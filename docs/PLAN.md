@@ -1,0 +1,108 @@
+# Plan del sistema — síntesis de los 5 informes de agentes (2026-10-07)
+
+Fuente: revisión en paralelo por 5 agentes (Scout de datos, Estratega macro, Analista cuantitativo,
+Analista de empresas, Asesor/Arquitecto). Este documento es la referencia para las siguientes fases.
+
+## Principios
+
+1. **Python calcula, el LLM interpreta.** Ninguna cifra la genera un LLM; la narrativa copia números del JSON de señal y un validador lo comprueba.
+2. **Point-in-time siempre.** Backtests solo con datos disponibles en cada fecha (vintages ALFRED, retrasos de publicación, z-scores expansivos).
+3. **Apoyo a la decisión, no ejecución.** Paper trading 6-12 meses antes de dinero real; sin herramientas de broker.
+4. **Procedencia.** Cada claim/cita enlaza a su fuente (chunk_id, serie). Las contradicciones coexisten.
+5. **Contar episodios, no meses.** ~12 recesiones en EE. UU. desde 1948: muestra pequeña → shrinkage, baja confianza explícita.
+
+## Arquitectura objetivo
+
+```
+Ingesta (FRED/ALFRED, BLS, SEC, Shiller, JST, Ken French, precios ETF UCITS, RSS)
+  → DuckDB + Parquet (fuente de verdad numérica)
+  → features/regímenes (regime_daily)
+  → motor probabilístico (HMM + análogos + Bayes) → escenarios → EV/CVaR/tamaño
+  → Neo4j local (Docker): eventos, análogos, lecciones, chunks de texto
+  → agentes LLM (Claude) + Jev (decisiones tipadas, como un modelo más del ensemble)
+  → obsidian/Reports/ (Markdown) + señal JSON + obsidian/Decisions/ (diario)
+```
+
+## Marco de regímenes (Estratega macro)
+
+- **Crecimiento (G):** media de z-scores (ventana 10 años) de INDPRO yoy, PAYEMS yoy, GDPC1 q/q anualizado, UNRATE invertido. Regla de Sahm > 0,5 pp fuerza G↓. G↑ si compuesto > 0 y Δ6m > 0.
+- **Inflación (I):** CPILFESL y PCEPILFE 6m anualizado vs 2 %, + T5YIE, PPIACO yoy. I↑ si core 6m > 2,5 % y acelera; I↓ si < 2 % o desacelera > 0,5 pp.
+- **Cuadrantes:** Reflación (G↑I↑), Goldilocks (G↑I↓), Estanflación (G↓I↑), Deflación/recesión (G↓I↓).
+- **Ciclo de deuda corto:** expansión temprana (curva > 1 y empinándose, BAA10Y ↓), expansión tardía (TCU > 80, inflación ↑), endurecimiento (FEDFUNDS +100 pb/12m, real FF > 1), techo (T10Y3M < 0 ≥ 3m), desapalancamiento (BAA10Y > 3 o NFCI > 0), reflación (recortes > 150 pb o WALCL > +10 % yoy).
+- **Ciclo largo:** GFDEGDQ188S > 100 % y subiendo, FYFSGDA188S < −5 % fuera de recesión, intereses/ingresos federales, deuda privada/PIB (BIS).
+- **Liquidez:** M2 yoy − PIB yoy; WALCL − WTREGEN − RRPONTSYD; DFII10; NFCI.
+- **USREC no sirve como variable en tiempo real** (se publica 6-18 meses tarde).
+
+## Huecos de datos (por prioridad)
+
+1. ALFRED vintages: GDPC1, PAYEMS, CPIAUCSL, INDPRO, UNRATE.
+2. Series FRED que faltan: DFII10, A091RC1Q027SBEA, W006RC1Q027SBEA, TCMDO, WTREGEN, RRPONTSYD, THREEFYTP10, CFNAI, NROU, GS10, TB3MS, TWEXB, PCOPPNEW, TDSP, TOTLL, BUSLOANS.
+3. Rentabilidades largas: Shiller (1871+), Ken French, Damodaran, World Gold Council (oro: FRED retiró GOLDAMGBD228NLBM), World Bank Pink Sheet.
+4. Internacional: JST Macrohistory, BIS, OCDE CLI, BCE/Eurostat.
+5. Spreads largos: BAML HY/IG en FRED solo 3 años → usar Moody's BAA/AAA.
+6. Universo de empresas: composición histórica S&P 500 + empresas quebradas (Enron, Lehman, WorldCom...) contra el sesgo de supervivencia.
+
+## Motor de decisión (Analista cuantitativo)
+
+- Régimen: `statsmodels` MarkovRegression o `hmmlearn` GaussianHMM, usando **probabilidades filtradas**, nunca suavizadas. Previsión π_{t+h} = π_t·P^h.
+- Análogos: Mahalanobis sobre z-scores + DTW sobre trayectorias de 12-24m; excluir ±24 meses; 1 representante por episodio; N_eff = (Σw)²/Σw², baja confianza si < 10.
+- Combinación: prior HMM + análogos con Dirichlet: p_k = (α·π_k + Σ w_s·1[k]) / (α + Σw).
+- Rentabilidades por escenario con shrinkage (James-Stein / Ledoit-Wolf).
+- EV(d) = Σ p_k·Δw·(μ_k − r_f) − costes; varianza total; CVaR95 por Monte Carlo.
+- Tamaño: Kelly fraccionado κ ∈ [0,1; 0,25] + risk parity + ajuste por confianza. Actuar solo si EV/σ_EV > 0,5 y EV > costes.
+- Validación: walk-forward con vintages, Brier Skill Score > 0, Deflated Sharpe, costes 5-10 pb.
+- Módulo: `src/decision/{features,regime,analogs,bayes,scenario_returns,ev_risk,sizing,backtest,calibration}.py`.
+
+## Jev (TypeSafe, System One)
+
+Modelo que devuelve decisiones tipadas con probabilidades calibradas (acceso anticipado, sept. 2026). Uso propuesto: recibir el estado macro diario (JSON desde DuckDB) y responder preguntas cerradas (régimen, P(recesión 12m), sobre/infraponderar). Se trata como **un miembro más del ensemble**, validado con el mismo walk-forward y Brier que el HMM y los análogos antes de darle peso.
+
+## Empresas y 10-K (Analista de empresas)
+
+- Hay 6 empresas (AAPL, MSFT, KO, GE, XOM, JPM); el texto útil (`10k_clean.txt`) son ~85 MB; nunca embeber `submission.txt`.
+- XBRL CompanyFacts solo desde 2009; `fy` es el ejercicio del filing, filtrar por duración ~365 días y `period_end`; guardar primera versión publicada (`filed`).
+- Trocear por secciones (1, 1A, 3, 7, 7A, 8, 9A); en el índice "Item 1A" aparece antes que el cuerpo.
+- Embeddings: sustituir all-MiniLM (256 tokens; trunca la mitad de cada chunk) por bge-base-en-v1.5 o nomic-embed-text-v1.5, chunks de 300-400 tokens con cabecera ("KO 10-K FY2010 · Item 1A") + reranker.
+- Neo4j: Docker `neo4j:5-community` en lugar de Aura Free.
+
+### Lecciones de inversores → reglas comprobables (alertas, no señales)
+
+| Principio | Regla |
+|---|---|
+| Buffett, foso | ROIC > 12 % en ≥ 8 de 10 años; desviación margen bruto < 3 pp |
+| Graham | P/E (beneficio medio 10 años) < 15-20; P/E×P/B < 22,5; current ratio > 2 (no bancos) |
+| Buffett, deuda | Deuda LP / FCF < 4 |
+| Munger, incentivos | CAGR acciones diluidas ≤ 0; SBC/CFO < 10 % |
+| Lynch | PEG < 1; alerta si inventario crece más que ventas |
+| Calidad contable | Accruals > 10 % activos; debilidad material en Item 9A |
+| Marks, péndulo | Percentil de BAA10Y y de valoración |
+
+Las citas se guardan con `char_start/char_end` verificados en el texto original.
+
+## Política de inversión (borrador, ajustar en `config/ips.yaml`)
+
+- Horizonte ≥ 10 años; colchón de emergencia fuera del sistema.
+- Núcleo 80-90 % All Weather en **fondos indexados** (traspaso sin tributar, art. 94 LIRPF); satélite táctico ≤ 10-20 % en ETFs UCITS.
+- Volatilidad objetivo 8-10 %; drawdown máximo 20-25 %; posición táctica ≤ 5 %; sin apalancamiento ni derivados el primer año.
+- Rebalanceo trimestral o bandas ±5 pp; máximo un cambio táctico al mes.
+- Calcular el coste fiscal antes de proponer cualquier venta (regla de 2 meses, modelo 720, W-8BEN).
+
+## Equipo de agentes permanente
+
+| Agente | Salida | Cuándo |
+|---|---|---|
+| Scout | `News/fecha.md`: datos nuevos, sorpresas, fallos de ingesta | Diario |
+| Estratega macro | Régimen, ciclo, 3 escenarios con probabilidad | Diario breve / semanal completo |
+| Analista cuantitativo | Probabilidades, EV, alertas de ruptura (sin LLM salvo resumen) | Diario |
+| Analista de empresas | Fichas en `Assets/` | Semanal / bajo demanda |
+| Abogado del diablo | Contraargumentos, colas, veto si se incumple el IPS | Antes del comité |
+| Comité | Reporte final + señal JSON + entrada del diario | Semanal/mensual |
+
+## Roadmap
+
+- **Fase 0 (hecha 2026-10-07):** limpieza, git, bugs de descarga, datos unificados en `data/archive`.
+- **Fase 1 — MVP (2 semanas):** FRED + BLS a DuckDB; clasificador de 4 cuadrantes + curva + spreads; script con Claude que escribe `obsidian/Reports/<semana>.md`; plantilla de diario de decisiones.
+- **Fase 2 (sem. 3-5):** Neo4j local; ingesta por secciones (Dalio, Berkshire, 10-K); agentes Scout, Estratega, Abogado del diablo.
+- **Fase 3 (sem. 6-9):** ALFRED, Shiller, JST, French; motor probabilístico + backtest walk-forward; Jev en el ensemble; cartera en paper trading.
+- **Fase 4 (sem. 10-13):** cron diario; analista de empresas con universo histórico; calculadora fiscal; dashboard.
+- **+6 meses de paper trading:** decidir si se pasa a dinero real en el satélite.
