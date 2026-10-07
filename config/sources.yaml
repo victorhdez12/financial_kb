@@ -43,3 +43,27 @@ sources:
     url: https://alfred.stlouisfed.org/
     coverage: "Historical vintages: what data was actually available at a past date"
     format: api
+  - id: gold
+    name: Gold price long history (MeasuringWorth + World Bank Pink Sheet + datahub)
+    type: commodity_price
+    url: https://www.measuringworth.com/datasets/gold/
+    coverage: "Annual 1257-present (various markets); spliced monthly USD 1791-present (gold_usd_monthly)"
+    format: html_table+xlsx+csv
+  - id: wb_pinksheet
+    name: World Bank Commodity Price Data (Pink Sheet), monthly
+    type: commodity_price
+    url: https://www.worldbank.org/en/research/commodity-markets
+    coverage: "~71 commodity prices + 16 indices, monthly 1960-present"
+    format: xlsx
+  - id: ken_french
+    name: Kenneth R. French Data Library
+    type: equity_factors
+    url: https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html
+    coverage: "US Fama-French 3/5 factors, momentum, 10/12 industry portfolios; monthly 1926-present"
+    format: zip_csv
+  - id: damodaran
+    name: Damodaran historical returns (histretSP.xls)
+    type: asset_returns
+    url: https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/histret.html
+    coverage: "Annual US returns 1928-present: S&P 500, small caps, T-bills, T-bonds, Baa, real estate, gold"
+    format: xls
