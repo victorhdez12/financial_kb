@@ -1,0 +1,27 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Secrets
+.env
+
+# macOS
+.DS_Store
+
+# Data: never commit raw/processed data (size + licensing). data/archive is a symlink to ~/financial_archive.
+data/archive
+data/raw/pdfs/*
+data/raw/tabular/*
+data/processed/*
+!data/**/.gitkeep
+
+# Media / large binaries
+*.mp4
+*.mov
+*.parquet
+*.duckdb
+
+# Obsidian workspace state
+obsidian/.obsidian/workspace*.json
+obsidian/.trash/

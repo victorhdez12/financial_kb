@@ -1,0 +1,3 @@
+This starter repository contains only code, schemas, configuration and short original seed notes.
+Do not add copyrighted books or datasets to a public Git repository unless the license/permission allows redistribution.
+Keep private/source files in local storage or an appropriate private bucket.

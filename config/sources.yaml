@@ -1,0 +1,45 @@
+# Source registry. Add a new source here before ingesting it.
+# Keep provenance and license/usage notes explicit.
+sources:
+  - id: boe_millennium_uk
+    name: A millennium of macroeconomic data for the UK
+    type: historical_macro
+    url: https://www.bankofengland.co.uk/-/media/boe/files/statistics/research-datasets/a-millennium-of-macroeconomic-data-for-the-uk.xlsx
+    coverage: "UK; selected series reach back to the 13th century; benchmark estimates include 1086"
+    format: xlsx
+  - id: nber_macrohistory
+    name: NBER Macrohistory Database
+    type: historical_macro_finance
+    url: https://www.nber.org/research/data/nber-macrohistory-database
+    coverage: "Mainly US; pre-WWI and interwar; production, prices, employment, money, banking, finance, markets"
+    format: ascii_dat_db
+  - id: jst_macrohistory
+    name: Macrofinancial history database (Jordà-Schularick-Taylor)
+    type: historical_macro_finance
+    url: https://www.macrohistory.net/database/
+    coverage: "Long-run macrofinancial series across advanced economies"
+    format: database_download
+  - id: shiller
+    name: Robert Shiller historical stock market data
+    type: market_valuation
+    url: https://www.econ.yale.edu/~shiller/data.htm
+    coverage: "US equity prices, earnings, dividends, CPI and valuation measures from the 19th century onward"
+    format: xls
+  - id: maddison
+    name: Maddison Project Database
+    type: historical_gdp_population
+    url: https://www.rug.nl/ggdc/historicaldevelopment/maddison/
+    coverage: "Long-run GDP, population and income comparisons"
+    format: xlsx
+  - id: fred
+    name: FRED
+    type: macro_timeseries
+    url: https://fred.stlouisfed.org/
+    coverage: "Modern macroeconomic and financial time series"
+    format: api
+  - id: alfred
+    name: ALFRED
+    type: realtime_vintages
+    url: https://alfred.stlouisfed.org/
+    coverage: "Historical vintages: what data was actually available at a past date"
+    format: api

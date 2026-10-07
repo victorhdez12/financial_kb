@@ -1,0 +1,14 @@
+neo4j>=5.28
+neo4j-graphrag>=1.10
+pymupdf>=1.26
+sentence-transformers>=5.1
+pandas>=2.3
+pyarrow>=21.0
+duckdb>=1.4
+pyyaml>=6.0
+python-dotenv>=1.1
+tqdm>=4.67
+openpyxl>=3.1
+requests>=2.32
+beautifulsoup4>=4.12
+lxml>=5.0
