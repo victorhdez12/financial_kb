@@ -189,6 +189,7 @@ def md_analogs(s: dict) -> str:
             f"episodio. Rentabilidades nominales a {m['horizon_months']} meses desde el mes del análogo; series: "
             + ", ".join(f"{k} = `{v}`" for k, v in m["return_series"].items())
             + ". Mediana: " + ", ".join(f"{k} {v:.1f} %" for k, v in meds.items() if not np.isnan(v))
+            + ". Oro solo desde 1971-08 (antes, precio oficial fijo: celda vacía)"
             + ". Con 5 episodios esto es anecdótico, no una distribución.")
     return table(rows, cols) + foot
 

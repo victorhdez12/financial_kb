@@ -1,0 +1,29 @@
+# Neo4j local para el grafo de conocimiento (Fase 2).
+# Credenciales desde .env (NEO4J_PASSWORD); compose lee .env automáticamente para la interpolación.
+# Datos persistentes fuera del repo: ~/financial_archive/neo4j/{data,logs,import,plugins}
+#   make graph-up | make graph-load | make graph-down
+services:
+  neo4j:
+    image: neo4j:5-community
+    container_name: financial_kb_neo4j
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:7474:7474"   # Browser http://localhost:7474
+      - "127.0.0.1:7687:7687"   # Bolt
+    environment:
+      NEO4J_AUTH: "neo4j/${NEO4J_PASSWORD:?define NEO4J_PASSWORD en .env}"
+      NEO4J_server_memory_heap_initial__size: "${NEO4J_HEAP:-2G}"
+      NEO4J_server_memory_heap_max__size: "${NEO4J_HEAP:-2G}"
+      NEO4J_server_memory_pagecache_size: "${NEO4J_PAGECACHE:-2G}"
+      NEO4J_server_directories_import: "/import"
+      NEO4J_dbms_security_procedures_unrestricted: ""
+    volumes:
+      - ${HOME}/financial_archive/neo4j/data:/data
+      - ${HOME}/financial_archive/neo4j/logs:/logs
+      - ${HOME}/financial_archive/neo4j/import:/import
+      - ${HOME}/financial_archive/neo4j/plugins:/plugins
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:7474 || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 30

@@ -5,12 +5,15 @@ $FIN_DATA_ROOT/curated/*/*.parquet and $FIN_DATA_ROOT/events/*.parquet at run ti
 (glob), so new sources written by the ingest scripts are picked up automatically.
 
 Tables
-  observations(date, value, series_id, source, realtime_start)   all rows, incl. ALFRED vintages
-  catalog(series_id, source, name, category, frequency, units, country, start, "end", ...)
+  observations(date, value, series_id, source, realtime_start, realtime_end)  all rows, incl. ALFRED vintages
+  catalog(series_id, source, name, category, frequency, units, country, start, "end", ...,
+          country_iso3, pit_role)   one row per series_id (see dedupe_catalog / PIT_RULES)
   events(event_id, name, type, country, start_date, end_date, severity, source, url, notes, dataset)
 Views
-  obs_latest   one value per (series_id, date), vintages excluded; curated sources win over legacy
-  monthly      last observation of each calendar month per series (long format; PIVOT-able)
+  obs_latest   one value per (series_id, date), vintages excluded; curated sources win over legacy;
+               only pit_role='observed' series and no dates after the build date
+  forecasts    pit_role in ('forecast', 'lookahead'): never use as predictors at their own date
+  monthly      table: last observation of each calendar month per series (long format; PIVOT-able)
   vintages     ALFRED rows only (realtime_start not null)
   series_summary  coverage per series
 
@@ -19,15 +22,18 @@ Run: .venv/bin/python -m src.warehouse.build
 from __future__ import annotations
 
 import json
+import re
 import time
+from functools import lru_cache
 from pathlib import Path
 
 import duckdb
 import pandas as pd
+import pycountry
 
 from src.warehouse.db import DATA_ROOT, WAREHOUSE
 
-OBS_COLS = ["date", "value", "series_id", "source", "realtime_start"]
+OBS_COLS = ["date", "value", "series_id", "source", "realtime_start", "realtime_end"]
 CATALOG_COLS = ["series_id", "source", "name", "category", "frequency", "units", "country",
                 "start", "end", "transform_notes", "url", "license"]
 EVENT_COLS = ["event_id", "name", "type", "country", "start_date", "end_date", "severity",
@@ -40,6 +46,7 @@ def load_legacy_csv(path: Path, source: str, prefix: str = "") -> pd.DataFrame:
     df["series_id"] = prefix + df.get("series_id", pd.Series(path.stem, index=df.index)).astype(str)
     df["source"] = source
     df["realtime_start"] = pd.NaT
+    df["realtime_end"] = pd.NaT
     return df
 
 
@@ -75,9 +82,26 @@ def normalize_curated(df: pd.DataFrame, path: Path) -> pd.DataFrame:
                         "value": pd.to_numeric(df["value"], errors="coerce")})
     out["series_id"] = df["series_id"].astype(str) if "series_id" in df else path.stem
     out["source"] = df["source"].astype(str) if "source" in df else path.parent.name
-    out["realtime_start"] = (pd.to_datetime(df["realtime_start"], errors="coerce")
-                             if "realtime_start" in df else pd.NaT)
-    return out.dropna(subset=["date"])
+    for c in ("realtime_start", "realtime_end"):
+        out[c] = pd.to_datetime(df[c], errors="coerce") if c in df else pd.NaT
+    out = out.dropna(subset=["date"])
+    return fiscal_year_to_jan1(out)
+
+
+def fiscal_year_to_jan1(df: pd.DataFrame) -> pd.DataFrame:
+    """Annual series dated at a non-January day (e.g. FRED fiscal-year data on 06-30 before 1977
+    and 09-30 after) -> January 1st of the same year, as the contract requires. Only touches
+    single-series annual frames, and only if that leaves one observation per year."""
+    if df.empty or df["series_id"].nunique() != 1 or df["realtime_start"].notna().any():
+        return df
+    d = df["date"]
+    if len(d) < 3 or (d.dt.month.eq(1) & d.dt.day.eq(1)).all():
+        return df
+    yearly = d.sort_values().diff().dt.days.median() >= 360
+    if yearly and d.dt.year.is_unique:
+        df = df.copy()
+        df["date"] = d.dt.to_period("Y").dt.start_time
+    return df
 
 
 def curated_frames() -> tuple[list[pd.DataFrame], list[pd.DataFrame], list[str]]:
@@ -105,6 +129,70 @@ def curated_frames() -> tuple[list[pd.DataFrame], list[pd.DataFrame], list[str]]
     return frames, cats, errors
 
 
+# ---------------------------------------------------------------- catalog metadata
+# point-in-time role of a series: 'observed' (safe as predictor at its date), 'forecast'
+# (projections; future dates), 'lookahead' (value at t uses information after t)
+PIT_RULES: list[tuple[str, str]] = [
+    (r"_proj$", "forecast"),          # IMF WEO projections
+    (r"^NROU$", "forecast"),          # CBO natural rate, projected ~10 years ahead
+    (r"^shiller_fwd10y_", "lookahead"),  # realised forward 10y returns
+    (r"^nyfed_recprob_target$", "lookahead"),  # dated at the target month, not the forecast date
+]
+AGGREGATES = {"EA": "EA", "EA19": "EA", "EA20": "EA", "EA21": "EA", "EU": "EU", "EU27": "EU",
+              "U2": "EA", "I9": "EA", "EURO AREA": "EA", "WORLD": "WLD", "WLD": "WLD",
+              "UK": "GBR", "EL": "GRC", "KOSOVO": "XKX", "KOREA": "KOR",
+              # multi-country groups keep a stable code so they can still be filtered
+              "G7": "G7", "G20": "G20", "OECD": "OECD", "EM": "EM", "ADV": "ADV", "EMDE": "EMDE"}
+
+
+def pit_role(series_id: str, transform_notes: object = None) -> str:
+    if isinstance(transform_notes, str) and transform_notes.startswith("FORECAST"):
+        return "forecast"
+    for rx, role in PIT_RULES:
+        if re.search(rx, series_id):
+            return role
+    return "observed"
+
+
+@lru_cache(maxsize=None)
+def to_iso3(country: object) -> object:
+    """Normalise mixed country labels (ISO3, ISO2, English names) to ISO3; aggregates to EA/EU/WLD.
+    Unknown labels (regions, BIS groups) return None and keep their original `country`."""
+    if not isinstance(country, str) or not country.strip():
+        return None
+    c = country.strip()
+    if c.upper() in AGGREGATES:
+        return AGGREGATES[c.upper()]
+    try:
+        if len(c) == 3 and c.isalpha():
+            return pycountry.countries.get(alpha_3=c.upper()).alpha_3
+        if len(c) == 2 and c.isalpha():
+            return pycountry.countries.get(alpha_2=c.upper()).alpha_3
+        return pycountry.countries.lookup(c).alpha_3
+    except (LookupError, AttributeError):
+        pass
+    try:
+        hits = pycountry.countries.search_fuzzy(c)
+        return hits[0].alpha_3 if len(hits) == 1 else None
+    except LookupError:
+        return None
+
+
+def dedupe_catalog(catalog: pd.DataFrame) -> pd.DataFrame:
+    """One row per series_id: curated source > alfred (vintage-only twin) > legacy CSV."""
+    src = catalog["source"].fillna("")
+    rank = src.str.endswith("legacy").astype(int) * 2 + src.eq("alfred").astype(int)
+    out = catalog.assign(_rk=rank).sort_values(["series_id", "_rk"], kind="stable")
+    return out.drop_duplicates("series_id").drop(columns="_rk").reset_index(drop=True)
+
+
+def enrich_catalog(catalog: pd.DataFrame) -> pd.DataFrame:
+    catalog = dedupe_catalog(catalog)
+    catalog["country_iso3"] = catalog["country"].map(to_iso3)
+    catalog["pit_role"] = [pit_role(s, n) for s, n in zip(catalog["series_id"], catalog["transform_notes"])]
+    return catalog
+
+
 def event_frames() -> tuple[list[pd.DataFrame], list[str]]:
     frames, errors = [], []
     for p in sorted((DATA_ROOT / "events").glob("*.parquet")):
@@ -123,7 +211,7 @@ def event_frames() -> tuple[list[pd.DataFrame], list[str]]:
 
 # ---------------------------------------------------------------- build
 VIEWS_SQL = """
-create or replace view obs_latest as
+create or replace view obs_all_latest as
 select date, value, series_id, source from (
   select *, row_number() over (
      partition by series_id, date
@@ -131,10 +219,21 @@ select date, value, series_id, source from (
   from observations where realtime_start is null
 ) where rk = 1;
 
+create or replace view obs_latest as
+select o.* from obs_all_latest o
+left join catalog c using (series_id)
+where coalesce(c.pit_role, 'observed') = 'observed'
+  and o.date <= (select cast(built_at as date) from build_log);
+
+create or replace view forecasts as
+select o.*, c.pit_role from obs_all_latest o
+join catalog c using (series_id)
+where c.pit_role in ('forecast', 'lookahead');
+
 create or replace view vintages as
 select * from observations where realtime_start is not null;
 
-create or replace view monthly as
+create table monthly as
 select series_id,
        date_trunc('month', date)::date as month,
        arg_max(value, date) as value,
@@ -155,7 +254,8 @@ def write_tables(con, obs: pd.DataFrame, catalog: pd.DataFrame, events: pd.DataF
     con.execute("""create table observations as
                    select cast(date as date) as date, cast(value as double) as value,
                           cast(series_id as varchar) as series_id, cast(source as varchar) as source,
-                          cast(realtime_start as date) as realtime_start from obs_df""")
+                          cast(realtime_start as date) as realtime_start,
+                          cast(realtime_end as date) as realtime_end from obs_df""")
     con.register("cat_df", catalog)
     con.execute("create table catalog as select * from cat_df")
     if events.empty:
@@ -167,8 +267,8 @@ def write_tables(con, obs: pd.DataFrame, catalog: pd.DataFrame, events: pd.DataF
         con.execute("""create table events as select event_id, name, type, country,
                        cast(start_date as date) as start_date, cast(end_date as date) as end_date,
                        severity, source, url, notes, dataset from ev_df""")
-    con.execute(VIEWS_SQL)
     con.execute("create table build_log as select current_timestamp as built_at")
+    con.execute(VIEWS_SQL)
 
 
 def build() -> None:
@@ -180,7 +280,7 @@ def build() -> None:
 
     obs = pd.concat([f[OBS_COLS] for f in leg + cur], ignore_index=True)
     catalog = pd.concat([pd.DataFrame(leg_cat).reindex(columns=CATALOG_COLS)] + cur_cat, ignore_index=True)
-    catalog = catalog.astype("string")
+    catalog = enrich_catalog(catalog).astype("string")
     events = pd.concat(evs, ignore_index=True) if evs else pd.DataFrame()
 
     WAREHOUSE.parent.mkdir(parents=True, exist_ok=True)
@@ -190,11 +290,13 @@ def build() -> None:
     write_tables(con, obs, catalog, events)
     n_series = con.execute("select count(distinct series_id) from observations").fetchone()[0]
     n_vint = con.execute("select count(*) from vintages").fetchone()[0]
+    roles = dict(con.execute("select pit_role, count(*) from catalog group by 1").fetchall())
     con.close()
     tmp.replace(WAREHOUSE)  # atomic swap: readers never see a half-built DB
 
     print(f"warehouse: {len(obs):,} rows, {n_series} series ({len(cur)} curated files), "
           f"{n_vint:,} vintage rows, {len(events)} events -> {WAREHOUSE} [{time.time()-t0:.1f}s]")
+    print(f"  catalog: {len(catalog)} series, pit_role {roles}")
     for e in errors:
         print("  WARN", e)
 

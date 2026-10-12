@@ -1,6 +1,6 @@
 # Validación Fase 1 — clasificador de régimen
 
-Generado: 2026-10-07 por `src/regime/validate.py`. Muestra: 1950-01 → 2026-10
+Generado: 2026-10-12 por `src/regime/validate.py`. Muestra: 1950-01 → 2026-10
 (922 meses). `vintage_mode`: {'mixed': 608, 'alfred': 314}. USREC se usa **solo** como verificación ex post.
 
 > Contar episodios, no meses: hay ~11 recesiones NBER en la muestra; cualquier tasa de acierto
@@ -118,12 +118,12 @@ Distribución: Estanflación 67 %, Deflación/recesión 27 %, Reflación 7 %
 
 | mes | quadrant | G | I_state | core_6m | debt_phase | credit_light | liquidity | sahm | curve | baa_spread | vintage_mode |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| 2026-05 | Estanflación | -0.11 | up | 3.42 | expansión tardía | verde | neutral | 0.20 | 0.76 | 1.57 | alfred |
-| 2026-06 | Estanflación | -0.07 | up | 3.62 | expansión tardía | verde | neutral | 0.10 | 0.51 | 1.55 | alfred |
-| 2026-07 | Estanflación | -0.10 | up | 3.17 | expansión tardía | verde | neutral | 0.07 | 0.86 | 1.64 | alfred |
-| 2026-08 | Estanflación | -0.12 | up | 2.94 | expansión tardía | verde | neutral | 0.00 | 0.83 | 1.54 | alfred |
+| 2026-05 | Estanflación | -0.11 | up | 3.03 | expansión tardía | verde | neutral | 0.13 | 0.76 | 1.57 | alfred |
+| 2026-06 | Estanflación | -0.06 | up | 3.62 | expansión tardía | verde | neutral | 0.10 | 0.51 | 1.55 | alfred |
+| 2026-07 | Estanflación | -0.12 | up | 3.17 | expansión tardía | verde | neutral | 0.07 | 0.86 | 1.64 | alfred |
+| 2026-08 | Estanflación | -0.10 | up | 2.94 | expansión tardía | verde | neutral | -0.03 | 0.83 | 1.54 | alfred |
 | 2026-09 | Deflación/recesión | -0.04 | down | 2.66 | expansión temprana | verde | escasa | -0.07 | 1.01 | 1.46 | alfred |
-| 2026-10 | Deflación/recesión | -0.06 | down | 2.66 | expansión temprana | verde | neutral | 0.00 | 1.06 | 1.46 | alfred |
+| 2026-10 | Deflación/recesión | -0.05 | down | 2.66 | expansión temprana | verde | escasa | 0.00 | 1.06 | 1.46 | alfred |
 
 ## Notas y limitaciones
 

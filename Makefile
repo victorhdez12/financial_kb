@@ -19,3 +19,35 @@ weekly: regime        ## obsidian/Reports/AAAA-MM-DD_semanal.md + _signal.json
 
 clean-warehouse:
 	rm -f data/warehouse.duckdb data/warehouse.tmp.duckdb
+
+# Fase 2 — grafo Neo4j local (docker-compose.yml; credenciales en .env)
+.PHONY: graph-up graph-load graph-down
+
+graph-up:             ## arranca Neo4j (Docker) y espera a que esté healthy
+	mkdir -p $(HOME)/financial_archive/neo4j/data $(HOME)/financial_archive/neo4j/logs $(HOME)/financial_archive/neo4j/import $(HOME)/financial_archive/neo4j/plugins
+	docker compose up -d
+	@for i in $$(seq 1 60); do [ "$$(docker inspect -f '{{.State.Health.Status}}' financial_kb_neo4j 2>/dev/null)" = healthy ] && echo "neo4j healthy" && exit 0; sleep 3; done; echo "neo4j no está healthy" && exit 1
+
+graph-load:           ## esqueleto estructural del grafo desde warehouse.duckdb (idempotente)
+	$(PY) -m src.graph.load
+
+graph-down:           ## para Neo4j (los datos persisten en ~/financial_archive/neo4j)
+	docker compose down
+
+# Fase de datos — ingesta y auditoría
+# Orden: ecb antes que bundesbank (el empalme del tipo oficial alemán usa ecb_mro_d).
+INGEST := fred_extended alfred_vintages fred_us fed_yieldcurve us_treasury nyfed_hhdc nber_macrohistory \
+          shiller shiller_housing us_hist_labor ken_french damodaran wb_pinksheet measuringworth gold \
+          cycle_nyfed cycle_rtdsm cycle_spf \
+          ecb eurostat bde ine bundesbank \
+          cycle_bis bis_ext oecd imf_weo imf_gdd imf_hpdd wb_wdi jst_macrohistory boe_millennium_uk cycle_worldorder \
+          events_nber events_wars events_financial_crises events_gpr events_curated
+.PHONY: ingest audit data
+
+ingest:               ## descarga/actualiza todas las fuentes curadas (lento; idempotente)
+	@for s in $(INGEST); do echo "== $$s"; $(PY) -m src.ingest.$$s || echo "FALLO $$s"; done
+
+audit:                ## docs/data/audit_<hoy>.md + CSV (solo lectura)
+	$(PY) -m src.audit.run
+
+data: ingest warehouse regime audit   ## ciclo completo de la fase de datos

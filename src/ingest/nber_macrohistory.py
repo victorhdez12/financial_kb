@@ -9,6 +9,7 @@ Curated: $FIN_DATA_ROOT/curated/nber_macrohistory/nber_<id>.parquet
 from __future__ import annotations
 
 import re
+import time
 
 import pandas as pd
 
@@ -69,6 +70,110 @@ SELECTION = {
 }
 
 
+# --------------------------------------------------------------------------------------
+# Extension (2026-10): rule-based selection of US series from the chapter index pages.
+# The curated SELECTION above keeps its categories; everything below is added on top.
+# NBER Macrohistory files are frozen (last modified 2001-2002), so cached raw .dat/.txt
+# files are reused instead of re-downloaded.
+# --------------------------------------------------------------------------------------
+INDEX = "https://data.nber.org/databases/macrohistory/contents/chapter{ch}.html"
+EXT_ALL = {"04", "07", "09", "10", "11", "12", "13", "14", "15", "16"}  # all U.S. series
+EXT_RULES = {  # chapter -> regex on the index title (U.S. series only)
+    "01": r"index of|industrial production|pig iron|steel ingot|automobile|electric(al)? (power|energy)"
+          r"|bituminous coal production|crude petroleum production|cotton consumption",
+    "02": r"total|index",
+    "03": r"freight car|ton-miles, revenue",
+    "06": r"total|index|department store|retail|sales",
+    "08": r"unemploy|labor force|personal income|national income|payroll|employment, total|total employ"
+          r"|nonagricultural|all manufactur|manufacturing industries|composite"
+          r"|factory employment, (total|seasonally)|index of factory employment(?!,)|wage"
+          r"|earnings, (all|total|manufactur)|hours of work per week, (all|total|manufactur)|insured",
+}
+CH_CAT = {"01": "growth", "02": "housing", "03": "growth", "04": "inflation", "06": "growth",
+          "07": "growth", "08": "employment", "09": "growth", "10": "credit", "11": "markets",
+          "12": "growth", "13": "rates", "14": "money", "15": "fiscal", "16": "growth"}
+
+
+def ext_category(sid: str, title: str) -> str:
+    ch = sid[1:3]
+    t = title.lower()
+    if ch == "14" and re.search(r"loan|credit|discount|debits|failure|suspension", t):
+        return "credit"
+    if ch == "09" and re.search(r"failure|liabilit|debt", t):
+        return "credit"
+    if ch == "13" and re.search(r"corporate|railroad|municipal|industrial|utility", t):
+        return "credit"
+    if ch == "11" and "bond" in t:
+        return "bond_returns"
+    return CH_CAT[ch]
+
+
+def extended_selection() -> dict[str, tuple[str, str, str]]:
+    """id -> (category, country, index title) for the rule-based extension."""
+    idx_dir = raw_dir(SOURCE) / "_index"
+    idx_dir.mkdir(exist_ok=True)
+    out = {}
+    for ch in sorted(EXT_ALL | set(EXT_RULES)):
+        p = idx_dir / f"chapter{ch}.html"
+        if not p.exists():
+            try:
+                p.write_text(http_get(INDEX.format(ch=ch), timeout=90).text)
+            except Exception as e:  # noqa: BLE001
+                log.warning("index chapter %s unavailable: %s", ch, e)
+                continue
+        for m in re.finditer(r"<td>([amq]\d{5}[a-z]?)</td><td>([^<]+)</td>", p.read_text(errors="replace")):
+            sid, title = m[1], m[2].strip()
+            if not title.startswith("U.S.") or sid in SELECTION:
+                continue
+            if ch in EXT_ALL or (ch in EXT_RULES and re.search(EXT_RULES[ch], title, re.I)):
+                out[sid] = (ext_category(sid, title), "USA", title)
+    log.info("extended NBER selection: %d series", len(out))
+    return out
+
+
+def prefetch(ids: list[str], workers: int = 6) -> None:
+    """Download missing .dat/.txt files of the extension in parallel (polite: 6 workers).
+    404s are recorded in raw/_index/missing.txt and not retried on later runs."""
+    import requests
+    from concurrent.futures import ThreadPoolExecutor
+
+    from src.ingest._extlong_common import UA
+
+    rd = raw_dir(SOURCE)
+    miss_p = rd / "_index" / "missing.txt"
+    missing = set(miss_p.read_text().split()) if miss_p.exists() else set()
+    todo = [i for i in ids if not (rd / f"{i}.dat").exists() and i not in missing]
+    sess = requests.Session()
+    sess.headers["User-Agent"] = UA
+
+    def one(sid: str) -> str | None:
+        ch = re.search(r"\d{2}", sid).group(0)
+        for attempt in range(3):
+            try:
+                r = sess.get(BASE.format(ch=ch, sid=sid), timeout=60)
+                if r.status_code == 404:
+                    return sid
+                r.raise_for_status()
+                if r.content.lstrip()[:15].lower().startswith((b"<!doctype", b"<html")):
+                    return sid
+                d = sess.get(DOC.format(ch=ch, sid=sid), timeout=60)
+                if d.ok:
+                    (rd / f"{sid}.txt").write_text(d.text)
+                (rd / f"{sid}.dat").write_bytes(r.content)
+                return None
+            except Exception:  # noqa: BLE001
+                time.sleep(2 * (attempt + 1))
+        log.warning("prefetch failed %s", sid)
+        return None
+
+    log.info("prefetching %d NBER files", len(todo))
+    with ThreadPoolExecutor(workers) as ex:
+        new_missing = {m for m in ex.map(one, todo) if m}
+    if new_missing:
+        miss_p.write_text("\n".join(sorted(missing | new_missing)))
+        log.info("%d ids listed in the index have no .dat file (404)", len(new_missing))
+
+
 def parse_doc(text: str) -> dict:
     lines = [l.strip().strip('"').removeprefix("c").strip() for l in text.splitlines()]
     title = ""
@@ -108,13 +213,26 @@ def parse_dat(text: str, freq: str, md: float | None) -> pd.Series:
 def main() -> None:
     cw = CatalogWriter(SOURCE, url=PAGE, license=LICENSE)
     rd = raw_dir(SOURCE)
-    for sid, (cat, country) in SELECTION.items():
+    todo = {sid: (cat, country, "") for sid, (cat, country) in SELECTION.items()}
+    ext = extended_selection()
+    prefetch(list(ext))
+    missing_p = rd / "_index" / "missing.txt"
+    missing = set(missing_p.read_text().split()) if missing_p.exists() else set()
+    todo.update({k: v for k, v in ext.items() if k not in missing})
+    for sid, (cat, country, idx_title) in todo.items():
         ch = re.search(r"\d{2}", sid).group(0)
         freq = {"m": "M", "q": "Q", "a": "A"}[sid[0]]
         url = BASE.format(ch=ch, sid=sid)
         try:
+            if sid not in SELECTION and (rd / f"{sid}.dat").exists():
+                raise FileExistsError("cached (frozen NBER file)")
+            time.sleep(0.2)
             r = http_get(url, timeout=60)
-            validate_bytes(r.content, "dat")
+            try:
+                validate_bytes(r.content, "dat")
+            except ValueError as ve:  # short annual series are legitimately < 1 KB
+                if "too small" not in str(ve) or len(r.content) < 20:
+                    raise
             (rd / f"{sid}.dat").write_bytes(r.content)
             try:
                 doc = http_get(DOC.format(ch=ch, sid=sid), timeout=60).text
@@ -123,14 +241,15 @@ def main() -> None:
                 doc = ""
         except Exception as e:  # noqa: BLE001
             if (rd / f"{sid}.dat").exists():
-                log.warning("%s download failed (%s); using cached", sid, e)
+                if not isinstance(e, FileExistsError):
+                    log.warning("%s download failed (%s); using cached", sid, e)
                 doc = (rd / f"{sid}.txt").read_text() if (rd / f"{sid}.txt").exists() else ""
             else:
                 log.error("skip %s: %s", sid, e)
                 continue
         meta = parse_doc(doc)
         s = parse_dat((rd / f"{sid}.dat").read_text(errors="replace"), freq, meta["md"])
-        n = cw.add(f"nber_{sid}", s, name=meta["title"] or sid, category=cat, frequency=freq,
+        n = cw.add(f"nber_{sid}", s, name=meta["title"] or idx_title or sid, category=cat, frequency=freq,
                    units=meta["units"], country=country,
                    transform_notes=f"NBER series {sid}; missing code {meta['md']} -> NaN; see raw {sid}.txt for source/notes",
                    url=url)
