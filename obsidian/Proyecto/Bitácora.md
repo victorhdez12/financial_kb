@@ -129,4 +129,4 @@ Las entradas más recientes van arriba. Ver también [[Proyecto/Estado del proye
   - **`DATA_CONTRACT.md`** documenta `pit_role` y `country_iso3`.
   - **Nuevo reporte** [[Reports/2026-10-12_semanal]].
   - **Reauditoría:** 0 críticas y 28 altas (todas explicadas: precios oficiales históricos, look-ahead ya marcado y un falso positivo). Ninguna fuente en rojo.
-- **Commit de la fase de datos** (ver git log).
+- **Commit `d1acc7e` en la rama `fase-datos`** (no fusionada aún en `main`).
