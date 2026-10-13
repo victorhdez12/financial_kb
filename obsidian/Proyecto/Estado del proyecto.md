@@ -8,7 +8,31 @@ fase_real: recopilación y limpieza de datos
 
 > [!info] Para retomar en una sesión nueva
 > Lee esta nota, después [[Proyecto/Agentes]] (roles e instrucciones completas) y [[Proyecto/Bitácora]] (qué se hizo y cuándo).
-> Código: `~/Desktop/financial_kb` · Datos: `~/financial_archive` (enlace `data/archive`) · Plan original: `docs/PLAN.md`.
+> Código: `~/Proyectos/financial_kb` (movido del Escritorio el 13-oct) · Datos: `~/financial_archive` (enlace `data/archive`) · Plan original: `docs/PLAN.md`.
+
+## ▶ Retomar aquí (13-oct, 12:50)
+
+**Fases del plan (`docs/PLAN.md`) y estado:**
+| Fase | Contenido | Estado |
+|---|---|---|
+| 0 | Limpieza, git, datos unificados | ✅ hecha (7-oct) |
+| 1 · MVP | DuckDB, clasificador de régimen, reporte semanal | ✅ hecha (7-oct); la revisión dijo que el reporte aún no sirve para decidir |
+| Fase de datos (añadida por el usuario el 12-oct) | Recopilar, limpiar, auditar | 🟡 casi cerrada: 15.397 series, 12,2 M filas |
+| 2 | Neo4j, textos (Dalio, Berkshire, 10-K), agentes Scout/Estratega/Abogado del diablo | 🟡 empezada y aparcada (Neo4j en Docker, ingestas de ciclos/textos); agentes de análisis parados hasta cerrar datos |
+| 3 | Motor probabilístico, backtest walk-forward, cartera en paper | 🟡 los datos ya están (ALFRED, Shiller, JST, French); falta el modelo |
+| 4 | Cron diario, analista de empresas, calculadora fiscal, dashboard | 🟡 actualización automática montada el 13-oct; resto pendiente |
+| +6 meses | Paper trading antes de dinero real | ⏳ |
+
+**Al retomar, lo primero:**
+1. Mirar [[Proyecto/Actualizaciones]]: la prueba real de la tarea diaria (`launchctl kickstart`) se lanzó a las 12:46 del 13-oct. Si no hay línea, ver el último log en `~/financial_archive/logs/`.
+2. Pasar la auditoría completa con las fuentes nuevas (`make audit`), escribir el resumen `docs/data/audit_2026-10-13_b.md` (falsos positivos esperables: `cboe_vvix` primeras obs., picos de `cboe_pc_*`, negativos de `cftc_*_net`; licencias `aqr` sin redistribuir y `jkp` no comercial) y `make weekly`.
+3. Commit en `fase-datos` (el código ya va en el commit de las 12:50; faltaría el resumen de auditoría y el reporte).
+
+**Decisiones pendientes del usuario:**
+1. Fusionar `fase-datos` en `main`.
+2. Dar por cerrada la fase de datos (los huecos que quedan son casi todos de pago: PMI, Euribor diario, MOVE, MSCI/STOXX con dividendos; además bonos soberanos diarios por país e Inverco/ICI).
+3. Pasar al modelo: liquidez neta diaria y global en el clasificador (`docs/data/liquidity_2026-10-13.md`), conectar rtdsm, pendientes de la revisión de la Fase 1 (histéresis de G, I compuesta con petróleo/PPI, bear/bull steepening, capa EUR) y después motor probabilístico + backtest.
+4. Más adelante: reactivar la Fase 2 (grafo y agentes de análisis).
 
 ## Fase actual (decisión del 2026-10-12)
 
@@ -41,6 +65,17 @@ Aunque `docs/PLAN.md` ya habla de la Fase 2 (Neo4j, agentes de decisión), **seg
 | **EE. UU. (terminado):** fred_us, fed_yieldcurve, us_treasury, nyfed_hhdc, us_hist_labor, shiller_housing, + alfred 14, nber_macrohistory 1.627 | 1.691, 73, 25, 103, 2, 9 (~3.500 en total) | hecho y auditado (tarde). Doc: `docs/data/us_macro_credit.md` |
 | **nuevas hoy (internacional, terminado):** bis_ext, oecd, imf_weo, imf_gdd, imf_hpdd, wb_wdi, measuringworth | 366, 309, 955, 155, 31, 375, 16 (2.207 en total) | hecho y auditado (tarde). Doc: `docs/data/international_macro.md` |
 | **Europa (terminado):** ecb, eurostat, bde, ine, bundesbank | 116, 98, 53, 13, 19 (299 en total) | hecho y auditado (tarde). Doc: `docs/data/europe_macro_financial.md` |
+
+## Actualización automática (desde el 13-oct)
+launchd en el Mac: **diario** lun-sáb 7:30 (`make daily`: fuentes diarias + warehouse + régimen) y **semanal** domingo 7:00 (`make semanal`: todo + auditoría + reporte). Resultado de cada ejecución en [[Proyecto/Actualizaciones]]; notificación de macOS si falla algo. Detalle: `docs/automatizacion.md`.
+
+## Segunda tanda del 13-oct (huecos de prioridad alta)
+- Factores: `ken_french_intl` (internacional y diario), `aqr` (QMJ con España, BAB, VME, TSMOM, Century; **sin redistribuir**), `jkp` (13 temas, 12 zonas; **no comercial**).
+- Mercado y sentimiento: `cftc_cot` (posicionamiento, 21 contratos), `cboe` (VIX3M, VVIX, SKEW, put/call…), `fed_ebp` (excess bond premium), +51 en `fred_us` (Brent diario, encuestas regionales de la Fed, dólar AFE/EME).
+- Europa y España: Bund diario 1-30 años, forwards y estrés soberano diario del BCE, empleo euro, vivienda España (IPV, compraventas, hipotecas), producción industrial, `ifo`, `zew`; IPC de la OCDE desbloqueado.
+- Series diarias de FRED que estaban congeladas: arregladas.
+- Base de datos: **15.397 series, 12,2 M de filas.**
+- Huecos que quedan: PMI (de pago), bonos soberanos diarios por país salvo Alemania, Euribor diario, MOVE, flujos ICI e Inverco, índices MSCI/STOXX con dividendos.
 
 ## Liquidez (petición del 13-oct)
 Datos para medir cuánta liquidez meten la Fed, el Tesoro y los grandes bancos centrales (doc `docs/data/liquidity_2026-10-13.md`):

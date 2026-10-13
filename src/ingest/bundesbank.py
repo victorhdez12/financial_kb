@@ -50,6 +50,15 @@ for m in ["01", "02", "05", "10"]:
                 f"Federal securities zero-coupon yield {int(m)}y (Svensson), monthly", "rates", "% p.a.", False,
                 "Bundesbank term-structure estimate from listed Federal securities, since 1972-09."))
 
+# Daily Svensson term structure of listed Federal securities (europe_daily_spain, 2026-10-13)
+DAILY = []
+for m in ["01", "02", "05", "10", "30"]:
+    DAILY.append((f"bundesbank_bund_zero_{int(m)}y_d", "BBSIS", f"D.I.ZST.ZI.EUR.S1311.B.A604.R{m}XX.R.A.A._Z._Z.A",
+                  f"Federal securities zero-coupon yield {int(m)}y (Svensson), daily", "rates", "% p.a.", False,
+                  "Bundesbank daily term-structure estimate from listed Federal securities (benchmark DE sovereign, daily since 1972)."))
+DAILY.append(("bundesbank_umlaufsrendite_d", "BBSIS", "D.I.UMR.RD.EUR.A.B.A.A.R.A.A._Z._Z.A", "Yield on debt securities outstanding (Umlaufsrendite), total, daily",
+              "rates", "% p.a.", False, "Daily, all domestic bearer bonds."))
+
 
 def fetch(flow: str, key: str) -> tuple[pd.Series, str]:
     content = cached_get(API.format(flow=flow, key=key), raw_dir(SOURCE) / f"{flow}.{key}.csv", min_bytes=100)
@@ -81,6 +90,15 @@ def main() -> pd.DataFrame:
             continue
         got[sid] = s
         n = add_series(cw, sid, s, positive=pos, name=name, category=cat, frequency="M", units=units, country="DE",
+                       transform_notes=f"Bundesbank {flow}.{key}: {title}. {notes}".strip(), url=PAGE.format(flow=flow, key=key))
+        log.info("%-40s %5d obs", sid, n)
+    for sid, flow, key, name, cat, units, pos, notes in DAILY:
+        try:
+            s_, title = fetch(flow, key)
+        except Exception as e:  # noqa: BLE001
+            log.warning("%s failed: %s", sid, e)
+            continue
+        n = add_series(cw, sid, s_, positive=pos, name=name, category=cat, frequency="D", units=units, country="DE",
                        transform_notes=f"Bundesbank {flow}.{key}: {title}. {notes}".strip(), url=PAGE.format(flow=flow, key=key))
         log.info("%-40s %5d obs", sid, n)
     # Spliced German/euro policy rate: Bundesbank discount rate -> ECB MRO (monthly, end of month)

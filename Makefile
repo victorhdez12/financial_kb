@@ -39,11 +39,15 @@ graph-down:           ## para Neo4j (los datos persisten en ~/financial_archive/
 INGEST := fred_extended alfred_vintages fred_us fed_yieldcurve us_treasury nyfed_hhdc nber_macrohistory \
           shiller shiller_housing us_hist_labor ken_french damodaran wb_pinksheet measuringworth gold \
           fred_banking_1914 fed_z1 nyfed_repo us_liquidity cb_balance_sheets \
+          ken_french_intl aqr jkp cftc_cot cboe fed_ebp \
           cycle_nyfed cycle_rtdsm cycle_spf \
-          ecb eurostat bde ine bundesbank \
+          ecb eurostat bde ine bundesbank ifo zew \
           cycle_bis bis_ext oecd imf_weo imf_ifs imf_gdd imf_hpdd wb_wdi jst_macrohistory boe_millennium_uk cycle_worldorder \
           events_nber events_wars events_financial_crises events_gpr events_curated
-.PHONY: ingest audit data
+.PHONY: ingest audit data ingest-daily daily semanal
+
+# Fuentes con datos diarios o semanales (actualización diaria automática, ver scripts/actualizar.sh)
+INGEST_DAILY := fred_extended fed_yieldcurve us_liquidity nyfed_repo ecb bundesbank cboe
 
 ingest:               ## descarga/actualiza todas las fuentes curadas (lento; idempotente)
 	@for s in $(INGEST); do echo "== $$s"; $(PY) -m src.ingest.$$s || echo "FALLO $$s"; done
@@ -52,3 +56,10 @@ audit:                ## docs/data/audit_<hoy>.md + CSV (solo lectura)
 	$(PY) -m src.audit.run
 
 data: ingest warehouse regime audit   ## ciclo completo de la fase de datos
+
+ingest-daily:         ## solo las fuentes diarias (minutos)
+	@for s in $(INGEST_DAILY); do echo "== $$s"; $(PY) -m src.ingest.$$s || echo "FALLO $$s"; done
+
+daily: ingest-daily warehouse regime   ## actualización diaria (launchd, lun-sáb)
+
+semanal: data weekly  ## actualización completa + auditoría + reporte (launchd, domingo)

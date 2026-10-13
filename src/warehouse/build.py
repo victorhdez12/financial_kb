@@ -142,7 +142,10 @@ AGGREGATES = {"EA": "EA", "EA19": "EA", "EA20": "EA", "EA21": "EA", "EU": "EU", 
               "U2": "EA", "I9": "EA", "EURO AREA": "EA", "WORLD": "WLD", "WLD": "WLD",
               "UK": "GBR", "EL": "GRC", "KOSOVO": "XKX", "KOREA": "KOR",
               # multi-country groups keep a stable code so they can still be filtered
-              "G7": "G7", "G20": "G20", "OECD": "OECD", "EM": "EM", "ADV": "ADV", "EMDE": "EMDE"}
+              "G7": "G7", "G20": "G20", "OECD": "OECD", "EM": "EM", "ADV": "ADV", "EMDE": "EMDE",
+              # factor regions (ken_french_intl, aqr, jkp); NAMER, not NAM (= Namibia)
+              "WLDXUS": "WLDXUS", "DEV": "DEV", "DEVXUS": "DEVXUS", "EUR": "EUR", "NAMER": "NAMER",
+              "APXJ": "APXJ", "PAC": "PAC"}
 
 
 def pit_role(series_id: str, transform_notes: object = None) -> str:

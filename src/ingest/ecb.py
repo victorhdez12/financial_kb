@@ -120,6 +120,19 @@ for c in ["ES", "DE", "FR", "IT", "NL", "PT", "GR", "IE"]:
     add(f"ecb_hicp_headline_yoy_{c.lower()}_m", "HICP", f"M.{c}.N.000000.4D0.ANR", f"HICP overall index, annual rate, {c}", "inflation", "M", "% y/y", c, False, HICP_NOTE)
     add(f"ecb_hicp_core_yoy_{c.lower()}_m", "HICP", f"M.{c}.N.XEF000.4D0.ANR", f"HICP excl. energy, food, alcohol & tobacco, annual rate, {c}", "inflation", "M", "% y/y", c, False, HICP_NOTE)
 
+# --- europe_daily_spain extension (2026-10-13), additive: forwards, EUR OIS proxies, benchmark yields ---
+for curve, tag, cname in [("G_N_A", "aaa", "AAA-rated euro area central government bonds"), ("G_N_C", "all", "all euro area central government bonds")]:
+    for m in ["1Y", "2Y", "5Y", "10Y"]:
+        add(f"ecb_yc_{tag}_fwd_{m.lower()}_d", "YC", f"B.U2.EUR.4F.{curve}.SV_C_YM.IF_{m}",
+            f"ECB yield curve, {cname}, instantaneous forward rate {m}", "rates", "D", "% p.a.", "EA", False,
+            "Svensson-fitted instantaneous forward, business days, since 2004-09-06. The ECB curve is built on government bonds (AAA = mostly DE/NL/FI/LU), not on swaps.")
+for code, lab, nm in [("EU000A2QQF16", "1w", "1 week"), ("EU000A2QQF24", "1m", "1 month"), ("EU000A2QQF32", "3m", "3 months"),
+                      ("EU000A2QQF40", "6m", "6 months"), ("EU000A2QQF57", "12m", "12 months")]:
+    add(f"ecb_estr_comp_{lab}_d", "EST", f"B.{code}.CR", f"Compounded €STR average rate, {nm} tenor (backward-looking)", "rates", "D", "% p.a.", "EA", False,
+        "ECB-published backward-looking compounded €STR over the past tenor; a free, official proxy for realised OIS (NOT forward-looking market OIS, which is licensed). Since 2022-09-15 (ECB publication start; ~2019-10 for the 1w tenor).")
+add("ecb_bench_yld_ea_2y_m", "FM", "M.U2.EUR.4F.BB.U2_2Y.YLD", "Euro area 2-year government benchmark bond yield, monthly average", "rates", "M", "% p.a.", "EA", False, "ECB/Refinitiv benchmark, changing composition.")
+add("ecb_bench_yld_ea_10y_m", "FM", "M.U2.EUR.4F.BB.U2_10Y.YLD", "Euro area 10-year government benchmark bond yield, monthly average", "rates", "M", "% p.a.", "EA", False, "ECB/Refinitiv benchmark, changing composition.")
+
 
 def fetch(flow: str, key: str) -> tuple[pd.Series, str]:
     dest = raw_dir(SOURCE) / f"{flow}.{key}.csv"
@@ -182,6 +195,19 @@ def main() -> pd.DataFrame:
             add_series(cw, f"ecb_yc_{tag}_10y2y_slope_d", (a - b).dropna() * 100, name=f"ECB {tag.upper()} yield curve slope 10y-2y",
                        category="rates", frequency="D", units="basis points", country="EA",
                        transform_notes="Derived: spot 10y - spot 2y (Svensson), x100.")
+    # europe_daily_spain: derived daily curve metrics
+    a, b = got.get("ecb_yc_all_spot_10y_d"), got.get("ecb_yc_aaa_spot_10y_d")
+    if a is not None and b is not None:
+        add_series(cw, "ecb_yc_all_minus_aaa_10y_d", (a - b).dropna() * 100, name="Euro area 10y spot: all-bonds minus AAA curve (sovereign stress proxy)",
+                   category="rates", frequency="D", units="basis points", country="EA",
+                   transform_notes="Derived: ecb_yc_all_spot_10y_d - ecb_yc_aaa_spot_10y_d, x100. Widens with periphery spreads (2011-12 peak).")
+    for tag in ["aaa", "all"]:
+        s1, s2 = got.get(f"ecb_yc_{tag}_spot_1y_d"), got.get(f"ecb_yc_{tag}_spot_2y_d")
+        if s1 is not None and s2 is not None:
+            f = (((1 + s2 / 100) ** 2 / (1 + s1 / 100)) - 1) * 100
+            add_series(cw, f"ecb_yc_{tag}_fwd_1y1y_d", f.dropna(), name=f"ECB {tag.upper()} curve, 1y forward rate 1 year ahead (from spot 1y and 2y)",
+                       category="rates", frequency="D", units="% p.a.", country="EA",
+                       transform_notes="Derived: ((1+s2)^2/(1+s1))-1 with annual-compounded Svensson spot rates (zero-coupon, government bonds).")
     cat = cw.close()
     if failed:
         log.warning("failed series: %s", failed)

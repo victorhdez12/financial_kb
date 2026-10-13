@@ -121,6 +121,35 @@ EXPLICIT: dict[str, list[str]] = {
                               "RIFSPPFAAD90NB", "RIFSPPNAAD90NB"],
 }
 
+# Market / sentiment extension (2026-10-13, agent "mercado, credito y sentimiento"). None of these
+# ids were in curated/fred or fred_us before. Run only these (merging into the existing catalog,
+# no deletions) with:  .venv/bin/python -m src.ingest.fred_us --only-ext
+EXT: dict[str, list[str]] = {
+    "commodities": ["DCOILBRENTEU"],
+    "fx": ["DTWEXAFEGS", "DTWEXEMEGS"],
+    # CBOE vol indices on FRED (longer than the CBOE VIX3M file: VXV from 2007-12)
+    "markets": ["VXVCLS", "VXNCLS", "RVXCLS", "OVXCLS", "GVZCLS", "VXEEMCLS", "VXDCLS"],
+    "financial_conditions": ["USEPUINDXD", "USEPUINDXM"],
+    "growth": [
+        "CFNAIMA3",
+        # Empire State (NY) manufacturing survey, SA diffusion indices
+        "GACDISA066MSFRBNY", "GAFDISA066MSFRBNY", "NOCDISA066MSFRBNY", "NOFDISA066MSFRBNY",
+        "PPCDISA066MSFRBNY", "PRCDISA066MSFRBNY", "NECDISA066MSFRBNY", "SHCDISA066MSFRBNY",
+        "UOCDISA066MSFRBNY", "DTCDISA066MSFRBNY", "IVCDISA066MSFRBNY",
+        # Philadelphia Fed manufacturing survey (1968+)
+        "GACDFSA066MSFRBPHI", "GAFDFSA066MSFRBPHI", "NOCDFSA066MSFRBPHI", "NOFDFSA066MSFRBPHI",
+        "PPCDFSA066MSFRBPHI", "PPFDFSA066MSFRBPHI", "PRCDFSA066MSFRBPHI", "NECDFSA066MSFRBPHI",
+        "SHCDFSA066MSFRBPHI", "UOCDFSA066MSFRBPHI", "DTCDFSA066MSFRBPHI", "IVCDFSA066MSFRBPHI",
+        # Dallas Fed Texas manufacturing (TMOS) and services (TSSOS) outlook surveys
+        "BACTSAMFRBDAL", "FBACTSAMFRBDAL", "VNWOSAMFRBDAL", "PRMSAMFRBDAL", "PFGSAMFRBDAL",
+        "NEMPSAMFRBDAL", "PRODSAMFRBDAL", "COLKSAMFRBDAL",
+        "TSSOSBACTSAMFRBDAL", "TSSOSCOLKSAMFRBDAL", "TSSOSREVSAMFRBDAL",
+    ],
+    "employment": ["FRBKCLMCILA", "FRBKCLMCIM"],
+    # H.6 money-fund assets (ICI-sourced): retail weekly NSA; institutional discontinued 2021-02
+    "money": ["WRMFNS", "WIMFNS"],
+}
+
 # release_id -> (category, label, filter(meta)->bool)
 RELEASES: dict[int, tuple[str, str, object]] = {
     18: ("rates", "H.15 Selected Interest Rates (non-annual)",
@@ -165,7 +194,40 @@ def drop_sentinels(v: pd.Series) -> pd.Series:
     return v
 
 
-def run(refresh: bool = False) -> pd.DataFrame:
+def run_ext(fred, root, raw, out, existing, refresh) -> pd.DataFrame:
+    """Fetch only EXT ids and merge them into the existing curated/fred_us catalog."""
+    cat_path = out / "_catalog.csv"
+    cur = pd.read_csv(cat_path) if cat_path.exists() else pd.DataFrame(columns=CATALOG_COLS)
+    rows, failures = {}, []
+    for cat, ids in EXT.items():
+        for sid in ids:
+            if sid in existing:
+                log.warning("%s already in curated/fred: skipped", sid)
+                continue
+            try:
+                m, obs = fetch_series(fred, sid, raw, refresh, None)
+            except FredError as e:
+                log.warning("%s: %s", sid, e)
+                failures.append(sid)
+                continue
+            df = obs_to_frame(obs, sid)
+            df["value"] = drop_sentinels(df["value"])
+            df["source"] = SOURCE
+            if df["value"].notna().sum() == 0:
+                failures.append(sid)
+                continue
+            write_parquet(out / f"{sid}.parquet", df)
+            r = catalog_row(sid, m, df, cat, "US", sid, "", "origin: FRED API (market/sentiment extension)")
+            r["source"] = SOURCE
+            rows[sid] = r
+    new = pd.DataFrame(list(rows.values()), columns=CATALOG_COLS)
+    cat_df = pd.concat([cur[~cur["series_id"].isin(new["series_id"])], new]).sort_values("series_id")
+    cat_df.to_csv(cat_path, index=False)
+    log.info("fred_us ext: %d series written/updated; failures %s; catalog now %d", len(new), failures, len(cat_df))
+    return cat_df
+
+
+def run(refresh: bool = False, only_ext: bool = False) -> pd.DataFrame:
     root = data_root()
     raw = root / "raw" / SOURCE
     out = root / "curated" / SOURCE
@@ -178,9 +240,14 @@ def run(refresh: bool = False) -> pd.DataFrame:
 
     fred = Fred()
     todo: dict[str, tuple[str, str, dict | None]] = {}  # sid -> (category, origin note, meta)
+    if only_ext:
+        return run_ext(fred, root, raw, out, existing, refresh)
     for cat, ids in EXPLICIT.items():
         for sid in ids:
             todo.setdefault(sid, (cat, "explicit list", None))
+    for cat, ids in EXT.items():
+        for sid in ids:
+            todo.setdefault(sid, (cat, "explicit list (market/sentiment extension)", None))
     for rid, (cat, label, filt) in RELEASES.items():
         metas = [m for m in discover_release(fred, rid) if filt(m)]
         log.info("release %d (%s): %d series selected", rid, label, len(metas))
@@ -234,7 +301,10 @@ def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     ap = argparse.ArgumentParser()
     ap.add_argument("--refresh", action="store_true", help="ignore raw cache")
-    run(refresh=ap.parse_args().refresh)
+    ap.add_argument("--only-ext", action="store_true",
+                    help="fetch only the market/sentiment extension (EXT) and merge into the catalog")
+    a = ap.parse_args()
+    run(refresh=a.refresh, only_ext=a.only_ext)
 
 
 if __name__ == "__main__":

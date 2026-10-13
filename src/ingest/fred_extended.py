@@ -338,6 +338,23 @@ def run(refresh: bool = False) -> pd.DataFrame:
 
     fred = Fred()
     failures, substitutions = [], []
+    # Legacy CSVs are only a fallback: refresh every legacy series from the API so they do not freeze
+    # (DGS10, VIXCLS, SP500… stopped at the date of the old CSV until 2026-10-13).
+    for sid in list(rows):
+        try:
+            m, obs = fetch_series(fred, sid, raw, refresh)
+        except FredError as e:
+            log.warning("%s: API refresh failed, keeping legacy CSV (%s)", sid, e)
+            continue
+        if not obs:
+            continue
+        cat, country, _, note = UNIVERSE.get(sid, (rows[sid]["category"], rows[sid]["country"], [], ""))
+        df = obs_to_frame(obs, sid)
+        df, fix_note = apply_fixes(sid, df)
+        write_parquet(out / f"{sid}.parquet", df)
+        rows[sid] = override_row(sid, catalog_row(sid, m, df, cat, country, sid,
+                                                  "; ".join(x for x in (note, fix_note) if x),
+                                                  "origin: FRED API (raw/fred_extended); legacy CSV kept as fallback"))
     todo: list[tuple[str, tuple, dict | None]] = [(k, v, None) for k, v in UNIVERSE.items()]
     for sid, meta in discover_baml(fred).items():
         if sid not in UNIVERSE:
