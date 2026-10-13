@@ -38,9 +38,10 @@ graph-down:           ## para Neo4j (los datos persisten en ~/financial_archive/
 # Orden: ecb antes que bundesbank (el empalme del tipo oficial alemán usa ecb_mro_d).
 INGEST := fred_extended alfred_vintages fred_us fed_yieldcurve us_treasury nyfed_hhdc nber_macrohistory \
           shiller shiller_housing us_hist_labor ken_french damodaran wb_pinksheet measuringworth gold \
+          fred_banking_1914 fed_z1 nyfed_repo us_liquidity cb_balance_sheets \
           cycle_nyfed cycle_rtdsm cycle_spf \
           ecb eurostat bde ine bundesbank \
-          cycle_bis bis_ext oecd imf_weo imf_gdd imf_hpdd wb_wdi jst_macrohistory boe_millennium_uk cycle_worldorder \
+          cycle_bis bis_ext oecd imf_weo imf_ifs imf_gdd imf_hpdd wb_wdi jst_macrohistory boe_millennium_uk cycle_worldorder \
           events_nber events_wars events_financial_crises events_gpr events_curated
 .PHONY: ingest audit data
 

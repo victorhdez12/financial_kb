@@ -71,19 +71,30 @@ def maddison(refresh=False):
         cw.add(f"maddison_{c}_gdp", gdppc * pop / 1e6, name=f"Maddison total GDP (gdppc x pop), {country}",
                category="growth", frequency="A", units="billions 2011 int. $", country=iso,
                transform_notes="derived gdppc*pop/1e6; " + note)
+    # The sheet has two blocks side by side with the same region names: GDP per capita, then population
+    # (block titles in row 0; region names in row 1, except the World column whose name is in row 0).
     reg = pd.read_excel(dest, sheet_name="Regional data", header=None)
-    hdr = 1
-    names = reg.iloc[hdr].tolist()
-    body = reg.iloc[hdr + 1:]
+    titles, names = reg.iloc[0].tolist(), reg.iloc[1].tolist()
+    body = reg.iloc[2:]
     body = body[pd.to_numeric(body[0], errors="coerce").notna()]
     idx = [dt.date(int(y), 1, 1) for y in body[0]]
-    for j, nm in enumerate(names):
-        if j == 0 or not isinstance(nm, str):
+    pop_start = next(j for j, t in enumerate(titles) if isinstance(t, str) and t.strip().lower().startswith("regional population"))
+    for j in range(1, len(names)):
+        nm = names[j] if isinstance(names[j], str) else titles[j] if isinstance(titles[j], str) else None
+        if nm is None:
             continue
+        is_pop = j >= pop_start
+        nm = re.sub(r"\s*(GDP pc|Population)$", "", nm.strip()).replace("Sub Saharan SSA", "Sub Saharan Africa")
         slug = re.sub(r"[^a-z0-9]+", "_", nm.lower()).strip("_")
-        cw.add(f"maddison_region_{slug}_gdppc", pd.Series(pd.to_numeric(body[j], errors="coerce").values, index=idx),
-               name=f"Maddison regional GDP per capita, {nm}", category="growth", frequency="A",
-               units="2011 int. $", country=nm, transform_notes="Regional data sheet")
+        vals = pd.Series(pd.to_numeric(body[j], errors="coerce").values, index=idx)
+        if is_pop:
+            cw.add(f"maddison_region_{slug}_pop", vals, name=f"Maddison regional population, {nm}",
+                   category="growth", frequency="A", units="thousands", country=nm,
+                   transform_notes="Regional data sheet, population block")
+        else:
+            cw.add(f"maddison_region_{slug}_gdppc", vals, name=f"Maddison regional GDP per capita, {nm}",
+                   category="growth", frequency="A", units="2011 int. $", country=nm,
+                   transform_notes="Regional data sheet, GDP per capita block")
     return cw.close()
 
 

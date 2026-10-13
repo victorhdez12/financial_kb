@@ -235,6 +235,42 @@ def catalog_row(sid, meta, df, cat, country, requested, note, origin) -> dict:
 
 
 # --------------------------------------------------------------------------------------
+# Known data problems found by the data audit (docs/data/audit_2026-10-12_tarde.md).
+# sid -> list of (first date, last date, factor, reason): values in the range are multiplied by factor.
+KNOWN_FIXES: dict[str, list[tuple[str, str, float, str]]] = {
+    "BOGZ1FL073164003Q": [("1945-01-01", "1951-12-31", 10.0,
+                           "pre-1952 annual (Q4) observations are one decimal place off the quarterly "
+                           "series that starts in 1952 (1.277 in 1951-Q4 vs 12.910 in 1952-Q1)")],
+}
+# sid -> catalog fields to override, plus an extra transform note.
+CATALOG_OVERRIDES: dict[str, dict[str, str]] = {
+    "BOGZ1FL073164003Q": {"units": "Index (FRED metadata says 'Percent': wrong)",
+                          "note": "Z.1 corporate equities market value index; used only as a Wilshire substitute"},
+    "M1SL": {"note": "DEFINITION BREAK 2020-05: savings deposits reclassified into M1 (Fed H.6, Feb-2021); "
+                     "levels jump ~+11 tn USD; do not use y/y changes across 2020-05..2021-04"},
+}
+
+
+def apply_fixes(sid: str, df: pd.DataFrame) -> tuple[pd.DataFrame, str]:
+    notes = []
+    for lo, hi, factor, why in KNOWN_FIXES.get(sid, []):
+        d = pd.to_datetime(df["date"])
+        m = (d >= pd.Timestamp(lo)) & (d <= pd.Timestamp(hi)) & df["value"].notna()
+        if m.any():
+            df = df.copy()
+            df.loc[m, "value"] = df.loc[m, "value"] * factor
+            notes.append(f"FIX {lo}..{hi} x{factor:g}: {why}")
+    if CATALOG_OVERRIDES.get(sid, {}).get("note"):
+        notes.append(CATALOG_OVERRIDES[sid]["note"])
+    return df, "; ".join(notes)
+
+
+def override_row(sid: str, row: dict) -> dict:
+    if "units" in CATALOG_OVERRIDES.get(sid, {}):
+        row["units"] = CATALOG_OVERRIDES[sid]["units"]
+    return row
+
+
 def load_legacy(legacy_dir: Path, out: Path) -> dict[str, dict]:
     rows = {}
     for csv in sorted(legacy_dir.glob("*.csv")):
@@ -247,9 +283,10 @@ def load_legacy(legacy_dir: Path, out: Path) -> dict[str, dict]:
         if sid in UNIVERSE:
             cat = UNIVERSE[sid][0]
         df = obs_to_frame(raw[["date", "value"]].astype({"value": "string"}).to_dict("records"), sid)
+        df, fix_note = apply_fixes(sid, df)
         write_parquet(out / f"{sid}.parquet", df)
-        rows[sid] = catalog_row(sid, meta, df, cat, "US", sid, "",
-                                "origin: legacy macro/fred CSV (re-normalised, not re-downloaded)")
+        rows[sid] = override_row(sid, catalog_row(sid, meta, df, cat, "US", sid, fix_note,
+                                "origin: legacy macro/fred CSV (re-normalised, not re-downloaded)"))
     log.info("legacy: %d series re-normalised", len(rows))
     return rows
 
@@ -325,9 +362,11 @@ def run(refresh: bool = False) -> pd.DataFrame:
                 log.warning("%s: no observations", sid)
                 continue
             df = obs_to_frame(obs, sid)
+            df, fix_note = apply_fixes(sid, df)
             write_parquet(out / f"{sid}.parquet", df)
-            rows[sid] = catalog_row(sid, m, df, cat, country, requested, note,
-                                    "origin: FRED API (raw/fred_extended)")
+            rows[sid] = override_row(sid, catalog_row(sid, m, df, cat, country, requested,
+                                                      "; ".join(x for x in (note, fix_note) if x),
+                                                      "origin: FRED API (raw/fred_extended)"))
             got = sid
             break
         if got is None:

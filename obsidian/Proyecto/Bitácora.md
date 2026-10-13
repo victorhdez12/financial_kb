@@ -130,3 +130,36 @@ Las entradas más recientes van arriba. Ver también [[Proyecto/Estado del proye
   - **Nuevo reporte** [[Reports/2026-10-12_semanal]].
   - **Reauditoría:** 0 críticas y 28 altas (todas explicadas: precios oficiales históricos, look-ahead ya marcado y un falso positivo). Ninguna fuente en rojo.
 - **Commit `d1acc7e` en la rama `fase-datos`** (no fusionada aún en `main`).
+- **El usuario aprueba seguir** con los pendientes MEDIA y los huecos accesibles (rama `fase-datos`).
+  - **Agente "Huecos EE. UU.":** FRED release 388 (1914-41), Z.1 completo, repo BGCR/TGCR/SOFR y MTS anterior a 1980.
+  - **Agente "Huecos Europa/FMI":** EPA 1976-2001 (PC-Axis del INE), IPC del INE anterior a 2002 e IFS del FMI.
+  - **El coordinador corrige los pendientes MEDIA:** BOGZ1FL073164003Q, nber_m12014, shiller_gs10, el arroz de 2008, M1SL, los eventos y el catálogo de maddison.
+
+## 2026-10-13
+- **Retomado.** La sesión del 12-oct se cortó: de los pendientes MEDIA solo había 2 arreglos sin commit (`nber_m12014` ×10 en 1915 y ceros del arroz en `wb_pinksheet`); los agentes "Huecos EE. UU." y "Huecos Europa/FMI" no dejaron nada.
+- **Liquidez (petición del usuario):** ya estaban WALCL, WRESBAL, TGA (WTREGEN/WDTGAL), RRP, SRF (RPONTSYD), swaps, M2 mensual/semanal, MSPD por tipo y balance del Eurosistema; el clasificador ya usa liquidez neta = WALCL − TGA − RRP. Se añade un agente **"Liquidez EE. UU. y global"** para lo que falta (TGA diaria DTS, emisión neta letras/cupones, recompras, balance Fed antes de 2002, BoJ/BoE/PBoC/SNB y M2 de grandes economías).
+- Lanzados en paralelo: Huecos EE. UU., Huecos Europa/FMI y Liquidez. El coordinador corrige los MEDIA.
+- **Arreglos MEDIA hechos por el coordinador (13-oct, sin commit aún)**, todos en los scripts de ingesta y reejecutados:
+  - `BOGZ1FL073164003Q` (`fred_extended.py`, nuevos `KNOWN_FIXES`/`CATALOG_OVERRIDES`): 1945-1951 ×10 (1.277 → 12.770 frente a 12.910 en 1952-Q1) y unidades "Index" (FRED decía "Percent").
+  - `M1SL`: nota de ruptura de definición en 2020-05 (depósitos de ahorro pasan a M1; no usar a/a entre 2020-05 y 2021-04).
+  - `shiller_gs10` 2019-07: 1,63 → 2,06 (Shiller repetía agosto; FRED GS10), solo mientras el fichero traiga el valor malo.
+  - `nber_m12014` 1915 ×10 y arroz de 2008 a NaN (`wb_pinksheet`): comprobados.
+  - Eventos: `inflation_crisis` añadido al enum de `DATA_CONTRACT.md`; COW con día/mes de fin desconocido → último día del periodo (`cow_extra_321`: fin 1838-04-30). 0 eventos con fin < inicio.
+  - **Maddison (era un fallo real, no solo duplicados):** la hoja regional tiene dos bloques (PIB pc y población) y el segundo sobrescribía al primero: 7 series `maddison_region_*_gdppc` contenían población. Ahora 9 `_gdppc` + 9 `_pop` (Europa occidental 2000: 32.593 $ y 390 M hab.). `CatalogWriter.close()` falla si hay `series_id` repetidos.
+  - Pendiente: rtdsm sin conectar al clasificador (es del modelo, para después de la fase de datos).
+- **Agente "Huecos Europa/FMI" terminado** (doc: `docs/data/europe_gaps_2026-10-13.md`).
+  - `ine`: 13 → 60 series. EPA 1976T3-2001T4 (Excel oficial `series76_01.xls`, definición antigua) + EPA Tempus desde 2002 + empalmadas `*_linked_q` (ruptura 2002 anotada: 12,75 % → 11,55 %). Paro 1994 ≈ 24 %.
+  - IPC desde 1961: `ine_ipc_mom_m` e `ine_ipc_index_linked_m`; `bde_es_cpi_m` es el mismo índice con otra base (cociente 0,7888). Dic-1977 26,4 %. Ene-sep 2002: usar `ine_ipc_yoy_m`.
+  - `imf_ifs` (nueva, api.imf.org SDMX 3.0): 305 series, 22 países (G20 + ESP, CHE, NLD): IPC, tipos de cambio, tipos de interés, dinero, reservas y oro. Huecos: dinero estandarizado solo desde 2000-12; tipo oficial en 13 de 22 países; sin subyacente.
+- **Agente "Liquidez EE. UU. y global" terminado** (doc: `docs/data/liquidity_2026-10-13.md`, con la sección "Cómo medir la liquidez").
+  - `us_liquidity` (55 series): TGA **diaria** desde 2005-10 (cuadra exacta con WDTGAL en 1.084 miércoles), depósitos/retiros diarios, emisión DTS bruta/neta de letras, notas y bonos, subastas desde 1979 (cuota de letras), recompras del Tesoro, detalle H.4.1 (ventana de descuento, FIMA) y proxies de la Fed antes de 2002 (AMBSL desde 1918, NBER 1914-69).
+  - `cb_balance_sheets` (38 series): BoJ (API oficial: balance, base, M1-M3), SNB, BoE (M4 desde 1982; balance solo 2006-2014), PBoC (vía FMI/DBnomics, hasta 2025-06), M2 de China (Eastmoney, agregador).
+  - Fórmulas propuestas: liquidez neta diaria = WALCL − TGA diaria − 1000 × RRP (5,86 billones $ el 2026-10-08); liquidez global USD = Fed + BCE + BoJ + SNB [+ PBoC] (15,5 → 25,9 → 19,9 billones en dic-19 / mar-22 / jun-25); impulso a 13 y 26 semanas.
+  - Huecos: BoE tras 2014, PBoC tras 2025-06, total de activos de la Fed 1969-2002, DTS antes de 2005-10. Pendiente de la checklist del auditor.
+  - **Para el modelo (cuando se cierre la fase de datos):** `net_liquidity` diaria desde 2005 con retardo de publicación (DTS T+1, WALCL los jueves) y el agregado global.
+- **Agente "Huecos EE. UU." terminado** (doc: `docs/data/us_gaps_2026-10-13.md`).
+  - `fred_banking_1914` (release 388 completa): 1.993 series 1914-1941 (balance de *member banks*, nº de bancos: 26.150 en 1914 → 14.523 en 1933).
+  - `fed_z1`: 1.935 series trimestrales 1945-2026 (niveles de todos los sectores y deuda por sector; 20 duplicadas con `fred_us` omitidas; deuda no financiera 84,09 billones $ en 2026-Q2 = TODNS).
+  - `nyfed_repo`: SOFR, BGCR, TGCR con percentiles y volumen desde 2018-04 (+ medias e índice SOFR desde 2020).
+  - Hueco: MTS anterior a 1980 (solo PDF escaneado); se cubre con anuales desde 1901. Z.1 y SOFR se revisan: no son point-in-time.
+- **Reconstrucción (13-oct):** 5 fuentes nuevas añadidas al `Makefile` (`INGEST`). `make warehouse regime audit weekly`: 14.026 series, 6,46 M filas; régimen hoy Deflación/recesión, crédito verde, **liquidez neutral** (−0,47; ayer escasa −0,51, por datos semanales más frescos). Auditoría: 0 críticas, 32 altas explicadas (precios oficiales fijos, look-ahead marcado y 5 falsos 9999/−99 que son valores reales). Resumen en `docs/data/audit_2026-10-13.md`. Reporte `Reports/2026-10-13_semanal`.

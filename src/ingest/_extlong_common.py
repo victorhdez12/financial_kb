@@ -163,6 +163,9 @@ class CatalogWriter:
 
     def close(self) -> pd.DataFrame:
         cat = pd.DataFrame(self.rows, columns=CATALOG_COLS).sort_values("series_id")
+        dup = cat["series_id"][cat["series_id"].duplicated()].unique().tolist()
+        if dup:  # a repeated id means one parquet silently overwrote another (maddison regions, 2026-10)
+            raise ValueError(f"{self.source}: duplicated series_id {dup[:10]}")
         # drop stale parquet files no longer produced
         keep = set(cat["series_id"])
         for f in self.out.glob("*.parquet"):

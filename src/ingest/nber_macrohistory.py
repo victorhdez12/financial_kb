@@ -210,6 +210,25 @@ def parse_dat(text: str, freq: str, md: float | None) -> pd.Series:
     return pd.Series(vals, index=pd.DatetimeIndex(idx))
 
 
+# Transcription errors in the NBER .dat files, verified against the neighbouring years.
+# sid -> list of (first date, last date, factor, reason)
+KNOWN_FIXES: dict[str, list[tuple[str, str, float, str]]] = {
+    "m12014": [("1915-01-01", "1915-12-01", 10.0,
+                "1915 shifted one decimal place in the NBER file (~20 vs ~197 in Dec-1914 and ~252 in Jan-1916)")],
+}
+
+
+def apply_fixes(sid: str, s: pd.Series) -> tuple[pd.Series, str]:
+    notes = []
+    for lo, hi, factor, why in KNOWN_FIXES.get(sid, []):
+        m = (s.index >= pd.Timestamp(lo)) & (s.index <= pd.Timestamp(hi))
+        if m.any():
+            s = s.copy()
+            s[m] = s[m] * factor
+            notes.append(f"FIX {lo}..{hi} x{factor:g}: {why}")
+    return s, ("; " + "; ".join(notes)) if notes else ""
+
+
 def main() -> None:
     cw = CatalogWriter(SOURCE, url=PAGE, license=LICENSE)
     rd = raw_dir(SOURCE)
@@ -249,9 +268,11 @@ def main() -> None:
                 continue
         meta = parse_doc(doc)
         s = parse_dat((rd / f"{sid}.dat").read_text(errors="replace"), freq, meta["md"])
+        s, fix_note = apply_fixes(sid, s)
         n = cw.add(f"nber_{sid}", s, name=meta["title"] or idx_title or sid, category=cat, frequency=freq,
                    units=meta["units"], country=country,
-                   transform_notes=f"NBER series {sid}; missing code {meta['md']} -> NaN; see raw {sid}.txt for source/notes",
+                   transform_notes=f"NBER series {sid}; missing code {meta['md']} -> NaN; see raw {sid}.txt for source/notes"
+                                   + fix_note,
                    url=url)
         if not n:
             log.warning("no data parsed for %s", sid)

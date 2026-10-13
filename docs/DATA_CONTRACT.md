@@ -31,7 +31,7 @@ Categorías: `growth, inflation, employment, rates, credit, money, liquidity, fi
 
 ## Eventos: `events/<dataset>.parquet`
 
-`event_id, name, type (war|banking_crisis|currency_crisis|sovereign_default|market_crash|recession|pandemic|oil_shock|policy|credit_event), country, start_date, end_date, severity (texto o numérico), source, url, notes`
+`event_id, name, type (war|banking_crisis|currency_crisis|sovereign_default|market_crash|recession|pandemic|oil_shock|policy|credit_event|inflation_crisis), country, start_date, end_date, severity (texto o numérico), source, url, notes`
 
 ## Reglas
 

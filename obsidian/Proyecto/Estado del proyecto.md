@@ -1,6 +1,6 @@
 ---
 tipo: estado_proyecto
-actualizado: 2026-10-12 (tarde)
+actualizado: 2026-10-13
 fase_real: recopilación y limpieza de datos
 ---
 
@@ -22,6 +22,7 @@ Aunque `docs/PLAN.md` ya habla de la Fase 2 (Neo4j, agentes de decisión), **seg
 - **Fase 1** (2026-10-07, commit `9c3f887`): base de datos DuckDB, clasificador de régimen desde 1950 (4 cuadrantes, ciclo de deuda, crédito y liquidez), validación en `docs/phase1_validation.md` y primer reporte en [[Reports/2026-10-07_semanal]].
 - **Fase 2a** (sin commitear): Neo4j local en Docker (`src/graph/`, `make graph-up/graph-load`) e ingestas de ciclos (BIS, NY Fed, RTDSM).
 - **Revisiones de la Fase 1:** `docs/reviews/2026-10-07_estratega_macro.md` y `docs/reviews/2026-10-07_pm_abogado_diablo.md`. Veredicto: **el reporte aún no sirve para decidir.**
+- **13-oct:** 7 arreglos MEDIA cerrados (incluido un fallo real en Maddison regional), 6 fuentes nuevas (release 388, Z.1, repo SOFR/BGCR/TGCR, liquidez EE. UU., balances de bancos centrales, IFS del FMI) e `ine` ampliado (EPA desde 1976, IPC desde 1961). Base de datos: **14.026 series**, 6,46 M de filas. Auditoría `docs/data/audit_2026-10-13.md`: 0 críticas, 32 altas explicadas. Reporte [[Reports/2026-10-13_semanal]].
 - **Auditoría de datos** (2026-10-12): `docs/data/audit_2026-10-12.md` y su CSV. Reejecutar con `.venv/bin/python -m src.audit.run`.
 
 ## Inventario de datos (`~/financial_archive/curated`, 2026-10-12 por la mañana)
@@ -41,7 +42,15 @@ Aunque `docs/PLAN.md` ya habla de la Fase 2 (Neo4j, agentes de decisión), **seg
 | **nuevas hoy (internacional, terminado):** bis_ext, oecd, imf_weo, imf_gdd, imf_hpdd, wb_wdi, measuringworth | 366, 309, 955, 155, 31, 375, 16 (2.207 en total) | hecho y auditado (tarde). Doc: `docs/data/international_macro.md` |
 | **Europa (terminado):** ecb, eurostat, bde, ine, bundesbank | 116, 98, 53, 13, 19 (299 en total) | hecho y auditado (tarde). Doc: `docs/data/europe_macro_financial.md` |
 
+## Liquidez (petición del 13-oct)
+Datos para medir cuánta liquidez meten la Fed, el Tesoro y los grandes bancos centrales (doc `docs/data/liquidity_2026-10-13.md`):
+- EE. UU.: balance de la Fed (WALCL + detalle H.4.1), reservas, TGA **diaria** desde 2005, RRP, SRF, emisión neta de letras/cupones, subastas desde 1979, recompras, M2 mensual y semanal, repo SOFR/BGCR/TGCR.
+- Global: Eurosistema, BoJ, SNB, BoE (balance solo 2006-14; M4 desde 1982), PBoC (hasta 2025-06), M2 de China.
+- El clasificador ya usa liquidez neta = WALCL − TGA − RRP (semanal). Propuesto para la fase de modelo: versión diaria, agregado global en USD e impulso a 13/26 semanas.
+- Hoy: liquidez **neutral** por poco (score −0,47; ayer escasa, −0,51), liquidez neta 5,86 billones $ (+4,5 % a/a).
+
 ## Problemas abiertos (reauditoría del 2026-10-12 por la tarde)
+> 13-oct: los MEDIA de esta lista están **cerrados** salvo rtdsm (modelo) y la revisión una a una de `fred_us`/`imf_weo`.
 
 Los problemas en rojo de la mañana (fallo del IPC, base de datos desfasada, TED, oro en los análogos, look-ahead sin marcar y COFER) están **corregidos**: ver `docs/data/audit_2026-10-12_tarde.md`. Ya no hay ninguna fuente en rojo.
 
@@ -64,6 +73,7 @@ Huecos de fuentes (de pago o sin API):
 - Release 388 de FRED (1914-41) y Z.1 completo (zip de la Fed).
 
 ## Próximos pasos
+0. (13-oct) Fusionar `fase-datos` en `main` cuando el usuario lo apruebe. Huecos que siguen: MTS anterior a 1980, BoE tras 2014, total de activos de la Fed 1969-2002, IPC subyacente de España antes de 2002, PMI, Euribor diario.
 
 1. Corregir los problemas MEDIA de la lista anterior (los scripts de ingesta afectados, sin tocar los datos a mano).
 2. Cubrir los huecos accesibles: release 388 de FRED, Z.1 completo, IFS del FMI, EPA anterior a 2002 (PC-Axis del INE) y repo BGCR/TGCR.
