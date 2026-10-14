@@ -98,11 +98,68 @@ Las citas se guardan con `char_start/char_end` verificados en el texto original.
 | Abogado del diablo | Contraargumentos, colas, veto si se incumple el IPS | Antes del comité |
 | Comité | Reporte final + señal JSON + entrada del diario | Semanal/mensual |
 
+## Fase 3 — arquitectura de modelos (propuesta del usuario, revisada el 2026-10-14)
+
+Sustituye y concreta el "Motor de decisión" de arriba: HMM, análogos y Bayes pasan a ser modelos del ensemble, no la base.
+
+### Capa 1 — Base point-in-time (primer entregable)
+- **Etiqueta de régimen definida antes de modelar** (`docs/models/label_spec.md`): cuadrante G×I **ex post** con datos definitivos (crecimiento e inflación realizados en los k meses siguientes; contraste con fechas NBER). Nunca la salida del clasificador de reglas (sería circular).
+- Decidir y documentar: **nowcast** (régimen actual) frente a **forecast** (régimen a h = 3, 6, 12 meses); número de clases; frecuencia (mensual al principio).
+- **Matriz de variables as-of** (`src/models/features.py`): en cada fecha t, solo lo publicado en t (vintages ALFRED, retardos de publicación, `pit_role = 'observed'`, z-scores con ventana expansiva). Excluir `forecast`/`lookahead` y marcar las series que se revisan (AQR, JKP, Z.1, SOFR).
+- Test automático de fuga: ninguna variable puede tener fecha de publicación posterior a t.
+
+### Capa 2 — Modelos
+- **Baselines obligatorios** (el listón que hay que batir): persistencia ("mismo régimen que el mes anterior"), clasificador de reglas actual, logística/probit con 5-10 variables (curva, EBP, Sahm, inflación subyacente), Markov switching.
+- **Aspirante:** LightGBM/XGBoost/CatBoost con árboles poco profundos, regularización fuerte y restricciones de monotonía donde haya sentido económico. Solo entra si bate a los baselines fuera de muestra.
+- Ensemble: combinar modelos **distintos** (GBM + logística + Markov), no tres GBM.
+- **Dos etapas:** (1) probabilidad de régimen + confianza calibrada; (2) preferencia relativa de factores/activos condicionada al régimen, con shrinkage hacia la media (pocos meses por régimen).
+- Un único modelo de régimen al principio; los indicadores por bloque (crédito, empleo, inflación, liquidez) entran como variables.
+
+### Validación (nivel profesional)
+- Walk-forward con **purging + embargo** (etiquetas solapadas); ajuste de hiperparámetros con validación anidada.
+- **Periodo final bloqueado** (p. ej. 2016-2026): no se mira hasta el final; una sola evaluación.
+- Métricas de probabilidad: **log-loss / Brier Skill Score frente a la persistencia**, curvas de calibración (calibración isotónica/Platt dentro del walk-forward). El acierto (58-65 % esperable) se informa, pero no decide.
+- **Registro de pruebas** (todas, también las fallidas) y **Deflated Sharpe** para corregir por número de intentos.
+- Etapa 2 validada **de extremo a extremo**: ¿la cartera resultante bate a la cartera estática del IPS después de costes (5-10 pb), impuestos y en EUR? Con instrumentos invertibles (fondos indexados / ETFs UCITS), no solo con factores teóricos.
+- Estabilidad: resultados por década y por episodio (contar episodios, no meses).
+
+### Capa 3 — Reglas de oro
+- Candidatas desde SHAP, comportamiento histórico de factores por régimen y sentido económico. **SHAP explica el modelo, no la economía:** una regla es hipótesis hasta que tiene sentido económico **y** aguanta en el periodo bloqueado.
+- Se guardan versionadas (`config/rules.yaml` + Neo4j) con su evidencia y fecha de validación.
+
+### Capa 4 — Cartera y riesgo (nueva)
+- Traduce probabilidades + preferencias a pesos dentro del IPS: límites por posición, control de rotación (máx. un cambio táctico al mes), volatilidad objetivo, cobertura de divisa USD/EUR, coste fiscal antes de vender.
+- Benchmark fijo: la cartera estratégica del IPS.
+
+### Capa 5 — LLM (Claude)
+- Recibe solo salidas estructuradas (JSON de señal) + reglas validadas + plantilla fija. Python calcula, el LLM redacta; un validador comprueba que cada cifra del texto está en el JSON.
+- No busca señales libres en la web ni en redes para alterar la decisión.
+- Knowledge Graph como memoria estructurada: reglas, definiciones de régimen, historial de decisiones, perfiles de empresa.
+
+### Capa 6 — Salidas
+- **A) Informe de inversión/régimen:** régimen actual + confianza calibrada; renta variable (estilos a favorecer/infraponderar); renta fija/duración; riesgos y puntos de vigilancia; implicaciones para la cartera; vista opcional Fed/BCE; limitaciones del sistema.
+- **B) Informe para empresas** (después de validar A): mismo régimen cruzado con el perfil de la empresa (inventario, capex, deuda, liquidez, segmentos). Requiere datos propios de cada empresa.
+- Aviso: recomendaciones de inversión a terceros = asesoramiento regulado (CNMV, MiFID II). Uso propio sin problema.
+
+### Operación
+- Monitorización: deriva de variables y del modelo, calidad de datos (auditor existente), alertas si la calibración se degrada.
+- Registro de modelos y experimentos (MLflow o equivalente), ficha por modelo (`docs/models/<modelo>.md`): datos, etiqueta, métricas, limitaciones.
+- Paper trading ≥ 6 meses antes de dinero real.
+
+### Orden de trabajo
+1. Especificación de la etiqueta + matriz point-in-time + test de fugas.
+2. Pendientes de la revisión de la Fase 1 como variables: histéresis de G, inflación compuesta (petróleo, PPI), bear/bull steepening, liquidez neta diaria y global, capa EUR.
+3. Arnés de backtest walk-forward (purging, embargo, periodo bloqueado, registro de pruebas).
+4. Baselines → aspirante GBM → ensemble → calibración.
+5. Etapa 2 (factores por régimen) + capa de cartera, validadas de extremo a extremo.
+6. Reglas de oro validadas → informe A con Claude → paper trading.
+
 ## Roadmap
 
 - **Fase 0 (hecha 2026-10-07):** limpieza, git, bugs de descarga, datos unificados en `data/archive`.
 - **Fase 1 — MVP (2 semanas):** FRED + BLS a DuckDB; clasificador de 4 cuadrantes + curva + spreads; script con Claude que escribe `obsidian/Reports/<semana>.md`; plantilla de diario de decisiones.
+- **Fase de datos (añadida 2026-10-12, cerrada 2026-10-14):** 15.397 series, 12,25 M filas, auditadas; actualización automática con launchd.
 - **Fase 2 (sem. 3-5):** Neo4j local; ingesta por secciones (Dalio, Berkshire, 10-K); agentes Scout, Estratega, Abogado del diablo.
-- **Fase 3 (sem. 6-9):** ALFRED, Shiller, JST, French; motor probabilístico + backtest walk-forward; Jev en el ensemble; cartera en paper trading.
+- **Fase 3 (siguiente, desde 2026-10-14):** ver "Fase 3 — arquitectura de modelos": base point-in-time, baselines y GBM, validación walk-forward, reglas de oro, capa de cartera, informe con Claude; paper trading.
 - **Fase 4 (sem. 10-13):** cron diario; analista de empresas con universo histórico; calculadora fiscal; dashboard.
 - **+6 meses de paper trading:** decidir si se pasa a dinero real en el satélite.

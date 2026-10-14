@@ -1,7 +1,7 @@
 ---
 tipo: estado_proyecto
 actualizado: 2026-10-14
-fase_real: recopilación y limpieza de datos
+fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 ---
 
 # Estado del proyecto
@@ -17,21 +17,21 @@ fase_real: recopilación y limpieza de datos
 |---|---|---|
 | 0 | Limpieza, git, datos unificados | ✅ hecha (7-oct) |
 | 1 · MVP | DuckDB, clasificador de régimen, reporte semanal | ✅ hecha (7-oct); la revisión dijo que el reporte aún no sirve para decidir |
-| Fase de datos (añadida por el usuario el 12-oct) | Recopilar, limpiar, auditar | 🟡 casi cerrada: 15.397 series, 12,2 M filas |
+| Fase de datos (añadida por el usuario el 12-oct) | Recopilar, limpiar, auditar | ✅ cerrada el 14-oct: 15.397 series, 12,25 M filas, fusionada en `main` |
 | 2 | Neo4j, textos (Dalio, Berkshire, 10-K), agentes Scout/Estratega/Abogado del diablo | 🟡 empezada y aparcada (Neo4j en Docker, ingestas de ciclos/textos); agentes de análisis parados hasta cerrar datos |
-| 3 | Motor probabilístico, backtest walk-forward, cartera en paper | 🟡 los datos ya están (ALFRED, Shiller, JST, French); falta el modelo |
+| 3 | Modelos (ver `docs/PLAN.md`, "Fase 3 — arquitectura de modelos") | ▶ **siguiente**: etiqueta + base point-in-time + test de fugas |
 | 4 | Cron diario, analista de empresas, calculadora fiscal, dashboard | 🟡 actualización automática montada el 13-oct; resto pendiente |
 | +6 meses | Paper trading antes de dinero real | ⏳ |
 
 **Hecho el 14-oct:** auditoría completa con las fuentes nuevas (`docs/data/audit_2026-10-14.md`, 0 críticas), arreglos de INE (EPA por sexo), CFTC (ECU) y `PIT_RULES`, reporte [[Reports/2026-10-14_semanal]] y commit en `fase-datos`. Tarea launchd de arranque (`com.financialkb.arranque`) instalada: recupera la actualización perdida al encender el Mac.
 
-**Decisiones pendientes del usuario:**
-1. Fusionar `fase-datos` en `main`.
-2. Dar por cerrada la fase de datos (los huecos que quedan son casi todos de pago: PMI, Euribor diario, MOVE, MSCI/STOXX con dividendos; además bonos soberanos diarios por país e Inverco/ICI).
-3. Pasar al modelo (arquitectura de la Fase 3 propuesta por el usuario y revisada el 14-oct; ver Bitácora): liquidez neta diaria y global en el clasificador (`docs/data/liquidity_2026-10-13.md`), conectar rtdsm, pendientes de la revisión de la Fase 1 (histéresis de G, I compuesta con petróleo/PPI, bear/bull steepening, capa EUR) y después motor probabilístico + backtest.
-4. Más adelante: reactivar la Fase 2 (grafo y agentes de análisis).
+**Siguiente paso (Fase 3, orden de `docs/PLAN.md`):**
+1. Especificación de la etiqueta de régimen (ex post, nowcast vs forecast, horizonte) + matriz de variables point-in-time + test de fugas.
+2. Pendientes de la revisión de la Fase 1 como variables (histéresis de G, inflación compuesta, bear/bull steepening, liquidez neta diaria y global, capa EUR).
+3. Arnés walk-forward → baselines (persistencia, reglas, logística, Markov) → GBM → calibración → etapa 2 + cartera → reglas de oro → informe con Claude → paper trading.
+- Más adelante: reactivar la Fase 2 (grafo y agentes de análisis). Volver a ejecutar `imf_weo` con el WEO de octubre de 2026.
 
-## Fase actual (decisión del 2026-10-12)
+## Fase de datos (decisión del 2026-10-12; cerrada el 14-oct)
 
 Aunque `docs/PLAN.md` ya habla de la Fase 2 (Neo4j, agentes de decisión), **seguimos en la fase de datos**: recopilar, limpiar, almacenar y auditar.
 - **Agentes activos:** recopiladores (EE. UU., Europa/BCE/España e internacional) y un auditor de datos.
