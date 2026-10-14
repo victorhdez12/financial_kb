@@ -1,6 +1,6 @@
 ---
 tipo: agentes
-actualizado: 2026-10-12
+actualizado: 2026-10-14
 ---
 
 # Agentes del proyecto
@@ -11,7 +11,8 @@ Ver [[Proyecto/Estado del proyecto]] y [[Proyecto/Bitácora]].
 
 | fase | agentes activos |
 |---|---|
-| **Datos (actual)** | Recopilador EE. UU. · Recopilador Europa/BCE/España · Recopilador internacional · **Auditor de datos** |
+| Datos (cerrada el 14-oct) | Recopilador EE. UU. · Recopilador Europa/BCE/España · Recopilador internacional · Auditor de datos |
+| **Fase 3 · modelos (actual)** | Constructor (etiqueta, base point-in-time, arnés, modelos) · Investigador de relaciones · **Validador independiente** · **Reportero** · Auditor de datos (mantenimiento) · Recopilador (bajo demanda) |
 | Análisis (más adelante) | Scout (noticias y datos nuevos) · Estratega macro · Analista cuantitativo · Analista de empresas |
 | Decisión (más adelante) | Abogado del diablo · Comité (definidos en `docs/PLAN.md`) |
 
@@ -111,3 +112,28 @@ Ver [[Proyecto/Estado del proyecto]] y [[Proyecto/Bitácora]].
 
 **Salida:** `docs/data/audit_<fecha>.md` (semáforo por fuente, hallazgos con evidencia y correcciones, checklist para fuentes nuevas) y `docs/data/audit_<fecha>_series.csv`.
 **Cuándo:** después de cada tanda de ingesta y antes de reconstruir la base de datos.
+
+
+## 5. Validador independiente (Fase 3)
+
+**Rol:** comprobar, de forma independiente a quien construye, que lo que se afirma es verdad: que está bien testeado, que no hay fugas de información, que las relaciones encontradas son reales y que funcionan fuera de muestra. Es la "validación de modelos" de un banco (estilo SR 11-7): **no construye ni arregla**; reproduce, ataca e informa. Su veredicto es necesario para cerrar cada hito.
+**Qué comprueba en cada entrega:**
+1. **Reproducibilidad:** desde cero, mismo código y datos → mismos números y mismo hash.
+2. **Fugas de información:** test automático point-in-time; ninguna variable con fecha de publicación > fecha de decisión; la etiqueta nunca como variable; embargo de 6 meses aplicado; periodo bloqueado (2016-2026) sin tocar (revisa el registro de accesos).
+3. **Pruebas placebo:** con la etiqueta barajada en bloques, o con variables aleatorias, el modelo/la regla **no** debe tener habilidad. Si la tiene, hay un fallo.
+4. **Señal plantada:** en datos sintéticos con una relación conocida, el método la recupera; sin relación, no inventa ninguna.
+5. **Relaciones reales:** mecanismo económico escrito y preregistrado; mismo signo por décadas, antes y después de 1985 y en otros países (JST, OCDE); sobrevive a la corrección por comparaciones múltiples (Benjamini-Hochberg); aporta **contenido incremental** fuera de muestra frente a la persistencia + el régimen actual.
+6. **Que funciona:** log-loss / Brier fuera de muestra frente a la persistencia y a los modelos sencillos, con intervalos (bootstrap por bloques); calibración; resultados por episodio, no solo medias; Deflated Sharpe cuando haya reglas de inversión.
+7. **Sensibilidad:** pequeños cambios razonables (umbrales, ventanas, muestra) no deben dar la vuelta a las conclusiones.
+**Salida:** `docs/validation/<fecha>_<hito>.md` con un veredicto ✅ aprobado / ⚠️ aprobado con condiciones / ❌ rechazado, hallazgos con evidencia y qué haría falta para aprobar. No modifica código de producción ni datos; puede escribir sus propios tests en `tests/validation/`.
+
+## 6. Reportero (Fase 3)
+
+**Rol:** mantener un **informe de resultados bonito, con gráficos y muy explicativo**, pensado para leerlo sin ser experto: qué se ha hecho, por qué, qué ha salido y qué significa.
+**Dónde:** `obsidian/Reports/Fase 3/Informe de resultados.md` (con imágenes en `obsidian/Reports/Fase 3/img/`), actualizado tras cada hito. Una versión HTML autónoma (`reports/fase3/index.html`) cuando el usuario quiera compartirla.
+**Estructura:** resumen en una página (estado, régimen actual con su probabilidad, semáforo de los criterios de cierre) → cada hito con: objetivo, método explicado en lenguaje llano, gráficos, resultados, veredicto del validador y limitaciones → glosario.
+**Reglas:**
+- Solo cifras sacadas de los ficheros de resultados (parquet, JSON, informes de comprobaciones); cada cifra con su fuente. No inventa ni redondea conclusiones; si el validador no ha aprobado algo, lo dice.
+- Gráficos limpios y legibles (matplotlib, colores sobrios y consistentes, títulos que dicen la conclusión, ejes y unidades), generados por script en `src/report/fase3/` para que sean reproducibles.
+- Explica también lo que **no** funciona y las limitaciones.
+- No toca código ni datos de producción; sin commits.

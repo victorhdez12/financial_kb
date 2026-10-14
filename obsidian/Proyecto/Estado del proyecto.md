@@ -10,6 +10,25 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 > Lee esta nota, después [[Proyecto/Agentes]] (roles e instrucciones completas) y [[Proyecto/Bitácora]] (qué se hizo y cuándo).
 > Código: `~/Proyectos/financial_kb` (movido del Escritorio el 13-oct) · Datos: `~/financial_archive` (enlace `data/archive`) · Plan original: `docs/PLAN.md`.
 
+## 🎯 Objetivo de la Fase 3 (acordado el 14-oct)
+
+**Tener un nowcast del régimen de EE. UU. validado:** que el sistema diga cada mes en qué cuadrante estamos y con qué probabilidad, usando solo la información disponible en esa fecha, y que esté demostrado en un backtest honesto que lo hace mejor que las alternativas sencillas.
+
+**Entregables, por orden:** (1) etiqueta v1.0 congelada · (2) base point-in-time + calendario de publicación + test de fugas · (3) arnés walk-forward (embargo 6 m, periodo 2016-2026 bloqueado, registro de pruebas) · (4) baselines: persistencia, reglas, logística, Markov · (5) GBM solo si los bate · (6) calibración. En paralelo: investigación de relaciones adelantadas (las validadas entran como variables).
+
+**Criterios de cierre:**
+- [ ] Bate a la persistencia en log-loss fuera de muestra, también en el periodo bloqueado, con intervalos que no incluyen el cero.
+- [ ] Probabilidades calibradas.
+- [ ] Sin fugas: test point-in-time, placebo y señal plantada superados.
+- [ ] Las relaciones que usa tienen mecanismo, son estables por épocas/países y sobreviven a la corrección por comparaciones múltiples.
+- [ ] **Veredicto ✅ del Validador independiente.**
+- [ ] Ficha del modelo + informe de resultados del Reportero.
+- [ ] Sustituye al clasificador de reglas en el reporte semanal.
+
+**Fuera de esta fase:** factores y cartera (siguiente fase), zona euro, forecast a 6 m, informe para empresas.
+
+**Agentes de la fase:** Constructor · Investigador de relaciones · **Validador independiente** · **Reportero** (ver [[Proyecto/Agentes]]). Informe: [[Reports/Fase 3/Informe de resultados]].
+
 ## ▶ Retomar aquí (14-oct)
 
 **Fases del plan (`docs/PLAN.md`) y estado:**
