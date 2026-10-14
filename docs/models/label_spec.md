@@ -134,12 +134,12 @@ que queremos". Si alguna falla, se documenta el porqué antes de cambiar nada.
 - Cualquier cambio posterior crea una versión nueva, obliga a repetir todas las validaciones y queda anotado en el
   registro de pruebas.
 
-## 11. Parámetros a confirmar antes de congelar
+## 11. Parámetros (confirmados por el usuario el 2026-10-14: los propuestos, con las escalas estimadas con ALFRED)
 
 | parámetro | propuesto | alternativa |
 |---|---|---|
 | Umbral de inflación κ | 2,5 % PCE subyacente | 2,0 % (objetivo exacto) / 3,0 % |
-| Escalas s<sub>G</sub>, s<sub>I</sub> | 0,5 z / 0,5 pp | estimarlas con el ruido de revisión de ALFRED |
+| Escalas s<sub>G</sub>, s<sub>I</sub> | **estimadas con el ruido de revisión de ALFRED** (desv. robusta de primera publicación − última vintage, en las mismas unidades); suelo 0,25 | 0,5 z / 0,5 pp si ALFRED no da una estimación estable |
 | Ventana de ritmo | 6 meses anualizado sobre media de 3 meses | 12 meses (más estable, más lenta) |
 | Ventana de tendencia | mediana centrada de 10 años | 7 años / filtro HP |
 | Umbral de frontera | máx. prob. < 0,55 | < 0,6 |

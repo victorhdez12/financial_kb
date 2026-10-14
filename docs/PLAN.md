@@ -146,6 +146,9 @@ Sustituye y concreta el "Motor de decisión" de arriba: HMM, análogos y Bayes p
 - Registro de modelos y experimentos (MLflow o equivalente), ficha por modelo (`docs/models/<modelo>.md`): datos, etiqueta, métricas, limitaciones.
 - Paper trading ≥ 6 meses antes de dinero real.
 
+### Investigación de relaciones adelantadas
+Programa propio en `docs/models/research_program.md`: hipótesis con mecanismo y preregistradas, prueba de universalidad (JST, OCDE, zona euro), métodos de alerta temprana y contenido incremental fuera de muestra, control de comparaciones múltiples. Las reglas validadas alimentan el modelo, las reglas de oro y un panel de alertas; el sistema de reglas compite con el GBM. Futuros y derivados: variables y "sorpresa frente a lo descontado".
+
 ### Orden de trabajo
 1. Especificación de la etiqueta + matriz point-in-time + test de fugas.
 2. Pendientes de la revisión de la Fase 1 como variables: histéresis de G, inflación compuesta (petróleo, PPI), bear/bull steepening, liquidez neta diaria y global, capa EUR.
