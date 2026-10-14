@@ -4,7 +4,7 @@ Ejecutar:  .venv/bin/python -m src.labels.checks
 
 Detectan errores de cálculo; NO sirven para ajustar parámetros. Escribe
 docs/models/label_v<version>_checks.md y docs/models/label_v<version>.png. Si existe la versión
-anterior (v0.1) en la carpeta de etiquetas, añade la comparación entre versiones.
+anterior (PREV_VERSION) en la carpeta de etiquetas, añade la comparación entre versiones.
 
 Muestra puntuable: weight > 0 (fuera 1950-1954) y no provisional (fuera los últimos 24 meses).
 Cada criterio se calcula en esa muestra y, aparte, sin los meses de frontera.
@@ -25,7 +25,7 @@ from src.labels import regime_us as R  # noqa: E402
 from src.warehouse import db  # noqa: E402
 
 DOCS = db.REPO / "docs" / "models"
-PREV_VERSION = "0.1"
+PREV_VERSION = "0.2"
 NAMES = {"expansion": "Expansión", "late_cycle": "Late cycle / sobrecal.",
          "stagflation": "Estanflación", "low_growth_disinfl": "Crec. bajo / desinflación"}
 # paleta categórica validada (dataviz validate_palette: PASS en luminosidad, croma, CVD y visión normal)
@@ -147,7 +147,7 @@ def compute(df: pd.DataFrame, meta: dict) -> dict:
                     "periods": {f"{a}-{b}": (float(G.loc[a:b].corr(ext["cfnai3"].loc[a:b])),
                                              float(G.loc[a:b].corr(ext["cf_g"].loc[a:b])))
                                 for a, b in (("1967", "1983"), ("1984", "2007"), ("2008", "2019"), ("2020", "2021"),
-                                             (f"{max(2022, G.index.max().year - 2)}", str(G.index.max().year)))}}
+                                             ("2022", "2024")) if len(G.loc[a:b]) >= 12}}
     res["gi_post"] = float(m.loc["1984":, "G"].corr(m.loc["1984":, "I"]))
 
     episodes = []
@@ -177,7 +177,7 @@ def compute(df: pd.DataFrame, meta: dict) -> dict:
 
 
 def compare(df: pd.DataFrame) -> dict | None:
-    """Comparación con la versión anterior (v0.1): meses que cambian de cuadrante y dónde."""
+    """Comparación con la versión anterior (PREV_VERSION): meses que cambian de cuadrante y dónde."""
     path = R.out_dir() / f"regime_us_v{PREV_VERSION}.parquet"
     if not path.exists():
         return None
@@ -188,7 +188,7 @@ def compare(df: pd.DataFrame) -> dict | None:
     a, b = old.loc[idx, "label_hard"], df.loc[idx, "label_hard"]
     ch = a != b
     out = {"n": len(idx), "changed": int(ch.sum()), "share": float(ch.mean()),
-           "cross": pd.crosstab(a.rename("v0.1"), b.rename(f"v{R.PARAMS.version}")).reindex(
+           "cross": pd.crosstab(a.rename(f"v{PREV_VERSION}"), b.rename(f"v{R.PARAMS.version}")).reindex(
                index=R.QUADRANTS, columns=R.QUADRANTS).fillna(0).astype(int),
            "only_old": f"{old.index.max():%Y-%m}", "only_new_end": f"{df.index.max():%Y-%m}"}
     # desfase: correlación de G v0.2(t) con G v0.1(t+k)
@@ -216,6 +216,15 @@ def compare(df: pd.DataFrame) -> dict | None:
     out["short_share"] = float(sum(b[2] for b in blocks if b[2] <= 4) / max(1, sum(b[2] for b in blocks)))
     out["blocks"] = sorted(blocks, key=lambda x: -x[2])[:12]
     out["by_decade"] = ch.groupby(ch.index.year // 10 * 10).mean()
+    po, pn = old.loc[idx, "provisional"], df.loc[idx, "provisional"]
+    out["prov_old_from"] = f"{po[po].index.min():%Y-%m}"
+    out["prov_new_from"] = f"{pn[pn].index.min():%Y-%m}"
+    out["to_prov"] = int((pn & ~po).sum())
+    out["changed_scored"] = int(ch[~pn].sum())
+    out["n_scored"] = int((~pn).sum())
+    tv = 0.5 * (old.loc[idx, PCOLS] - df.loc[idx, PCOLS]).abs().sum(axis=1)
+    out["tv_mean"], out["tv_max"] = float(tv.mean()), float(tv.max())
+    out["front_old"], out["front_new"] = int(old.loc[idx, "frontera"].sum()), int(df.loc[idx, "frontera"].sum())
     return out
 
 
@@ -278,13 +287,16 @@ def report(df: pd.DataFrame, meta: dict, res: dict, png_name: str) -> str:
     L.append(f"Generado por `src/labels/checks.py` a partir de `data/archive/labels/regime_us_v{v}.parquet` "
              f"(hash de contenido `{meta['sha256_content'][:16]}…`). Muestra {meta['first'][:7]} → {meta['last'][:7]} "
              f"({meta['rows']} meses). **Muestra puntuable: {res['n_scored']} meses** (weight = 1 y no provisional: "
-             f"fuera 1950-1954 y los 24 últimos); sin frontera: {res['n_nf']}.\n")
-    L.append("Las comprobaciones sirven para detectar errores de cálculo, **no para ajustar parámetros**. Los cambios de "
-             "la v0.2 (ventanas centradas, nombre del cuadrante G↓I↓, pesos) los aprobó el usuario como corrección de la "
-             "definición, antes de calcular estas comprobaciones; los umbrales de la §8 no cambian.\n")
+             f"fuera 1950-1954 y los {meta['params']['provisional_months']} últimos); sin frontera: {res['n_nf']}.\n")
+    L.append(f"**Versión {meta.get('status', '')}.** Parámetros finales aprobados por el usuario: s_G = {meta['s_G']:.2f} y "
+             f"s_I = {meta['s_I']:.2f} fijas; `provisional_months` = {meta['params']['provisional_months']} (estudio de "
+             f"revisión, `docs/models/label_revision_study.md`); `embargo_months` = {meta['params']['embargo_months']}; el "
+             "resto como en la v0.2. Las comprobaciones sirven para detectar errores de cálculo, **no para ajustar "
+             "parámetros**; los umbrales de la §8 no cambian. Código: SHA-256 "
+             f"`{meta.get('code', {}).get('sha256_code', '')[:16]}…`.\n")
     L.append(f"![Etiqueta v{v}]({png_name})\n")
 
-    L.append("## 1. Escalas estimadas con ALFRED\n")
+    L.append("## 1. Escalas: valores fijos y estimaciones ALFRED de referencia\n")
     L.append("Error de revisión = valor del eje en t con la **primera publicación** − valor con la **última vintage**. Con "
              "ventanas centradas, la \"primera publicación\" de G(t) es la primera vintage que contiene t+4 (último nivel que "
              "necesita la media de 3 m en t+3) y la de I(t), la primera que contiene t+3; la serie se reconstruye tal como "
@@ -302,14 +314,15 @@ def report(df: pd.DataFrame, meta: dict, res: dict, png_name: str) -> str:
                  f"{'sí' if d['stable'] else 'no'} |")
     L.append("")
     two = sd.get("G_composite_INDPRO_PAYEMS")
-    L.append(f"- **s_G = {meta['s_G']:.3f}** ({meta['how_G']}): error del G compuesto con los cuatro indicadores "
-             f"({' + '.join(meta['g_composite_ids'])}), en los {sd['G_composite']['n']} meses en que los cuatro tienen "
-             f"primera publicación ({str(sd['G_composite']['from'])[:7]} → {str(sd['G_composite']['to'])[:7]})."
-             + (f" Contraste: INDPRO + PAYEMS en 1955-2024 da {two['mad_sd']:.3f} (era la escala de la v0.1)." if two else ""))
+    L.append(f"- **s_G = {meta['s_G']:.2f}** ({meta['how_G']}): estimación con INDPRO + PAYEMS en 1955-2024 "
+             + (f"({two['mad_sd']:.3f}), " if two else "")
+             + f"redondeada. La de cuatro indicadores ({sd['G_composite']['mad_sd']:.3f}, "
+             f"{str(sd['G_composite']['from'])[:7]} → {str(sd['G_composite']['to'])[:7]}) era la de la v0.2: cubre solo un "
+             "periodo de revisiones pequeñas.")
     L.append("- Vintages de W875RX1 y CMRMTSPL: ALFRED las tiene (desde 2010-05 y 2013-06). Se descargan con "
              "`python -m src.labels.regime_us --fetch-vintages` a `data/archive/labels/raw/alfred/` (sin tocar `src/ingest` "
              "ni el warehouse).")
-    L.append(f"- **s_I = {meta['s_I']:.3f} pp** ({meta['how_I']}): PCE subyacente. El IPC subyacente da "
+    L.append(f"- **s_I = {meta['s_I']:.2f} pp** ({meta['how_I']}): PCE subyacente, estimación {sd['I_PCEPILFE']['mad_sd']:.3f}. El IPC subyacente da "
              f"{sd['I_CPILFESL']['mad_sd']:.2f} pp (solo revisa factores estacionales); contraste.")
     for n in meta["notes"]:
         L.append(f"- Nota: {n}.")
@@ -339,13 +352,9 @@ def report(df: pd.DataFrame, meta: dict, res: dict, png_name: str) -> str:
              + "; ".join(f"{p} {x:.2f} / {y:.2f}" for p, (x, y) in c["periods"].items()) + ". "
              "CFNAI-MA3(t+1) cubre t−1…t+1, centrado en t como G; el máximo está en k = +1/+2, como se espera "
              "(en la v0.1 estaba en k = −2/−3).")
-    last_p, (x_l, y_l) = list(c["periods"].items())[-1]
-    if y_l < 0.3:
-        L.append(f"En {last_p} (hasta el último mes no provisional) la correlación es negativa también con la ventana de G "
-                 f"({y_l:.2f}). Es un resultado real, ya visto en la v0.1: los dos indicadores están cerca de cero (poca "
-                 "señal), G compara con una tendencia local de 10 años (truncada al final) y CFNAI con una tendencia fija, y "
-                 "la debilidad de 2023 fue de manufactura (pesa mucho en CFNAI) mientras empleo y renta real crecían por "
-                 "encima de su tendencia. Esos meses están en la ventana truncada y se recalcularán.")
+    L.append("El tramo 2022-2024 (correlación negativa en la v0.2) es ahora provisional y no puntúa; el estudio de "
+             "revisión muestra que no se debe al borde, sino a un desacuerdo de composición en un tramo casi plano "
+             "(`docs/models/label_revision_study.md`).")
     L.append("")
     L.append(f"**Correlación G-I** (1984+: {res['gi_post']:.2f}).\n")
 
@@ -387,14 +396,16 @@ def report(df: pd.DataFrame, meta: dict, res: dict, png_name: str) -> str:
         L.append(f"No se encuentra `regime_us_v{PREV_VERSION}.parquet`.\n")
     else:
         lg, li = cmp_["lag_G"], cmp_["lag_I"]
-        kg, ki = max(lg, key=lg.get), max(li, key=li.get)
         L.append(f"Meses comparados: {cmp_['n']} (fechas comunes con weight = 1, 1955-01 → {cmp_['only_new_end']}). "
-                 f"**Cambian de cuadrante {cmp_['changed']} meses ({cmp_['share']:.1%}).**\n")
-        L.append(f"- Desfase confirmado: G v{v}(t) correlaciona al máximo con G v{PREV_VERSION}(t+{kg}) ({lg[kg]:.3f}; "
-                 f"contemporánea {lg[0]:.2f}) e I v{v}(t) con I v{PREV_VERSION}(t+{ki}) ({li[ki]:.3f}; contemporánea "
-                 f"{li[0]:.2f}). La v{PREV_VERSION} etiquetaba el mes t con el crecimiento de ~t−4 y la inflación de ~t−3: "
-                 "además de llegar tarde, los dos ejes estaban desalineados un mes entre sí.")
-        L.append(f"- La v{v} termina en {cmp_['only_new_end']} (la v{PREV_VERSION} llegaba a {cmp_['only_old']}): ver §8.\n")
+                 f"**Cambian de cuadrante {cmp_['changed']} meses ({cmp_['share']:.1%})**; en la muestra puntuable de la "
+                 f"v{v}: {cmp_['changed_scored']} de {cmp_['n_scored']}.\n")
+        L.append(f"- G e I no cambian de definición (correlación v{v} vs v{PREV_VERSION}: G {lg[0]:.3f}, I {li[0]:.3f}). "
+                 "Solo cambian las escalas (s_G 0,33 → 0,40; s_I 0,305 → 0,31). Con ejes independientes, el cuadrante "
+                 "de mayor probabilidad solo depende del signo de G y de I − κ, así que la etiqueta dura no cambia; cambian "
+                 f"las probabilidades (Δp medio {cmp_['tv_mean']:.3f}, máximo {cmp_['tv_max']:.3f}) y los meses frontera "
+                 f"({cmp_['front_old']} → {cmp_['front_new']}).")
+        L.append(f"- Provisionales: desde {cmp_['prov_new_from']} (antes desde {cmp_['prov_old_from']}); "
+                 f"{cmp_['to_prov']} meses dejan de puntuar.\n")
         L.append(f"| v{PREV_VERSION} \\ v{v} | " + " | ".join(NAMES[q] for q in R.QUADRANTS) + " |\n|---|" + "---|" * 4)
         for q in R.QUADRANTS:
             L.append(f"| {NAMES[q]} | " + " | ".join(str(cmp_["cross"].loc[q, x]) for x in R.QUADRANTS) + " |")
@@ -402,21 +413,25 @@ def report(df: pd.DataFrame, meta: dict, res: dict, png_name: str) -> str:
         L.append("| episodio | cambian | meses |\n|---|---|---|")
         for name, n, tot in cmp_["episodes"]:
             L.append(f"| {name} | {n} | {tot} |")
-        L.append("\nBloques más largos de meses consecutivos que cambian:\n")
-        L.append("| desde | hasta | meses | cambio principal |\n|---|---|---|---|")
-        for i0, i1, n, tr in cmp_["blocks"]:
-            L.append(f"| {i0:%Y-%m} | {i1:%Y-%m} | {n} | {tr} |")
-        L.append(f"\nLos {cmp_['changed']} meses cambiados forman {cmp_['n_blocks']} bloques; el "
-                 f"{cmp_['short_share']:.0%} de los meses cambiados está en bloques de 1-4 meses, en los giros: la v0.2 adelanta los cambios de "
-                 "régimen unos 3-4 meses respecto a la v0.1, así que en cada giro cambian los meses entre el giro real y el "
-                 "giro que veía la v0.1.\n")
+        if cmp_["blocks"]:
+          L.append("\nBloques más largos de meses consecutivos que cambian:\n")
+          L.append("| desde | hasta | meses | cambio principal |\n|---|---|---|---|")
+          for i0, i1, n, tr in cmp_["blocks"]:
+              L.append(f"| {i0:%Y-%m} | {i1:%Y-%m} | {n} | {tr} |")
+        if cmp_["changed"]:
+            L.append(f"\nLos {cmp_['changed']} meses cambiados forman {cmp_['n_blocks']} bloques; el "
+                     f"{cmp_['short_share']:.0%} está en bloques de 1-4 meses.\n")
+        L.append("")
 
-    L.append("## 7. Últimos 6 meses (provisionales)\n")
-    t = df.tail(6)
-    L.append("| mes | G | I | " + " | ".join(NAMES[q] for q in R.QUADRANTS) + " | etiqueta dura | frontera |")
-    L.append("|---|---|---|" + "---|" * 4 + "---|---|")
+    L.append("## 7. Últimos meses maduros y provisionales\n")
+    mature = df[~df["provisional"]].tail(6)
+    t = pd.concat([mature, df.tail(6)])
+    L.append(f"Últimos 6 meses maduros (puntuables) y últimos 6 provisionales (desde {df.index[df['provisional']].min():%Y-%m}).\n")
+    L.append("| mes | estado | G | I | " + " | ".join(NAMES[q] for q in R.QUADRANTS) + " | etiqueta dura | frontera |")
+    L.append("|---|---|---|---|" + "---|" * 4 + "---|---|")
     for d, r in t.iterrows():
-        L.append(f"| {d:%Y-%m} | {r['G']:.2f} | {r['I']:.2f} | " + " | ".join(f"{r[f'p_{q}']:.2f}" for q in R.QUADRANTS)
+        L.append(f"| {d:%Y-%m} | {'provisional' if r['provisional'] else 'madura'} | {r['G']:.2f} | {r['I']:.2f} | "
+                 + " | ".join(f"{r[f'p_{q}']:.2f}" for q in R.QUADRANTS)
                  + f" | {NAMES[r['label_hard']]} | {'sí' if r['frontera'] else 'no'} |")
     L.append("")
 
@@ -427,9 +442,12 @@ def report(df: pd.DataFrame, meta: dict, res: dict, png_name: str) -> str:
              + f". G con ≥ 2 indicadores llega a {meta['last'][:7]} (2026-05 solo tendría PAYEMS), así que la etiqueta "
              f"termina en {meta['last'][:7]}, unos 4 meses antes que la v0.1. Los meses posteriores no tienen etiqueta "
              "hasta que se publiquen sus datos t+4: la etiqueta del mes t está disponible ~5 meses después.")
-    L.append("- **Meses provisionales.** Siguen siendo los 24 últimos de la etiqueta. Con la ventana centrada, los últimos "
-             "meses dependen de datos aún más recientes (t+3/t+4, recién publicados y sin revisar), así que los 24 meses "
-             "cubren hasta ~28 meses de datos. La tendencia (±60 m) sigue truncada en los últimos 60 meses.")
+    L.append(f"- **Meses provisionales.** Los {meta['params']['provisional_months']} últimos de la etiqueta, fijados con la "
+             "regla declarada en el estudio de revisión (concordancia ≥ 95 % y Δp medio ≤ 0,05 de forma sostenida; k* = 55 "
+             "meses desde el corte de datos, 51 desde el último mes de la etiqueta, redondeado a 54). La tendencia (±60 m) "
+             "sigue truncada en los últimos 60 meses.")
+    L.append(f"- **Uso.** Los meses con `provisional = true` o `weight = 0` no puntúan ni entrenan. Embargo del backtest: "
+             f"{meta['params']['embargo_months']} meses (la etiqueta de t usa datos hasta t+4).")
     L.append("- **Inicio.** G(1950-01) usa niveles desde 1949-09 e I(1950-01) desde 1949-10, así que el inicio no cambia. "
              "PCE subyacente centrado desde 1959-04 e IPC subyacente − 0,4 desde 1957-04 (antes 1959-07 / 1957-07). "
              f"Diferencia media IPC − PCE subyacentes (contraste del ajuste de 0,4 pp, no se cambia): {res['cpi_pce_gap']:.2f} pp.")
@@ -448,21 +466,14 @@ def report(df: pd.DataFrame, meta: dict, res: dict, png_name: str) -> str:
     for (name, exp, got, _), _ in fails:
         L.append(f"- **{name}** (esperado {exp}; obtenido {got}).")
     L.append("")
-    two = sd.get("G_composite_INDPRO_PAYEMS")
+    first_prov = df.index[df["provisional"]].min()
     L.append("## 10. Propuestas (para que decida el usuario; no aplicadas)\n")
-    L.append("1. **Embargo del backtest.** La etiqueta de t usa datos hasta t+4 (y la tendencia, hasta t+60). En el "
-             "walk-forward, el purging/embargo entre entrenamiento y prueba debe ser de al menos 4-5 meses (mejor 6), y "
-             "la etiqueta de t no se conoce hasta ~t+5.")
-    L.append(f"2. **Escala s_G.** La de cuatro indicadores ({meta['s_G']:.2f}) solo cubre "
-             f"{str(sd['G_composite']['from'])[:4]}-{str(sd['G_composite']['to'])[:4]}"
-             + (f"; INDPRO + PAYEMS en 1955-2024 da {two['mad_sd']:.2f}" if two else "")
-             + ". El ruido de revisión era mayor antes de ~1990. Se podría estudiar una escala por época (o la más "
-             "conservadora de las dos); ahora se usa la que pide la ficha (todas las series con vintages).")
-    L.append("3. **Meses provisionales.** Con ventana centrada, los últimos meses dependen de datos t+3/t+4 recién "
-             "publicados. Valorar la alternativa de 36 meses de la §11, o medir con ALFRED cuánto cambia la etiqueta dura "
-             "de un mes según su antigüedad antes de decidir.")
-    L.append("4. **CFNAI 2022-2024.** Si se quiere un contraste del tramo final más informativo, comparar también con "
-             "una tendencia fija (o la de la v1.0 congelada) cuando esos meses salgan de la ventana truncada.\n")
+    L.append(f"1. **Periodo bloqueado.** Con {meta['params']['provisional_months']} meses provisionales, la etiqueta solo "
+             f"puntúa hasta {first_prov - pd.DateOffset(months=1):%Y-%m}. Un periodo bloqueado 2016-2026 tendría hoy "
+             f"~{(first_prov.year - 2016) * 12 + first_prov.month - 1} meses puntuables (incluido 2020). Valorar adelantar "
+             "su inicio o aceptar que madura con el tiempo.")
+    L.append("2. **Estudio de revisión.** La variante ALFRED solo revisa INDPRO y PAYEMS (cota inferior). Repetirlo al "
+             "añadir vintages de PCE (desde 2000) y de W875RX1/CMRMTSPL, sin cambiar la v1.0 salvo nueva versión.\n")
     return "\n".join(L)
 
 

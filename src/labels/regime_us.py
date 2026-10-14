@@ -1,4 +1,4 @@
-"""Etiqueta de régimen EE. UU. v0.2 (ficha: docs/models/label_spec.md).
+"""Etiqueta de régimen EE. UU. v1.0 — CONGELADA (ficha: docs/models/label_spec.md).
 
 Ejecutar:
     .venv/bin/python -m src.labels.regime_us                    # construye la etiqueta
@@ -10,9 +10,12 @@ delante). Nunca debe entrar como variable de un modelo. Las únicas piezas que u
 (ALFRED) son las escalas s_G y s_I, que miden el ruido de revisión (primera publicación − última
 vintage).
 
-Salida: <FIN_DATA_ROOT>/labels/regime_us_v0.2.parquet (+ .meta.json con parámetros, escalas y
-hash). `data/archive` es un enlace a FIN_DATA_ROOT, así que queda en data/archive/labels/.
-La v0.1 (ventanas hacia atrás) está en git, commit 35a0375.
+Salida: <FIN_DATA_ROOT>/labels/regime_us_v1.0.parquet (+ .meta.json con parámetros, escalas,
+hash del contenido y SHA del código). `data/archive` es un enlace a FIN_DATA_ROOT, así que queda en
+data/archive/labels/. Versiones anteriores en git: v0.1 (35a0375), v0.2 (7b378cf).
+
+Uso: los meses con `provisional = true` o `weight = 0` no puntúan ni entrenan. El backtest
+necesita un embargo de `embargo_months` (la etiqueta de t usa datos hasta t+4).
 """
 from __future__ import annotations
 
@@ -32,7 +35,7 @@ from src.warehouse import db
 # ------------------------------------------------------------------ parámetros (ficha §11)
 @dataclass(frozen=True)
 class Params:
-    version: str = "0.2"
+    version: str = "1.0"
     start: str = "1950-01-01"                   # inicio de la muestra de la etiqueta
     growth_ids: tuple[str, ...] = ("INDPRO", "PAYEMS", "W875RX1", "CMRMTSPL")
     min_growth_ind: int = 2                     # mínimo de indicadores para G
@@ -46,10 +49,15 @@ class Params:
     infl_lead: int = 3                          # inflación: índice en t+3 ...
     infl_lag: int = 3                           # ... frente a t−3, anualizada
     frontier: float = 0.55                      # máx. prob. < 0,55 → frontera
-    provisional_months: int = 24
+    provisional_months: int = 54               # fijado por src/labels/revision_study.py (k* = 55, ver ficha §7)
+    embargo_months: int = 6                     # embargo del backtest (la etiqueta usa datos hasta t+4)
     truncated_months: int = 60                  # meses con ventana de tendencia truncada
     zero_weight_until: str = "1954-12-01"       # weight = 0 hasta aquí (IPC general, Corea)
-    # escalas: estimadas con ALFRED; suelo y valor de reserva
+    # escalas FIJAS de la v1.0 (estimadas con ALFRED en la v0.2; ver ficha §11). None = estimarlas
+    s_G_fixed: float | None = 0.40              # INDPRO + PAYEMS, 1955-2024 (4 indicadores 2013-24: 0,33)
+    s_I_fixed: float | None = 0.31              # PCE subyacente, 2000-2024
+    scale_mature_months: int = 24               # fechas maduras para la estimación informativa
+    # estimación ALFRED (informativa en la v1.0): suelo y valor de reserva
     scale_floor: float = 0.25
     scale_fallback: float = 0.5
     first_release_max_days: int = 75            # primera vintage ≤ 75 días tras fin de mes
@@ -119,7 +127,7 @@ def centered_median(g: pd.Series, p: Params = PARAMS) -> pd.Series:
 
 
 # ------------------------------------------------------------------ eje G
-def growth_components(con, p: Params = PARAMS) -> dict:
+def growth_components(levels: dict, p: Params = PARAMS) -> dict:
     """Para cada indicador: ritmo g, tendencia τ, σ y z (todo con la última vintage).
 
     La tendencia y σ se calculan sobre la muestra de la etiqueta (desde p.start); por eso la
@@ -127,10 +135,11 @@ def growth_components(con, p: Params = PARAMS) -> dict:
     start = pd.Timestamp(p.start)
     out, notes = {}, []
     for sid in p.growth_ids:
-        lv = monthly(con, sid)
+        lv = levels.get(sid, pd.Series(dtype=float)).dropna()
         if lv.empty:
             notes.append(f"{sid}: sin datos en obs_latest; se omite")
             continue
+        lv = lv.reindex(pd.date_range(lv.index.min(), lv.index.max(), freq="MS"))
         g = pace(lv, p)
         g = g[g.index >= start].dropna()
         tau = centered_median(g, p)
@@ -148,12 +157,16 @@ def growth_axis(comp: dict, p: Params = PARAMS) -> pd.DataFrame:
 
 
 # ------------------------------------------------------------------ eje I
-def inflation_axis(con, p: Params = PARAMS) -> pd.DataFrame:
+def inflation_axis(levels: dict, p: Params = PARAMS) -> pd.DataFrame:
     """PCE subyacente (desde su primer valor centrado, 1959-04); antes IPC subyacente − 0,4 pp
     (desde 1957-04); antes IPC general (`headline`)."""
-    pce = ann_change(monthly(con, "PCEPILFE"), p)
-    cpic = ann_change(monthly(con, "CPILFESL"), p) - p.cpi_core_adj
-    head = ann_change(monthly(con, "CPIAUCSL"), p)
+    def lv(sid):
+        x = levels[sid].dropna()
+        return x.reindex(pd.date_range(x.index.min(), x.index.max(), freq="MS"))
+
+    pce = ann_change(lv("PCEPILFE"), p)
+    cpic = ann_change(lv("CPILFESL"), p) - p.cpi_core_adj
+    head = ann_change(lv("CPIAUCSL"), p)
     idx = pd.date_range(p.start, max(s.dropna().index.max() for s in (pce, cpic, head)), freq="MS")
     pce, cpic, head = (s.reindex(idx) for s in (pce, cpic, head))
     m_pce = idx >= pce.first_valid_index()
@@ -300,29 +313,32 @@ def estimate_scales(con, comp: dict, last_mature: pd.Timestamp, p: Params = PARA
 
 
 # ------------------------------------------------------------------ construcción
-def build(con=None, p: Params = PARAMS) -> tuple[pd.DataFrame, dict]:
-    own = con is None
-    con = con or db.connect()
-    try:
-        gc = growth_components(con, p)
-        g = growth_axis(gc["comp"], p)
-        i = inflation_axis(con, p)
-        df = g.join(i, how="outer")
-        df = df[df.index >= pd.Timestamp(p.start)]
-        ok = df["G"].notna() & df["I"].notna()
-        last = df.index[ok].max()
-        df = df.loc[:last]
-        last_mature = last - pd.DateOffset(months=p.provisional_months)
-        sc = estimate_scales(con, gc["comp"], last_mature, p)
-        usrec = db.series(con, "USREC")
-        data_end = {sid: str(db.series(con, sid).index.max().date())
-                    for sid in (*p.growth_ids, "PCEPILFE")}
-    finally:
-        if own:
-            con.close()
+INFL_IDS = ("PCEPILFE", "CPILFESL", "CPIAUCSL")
 
-    p_g = pd.Series(norm.cdf(df["G"] / sc["s_G"]), index=df.index).where(df["G"].notna())
-    p_i = pd.Series(norm.cdf((df["I"] - p.kappa) / sc["s_I"]), index=df.index).where(df["I"].notna())
+
+def load_inputs(con, p: Params = PARAMS) -> dict:
+    """Niveles mensuales (última vintage) de todas las series de la etiqueta, y USREC."""
+    levels = {sid: monthly(con, sid) for sid in (*p.growth_ids, *INFL_IDS)}
+    return {"levels": levels, "usrec": db.series(con, "USREC")}
+
+
+def make_label(inputs: dict, p: Params, s_G: float, s_I: float,
+               cutoff: pd.Timestamp | None = None) -> tuple[pd.DataFrame, dict]:
+    """Etiqueta completa a partir de los niveles. Con `cutoff`, solo usa datos con fecha ≤ cutoff
+    (para el estudio de revisión)."""
+    levels = inputs["levels"]
+    if cutoff is not None:
+        levels = {k: v[v.index <= cutoff] for k, v in levels.items()}
+    gc = growth_components(levels, p)
+    g = growth_axis(gc["comp"], p)
+    i = inflation_axis(levels, p)
+    df = g.join(i, how="outer")
+    df = df[df.index >= pd.Timestamp(p.start)]
+    ok = df["G"].notna() & df["I"].notna()
+    df = df.loc[:df.index[ok].max()]
+
+    p_g = pd.Series(norm.cdf(df["G"] / s_G), index=df.index).where(df["G"].notna())
+    p_i = pd.Series(norm.cdf((df["I"] - p.kappa) / s_I), index=df.index).where(df["I"].notna())
     probs = pd.DataFrame({
         "p_expansion": p_g * (1 - p_i),
         "p_late_cycle": p_g * p_i,
@@ -343,20 +359,74 @@ def build(con=None, p: Params = PARAMS) -> tuple[pd.DataFrame, dict]:
     out["tendencia_truncada"] = (pos < p.truncated_months) | (pos >= n - p.truncated_months)
     out["cobertura_g"] = df["cobertura_g"].astype("int64")
     out["fuente_i"] = df["fuente_i"].astype(str)
-    out["usrec"] = usrec.reindex(out.index).astype("Int64")
+    out["usrec"] = inputs["usrec"].reindex(out.index).astype("Int64")
     out["weight"] = np.where(out.index <= pd.Timestamp(p.zero_weight_until), 0.0, 1.0)
     out.index.name = "date"
-    out = out.reset_index()
+    return out.reset_index(), gc
+
+
+def code_sha() -> dict:
+    """SHA-256 del código que genera la etiqueta (y el commit de git, si se puede leer)."""
+    here = Path(__file__).resolve()
+    files = [here, here.parent / "__init__.py"]
+    h = hashlib.sha256()
+    for f in files:
+        h.update(f.read_bytes())
+    out = {"sha256_code": h.hexdigest(), "files": [str(f.relative_to(db.REPO)) for f in files]}
+    try:
+        import subprocess
+        out["git_head"] = subprocess.run(["git", "-C", str(db.REPO), "rev-parse", "HEAD"], capture_output=True,
+                                         text=True, check=True).stdout.strip()
+        dirty = subprocess.run(["git", "-C", str(db.REPO), "status", "--porcelain", "--", *out["files"]],
+                               capture_output=True, text=True, check=True).stdout.strip()
+        out["git_dirty"] = bool(dirty)
+    except Exception:  # noqa: BLE001
+        pass
+    return out
+
+
+def build(con=None, p: Params = PARAMS) -> tuple[pd.DataFrame, dict]:
+    own = con is None
+    con = con or db.connect()
+    try:
+        inputs = load_inputs(con, p)
+        # estimación ALFRED (siempre se calcula y se guarda; en la v1.0 las escalas son fijas)
+        gc_full = growth_components(inputs["levels"], p)
+        g_full = growth_axis(gc_full["comp"], p)
+        i_full = inflation_axis(inputs["levels"], p)
+        ok = g_full["G"].notna() & i_full["I"].reindex(g_full.index).notna()
+        last = g_full.index[ok].max()
+        last_mature = last - pd.DateOffset(months=p.scale_mature_months)
+        sc = estimate_scales(con, gc_full["comp"], last_mature, p)
+        data_end = {sid: str(inputs["levels"][sid].dropna().index.max().date())
+                    for sid in (*p.growth_ids, "PCEPILFE")}
+    finally:
+        if own:
+            con.close()
+    s_G = p.s_G_fixed if p.s_G_fixed is not None else sc["s_G"]
+    s_I = p.s_I_fixed if p.s_I_fixed is not None else sc["s_I"]
+    how_G = "fija (ficha §11)" if p.s_G_fixed is not None else sc["how_G"]
+    how_I = "fija (ficha §11)" if p.s_I_fixed is not None else sc["how_I"]
+    out, gc = make_label(inputs, p, s_G, s_I)
     meta = {
-        "version": p.version, "params": asdict(p), "s_G": sc["s_G"], "s_I": sc["s_I"],
-        "how_G": sc["how_G"], "how_I": sc["how_I"], "scale_detail": sc["detail"],
+        "version": p.version, "status": "CONGELADA" if p.version.startswith("1.") else "borrador",
+        "params": asdict(p), "s_G": float(s_G), "s_I": float(s_I), "how_G": how_G, "how_I": how_I,
+        "alfred_estimates": {"s_G_4ind": sc["detail"]["G_composite"]["mad_sd"],
+                             "s_G_indpro_payems": sc["detail"].get("G_composite_INDPRO_PAYEMS", {}).get("mad_sd"),
+                             "s_I_pce": sc["detail"]["I_PCEPILFE"]["mad_sd"]},
+        "scale_detail": sc["detail"],
         "g_composite_ids": sc["g_composite_ids"], "vintage_origin": sc["vintage_origin"],
         "notes": gc["notes"] + sc["notes"], "aliases_v0_1": ALIASES,
+        "usage": {"embargo_months": p.embargo_months,
+                  "score_and_train_mask": "weight > 0 and not provisional",
+                  "note": "la etiqueta de t usa datos hasta t+4 (y la tendencia hasta t+60); nunca es variable"},
+        "embargo_months": p.embargo_months, "provisional_months": p.provisional_months,
         "sigma_i": {k: v["sigma"] for k, v in gc["comp"].items()},
         "first": str(out["date"].min().date()), "last": str(out["date"].max().date()),
         "data_end": data_end, "last_mature_for_scales": str(last_mature.date()),
+        "code": code_sha(),
     }
-    return out, {"meta": meta, "scales": sc, "components": gc["comp"]}
+    return out, {"meta": meta, "scales": sc, "components": gc["comp"], "inputs": inputs}
 
 
 def content_hash(df: pd.DataFrame) -> str:

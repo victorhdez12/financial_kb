@@ -1,8 +1,8 @@
 ---
 documento: ficha de la etiqueta de régimen
-version: 0.2 (BORRADOR — no congelada; cambios aprobados por el usuario el 2026-10-14, ver registro al final)
+version: 1.0
 fecha: 2026-10-14
-estado: pendiente de revisión y congelación por el usuario
+estado: CONGELADA (aprobada por el usuario el 2026-10-14). Cualquier cambio = v1.1 / v2.0 con revalidación completa
 ---
 
 # Ficha de la etiqueta de régimen — nowcast EE. UU.
@@ -75,9 +75,10 @@ Cada eje se convierte en una probabilidad según su distancia al umbral, escalad
 - P(G alto)<sub>t</sub> = Φ(G<sub>t</sub> / s<sub>G</sub>)
 - P(I alta)<sub>t</sub> = Φ((I<sub>t</sub> − κ) / s<sub>I</sub>)
 
-s<sub>G</sub> y s<sub>I</sub> se estiman con el ruido de revisión de ALFRED en las mismas unidades del eje (§11). En la
-v0.2: **s<sub>G</sub> = 0,33** (z; G compuesto con los cuatro indicadores, 2012-12 → 2024-04) y **s<sub>I</sub> = 0,31 pp**
-(PCE subyacente, 2000-2024). Detalle en `docs/models/label_v0.2_checks.md`.
+s<sub>G</sub> y s<sub>I</sub> salen del ruido de revisión de ALFRED en las mismas unidades del eje y en la v1.0 son
+**fijas**: **s<sub>G</sub> = 0,40** (z; INDPRO + PAYEMS, 1955-2024) y **s<sub>I</sub> = 0,31 pp** (PCE subyacente,
+2000-2024). La estimación con los cuatro indicadores daba 0,33, pero solo cubre 2013-2024, un periodo de revisiones
+pequeñas. Detalle en `docs/models/label_v1.0_checks.md`.
 
 Φ = normal acumulada. Ejemplo con s<sub>G</sub> = 0,5: G = 0 da 50 %; G = +0,5 da 84 %; G = +1 da 98 %.
 
@@ -110,8 +111,16 @@ v0.2: **s<sub>G</sub> = 0,33** (z; G compuesto con los cuatro indicadores, 2012-
 
 - La ventana centrada de tendencia necesita 60 meses de futuro. En los últimos 60 meses se trunca (usa lo que hay) y,
   además, los datos de los últimos meses aún se revisarán.
-- Por eso, los **últimos 24 meses** llevan `provisional = true`. No se usan para puntuar ni el periodo bloqueado ni el
-  backtest, y se recalculan cada mes hasta que maduran.
+- Por eso, los **últimos 54 meses** llevan `provisional = true`. No puntúan ni entrenan (ni el periodo bloqueado ni el
+  backtest) y se recalculan cada mes hasta que maduran. El número sale del estudio de revisión
+  (`docs/models/label_revision_study.md`, `src/labels/revision_study.py`), con una regla declarada antes de ver los
+  resultados. Se recalculó la etiqueta solo con datos ≤ T en 100 cortes semestrales (1975-2024), con dos variantes:
+  la última vintage truncada y otra con INDPRO/PAYEMS de ALFRED a fecha T. La regla busca el menor k desde el corte a
+  partir del cual la concordancia de la etiqueta dura es ≥ 95 % **y** el Δp medio es ≤ 0,05 de forma sostenida. Sale
+  k* = 55, menos el desfase de 4 meses de la etiqueta, redondeado a múltiplo de 6: 54.
+- **Uso en el backtest:** los meses con `provisional = true` o `weight = 0` no puntúan ni entrenan, con
+  **`embargo_months = 6`** entre entrenamiento y prueba (la etiqueta de t usa datos hasta t+4). Ambos valores están en
+  el `meta.json`.
 - Con el inicio pasa lo mismo: 1950-1954 tienen la ventana truncada hacia atrás y se marcan
   `tendencia_truncada = true`.
 - **Final de la muestra con ventanas centradas:** G(t) necesita niveles hasta t+4 e I(t) hasta t+3, así que la etiqueta
@@ -150,26 +159,44 @@ el acierto esperado de la etiqueta dura (media de la probabilidad máxima).
 
 ## 10. Versionado
 
-- Esta ficha es la **v0.2, borrador**. Al aprobarla pasa a **v1.0**, se etiqueta en git (`label-v1.0`) y se guarda la
-  serie de la etiqueta con su hash en `data/labels/regime_us_v1.0.parquet`.
-- Cualquier cambio posterior crea una versión nueva, obliga a repetir todas las validaciones y queda anotado en el
-  registro de pruebas.
+- Esta ficha es la **v1.0, CONGELADA**. Se etiqueta en git (`label-v1.0`). La serie está en
+  `data/archive/labels/regime_us_v1.0.parquet` y su `meta.json` guarda los parámetros, el hash del contenido y el
+  SHA-256 del código que la genera (`src/labels/regime_us.py`).
+- **Cualquier cambio posterior** (de definición, parámetros o series) crea una **v1.1 o v2.0**, obliga a repetir
+  **todas** las validaciones (§8 y estudio de revisión) y queda anotado en el registro de pruebas. Las nuevas
+  publicaciones de datos solo actualizan los meses provisionales; no cambian la versión.
 
-## 11. Parámetros (confirmados por el usuario el 2026-10-14: los propuestos, con las escalas estimadas con ALFRED)
+## 11. Parámetros finales v1.0 (congelados el 2026-10-14)
 
-| parámetro | propuesto | alternativa |
+| parámetro | valor v1.0 | alternativa descartada |
 |---|---|---|
 | Umbral de inflación κ | 2,5 % PCE subyacente | 2,0 % (objetivo exacto) / 3,0 % |
-| Escalas s<sub>G</sub>, s<sub>I</sub> | **estimadas con el ruido de revisión de ALFRED** (desv. robusta de primera publicación − última vintage, en las mismas unidades); suelo 0,25 | 0,5 z / 0,5 pp si ALFRED no da una estimación estable |
+| Escala s<sub>G</sub> | **0,40 z, fija** (ruido de revisión ALFRED de INDPRO + PAYEMS, 1955-2024; MAD × 1,4826 de primera publicación − última vintage) | 0,33 (cuatro indicadores, solo 2013-2024) |
+| Escala s<sub>I</sub> | **0,31 pp, fija** (ruido de revisión ALFRED de PCEPILFE, 2000-2024) | 0,5 pp |
 | Ventana de ritmo | 6 meses centrada (t−3…t+3), anualizado, sobre media de 3 meses centrada | 12 meses (más estable, más lenta) |
 | Ventana de inflación | 6 meses centrada (t−3…t+3), anualizada | — |
 | Pesos | 0 en 1950-1954, 1 en el resto | — |
 | Ventana de tendencia | mediana centrada de 10 años | 7 años / filtro HP |
 | Umbral de frontera | máx. prob. < 0,55 | < 0,6 |
-| Meses provisionales | 24 | 36 |
+| Meses provisionales | **54** (estudio de revisión, §7) | 24 / 36 |
+| Embargo del backtest | **6 meses** | — |
 | Fecha de decisión | último día hábil de t | día 15 de t+1 |
 
 ## 12. Registro de cambios
+
+### v1.0 (2026-10-14, CONGELADA, aprobada por el usuario)
+
+1. **Escalas fijas:** s<sub>G</sub> = 0,40 (INDPRO + PAYEMS, 1955-2024) en lugar de 0,33. La estimación de cuatro
+   indicadores solo cubre 2013-2024, un periodo de revisiones pequeñas, y no representa la muestra. s<sub>I</sub> = 0,31.
+   Como los ejes son independientes, la etiqueta dura solo depende del signo de G y de I − κ y no cambia en ningún mes
+   frente a la v0.2. Cambian las probabilidades (Δp medio 0,019, máx. 0,045) y los meses frontera (72 → 84).
+2. **`provisional_months` = 54** (antes 24), fijado por el estudio de revisión del borde derecho con una regla declarada
+   de antemano (§7). Con 24 meses, la etiqueta dura de los meses "maduros" se revisaba aún en ~10 % de los casos. 30
+   meses (2021-11 → 2024-04) pasan a provisionales.
+3. **Metadatos de uso:** `embargo_months = 6` y la regla "provisional o weight = 0 no puntúan ni entrenan", en el
+   `meta.json` y en la §7; hash del contenido y SHA-256 del código en el `meta.json`.
+4. Las comprobaciones de la §8 se repiten con la muestra nueva: pasan todas (`docs/models/label_v1.0_checks.md`).
+5. **Nota:** a partir de aquí, cualquier cambio = v1.1 / v2.0 con revalidación completa.
 
 ### v0.2 (2026-10-14, aprobada por el usuario)
 

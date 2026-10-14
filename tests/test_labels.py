@@ -102,6 +102,30 @@ def test_scales(built):
     m = info["meta"]
     for k in ("s_G", "s_I"):
         assert m[k] >= R.PARAMS.scale_floor
+    assert m["s_G"] == pytest.approx(0.40) and m["s_I"] == pytest.approx(0.31)
+
+
+def test_usage_metadata(built):
+    _, info = built
+    m = info["meta"]
+    assert m["embargo_months"] == 6 and m["usage"]["embargo_months"] == 6
+    assert "provisional" in m["usage"]["score_and_train_mask"] and "weight" in m["usage"]["score_and_train_mask"]
+    assert len(m["code"]["sha256_code"]) == 64
+
+
+def test_provisional_covers_revision_study():
+    """`provisional` debe cubrir los meses que el estudio de revisión considera inmaduros:
+    month T−k es inmaduro si k < k*; la etiqueta termina en T−lag, así que hacen falta k* − lag filas."""
+    import json
+
+    f = R.out_dir() / "revision_study.json"
+    if not f.exists():
+        pytest.skip("falta revision_study.json: ejecutar python -m src.labels.revision_study")
+    st = json.loads(f.read_text())
+    need = st["k_final"] - st["lag"]
+    assert R.PARAMS.provisional_months >= need
+    assert R.PARAMS.provisional_months == st["provisional_months"]
+    assert R.PARAMS.provisional_months % 6 == 0
 
 
 def test_reproducible(built):
