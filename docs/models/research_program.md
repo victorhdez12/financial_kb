@@ -23,7 +23,7 @@ validadas entran como variables del modelo, como "reglas de oro" para el informe
    publicación). Una regla que necesita el dato revisado no sirve para anticiparse.
 5. **Contar episodios, no meses.** Desde 1950 hay unas 11 recesiones y unas pocas decenas de cambios de cuadrante. Se
    exigen ≥ 6 episodios para evaluar una regla.
-6. **El periodo bloqueado (2016-2026) no se toca** hasta la evaluación final, igual que en el modelo.
+6. **El periodo bloqueado (2005-01 → abierto, decidido el 2026-10-14) no se toca** hasta la evaluación final, igual que en el modelo. La investigación usa solo datos ≤ 2004-12. Las variables que nacen después (derivados) se preregistran por teoría y se evalúan solo fuera de muestra.
 
 ## 2. Catálogo inicial de hipótesis (por bloque de "la máquina")
 

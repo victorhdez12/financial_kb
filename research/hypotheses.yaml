@@ -1,0 +1,65 @@
+# Registro de hipótesis preregistradas (docs/models/research_program.md §1.2).
+# Se escriben ANTES de mirar el resultado. No se borran ni se editan las ya registradas:
+# un cambio = hipótesis nueva con referencia a la anterior. Se registran también las que fallan.
+#
+# Periodo bloqueado: 2005-01 -> abierto (decisión del usuario, 2026-10-14).
+# La investigación empírica y el diseño del modelo base usan solo datos con fecha <= 2004-12.
+
+- id: H-DER-001
+  registrada: 2026-10-14
+  autor: usuario + coordinador
+  estado: preregistrada (sin datos mirados después de 2004)
+  bloque: mercados / derivados
+  modulo: derivados (adicional; se evalúa en el walk-forward cuando cumpla su historia mínima)
+  mecanismo: >
+    La estructura temporal de la volatilidad implícita refleja cuánto riesgo inmediato descuenta el
+    mercado. En condiciones normales la curva de futuros del VIX está en contango (el futuro a 2 meses
+    por encima del de 1 mes). Cuando el mercado percibe un deterioro inminente, la volatilidad a corto
+    supera a la de plazo (backwardation). La aversión al riesgo y el endurecimiento de las condiciones
+    financieras preceden y acompañan a la caída de la actividad.
+  variable:
+    serie: cboe_vx
+    definicion: pendiente = futuro VIX a vencimiento constante 60 d - 30 d (puntos de índice), media mensual de datos diarios
+    transformacion: nivel de la pendiente; y un indicador de backwardation = pendiente < 0 en más de la mitad de los días del mes
+    fijada_a_priori: sí (no se exploran otras definiciones con datos 2005-2026)
+  objetivo: P(G alto) del nowcast (eje de crecimiento)
+  signo_esperado: pendiente más baja / backwardation -> menor P(G alto)
+  horizonte: 0-3 meses
+  disponibilidad: 2004-03 -> hoy, diaria; retardo t+1 día hábil
+  evaluacion: >
+    Contenido incremental en log-loss frente al modelo base sin la variable, en el walk-forward
+    point-in-time, dentro de la evaluación única del periodo bloqueado. Sin ajuste de umbrales ni de
+    ventanas con datos posteriores a 2004.
+  criterio_exito: mejora de log-loss con intervalo bootstrap por bloques que no incluye el cero, y signo correcto
+  advertencias: >
+    Solo 2 recesiones NBER (2008, 2020) en su historia: no cumple la regla de admisión al modelo
+    principal (>= 3 recesiones o >= 6 cambios de régimen) hasta acumular más cambios de régimen.
+
+- id: H-DER-002
+  registrada: 2026-10-14
+  autor: usuario + coordinador
+  estado: preregistrada (sin datos mirados después de 2004)
+  bloque: mercados / derivados
+  modulo: derivados (adicional; se evalúa en el walk-forward cuando cumpla su historia mínima)
+  mecanismo: >
+    La volatilidad implícita de los bonos del Tesoro mide la incertidumbre sobre la trayectoria de
+    tipos e inflación. Sube cuando el mercado no sabe si la política monetaria va a endurecerse
+    (inflación) o relajarse (recesión). Una incertidumbre de tipos alta encarece la financiación a
+    plazo y precede a peores condiciones de crecimiento; su subida combinada con breakevens al alza
+    apunta a riesgo inflacionista.
+  variable:
+    serie: mpls_mpd
+    definicion: desviación típica implícita del rendimiento del Treasury a 10 años a 6 meses vista (Fed de Minneapolis), dato semanal -> último dato del mes
+    transformacion: z-score con ventana expansiva (solo datos <= t)
+    fijada_a_priori: sí (no se exploran otros plazos ni transformaciones con datos 2005-2026)
+  objetivo: P(G alto) y P(I alta) del nowcast
+  signo_esperado: >
+    volatilidad implícita alta -> menor P(G alto); volatilidad alta junto con breakevens a 5 años
+    subiendo -> mayor P(I alta)
+  horizonte: 0-6 meses
+  disponibilidad: 2006 -> hoy, semanal; retardo +14 días
+  evaluacion: igual que H-DER-001
+  criterio_exito: igual que H-DER-001, por eje
+  advertencias: >
+    Nace en 2006, dentro del periodo bloqueado: no hay ningún dato en el periodo de investigación.
+    Toda su evaluación es fuera de muestra. Solo 2 recesiones en su historia.

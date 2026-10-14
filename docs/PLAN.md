@@ -117,7 +117,7 @@ Sustituye y concreta el "Motor de decisión" de arriba: HMM, análogos y Bayes p
 
 ### Validación (nivel profesional)
 - Walk-forward con **purging + embargo** (etiquetas solapadas); ajuste de hiperparámetros con validación anidada.
-- **Periodo final bloqueado** (p. ej. 2016-2026): no se mira hasta el final; una sola evaluación.
+- **Periodo final bloqueado: 2005-01 → abierto** (decidido el 2026-10-14): no se mira hasta el final; una sola evaluación.
 - Métricas de probabilidad: **log-loss / Brier Skill Score frente a la persistencia**, curvas de calibración (calibración isotónica/Platt dentro del walk-forward). El acierto (58-65 % esperable) se informa, pero no decide.
 - **Registro de pruebas** (todas, también las fallidas) y **Deflated Sharpe** para corregir por número de intentos.
 - Etapa 2 validada **de extremo a extremo**: ¿la cartera resultante bate a la cartera estática del IPS después de costes (5-10 pb), impuestos y en EUR? Con instrumentos invertibles (fondos indexados / ETFs UCITS), no solo con factores teóricos.
@@ -154,6 +154,13 @@ Una variable solo entra en el modelo de producción si cumple las cuatro condici
 4. **Sin cambio de régimen de disponibilidad:** el patrón de huecos no puede delatar la época. Las variables que empiezan tarde entran en modelos por época o se imputan con un indicador de disponibilidad; nunca se deja que "dato presente / ausente" haga de señal.
 
 El backtest usa un **embargo de 6 meses**, porque la etiqueta usa datos hasta t+4. Los meses provisionales y con peso 0 no entrenan ni puntúan.
+
+### Periodo bloqueado y reglas del arnés (decisión del usuario, 2026-10-14, tras la validación de la etiqueta)
+- **Periodo bloqueado: 2005-01 → abierto.** La investigación empírica de relaciones y el diseño del modelo base usan **solo datos con fecha ≤ 2004-12**. El periodo bloqueado se evalúa **una sola vez**, con todo preregistrado; sus ampliaciones (a medida que maduran los meses provisionales) también se preregistran.
+- **Etiqueta de entrenamiento sin fuga de tendencia (obligatorio):** en cada corte T del walk-forward, la etiqueta de entrenamiento se **recalcula solo con los datos disponibles hasta T**. Prohibido usar la etiqueta final precalculada para entrenar. La puntuación sí se hace contra la etiqueta oficial congelada.
+- **Columnas prohibidas:** el arnés llama a `assert_no_forbidden()` (lista negra de `src/labels/`) antes de entrenar.
+- **Baseline honesto que hay que batir: persistencia point-in-time**, es decir, la última etiqueta que realmente se conoce en t (≈ 68 % de acierto según el Validador; la cifra exacta y su log-loss están en la ficha v1.1). La persistencia "mes anterior" (89 %) tiene fuga y no vale como referencia. La métrica principal sigue siendo la log-loss.
+- **Variables que nacen dentro del periodo bloqueado** (`cboe_vx` 2004, `mpls_mpd` 2006): no se seleccionan ni se ajustan explorando datos de 2005-2026. Se definen **a priori por teoría económica y se preregistran** (`research/hypotheses.yaml`, H-DER-001 y H-DER-002). Se evalúan como **módulo adicional** dentro de la evaluación única del walk-forward point-in-time, cuando cumplan la historia mínima de la regla de admisión.
 
 ### Investigación de relaciones adelantadas
 Programa propio en `docs/models/research_program.md`: hipótesis con mecanismo y preregistradas, prueba de universalidad (JST, OCDE, zona euro), métodos de alerta temprana y contenido incremental fuera de muestra, control de comparaciones múltiples. Las reglas validadas alimentan el modelo, las reglas de oro y un panel de alertas; el sistema de reglas compite con el GBM. Futuros y derivados: variables y "sorpresa frente a lo descontado".
