@@ -1,0 +1,410 @@
+{
+ "etiqueta": {
+  "version": "1.0",
+  "estado": "CONGELADA",
+  "sha256_content": "38250f0adc88bd55f604839fcc2d9c715b207456654c290c5a6214201ee512f7",
+  "primer_mes": "1950-01-01",
+  "ultimo_mes": "2026-04-01",
+  "meses": 916,
+  "puntuables": 802,
+  "provisional_desde": "2021-11-01",
+  "ultimo": {
+   "date": "2026-04-01 00:00:00",
+   "p_expansion": "0.0287499198586547",
+   "p_late_cycle": "0.3105286814749824",
+   "p_stagflation": "0.6047329361288263",
+   "p_low_growth_disinfl": "0.055988462537536664",
+   "label_hard": "stagflation",
+   "frontera": "False",
+   "G": "-0.16577310314724822",
+   "I": "2.9259049713080465"
+  }
+ },
+ "cobertura": {
+  "series_catalogo": 15610,
+  "series_con_observaciones": 15121,
+  "por_bloque_catalogo": {
+   "Tipos y crédito": 6559,
+   "Crecimiento, empleo y vivienda": 3504,
+   "Dinero y liquidez": 1884,
+   "Mercados (bolsa, divisas, valoración)": 1646,
+   "Inflación y materias primas": 1125,
+   "Fiscal, geopolítica y otros": 892
+  },
+  "series_activas": {
+   "1900": 1569,
+   "1950": 4686,
+   "1970": 5417,
+   "2000": 9728,
+   "2026": 7646
+  },
+  "series_usa_activas_1950": 2969,
+  "series_con_dato_2026": 7646,
+  "pit_role": {
+   "observed": 15125,
+   "forecast": 480,
+   "lookahead": 5
+  }
+ },
+ "recesion": {
+  "meses_nber_puntuables": 103,
+  "pct_p_g_alto_bajo_0_5": 1.0,
+  "reparto_cuadrante_en_recesion": {
+   "stagflation": 57,
+   "low_growth_disinfl": 46
+  }
+ },
+ "mapa": {
+  "meses_fuera_de_ejes_recortados": 31,
+  "episodios": [
+   {
+    "episodio": "1974-75",
+    "G_medio": -3.2031195830228536,
+    "I_medio": 9.410818605867311
+   },
+   {
+    "episodio": "1979-80",
+    "G_medio": -2.263379711249804,
+    "I_medio": 9.072731598050735
+   },
+   {
+    "episodio": "2008-09",
+    "G_medio": -3.6394728907666556,
+    "I_medio": 0.6711649612703352
+   },
+   {
+    "episodio": "1997-99",
+    "G_medio": 0.49191550509708776,
+    "I_medio": 1.4216394246767474
+   },
+   {
+    "episodio": "2021",
+    "G_medio": 0.8412853725410485,
+    "I_medio": 5.198636989774256
+   },
+   {
+    "episodio": "últimos 6 m\n(provisional)",
+    "G_medio": -0.13054744633958362,
+    "I_medio": 3.3987364936817275
+   }
+  ]
+ },
+ "reparto": {
+  "meses": 802,
+  "pct": {
+   "expansion": 0.300498753117207,
+   "late_cycle": 0.23067331670822944,
+   "stagflation": 0.2281795511221945,
+   "low_growth_disinfl": 0.24064837905236908
+  },
+  "tramos": 86,
+  "duracion_media": 9.325581395348838,
+  "duracion_mediana": 6.0,
+  "por_cuadrante": {
+   "expansion": {
+    "tramos": 20,
+    "media": 12.05,
+    "mediana": 9.0,
+    "max": 50
+   },
+   "late_cycle": {
+    "tramos": 21,
+    "media": 8.80952380952381,
+    "mediana": 6.0,
+    "max": 32
+   },
+   "stagflation": {
+    "tramos": 23,
+    "media": 7.956521739130435,
+    "mediana": 4.0,
+    "max": 38
+   },
+   "low_growth_disinfl": {
+    "tramos": 22,
+    "media": 8.772727272727273,
+    "mediana": 5.0,
+    "max": 25
+   }
+  },
+  "pct_frontera": 0.0798004987531172
+ },
+ "revision": {
+  "k_star": {
+   "latest": 54,
+   "alfred": 55
+  },
+  "k_final": 55,
+  "lag": 4,
+  "provisional_months": 54,
+  "n_cortes": 100
+ },
+ "ultimos24": {
+  "coinciden": 9,
+  "n": 24,
+  "detalle": [
+   {
+    "mes": "2024-05",
+    "etiqueta": "late_cycle",
+    "p_max": 0.3695325827090439,
+    "reglas": "Estanflación",
+    "coinciden": false
+   },
+   {
+    "mes": "2024-06",
+    "etiqueta": "expansion",
+    "p_max": 0.35463821212724383,
+    "reglas": "Estanflación",
+    "coinciden": false
+   },
+   {
+    "mes": "2024-07",
+    "etiqueta": "stagflation",
+    "p_max": 0.3114116523855832,
+    "reglas": "Estanflación",
+    "coinciden": true
+   },
+   {
+    "mes": "2024-08",
+    "etiqueta": "stagflation",
+    "p_max": 0.34220546224974757,
+    "reglas": "Deflación/recesión",
+    "coinciden": false
+   },
+   {
+    "mes": "2024-09",
+    "etiqueta": "stagflation",
+    "p_max": 0.32303445132256997,
+    "reglas": "Deflación/recesión",
+    "coinciden": false
+   },
+   {
+    "mes": "2024-10",
+    "etiqueta": "stagflation",
+    "p_max": 0.5057322660659543,
+    "reglas": "Deflación/recesión",
+    "coinciden": false
+   },
+   {
+    "mes": "2024-11",
+    "etiqueta": "stagflation",
+    "p_max": 0.5035480589515935,
+    "reglas": "Deflación/recesión",
+    "coinciden": false
+   },
+   {
+    "mes": "2024-12",
+    "etiqueta": "late_cycle",
+    "p_max": 0.4972969292073264,
+    "reglas": "Estanflación",
+    "coinciden": false
+   },
+   {
+    "mes": "2025-01",
+    "etiqueta": "late_cycle",
+    "p_max": 0.5008571100515168,
+    "reglas": "Estanflación",
+    "coinciden": false
+   },
+   {
+    "mes": "2025-02",
+    "etiqueta": "stagflation",
+    "p_max": 0.5386102312503175,
+    "reglas": "Estanflación",
+    "coinciden": true
+   },
+   {
+    "mes": "2025-03",
+    "etiqueta": "stagflation",
+    "p_max": 0.5853841054462585,
+    "reglas": "Estanflación",
+    "coinciden": true
+   },
+   {
+    "mes": "2025-04",
+    "etiqueta": "stagflation",
+    "p_max": 0.5586358926639824,
+    "reglas": "Estanflación",
+    "coinciden": true
+   },
+   {
+    "mes": "2025-05",
+    "etiqueta": "stagflation",
+    "p_max": 0.5242214307459941,
+    "reglas": "Estanflación",
+    "coinciden": true
+   },
+   {
+    "mes": "2025-06",
+    "etiqueta": "stagflation",
+    "p_max": 0.8379992632363955,
+    "reglas": "Deflación/recesión",
+    "coinciden": false
+   },
+   {
+    "mes": "2025-07",
+    "etiqueta": "stagflation",
+    "p_max": 0.6424453481592578,
+    "reglas": "Deflación/recesión",
+    "coinciden": false
+   },
+   {
+    "mes": "2025-08",
+    "etiqueta": "low_growth_disinfl",
+    "p_max": 0.5098567019406013,
+    "reglas": "Goldilocks",
+    "coinciden": false
+   },
+   {
+    "mes": "2025-09",
+    "etiqueta": "stagflation",
+    "p_max": 0.5854152667405653,
+    "reglas": "Deflación/recesión",
+    "coinciden": false
+   },
+   {
+    "mes": "2025-10",
+    "etiqueta": "stagflation",
+    "p_max": 0.8352739174622519,
+    "reglas": "Deflación/recesión",
+    "coinciden": false
+   },
+   {
+    "mes": "2025-11",
+    "etiqueta": "stagflation",
+    "p_max": 0.7760498998533957,
+    "reglas": "Estanflación",
+    "coinciden": true
+   },
+   {
+    "mes": "2025-12",
+    "etiqueta": "stagflation",
+    "p_max": 0.653912269829963,
+    "reglas": "Reflación",
+    "coinciden": false
+   },
+   {
+    "mes": "2026-01",
+    "etiqueta": "stagflation",
+    "p_max": 0.5668228943703792,
+    "reglas": "Reflación",
+    "coinciden": false
+   },
+   {
+    "mes": "2026-02",
+    "etiqueta": "stagflation",
+    "p_max": 0.5485024726431244,
+    "reglas": "Estanflación",
+    "coinciden": true
+   },
+   {
+    "mes": "2026-03",
+    "etiqueta": "stagflation",
+    "p_max": 0.5291102186416354,
+    "reglas": "Estanflación",
+    "coinciden": true
+   },
+   {
+    "mes": "2026-04",
+    "etiqueta": "stagflation",
+    "p_max": 0.6047329361288263,
+    "reglas": "Estanflación",
+    "coinciden": true
+   }
+  ],
+  "reglas_hasta": "2026-10",
+  "reglas_ultimos": {
+   "2026-05": "Estanflación",
+   "2026-06": "Estanflación",
+   "2026-07": "Estanflación",
+   "2026-08": "Estanflación",
+   "2026-09": "Deflación/recesión",
+   "2026-10": "Deflación/recesión"
+  }
+ },
+ "desfase": {
+  "k": [
+   -6,
+   -5,
+   -4,
+   -3,
+   -2,
+   -1,
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "v0.1": [
+   0.4035371348509438,
+   0.6023114922347889,
+   0.740680139718519,
+   0.8061582954764965,
+   0.811968930555906,
+   0.7570176249615671,
+   0.626921960935107,
+   0.43717340238670443,
+   0.2991567256963102,
+   0.23670312323882403,
+   0.23060547334074813,
+   0.22218439668782516,
+   0.19822120270151866
+  ],
+  "v0.2 / v1.0": [
+   0.18971507765042855,
+   0.19543698116923047,
+   0.19813129163807863,
+   0.2609265257513904,
+   0.40475102612421626,
+   0.6028189919185557,
+   0.7409833644518325,
+   0.8061717900793006,
+   0.811945027660131,
+   0.7572319265286539,
+   0.6277382470767369,
+   0.43855102349313746,
+   0.30092158160084964
+  ],
+  "muestra": "1967-01 → 2021-10",
+  "nota": "corr(G(t), CFNAI-MA3(t+k)); CFNAIMA3 de obs_latest",
+  "fondo_2008": {
+   "v0.1": "2009-04-01",
+   "v0.2": "2008-12-01",
+   "meses": 4
+  }
+ },
+ "reglas_vs_etiqueta": {
+  "meses": 802,
+  "concordancia": 0.513715710723192,
+  "concordancia_sin_frontera": 0.5230352303523035,
+  "tabla": {
+   "Deflación/recesión": {
+    "expansion": 99,
+    "late_cycle": 43,
+    "low_growth_disinfl": 124,
+    "stagflation": 47
+   },
+   "Estanflación": {
+    "expansion": 12,
+    "late_cycle": 62,
+    "low_growth_disinfl": 32,
+    "stagflation": 112
+   },
+   "Goldilocks": {
+    "expansion": 116,
+    "late_cycle": 20,
+    "low_growth_disinfl": 33,
+    "stagflation": 9
+   },
+   "Reflación": {
+    "expansion": 14,
+    "late_cycle": 60,
+    "low_growth_disinfl": 4,
+    "stagflation": 15
+   }
+  },
+  "nota": "correspondencia aproximada Goldilocks=expansion, Reflación=late_cycle, Estanflación=stagflation, Deflación/recesión=low_growth_disinfl; las definiciones no son idénticas"
+ }
+}
