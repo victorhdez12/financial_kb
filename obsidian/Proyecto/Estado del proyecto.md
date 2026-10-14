@@ -14,7 +14,7 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Tener un nowcast del régimen de EE. UU. validado:** que el sistema diga cada mes en qué cuadrante estamos y con qué probabilidad, usando solo la información disponible en esa fecha, y que esté demostrado en un backtest honesto que lo hace mejor que las alternativas sencillas.
 
-**Entregables, por orden:** (1) etiqueta v1.0 congelada · (2) base point-in-time + calendario de publicación + test de fugas · (3) arnés walk-forward (embargo 6 m, periodo 2016-2026 bloqueado, registro de pruebas) · (4) baselines: persistencia, reglas, logística, Markov · (5) GBM solo si los bate · (6) calibración. En paralelo: investigación de relaciones adelantadas (las validadas entran como variables).
+**Entregables, por orden:** (1) ✅ etiqueta v1.0 congelada (14-oct, tag `label-v1.0`; [[Proyecto/Etiqueta de régimen]]) · (2) base point-in-time + calendario de publicación + test de fugas · (3) arnés walk-forward (embargo 6 m, periodo 2016-2026 bloqueado, registro de pruebas) · (4) baselines: persistencia, reglas, logística, Markov · (5) GBM solo si los bate · (6) calibración. En paralelo: investigación de relaciones adelantadas (las validadas entran como variables).
 
 **Criterios de cierre:**
 - [ ] Bate a la persistencia en log-loss fuera de muestra, también en el periodo bloqueado, con intervalos que no incluyen el cero.
