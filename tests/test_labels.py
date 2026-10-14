@@ -19,7 +19,7 @@ def built():
 def test_columns(built):
     df, _ = built
     expected = ["date", "G", "I", "p_g_high", "p_i_high", *PCOLS, "label_hard", "max_prob", "frontera",
-                "provisional", "tendencia_truncada", "cobertura_g", "fuente_i", "usrec"]
+                "provisional", "tendencia_truncada", "cobertura_g", "fuente_i", "usrec", "weight"]
     assert list(df.columns) == expected
     assert df["date"].min() == pd.Timestamp("1950-01-01")
     assert df["date"].is_monotonic_increasing and df["date"].is_unique
@@ -67,6 +67,34 @@ def test_coverage_and_sources(built):
     assert (df["cobertura_g"] >= R.PARAMS.min_growth_ind).all()
     assert (df.set_index("date").loc[:"1958-12", "cobertura_g"] == 2).all()
     assert set(df["fuente_i"]) <= {"pce_core", "cpi_core_adj", "headline"}
+
+
+def test_weights(built):
+    df, _ = built
+    w = df.set_index("date")["weight"]
+    assert set(w.unique()) <= {0.0, 1.0}
+    assert (w.loc[:"1954-12"] == 0).all() and (w.loc["1955-01":] == 1).all()
+
+
+def test_quadrant_names(built):
+    df, _ = built
+    assert "p_slowdown" not in df.columns and "p_low_growth_disinfl" in df.columns
+    assert set(df["label_hard"]) <= set(R.QUADRANTS)
+    assert R.ALIASES["p_slowdown"] == "p_low_growth_disinfl"
+
+
+def test_centered_windows():
+    """G e I en t usan datos de t−4…t+4 / t−3…t+3. Un salto de nivel entre los meses s−1 y s
+    (centrado en s−0,5) mueve el ritmo en s−4…s+3 y la inflación en s−3…s+2: simétrico."""
+    idx = pd.date_range("2000-01-01", periods=40, freq="MS")
+    lv = pd.Series(100.0, index=idx)
+    lv.iloc[20:] = 110.0
+    g = R.pace(lv)
+    moved = g[g.abs() > 1e-9].index
+    assert moved.min() == idx[20 - 4] and moved.max() == idx[20 + 3]
+    i = R.ann_change(lv)
+    moved_i = i[i.abs() > 1e-9].index
+    assert moved_i.min() == idx[20 - 3] and moved_i.max() == idx[20 + 2]
 
 
 def test_scales(built):

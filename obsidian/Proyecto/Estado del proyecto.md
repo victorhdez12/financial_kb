@@ -25,6 +25,8 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Hecho el 14-oct:** auditoría completa con las fuentes nuevas (`docs/data/audit_2026-10-14.md`, 0 críticas), arreglos de INE (EPA por sexo), CFTC (ECU) y `PIT_RULES`, reporte [[Reports/2026-10-14_semanal]] y commit en `fase-datos`. Tarea launchd de arranque (`com.financialkb.arranque`) instalada: recupera la actualización perdida al encender el Mac.
 
+**14-oct (tarde):** etiqueta de régimen v0.2 lista ([[Proyecto/Etiqueta de régimen]]: 13/13 comprobaciones; falta decidir 4 propuestas y congelar v1.0). Programa de investigación de relaciones adelantadas en `docs/models/research_program.md`. Futuros y derivados integrados (5 fuentes, 213 series; decisión pendiente: ¿pagar Databento/Norgate?). Base de datos: 15.610 series, 12,53 M filas.
+
 **Siguiente paso (Fase 3, orden de `docs/PLAN.md`):**
 1. Especificación de la etiqueta de régimen (ex post, nowcast vs forecast, horizonte) + matriz de variables point-in-time + test de fugas.
 2. Pendientes de la revisión de la Fase 1 como variables (histéresis de G, inflación compuesta, bear/bull steepening, liquidez neta diaria y global, capa EUR).
