@@ -146,6 +146,15 @@ Sustituye y concreta el "Motor de decisión" de arriba: HMM, análogos y Bayes p
 - Registro de modelos y experimentos (MLflow o equivalente), ficha por modelo (`docs/models/<modelo>.md`): datos, etiqueta, métricas, limitaciones.
 - Paper trading ≥ 6 meses antes de dinero real.
 
+### Regla de admisión de variables al modelo principal (2026-10-14)
+Una variable solo entra en el modelo de producción si cumple las cuatro condiciones:
+1. **Fuente viva:** se puede actualizar hoy. Si no, por ejemplo `eia_futures`, cortada en 2024-04, solo sirve para investigación hasta que se empalme con otra fuente.
+2. **Historia mínima:** cubre ≥ 3 recesiones NBER **o** ≥ 6 cambios de régimen de la etiqueta. Si no, por ejemplo `atl_mpt`, desde 2023, se usa solo en la capa "descontado por el mercado" y en el informe.
+3. **Point-in-time:** tiene un retardo de publicación documentado en el calendario y no es `forecast`/`lookahead`, salvo que se use de forma explícita como expectativa con su fecha de publicación.
+4. **Sin cambio de régimen de disponibilidad:** el patrón de huecos no puede delatar la época. Las variables que empiezan tarde entran en modelos por época o se imputan con un indicador de disponibilidad; nunca se deja que "dato presente / ausente" haga de señal.
+
+El backtest usa un **embargo de 6 meses**, porque la etiqueta usa datos hasta t+4. Los meses provisionales y con peso 0 no entrenan ni puntúan.
+
 ### Investigación de relaciones adelantadas
 Programa propio en `docs/models/research_program.md`: hipótesis con mecanismo y preregistradas, prueba de universalidad (JST, OCDE, zona euro), métodos de alerta temprana y contenido incremental fuera de muestra, control de comparaciones múltiples. Las reglas validadas alimentan el modelo, las reglas de oro y un panel de alertas; el sistema de reglas compite con el GBM. Futuros y derivados: variables y "sorpresa frente a lo descontado".
 
