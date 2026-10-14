@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.financialkb.arranque</string>
+	<!-- Al iniciar sesión: recupera la actualización diaria o semanal si se perdió con el Mac apagado -->
+	<key>ProgramArguments</key>
+	<array>
+		<string>/bin/bash</string>
+		<string>/Users/victorhdez12/Proyectos/financial_kb/scripts/actualizar.sh</string>
+		<string>pendiente</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+	<!-- Y cada hora por si se enciende antes de las 7:30 y la cita de launchd ya pasó por otro motivo -->
+	<key>StartInterval</key>
+	<integer>3600</integer>
+	<key>Nice</key>
+	<integer>10</integer>
+	<key>StandardOutPath</key>
+	<string>/Users/victorhdez12/financial_archive/logs/launchd_arranque.out</string>
+	<key>StandardErrorPath</key>
+	<string>/Users/victorhdez12/financial_archive/logs/launchd_arranque.err</string>
+</dict>
+</plist>

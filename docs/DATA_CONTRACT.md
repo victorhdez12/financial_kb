@@ -31,7 +31,7 @@ Categorías: `growth, inflation, employment, rates, credit, money, liquidity, fi
 
 ## Eventos: `events/<dataset>.parquet`
 
-`event_id, name, type (war|banking_crisis|currency_crisis|sovereign_default|market_crash|recession|pandemic|oil_shock|policy|credit_event), country, start_date, end_date, severity (texto o numérico), source, url, notes`
+`event_id, name, type (war|banking_crisis|currency_crisis|sovereign_default|market_crash|recession|pandemic|oil_shock|policy|credit_event|inflation_crisis), country, start_date, end_date, severity (texto o numérico), source, url, notes`
 
 ## Reglas
 
@@ -39,3 +39,20 @@ Categorías: `growth, inflation, employment, rates, credit, money, liquidity, fi
 - Claves en `.env` (python-dotenv). Nunca imprimir claves en logs.
 - No reescribir datos ya existentes en `macro/fred`, `macro/bls` ni `sec/` (legacy); las capas nuevas van en `raw/` y `curated/`.
 - Licencias: uso personal/investigación; anotar la licencia en el catálogo.
+
+## Metadatos que añade el warehouse (2026-10-12)
+
+`src/warehouse/build.py` enriquece la tabla `catalog` (no hace falta escribirlos en `_catalog.csv`):
+
+| columna | regla |
+|---|---|
+| `pit_role` | `observed` (por defecto), `forecast` (proyecciones: `*_proj`, `transform_notes` que empieza por `FORECAST`, `NROU`) o `lookahead` (el valor en t usa información posterior a t: `shiller_fwd10y_*`, `nyfed_recprob_target`). Reglas en `PIT_RULES`. **Toda fuente nueva con previsiones o look-ahead debe cumplir una de estas reglas o añadir la suya.** |
+| `country_iso3` | `country` normalizado a ISO3 (acepta ISO3, ISO2 o nombre en inglés). Agregados: `EA`, `EU`, `WLD`, `G7`, `G20`, `OECD`, `EM`, `ADV`, `EMDE`. NULL si no se reconoce (grupos BIS, regiones). |
+
+Además:
+- `catalog` tiene una fila por `series_id`. Si una serie aparece en varias fuentes, gana la fuente curada, después `alfred` y por último la legacy.
+- `obs_latest` solo contiene series `observed` y fechas ≤ fecha de construcción. Las demás están en la vista `forecasts`.
+- `observations.realtime_end` se conserva para hacer consultas point-in-time en SQL.
+- Las series anuales con fecha distinta del 1 de enero (años fiscales de FRED, 30-jun/30-sep) se fechan al 1 de enero de ese año.
+- Un mes ausente en una serie mensual (p. ej. IPC oct-2025) se queda como hueco. El clasificador reindexa al calendario completo (`src/regime/features.py: regularize`) antes de calcular variaciones, así que nunca hace una variación interanual de 13 meses.
+- Las series sin publicar durante más de `MAX_STALE_DAYS` (`src/regime/asof.py`) dejan de votar en el clasificador.

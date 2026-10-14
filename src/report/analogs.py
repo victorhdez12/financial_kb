@@ -26,6 +26,10 @@ ASSET_SOURCES = {
     "bonos 10a (TR)": [("^shiller_nominal_bond_tr_ret_m$", "ret_frac"), ("^GS10$", "yield"), ("^DGS10$", "yield")],
     "oro": [("^gold_usd_monthly$", "level"), ("^wb_gold$", "level")],
 }
+# first month in which an asset had a market price. Gold was fixed by the US Treasury
+# ($20.67 to 1933, $35 to 1971) and `gold_usd_monthly` repeats annual averages before 1960, so its
+# "returns" before the end of convertibility (Aug 1971) are artificial zeros, not outcomes.
+ASSET_VALID_FROM = {"oro": pd.Timestamp("1971-08-31")}
 
 
 def _to_month(s: pd.Series) -> pd.Series:
@@ -57,7 +61,10 @@ def monthly_returns(con) -> tuple[dict[str, pd.Series], dict[str, str]]:
                 r = bond_return_from_yield(s)
             else:
                 r = _to_month(s).pct_change()
-            rets[asset], used[asset] = r.dropna(), sid
+            r = r.dropna()
+            if asset in ASSET_VALID_FROM:
+                r = r[r.index >= ASSET_VALID_FROM[asset]]
+            rets[asset], used[asset] = r, sid
             break
     return rets, used
 

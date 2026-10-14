@@ -23,6 +23,12 @@ Build a source-grounded macro/market knowledge system covering roughly 1800-pres
 4. Historical analogies must list both similarities and differences.
 5. Store the data series outside Neo4j; store metadata and relationships in Neo4j.
 
+## Proyecto (empezar aquí)
+
+- [[Proyecto/Estado del proyecto]]: fase actual, inventario, problemas abiertos y próximos pasos
+- [[Proyecto/Agentes]]: roles e instrucciones completas de los agentes
+- [[Proyecto/Bitácora]]: registro cronológico de avances
+
 ## Main folders
 
 - [[Concepts/Inflation]]

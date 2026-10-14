@@ -47,6 +47,10 @@ PUB_LAG: dict[str, int] = {
     "DRTSCILM": 45, "DRTSCIS": 45, "DRALACBN": 60, "DRALACBS": 60, "DRCCLACBS": 60, "DRBLACBS": 60,
 }
 DEFAULT_LAG = {"D": 1, "W": 6, "M": 31, "Q": 60, "A": 120}
+# max days between a value's release and the decision date before it counts as stale (NaN).
+# Generous enough for holidays, shutdown delays and slow annual releases, but stops a
+# discontinued series (e.g. TEDRATE, last published 2022-01) from voting forever.
+MAX_STALE_DAYS = {"D": 45, "W": 45, "M": 120, "Q": 250, "A": 550}
 # series whose FRED date is the survey START rather than a period to be completed
 START_ANCHORED = {"DRTSCILM", "DRTSCIS"}
 
@@ -92,7 +96,8 @@ def month_grid(start: str = "1947-01-31", today: date | None = None) -> pd.DataF
 
 
 def asof_on_grid(s: pd.Series, sid: str, grid: pd.DataFrame, tag_obs: bool = False):
-    """Value known at each grid cutoff (last observation whose release date <= cutoff)."""
+    """Value known at each grid cutoff (last observation whose release date <= cutoff), or NaN if
+    that observation is older than MAX_STALE_DAYS (discontinued or long-interrupted series)."""
     s = s.dropna()
     if s.empty:
         out = pd.Series(np.nan, index=grid["date"])
@@ -100,6 +105,8 @@ def asof_on_grid(s: pd.Series, sid: str, grid: pd.DataFrame, tag_obs: bool = Fal
     obs = pd.DataFrame({"available": available_dates(s, sid), "value": s.values, "obs_date": s.index})
     obs = obs.sort_values("available")
     m = pd.merge_asof(grid.sort_values("cutoff"), obs, left_on="cutoff", right_on="available")
+    stale = (m["cutoff"] - m["available"]).dt.days > MAX_STALE_DAYS[infer_freq(s.index)]
+    m.loc[stale, ["value", "obs_date"]] = np.nan
     vals = pd.Series(m["value"].values, index=grid["date"].values)
     if tag_obs:
         return vals, pd.Series(m["obs_date"].values, index=grid["date"].values)

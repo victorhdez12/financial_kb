@@ -35,15 +35,20 @@ UCDP_PAGE = "https://ucdp.uu.se/downloads/"
 UCDP_TYPES = {1: "extrasystemic", 2: "interstate", 3: "intrastate", 4: "internationalized intrastate"}
 
 
-def _d(y, m, d):
+def _d(y, m, d, end: bool = False):
+    """COW date; unknown month/day (-9, -8) -> start of the period, or its last day when end=True
+    (an end date of 'Apr-1838, day unknown' must not fall before a start on 17-Apr-1838)."""
     try:
         y = int(y)
     except Exception:  # noqa: BLE001
         return None
     if y <= 0:
         return None
-    m = int(m) if pd.notna(m) and 1 <= int(m) <= 12 else 1
-    d = int(d) if pd.notna(d) and 1 <= int(d) <= 31 else 1
+    m = int(m) if pd.notna(m) and 1 <= int(m) <= 12 else (12 if end else 1)
+    if pd.notna(d) and 1 <= int(d) <= 31:
+        d = int(d)
+    else:
+        d = pd.Timestamp(year=y, month=m, day=1).days_in_month if end else 1
     try:
         return pd.Timestamp(year=y, month=m, day=d).date()
     except ValueError:
@@ -51,8 +56,8 @@ def _d(y, m, d):
 
 
 def _end(r, cols1, cols2):
-    e2 = _d(*[r[c] for c in cols2]) if cols2[0] in r else None
-    e1 = _d(*[r[c] for c in cols1])
+    e2 = _d(*[r[c] for c in cols2], end=True) if cols2[0] in r else None
+    e1 = _d(*[r[c] for c in cols1], end=True)
     return e2 or e1
 
 

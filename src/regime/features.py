@@ -16,6 +16,28 @@ from src.warehouse import db
 
 
 # ---------------------------------------------------------------- transforms (observation index)
+CAL_FREQ = {"M": "MS", "Q": "QS", "A": "YS"}
+
+
+def regularize(s: pd.Series) -> pd.Series:
+    """Reindex a monthly/quarterly/annual series onto its full calendar so that a missing
+    observation (e.g. CPI Oct-2025, never published after the 2025 shutdown) becomes NaN instead of
+    silently disappearing. Position-based shifts (yoy = shift(12)) are then calendar-correct:
+    yoy and 6m changes that would need the missing month are NaN, not a 13-month change.
+    Daily/weekly series and series not dated at period start are returned unchanged."""
+    s = s.dropna()
+    if len(s) < 3:
+        return s
+    freq = infer_freq(s.index)
+    cal = CAL_FREQ.get(freq)
+    if cal is None:
+        return s
+    full = pd.date_range(s.index.min(), s.index.max(), freq=cal)
+    if not s.index.isin(full).all():
+        return s
+    return s.reindex(full)
+
+
 def _periods_per_year(s: pd.Series) -> int:
     return {"D": 252, "W": 52, "M": 12, "Q": 4, "A": 1}[infer_freq(s.index)]
 
@@ -41,9 +63,13 @@ def d12(s: pd.Series) -> pd.Series:
 
 
 def sahm(s: pd.Series) -> pd.Series:
-    """Sahm rule: 3m avg unemployment minus the minimum 3m avg of the previous 12 months."""
-    m3 = s.rolling(3).mean()
-    return m3 - m3.shift(1).rolling(12, min_periods=12).min()
+    """Sahm rule: 3m avg unemployment minus the minimum 3m avg of the previous 12 months.
+
+    A single missing month (NaN after `regularize`) must not blank the rule for a year: the 3m
+    average needs 2 of 3 months (but is never produced for the missing month itself) and the
+    12-month minimum needs 11 of 12."""
+    m3 = s.rolling(3, min_periods=2).mean().where(s.notna())
+    return m3 - m3.shift(1).rolling(12, min_periods=11).min()
 
 
 @dataclass(frozen=True)
@@ -62,8 +88,8 @@ FEATURES: list[Feature] = [
     Feature("unrate", ("UNRATE", "bls_LNS14000000"), level, True),
     Feature("unrate_d12", ("UNRATE", "bls_LNS14000000"), d12, True),
     Feature("sahm", ("UNRATE", "bls_LNS14000000"), sahm, True),
-    Feature("tcu", ("TCU",)),
-    Feature("cfnai", ("CFNAI",)),
+    Feature("tcu", ("TCU",), level, True),
+    Feature("cfnai", ("CFNAI",), level, True),
     # inflation
     Feature("core_cpi_6m", ("CPILFESL",), ann6m, True),
     Feature("core_pce_6m", ("PCEPILFE",), ann6m, True),
@@ -97,8 +123,8 @@ FEATURES: list[Feature] = [
     Feature("ted", ("TEDRATE",)),
     Feature("vix", ("VIXCLS",)),
     # liquidity
-    Feature("m2_yoy", ("M2SL",), yoy),
-    Feature("gdp_nom_yoy", ("GDP",), yoy),
+    Feature("m2_yoy", ("M2SL",), yoy, True),
+    Feature("gdp_nom_yoy", ("GDP",), yoy, True),
     Feature("walcl", ("WALCL",)),
     Feature("walcl_yoy", ("WALCL",), yoy),
     Feature("tga", ("WTREGEN",)),
@@ -141,7 +167,7 @@ def build_feature(con, f: Feature, grid: pd.DataFrame, use_vintages: bool):
             continue
         if f.name in ("walcl", "tga", "rrp"):
             s = to_billions(con, cand, s)
-        vals = vals.combine_first(asof_on_grid(f.fn(s), cand, grid))
+        vals = vals.combine_first(asof_on_grid(f.fn(regularize(s)), cand, grid))
         if sid is None:
             sid, raw = cand, s
     if sid is None:
@@ -149,7 +175,7 @@ def build_feature(con, f: Feature, grid: pd.DataFrame, use_vintages: bool):
     if f.vintage and use_vintages:
         v = db.vintages(con, sid)
         if not v.empty:
-            vv = vintage_asof(v, grid, lambda snap: f.fn(snap).dropna().iloc[-1])
+            vv = vintage_asof(v, grid, lambda snap: f.fn(regularize(snap)).dropna().iloc[-1])
             flag = vv.notna()
             vals = vv.combine_first(vals)
     return vals, flag, sid, raw.index.max()

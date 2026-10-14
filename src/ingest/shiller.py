@@ -42,6 +42,12 @@ COLS = {
 }
 
 
+# (series suffix, date) -> (wrong value in Shiller's file, corrected value, reason); only applied while the file still has the wrong value
+KNOWN_FIXES = {
+    ("gs10", "2019-07-01"): (1.63, 2.06, "Shiller repeats the Aug-2019 value; FRED GS10 Jul-2019 = 2.06 (audit 2026-10-12)"),
+}
+
+
 def fetch() -> tuple[str, "Path"]:
     dest = raw_dir(SOURCE) / "ie_data.xls"
     urls = []
@@ -81,7 +87,14 @@ def main() -> None:
         notes = "Date decoded from YYYY.MM; last month is provisional (partial-month price/CPI estimate per Shiller footnote)"
         if suf.startswith("fwd10y"):
             notes += "; FORWARD-LOOKING (look-ahead): value at t uses returns t..t+120m - never use as a predictor"
-        cw.add(f"shiller_{suf}", d[col], name=name, category=cat, frequency="M", units=units,
+        series = d[col]
+        for (fsuf, fdate), (bad, good, why) in KNOWN_FIXES.items():
+            ts = pd.Timestamp(fdate)
+            if fsuf == suf and ts in series.index and abs(pd.to_numeric(series[ts]) - bad) < 1e-9:
+                series = series.copy()
+                series[ts] = good
+                notes += f"; FIX {fdate}: {bad} -> {good} ({why})"
+        cw.add(f"shiller_{suf}", series, name=name, category=cat, frequency="M", units=units,
                country="USA", transform_notes=notes)
     # derived monthly returns
     rtr = pd.to_numeric(d[9], errors="coerce")

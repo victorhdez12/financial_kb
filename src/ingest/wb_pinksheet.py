@@ -64,6 +64,7 @@ def load_prices(path) -> list[tuple[str, str, str, pd.Series]]:
         if name == "nan":
             continue
         vals = pd.to_numeric(body[c].replace({"…": None, "..": None}), errors="coerce")
+        vals = vals.mask(vals == 0)  # a price of 0 is a gap (e.g. Thai rice 25% Mar-Jun 2008), not a value
         out.append((name, str(units[c]).strip().strip("()"), "price", pd.Series(vals.values, index=idx)))
     return out
 
@@ -98,7 +99,7 @@ def main() -> None:
         cw.add(sid, s, name=f"World Bank Pink Sheet: {name.replace('**', '').strip()}",
                category=category_for(name) if kind == "price" else "commodities", frequency="M",
                units=units, country="WLD",
-               transform_notes="monthly average, nominal USD; '…' -> NaN; see Description sheet in raw xlsx")
+               transform_notes="monthly average, nominal USD; '…' and 0 -> NaN; see Description sheet in raw xlsx")
     cat = cw.close()
     print(cat[["series_id", "units", "start", "end"]].to_string(index=False))
 

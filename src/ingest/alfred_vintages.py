@@ -30,10 +30,13 @@ import pyarrow.parquet as pq
 from src.ingest.fred_extended import LICENSE, Fred, data_root
 
 SOURCE = "alfred"
-SERIES = ["GDPC1", "PAYEMS", "CPIAUCSL", "INDPRO", "UNRATE", "PCEPILFE", "CPILFESL"]
+SERIES = ["GDPC1", "PAYEMS", "CPIAUCSL", "INDPRO", "UNRATE", "PCEPILFE", "CPILFESL",
+          # added 2026-10 (inputs of src/regime/features.py with revisions)
+          "ICSA", "TCU", "M2SL", "PPIACO", "GDP", "PCEPI", "CFNAI"]
 CATEGORY = {"GDPC1": "growth", "INDPRO": "growth", "PAYEMS": "employment",
             "UNRATE": "employment", "CPIAUCSL": "inflation", "PCEPILFE": "inflation",
-            "CPILFESL": "inflation"}
+            "CPILFESL": "inflation", "ICSA": "employment", "TCU": "growth", "M2SL": "money",
+            "PPIACO": "inflation", "GDP": "growth", "PCEPI": "inflation", "CFNAI": "growth"}
 SCHEMA = pa.schema([("date", pa.date32()), ("value", pa.float64()),
                     ("realtime_start", pa.date32()), ("realtime_end", pa.date32()),
                     ("series_id", pa.string()), ("source", pa.string())])
