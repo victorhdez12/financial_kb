@@ -1,0 +1,147 @@
+---
+documento: ficha de la etiqueta de régimen
+version: 0.1 (BORRADOR — no congelada)
+fecha: 2026-10-14
+estado: pendiente de revisión y congelación por el usuario
+---
+
+# Ficha de la etiqueta de régimen — nowcast EE. UU.
+
+Define **qué es el régimen "verdadero"** de cada mes. Es lo que los modelos intentan adivinar con la información
+disponible en cada fecha. Se fija **antes** de modelar y no se toca para que los modelos salgan mejor.
+
+## 1. Decisiones tomadas (usuario, 2026-10-14)
+
+| decisión | elección |
+|---|---|
+| Objetivo | **Nowcast** del régimen del mes actual. Forecast a 6 meses más adelante, con validación y métricas propias |
+| Taxonomía | 4 cuadrantes crecimiento × inflación |
+| Crecimiento alto/bajo | **Ritmo frente a tendencia** |
+| Inflación alta/baja | **Subyacente frente a umbral fijo** |
+| Fronteras | **Etiquetas probabilísticas** (y una etiqueta dura derivada) |
+| Geografía | **EE. UU. primero** (1950-hoy); la zona euro después, con ficha propia |
+| Capas aparte (no son régimen) | Recesión (NBER) y, más adelante, estrés de liquidez/crédito |
+
+## 2. Principio: la etiqueta usa datos definitivos; las variables, no
+
+- **Etiqueta:** se calcula con la **última vintage** (datos revisados) y puede usar ventanas centradas, que miran meses
+  hacia delante. Es la mejor estimación a posteriori de lo que estaba pasando.
+- **Variables de los modelos:** solo lo publicado hasta la fecha de decisión (ver `docs/models/pit_calendar.md`).
+- Por eso la etiqueta **nunca** puede entrar como variable, ni con retardo.
+
+## 3. Eje de crecimiento (G)
+
+**Indicadores** (el conjunto coincidente del NBER, mensual, última vintage):
+
+| serie | qué mide | desde |
+|---|---|---|
+| `INDPRO` | producción industrial | 1919 |
+| `PAYEMS` | empleo no agrícola | 1939 |
+| `W875RX1` | renta personal real sin transferencias | 1959 |
+| `CMRMTSPL` | ventas reales de manufactura y comercio | 1967 |
+
+**Cálculo**, para cada indicador *i* y mes *t*:
+1. Nivel suavizado: media de 3 meses del nivel.
+2. Ritmo: g<sub>i,t</sub> = variación logarítmica a 6 meses del nivel suavizado, anualizada (×2).
+3. Tendencia: τ<sub>i,t</sub> = mediana **centrada** de g<sub>i</sub> en ±60 meses (10 años). En los extremos de la
+   muestra la ventana se trunca (ver §7).
+4. Desviación estandarizada: z<sub>i,t</sub> = (g<sub>i,t</sub> − τ<sub>i,t</sub>) / σ<sub>i</sub>, donde σ<sub>i</sub>
+   es la desviación robusta (MAD × 1,4826) de g<sub>i</sub> − τ<sub>i</sub> en toda la muestra.
+
+**Compuesto:** G<sub>t</sub> = media de los z<sub>i,t</sub> disponibles. Mínimo 2 indicadores: entre 1950 y 1958 solo
+están INDPRO y PAYEMS, y esos meses se marcan con `cobertura_g = 2`.
+
+**Lectura:** G > 0 = la economía crece por encima de su tendencia; G < 0 = por debajo.
+
+## 4. Eje de inflación (I)
+
+**Serie principal:** PCE subyacente (`PCEPILFE`), desde 1959. Es la medida de referencia de la Fed.
+- 1957-1958: IPC subyacente (`CPILFESL`) menos 0,4 pp (diferencia media IPC − PCE subyacentes), anotado.
+- 1950-1956: IPC general (`CPIAUCSL`), marcado `fuente_i = headline`. Es un periodo con más ruido (guerra de Corea).
+
+**Cálculo:** I<sub>t</sub> = variación a 6 meses del índice, anualizada, en %.
+
+**Umbral fijo:** **κ = 2,5 %**, el objetivo de la Fed (2 %) más un margen de tolerancia. Se mide en PCE subyacente; con
+IPC el equivalente sería ~2,9 %.
+
+## 5. Probabilidades por cuadrante (etiqueta probabilística)
+
+Cada eje se convierte en una probabilidad según su distancia al umbral, escalada por la incertidumbre de medida:
+
+- P(G alto)<sub>t</sub> = Φ(G<sub>t</sub> / s<sub>G</sub>), con **s<sub>G</sub> = 0,5** (unidades z)
+- P(I alta)<sub>t</sub> = Φ((I<sub>t</sub> − κ) / s<sub>I</sub>), con **s<sub>I</sub> = 0,5 pp**
+
+Φ = normal acumulada. Ejemplo: G = 0 da 50 %; G = +0,5 da 84 %; G = +1 da 98 %.
+
+| cuadrante | G | I | probabilidad |
+|---|---|---|---|
+| **Expansión** | alto | baja/moderada | P(G alto) · (1 − P(I alta)) |
+| **Late cycle / sobrecalentamiento** | alto | alta | P(G alto) · P(I alta) |
+| **Estanflación** | bajo | alta | (1 − P(G alto)) · P(I alta) |
+| **Desaceleración / recesión** | bajo | baja | (1 − P(G alto)) · (1 − P(I alta)) |
+
+- Se supone independencia entre ejes al combinar. Es una simplificación documentada; la correlación G-I se revisa en §8.
+- **Etiqueta dura** = cuadrante de mayor probabilidad. Sirve para los baselines de reglas, para el acierto y para leer
+  los resultados.
+- **Frontera:** si la probabilidad máxima es < 0,55, el mes se marca `frontera = true`. Se puntúa igual en log-loss, pero
+  se informa aparte.
+- **Métrica principal de los modelos:** log-loss / Brier **contra las probabilidades de la etiqueta** (objetivo
+  "blando"), frente a la persistencia.
+
+## 6. Capas aparte (no cambian el cuadrante)
+
+- **Recesión:** `USREC` (NBER), ex post. Se usa para validar la etiqueta (§8) y como objetivo secundario. No es un
+  quinto régimen.
+- **Estrés de liquidez/crédito:** más adelante, con su propia ficha.
+
+## 7. Extremos de la muestra y etiqueta provisional
+
+- La ventana centrada de tendencia necesita 60 meses de futuro. En los últimos 60 meses se trunca (usa lo que hay) y,
+  además, los datos de los últimos meses aún se revisarán.
+- Por eso, los **últimos 24 meses** llevan `provisional = true`. No se usan para puntuar ni el periodo bloqueado ni el
+  backtest, y se recalculan cada mes hasta que maduran.
+- Con el inicio pasa lo mismo: 1950-1954 tienen la ventana truncada hacia atrás y se marcan
+  `tendencia_truncada = true`.
+
+## 8. Comprobaciones antes de congelar (sentido, no ajuste)
+
+Sirven para detectar errores de cálculo, **no para ajustar los parámetros** hasta que la etiqueta "cuente la historia
+que queremos". Si alguna falla, se documenta el porqué antes de cambiar nada.
+
+| comprobación | criterio esperado |
+|---|---|
+| Meses NBER de recesión | ≥ 85 % con P(G alto) < 0,5 |
+| Correlación con CFNAI-MA3 (1967+) | > 0,7 |
+| Correlación con la brecha de producción (GDPC1 vs GDPPOT, trimestral) | > 0,6 en cambios |
+| Episodios: 1973-75 y 1979-80 | estanflación dominante |
+| Episodios: 2021-T2 a 2022 | sobrecalentamiento / estanflación |
+| Episodios: 1995-99 | expansión |
+| Episodios: 2008-09 y 2020-T2 | desaceleración/recesión |
+| Distribución por cuadrante | ninguno < 10 % de los meses |
+| Duración media de los regímenes duros | ≥ 6 meses |
+| Correlación G-I | se informa; si es \|ρ\| > 0,3, se revisa el supuesto de independencia |
+
+## 9. Fecha de decisión del nowcast
+
+- **Último día hábil del mes t**, con todo lo publicado hasta ese día. Se nowcastea el régimen del mes t, para el que
+  aún no hay casi ningún dato oficial.
+- Variante a evaluar también: día 15 del mes t+1, con el empleo y el IPC de t ya publicados. Se informa aparte.
+
+## 10. Versionado
+
+- Esta ficha es la **v0.1, borrador**. Al aprobarla pasa a **v1.0**, se etiqueta en git (`label-v1.0`) y se guarda la
+  serie de la etiqueta con su hash en `data/labels/regime_us_v1.0.parquet`.
+- Cualquier cambio posterior crea una versión nueva, obliga a repetir todas las validaciones y queda anotado en el
+  registro de pruebas.
+
+## 11. Parámetros a confirmar antes de congelar
+
+| parámetro | propuesto | alternativa |
+|---|---|---|
+| Umbral de inflación κ | 2,5 % PCE subyacente | 2,0 % (objetivo exacto) / 3,0 % |
+| Escalas s<sub>G</sub>, s<sub>I</sub> | 0,5 z / 0,5 pp | estimarlas con el ruido de revisión de ALFRED |
+| Ventana de ritmo | 6 meses anualizado sobre media de 3 meses | 12 meses (más estable, más lenta) |
+| Ventana de tendencia | mediana centrada de 10 años | 7 años / filtro HP |
+| Umbral de frontera | máx. prob. < 0,55 | < 0,6 |
+| Meses provisionales | 24 | 36 |
+| Fecha de decisión | último día hábil de t | día 15 de t+1 |
