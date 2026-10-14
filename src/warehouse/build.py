@@ -135,6 +135,8 @@ def curated_frames() -> tuple[list[pd.DataFrame], list[pd.DataFrame], list[str]]
 PIT_RULES: list[tuple[str, str]] = [
     (r"_proj$", "forecast"),          # IMF WEO projections
     (r"^NROU$", "forecast"),          # CBO natural rate, projected ~10 years ahead
+    (r"^N?GDPPOT$", "forecast"),      # CBO potential GDP, projected ~10 years ahead
+    (r"^fed_ebp_recession_prob$", "lookahead"),  # estimated on the full sample
     (r"^shiller_fwd10y_", "lookahead"),  # realised forward 10y returns
     (r"^nyfed_recprob_target$", "lookahead"),  # dated at the target month, not the forecast date
 ]

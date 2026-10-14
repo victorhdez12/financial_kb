@@ -1,6 +1,6 @@
 ---
 tipo: estado_proyecto
-actualizado: 2026-10-13
+actualizado: 2026-10-14
 fase_real: recopilación y limpieza de datos
 ---
 
@@ -10,7 +10,7 @@ fase_real: recopilación y limpieza de datos
 > Lee esta nota, después [[Proyecto/Agentes]] (roles e instrucciones completas) y [[Proyecto/Bitácora]] (qué se hizo y cuándo).
 > Código: `~/Proyectos/financial_kb` (movido del Escritorio el 13-oct) · Datos: `~/financial_archive` (enlace `data/archive`) · Plan original: `docs/PLAN.md`.
 
-## ▶ Retomar aquí (13-oct, 12:50)
+## ▶ Retomar aquí (14-oct)
 
 **Fases del plan (`docs/PLAN.md`) y estado:**
 | Fase | Contenido | Estado |
@@ -23,15 +23,12 @@ fase_real: recopilación y limpieza de datos
 | 4 | Cron diario, analista de empresas, calculadora fiscal, dashboard | 🟡 actualización automática montada el 13-oct; resto pendiente |
 | +6 meses | Paper trading antes de dinero real | ⏳ |
 
-**Al retomar, lo primero:**
-1. Mirar [[Proyecto/Actualizaciones]]: la prueba real de la tarea diaria (`launchctl kickstart`) se lanzó a las 12:46 del 13-oct. Si no hay línea, ver el último log en `~/financial_archive/logs/`.
-2. Pasar la auditoría completa con las fuentes nuevas (`make audit`), escribir el resumen `docs/data/audit_2026-10-13_b.md` (falsos positivos esperables: `cboe_vvix` primeras obs., picos de `cboe_pc_*`, negativos de `cftc_*_net`; licencias `aqr` sin redistribuir y `jkp` no comercial) y `make weekly`.
-3. Commit en `fase-datos` (el código ya va en el commit de las 12:50; faltaría el resumen de auditoría y el reporte).
+**Hecho el 14-oct:** auditoría completa con las fuentes nuevas (`docs/data/audit_2026-10-14.md`, 0 críticas), arreglos de INE (EPA por sexo), CFTC (ECU) y `PIT_RULES`, reporte [[Reports/2026-10-14_semanal]] y commit en `fase-datos`. Tarea launchd de arranque (`com.financialkb.arranque`) instalada: recupera la actualización perdida al encender el Mac.
 
 **Decisiones pendientes del usuario:**
 1. Fusionar `fase-datos` en `main`.
 2. Dar por cerrada la fase de datos (los huecos que quedan son casi todos de pago: PMI, Euribor diario, MOVE, MSCI/STOXX con dividendos; además bonos soberanos diarios por país e Inverco/ICI).
-3. Pasar al modelo: liquidez neta diaria y global en el clasificador (`docs/data/liquidity_2026-10-13.md`), conectar rtdsm, pendientes de la revisión de la Fase 1 (histéresis de G, I compuesta con petróleo/PPI, bear/bull steepening, capa EUR) y después motor probabilístico + backtest.
+3. Pasar al modelo (arquitectura de la Fase 3 propuesta por el usuario y revisada el 14-oct; ver Bitácora): liquidez neta diaria y global en el clasificador (`docs/data/liquidity_2026-10-13.md`), conectar rtdsm, pendientes de la revisión de la Fase 1 (histéresis de G, I compuesta con petróleo/PPI, bear/bull steepening, capa EUR) y después motor probabilístico + backtest.
 4. Más adelante: reactivar la Fase 2 (grafo y agentes de análisis).
 
 ## Fase actual (decisión del 2026-10-12)

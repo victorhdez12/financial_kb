@@ -95,6 +95,8 @@ def load_family(fam: str) -> pd.DataFrame:
                                    format="mixed", errors="coerce")
         d["code"] = d["code"].str.strip()
         d = d[d["code"].isin(MARKETS)]
+        # 099741 was the ECU before the euro (1986 rows): not the same contract
+        d = d[~d[d.columns[0]].str.contains("EUROPEAN CURRENCY UNIT", case=False, na=False)]
         frames.append(d)
     out = pd.concat(frames, ignore_index=True)
     # one row per (code, date); a duplicate would double count -> keep last (newest file)

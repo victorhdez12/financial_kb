@@ -13,6 +13,14 @@ El proyecto está en `~/Proyectos/financial_kb` (fuera del Escritorio: macOS blo
 - Si alguna fuente falla o la auditoría tiene críticas: notificación de macOS. Las fuentes que fallan no paran el resto (se queda el último dato bueno).
 - No hace commits (los datos no van a git).
 
+## Mac apagado a la hora de la cita (14-oct)
+launchd recupera una cita perdida si el Mac estaba en **reposo**, pero **no si estaba apagado** (el 14-oct arrancó a las 8:06 y la diaria de las 7:30 no se ejecutó).
+Por eso hay una tercera tarea, `com.financialkb.arranque` (`RunAtLoad` + cada hora), que llama a `scripts/actualizar.sh pendiente`:
+- marcas `~/financial_archive/logs/.hecho_diario` y `.hecho_semanal` (fecha de la última ejecución correcta; la semanal también marca la diaria);
+- si la semanal tiene más de 7 días, o es domingo después de las 7:00 y no está hecha → semanal;
+- si es lunes-sábado después de las 7:30 y la diaria de hoy no está hecha → diaria; si no, no hace nada.
+En `Actualizaciones.md` estas salen como "(recuperada al encender)". Un lock evita que coincida con las tareas normales.
+
 ## Comandos
 ```
 scripts/actualizar.sh diario      # a mano, igual que la tarea
@@ -21,7 +29,7 @@ launchctl print gui/$(id -u)/com.financialkb.diario | grep -E "state|last exit"
 launchctl kickstart gui/$(id -u)/com.financialkb.diario       # lanzarla ya
 # instalar / desinstalar
 cp scripts/launchd/com.financialkb.*.plist ~/Library/LaunchAgents/
-launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.financialkb.diario.plist
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.financialkb.diario.plist   # ídem .semanal y .arranque
 launchctl bootout   gui/$(id -u) ~/Library/LaunchAgents/com.financialkb.diario.plist
 ```
 

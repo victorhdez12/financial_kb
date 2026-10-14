@@ -103,7 +103,7 @@ def fetch(cod: str) -> tuple[pd.Series, str]:
 # ---------------------------------------------------------------------------------------------
 RETRO_URL = "https://ine.es/epa02/series76_01.xls"
 RETRO_PAGE = "https://ine.es/epa02/repercusion_nacio7601.htm"
-SEXES = [("t", "Ambos sexos", "both sexes", 0), ("m", "Varones", "men", 8), ("f", "Mujeres", "women", 14)]
+SEXES = [("t", "Ambos sexos", "both sexes", 0), ("m", "Varones", "men", 6), ("f", "Mujeres", "women", 12)]
 # variable -> (xls sheet, tempus codes by sex, name, units, category)
 EPA_VARS = {
     "unemp_rate": ("TasaParo", {"t": "EPA423474", "m": "EPA423488", "f": "EPA423501"}, "unemployment rate", "% of active population"),

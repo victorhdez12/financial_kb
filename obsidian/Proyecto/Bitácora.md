@@ -196,3 +196,17 @@ Las entradas más recientes van arriba. Ver también [[Proyecto/Estado del proye
 - **12:46:** tareas launchd instaladas (`com.financialkb.diario` y `.semanal`) y prueba real de la diaria lanzada: ya lee el proyecto sin el bloqueo del Escritorio.
 - Memoria de Claude actualizada con la ruta nueva y la automatización.
 - **12:50: el usuario hace /clear.** Estado y próximos pasos en la sección "▶ Retomar aquí" de [[Proyecto/Estado del proyecto]].
+
+## 2026-10-14
+- **Tarea launchd de arranque** (`com.financialkb.arranque`, modo `scripts/actualizar.sh pendiente`): launchd no recupera las citas perdidas con el Mac apagado; al encender, lanza la semanal si tiene más de 7 días o la diaria si falta la de hoy (marcas `~/financial_archive/logs/.hecho_*`). Instalada; **sin commitear** (plist nuevo + `actualizar.sh` + `docs/automatizacion.md`).
+- **17:38:** primera diaria recuperada al encender: ✅ ok, 15 min. Régimen sin cambios (Deflación/recesión, crédito verde, liquidez neutral).
+- Pendiente del 13-oct sin hacer: `make audit` completo con las fuentes nuevas, resumen `docs/data/audit_2026-10-13_b.md` y `make weekly`.
+- **El usuario pide cerrar el punto 1 (auditoría pendiente).** Lanzado el agente **Auditor de datos**: `make audit` → `docs/data/audit_2026-10-14.md`, foco en las fuentes nuevas del 13-oct, falsos positivos explicados y veredicto sobre cerrar la fase de datos. Al terminar: `make weekly` y commit en `fase-datos`.
+- **Auditor terminado** (`docs/data/audit_2026-10-14.md`): 0 críticas, 33 altas (32 ya explicadas el 13-oct + `cftc_ust5y_nc_net` = −999, que es real). Valores conocidos correctos; contrato, catálogo y licencias bien en las 14 fuentes nuevas. Arregló `EVENT_TYPES` en `src/audit/other_checks.py` (`inflation_crisis`). Veredicto: **se puede cerrar la fase de datos** tras el arreglo del INE.
+- **Arreglos aplicados por el coordinador** (verificados en el warehouse):
+  - `ine.py`: desfases de columna de la EPA 1976-2001 por sexo (8/14 → 6/12); 20 series leían la «Diferencia». Hombres activos 1976-T3 = 9.556.
+  - `cftc_cot.py`: descartadas las filas del ECU de 1986 mezcladas en el euro (código 099741).
+  - `PIT_RULES`: `GDPPOT`/`NGDPPOT` como `forecast` y `fed_ebp_recession_prob` como `lookahead`.
+  - Reingesta `ine` + `cftc_cot`, `make warehouse regime weekly`: 15.397 series, 12,25 M filas; régimen sin cambios. Reporte [[Reports/2026-10-14_semanal]].
+- Pendientes menores: confirmar si DG ECFIN dejó de publicar `eurostat_rci_es`/`sci_es` (acaban en 2024-09); etiqueta `restated` para AQR/JKP/Z.1/SOFR; `make audit` no genera el `.md` (el auditor lo escribió a mano); no usar VVIX antes de 2007.
+- **Arquitectura propuesta por el usuario para la Fase 3** (modelo GBM de régimen en dos etapas → reglas de oro validadas → Claude redacta → informes). Revisión: buena base; cambios propuestos: baselines sencillos + persistencia (GBM como aspirante), etiqueta de régimen ex post con variables point-in-time, métricas de probabilidad (log-loss/Brier, calibración), periodo final bloqueado y Deflated Sharpe, capa de cartera/riesgo validada después de costes (EUR, fiscalidad), monitorización y registro de modelos; informe de empresas después; ojo CNMV si llega a terceros. Pendiente de que el usuario lo apruebe para escribirlo en `docs/PLAN.md`.

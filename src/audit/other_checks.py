@@ -12,7 +12,7 @@ from src.regime.features import FEATURES
 
 EVENT_COLS = ["event_id", "name", "type", "country", "start_date", "end_date", "severity", "source", "url", "notes"]
 EVENT_TYPES = {"war", "banking_crisis", "currency_crisis", "sovereign_default", "market_crash", "recession",
-               "pandemic", "oil_shock", "policy", "credit_event"}
+               "pandemic", "oil_shock", "policy", "credit_event", "inflation_crisis"}  # contrato 2026-10-12
 NC_RX = re.compile(r"non-?commercial|\bNC\b|BY-NC", re.I)
 # forward RATES (yield-curve forwards) are fine; forward RETURNS / projections are look-ahead
 LOOKAHEAD_RX = re.compile(r"fwd\d|forward \d+y annualized|forward[- ]looking|look-?ahead|projection|proyecci|"

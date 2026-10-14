@@ -2,6 +2,10 @@
 # Actualización automática de financial_kb (la lanza launchd; ver docs/automatizacion.md).
 #   scripts/actualizar.sh diario    -> make daily   (fuentes diarias + warehouse + régimen)
 #   scripts/actualizar.sh semanal   -> make semanal (todas las fuentes + warehouse + régimen + auditoría + reporte)
+#   scripts/actualizar.sh pendiente -> al encender el Mac (launchd RunAtLoad): lanza la que falte hoy.
+#     launchd no recupera las citas perdidas con el Mac APAGADO (solo en reposo). Este modo mira las marcas
+#     ~/financial_archive/logs/.hecho_diario y .hecho_semanal: si la semanal tiene más de 7 días -> semanal;
+#     si no, si hoy es lun-sáb, ya son las 7:30 y la diaria de hoy no está hecha -> diaria; si no, nada.
 # Deja el log en ~/financial_archive/logs/, apunta el resultado en obsidian/Proyecto/Actualizaciones.md
 # y avisa con una notificación de macOS si alguna fuente falla o la auditoría encuentra algo crítico.
 set -u
@@ -15,10 +19,23 @@ export PATH="/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 mkdir -p "$LOGDIR"
 cd "$REPO" || exit 1
 
+HOY="$(date +%Y-%m-%d)"
+if [ "$MODO" = pendiente ]; then
+  ULT_S="$(cat "$LOGDIR/.hecho_semanal" 2>/dev/null || echo 1970-01-01)"
+  ULT_D="$(cat "$LOGDIR/.hecho_diario" 2>/dev/null || echo 1970-01-01)"
+  DIAS_S=$(( ( $(date +%s) - $(date -j -f %Y-%m-%d "$ULT_S" +%s) ) / 86400 ))
+  AHORA=$(date +%H%M); DOW=$(date +%u)   # 1 = lunes … 7 = domingo
+  if [ "$DIAS_S" -gt 7 ] || { [ "$DOW" = 7 ] && [ "$AHORA" -ge 0700 ] && [ "$ULT_S" != "$HOY" ]; }; then MODO=semanal
+  elif [ "$DOW" != 7 ] && [ "$AHORA" -ge 0730 ] && [ "$ULT_D" != "$HOY" ] && [ "$ULT_S" != "$HOY" ]; then MODO=diario
+  else exit 0; fi
+  LOG="$LOGDIR/${STAMP}_${MODO}.log"
+  RECUPERADA=" (recuperada al encender)"
+fi
+
 case "$MODO" in
   diario)  OBJ=daily ;;
   semanal) OBJ=semanal ;;
-  *) echo "uso: $0 diario|semanal"; exit 2 ;;
+  *) echo "uso: $0 diario|semanal|pendiente"; exit 2 ;;
 esac
 
 # Evita dos ejecuciones a la vez (la semanal puede tardar)
@@ -32,6 +49,8 @@ INICIO=$(date +%s)
 make "$OBJ" > "$LOG" 2>&1
 RC=$?
 DUR=$(( ($(date +%s) - INICIO) / 60 ))
+# Marca de hecho (la usa el modo pendiente); la semanal también cubre la diaria
+if [ $RC -eq 0 ]; then echo "$HOY" > "$LOGDIR/.hecho_$MODO"; [ "$MODO" = semanal ] && echo "$HOY" > "$LOGDIR/.hecho_diario"; fi
 
 FALLOS=$(grep -o 'FALLO [a-z0-9_]*' "$LOG" | sed 's/FALLO //' | sort -u | tr '\n' ' ')
 REGIMEN=$(grep -o 'now: .*' "$LOG" | tail -1 | sed 's/^now: //')
@@ -49,7 +68,7 @@ else ESTADO="✅ ok"; fi
 if [ ! -f "$NOTA" ]; then
   printf -- "---\ntipo: actualizaciones\n---\n\n# Actualizaciones automáticas\n\nLas escribe \`scripts/actualizar.sh\` (launchd). Ver [[Proyecto/Estado del proyecto]] y \`docs/automatizacion.md\`.\n\n<!-- entradas -->\n" > "$NOTA"
 fi
-LINEA="- **$(date '+%Y-%m-%d %H:%M')** · $MODO · $ESTADO · ${DUR} min"
+LINEA="- **$(date '+%Y-%m-%d %H:%M')** · $MODO${RECUPERADA:-} · $ESTADO · ${DUR} min"
 [ -n "$FALLOS" ] && LINEA="$LINEA · fuentes con fallo: $FALLOS"
 [ -n "$CRITICAS" ] && LINEA="$LINEA · críticas en auditoría: $CRITICAS"
 [ -n "$REGIMEN" ] && LINEA="$LINEA · régimen: $REGIMEN"
