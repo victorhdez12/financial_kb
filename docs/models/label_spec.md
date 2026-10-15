@@ -124,7 +124,7 @@ pequeñas. Detalle en `docs/models/label_v1.1_checks.md`.
   partir del cual la concordancia de la etiqueta dura es ≥ 95 % **y** el Δp medio es ≤ 0,05 de forma sostenida. Sale
   k* = 55, menos el desfase de 4 meses de la etiqueta, redondeado a múltiplo de 6: 54.
 - **Uso en el backtest:** los meses con `provisional = true` o `weight = 0` no puntúan ni entrenan, con
-  **`embargo_months = 6`** entre entrenamiento y prueba (la etiqueta de t usa datos hasta t+4). Ambos valores están en
+  **`embargo_months = 6`** entre entrenamiento y prueba (la ventana de ritmo de t usa datos hasta t+4; la tendencia de ±60 m y σ<sub>i</sub> miran mucho más adelante, por eso además las etiquetas de entrenamiento se recalculan con datos ≤ T, §12). Ambos valores están en
   el `meta.json`.
 - **Ruido de la inflación que no desaparece (Validador, v1.0 M1):** el estudio de revisión solo revisa el crecimiento.
   Con las vintages ALFRED del PCE subyacente (variante C, 49 cortes 2000-2024), incluso con k = 84 meses la concordancia
@@ -181,7 +181,12 @@ el acierto esperado de la etiqueta dura (media de la probabilidad máxima).
   genera `regime_us_v1.1_live.parquet`, que es solo de seguimiento y **no** es la etiqueta oficial; (b) una instantánea
   nueva = **versión nueva** (v1.2 / v2.0), con revalidación completa (§8 y estudio de revisión) y su ventana de cambios
   declarada; (c) un test compara las filas maduras con la versión anterior y falla si cambian fuera de lo declarado.
-- Una versión pasa a `FROZEN` solo tras el veredicto del Validador y la aprobación del usuario.
+- Una versión pasa a `FROZEN` solo tras el veredicto del Validador y la aprobación del usuario. La v1.1 recibió el ✅
+  en la re-auditoría de cierre del 2026-10-15 y el tag `label-v1.1` apunta a `ebccae1`.
+- **Protección:** la instantánea y el parquet oficial están sin permisos de escritura (copia de respaldo en
+  `labels/inputs/backup/`); `write_snapshot` se niega con una versión congelada (incluso con `--force`) y `write`
+  no escribe una etiqueta oficial cuyo hash no sea el congelado. Los tests comprueban **todas** las versiones de
+  `FROZEN`, no solo la actual; una candidata debe declarar `CANDIDATE_CHANGES`.
 
 ## 11. Parámetros finales (v1.0 el 2026-10-14; v1.1 el 2026-10-15)
 
@@ -208,8 +213,12 @@ el acierto esperado de la etiqueta dura (media de la probabilidad máxima).
   `provisional`, `tendencia_truncada`, `cobertura_g`, `fuente_i`, `usrec`, `weight`), ni `USREC`, ni las 485 series del
   warehouse con `pit_role` forecast/lookahead (p. ej. `GDPPOT`, `NGDPPOT`, `fed_ebp_recession_prob`) puede ser variable,
   **ni tampoco sus derivadas** (`usrec_lag1`, `G_lag5`, `p_expansion_lag5`, `GDPPOT_yoy`, cualquier `label_*`). Lo
-  comprueba `assert_no_forbidden()` por raíz del nombre (nombre + separador `_ . - ` + sufijo, sin distinguir
-  mayúsculas); sin argumentos usa la lista del `meta.json` oficial. El arnés la llama antes de entrenar.
+  comprueba `assert_no_forbidden()` por componente del nombre (delimitado por inicio/fin o separador `_ . - `, sin distinguir
+  mayúsculas), también con prefijo (`lag5_G`, `d_usrec`) y en columnas en tupla (MultiIndex); sin argumentos usa la
+  lista del `meta.json` oficial. El arnés la llama antes de entrenar. **Límite:** una lista por nombre no ve una
+  columna renombrada sin rastro del original; por eso el arnés construye las variables desde una **lista blanca**
+  (calendario point-in-time) y la lista negra es una segunda barrera. Las capas ex post L-CAP-001/002/003
+  (`research/hypotheses.yaml`) entran en la lista negra cuando existan.
 - **Persistencia point-in-time** (el baseline que hay que batir): en la fecha de decisión t (último día hábil) la última
   etiqueta calculable es la de **t − 5** (`label_lag`), **recalculada solo con los datos publicados en t**. Acierto
   **63,6 %**, log-loss blanda 1,235 (797 meses puntuables; 62,9 % en entrenamiento ≤ 2004). La persistencia "mes

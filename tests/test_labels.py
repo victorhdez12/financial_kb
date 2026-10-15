@@ -174,11 +174,13 @@ def test_official_file_is_frozen():
     assert R.content_hash(df) == FROZEN["label_sha256_content"]
 
 
-@frozen_only
 def test_mature_rows_vs_previous_version(built):
-    """Frente a la versión anterior, las filas maduras solo cambian en la ventana declarada (§12).
-    Si una versión futura reescribe filas maduras fuera de lo declarado, este test falla."""
-    prev, lo, hi = FROZEN["mature_changes_vs"]
+    """Frente a la versión anterior, las filas maduras solo cambian en la ventana declarada (§13).
+    Vale también para una candidata, que debe declarar su ventana en `R.CANDIDATE_CHANGES`. Si una
+    versión nueva reescribe filas maduras fuera de lo declarado, este test falla."""
+    decl = FROZEN["mature_changes_vs"] if FROZEN else getattr(R, "CANDIDATE_CHANGES", None)
+    assert decl, "una versión candidata debe declarar CANDIDATE_CHANGES = (versión anterior, desde, hasta)"
+    prev, lo, hi = decl
     path = R.out_dir() / f"regime_us_v{prev}.parquet"
     if not path.exists():
         pytest.skip(f"falta {path}")
@@ -189,8 +191,40 @@ def test_mature_rows_vs_previous_version(built):
     cols = [c for c in new.columns if c in old.columns]
     a, b = new.loc[outside, cols], old.loc[outside, cols]
     num = a.select_dtypes("number").columns
-    assert np.allclose(a[num].astype(float), b[num].astype(float), atol=1e-12, equal_nan=True)
+    assert np.allclose(a[num].astype(float), b[num].astype(float), rtol=0, atol=1e-12, equal_nan=True)
     assert a.drop(columns=num).equals(b.drop(columns=num))
+
+
+# ------------------------------------------------------------------ todas las versiones congeladas (P-2)
+def test_frozen_registry_not_emptied():
+    """FROZEN no se puede vaciar ni perder versiones sin que falle algo."""
+    assert {"1.1"} <= set(R.FROZEN)
+
+
+@pytest.mark.parametrize("v", sorted(R.FROZEN))
+def test_every_frozen_version_on_disk(v):
+    """Cada versión congelada sigue intacta en disco (etiqueta e instantánea), aunque ya no sea la actual."""
+    lab = R.out_dir() / f"regime_us_v{v}.parquet"
+    snap = R.out_dir() / "inputs" / f"regime_us_v{v}_inputs.parquet"
+    ref = R.FROZEN[v]
+    assert R.content_hash(pd.read_parquet(lab)) == ref["label_sha256_content"]
+    assert R.file_sha(snap) == ref["snapshot_sha256_file"]
+
+
+def test_frozen_snapshot_cannot_be_rewritten():
+    if not R.FROZEN:
+        pytest.skip("sin versiones congeladas")
+    v = sorted(R.FROZEN)[-1]
+    p = R.Params(version=v) if "version" in R.Params.__dataclass_fields__ else R.PARAMS
+    with pytest.raises(SystemExit):
+        R.write_snapshot({}, p, force=True)
+
+
+@pytest.mark.parametrize("col", ["lag5_G", "d_usrec", "L5.usrec", "yoy_GDPPOT", ("lag1", "usrec"),
+                                 ("G", "lag5"), "x_p_expansion_y"])
+def test_forbidden_rejects_prefix_and_tuple(col):
+    with pytest.raises(AssertionError):
+        R.assert_no_forbidden([col], extra=["GDPPOT"])
 
 
 @pytest.mark.parametrize("col", ["usrec", "USREC_lag1", "G_lag5", "p_expansion_lag5", "label_hard",

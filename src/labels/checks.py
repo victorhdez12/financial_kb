@@ -28,7 +28,7 @@ from src.warehouse import db  # noqa: E402
 
 DOCS = db.REPO / "docs" / "models"
 PREV_VERSION = "1.0"
-NAMES = {"expansion": "Expansión", "late_cycle": "Late cycle / sobrecal.",
+NAMES = {"expansion": "Expansión", "late_cycle": "Crec. con infl. alta",
          "stagflation": "Estanflación", "low_growth_disinfl": "Crec. bajo / desinflación"}
 # paleta categórica validada (dataviz validate_palette: PASS en luminosidad, croma, CVD y visión normal)
 COLORS = {"expansion": "#1baf7a", "late_cycle": "#eda100", "stagflation": "#e34948",

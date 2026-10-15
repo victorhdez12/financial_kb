@@ -413,6 +413,9 @@ def frame_to_inputs(df: pd.DataFrame) -> dict:
 
 def write_snapshot(inputs: dict, p: Params = PARAMS, force: bool = False) -> Path:
     path = snapshot_path(p)
+    if p.version in FROZEN:
+        raise SystemExit(f"la v{p.version} está congelada (FROZEN): su instantánea no se toca ni con --force; "
+                         "crea una versión nueva")
     if path.exists() and not force:
         raise SystemExit(f"{path} ya existe: la instantánea oficial no se sobrescribe (usa --force y crea "
                          "una versión nueva de la etiqueta)")
@@ -451,16 +454,24 @@ SEPARATORS = ("_", ".", "-", " ")
 
 
 def forbidden_root(col, forb) -> str | None:
-    """Raíz prohibida de `col`, o None. Coincide sin distinguir mayúsculas con un nombre prohibido
-    exacto o con uno seguido de separador y sufijo derivado (`usrec_lag1`, `G_lag5`,
-    `p_expansion_lag5`, `GDPPOT_yoy`); también cualquier `label_*`."""
+    """Raíz prohibida de `col`, o None. Sin distinguir mayúsculas, `col` es prohibida si un nombre
+    prohibido aparece como componente completo, delimitado por inicio/fin o separador: sufijos
+    (`usrec_lag1`, `G_lag5`, `GDPPOT_yoy`), prefijos (`lag5_G`, `d_usrec`, `L5.usrec`) o en medio.
+    Una tupla (columnas MultiIndex, p. ej. `('lag1', 'usrec')`) se comprueba nivel a nivel. También
+    cualquier `label_*`."""
+    if isinstance(col, tuple):
+        return next((r for c in col if (r := forbidden_root(c, forb))), None)
     c = str(col).lower()
     if c.startswith("label_"):
         return "label_*"
     for f in forb:
         fl = f.lower()
-        if c == fl or (c.startswith(fl) and c[len(fl)] in SEPARATORS):
-            return f
+        i = c.find(fl)
+        while i >= 0:
+            j = i + len(fl)
+            if (i == 0 or c[i - 1] in SEPARATORS) and (j == len(c) or c[j] in SEPARATORS):
+                return f
+            i = c.find(fl, i + 1)
     return None
 
 
@@ -476,7 +487,7 @@ def assert_no_forbidden(columns, extra=None, meta: dict | None = None) -> None:
             meta = json.loads(path.read_text())
         extra = meta["forbidden_features"]["series"]
     forb = sorted(set(FORBIDDEN_FEATURES) | set(extra), key=len, reverse=True)
-    bad = {str(c): r for c in columns if (r := forbidden_root(c, forb))}
+    bad = {str(c): r for c in columns if (r := forbidden_root(c, forb))}  # lista blanca en el arnés: mejor aún
     if bad:
         raise AssertionError(f"columnas prohibidas como variables: {bad}")
 
@@ -652,7 +663,15 @@ def write(df: pd.DataFrame, meta: dict, p: Params = PARAMS, live: bool = False) 
     if live:
         path = path.with_name(path.stem + "_live.parquet")
     path.parent.mkdir(parents=True, exist_ok=True)
+    ref = FROZEN.get(p.version)
+    if ref and not live and content_hash(df) != ref["label_sha256_content"]:
+        raise RuntimeError(f"la v{p.version} está congelada y esta etiqueta no es la congelada: no se escribe")
+    if path.exists() and not live:  # el oficial está protegido contra escritura tras el tag
+        path.chmod(0o644)
+        path.with_suffix(".meta.json").chmod(0o644) if path.with_suffix(".meta.json").exists() else None
     df.to_parquet(path, index=False)
+    if ref and not live:
+        path.chmod(0o444)
     meta = dict(meta, sha256_content=content_hash(df), rows=len(df))
     path.with_suffix(".meta.json").write_text(json.dumps(meta, indent=2, ensure_ascii=False, default=str))
     return path
