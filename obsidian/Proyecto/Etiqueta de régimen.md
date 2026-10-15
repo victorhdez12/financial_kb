@@ -1,8 +1,8 @@
 ---
 tipo: modelo
-version: 1.0
-estado: CONGELADA (tag git label-v1.0)
-actualizado: 2026-10-14
+version: 1.1
+estado: CONGELADA (tag git label-v1.1; v1.0 en label-v1.0)
+actualizado: 2026-10-15
 ---
 
 # Etiqueta de régimen EE. UU. (nowcast)
@@ -10,7 +10,13 @@ actualizado: 2026-10-14
 Define qué régimen hubo "de verdad" cada mes; es lo que los modelos intentan adivinar con la información de cada fecha.
 Ficha completa: `docs/models/label_spec.md` · comprobaciones: `docs/models/label_v1.0_checks.md` · código: `src/labels/` · datos: `~/financial_archive/labels/regime_us_v1.0.parquet`. Ver [[Proyecto/Estado del proyecto]] y [[Proyecto/Bitácora]].
 
-![[Proyecto/img/label_v1.0.png]]
+> [!success] v1.1 congelada (15-oct) — validador ✅
+> Cambios frente a la v1.0: empalme IPC→PCE subyacente de 1957-59 medido (**+0,20 pp**, 24 meses; antes −0,4 pp fijo; solo cambian 6 meses de 1957), entradas congeladas con SHA-256 y protegidas, lista de columnas prohibidas aplicada en código. Hash `8425b403…`. Ficha `docs/models/label_spec.md` v1.1; validación `docs/validation/2026-10-15_label_v1.1.md`.
+> **Listón para el modelo:** persistencia point-in-time = **63,6 %** de acierto (log-loss 1,235).
+> **Nombre visible:** el cuadrante `late_cycle` se presenta como **"Crecimiento con inflación alta"** (puede ser recuperación temprana o sobrecalentamiento).
+> Revisión económica (Estratega macro): sirve como objetivo del nowcast, no sola como régimen de inversión → capas ex post preregistradas: dirección de la inflación, shock energético, holgura (`research/hypotheses.yaml`).
+
+![[Proyecto/img/label_v1.1.png]]
 
 ## Definición (decisiones del usuario, 14-oct)
 - **Nowcast** del mes t, 4 cuadrantes, **EE. UU.** desde 1950 (zona euro después, con ficha propia).

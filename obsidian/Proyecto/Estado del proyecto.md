@@ -1,6 +1,6 @@
 ---
 tipo: estado_proyecto
-actualizado: 2026-10-14
+actualizado: 2026-10-15
 fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 ---
 
@@ -14,7 +14,7 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Tener un nowcast del régimen de EE. UU. validado:** que el sistema diga cada mes en qué cuadrante estamos y con qué probabilidad, usando solo la información disponible en esa fecha, y que esté demostrado en un backtest honesto que lo hace mejor que las alternativas sencillas.
 
-**Entregables, por orden:** (1) ✅ etiqueta v1.0 congelada (14-oct, tag `label-v1.0`; [[Proyecto/Etiqueta de régimen]]) · (2) base point-in-time + calendario de publicación + test de fugas · (3) arnés walk-forward (embargo 6 m, periodo 2016-2026 bloqueado, registro de pruebas) · (4) baselines: persistencia, reglas, logística, Markov · (5) GBM solo si los bate · (6) calibración. En paralelo: investigación de relaciones adelantadas (las validadas entran como variables).
+**Entregables, por orden:** (1) ✅ etiqueta **v1.1** congelada y validada ✅ (15-oct, tag `label-v1.1`; [[Proyecto/Etiqueta de régimen]]) · (2) ▶ base point-in-time + calendario de publicación + test de fugas · (3) arnés walk-forward (embargo 6 m, periodo 2016-2026 bloqueado, registro de pruebas) · (4) baselines: persistencia, reglas, logística, Markov · (5) GBM solo si los bate · (6) calibración. En paralelo: investigación de relaciones adelantadas (las validadas entran como variables).
 
 **Criterios de cierre:**
 - [ ] Bate a la persistencia en log-loss fuera de muestra, también en el periodo bloqueado, con intervalos que no incluyen el cero.
@@ -29,7 +29,13 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Agentes de la fase:** Constructor · Investigador de relaciones · **Validador independiente** · **Reportero** (ver [[Proyecto/Agentes]]). Informe: [[Reports/Fase 3/Informe de resultados]].
 
-## ▶ Retomar aquí (14-oct)
+## ▶ Retomar aquí (15-oct)
+
+**Hecho el 15-oct:** etiqueta **v1.1 congelada** (tag `label-v1.1` en `ebccae1`, validador ✅ tras re-auditoría; blindaje en `6aaf3f7`). Revisión económica del Estratega macro (`docs/reviews/2026-10-15_estratega_macro_etiqueta.md`): sirve como objetivo del nowcast; capas ex post preregistradas L-CAP-001/002/003; `late_cycle` = "Crecimiento con inflación alta" en informes. Registro de pruebas `research/trial_log.md`. Listón: persistencia PIT 63,6 %.
+
+**Siguiente:** entregable (2), base point-in-time: `docs/models/pit_calendar.md` (retardos medidos con ALFRED), matriz de variables con **lista blanca**, test de fugas, placebo y señal plantada. Después, arnés walk-forward (etiquetas de entrenamiento con datos ≤ T, embargo 6 m, holdout 2005-01→) y baselines. El Reportero debe actualizar el informe con la v1.1 y las dos revisiones.
+
+### Retomar (14-oct, histórico)
 
 **Fases del plan (`docs/PLAN.md`) y estado:**
 | Fase | Contenido | Estado |
