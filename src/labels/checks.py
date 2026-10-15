@@ -6,12 +6,14 @@ Detectan errores de cálculo; NO sirven para ajustar parámetros. Escribe
 docs/models/label_v<version>_checks.md y docs/models/label_v<version>.png. Si existe la versión
 anterior (PREV_VERSION) en la carpeta de etiquetas, añade la comparación entre versiones.
 
-Muestra puntuable: weight > 0 (fuera 1950-1954) y no provisional (fuera los últimos 24 meses).
+Muestra puntuable: weight > 0 (fuera 1950-1954) y no provisional (fuera los últimos
+`provisional_months` = 54 meses). También calcula la persistencia point-in-time (baseline).
 Cada criterio se calcula en esa muestra y, aparte, sin los meses de frontera.
 """
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import matplotlib
 
@@ -25,7 +27,7 @@ from src.labels import regime_us as R  # noqa: E402
 from src.warehouse import db  # noqa: E402
 
 DOCS = db.REPO / "docs" / "models"
-PREV_VERSION = "0.2"
+PREV_VERSION = "1.0"
 NAMES = {"expansion": "Expansión", "late_cycle": "Late cycle / sobrecal.",
          "stagflation": "Estanflación", "low_growth_disinfl": "Crec. bajo / desinflación"}
 # paleta categórica validada (dataviz validate_palette: PASS en luminosidad, croma, CVD y visión normal)
@@ -173,7 +175,59 @@ def compute(df: pd.DataFrame, meta: dict) -> dict:
     res["cpi_pce_gap"] = float((both["cpi"] - both["pce"]).mean())
     res["n_scored"] = len(m)
     res["compare"] = compare(df)
+    res["persistence"] = persistence(df, meta)
     return res
+
+
+EPS = 1e-4  # probabilidades recortadas a [EPS, 1] y renormalizadas antes del log-loss
+
+
+def _metrics(pred: pd.DataFrame, tgt: pd.DataFrame) -> dict:
+    P = np.clip(pred[PCOLS].to_numpy(float), EPS, 1)
+    P = P / P.sum(axis=1, keepdims=True)
+    T = tgt[PCOLS].to_numpy(float)
+    hard = np.array([R.QUADRANTS.index(x) for x in tgt["label_hard"]])
+    phard = np.array([R.QUADRANTS[i] for i in pred[PCOLS].to_numpy(float).argmax(axis=1)])
+    return {"n": len(tgt), "acc": float((phard == tgt["label_hard"].to_numpy()).mean()),
+            "logloss_soft": float(-(T * np.log(P)).sum(axis=1).mean()),
+            "logloss_hard": float(-np.log(P[np.arange(len(P)), hard]).mean()),
+            "brier": float(((P - T) ** 2).sum(axis=1).mean())}
+
+
+def persistence(df: pd.DataFrame, meta: dict) -> dict:
+    """Baseline de persistencia point-in-time: en la fecha de decisión t (último día hábil de t), la
+    predicción es la última etiqueta calculable con los datos publicados en t, es decir la de
+    t − label_lag recalculada con cada serie truncada en t − months_back(serie). Se compara con la
+    versión ingenua (etiqueta final desplazada label_lag y 1 mes)."""
+    inputs, _ = R.read_snapshot()
+    p = R.PARAMS
+    lag = meta["label_lag"]["label_lag"]
+    mb = meta["label_lag"]["months_back"]
+    m = df[(df["weight"] > 0) & ~df["provisional"]]
+    rows = {}
+    for t in m.index:
+        cut = {sid: t - pd.DateOffset(months=mb.get(sid, 2)) for sid in inputs["levels"]}
+        lab, _ = R.make_label(inputs, p, meta["s_G"], meta["s_I"], cutoff=cut,
+                              splice=meta["splice_cpi_core"]["adj_pp"])
+        lab = lab.set_index("date")
+        s = t - pd.DateOffset(months=lag)
+        if s in lab.index:  # sin etiqueta calculable (p. ej. 1955: tendencia sin 61 meses) → fuera
+            rows[t] = lab.loc[s]
+    pit = pd.DataFrame(rows).T
+    pit[PCOLS] = pit[PCOLS].astype(float)
+    out = {"n_missing": int(len(m) - len(pit)), "missing_to": f"{m.index.difference(pit.index).max():%Y-%m}"
+           if len(m) > len(pit) else None}
+    common = pit.index
+    for name, sub in (("puntuable", common), ("bloqueado", common[common >= pd.Timestamp(p.holdout_start)]),
+                      ("entrenamiento", common[common < pd.Timestamp(p.holdout_start)])):
+        out[name] = {
+            "pit": _metrics(pit.loc[sub], m.loc[sub]),
+            f"final_shift_{lag}": _metrics(df.shift(lag).loc[sub], m.loc[sub]),
+            "final_shift_1": _metrics(df.shift(1).loc[sub], m.loc[sub]),
+        }
+    out["label_lag"] = lag
+    out["pit_hard_same_as_final_shift"] = float((pit["label_hard"] == df.shift(lag).loc[common, "label_hard"]).mean())
+    return out
 
 
 def compare(df: pd.DataFrame) -> dict | None:
@@ -194,6 +248,13 @@ def compare(df: pd.DataFrame) -> dict | None:
     # desfase: correlación de G v0.2(t) con G v0.1(t+k)
     out["lag_G"] = {k: float(df["G"].corr(old["G"].shift(-k))) for k in range(0, 7)}
     out["lag_I"] = {k: float(df["I"].corr(old["I"].shift(-k))) for k in range(0, 7)}
+    dI = (df["I"] - old["I"]).reindex(old.index).abs()
+    dG = (df["G"] - old["G"]).reindex(old.index).abs()
+    out["dI_months"] = (f"{dI[dI > 1e-12].index.min():%Y-%m}", f"{dI[dI > 1e-12].index.max():%Y-%m}",
+                        float(dI.max())) if (dI > 1e-12).any() else None
+    out["dG_max"] = float(dG.max())
+    out["changed_list"] = [f"{d:%Y-%m}" for d in (old.loc[idx, "label_hard"] != df.loc[idx, "label_hard"])
+                           .pipe(lambda x: x[x]).index]
     # cambios por episodio de la §8 y por recesión NBER
     ep = []
     for name, s, e, *_ in EPISODES:
@@ -275,7 +336,7 @@ def plot(df: pd.DataFrame, meta: dict, path) -> None:
     fig.suptitle(f"Etiqueta de régimen EE. UU. v{meta['version']} — {meta['first'][:7]} a {meta['last'][:7]}",
                  x=0.06, ha="left", fontsize=12, fontweight="bold", color=INK)
     fig.text(0.06, 0.935, "Gris: recesiones NBER (USREC; en el panel inferior, franja sobre el área). "
-             "Rayado: 1950-1954 (peso 0) y últimos 24 meses (provisionales).", fontsize=8.5, color=INK2)
+             f"Rayado: 1950-1954 (peso 0) y últimos {meta['params']['provisional_months']} meses (provisionales).", fontsize=8.5, color=INK2)
     fig.savefig(path, dpi=150, bbox_inches="tight", facecolor=SURF)
     plt.close(fig)
 
@@ -399,13 +460,13 @@ def report(df: pd.DataFrame, meta: dict, res: dict, png_name: str) -> str:
         L.append(f"Meses comparados: {cmp_['n']} (fechas comunes con weight = 1, 1955-01 → {cmp_['only_new_end']}). "
                  f"**Cambian de cuadrante {cmp_['changed']} meses ({cmp_['share']:.1%})**; en la muestra puntuable de la "
                  f"v{v}: {cmp_['changed_scored']} de {cmp_['n_scored']}.\n")
-        L.append(f"- G e I no cambian de definición (correlación v{v} vs v{PREV_VERSION}: G {lg[0]:.3f}, I {li[0]:.3f}). "
-                 "Solo cambian las escalas (s_G 0,33 → 0,40; s_I 0,305 → 0,31). Con ejes independientes, el cuadrante "
-                 "de mayor probabilidad solo depende del signo de G y de I − κ, así que la etiqueta dura no cambia; cambian "
-                 f"las probabilidades (Δp medio {cmp_['tv_mean']:.3f}, máximo {cmp_['tv_max']:.3f}) y los meses frontera "
-                 f"({cmp_['front_old']} → {cmp_['front_new']}).")
-        L.append(f"- Provisionales: desde {cmp_['prov_new_from']} (antes desde {cmp_['prov_old_from']}); "
-                 f"{cmp_['to_prov']} meses dejan de puntuar.\n")
+        di = cmp_["dI_months"]
+        L.append(f"- G no cambia (|ΔG| máx. {cmp_['dG_max']:.1e}). I solo cambia "
+                 + (f"en {di[0]} → {di[1]} (|ΔI| máx. {di[2]:.2f} pp), los meses del empalme IPC → PCE subyacente"
+                    if di else "en ningún mes")
+                 + f". Meses que cambian de cuadrante: {', '.join(cmp_['changed_list']) or 'ninguno'}. Δp medio "
+                 f"{cmp_['tv_mean']:.4f} (máx. {cmp_['tv_max']:.3f}); meses frontera {cmp_['front_old']} → {cmp_['front_new']}.")
+        L.append(f"- Provisionales: desde {cmp_['prov_new_from']} (antes desde {cmp_['prov_old_from']}).\n")
         L.append(f"| v{PREV_VERSION} \\ v{v} | " + " | ".join(NAMES[q] for q in R.QUADRANTS) + " |\n|---|" + "---|" * 4)
         for q in R.QUADRANTS:
             L.append(f"| {NAMES[q]} | " + " | ".join(str(cmp_["cross"].loc[q, x]) for x in R.QUADRANTS) + " |")
@@ -422,6 +483,30 @@ def report(df: pd.DataFrame, meta: dict, res: dict, png_name: str) -> str:
             L.append(f"\nLos {cmp_['changed']} meses cambiados forman {cmp_['n_blocks']} bloques; el "
                      f"{cmp_['short_share']:.0%} está en bloques de 1-4 meses.\n")
         L.append("")
+
+    pe = res["persistence"]
+    lag = pe["label_lag"]
+    L.append("## 6b. Persistencia point-in-time (referencia que hay que batir)\n")
+    L.append(f"En la fecha de decisión t (último día hábil de t) la última etiqueta calculable es la de t − **{lag}** "
+             f"(`label_lag`): G necesita niveles hasta s+4 de ≥ 2 indicadores, e INDPRO/PAYEMS de t−1 son los últimos "
+             f"publicados (→ s = t−5); I necesita el índice hasta s+3 y el PCE de t−2 es el último (→ s = t−5). La "
+             "predicción PIT es esa etiqueta, **recalculada solo con los datos publicados en t** (cada serie truncada en "
+             f"t − meses de retraso), es decir, en su versión provisional. Log-loss con probabilidades recortadas a "
+             f"[{EPS:g}, 1] y renormalizadas; objetivo blando = probabilidades de la etiqueta; Brier sobre los 4 cuadrantes.\n")
+    L.append("| muestra | baseline | n | acierto | log-loss (blando) | log-loss (duro) | Brier |\n|---|---|---|---|---|---|---|")
+    for samp in ("puntuable", "entrenamiento", "bloqueado"):
+        for name, lab_ in (("pit", f"PIT (t−{lag}, datos de t)"), (f"final_shift_{lag}", f"final desplazada {lag}"),
+                           ("final_shift_1", "final desplazada 1 (con fuga)")):
+            x = pe[samp][name]
+            L.append(f"| {samp} | {lab_} | {x['n']} | {x['acc']:.1%} | {x['logloss_soft']:.3f} | {x['logloss_hard']:.3f} | "
+                     f"{x['brier']:.3f} |")
+    if pe.get("n_missing"):
+        L.append(f"\n{pe['n_missing']} meses (hasta {pe['missing_to']}) no tienen etiqueta PIT calculable (la tendencia "
+                 "necesita ≥ 61 meses de ritmo desde 1950); las tres filas usan los mismos meses.")
+    L.append(f"\nLa etiqueta dura PIT coincide con la final desplazada {lag} meses en el "
+             f"{pe['pit_hard_same_as_final_shift']:.1%} de los meses. La persistencia con t−1 tiene fuga (usa datos hasta "
+             "t+3) y **no** es una referencia válida. Periodo bloqueado: desde "
+             f"{meta.get('holdout_start', R.PARAMS.holdout_start)[:7]}, abierto.\n")
 
     L.append("## 7. Últimos meses maduros y provisionales\n")
     mature = df[~df["provisional"]].tail(6)
@@ -447,10 +532,18 @@ def report(df: pd.DataFrame, meta: dict, res: dict, png_name: str) -> str:
              "meses desde el corte de datos, 51 desde el último mes de la etiqueta, redondeado a 54). La tendencia (±60 m) "
              "sigue truncada en los últimos 60 meses.")
     L.append(f"- **Uso.** Los meses con `provisional = true` o `weight = 0` no puntúan ni entrenan. Embargo del backtest: "
-             f"{meta['params']['embargo_months']} meses (la etiqueta de t usa datos hasta t+4).")
-    L.append("- **Inicio.** G(1950-01) usa niveles desde 1949-09 e I(1950-01) desde 1949-10, así que el inicio no cambia. "
-             "PCE subyacente centrado desde 1959-04 e IPC subyacente − 0,4 desde 1957-04 (antes 1959-07 / 1957-07). "
-             f"Diferencia media IPC − PCE subyacentes (contraste del ajuste de 0,4 pp, no se cambia): {res['cpi_pce_gap']:.2f} pp.")
+             f"{meta['params']['embargo_months']} meses (la etiqueta de t usa datos hasta t+4; la tendencia, hasta t+60). "
+             "Columnas prohibidas como variables: `meta.json → forbidden_features` (`assert_no_forbidden`).")
+    snap = meta.get("inputs_snapshot") or {}
+    L.append(f"- **Entradas congeladas.** La etiqueta oficial se reconstruye solo desde `{Path(snap.get('path', '')).name}` "
+             f"(SHA-256 del fichero `{str(snap.get('sha256_file', ''))[:16]}…`, del contenido "
+             f"`{str(snap.get('sha256_content', ''))[:16]}…`, {snap.get('rows', 0)} filas) con `--from-snapshot`.")
+    sp = meta.get("splice_cpi_core") or {}
+    L.append("- **Empalme IPC → PCE subyacente (v1.1).** 1957-04 → 1959-03 usan el IPC subyacente más un ajuste medido con "
+             f"una regla fija: la media de (PCE − IPC) subyacentes, en unidades de I, en los "
+             f"{meta['params']['splice_months']} primeros meses en que coexisten ({sp.get('from')} → {sp.get('to')}): "
+             f"**{sp.get('adj_pp', float('nan')):+.3f} pp** (la v1.0 restaba 0,4 pp, la diferencia media de toda la muestra, "
+             f"{-res['cpi_pce_gap']:+.2f} pp en signo PCE − IPC, que no representa el empalme).")
     L.append("- **Pesos.** `weight` = 0 en 1950-1954 (IPC general con la guerra de Corea, tendencia truncada) y 1 en el resto. "
              "Esos meses no puntúan (ni en el backtest ni en estas comprobaciones), pero se conservan en el fichero.")
     L.append("- **Nombre.** El cuadrante G↓ I↓ pasa de `slowdown` (\"desaceleración / recesión\") a `low_growth_disinfl` "
@@ -466,14 +559,13 @@ def report(df: pd.DataFrame, meta: dict, res: dict, png_name: str) -> str:
     for (name, exp, got, _), _ in fails:
         L.append(f"- **{name}** (esperado {exp}; obtenido {got}).")
     L.append("")
-    first_prov = df.index[df["provisional"]].min()
     L.append("## 10. Propuestas (para que decida el usuario; no aplicadas)\n")
-    L.append(f"1. **Periodo bloqueado.** Con {meta['params']['provisional_months']} meses provisionales, la etiqueta solo "
-             f"puntúa hasta {first_prov - pd.DateOffset(months=1):%Y-%m}. Un periodo bloqueado 2016-2026 tendría hoy "
-             f"~{(first_prov.year - 2016) * 12 + first_prov.month - 1} meses puntuables (incluido 2020). Valorar adelantar "
-             "su inicio o aceptar que madura con el tiempo.")
-    L.append("2. **Estudio de revisión.** La variante ALFRED solo revisa INDPRO y PAYEMS (cota inferior). Repetirlo al "
-             "añadir vintages de PCE (desde 2000) y de W875RX1/CMRMTSPL, sin cambiar la v1.0 salvo nueva versión.\n")
+    L.append("1. **Regla del empalme.** Con 24 meses sale "
+             f"{sp.get('adj_pp', float('nan')):+.2f} pp; el Validador midió ≈ +0,06 pp (PCE − IPC) en 1959-1964. La "
+             "diferencia es de ventana; la regla fijada (24 meses) se mantiene. Con cualquiera de las dos solo cambian "
+             "meses de 1957.")
+    L.append("2. Las recomendaciones M5 del Validador (contrastes del eje I, especificidad de recesiones, tabla de giros) "
+             "siguen pendientes para una versión futura de la §8.\n")
     return "\n".join(L)
 
 
