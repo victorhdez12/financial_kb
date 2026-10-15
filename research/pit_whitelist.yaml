@@ -1,0 +1,468 @@
+# Lista blanca de variables de la base point-in-time (docs/models/pit_base.md; código: src/features/pit.py).
+#
+# Solo lo que está aquí puede entrar en la matriz de variables. La lista negra de la etiqueta
+# (src/labels/regime_us.assert_no_forbidden) es una segunda barrera. Transformaciones FIJADAS A PRIORI
+# (2026-10-15), sin mirar la relación con la etiqueta. Un cambio = versión nueva de la lista.
+#
+# Campos
+#   nombre        columna de la matriz. Las que empiezan por "_" son auxiliares (no salen en la matriz).
+#   tipo          serie (de una o varias series del warehouse, en orden de prioridad) | derivada (función de columnas)
+#   series        ids del warehouse (deben estar en research/pit_calendar.yaml)
+#   transformacion  {fn, ...} sobre el índice de observación (src/features/pit.py, TRANSFORMS)
+#   funcion/entradas  para derivadas (src/features/pit.py, DERIVED)
+#   modo          vintage = ALFRED/RTDSM tal como se publicó donde haya vintages (fuera: latest_truncated, marcado
+#                 por celda) | latest_truncated = última vintage, truncada por el calendario de publicación
+#   estado        principal | principal_epoca (entra por épocas: desde su inicio) | modulo_adicional (nace en o
+#                 cerca del periodo bloqueado: se preregistra y evalúa aparte) | condicional (duda point-in-time:
+#                 decide el usuario)
+#   admision      regla de admisión (docs/PLAN.md): fuente viva, historia mínima, point-in-time, disponibilidad
+#   factor/unidades  escala fija y unidades esperadas en el catálogo (el constructor falla si cambian)
+
+version: "0.1"
+fecha: 2026-10-15
+zscore_min_meses: 120          # z-scores expansivos: solo historia <= t, mínimo 10 años
+histeresis_banda: 0.15         # estado de crecimiento con histéresis (revisión Fase 1, estratega macro)
+
+variables:
+  # ======================================================================= CRECIMIENTO
+  - nombre: payems_3m_ann
+    bloque: crecimiento
+    tipo: serie
+    series: [PAYEMS]
+    transformacion: {fn: log_diff_ann, k: 3}
+    modo: vintage
+    estado: principal
+    mecanismo: El empleo es el indicador coincidente central del NBER; su ritmo de 3 meses mide el impulso actual.
+    signo_esperado: "+ P(G alto)"
+    admision: {fuente_viva: FRED/ALFRED, historia: "1939-; 11+ recesiones", pit: "ALFRED desde 1955-05; retardo medido", disponibilidad: "completa desde 1950"}
+  - nombre: unrate_sahm
+    bloque: crecimiento
+    tipo: serie
+    series: [UNRATE]
+    transformacion: {fn: sahm}
+    modo: vintage
+    estado: principal
+    mecanismo: Regla de Sahm. Una subida de 0,5 pp de la media de 3 meses del paro sobre su mínimo de 12 meses solo ocurre al entrar en recesión (dinámica no lineal del despido).
+    signo_esperado: "- P(G alto)"
+    admision: {fuente_viva: FRED/ALFRED, historia: "1948-", pit: "ALFRED desde 1960-03", disponibilidad: "completa desde 1950"}
+  - nombre: indpro_3m_ann
+    bloque: crecimiento
+    tipo: serie
+    series: [INDPRO]
+    transformacion: {fn: log_diff_ann, k: 3}
+    modo: vintage
+    estado: principal
+    mecanismo: Producción industrial, el componente más cíclico del conjunto coincidente del NBER.
+    signo_esperado: "+ P(G alto)"
+    admision: {fuente_viva: FRED/ALFRED, historia: "1919-", pit: "ALFRED desde 1927", disponibilidad: "completa"}
+  - nombre: tcu
+    bloque: crecimiento
+    tipo: serie
+    series: [TCU]
+    transformacion: {fn: level}
+    modo: vintage
+    estado: principal_epoca
+    mecanismo: Utilización de la capacidad alta = economía cerca de su límite, presión de costes (expansión tardía).
+    signo_esperado: "+ P(G alto), + P(I alta)"
+    admision: {fuente_viva: FRED/ALFRED, historia: "1967-; 8 recesiones", pit: "ALFRED desde 1996; G.17 antes", disponibilidad: "desde 1967 (época E1)"}
+  - nombre: claims_4w_yoy
+    bloque: crecimiento
+    tipo: serie
+    series: [ICSA]
+    transformacion: {fn: rolling_log_yoy, n: 4}
+    modo: vintage
+    estado: principal_epoca
+    mecanismo: Las peticiones iniciales de paro son el dato de despidos más rápido (semanal); su subida anticipa el deterioro del empleo.
+    signo_esperado: "- P(G alto)"
+    admision: {fuente_viva: FRED/ALFRED, historia: "1967-; 8 recesiones", pit: "ALFRED desde 2009; antes calendario (jueves)", disponibilidad: "desde 1968 (E1)"}
+  - nombre: awhman_d3
+    bloque: crecimiento
+    tipo: serie
+    series: [AWHMAN]
+    transformacion: {fn: diff, k: 3}
+    modo: latest_truncated
+    estado: principal
+    mecanismo: Las empresas ajustan horas antes que plantilla; las horas de manufactura son un componente clásico del índice adelantado.
+    signo_esperado: "+ P(G alto)"
+    admision: {fuente_viva: FRED, historia: "1939-", pit: "fechas de publicación de PAYEMS (mismo comunicado)", disponibilidad: "completa"}
+  - nombre: permit_yoy
+    bloque: crecimiento
+    tipo: serie
+    series: [PERMIT]
+    transformacion: {fn: log_diff, k: 12}
+    modo: latest_truncated
+    estado: principal
+    mecanismo: La vivienda es el canal más sensible a los tipos; los permisos adelantan la construcción y el empleo ligado a ella.
+    signo_esperado: "+ P(G alto)"
+    admision: {fuente_viva: FRED, historia: "1960-", pit: "supuesto 20 días (Census)", disponibilidad: "desde 1961"}
+  - nombre: philly_activity
+    bloque: crecimiento
+    tipo: serie
+    series: [GACDFSA066MSFRBPHI]
+    transformacion: {fn: level}
+    modo: latest_truncated
+    estado: principal_epoca
+    mecanismo: Encuesta regional (sustituto del ISM, que no está en el warehouse); se publica dentro del propio mes y es la información más temprana sobre el mes t.
+    signo_esperado: "+ P(G alto)"
+    admision: {fuente_viva: FRED, historia: "1968-; 7 recesiones", pit: "supuesto: 3.er jueves del mes t", disponibilidad: "desde 1968-05 (E1)"}
+  - nombre: philly_neworders
+    bloque: crecimiento
+    tipo: serie
+    series: [NOCDFSA066MSFRBPHI]
+    transformacion: {fn: level}
+    modo: latest_truncated
+    estado: principal_epoca
+    mecanismo: Los nuevos pedidos adelantan la producción.
+    signo_esperado: "+ P(G alto)"
+    admision: {fuente_viva: FRED, historia: "1968-", pit: "supuesto: 3.er jueves del mes t", disponibilidad: "desde 1968-05 (E1)"}
+  - nombre: umcsent
+    bloque: crecimiento
+    tipo: serie
+    series: [UMCSENT]
+    transformacion: {fn: level}
+    modo: latest_truncated
+    estado: principal
+    mecanismo: La confianza del consumidor anticipa el gasto en bienes duraderos.
+    signo_esperado: "+ P(G alto)"
+    admision: {fuente_viva: FRED (con retraso de licencia), historia: "1952- (trimestral hasta 1977)", pit: "supuesto 35 días", disponibilidad: "trimestral antes de 1978: cambio de frecuencia (ver pit_base.md)"}
+  - nombre: cfnai_ma3
+    bloque: crecimiento
+    tipo: serie
+    series: [CFNAI]
+    transformacion: {fn: rolling_mean, n: 3}
+    modo: vintage
+    estado: condicional
+    mecanismo: Media ponderada de 85 indicadores (componente principal); MA3 < -0,7 señala recesión.
+    signo_esperado: "+ P(G alto)"
+    admision: {fuente_viva: FRED/ALFRED, historia: "1967-", pit: "DUDOSO antes de 2011: se publica desde 2001 y la historia se reestima con toda la muestra (PCA)", disponibilidad: "vintages solo desde 2011"}
+  - nombre: gdp_qoq_ann
+    bloque: crecimiento
+    tipo: serie
+    series: [GDPC1]
+    transformacion: {fn: log_diff_ann, k: 1}
+    modo: vintage
+    estado: principal
+    mecanismo: La medida más amplia de la producción (trimestral, con retardo).
+    signo_esperado: "+ P(G alto)"
+    admision: {fuente_viva: FRED/ALFRED, historia: "1947-", pit: "ALFRED desde 1991-12; RTDSM desde 1965-11", disponibilidad: "completa"}
+  - nombre: w875rx1_3m_ann
+    bloque: crecimiento
+    tipo: serie
+    series: [W875RX1]
+    transformacion: {fn: log_diff_ann, k: 3}
+    modo: latest_truncated
+    estado: principal
+    mecanismo: Renta personal real sin transferencias (indicador coincidente del NBER).
+    signo_esperado: "+ P(G alto)"
+    admision: {fuente_viva: FRED, historia: "1959-", pit: "fechas de PCEPI desde 2000; 35 días antes", disponibilidad: "desde 1959"}
+  - nombre: cmrmtspl_3m_ann
+    bloque: crecimiento
+    tipo: serie
+    series: [CMRMTSPL]
+    transformacion: {fn: log_diff_ann, k: 3}
+    modo: latest_truncated
+    estado: principal_epoca
+    mecanismo: Ventas reales de manufactura y comercio (indicador coincidente del NBER), con ~2 meses de retardo.
+    signo_esperado: "+ P(G alto)"
+    admision: {fuente_viva: FRED, historia: "1967-", pit: "70 días (medido 2013+)", disponibilidad: "desde 1967 (E1)"}
+  - nombre: spf_rgdp_4q
+    bloque: crecimiento
+    tipo: derivada
+    funcion: log_ratio_x100
+    entradas: [_spf_rgdp_6, _spf_rgdp_2]
+    estado: principal_epoca
+    mecanismo: "Expectativa con fecha: crecimiento del PIB real que esperan los analistas en los próximos 4 trimestres (lo descontado)."
+    signo_esperado: "+ P(G alto)"
+    admision: {fuente_viva: Fed de Filadelfia, historia: "1968-", pit: "expectativa fechada en la encuesta; supuesto 50-60 días desde el inicio del trimestre", disponibilidad: "desde 1969 (E1)"}
+  - nombre: growth_rt
+    bloque: crecimiento
+    tipo: derivada
+    funcion: zmean
+    entradas: [indpro_3m_ann, payems_3m_ann, w875rx1_3m_ann, cmrmtspl_3m_ann]
+    min_entradas: 2
+    estado: principal
+    mecanismo: Compuesto de crecimiento en tiempo real (análogo PIT de las entradas de G); media de z-scores expansivos.
+    signo_esperado: "+ P(G alto)"
+    admision: {fuente_viva: sí, historia: "1950-", pit: "z-score expansivo sobre la trayectoria PIT", disponibilidad: "desde 1960 (10 años de z)"}
+  - nombre: growth_rt_state
+    bloque: crecimiento
+    tipo: derivada
+    funcion: hysteresis_state
+    entradas: [growth_rt, unrate_sahm]
+    estado: principal
+    mecanismo: "Pendiente de la Fase 1 (histéresis de G): +1 si growth_rt > +0,15; -1 si < -0,15 o Sahm >= 0,5; si no, mantiene el estado anterior. Reduce la rotación en la frontera."
+    signo_esperado: "+ P(G alto)"
+    admision: {fuente_viva: sí, historia: "1960-", pit: "recursivo sobre valores PIT", disponibilidad: "desde 1960"}
+
+  # ======================================================================= INFLACIÓN
+  - nombre: core_cpi_6m_ann
+    bloque: inflacion
+    tipo: serie
+    series: [CPILFESL]
+    transformacion: {fn: pct_ann, k: 6}
+    modo: vintage
+    estado: principal
+    mecanismo: Inflación subyacente reciente; el eje I de la etiqueta es la subyacente de 6 meses.
+    signo_esperado: "+ P(I alta)"
+    admision: {fuente_viva: FRED/ALFRED, historia: "1957-", pit: "ALFRED desde 1996-12; fechas de CPIAUCSL desde 1972", disponibilidad: "desde 1957; ver advertencia de historia reconstruida (pit_base.md)"}
+  - nombre: core_cpi_yoy
+    bloque: inflacion
+    tipo: serie
+    series: [CPILFESL]
+    transformacion: {fn: pct_ann, k: 12}
+    modo: vintage
+    estado: principal
+    mecanismo: Nivel de la inflación subyacente a 12 meses (más estable que la de 6 meses).
+    signo_esperado: "+ P(I alta)"
+    admision: {fuente_viva: FRED/ALFRED, historia: "1958-", pit: "igual que core_cpi_6m_ann", disponibilidad: "desde 1958"}
+  - nombre: headline_cpi_6m_ann
+    bloque: inflacion
+    tipo: serie
+    series: [CPIAUCSL]
+    transformacion: {fn: pct_ann, k: 6}
+    modo: vintage
+    estado: principal
+    mecanismo: Inflación general (incluye energía y alimentos); recoge shocks de oferta que la subyacente deja fuera.
+    signo_esperado: "+ P(I alta)"
+    admision: {fuente_viva: FRED/ALFRED, historia: "1947-", pit: "ALFRED desde 1972-07", disponibilidad: "completa"}
+  - nombre: core_pce_6m_ann
+    bloque: inflacion
+    tipo: serie
+    series: [PCEPILFE]
+    transformacion: {fn: pct_ann, k: 6}
+    modo: vintage
+    estado: condicional
+    mecanismo: La serie del eje I de la etiqueta, tal como se conocía en t (retardo ~30 días).
+    signo_esperado: "+ P(I alta)"
+    admision: {fuente_viva: FRED/ALFRED, historia: "1959-", pit: "vintages desde 2000-08; antes de ~1996 la serie (índice encadenado) no existía en tiempo real", disponibilidad: "real solo desde 2000 en modo vintage"}
+  - nombre: ppi_yoy
+    bloque: inflacion
+    tipo: serie
+    series: [PPIACO]
+    transformacion: {fn: pct_ann, k: 12}
+    modo: vintage
+    estado: principal
+    mecanismo: "Presión de costes en origen que se traslada a la subyacente con retardo (pendiente de la Fase 1: inflación compuesta con PPI)."
+    signo_esperado: "+ P(I alta)"
+    admision: {fuente_viva: FRED/ALFRED, historia: "1913-", pit: "ALFRED desde 1996-12; antes supuesto 21 días", disponibilidad: "completa"}
+  - nombre: oil_yoy
+    bloque: inflacion
+    tipo: serie
+    series: [MCOILWTICO, WPU0561]
+    transformacion: {fn: log_diff, k: 12}
+    modo: latest_truncated
+    estado: principal
+    mecanismo: "Shock de oferta energético: mueve la inflación general, la renta real y las expectativas (pendiente de la Fase 1). WTI medio mensual desde 1987; PPI de crudo antes (empalme en tasas)."
+    signo_esperado: "+ P(I alta)"
+    admision: {fuente_viva: FRED, historia: "1947-", pit: "WTI: precio de mercado; PPI crudo: fechas de PPIACO", disponibilidad: "completa; cambio de fuente en 1987 (anotado)"}
+  - nombre: infl_composite
+    bloque: inflacion
+    tipo: derivada
+    funcion: zmean
+    entradas: [core_cpi_6m_ann, headline_cpi_6m_ann, ppi_yoy, oil_yoy]
+    min_entradas: 3
+    estado: principal
+    mecanismo: "Pendiente de la Fase 1: inflación compuesta (subyacente + general + PPI + petróleo) con z-scores expansivos."
+    signo_esperado: "+ P(I alta)"
+    admision: {fuente_viva: sí, historia: "1950-", pit: "z expansivo sobre la trayectoria PIT", disponibilidad: "desde 1960"}
+  - nombre: mich_infl_exp
+    bloque: inflacion
+    tipo: serie
+    series: [MICH]
+    transformacion: {fn: level}
+    modo: latest_truncated
+    estado: principal_epoca
+    mecanismo: "Expectativa con fecha: inflación esperada a 1 año por los hogares; ancla salarios y precios."
+    signo_esperado: "+ P(I alta)"
+    admision: {fuente_viva: FRED (retraso de licencia), historia: "1978-; 6 recesiones", pit: "encuesta fechada; supuesto 35 días", disponibilidad: "desde 1978 (E2)"}
+  - nombre: spf_cpi_4q
+    bloque: inflacion
+    tipo: serie
+    series: [spf_mean_cpi_6]
+    transformacion: {fn: level}
+    modo: latest_truncated
+    estado: principal_epoca
+    mecanismo: "Expectativa con fecha: IPC esperado a 4 trimestres vista por los analistas profesionales."
+    signo_esperado: "+ P(I alta)"
+    admision: {fuente_viva: Fed de Filadelfia, historia: "1981-; 5 recesiones", pit: "fecha de la encuesta + 50-60 días (supuesto)", disponibilidad: "desde 1981-Q3 (E2)"}
+  - nombre: usd_neer_yoy
+    bloque: inflacion
+    tipo: serie
+    series: [bis_eer_us_neer_narrow_m]
+    transformacion: {fn: log_diff, k: 12}
+    modo: latest_truncated
+    estado: principal
+    mecanismo: Un dólar fuerte abarata las importaciones (inflación a la baja) y endurece las condiciones financieras globales.
+    signo_esperado: "- P(I alta)"
+    admision: {fuente_viva: BIS, historia: "1964-", pit: "supuesto 30 días", disponibilidad: "desde 1965"}
+
+  # ======================================================================= FINANCIERAS
+  - {nombre: _t10y3m, bloque: auxiliar, tipo: serie, series: [T10Y3M], transformacion: {fn: level}, modo: latest_truncated, estado: auxiliar, mecanismo: "Pendiente oficial 10a-3m (1982-)."}
+  - {nombre: _dgs10, bloque: auxiliar, tipo: serie, series: [DGS10, GS10], transformacion: {fn: level}, modo: latest_truncated, estado: auxiliar, mecanismo: "Treasury 10 años (diario 1962-; media mensual 1953-)."}
+  - {nombre: _tb3, bloque: auxiliar, tipo: serie, series: [DTB3, TB3MS], transformacion: {fn: level}, modo: latest_truncated, estado: auxiliar, mecanismo: "Letras a 3 meses (diario 1954-)."}
+  - {nombre: _gs10m, bloque: auxiliar, tipo: serie, series: [GS10], transformacion: {fn: level}, modo: latest_truncated, estado: auxiliar, mecanismo: "Treasury 10 años, media mensual (para el diferencial Baa mensual)."}
+  - {nombre: _ff, bloque: auxiliar, tipo: serie, series: [DFF], transformacion: {fn: level}, modo: latest_truncated, estado: auxiliar, mecanismo: "Fed funds efectivo diario (1954-07-)."}
+  - {nombre: _baa10y, bloque: auxiliar, tipo: serie, series: [BAA10Y], transformacion: {fn: level}, modo: latest_truncated, estado: auxiliar, mecanismo: "Baa - 10 años, diario (1986-)."}
+  - {nombre: _baa, bloque: auxiliar, tipo: serie, series: [BAA], transformacion: {fn: level}, modo: latest_truncated, estado: auxiliar, mecanismo: "Moody's Baa, media mensual."}
+  - nombre: curve_10y3m
+    bloque: financieras
+    tipo: derivada
+    funcion: curve
+    entradas: [_t10y3m, _dgs10, _tb3]
+    estado: principal
+    mecanismo: La curva invertida señala política monetaria restrictiva frente al tipo esperado futuro y precede a las recesiones.
+    signo_esperado: "+ P(G alto) con retardo"
+    admision: {fuente_viva: FRED, historia: "1954-", pit: "precios de mercado, no se revisan", disponibilidad: "desde 1954; empalme T10Y3M 1982 (anotado)"}
+  - {nombre: curve_d3m, bloque: financieras, tipo: derivada, funcion: diff3, entradas: [curve_10y3m], estado: principal, mecanismo: "Cambio de 3 meses de la pendiente (empinamiento/aplanamiento).", signo_esperado: "ambiguo: ver bear/bull", admision: {fuente_viva: sí, historia: "1954-", pit: "sí", disponibilidad: "desde 1954"}}
+  - {nombre: level_d3m, bloque: financieras, tipo: derivada, funcion: level_d3m, entradas: [_dgs10, _tb3], estado: principal, mecanismo: "Cambio de 3 meses del nivel medio de tipos (10a y 3m).", signo_esperado: "ambiguo", admision: {fuente_viva: sí, historia: "1954-", pit: "sí", disponibilidad: "desde 1954"}}
+  - nombre: bear_steepening
+    bloque: financieras
+    tipo: derivada
+    funcion: bear_steepening
+    entradas: [curve_d3m, level_d3m]
+    estado: principal
+    mecanismo: "Pendiente de la Fase 1: empinamiento con tipos al alza (lo mueve el largo plazo: prima por plazo, inflación, fiscal), distinto del empinamiento de recuperación."
+    signo_esperado: "+ P(I alta)"
+    admision: {fuente_viva: sí, historia: "1954-", pit: "sí", disponibilidad: "desde 1954"}
+  - nombre: bull_steepening
+    bloque: financieras
+    tipo: derivada
+    funcion: bull_steepening
+    entradas: [curve_d3m, level_d3m]
+    estado: principal
+    mecanismo: "Empinamiento con tipos a la baja (lo mueve el corto plazo: la Fed recorta); típico al inicio de las recesiones."
+    signo_esperado: "- P(G alto) a corto plazo"
+    admision: {fuente_viva: sí, historia: "1954-", pit: "sí", disponibilidad: "desde 1954"}
+  - {nombre: ff_d12m, bloque: financieras, tipo: derivada, funcion: diff12, entradas: [_ff], estado: principal, mecanismo: "Endurecimiento acumulado: +100 pb en 12 meses es la fase de endurecimiento del ciclo de deuda corto.", signo_esperado: "- P(G alto) con retardo; + P(I alta) contemporáneo", admision: {fuente_viva: FRED, historia: "1955-", pit: "mercado", disponibilidad: "desde 1955-07"}}
+  - {nombre: real_ff, bloque: financieras, tipo: derivada, funcion: diff_ab, entradas: [_ff, core_cpi_yoy], estado: principal, mecanismo: "Tipo real (fed funds - subyacente a/a conocida): restricción monetaria efectiva.", signo_esperado: "- P(G alto) con retardo", admision: {fuente_viva: sí, historia: "1958-", pit: "sí", disponibilidad: "desde 1958"}}
+  - nombre: baa_spread
+    bloque: financieras
+    tipo: derivada
+    funcion: baa_spread
+    entradas: [_baa10y, _baa, _gs10m]
+    estado: principal
+    mecanismo: El diferencial de crédito corporativo mide el precio del riesgo y la capacidad de financiación; se amplía antes y durante las recesiones.
+    signo_esperado: "- P(G alto)"
+    admision: {fuente_viva: FRED, historia: "1953-", pit: "mercado", disponibilidad: "desde 1953; diario desde 1986 (empalme anotado)"}
+  - nombre: gz_spread
+    bloque: financieras
+    tipo: serie
+    series: [fed_ebp_gz_spread]
+    transformacion: {fn: level}
+    modo: latest_truncated
+    estado: principal_epoca
+    mecanismo: Diferencial medio de bonos corporativos frente a Treasuries de igual duración (Gilchrist-Zakrajšek).
+    signo_esperado: "- P(G alto)"
+    admision: {fuente_viva: Fed, historia: "1973-; 7 recesiones", pit: "supuesto 35 días; metodología de 2012 sobre precios de mercado", disponibilidad: "desde 1973 (E2)"}
+  - nombre: ebp
+    bloque: financieras
+    tipo: serie
+    series: [fed_ebp_ebp]
+    transformacion: {fn: level}
+    modo: latest_truncated
+    estado: condicional
+    mecanismo: Excess bond premium = apetito por el riesgo de los intermediarios; su subida precede a las recesiones (H de research_program §2).
+    signo_esperado: "- P(G alto)"
+    admision: {fuente_viva: Fed, historia: "1973-", pit: "DUDOSO: residuo de una regresión estimada con toda la muestra (catálogo); la historia se revisa", disponibilidad: "desde 1973"}
+  - nombre: nfci
+    bloque: financieras
+    tipo: serie
+    series: [NFCI]
+    transformacion: {fn: level}
+    modo: latest_truncated
+    estado: condicional
+    mecanismo: "Condiciones financieras (Chicago Fed); por encima de 0 = más tensas que la media."
+    signo_esperado: "- P(G alto)"
+    admision: {fuente_viva: FRED, historia: "1971-", pit: "DUDOSO: modelo de factores reestimado cada semana; vintages ALFRED (2011+) no descargadas", disponibilidad: "desde 1971"}
+  - nombre: vix
+    bloque: financieras
+    tipo: serie
+    series: [VIXCLS]
+    transformacion: {fn: level}
+    modo: latest_truncated
+    estado: principal_epoca
+    mecanismo: Volatilidad implícita = aversión al riesgo; los picos acompañan a los episodios de estrés.
+    signo_esperado: "- P(G alto)"
+    admision: {fuente_viva: FRED, historia: "1990-; 4 recesiones", pit: "mercado", disponibilidad: "desde 1990 (E3)"}
+  - nombre: eq_ret_6m
+    bloque: financieras
+    tipo: serie
+    series: [shiller_sp_price]
+    transformacion: {fn: log_diff, k: 6}
+    modo: latest_truncated
+    estado: principal
+    mecanismo: La bolsa descuenta los beneficios futuros y anticipa el crecimiento (componente del índice adelantado).
+    signo_esperado: "+ P(G alto)"
+    admision: {fuente_viva: Shiller, historia: "1871-", pit: "media mensual de precios de mercado", disponibilidad: "completa"}
+  - {nombre: _copper, bloque: auxiliar, tipo: serie, series: [wb_copper], transformacion: {fn: level}, modo: latest_truncated, estado: auxiliar, mecanismo: "Cobre, Pink Sheet."}
+  - {nombre: _gold, bloque: auxiliar, tipo: serie, series: [wb_gold], transformacion: {fn: level}, modo: latest_truncated, estado: auxiliar, mecanismo: "Oro, Pink Sheet."}
+  - nombre: copper_gold_6m
+    bloque: financieras
+    tipo: derivada
+    funcion: ratio_log_diff6
+    entradas: [_copper, _gold]
+    estado: principal
+    mecanismo: El cobre sigue a la demanda industrial y el oro al refugio; su cociente sube con el crecimiento global.
+    signo_esperado: "+ P(G alto)"
+    admision: {fuente_viva: Banco Mundial, historia: "1960-", pit: "supuesto 7 días", disponibilidad: "desde 1961"}
+
+  # ======================================================================= LIQUIDEZ
+  - {nombre: _m2_yoy, bloque: auxiliar, tipo: serie, series: [M2SL], transformacion: {fn: pct_ann, k: 12}, modo: vintage, estado: auxiliar, mecanismo: "M2 a/a (ALFRED desde 1980)."}
+  - {nombre: _cpi_yoy, bloque: auxiliar, tipo: serie, series: [CPIAUCSL], transformacion: {fn: pct_ann, k: 12}, modo: vintage, estado: auxiliar, mecanismo: "IPC general a/a."}
+  - nombre: m2_real_yoy
+    bloque: liquidez
+    tipo: derivada
+    funcion: diff_ab
+    entradas: [_m2_yoy, _cpi_yoy]
+    estado: principal
+    mecanismo: El crecimiento real del dinero amplio aproxima la liquidez disponible para gasto y activos.
+    signo_esperado: "+ P(G alto) con retardo"
+    admision: {fuente_viva: FRED/ALFRED, historia: "1960-", pit: "ALFRED desde 1980; el M2 actual se definió en 1980 (historia reconstruida antes)", disponibilidad: "desde 1960"}
+  - {nombre: _walcl, bloque: auxiliar, tipo: serie, series: [WALCL], transformacion: {fn: level}, modo: latest_truncated, estado: auxiliar, unidades: {WALCL: million}, mecanismo: "Activos de la Fed (millones USD)."}
+  - {nombre: _tga, bloque: auxiliar, tipo: serie, series: [usliq_tga_close_d, WTREGEN], transformacion: {fn: level}, modo: latest_truncated, estado: auxiliar, unidades: {usliq_tga_close_d: million, WTREGEN: million}, mecanismo: "Cuenta del Tesoro en la Fed: diaria (DTS, 2005-10-) y semanal (H.4.1) antes."}
+  - {nombre: _rrp, bloque: auxiliar, tipo: serie, series: [RRPONTSYD], transformacion: {fn: level}, factor: 1000, modo: latest_truncated, estado: auxiliar, unidades: {RRPONTSYD: billion}, mecanismo: "Repos inversos ON (miles de millones → millones)."}
+  - nombre: net_liq_yoy
+    bloque: liquidez
+    tipo: derivada
+    funcion: net_liq_yoy
+    entradas: [_walcl, _tga, _rrp]
+    estado: modulo_adicional
+    mecanismo: "Pendiente de la Fase 1 (liquidez neta diaria): balance de la Fed - TGA - RRP = reservas que el sistema puede desplegar en activos de riesgo."
+    signo_esperado: "+ P(G alto) (vía activos de riesgo)"
+    admision: {fuente_viva: FRED/DTS, historia: "2003-; 2 recesiones", pit: "H.4.1/DTS/NY Fed", disponibilidad: "desde 2003-12: nace en el borde del periodo bloqueado → módulo adicional preregistrado"}
+  - {nombre: _ecb, bloque: auxiliar, tipo: serie, series: [ecb_eurosystem_total_assets_w], transformacion: {fn: level}, modo: latest_truncated, estado: auxiliar, unidades: {ecb_eurosystem_total_assets_w: eur millions}, mecanismo: "Activos del Eurosistema (millones EUR)."}
+  - {nombre: _boj, bloque: auxiliar, tipo: serie, series: [cbbs_boj_total_assets_m], transformacion: {fn: level}, modo: latest_truncated, estado: auxiliar, unidades: {cbbs_boj_total_assets_m: 100 million yen}, mecanismo: "Activos del BoJ (100 millones de yenes)."}
+  - {nombre: _usdeur, bloque: auxiliar, tipo: serie, series: [DEXUSEU], transformacion: {fn: level}, modo: latest_truncated, estado: auxiliar, mecanismo: "USD por euro."}
+  - {nombre: _jpyusd, bloque: auxiliar, tipo: serie, series: [DEXJPUS], transformacion: {fn: level}, modo: latest_truncated, estado: auxiliar, mecanismo: "Yenes por USD."}
+  - nombre: global_cb_usd_yoy
+    bloque: liquidez
+    tipo: derivada
+    funcion: global_cb_usd_yoy
+    entradas: [_walcl, _ecb, _usdeur, _boj, _jpyusd]
+    estado: modulo_adicional
+    mecanismo: "Pendiente de la Fase 1 (liquidez global): balances Fed + BCE + BoJ en USD; la expansión conjunta sostiene precios de activos globales."
+    signo_esperado: "+ P(G alto)"
+    admision: {fuente_viva: FRED/BCE/BoJ, historia: "2003-", pit: "supuestos 1-7 días", disponibilidad: "desde 2003-12 → módulo adicional"}
+  - {nombre: t5yie, bloque: inflacion, tipo: serie, series: [T5YIE], transformacion: {fn: level}, modo: latest_truncated, estado: modulo_adicional, mecanismo: "Expectativa de mercado: inflación descontada a 5 años (breakeven).", signo_esperado: "+ P(I alta)", admision: {fuente_viva: FRED, historia: "2003-; 2 recesiones", pit: "mercado", disponibilidad: "desde 2003 → módulo adicional"}}
+  - {nombre: dfii10, bloque: financieras, tipo: serie, series: [DFII10], transformacion: {fn: level}, modo: latest_truncated, estado: modulo_adicional, mecanismo: "Tipo real a 10 años (TIPS): coste real de la financiación a largo plazo.", signo_esperado: "- P(G alto)", admision: {fuente_viva: FRED, historia: "2003-", pit: "mercado", disponibilidad: "desde 2003 → módulo adicional"}}
+  - {nombre: _spf_rgdp_2, bloque: auxiliar, tipo: serie, series: [spf_mean_rgdp_2], transformacion: {fn: level}, modo: latest_truncated, estado: auxiliar, mecanismo: "SPF, PIB real del trimestre en curso."}
+  - {nombre: _spf_rgdp_6, bloque: auxiliar, tipo: serie, series: [spf_mean_rgdp_6], transformacion: {fn: level}, modo: latest_truncated, estado: auxiliar, mecanismo: "SPF, PIB real a 4 trimestres."}
+
+# Candidatas revisadas y NO admitidas (no se construyen)
+rechazadas:
+  - {nombre: usrec / NBER, series: [USREC], motivo: "Ex post (se publica 6-18 meses tarde) y está en la lista negra."}
+  - {nombre: GDPPOT, NROU (brecha de producción / paro), series: [GDPPOT, NGDPPOT, NROU], motivo: "pit_role forecast: proyecciones de la CBO revisadas hacia atrás. La brecha de paro necesitaría vintages de NROU (no hay)."}
+  - {nombre: fed_ebp_recession_prob, series: [fed_ebp_recession_prob], motivo: "pit_role lookahead (estimada con toda la muestra)."}
+  - {nombre: nyfed_recprob_12m, series: [nyfed_recprob_12m], motivo: "Salida de un probit estimado con toda la muestra sobre la curva; la curva ya entra directamente."}
+  - {nombre: Prima por plazo ACM, series: [nyfed_acm_tp10_m, THREEFYTP10], motivo: "Modelo afín reestimado con toda la muestra en cada actualización: historia revisada sin vintages."}
+  - {nombre: Expectativas de inflación de Cleveland, series: [clev_expinf_*, EXPINF1YR], motivo: "Modelo reestimado cada mes con toda la muestra (no es lo que se conocía en t)."}
+  - {nombre: TEDRATE, series: [TEDRATE], motivo: "Fuente muerta (2022-01): no cumple 'fuente viva'."}
+  - {nombre: Dólar ponderado (TWEXB), series: [TWEXB, TWEXMMTH], motivo: "Discontinuadas (2019-2020); se usa la NEER estrecha del BIS."}
+  - {nombre: Base monetaria St. Louis, series: [usliq_fred_ambsl, usliq_fred_bogambsl], motivo: "Discontinuadas."}
+  - {nombre: Futuros de energía, series: [eia_futures_*], motivo: "Fuente cortada en 2024-04 (regla 1)."}
+  - {nombre: Market Probability Tracker, series: [atl_mpt_*], motivo: "Desde 2023: sin historia mínima (regla 2); solo capa 'descontado' e informe."}
+  - {nombre: Estructura del VIX y volatilidad de tipos, series: [cboe_vx_*, mpls_mpd_*], motivo: "Nacen en 2004/2006: preregistradas como H-DER-001/002 (módulo de derivados), fuera de esta lista."}
+  - {nombre: STLFSI, series: [STLFSI4], motivo: "Índice reestimado (historia revisada) y desde 1993; redundante con NFCI/baa_spread/vix."}
+  - {nombre: SAHMREALTIME, series: [SAHMREALTIME], motivo: "Duplicada: unrate_sahm se calcula desde las vintages de UNRATE."}
+  - {nombre: Capa EUR, series: [], motivo: "Pospuesta a su fase (PLAN: capa EUR)."}
+  - {nombre: Capas ex post L-CAP-001/002/003, series: [], motivo: "Prohibidas como variables (PLAN, hypotheses.yaml); oil_yoy es el dato PIT de mercado, no la capa energy_shock."}

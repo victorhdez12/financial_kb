@@ -1,0 +1,304 @@
+# Calendario de publicación point-in-time (ficha: docs/models/pit_calendar.md; código: src/features/calendar.py).
+#
+# Una entrada por serie del warehouse que usa la lista blanca (research/pit_whitelist.yaml).
+#   frecuencia            D, W, M, Q, A (la de la fecha de referencia del warehouse)
+#   ancla                 fin_periodo (por defecto: fin del mes/trimestre de referencia; para D/W, la fecha del dato)
+#                         | inicio_periodo (encuestas fechadas en el inicio del trimestre, p. ej. SPF)
+#   retardo_dias          días desde el ancla hasta la PRIMERA publicación, por épocas de la fecha de referencia.
+#                         Solo se usa donde las vintages no fechan la publicación (antes del archivo ALFRED o
+#                         series sin vintages). Valor CONSERVADOR: el máximo medido en la época más antigua
+#                         medida, redondeado hacia arriba, o un supuesto documentado.
+#   proxies_publicacion   series con vintages cuyo primer realtime_start da la fecha de publicación exacta
+#                         (la propia serie o otra del mismo comunicado de prensa).
+#   vintages              fuentes de vintage para el modo `vintage`, en orden de prioridad.
+#   supuesto              true = el retardo NO está medido (fuente indicada); false = medido con vintages.
+# Fecha de decisión: último día hábil (calendario federal de EE. UU.) del mes t (ficha de la etiqueta §9).
+# Medición: research/pit_calendar_measured.csv (.venv/bin/python -m src.features.calendar).
+
+version: "0.1"
+fecha: 2026-10-15
+series:
+  # ---------------------------------------------------------------- empleo (Employment Situation, BLS)
+  PAYEMS:
+    publicacion: BLS Employment Situation (primer viernes del mes siguiente)
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: 16}]
+    proxies_publicacion: [PAYEMS]
+    vintages: [PAYEMS]
+    supuesto: false
+    fuente: ALFRED PAYEMS desde 1955-05 (medido; <1980 mediana 7, p90 11, máx 16). Antes de 1955, el máximo de <1980.
+  UNRATE:
+    publicacion: BLS Employment Situation (encuesta de hogares)
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: 16}]
+    proxies_publicacion: [UNRATE, PAYEMS]
+    vintages: [UNRATE]
+    supuesto: false
+    fuente: ALFRED UNRATE desde 1960-03 y PAYEMS (mismo comunicado) desde 1955-05 (medido).
+  AWHMAN:
+    publicacion: BLS Employment Situation (horas semanales medias, manufactura)
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: 16}]
+    proxies_publicacion: [PAYEMS]
+    supuesto: false
+    fuente: Mismo comunicado que PAYEMS; fecha de publicación tomada de las vintages de PAYEMS. Sin vintages propias.
+  ICSA:
+    publicacion: DOL Unemployment Insurance Weekly Claims (jueves, semana que acaba el sábado anterior)
+    frecuencia: W
+    retardo_dias: [{desde: 1900-01-01, dias: 6}]
+    proxies_publicacion: [ICSA]
+    vintages: [ICSA]
+    supuesto: false
+    fuente: ALFRED ICSA desde 2009-05 (medido; mediana 5, p90 5). Antes de 2009, supuesto 6 días (mismo calendario de jueves).
+  # ---------------------------------------------------------------- actividad
+  INDPRO:
+    publicacion: Fed G.17 Industrial Production and Capacity Utilization (mediados del mes siguiente)
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: 33}]
+    proxies_publicacion: [INDPRO]
+    vintages: [INDPRO]
+    supuesto: false
+    fuente: ALFRED INDPRO desde 1927-01 (medido; <1980 mediana 18, p90 28, máx 33; 1980+ mediana 15-16, p90 17).
+  TCU:
+    publicacion: Fed G.17 (utilización de la capacidad)
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: 33}]
+    proxies_publicacion: [TCU, INDPRO]
+    vintages: [TCU]
+    supuesto: false
+    fuente: ALFRED TCU desde 1996-11 e INDPRO (mismo comunicado) desde 1927 (medido).
+  CFNAI:
+    publicacion: Chicago Fed National Activity Index (hacia el día 20-25 del mes siguiente)
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: 28}]
+    proxies_publicacion: [CFNAI]
+    vintages: [CFNAI]
+    supuesto: false
+    fuente: ALFRED CFNAI desde 2011-05 (medido; mediana 23, p90 26). Se publica desde 2001; antes es historia reconstruida.
+  GDPC1:
+    publicacion: BEA PIB real, estimación avance (~30 días tras el trimestre)
+    frecuencia: Q
+    retardo_dias: [{desde: 1900-01-01, dias: 60}]
+    proxies_publicacion: [GDPC1, rtdsm_routput]
+    vintages: [GDPC1, rtdsm_routput]
+    supuesto: false
+    fuente: >
+      ALFRED GDPC1 desde 1991-12 (medido; mediana 29, p90 31) y RTDSM (Fed de Filadelfia) desde 1965-11, cuyas
+      vintages están fechadas a mitad de mes (cota superior: ~46 días). Antes de 1965, supuesto 60 días.
+  rtdsm_routput:
+    publicacion: RTDSM, Fed de Filadelfia (vintage de mitad de mes del PIB real)
+    frecuencia: Q
+    retardo_dias: [{desde: 1900-01-01, dias: 60}]
+    proxies_publicacion: [rtdsm_routput]
+    vintages: [rtdsm_routput]
+    supuesto: false
+    fuente: Solo como fuente de vintages de GDPC1 antes de 1991.
+  W875RX1:
+    publicacion: BEA Personal Income and Outlays (renta personal real sin transferencias; finales del mes siguiente)
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: 35}]
+    proxies_publicacion: [PCEPI]
+    supuesto: false
+    fuente: >
+      Mismo comunicado que el PCE: fechas de PCEPI (ALFRED desde 2000-08). Medición propia con las vintages de
+      labels/raw/alfred/W875RX1 (2010+): mediana 29, p90 32, máx 83 (cierre de 2013). Antes de 2000, 35 días.
+  CMRMTSPL:
+    publicacion: BEA, ventas reales de manufactura y comercio (detalle NIPA, ~2 meses después)
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: 70}]
+    supuesto: false
+    fuente: >
+      Sin vintages en el warehouse. Medido con labels/raw/alfred/CMRMTSPL (2013+): mediana 60, p90 66, máx 114.
+      Se usa 70 días para toda la historia (supuesto: el calendario anterior a 2013 no está medido).
+  PERMIT:
+    publicacion: Census New Residential Construction (hacia el 12.º día hábil del mes siguiente)
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: 20}]
+    supuesto: true
+    fuente: Calendario del Census (~día 17-19). Sin vintages en el warehouse. Supuesto conservador de 20 días.
+  GACDFSA066MSFRBPHI:
+    publicacion: Fed de Filadelfia, Manufacturing Business Outlook Survey (tercer jueves del MISMO mes)
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: -7}]
+    supuesto: true
+    fuente: >
+      Se publica el tercer jueves del mes de referencia (≤ día 21): fin de mes − 7 días es siempre posterior.
+      Supuesto: el calendario histórico (1968-1990) no está documentado en el warehouse. Revisiones anuales de los
+      factores estacionales (sin vintages): modo latest_truncated.
+  NOCDFSA066MSFRBPHI:
+    publicacion: Fed de Filadelfia, Manufacturing Business Outlook Survey (nuevos pedidos)
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: -7}]
+    supuesto: true
+    fuente: Igual que GACDFSA066MSFRBPHI.
+  UMCSENT:
+    publicacion: Universidad de Michigan, Surveys of Consumers (final a finales del mes t); FRED lo publica con ~1 mes de retraso
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: 35}]
+    supuesto: true
+    fuente: >
+      Supuesto de 35 días: la fuente del warehouse es FRED, que publica Michigan con retraso de licencia
+      (a 2026-10-15 el último dato es 2026-08). Se usa el retraso de NUESTRA fuente para que el backtest y la
+      producción vean lo mismo. Trimestral hasta 1977.
+  MICH:
+    publicacion: Universidad de Michigan, expectativa de inflación a 1 año (mediana); FRED con ~1 mes de retraso
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: 35}]
+    supuesto: true
+    fuente: Igual que UMCSENT.
+  # ---------------------------------------------------------------- precios
+  CPIAUCSL:
+    publicacion: BLS Consumer Price Index (mediados del mes siguiente)
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: 32}]
+    proxies_publicacion: [CPIAUCSL]
+    vintages: [CPIAUCSL]
+    supuesto: false
+    fuente: >
+      ALFRED CPIAUCSL desde 1972-07 (medido; <1980 mediana 21, p90 26, máx 31; 1980-99 mediana 19, máx 32;
+      2000-12 mediana 16; 2013+ mediana 13). Antes de 1972, 32 días.
+  CPILFESL:
+    publicacion: BLS CPI (subyacente), mismo comunicado que CPIAUCSL
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: 32}]
+    proxies_publicacion: [CPILFESL, CPIAUCSL]
+    vintages: [CPILFESL]
+    supuesto: false
+    fuente: ALFRED CPILFESL desde 1996-12; fechas de CPIAUCSL (mismo comunicado) desde 1972-07 (medido).
+  PCEPI:
+    publicacion: BEA Personal Income and Outlays (finales del mes siguiente)
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: 35}]
+    proxies_publicacion: [PCEPI]
+    vintages: [PCEPI]
+    supuesto: false
+    fuente: ALFRED PCEPI desde 2000-08 (medido; mediana 29-30, p90 32, máx 35). Antes de 2000, 35 días.
+  PCEPILFE:
+    publicacion: BEA Personal Income and Outlays (PCE subyacente)
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: 35}]
+    proxies_publicacion: [PCEPILFE, PCEPI]
+    vintages: [PCEPILFE]
+    supuesto: false
+    fuente: ALFRED PCEPILFE desde 2000-08 (medido). Antes de 2000, 35 días; ver la advertencia de historia reconstruida.
+  PPIACO:
+    publicacion: BLS Producer Price Index (mediados del mes siguiente)
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: 21}]
+    proxies_publicacion: [PPIACO]
+    vintages: [PPIACO]
+    supuesto: false
+    fuente: ALFRED PPIACO desde 1996-12 (medido; mediana 12-15, p90 14-19). Antes de 1996, supuesto 21 días.
+  WPU0561:
+    publicacion: BLS PPI, petróleo crudo (mismo comunicado que PPIACO)
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: 21}]
+    proxies_publicacion: [PPIACO]
+    supuesto: false
+    fuente: Fechas de PPIACO (mismo comunicado) desde 1996-12; antes, supuesto 21 días.
+  MCOILWTICO:
+    publicacion: Precio WTI, media mensual de datos diarios de mercado (EIA vía FRED)
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: 1}]
+    supuesto: true
+    fuente: Media de precios de mercado del mes; conocida al cierre del mes. No se revisa.
+  M2SL:
+    publicacion: Fed H.6 Money Stock (semanal hasta 2021; mensual desde 2021)
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: 21}]
+    proxies_publicacion: [M2SL]
+    vintages: [M2SL]
+    supuesto: false
+    fuente: >
+      ALFRED M2SL desde 1980-02 (medido; 1980-2012 mediana 13, p90 16; 2013+ mediana 15, p90 27: el H.6 pasó a
+      mensual en 2021). Antes de 1980, supuesto 21 días; el M2 actual se definió en 1980 (historia reconstruida).
+  # ---------------------------------------------------------------- expectativas con fecha
+  spf_mean_cpi_6:
+    publicacion: Survey of Professional Forecasters (Fed de Filadelfia desde 1990-T2; antes ASA-NBER)
+    frecuencia: Q
+    ancla: inicio_periodo
+    retardo_dias: [{desde: 1900-01-01, dias: 60}, {desde: 1990-07-01, dias: 50}]
+    supuesto: true
+    fuente: >
+      Fecha = inicio del trimestre de la encuesta; resultados a mediados del 2.º mes (~45 días, catálogo).
+      Supuesto conservador: 50 días desde 1990-T3 y 60 antes (calendario ASA-NBER no documentado).
+  spf_mean_rgdp_2:
+    publicacion: SPF, PIB real del trimestre en curso (nivel)
+    frecuencia: Q
+    ancla: inicio_periodo
+    retardo_dias: [{desde: 1900-01-01, dias: 60}, {desde: 1990-07-01, dias: 50}]
+    supuesto: true
+    fuente: Igual que spf_mean_cpi_6.
+  spf_mean_rgdp_6:
+    publicacion: SPF, PIB real a 4 trimestres vista (nivel)
+    frecuencia: Q
+    ancla: inicio_periodo
+    retardo_dias: [{desde: 1900-01-01, dias: 60}, {desde: 1990-07-01, dias: 50}]
+    supuesto: true
+    fuente: Igual que spf_mean_cpi_6.
+  # ---------------------------------------------------------------- tipos y mercados (no se revisan)
+  T10Y3M: {publicacion: "FRED, 10 años − 3 meses (H.15, diario)", frecuencia: D, retardo_dias: [{desde: 1900-01-01, dias: 1}], supuesto: true, fuente: "H.15 publica el dato del día d el día hábil siguiente; con decisión en día hábil, 1 día basta."}
+  DGS10: {publicacion: "H.15, Treasury 10 años (diario)", frecuencia: D, retardo_dias: [{desde: 1900-01-01, dias: 1}], supuesto: true, fuente: "Igual que T10Y3M."}
+  DTB3: {publicacion: "H.15, letras a 3 meses, mercado secundario (diario)", frecuencia: D, retardo_dias: [{desde: 1900-01-01, dias: 1}], supuesto: true, fuente: "Igual que T10Y3M."}
+  GS10: {publicacion: "H.15, Treasury 10 años, media mensual", frecuencia: M, retardo_dias: [{desde: 1900-01-01, dias: 1}], supuesto: true, fuente: "Media de datos diarios del mes, conocida al cierre."}
+  TB3MS: {publicacion: "H.15, letras a 3 meses, media mensual", frecuencia: M, retardo_dias: [{desde: 1900-01-01, dias: 1}], supuesto: true, fuente: "Igual que GS10."}
+  DFF: {publicacion: "H.15, fed funds efectivo (diario)", frecuencia: D, retardo_dias: [{desde: 1900-01-01, dias: 1}], supuesto: true, fuente: "Igual que T10Y3M."}
+  BAA10Y: {publicacion: "Moody's Baa − Treasury 10 años (diario)", frecuencia: D, retardo_dias: [{desde: 1900-01-01, dias: 1}], supuesto: true, fuente: "Igual que T10Y3M."}
+  BAA: {publicacion: "Moody's Baa, media mensual", frecuencia: M, retardo_dias: [{desde: 1900-01-01, dias: 1}], supuesto: true, fuente: "Igual que GS10."}
+  VIXCLS: {publicacion: "CBOE VIX, cierre diario", frecuencia: D, retardo_dias: [{desde: 1900-01-01, dias: 1}], supuesto: true, fuente: "Cierre del día; 1 día por prudencia."}
+  T5YIE: {publicacion: "Breakeven 5 años (diario)", frecuencia: D, retardo_dias: [{desde: 1900-01-01, dias: 1}], supuesto: true, fuente: "Igual que T10Y3M."}
+  DFII10: {publicacion: "TIPS 10 años, rendimiento real (diario)", frecuencia: D, retardo_dias: [{desde: 1900-01-01, dias: 1}], supuesto: true, fuente: "Igual que T10Y3M."}
+  DEXUSEU: {publicacion: "H.10, USD por euro (diario)", frecuencia: D, retardo_dias: [{desde: 1900-01-01, dias: 1}], supuesto: true, fuente: "H.10 diario; 1 día (la publicación semanal histórica no importa: es precio de mercado conocido)."}
+  DEXJPUS: {publicacion: "H.10, yenes por USD (diario)", frecuencia: D, retardo_dias: [{desde: 1900-01-01, dias: 1}], supuesto: true, fuente: "Igual que DEXUSEU."}
+  shiller_sp_price:
+    publicacion: S&P Composite, media mensual de cierres diarios (Shiller)
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: 1}]
+    supuesto: true
+    fuente: Precio de mercado (media del mes), conocido al cierre del mes. El fichero de Shiller llega más tarde, pero el dato es público en tiempo real.
+  wb_copper:
+    publicacion: Banco Mundial, Pink Sheet (medias mensuales; 2.º-3.er día hábil del mes siguiente)
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: 7}]
+    supuesto: true
+    fuente: Precio de mercado medio del mes; supuesto 7 días (a 2026-10-15 ya está 2026-09).
+  wb_gold:
+    publicacion: Banco Mundial, Pink Sheet (oro)
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: 7}]
+    supuesto: true
+    fuente: Igual que wb_copper.
+  bis_eer_us_neer_narrow_m:
+    publicacion: BIS, tipo de cambio efectivo nominal, cesta estrecha (mensual)
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: 30}]
+    supuesto: true
+    fuente: Actualización mensual del BIS (a 2026-10-15 el último es 2026-08). Supuesto 30 días.
+  # ---------------------------------------------------------------- crédito y condiciones financieras
+  fed_ebp_gz_spread:
+    publicacion: Fed (Favara et al.), CSV del GZ spread y EBP (mensual)
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: 35}]
+    supuesto: true
+    fuente: >
+      Supuesto 35 días. Se publica desde 2012 (Gilchrist-Zakrajšek, AER); la historia anterior se construyó entonces
+      con datos de bonos de mercado.
+  fed_ebp_ebp:
+    publicacion: Fed (Favara et al.), excess bond premium (mensual)
+    frecuencia: M
+    retardo_dias: [{desde: 1900-01-01, dias: 35}]
+    supuesto: true
+    fuente: Igual que fed_ebp_gz_spread. Estimado con parámetros de toda la muestra (catálogo).
+  NFCI:
+    publicacion: Chicago Fed NFCI (miércoles, semana que acaba el viernes anterior)
+    frecuencia: W
+    retardo_dias: [{desde: 1900-01-01, dias: 5}]
+    supuesto: true
+    fuente: Calendario de la Chicago Fed (viernes → miércoles). Sin vintages en el warehouse (ALFRED las tiene desde 2011).
+  # ---------------------------------------------------------------- liquidez
+  WALCL: {publicacion: "Fed H.4.1, activos totales (miércoles; jueves 16:30)", frecuencia: W, retardo_dias: [{desde: 1900-01-01, dias: 1}], supuesto: true, fuente: "Calendario del H.4.1."}
+  WTREGEN: {publicacion: "Fed H.4.1, cuenta del Tesoro (TGA), miércoles", frecuencia: W, retardo_dias: [{desde: 1900-01-01, dias: 1}], supuesto: true, fuente: "Calendario del H.4.1."}
+  RRPONTSYD: {publicacion: "NY Fed, repos inversos ON (diario, 13:15)", frecuencia: D, retardo_dias: [{desde: 1900-01-01, dias: 1}], supuesto: true, fuente: "Resultado de la operación del día."}
+  usliq_tga_close_d: {publicacion: "Daily Treasury Statement, saldo de cierre de la TGA", frecuencia: D, retardo_dias: [{desde: 1900-01-01, dias: 1}], supuesto: true, fuente: "El DTS del día d sale el día hábil siguiente a las 16:00; con decisión en día hábil, 1 día basta."}
+  ecb_eurosystem_total_assets_w: {publicacion: "BCE, estado financiero semanal consolidado del Eurosistema (viernes; martes siguiente)", frecuencia: W, retardo_dias: [{desde: 1900-01-01, dias: 5}], supuesto: true, fuente: "Calendario del BCE."}
+  cbbs_boj_total_assets_m: {publicacion: "BoJ, Accounts (fin de mes; primeros días hábiles del mes siguiente)", frecuencia: M, retardo_dias: [{desde: 1900-01-01, dias: 7}], supuesto: true, fuente: "Supuesto 7 días."}
