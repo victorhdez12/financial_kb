@@ -1,8 +1,8 @@
 {
  "etiqueta": {
-  "version": "1.0",
+  "version": "1.1",
   "estado": "CONGELADA",
-  "sha256_content": "38250f0adc88bd55f604839fcc2d9c715b207456654c290c5a6214201ee512f7",
+  "sha256_content": "8425b403f14626a1728a0f66446565dd205720993a30e5fa4fe337385329c30b",
   "primer_mes": "1950-01-01",
   "ultimo_mes": "2026-04-01",
   "meses": 916,
@@ -50,8 +50,8 @@
   "meses_nber_puntuables": 103,
   "pct_p_g_alto_bajo_0_5": 1.0,
   "reparto_cuadrante_en_recesion": {
-   "stagflation": 57,
-   "low_growth_disinfl": 46
+   "stagflation": 60,
+   "low_growth_disinfl": 43
   }
  },
  "mapa": {
@@ -94,8 +94,8 @@
   "pct": {
    "expansion": 0.300498753117207,
    "late_cycle": 0.23067331670822944,
-   "stagflation": 0.2281795511221945,
-   "low_growth_disinfl": 0.24064837905236908
+   "stagflation": 0.23566084788029926,
+   "low_growth_disinfl": 0.23316708229426433
   },
   "tramos": 86,
   "duracion_media": 9.325581395348838,
@@ -115,14 +115,14 @@
    },
    "stagflation": {
     "tramos": 23,
-    "media": 7.956521739130435,
+    "media": 8.217391304347826,
     "mediana": 4.0,
     "max": 38
    },
    "low_growth_disinfl": {
     "tramos": 22,
-    "media": 8.772727272727273,
-    "mediana": 5.0,
+    "media": 8.5,
+    "mediana": 4.5,
     "max": 25
    }
   },
@@ -352,7 +352,7 @@
    0.22218439668782516,
    0.19822120270151866
   ],
-  "v0.2 / v1.0": [
+  "v0.2 a v1.1 (misma G)": [
    0.18971507765042855,
    0.19543698116923047,
    0.19813129163807863,
@@ -375,22 +375,154 @@
    "meses": 4
   }
  },
+ "empalme": {
+  "ajuste_pp_v1_1": 0.20435090125244157,
+  "ventana": [
+   "1959-04",
+   "1961-03"
+  ],
+  "meses_cambian_cuadrante": [
+   "1957-05",
+   "1957-06",
+   "1957-07",
+   "1957-09",
+   "1957-11",
+   "1957-12"
+  ],
+  "cambios": {
+   "low_growth_disinfl->stagflation": 6
+  },
+  "max_abs_dI": 0.6043509012524416
+ },
+ "liston": {
+  "PIT (t−5, datos de t)": {
+   "n": 797,
+   "acierto": 0.636,
+   "logloss_blando": 1.235
+  },
+  "final desplazada 5": {
+   "n": 797,
+   "acierto": 0.68,
+   "logloss_blando": 1.479
+  },
+  "final desplazada 1 (con fuga)": {
+   "n": 797,
+   "acierto": 0.893,
+   "logloss_blando": 0.529
+  },
+  "PIT_entrenamiento_hasta_2004": {
+   "n": 595,
+   "acierto": 0.629,
+   "logloss_blando": 1.227
+  }
+ },
+ "rendimientos_1955_2004": {
+  "fuente": "docs/reviews/2026-10-15_estratega_macro_etiqueta.md",
+  "cuadrante": {
+   "expansion": {
+    "Bolsa EE. UU.": 15.4,
+    "Bono 10 años": -0.0,
+    "Materias primas": 2.2,
+    "Oro": -3.1,
+    "Cartera 60/40": 9.3
+   },
+   "late_cycle": {
+    "Bolsa EE. UU.": 6.3,
+    "Bono 10 años": 1.3,
+    "Materias primas": 10.4,
+    "Oro": 1.7,
+    "Cartera 60/40": 4.3
+   },
+   "stagflation": {
+    "Bolsa EE. UU.": 4.1,
+    "Bono 10 años": 3.0,
+    "Materias primas": 3.7,
+    "Oro": 7.0,
+    "Cartera 60/40": 3.6
+   },
+   "low_growth_disinfl": {
+    "Bolsa EE. UU.": 4.8,
+    "Bono 10 años": 8.3,
+    "Materias primas": 9.4,
+    "Oro": 2.8,
+    "Cartera 60/40": 6.2
+   }
+  },
+  "meses_por_cuadrante": {
+   "expansion": 149.0,
+   "late_cycle": 167.0,
+   "stagflation": 186.0,
+   "low_growth_disinfl": 98.0
+  },
+  "por_epoca": {
+   "expansion": {
+    "1955-79": {
+     "RV": 16.4,
+     "bono": 0.1
+    },
+    "1980-2004": {
+     "RV": 14.7,
+     "bono": -0.1
+    }
+   },
+   "late_cycle": {
+    "1955-79": {
+     "RV": 1.0,
+     "bono": -0.9
+    },
+    "1980-2004": {
+     "RV": 12.9,
+     "bono": 4.0
+    }
+   },
+   "stagflation": {
+    "1955-79": {
+     "RV": -2.1,
+     "bono": -4.0
+    },
+    "1980-2004": {
+     "RV": 10.5,
+     "bono": 10.2
+    }
+   },
+   "low_growth_disinfl": {
+    "1955-79": {
+     "RV": 11.9,
+     "bono": 3.5
+    },
+    "1980-2004": {
+     "RV": -1.0,
+     "bono": 12.2
+    }
+   }
+  },
+  "recesion": {
+   "Meses de recesión NBER": {
+    "RV": 1.2,
+    "bono": 9.9
+   },
+   "Resto de meses": {
+    "RV": 8.7,
+    "bono": 1.5
+   }
+  }
+ },
  "reglas_vs_etiqueta": {
   "meses": 802,
-  "concordancia": 0.513715710723192,
-  "concordancia_sin_frontera": 0.5230352303523035,
+  "concordancia": 0.516209476309227,
+  "concordancia_sin_frontera": 0.5257452574525745,
   "tabla": {
    "Deflación/recesión": {
     "expansion": 99,
     "late_cycle": 43,
-    "low_growth_disinfl": 124,
-    "stagflation": 47
+    "low_growth_disinfl": 122,
+    "stagflation": 49
    },
    "Estanflación": {
     "expansion": 12,
     "late_cycle": 62,
-    "low_growth_disinfl": 32,
-    "stagflation": 112
+    "low_growth_disinfl": 28,
+    "stagflation": 116
    },
    "Goldilocks": {
     "expansion": 116,

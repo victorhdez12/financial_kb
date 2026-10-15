@@ -23,6 +23,7 @@ import pandas as pd  # noqa: E402
 from matplotlib.patches import Patch  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[3]
+VERSION = "1.1"  # etiqueta congelada que usa el informe (tag label-v1.1)
 LABELS = ROOT / "data" / "archive" / "labels"
 WAREHOUSE = ROOT / "data" / "warehouse.duckdb"
 OUT = ROOT / "obsidian" / "Reports" / "Fase 3" / "img"
@@ -95,11 +96,12 @@ def runs(labels: pd.Series):
 
 # ---------------------------------------------------------------- datos
 def load():
-    lab = pd.read_parquet(LABELS / "regime_us_v1.0.parquet")
-    meta = json.loads((LABELS / "regime_us_v1.0.meta.json").read_text())
+    lab = pd.read_parquet(LABELS / f"regime_us_v{VERSION}.parquet")
+    meta = json.loads((LABELS / f"regime_us_v{VERSION}.meta.json").read_text())
     rev = json.loads((LABELS / "revision_study.json").read_text())
     v01 = pd.read_parquet(LABELS / "regime_us_v0.1.parquet")
     v02 = pd.read_parquet(LABELS / "regime_us_v0.2.parquet")
+    v10 = pd.read_parquet(LABELS / "regime_us_v1.0.parquet")
     con = duckdb.connect(str(WAREHOUSE), read_only=True)
     cat = con.sql("select c.series_id, c.source, c.category, c.country_iso3, c.pit_role, "
                   "s.first_date, s.last_date, s.n_obs from catalog c "
@@ -107,7 +109,7 @@ def load():
     rules = con.sql("select date, quadrant, vintage_mode from regime_monthly order by date").df()
     cfma3 = con.sql("select date, value from obs_latest where series_id = 'CFNAIMA3' order by date").df()
     con.close()
-    return lab, meta, rev, v01, v02, cat, rules, cfma3
+    return lab, meta, rev, v01, v02, v10, cat, rules, cfma3
 
 
 BLOCKS = {
@@ -202,7 +204,7 @@ def fig_historia(lab, cifras):
                 bbox=dict(boxstyle="round,pad=0.2", fc="white", ec="none", alpha=0.85))
     ann = [("1974-06-01", "Años 70:\nestanflación"), ("1981-01-01", "Volcker\n1979-82"),
            ("1999-01-01", "Expansión\n1995-99"), ("2009-01-01", "2008-09:\ncrisis financiera"),
-           ("2020-04-01", "COVID\n2020"), ("2021-08-01", "2021-22:\nsobrecalent.")]
+           ("2020-04-01", "COVID\n2020"), ("2021-08-01", "2021-22: crec.\ncon infl. alta")]
     for i, (dt, t) in enumerate(ann):
         x = pd.Timestamp(dt)
         y = 1.12 if i % 2 == 0 else 1.30
@@ -218,7 +220,7 @@ def fig_historia(lab, cifras):
     ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.07), ncol=4, fontsize=8.5)
     axr.set_title(f"La etiqueta marca crecimiento bajo (P(G alto) < 0,5) en el {share_low_g:.0%} de los "
                   f"{len(recm)} meses de recesión NBER".replace("%", " %"), pad=95)
-    footer(fig, "data/archive/labels/regime_us_v1.0.parquet (etiqueta v1.0, 1950-01 → 2026-04); recesiones = columna "
+    footer(fig, "data/archive/labels/regime_us_v1.1.parquet (etiqueta v1.1, 1950-01 → 2026-04); recesiones = columna "
                 "usrec (NBER). Meses puntuables: weight = 1 y no provisionales (1955-01 → 2021-10). Rayado: no puntúan.")
     save(fig, "02_historia_cuadrantes.png")
 
@@ -266,7 +268,7 @@ def fig_mapa(lab, cifras):
     ax.set_ylabel("I: inflación subyacente PCE, ventana centrada de 6 meses (% anualizado)")
     ax.legend(loc="upper left", bbox_to_anchor=(1.01, 1.0), fontsize=8)
     ax.set_title("Cada mes es un punto: el cuadrante solo depende de si G > 0 y de si I > 2,5 %")
-    footer(fig, f"data/archive/labels/regime_us_v1.0.parquet, meses con weight = 1 (1955-01 → 2026-04). "
+    footer(fig, f"data/archive/labels/regime_us_v1.1.parquet, meses con weight = 1 (1955-01 → 2026-04). "
                 f"{len(out)} meses extremos (1957-58, 1974-75, 1980, 2008-09, 2019-20) se dibujan en el borde. × = media del episodio.")
     save(fig, "03_mapa_G_I.png")
 
@@ -309,8 +311,8 @@ def fig_reparto(lab, cifras):
     a2.set_xlabel("duración de cada tramo (meses seguidos en el mismo cuadrante)")
     a2.set_title(f"Un régimen dura de media {rd.n.mean():.1f} meses; la mitad, ≤ {rd.n.median():.0f}".replace(".", ","),
                  fontsize=11)
-    footer(fig, f"data/archive/labels/regime_us_v1.0.parquet, {len(sc)} meses puntuables (1955-01 → 2021-10), "
-                f"{len(rd)} tramos. Raya negra = mediana. Cifras coherentes con docs/models/label_v1.0_checks.md §4.")
+    footer(fig, f"data/archive/labels/regime_us_v1.1.parquet, {len(sc)} meses puntuables (1955-01 → 2021-10), "
+                f"{len(rd)} tramos. Raya negra = mediana. Cifras coherentes con docs/models/label_v1.1_checks.md §4.")
     save(fig, "04_reparto_y_duracion.png")
 
 
@@ -373,7 +375,7 @@ def fig_ultimos(lab, rules, cifras):
             fontsize=8.5, color=MUTED)
     ax.set_ylim(0, 1.08)
     ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1.0))
-    ax.set_ylabel("probabilidad (etiqueta v1.0)")
+    ax.set_ylabel("probabilidad (etiqueta v1.1)")
     ax.grid(False)
     ax.legend(loc="upper center", bbox_to_anchor=(0.5, 1.13), ncol=4, fontsize=8.5)
     rr = r.set_index("m").reindex(months)
@@ -397,10 +399,11 @@ def fig_ultimos(lab, rules, cifras):
                            "reglas_hasta": str(r.m.max()),
                            "reglas_ultimos": {str(m): rr.loc[m, "quadrant"] for m in months[-6:]}}
     n_ok = cifras["ultimos24"]["coinciden"]
-    ax.set_title(f"Último mes con etiqueta ({lr.date:%Y-%m}): estanflación con {lr.p_stagflation:.0%} "
-                 f"(provisional); el clasificador de reglas coincide en {n_ok} de 24 meses".replace("%", " %"),
+    ax.set_title(f"Último mes con etiqueta ({lr.date:%Y-%m}): inflación persistente con crecimiento en torno a "
+                 f"tendencia (estanflación {lr.p_stagflation:.0%}, provisional)\n"
+                 f"El clasificador de reglas coincide en {n_ok} de 24 meses".replace("%", " %"),
                  pad=30, fontsize=11.5)
-    footer(fig, "etiqueta: data/archive/labels/regime_us_v1.0.parquet (todos provisionales; F = mes frontera, prob. máx. "
+    footer(fig, "etiqueta: data/archive/labels/regime_us_v1.1.parquet (todos provisionales; F = mes frontera, prob. máx. "
                 "< 0,55). Reglas: tabla regime_monthly del warehouse (src/regime), colores por correspondencia aproximada.")
     save(fig, "06_ultimos_24_meses.png")
 
@@ -412,7 +415,7 @@ def fig_desfase(v01, v02, cfma3, cifras):
     end = pd.Period("2021-10", "M")
     res = {}
     ks = range(-6, 7)
-    for name, d in [("v0.1", v01), ("v0.2 / v1.0", v02)]:
+    for name, d in [("v0.1", v01), ("v0.2 a v1.1 (misma G)", v02)]:
         g = d.set_index(d.date.dt.to_period("M"))["G"]
         g = g[(g.index >= pd.Period("1967-01", "M")) & (g.index <= end)]
         res[name] = [float(g.corr(c.shift(-k).reindex(g.index))) for k in ks]
@@ -432,7 +435,7 @@ def fig_desfase(v01, v02, cfma3, cifras):
     w = (pd.Timestamp("2007-01-01"), pd.Timestamp("2010-12-01"))
     spans = rec_spans(v02)
     shade_rec(a2, [(a, b) for a, b in spans if b > w[0] and a < w[1]])
-    for name, d, col, ls in [("v0.1", v01, "#999999", "--"), ("v0.2 / v1.0", v02, INK, "-")]:
+    for name, d, col, ls in [("v0.1", v01, "#999999", "--"), ("v0.2 a v1.1 (misma G)", v02, INK, "-")]:
         dd = d[(d.date >= w[0]) & (d.date <= w[1])]
         a2.plot(dd.date, dd.G, color=col, lw=2, ls=ls, label=name)
     a2.axhline(0, color=MUTED, lw=0.8)
@@ -450,6 +453,201 @@ def fig_desfase(v01, v02, cfma3, cifras):
     footer(fig, "data/archive/labels/regime_us_v0.1.parquet y regime_us_v0.2.parquet; CFNAIMA3 de data/warehouse.duckdb. "
                 "Muestra 1967-01 → 2021-10. Ver docs/models/label_v0.1_checks.md §8 y label_v0.2_checks.md.")
     save(fig, "07_desfase_v01_v02.png")
+
+
+# ---------------------------------------------------------------- utilidades para leer tablas de informes .md
+def md_table(path: Path, header_has: str):
+    """Filas (listas de celdas) de la primera tabla markdown cuya cabecera contiene ``header_has``."""
+    lines = path.read_text().splitlines()
+    for i, ln in enumerate(lines):
+        if ln.startswith("|") and header_has in ln:
+            rows = []
+            for r in lines[i + 2:]:
+                if not r.startswith("|"):
+                    break
+                rows.append([c.strip() for c in r.strip().strip("|").split("|")])
+            head = [c.strip() for c in ln.strip().strip("|").split("|")]
+            return head, rows
+    raise ValueError(f"tabla con '{header_has}' no encontrada en {path}")
+
+
+def num(cell: str) -> float:
+    """Primer número de una celda con formato español ('**+15,4** (12)' → 15.4; '−2,1' → -2.1)."""
+    import re
+    m = re.search(r"[+\-−]?\d+(?:,\d+)?", cell.replace("**", ""))
+    return float(m.group(0).replace("−", "-").replace(",", "."))
+
+
+# ---------------------------------------------------------------- 8 empalme 1957-59 (v1.0 → v1.1)
+def fig_empalme(lab, lab10, meta, cifras):
+    w = (pd.Timestamp("1956-01-01"), pd.Timestamp("1960-12-01"))
+    a = lab10[(lab10.date >= w[0]) & (lab10.date <= w[1])].set_index("date")
+    b = lab[(lab.date >= w[0]) & (lab.date <= w[1])].set_index("date")
+    m = lab10.merge(lab, on="date", suffixes=("_0", "_1"))
+    m = m[m.weight_1 == 1]
+    chg = m[m.label_hard_0 != m.label_hard_1]
+    sp = meta["splice_cpi_core"]
+    cifras["empalme"] = {"ajuste_pp_v1_1": sp["adj_pp"], "ventana": [sp["from"], sp["to"]],
+                         "meses_cambian_cuadrante": [str(d.date())[:7] for d in chg.date],
+                         "cambios": {f"{a}->{b}": int(n) for (a, b), n in
+                                     chg.groupby(["label_hard_0", "label_hard_1"]).size().items()},
+                         "max_abs_dI": float((m.I_1 - m.I_0).abs().max())}
+    fig, ax = plt.subplots(figsize=(11, 4.4))
+    ax.axvspan(pd.Timestamp("1957-04-01"), pd.Timestamp("1959-04-01"), facecolor="none", hatch="..",
+               edgecolor="#d9c9a0", lw=0, zorder=0)
+    shade_rec(ax, [(x, y) for x, y in rec_spans(lab) if y > w[0] and x < w[1]])
+    ax.text(pd.Timestamp("1958-04-01"), 4.55, "tramo empalmado\n(IPC subyacente + ajuste)", ha="center", va="top",
+            fontsize=8, color=MUTED)
+    ax.plot(a.index, a.I, color="#999999", lw=1.8, ls="--", label="v1.0 (IPC subyacente − 0,4 pp)")
+    ax.plot(b.index, b.I, color=INK, lw=2, label=f"v1.1 (IPC subyacente + {sp['adj_pp']:.2f} pp)".replace(".", ","))
+    ax.axhline(2.5, color="#d64545", lw=1, ls=":")
+    ax.text(w[1], 2.55, "umbral κ = 2,5 %", ha="right", va="bottom", fontsize=8, color="#d64545")
+    for d in chg.date:
+        ax.scatter([d], [b.loc[d, "I"]], s=60, facecolor="none", edgecolor=QCOL["stagflation"], lw=1.6, zorder=5)
+    ax.scatter([], [], s=60, facecolor="none", edgecolor=QCOL["stagflation"], lw=1.6,
+               label="mes que pasa de crec. bajo a estanflación")
+    ax.set_ylabel("I: inflación subyacente, 6 m centrada (% anualizado)")
+    ax.set_ylim(0.5, 4.7)
+    ax.xaxis.set_major_locator(mdates.YearLocator())
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+    ax.legend(loc="lower left", fontsize=8.5)
+    ax.set_title(f"v1.1: el empalme de 1957-59 sube I ~0,6 pp y {len(chg)} meses de 1957 pasan de crec. bajo a "
+                 "estanflación; la serie ya no salta en 1959-04")
+    footer(fig, "data/archive/labels/regime_us_v1.0.parquet y regime_us_v1.1.parquet (+ meta.json → splice_cpi_core); "
+                "gris = recesiones NBER (1957-58 y 1960-61); punteado = tramo empalmado 1957-04 → 1959-03. Ver docs/models/label_v1.1_checks.md §6 y label_spec.md §4.")
+    save(fig, "08_empalme_v10_v11.png")
+
+
+# ---------------------------------------------------------------- 9 el listón: persistencia point-in-time
+def fig_persistencia(cifras):
+    src = ROOT / "docs" / "models" / "label_v1.1_checks.md"
+    head, rows = md_table(src, "log-loss (blando)")
+    tab = [dict(zip(head, r)) for r in rows]
+    sel = {"PIT (t−5, datos de t)": ("Persistencia point-in-time\n(etiqueta de t−5 con lo\npublicado en t)", "ok"),
+           "final desplazada 5": ("Etiqueta definitiva\nde t−5", "fuga"),
+           "final desplazada 1 (con fuga)": ("\"Mes anterior\"\n(etiqueta definitiva\nde t−1)", "fuga")}
+    pts = [r for r in tab if r["muestra"] == "puntuable" and r["baseline"] in sel]
+    ent = [r for r in tab if r["muestra"] == "entrenamiento" and r["baseline"] == "PIT (t−5, datos de t)"][0]
+    acc = [float(r["acierto"].rstrip("%")) / 100 for r in pts]
+    ll = [float(r["log-loss (blando)"]) for r in pts]
+    cifras["liston"] = {r["baseline"]: {"n": int(r["n"]), "acierto": a, "logloss_blando": l}
+                        for r, a, l in zip(pts, acc, ll)}
+    cifras["liston"]["PIT_entrenamiento_hasta_2004"] = {"n": int(ent["n"]),
+                                                        "acierto": float(ent["acierto"].rstrip("%")) / 100,
+                                                        "logloss_blando": float(ent["log-loss (blando)"])}
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(12.5, 4.9), gridspec_kw={"width_ratios": [1.25, 1], "wspace": 0.6})
+    # izquierda: qué datos hay el día de la decisión
+    months = list(range(-6, 5))
+    a1.axvspan(0.5, 4.6, color="#f6e3e3", lw=0)
+    a1.text(2.55, 0.75, "FUTURO: aún no publicado\nel día de la decisión", ha="center", va="center", fontsize=8.5,
+            color="#a33")
+    a1.axvline(0.5, color=INK, lw=1.4)
+    a1.text(0.45, 3.95, "día de la decisión\n(fin del mes t)", ha="right", va="top", fontsize=8.5, color=INK)
+    bars = [(3, -1, 4, "#d64545", "Etiqueta del mes t−1: necesita datos hasta t+3 → no existe aún", "con fuga"),
+            (2, -5, 4, QCOL["expansion"], "Etiqueta del mes t−5: necesita datos hasta t−1 → calculable", "permitida"),
+            (1, -6, 0, "#999999", "Último dato publicado: producción y empleo de t−1; PCE de t−2", "")]
+    for y, c, half, col, txt, tag in bars:
+        if half:
+            a1.barh(y, 9, left=c - 4.5, height=0.45, color=col, alpha=0.35)
+            a1.scatter([c], [y], color=col, s=55, zorder=4)
+        else:
+            a1.barh(y, 6.5, left=-7, height=0.45, color=col, alpha=0.35)
+        a1.text(-6.85, y + 0.33, txt, fontsize=8, color=INK, va="bottom")
+    a1.set_yticks([])
+    a1.set_xticks(months, [f"t{m:+d}" if m else "t" for m in months], fontsize=8)
+    a1.set_xlim(-7, 4.6)
+    a1.set_ylim(0.4, 4.1)
+    a1.grid(False)
+    a1.spines["left"].set_visible(False)
+    a1.set_xlabel("meses")
+    a1.set_title("La etiqueta del mes t necesita datos hasta t+4:\nel día t, la más reciente calculable es la de t−5",
+                 fontsize=11)
+    # derecha: acierto y log-loss
+    y = np.arange(len(pts))[::-1]
+    for yi, r, a_, l_ in zip(y, pts, acc, ll):
+        lab_, kind = sel[r["baseline"]]
+        col = QCOL["expansion"] if kind == "ok" else "#d64545"
+        a2.barh(yi, a_, color=col, alpha=0.9 if kind == "ok" else 0.35, height=0.6,
+                hatch=None if kind == "ok" else "///", edgecolor=col)
+        a2.text(a_ + 0.01, yi, f"{a_:.1%} · log-loss {l_:.3f}".replace(".", ",").replace("%", " %"), va="center",
+                fontsize=8.5, color=INK)
+    a2.set_yticks(y, [sel[r["baseline"]][0] for r in pts], fontsize=8.5)
+    a2.set_xlim(0, 1.18)
+    a2.xaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1.0, decimals=0))
+    a2.set_xlabel(f"acierto del cuadrante ({pts[0]['n']} meses puntuables)")
+    a2.set_title("El listón honesto es 63,6 %; el 89 % del \"mes anterior\"\nusa datos del futuro (rayado = con fuga)",
+                 fontsize=11)
+    footer(fig, "docs/models/label_v1.1_checks.md §6b (tabla de persistencia, muestra puntuable 1955-06 → 2021-10) y "
+                "label_spec.md §12. Log-loss blanda: menor es mejor. Retrasos de publicación según el calendario del Constructor.")
+    save(fig, "09_liston_persistencia.png")
+
+
+# ---------------------------------------------------------------- 10 rendimientos por cuadrante 1955-2004 (Estratega)
+def fig_rendimientos(cifras):
+    src = ROOT / "docs" / "reviews" / "2026-10-15_estratega_macro_etiqueta.md"
+    head, rows = md_table(src, "Expansión (149 m)")
+    assets = {"RV EE. UU.": "Bolsa EE. UU.", "Bono 10a": "Bono 10 años", "Materias primas (colat.)": "Materias primas",
+              "Oro": "Oro", "60/40": "Cartera 60/40"}
+    qcols = head[1:5]
+    M = pd.DataFrame([[num(c) for c in r[1:5]] for r in rows if r[0] in assets],
+                     index=[assets[r[0]] for r in rows if r[0] in assets], columns=Q)
+    _, erows = md_table(src, "1955-79: RV / bono / MP / oro")
+    qmap = {"Expansión": "expansion", "Late": "late_cycle", "Estanflación": "stagflation", "Bajo / desinf.": "low_growth_disinfl"}
+    ep = {}
+    for r in erows:
+        q = qmap[r[0].replace("**", "").strip()]
+        e1 = [num(x) for x in r[1].split("/")]
+        e2 = [num(x) for x in r[2].split("/")]
+        ep[q] = {"1955-79": {"RV": e1[0], "bono": e1[1]}, "1980-2004": {"RV": e2[0], "bono": e2[1]}}
+    _, rrows = md_table(src, "| RV real | bono real")
+    rec = {r[0]: {"RV": num(r[1]), "bono": num(r[2])} for r in rrows}
+    cifras["rendimientos_1955_2004"] = {"fuente": str(src.relative_to(ROOT)), "cuadrante": M.to_dict(),
+                                        "meses_por_cuadrante": dict(zip(Q, [num(c.split("(")[1]) for c in qcols])),
+                                        "por_epoca": ep, "recesion": rec}
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13, 5.0), gridspec_kw={"width_ratios": [1.15, 1], "wspace": 0.38})
+    vmax = 16
+    im = a1.imshow(M.values, cmap="RdBu", vmin=-vmax, vmax=vmax, aspect="auto")
+    for i in range(M.shape[0]):
+        for j in range(M.shape[1]):
+            v = M.values[i, j]
+            a1.text(j, i, f"{v:+.1f}".replace(".", ","), ha="center", va="center", fontsize=9.5,
+                    color="white" if abs(v) > 10 else INK)
+    a1.set_xticks(range(4), [f"{QSHORT[q]}\n({int(n)} m)" for q, n in
+                             zip(Q, cifras["rendimientos_1955_2004"]["meses_por_cuadrante"].values())], fontsize=8.5)
+    a1.set_yticks(range(M.shape[0]), M.index, fontsize=9)
+    a1.grid(False)
+    for q, j in zip(Q, range(4)):
+        a1.add_patch(plt.Rectangle((j - 0.5, -0.62), 1, 0.12, color=QCOL[q], clip_on=False))
+    cb = fig.colorbar(im, ax=a1, fraction=0.04, pad=0.02)
+    cb.set_label("% real anual")
+    a1.set_title("Rendimiento real medio por cuadrante, 1955-2004 (% anual)", fontsize=11, pad=14)
+    # derecha: inestabilidad por épocas (bolsa)
+    x = np.arange(4)
+    w_ = 0.36
+    v1 = [ep[q]["1955-79"]["RV"] for q in Q]
+    v2 = [ep[q]["1980-2004"]["RV"] for q in Q]
+    a2.bar(x - w_ / 2, v1, w_, color="#9a9a9a", label="1955-79")
+    a2.bar(x + w_ / 2, v2, w_, color="#33507a", label="1980-2004")
+    for xi, a_, b_ in zip(x, v1, v2):
+        for xx, v in ((xi - w_ / 2, a_), (xi + w_ / 2, b_)):
+            a2.text(xx, v + (0.4 if v >= 0 else -0.4), f"{v:+.1f}".replace(".", ","), ha="center",
+                    va="bottom" if v >= 0 else "top", fontsize=8)
+        if np.sign(a_) != np.sign(b_):
+            a2.text(xi, max(a_, b_) + 2.6, "cambia\nde signo", ha="center", fontsize=8, color="#d64545",
+                    fontweight="bold")
+    a2.axhline(0, color=INK, lw=0.8)
+    a2.set_xticks(x, [QSHORT[q] for q in Q], fontsize=8.5)
+    a2.set_ylim(-5, 22)
+    a2.set_ylabel("bolsa EE. UU., % real anual")
+    a2.legend(loc="upper right", fontsize=8.5)
+    a2.set_title("Bolsa por épocas: \"Estanflación\" y \"Crec. bajo\" cambian de signo", fontsize=11)
+    fig.suptitle("DESCRIPCIÓN A POSTERIORI, NO OPERABLE: la etiqueta usa datos futuros. Solo \"Expansión → bolsa\" y "
+                 "\"Crec. bajo → bonos\" se mantienen en las dos épocas", x=0.01, ha="left", fontsize=12,
+                 fontweight="bold", y=1.03, color="#7a1f1f")
+    footer(fig, "docs/reviews/2026-10-15_estratega_macro_etiqueta.md §3.1 (cálculo del Estratega macro con la etiqueta dura "
+                "v1.1 y series del warehouse; reales con CPIAUCSL). Solo 1955-01 → 2004-12; nada del periodo bloqueado "
+                "(2005 →). Unos 20 tramos por cuadrante: incertidumbre grande.")
+    save(fig, "10_rendimientos_por_cuadrante_1955_2004.png")
 
 
 # ---------------------------------------------------------------- comparación con el clasificador de reglas
@@ -470,7 +668,7 @@ def comp_reglas(lab, rules, cifras):
 
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
-    lab, meta, rev, v01, v02, cat, rules, cfma3 = load()
+    lab, meta, rev, v01, v02, v10, cat, rules, cfma3 = load()
     cifras = {"etiqueta": {"version": meta["version"], "estado": meta["status"], "sha256_content": meta["sha256_content"],
                            "primer_mes": str(lab.date.min().date()), "ultimo_mes": str(lab.date.max().date()),
                            "meses": int(len(lab)), "puntuables": int(((lab.weight == 1) & ~lab.provisional).sum()),
@@ -484,6 +682,9 @@ def main():
     fig_revision(rev, cifras)
     fig_ultimos(lab, rules, cifras)
     fig_desfase(v01, v02, cfma3, cifras)
+    fig_empalme(lab, v10, meta, cifras)
+    fig_persistencia(cifras)
+    fig_rendimientos(cifras)
     comp_reglas(lab, rules, cifras)
     (OUT / "cifras.json").write_text(json.dumps(cifras, ensure_ascii=False, indent=1, default=str))
     print("escrito", OUT / "cifras.json")
