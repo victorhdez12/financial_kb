@@ -29,11 +29,22 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Agentes de la fase:** Constructor · Investigador de relaciones · **Validador independiente** · **Reportero** (ver [[Proyecto/Agentes]]). Informe: [[Reports/Fase 3/Informe de resultados]].
 
-## ▶ Retomar aquí (15-oct)
+## ▶ Retomar aquí (15-oct, tarde) — INSTRUCCIONES PARA SEGUIR
 
-**Hecho el 15-oct:** etiqueta **v1.1 congelada** (tag `label-v1.1` en `ebccae1`, validador ✅ tras re-auditoría; blindaje en `6aaf3f7`). Revisión económica del Estratega macro (`docs/reviews/2026-10-15_estratega_macro_etiqueta.md`): sirve como objetivo del nowcast; capas ex post preregistradas L-CAP-001/002/003; `late_cycle` = "Crecimiento con inflación alta" en informes. Registro de pruebas `research/trial_log.md`. Listón: persistencia PIT 63,6 %.
+**Dónde estamos:** Fase 3, entregable (2) **base point-in-time**, a punto de cerrarse.
+- ✅ (1) Etiqueta **v1.1 congelada** (tag `label-v1.1`, validador ✅). Listón: persistencia PIT.
+- ⏳ (2) Base PIT: v0.1 → v0.2 (re-auditoría ⚠️ "muy cerca de ✅", `docs/validation/2026-10-15_pit_base_v0.2.md`) → **v0.3 en marcha** (Constructor) con las correcciones: herencia automática de `principal_desde` (infl_energy_pressure), `vix` condicional < 2003-09, control "etiqueta t−4" en el placebo + tabla de potencia honesta, v0.3 **fuera de `FROZEN` hasta el ✅**, hash del meta de la etiqueta en los baselines, preregistros completos.
+- Documentos clave: `docs/models/pit_base.md` (registro de cambios por versión), `docs/models/pit_calendar.md`, `research/pit_whitelist.yaml`, `research/hypotheses.yaml`, `research/trial_log.md`.
 
-**Siguiente:** entregable (2), base point-in-time: `docs/models/pit_calendar.md` (retardos medidos con ALFRED), matriz de variables con **lista blanca**, test de fugas, placebo y señal plantada. Después, arnés walk-forward (etiquetas de entrenamiento con datos ≤ T, embargo 6 m, holdout 2005-01→) y baselines. El Reportero debe actualizar el informe con la v1.1 y las dos revisiones.
+**Pasos para seguir (en orden):**
+1. Si la v0.3 no está terminada: mirar `git status` y `docs/models/pit_base.md` (registro v0.2 → v0.3) y pedir al Constructor que la termine con el encargo de arriba (detalle en la Bitácora del 15-oct).
+2. `.venv/bin/python -m pytest -q tests` en verde → commit de la v0.3 candidata.
+3. **Re-auditoría final del Validador** sobre la v0.3 → `docs/validation/<fecha>_pit_base_v0.3.md`. Si da ✅: meter la v0.3 en `FROZEN` (`src/features/pit.py`), tag `pit-v0.3`, instantánea de solo lectura, Bitácora y este Estado.
+4. Reportero: añadir la base PIT al informe ([[Reports/Fase 3/Informe de resultados]]).
+5. Siguiente entregable **(3) arnés walk-forward**: modo principal `vintage` (ALFRED) y `latest_truncated` como sensibilidad, puntuando en los dos sobre los mismos meses; etiqueta de entrenamiento recalculada con datos ≤ T en cada corte; embargo 6 m; periodo bloqueado 2005-01→ intocable; variables solo desde la lista blanca + `assert_no_forbidden`; estabilidad de cada variable a ambos lados del salto revisado → primera publicación; registro de pruebas. Baselines a batir (≤ 2004, 579 meses): vintage 61,1 % / log-loss 1,300; latest_truncated 63,0 % / 1,182.
+6. Circuito en cada hito (preferencia del usuario): Constructor → **Validador** + **Estratega macro** en paralelo → paquete de correcciones al usuario → Constructor → **re-auditoría**.
+
+**Pendiente de decisión del usuario (no urgente):** v0.3 de la lista blanca con `permit_yoy` sobre media de 3 m y "sorpresa de inflación" (propuestas del Estratega no aprobadas aún); empalme VIX con VXO; inicio real del IPC subyacente del BLS (hueco).
 
 ### Retomar (14-oct, histórico)
 
