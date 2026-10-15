@@ -56,9 +56,10 @@ class CalEntry:
     lags: tuple[tuple[pd.Timestamp, int], ...]  # (desde fecha de referencia, días), ordenado
     proxies: tuple[str, ...]                    # vintages que fechan la publicación
     vintages: tuple[str, ...]                   # fuentes de vintage para el modo `vintage` (prioridad)
-    supuesto: bool                              # True si el retardo no está medido
+    supuesto: bool                              # True si algún tramo del retardo no está medido
     fuente: str
     publicacion: str
+    supuestos: tuple[bool, ...] = ()            # por tramo de `lags`: True = supuesto, False = medido
 
     def anchor_dates(self, idx: pd.DatetimeIndex) -> pd.DatetimeIndex:
         if self.anchor == "inicio_periodo" or self.freq in ("D", "W"):
@@ -76,16 +77,22 @@ class CalEntry:
         return self.anchor_dates(idx) + pd.to_timedelta(self.lag_days(idx), unit="D")
 
 
-def load_calendar(path: Path = CAL_PATH) -> dict[str, CalEntry]:
+def load_calendar(path: Path = CAL_PATH, variant: str | None = None) -> dict[str, CalEntry]:
+    """Calendario de publicación. `variant='prudente'` usa `retardo_dias_prudente` donde exista (sensibilidad
+    preregistrada; p. ej. Filadelfia 1968-90 con el dato de t−1)."""
     raw = yaml.safe_load(Path(path).read_text())
     out = {}
     for sid, e in raw["series"].items():
-        lags = tuple(sorted((pd.Timestamp(str(x["desde"])), int(x["dias"])) for x in e["retardo_dias"]))
+        tramos = e.get("retardo_dias_prudente") if variant == "prudente" and e.get("retardo_dias_prudente") \
+            else e["retardo_dias"]
+        tramos = sorted(tramos, key=lambda x: pd.Timestamp(str(x["desde"])))
+        lags = tuple((pd.Timestamp(str(x["desde"])), int(x["dias"])) for x in tramos)
+        sup = tuple(bool(x.get("supuesto", e.get("supuesto", True))) for x in tramos)
         out[sid] = CalEntry(sid=sid, freq=e["frecuencia"], anchor=e.get("ancla", "fin_periodo"), lags=lags,
                             proxies=tuple(e.get("proxies_publicacion") or ()),
                             vintages=tuple(e.get("vintages") or ()),
-                            supuesto=bool(e.get("supuesto", True)), fuente=str(e.get("fuente", "")),
-                            publicacion=str(e.get("publicacion", "")))
+                            supuesto=any(sup), fuente=str(e.get("fuente", "")),
+                            publicacion=str(e.get("publicacion", "")), supuestos=sup)
     return out
 
 
@@ -168,8 +175,14 @@ def first_release_lags(v: VintageSet, freq: str) -> pd.Series:
     return lag[(lag >= MEASURE_RANGE[0]) & (lag <= MEASURE_RANGE[1])]
 
 
-def load_vintage_set(con, sid: str) -> VintageSet | None:
+def load_vintage_set(con, sid: str, raw: bool = True) -> VintageSet | None:
+    """Vintages de `sid` en el warehouse o, si no están y `raw`, en features/raw/alfred."""
     df = con.execute("select date, value, realtime_start from vintages where series_id = ?", [sid]).df()
+    if df.empty and raw:
+        from src.features import alfred_raw
+        df = alfred_raw.load(sid)
+        if df is None:
+            return None
     return VintageSet(df, sid) if len(df) else None
 
 

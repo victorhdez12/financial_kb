@@ -1,8 +1,8 @@
 ---
 documento: calendario de publicación point-in-time
-version: 0.1
+version: 0.2
 fecha: 2026-10-15
-ficheros: research/pit_calendar.yaml (máquina), research/pit_calendar_measured.csv (medición), src/features/calendar.py
+ficheros: research/pit_calendar.yaml (máquina), research/pit_calendar_measured.csv (medición), src/features/calendar.py, src/features/alfred_raw.py
 ---
 
 # Calendario de publicación point-in-time
@@ -52,28 +52,47 @@ mismo suelo.
 | ICSA (semanal, desde la semana) | 2009-05 | — | — | 5 / 5 / 5 | 5 / 5 / 54 | 6 |
 | CFNAI | 2011-05 | — | — | 23,5 / 26 / 26 | 23 / 26 / 87 | 28 |
 | W875RX1 (labels/raw, sin vintages en el warehouse) | 2010-05 | — | — | 29 / 32 / 83 (2010+) | | 35 / fechas de PCEPI |
-| CMRMTSPL (labels/raw) | 2013-06 | — | — | — | 60 / 66 / 114 | 70 |
+| CMRMTSPL (features/raw/alfred) | 2013-06 | — | — | — | 60 / 66 / 114 | 90 < 2000, 70 en 2000-12 (supuestos) |
+| PERMIT (features/raw/alfred) | 1999-08 | — | — | 17 / 20 / 22 | 18 / 20 / 101 | 23 (supuesto) |
+| NFCI (features/raw/alfred, semanal) | 2011-05 | — | — | 5 / 6 / 12 | 5 / 6 / 20 | 7 (supuesto) |
+| AWHMAN / AHETPI (Employment Situation) | 1961-11 / 1999-08 | 5,5 / 10 / 16 | 5 / 8 / 19 | 5 / 7,5 / 10 | 5 / 8 / 51 | 16 / fechas de PAYEMS |
+| CUSR0000SASLE (CPI) | 2011-04 | — | — | 15 / 18 / 19 | 13 / 18 / 30 | 32 / fechas de CPIAUCSL |
+| Filadelfia ×3 (mismo mes) | 2015-04 | — | — | — | −12 / −10 / 18 | −7 (supuesto; prudente +25 antes de 1990-07) |
 
 **Cambios de calendario visibles:** el IPC se publica cada vez antes (mediana 21 → 13 días); la producción industrial
 tardaba más y era más variable antes de 1980 (p90 28, máx 33); el M2 pasó del H.6 semanal al mensual en 2021 (p90 16 →
 27); los máximos de 2013+ son los cierres del Gobierno (2013 y 2025: el IPC de octubre de 2025 nunca se publicó).
 
-## 3. Series sin medición (supuestos)
+## 3. Series sin medición o con tramos supuestos (v0.2)
 
 | serie | regla | justificación |
 |---|---|---|
-| Encuesta de Filadelfia (actividad, pedidos) | fin de mes − 7 días | 3.er jueves del propio mes (≤ día 21). Calendario 1968-90 no documentado |
-| PERMIT | 20 días | Census, ~12.º día hábil |
-| UMCSENT, MICH | 35 días | Nuestra fuente (FRED) los publica con ~1 mes de retraso de licencia: se usa el retraso de la fuente para que backtest y producción vean lo mismo |
-| SPF | inicio del trimestre + 60 días (hasta 1990-T2) / + 50 | Resultados a mitad del 2.º mes (catálogo: ~45 días) |
-| Mercados diarios (H.15, Moody's, VIX, WTI, H.10, RRP, DTS) | 1 día | Dato de d publicado el día hábil siguiente |
-| Medias mensuales de mercado (GS10, TB3MS, BAA, WTI mensual, S&P de Shiller) | 1 día tras el fin de mes | Media de precios de mercado conocida al cierre |
-| WALCL, WTREGEN | 1 día | H.4.1 del jueves con dato del miércoles |
-| NFCI | 5 días | viernes → miércoles |
-| BCE (estado semanal) / BoJ (fin de mes) | 5 / 7 días | calendarios de los bancos centrales |
-| Pink Sheet (cobre, oro) | 7 días | publicación a primeros del mes siguiente |
-| BIS NEER | 30 días | a 2026-10-15 el último dato es 2026-08 |
-| GZ spread / EBP | 35 días | CSV mensual de la Fed |
+| Encuesta de Filadelfia (actividad, pedidos, precios pagados) | fin de mes − 7 días; **variante prudente** (S-PIT-001): +25 días antes de 1990-07 | 3.er jueves del propio mes. ALFRED (2015+) lo confirma (mediana −12, p90 −10). 1968-90 sin verificar |
+| PERMIT | vintages ALFRED desde 1999-08; antes 23 días | máximo medido en 2000-12: 22 |
+| CMRMTSPL | vintages ALFRED desde 2013-06; 70 días en 2000-12; **90 días antes de 2000** | calendario anterior a 2013 no medido |
+| Michigan (`umich_ics`, `umich_px1_md`) | **fuente directa**, 20 días | el dato final sale a finales del mes t; 20 días garantizan t−1. Solo desde 1978 |
+| SPF | inicio del trimestre + **90 días hasta 1990-T2** / + 50 | ASA-NBER: difusión no documentada → el trimestre siguiente |
+| BIS NEER | **20 días** | agregado de tipos de mercado; siempre t−1 |
+| BCE (estado semanal) | **8 días** desde el lunes con que el warehouse fecha la semana | estado del viernes, publicado el martes siguiente |
+| NFCI | vintages desde 2011; antes 7 días | p90 medido 6 |
+| Mercados diarios, medias mensuales de mercado, H.4.1, DTS, Pink Sheet, BoJ, GZ/EBP | sin cambios respecto a la v0.1 (1 / 1 / 1 / 1 / 7 / 7 / 35 días) | |
+
+Cada tramo de `retardo_dias` lleva su marca `supuesto` (true = no medido), corrigiendo la v0.1 (CMRMTSPL antes de 2013,
+W875RX1 antes de 2000 e ICSA antes de 2009 figuraban como medidos).
+
+### Verificación con otra fuente (tests/test_pit_leaks.py, grupo v)
+
+- **"Mismo comunicado de prensa":** con las vintages propias de AWHMAN, AHETPI, UNRATE (→ PAYEMS), CUSR0000SASLE,
+  CPILFESL (→ CPIAUCSL), W875RX1, PCEPILFE (→ PCEPI) y TCU (→ INDPRO), la primera publicación coincide con la de la
+  proxy el mismo día en el 100 % de las fechas comunes (150-800 por par).
+- **Supuestos frente a ALFRED:** Filadelfia ≤ −7 días en ≥ 95 % (2015+), PERMIT ≤ 23 días en el 100 % de 1999-2012,
+  CMRMTSPL ≤ 70 días en ≥ 90 %.
+- Sin fuente externa disponible: Filadelfia 1968-90, SPF antes de 1990, Michigan directo, Pink Sheet, BIS, GZ/EBP, BoJ.
+
+### Cambios de retardo efectivo con la época (no son fugas)
+
+IPC antes de 1972 (32 días → t−2; después, fechas ALFRED → t−1); renta personal en 2000 (35 días → fechas de PCEPI:
+t−2 → t−1 en ~20 % de los meses); CMRMTSPL en 2000 y 2013; SPF en 1990. El arnés debe tenerlos en cuenta con la regla 4.
 
 ## 4. Consecuencias para código existente (no tocado; propuestas)
 

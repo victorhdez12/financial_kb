@@ -1,23 +1,24 @@
-"""Matriz de variables point-in-time para el nowcast de régimen EE. UU. (docs/models/pit_base.md).
+"""Matriz de variables point-in-time para el nowcast de régimen EE. UU. (docs/models/pit_base.md, v0.2).
 
 Para cada fecha de decisión t (último día hábil del mes, calendario federal de EE. UU.; ficha de la etiqueta §9)
 devuelve el valor de cada variable de la LISTA BLANCA (research/pit_whitelist.yaml) usando solo lo publicado
 hasta t, según el calendario (research/pit_calendar.yaml, src/features/calendar.py).
 
-Dos modos (Validador M-4: el baseline de persistencia y las variables se construyen con el mismo modo):
-- `vintage`: donde hay vintages (ALFRED/RTDSM), la serie tal como se publicó en t; fuera del archivo de vintages,
-  o para variables declaradas `latest_truncated`, se usa el modo siguiente. Cada celda indica su modo efectivo
-  (linaje).
-- `latest_truncated`: última vintage (datos revisados) truncada por la fecha de publicación de cada observación.
+Dos modos (Validador M-4; decisión B del usuario: `vintage` es el principal, `latest_truncated` la sensibilidad):
+- `vintage`: donde hay vintages (ALFRED/RTDSM/features/raw/alfred), la serie tal como se publicó en t; fuera del
+  archivo, o en variables declaradas `latest_truncated`, el modo siguiente. El linaje marca el modo de cada celda.
+- `latest_truncated`: última vintage truncada por la fecha de publicación de cada observación.
 
-Barreras: solo series de la lista blanca, con `pit_role = observed` en el catálogo y sin raíces prohibidas; al
-final, `src.labels.regime_us.assert_no_forbidden` sobre las columnas (segunda barrera, P-4 del Validador).
+La matriz OFICIAL se construye solo desde la instantánea congelada de entradas (FROZEN, read_snapshot), nunca desde el
+warehouse vivo. Barreras: lista blanca, `pit_role = observed`, sin raíces prohibidas y `assert_no_forbidden` al final.
 
-Salida (no va al warehouse): <FIN_DATA_ROOT>/features/pit_us_v<versión>_<modo>.parquet, su linaje
-(`..._lineage.parquet`), la persistencia point-in-time (`baseline_persistence_v<versión>_<modo>.parquet`) y
-`pit_us_v<versión>.meta.json` con hashes.
+Salida (no va al warehouse), en <FIN_DATA_ROOT>/features/: pit_us_v<versión>_<modo>.parquet (+ variante
+vintage_filadelfia_prudente), linaje, baseline_persistence_v<versión>_<modo>.parquet (misma muestra en los dos modos)
+y pit_us_v<versión>.meta.json.
 
-    .venv/bin/python -m src.features.pit            # construye los dos modos + baseline y escribe
+    .venv/bin/python -m src.features.pit --freeze   # warehouse vivo + raw → instantánea (no toca una versión congelada)
+    .venv/bin/python -m src.features.pit            # matriz oficial desde la instantánea
+    .venv/bin/python -m src.features.pit --live     # seguimiento desde el warehouse vivo (*_live)
 """
 from __future__ import annotations
 
@@ -34,15 +35,19 @@ import yaml
 from pandas.tseries.holiday import USFederalHolidayCalendar
 from pandas.tseries.offsets import CustomBusinessMonthEnd
 
-from src.features.calendar import (CAL_PATH, NEVER, CalEntry, VintageSet, availability, load_calendar)
+import duckdb
+
+from src.features.calendar import (CAL_PATH, NEVER, CalEntry, VintageSet, availability, load_calendar,
+                                   load_vintage_set)
 from src.labels import regime_us as R
 from src.regime.asof import infer_freq, period_end
 from src.regime.features import regularize, sahm
 from src.warehouse import db
+from src.warehouse.build import VIEWS_SQL
 
 REPO = Path(__file__).resolve().parents[2]
 WL_PATH = REPO / "research" / "pit_whitelist.yaml"
-VERSION = "0.1"
+VERSION = "0.2"
 MODES = ("vintage", "latest_truncated")
 GRID_START = "1950-01-01"
 # un valor deja de valer (NaN) si su periodo de referencia terminó hace más de estos días (series cortadas)
@@ -111,19 +116,65 @@ def d_zmean(df, cols, wl, spec):
     return z.mean(axis=1).where(z.notna().sum(axis=1) >= spec.get("min_entradas", len(cols)))
 
 
+def _rolling_prev(x: pd.Series, n: int, how: str) -> pd.Series:
+    """Estadístico de los n valores PIT ANTERIORES a t (t−n … t−1); exige el 90 % de la ventana."""
+    r = x.shift(1).rolling(n, min_periods=int(0.9 * n))
+    return r.median() if how == "median" else r.mean()
+
+
+def d_trend_zmean(df, cols, wl, spec):
+    """Versión unilateral de G (ficha §3): para cada entrada, (g − mediana de los 120 meses hasta t) / (1,4826 · MAD
+    expansiva de esa desviación); media de las disponibles."""
+    n, mmin = wl["tendencia_meses"], wl["mad_min_meses"]
+    zs = []
+    for c in cols:
+        g = df[c]
+        dev = g - g.rolling(n, min_periods=int(0.9 * n)).median()
+        mad = dev.expanding(min_periods=mmin).apply(lambda a: np.nanmedian(np.abs(a - np.nanmedian(a))), raw=True)
+        zs.append(dev / (1.4826 * mad))
+    z = pd.concat(zs, axis=1)
+    return z.mean(axis=1).where(z.notna().sum(axis=1) >= spec.get("min_entradas", len(cols)))
+
+
 def d_hysteresis_state(df, cols, wl, spec):
+    """+1 / −1 cuando growth_rt pasa de ±k·σ (σ expansiva de growth_rt) durante `confirmación` meses seguidos;
+    −1 inmediato si Sahm ≥ 0,5; si no, se mantiene el estado (0 hasta el primer cambio)."""
     g, sh = df[cols[0]], df[cols[1]]
-    band, state, out = wl["histeresis_banda"], 0.0, []
-    for gv, sv in zip(g.to_numpy(), sh.to_numpy()):
-        if np.isnan(gv):
+    band = wl["histeresis_sigma"] * g.expanding(min_periods=60).std()
+    conf = wl["histeresis_confirmacion"]
+    state, up, down, out = 0.0, 0, 0, []
+    for gv, bv, sv in zip(g.to_numpy(), band.to_numpy(), sh.to_numpy()):
+        if np.isnan(gv) or np.isnan(bv):
             out.append(np.nan)
+            up = down = 0
             continue
-        if gv < -band or (not np.isnan(sv) and sv >= 0.5):
+        up = up + 1 if gv > bv else 0
+        down = down + 1 if gv < -bv else 0
+        if not np.isnan(sv) and sv >= 0.5:
             state = -1.0
-        elif gv > band:
+        elif up >= conf:
             state = 1.0
+        elif down >= conf:
+            state = -1.0
         out.append(state)
     return pd.Series(out, index=df.index)
+
+
+def d_core_pressure(df, cols, wl, spec):
+    parts = pd.concat([df[cols[0]], df[cols[1]], df[cols[2]] - wl["salario_productividad_pp"]], axis=1)
+    return parts.mean(axis=1).where(parts.notna().sum(axis=1) >= spec.get("min_entradas", 3))
+
+
+def d_curve_regime(df, cols, wl, spec):
+    """Curva en 4 estados (Δ3m): sin cambio si |Δ(10a − 3m)| < umbral; si no, steepening/flattening por el signo de
+    Δcurva y bear/bull por el signo del tramo que más se mueve. Devuelve el indicador del estado `regimen`."""
+    d10, d3 = df[cols[0]].diff(3), df[cols[1]].diff(3)
+    dc = d10 - d3
+    thr = wl["curva_umbral_pb"] / 100
+    leg = d10.where(d10.abs() >= d3.abs(), d3)
+    states = {"bear_steep": (dc > thr) & (leg > 0), "bull_steep": (dc > thr) & (leg <= 0),
+              "bear_flat": (dc < -thr) & (leg > 0), "bull_flat": (dc < -thr) & (leg <= 0)}
+    return _flag(states[spec["regimen"]], d10, d3)
 
 
 def _flag(cond, *xs):
@@ -133,14 +184,18 @@ def _flag(cond, *xs):
 
 DERIVED: dict[str, Callable] = {
     "zmean": d_zmean,
+    "trend_zmean": d_trend_zmean,
     "hysteresis_state": d_hysteresis_state,
+    "core_pressure": d_core_pressure,
+    "curve_regime": d_curve_regime,
+    "gap_median_prev": lambda df, c, wl, sp: df[c[0]] - _rolling_prev(df[c[0]], wl["tendencia_meses"], "median"),
+    "gap_mean_prev": lambda df, c, wl, sp: df[c[0]] - _rolling_prev(df[c[0]], wl["tendencia_meses"], "mean"),
     "log_ratio_x100": lambda df, c, wl, sp: 100 * np.log(df[c[0]] / df[c[1]]),
     "curve": lambda df, c, wl, sp: df[c[0]].combine_first(df[c[1]] - df[c[2]]),
     "diff3": lambda df, c, wl, sp: df[c[0]] - df[c[0]].shift(3),
+    "diff6": lambda df, c, wl, sp: df[c[0]] - df[c[0]].shift(6),
     "diff12": lambda df, c, wl, sp: df[c[0]] - df[c[0]].shift(12),
     "level_d3m": lambda df, c, wl, sp: ((df[c[0]] + df[c[1]]) / 2).diff(3),
-    "bear_steepening": lambda df, c, wl, sp: _flag((df[c[0]] > 0) & (df[c[1]] > 0), df[c[0]], df[c[1]]),
-    "bull_steepening": lambda df, c, wl, sp: _flag((df[c[0]] > 0) & (df[c[1]] < 0), df[c[0]], df[c[1]]),
     "diff_ab": lambda df, c, wl, sp: df[c[0]] - df[c[1]],
     "baa_spread": lambda df, c, wl, sp: df[c[0]].combine_first(df[c[1]] - df[c[2]]),
     "ratio_log_diff6": lambda df, c, wl, sp: 100 * (np.log(df[c[0]] / df[c[1]])
@@ -194,8 +249,9 @@ def decision_grid(start: str = GRID_START, today: date | None = None) -> pd.Data
 class Warehouse:
     """Lecturas del warehouse con caché. Necesita `obs_latest`, `vintages` y `catalog`."""
 
-    def __init__(self, con):
+    def __init__(self, con, raw: bool = True):
         self.con = con
+        self.raw = raw          # vintages de features/raw/alfred si no están en el warehouse (nunca con la instantánea)
         self._latest: dict[str, pd.Series] = {}
         self._vint: dict[str, VintageSet | None] = {}
 
@@ -206,9 +262,7 @@ class Warehouse:
 
     def vint(self, sid: str) -> VintageSet | None:
         if sid not in self._vint:
-            df = self.con.execute("select date, value, realtime_start from vintages where series_id = ?",
-                                  [sid]).df()
-            self._vint[sid] = VintageSet(df, sid) if len(df) else None
+            self._vint[sid] = load_vintage_set(self.con, sid, raw=self.raw)
         return self._vint[sid]
 
     def catalog(self, sid: str) -> dict:
@@ -328,9 +382,10 @@ def series_variable(wh: Warehouse, cal: dict[str, CalEntry], spec: dict, grid: p
 # ------------------------------------------------------------------ matriz
 def build_matrix(con, mode: str, grid: pd.DataFrame | None = None, wl: dict | None = None,
                  cal: dict[str, CalEntry] | None = None, forbidden: list[str] | None = None,
-                 check_forbidden: bool = True) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
+                 check_forbidden: bool = True, raw: bool = True) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
     """Matriz (índice = fecha de decisión) con las columnas públicas de la lista blanca, linaje largo y
-    descripción por columna. `forbidden` = series forecast/lookahead (por defecto, las del meta.json oficial)."""
+    descripción por columna. `forbidden` = series forecast/lookahead (por defecto, las del meta.json oficial).
+    `raw=False` con la instantánea congelada (todo lo que se lee está dentro de ella)."""
     if mode not in MODES:
         raise ValueError(f"modo desconocido: {mode}")
     wl = wl or load_whitelist()
@@ -339,7 +394,7 @@ def build_matrix(con, mode: str, grid: pd.DataFrame | None = None, wl: dict | No
     if forbidden is None:
         meta = json.loads(R.out_path().with_suffix(".meta.json").read_text())
         forbidden = meta["forbidden_features"]["series"]
-    wh = Warehouse(con)
+    wh = Warehouse(con, raw=raw)
     check_sources(wh, wl, cal, forbidden)
 
     idx = grid["decision_date"].values
@@ -365,7 +420,13 @@ def build_matrix(con, mode: str, grid: pd.DataFrame | None = None, wl: dict | No
             lineage[name] = pd.concat(parts, ignore_index=True)
         else:
             raise ValueError(f"{name}: tipo desconocido {spec['tipo']}")
-        info[name] = {k: spec.get(k) for k in ("bloque", "tipo", "series", "entradas", "modo", "estado")}
+        if spec.get("desde"):   # sin mecanismo o sin datos fiables antes de esta fecha (regla 4)
+            before = pd.DatetimeIndex(idx) < pd.Timestamp(str(spec["desde"]))
+            cols[name] = cols[name].where(~before)
+            lineage[name] = lineage[name][lineage[name]["decision_date"] >= pd.Timestamp(str(spec["desde"]))]
+        info[name] = {k: (str(spec[k]) if k in ("desde", "principal_desde") and spec.get(k) else spec.get(k))
+                      for k in ("bloque", "tipo", "series", "entradas", "modo", "estado", "desde",
+                                "principal_desde")}
 
     pub = public_columns(wl)
     X = pd.DataFrame({c: cols[c] for c in pub}, index=pd.DatetimeIndex(idx, name="decision_date"))
@@ -378,7 +439,7 @@ def build_matrix(con, mode: str, grid: pd.DataFrame | None = None, wl: dict | No
         s = X[c].dropna()
         lc = lin[lin["column"] == c]
         vin = lc[lc["mode"].str.startswith("vintage")]
-        info[c].update(desde=f"{s.index.min():%Y-%m}" if len(s) else None,
+        info[c].update(primer_dato=f"{s.index.min():%Y-%m}" if len(s) else None,
                        hasta=f"{s.index.max():%Y-%m}" if len(s) else None, n=int(len(s)),
                        vintage_desde=f"{vin['decision_date'].min():%Y-%m}" if len(vin) else None,
                        celdas_vintage=int(vin["decision_date"].nunique()))
@@ -389,8 +450,8 @@ def build_matrix(con, mode: str, grid: pd.DataFrame | None = None, wl: dict | No
 PRED_COLS = [f"pers_{q}" for q in R.QUADRANTS]
 
 
-def persistence(con, mode: str, grid: pd.DataFrame | None = None,
-                start: str = "1955-01-01") -> pd.DataFrame:
+def persistence(con, mode: str, grid: pd.DataFrame | None = None, start: str = "1955-01-01",
+                cal: dict[str, CalEntry] | None = None, raw: bool = True) -> pd.DataFrame:
     """Baseline de persistencia point-in-time (ficha §12) con el MISMO modo que las variables (M-4): en cada t,
     la etiqueta se recalcula desde la instantánea congelada con los niveles conocidos en t (vintage: tal como se
     publicaron; latest_truncated: última vintage truncada por fecha de publicación) y se toma la última
@@ -399,8 +460,8 @@ def persistence(con, mode: str, grid: pd.DataFrame | None = None,
     grid = grid[grid["decision_date"] >= pd.Timestamp(start)]
     inputs, _ = R.read_snapshot()
     meta = json.loads(R.out_path().with_suffix(".meta.json").read_text())
-    cal = load_calendar()
-    wh = Warehouse(con)
+    cal = cal or load_calendar()
+    wh = Warehouse(con, raw=raw)
     snapv = {sid: VintageSet(v, sid) for sid, (v, _) in inputs["vintages"].items() if len(v)}
 
     def vset(sid):
@@ -458,51 +519,209 @@ def frame_sha(df: pd.DataFrame) -> str:
     return hashlib.sha256(pd.util.hash_pandas_object(df.reset_index(), index=False).values.tobytes()).hexdigest()
 
 
-def write(results: dict, baselines: dict, grid: pd.DataFrame, con) -> Path:
+# ------------------------------------------------------------------ instantánea congelada de entradas
+# Igual que la etiqueta (src/labels/regime_us.py): la matriz OFICIAL se construye solo desde la instantánea de entradas
+# (observaciones y vintages que lee el constructor + calendario + lista blanca). Sus hashes están aquí, en git;
+# `read_snapshot` se niega a usar una instantánea distinta y `write_snapshot` no toca una versión congelada.
+FROZEN: dict[str, dict] = {
+    # v0.2 candidata (2026-10-15): instantánea de entradas desde el warehouse built_at 2026-10-15 ~12:50 + raw ALFRED
+    "0.2": {
+        "data_sha256_file": "db06b89c63d7c89c896c76a13127739237c67e6594224a4d7375a5bf5c4a6261",
+        "data_sha256_content": "069b9d5cece116c8771c4d84c6f26ecc21d599f942f27f29b79bfbac9ded6b64",
+        "whitelist_sha256": "6e321ebe4068ba69c181affbd3b8c4b80b012e75fe5dfba3a28f558416a172b0",
+        "calendar_sha256": "9142290c086af0c8a3250a7a9184417f8e570777561052b0c6a3895efd6c566b",
+        "info_sha256": "8a01d6f0296bd6b16d2164fba87ab2dfd7f16801ee93809b701d84c5168c38f3",
+        "grid_end": "2026-09-30",
+    },
+}
+
+
+def inputs_dir() -> Path:
+    return out_dir() / "inputs"
+
+
+def snapshot_paths(version: str = VERSION) -> dict[str, Path]:
+    d = inputs_dir()
+    return {"data": d / f"pit_us_v{version}_inputs.parquet", "whitelist": d / f"pit_us_v{version}_whitelist.yaml",
+            "calendar": d / f"pit_us_v{version}_calendar.yaml", "info": d / f"pit_us_v{version}_inputs.json"}
+
+
+SNAP_COLS = ["kind", "series_id", "date", "value", "realtime_start", "source", "pit_role", "units"]
+
+
+def collect_inputs(con, wl: dict, cal: dict[str, CalEntry]) -> pd.DataFrame:
+    """Todo lo que lee el constructor (y la persistencia, para sus proxies) desde el warehouse vivo y
+    features/raw/alfred: última vintage (`latest`), vintages (`vintage`) y catálogo (`catalog`)."""
+    wh = Warehouse(con, raw=True)
+    parts = []
+    for sid in needed_series(wl, cal):
+        s = wh.latest(sid)
+        parts.append(pd.DataFrame({"kind": "latest", "series_id": sid, "date": s.index, "value": s.values}))
+        vs = wh.vint(sid)
+        if vs is not None:
+            parts.append(vs.v.assign(kind="vintage", series_id=sid))
+        r = con.execute("select source, pit_role, units from catalog where series_id = ?", [sid]).fetchone()
+        parts.append(pd.DataFrame([{"kind": "catalog", "series_id": sid, "source": r[0] if r else None,
+                                    "pit_role": r[1] if r else None, "units": r[2] if r else None}]))
+    df = pd.concat(parts, ignore_index=True).reindex(columns=SNAP_COLS)
+    for c in ("date", "realtime_start"):
+        df[c] = pd.to_datetime(df[c]).astype("datetime64[ns]")
+    df["value"] = df["value"].astype(float)
+    for c in ("kind", "series_id", "source", "pit_role", "units"):
+        df[c] = df[c].astype(object).where(df[c].notna(), None)
+    return df.sort_values(["kind", "series_id", "date", "realtime_start"], na_position="first").reset_index(drop=True)
+
+
+def write_snapshot(con, version: str = VERSION, force: bool = False) -> dict:
+    import shutil
+    paths = snapshot_paths(version)
+    if version in FROZEN:
+        raise SystemExit(f"la v{version} está congelada (FROZEN): su instantánea no se toca; crea una versión nueva")
+    if paths["data"].exists() and not force:
+        raise SystemExit(f"{paths['data']} ya existe (usa --force solo para una candidata no congelada)")
+    paths["data"].parent.mkdir(parents=True, exist_ok=True)
+    for p in paths.values():
+        if p.exists():
+            p.chmod(0o644)
+    df = collect_inputs(con, load_whitelist(), load_calendar())
+    df.to_parquet(paths["data"], index=False)
+    shutil.copyfile(WL_PATH, paths["whitelist"])
+    shutil.copyfile(CAL_PATH, paths["calendar"])
+    grid_end = decision_grid()["decision_date"].max()
+    info = {"version": version, "creado": pd.Timestamp.now().isoformat(timespec="seconds"),
+            "grid_end": f"{grid_end:%Y-%m-%d}",
+            "warehouse_built_at": str(con.execute("select built_at from build_log").fetchone()[0]),
+            "rows": len(df), "series": int(df.loc[df["kind"] == "catalog", "series_id"].nunique())}
+    paths["info"].write_text(json.dumps(info, indent=1))
+    frozen = {"data_sha256_file": file_sha(paths["data"]), "data_sha256_content": frame_sha(df),
+              "whitelist_sha256": file_sha(paths["whitelist"]), "calendar_sha256": file_sha(paths["calendar"]),
+              "info_sha256": file_sha(paths["info"]), "grid_end": info["grid_end"]}
+    backup = paths["data"].parent / "backup"
+    backup.mkdir(exist_ok=True)
+    for p in paths.values():
+        b = backup / p.name
+        if b.exists():
+            b.chmod(0o644)
+        shutil.copyfile(p, b)
+        b.chmod(0o444)
+        p.chmod(0o444)
+    return frozen
+
+
+def read_snapshot(version: str = VERSION, paths: dict[str, Path] | None = None):
+    """(conexión DuckDB en memoria con observations/catalog/vistas, lista blanca, ruta del calendario, info).
+    Falla si algún fichero no coincide con FROZEN."""
+    paths = paths or snapshot_paths(version)
+    ref = FROZEN.get(version)
+    if ref:
+        for key, k in (("data", "data_sha256_file"), ("whitelist", "whitelist_sha256"),
+                       ("calendar", "calendar_sha256"), ("info", "info_sha256")):
+            if file_sha(paths[key]) != ref[k]:
+                raise RuntimeError(f"la instantánea {paths[key].name} no coincide con la congelada de la v{version}")
+    df = pd.read_parquet(paths["data"])
+    if ref and frame_sha(df) != ref["data_sha256_content"]:
+        raise RuntimeError(f"el contenido de la instantánea v{version} no coincide con FROZEN")
+    info = json.loads(paths["info"].read_text())
+    return snapshot_warehouse(df, info["creado"]), load_whitelist(paths["whitelist"]), paths["calendar"], info
+
+
+def snapshot_warehouse(df: pd.DataFrame, built_at) -> duckdb.DuckDBPyConnection:
+    obs = df[df["kind"].isin(["latest", "vintage"])][["date", "value", "series_id", "realtime_start"]].copy()
+    obs["source"] = "snapshot"
+    obs["realtime_end"] = pd.NaT
+    cat = df[df["kind"] == "catalog"][["series_id", "source", "pit_role", "units"]].reset_index(drop=True)
+    mem = duckdb.connect(":memory:")
+    mem.register("o", obs)
+    mem.execute("""create table observations as select cast(date as date) as date, cast(value as double) as value,
+                   series_id, source, cast(realtime_start as date) as realtime_start,
+                   cast(realtime_end as date) as realtime_end from o""")
+    mem.register("c", cat)
+    mem.execute("create table catalog as select * from c")
+    mem.execute(f"create table build_log as select timestamp '{pd.Timestamp(built_at):%Y-%m-%d %H:%M:%S}' as built_at")
+    mem.execute(VIEWS_SQL)
+    return mem
+
+
+# ------------------------------------------------------------------ construcción oficial y escritura
+def common_sample(baselines: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
+    """Los baselines de los dos modos sobre la MISMA muestra de meses (decisión B del usuario)."""
+    common = None
+    for B in baselines.values():
+        common = B.index if common is None else common.intersection(B.index)
+    return {m: B.loc[common] for m, B in baselines.items()}
+
+
+def build_official(version: str = VERSION, with_baseline: bool = True) -> dict:
+    con, wl, cal_path, info = read_snapshot(version)
+    grid = decision_grid(today=pd.Timestamp(info["grid_end"]))
+    cal = load_calendar(cal_path)
+    out = {"matrices": {}, "baselines": {}, "grid": grid, "info": info}
+    for mode in MODES:
+        out["matrices"][mode] = build_matrix(con, mode, grid, wl=wl, cal=cal, raw=False)
+    out["matrices"]["vintage_filadelfia_prudente"] = build_matrix(
+        con, "vintage", grid, wl=wl, cal=load_calendar(cal_path, variant="prudente"), raw=False)
+    if with_baseline:
+        full = {m: persistence(con, m, grid, cal=cal, raw=False) for m in MODES}
+        out["baselines"] = common_sample(full)
+    out["con"] = con
+    return out
+
+
+def write(res: dict, version: str = VERSION, suffix: str = "") -> Path:
     od = out_dir()
     od.mkdir(parents=True, exist_ok=True)
-    meta = {"version": VERSION, "creado": pd.Timestamp.now().isoformat(timespec="seconds"),
+    meta = {"version": version, "creado": pd.Timestamp.now().isoformat(timespec="seconds"),
             "fecha_decision": "último día hábil del mes (calendario federal EE. UU.)",
-            "grid": [f"{grid['decision_date'].min():%Y-%m-%d}", f"{grid['decision_date'].max():%Y-%m-%d}"],
-            "warehouse_built_at": str(con.execute("select built_at from build_log").fetchone()[0]),
-            "whitelist_sha256": file_sha(WL_PATH), "calendar_sha256": file_sha(CAL_PATH),
+            "grid": [f"{res['grid']['decision_date'].min():%Y-%m-%d}", f"{res['grid']['decision_date'].max():%Y-%m-%d}"],
+            "instantanea_entradas": {"info": res.get("info"), "frozen": FROZEN.get(version)},
             "code_sha256": {p.name: file_sha(p) for p in sorted((REPO / "src" / "features").glob("*.py"))},
-            "label_snapshot": R.FROZEN.get(R.PARAMS.version), "files": {}, "columns": {}, "baseline": {}}
-    for mode, (X, lin, info) in results.items():
-        f = od / f"pit_us_v{VERSION}_{mode}.parquet"
+            "label_snapshot": R.FROZEN.get(R.PARAMS.version), "files": {}, "columns": {}, "baseline": {},
+            "regla_arnes": ("modo principal vintage; latest_truncated como sensibilidad; puntuar en los dos; "
+                            "comprobar la estabilidad de cada variable a ambos lados del salto revisado → primera "
+                            "publicación; no usar ninguna variable antes de su principal_desde en el modelo principal")}
+    for name, (X, lin, info) in res["matrices"].items():
+        f = od / f"pit_us_v{version}_{name}{suffix}.parquet"
         X.reset_index().to_parquet(f, index=False)
-        fl = od / f"pit_us_v{VERSION}_{mode}_lineage.parquet"
+        fl = od / f"pit_us_v{version}_{name}{suffix}_lineage.parquet"
         lin.to_parquet(fl, index=False)
         meta["files"][f.name] = {"sha256_file": file_sha(f), "sha256_content": frame_sha(X), "rows": len(X)}
         meta["files"][fl.name] = {"sha256_file": file_sha(fl), "rows": len(lin)}
-        meta["columns"][mode] = info
-    for mode, (B, sc) in baselines.items():
-        f = od / f"baseline_persistence_v{VERSION}_{mode}.parquet"
+        meta["columns"][name] = info
+    for mode, B in res["baselines"].items():
+        f = od / f"baseline_persistence_v{version}_{mode}{suffix}.parquet"
         B.reset_index().to_parquet(f, index=False)
         meta["files"][f.name] = {"sha256_file": file_sha(f), "rows": len(B)}
-        meta["baseline"][mode] = {"entrenamiento_hasta_2004": sc}
-    mp = od / f"pit_us_v{VERSION}.meta.json"
+        meta["baseline"][mode] = {"muestra": "meses comunes a los dos modos",
+                                  "entrenamiento_hasta_2004": score_training(B)}
+    mp = od / f"pit_us_v{version}{suffix}.meta.json"
     mp.write_text(json.dumps(meta, indent=1, ensure_ascii=False, default=str))
     return mp
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="Construye la matriz point-in-time y el baseline de persistencia")
+    ap = argparse.ArgumentParser(description="Base point-in-time: instantánea, matriz y baseline de persistencia")
+    ap.add_argument("--freeze", action="store_true", help="warehouse vivo + raw → instantánea de entradas")
+    ap.add_argument("--force", action="store_true", help="sobrescribe una instantánea candidata (no congelada)")
+    ap.add_argument("--live", action="store_true", help="construye desde el warehouse vivo (*_live, seguimiento)")
     ap.add_argument("--no-baseline", action="store_true")
     a = ap.parse_args()
-    con = db.connect()
-    grid = decision_grid()
-    results, baselines = {}, {}
-    for mode in MODES:
-        results[mode] = build_matrix(con, mode, grid)
-        X = results[mode][0]
-        print(f"{mode}: {X.shape[1]} columnas, {len(X)} fechas ({grid['decision_date'].min():%Y-%m} → "
-              f"{grid['decision_date'].max():%Y-%m})")
-        if not a.no_baseline:
-            B = persistence(con, mode, grid)
-            baselines[mode] = (B, score_training(B))
-            print(f"  persistencia PIT ≤2004: {baselines[mode][1]}")
-    print("→", write(results, baselines, grid, con))
+    if a.freeze:
+        frozen = write_snapshot(db.connect(), force=a.force)
+        print("Instantánea escrita. Añade a FROZEN en src/features/pit.py:")
+        print(json.dumps({VERSION: frozen}, indent=1))
+        return
+    if a.live:
+        con = db.connect()
+        grid = decision_grid()
+        res = {"grid": grid, "matrices": {m: build_matrix(con, m, grid) for m in MODES}, "baselines": {}}
+        print("→", write(res, suffix="_live"))
+        return
+    res = build_official(with_baseline=not a.no_baseline)
+    for name, (X, _, _) in res["matrices"].items():
+        print(f"{name}: {X.shape[1]} columnas, {len(X)} fechas")
+    for mode, B in res["baselines"].items():
+        print(f"  persistencia PIT ≤2004 ({mode}, muestra común): {score_training(B)}")
+    print("→", write(res))
 
 
 if __name__ == "__main__":

@@ -124,3 +124,118 @@
     entre medias. Ex post: última vintage de UNRATE y NROU.
   uso: subdividir "crecimiento con inflación alta" en recuperación (holgura) frente a sobrecalentamiento
     (tensión) en informes y en la Etapa 2.
+
+# ---------------------------------------------------------------------------------------------
+# Módulo adicional de la base point-in-time v0.2 (decisión C del usuario, 2026-10-15). Variables que nacen en 2003, en
+# el borde del periodo bloqueado: solo 2 años de datos <= 2004 y 0 recesiones. Definiciones fijadas a priori por teoría
+# (research/pit_whitelist.yaml v0.2), SIN mirar datos posteriores a 2004 ni su relación con la etiqueta. Se evalúan como
+# módulo adicional en la evaluación única del walk-forward point-in-time (modo vintage; latest_truncated como
+# sensibilidad), igual que H-DER-001/002. Propuesta del Estratega macro (H8): su mecanismo actúa sobre precios de
+# activos; se preregistran también para la Etapa 2.
+
+- id: H-MOD-001
+  registrada: 2026-10-15
+  autor: usuario + coordinador (Constructor PIT v0.2)
+  estado: preregistrada (sin datos mirados después de 2004)
+  bloque: liquidez
+  modulo: adicional (nowcast) y Etapa 2
+  mecanismo: >
+    La liquidez neta del sistema (balance de la Fed menos la cuenta del Tesoro y los repos inversos) son las reservas
+    que bancos e intermediarios pueden desplegar en activos de riesgo y crédito. Su expansión relaja las condiciones
+    financieras y sostiene la demanda; su contracción las endurece.
+  variable:
+    nombre: net_liq_yoy
+    definicion: 100·log(L_t / L_{t-12}), L = WALCL − TGA (saldo diario DTS desde 2005-10; media semanal H.4.1 antes) − RRPONTSYD, en millones de USD, último dato publicado en t
+    fijada_a_priori: sí
+  objetivo: P(G alto) del nowcast; en la Etapa 2, rendimiento relativo de la renta variable
+  signo_esperado: positivo
+  horizonte: 0-6 meses
+  disponibilidad: 2003-12 -> hoy; retardo 1 día (H.4.1, DTS, NY Fed)
+  evaluacion: contenido incremental en log-loss frente al modelo base sin la variable, en el walk-forward PIT, dentro de la evaluación única
+  criterio_exito: mejora de log-loss con intervalo bootstrap por bloques que no incluye el cero, y signo correcto
+  advertencias: empalme de la TGA en 2005-10 (conceptos distintos; el a/a lo cruza durante 12 meses); 2 recesiones en su historia
+
+- id: H-MOD-002
+  registrada: 2026-10-15
+  autor: usuario + coordinador (Constructor PIT v0.2)
+  estado: preregistrada (sin datos mirados después de 2004)
+  bloque: liquidez
+  modulo: adicional (nowcast) y Etapa 2
+  mecanismo: >
+    La expansión conjunta de los balances de los grandes bancos centrales (Fed, BCE, BoJ) aumenta la liquidez global en
+    dólares, reduce primas de riesgo y sostiene los precios de activos y la actividad global.
+  variable:
+    nombre: global_cb_usd_yoy
+    definicion: 100·log(G_t / G_{t-12}), G = WALCL + activos del Eurosistema × USD/EUR + activos del BoJ × 100 / JPY por USD (millones de USD)
+    fijada_a_priori: sí
+  objetivo: P(G alto) del nowcast; en la Etapa 2, renta variable global y materias primas
+  signo_esperado: positivo
+  horizonte: 0-6 meses
+  disponibilidad: 2003-12 -> hoy; retardos BCE 8 d, BoJ 7 d, Fed y tipos de cambio 1 d
+  evaluacion: igual que H-MOD-001
+  criterio_exito: igual que H-MOD-001
+  advertencias: mezcla efectos de tipo de cambio con cambios de balance; 2 recesiones en su historia
+
+- id: H-MOD-003
+  registrada: 2026-10-15
+  autor: usuario + coordinador (Constructor PIT v0.2)
+  estado: preregistrada (sin datos mirados después de 2004)
+  bloque: inflación / derivados
+  modulo: adicional (nowcast)
+  mecanismo: >
+    El breakeven a 5 años (Treasury nominal − TIPS) es la inflación que descuenta el mercado; cuando sube, anticipa
+    presión de precios y una Fed más restrictiva. Es la expectativa con fecha de mercado (complementa a Michigan y SPF).
+  variable:
+    nombre: t5yie
+    definicion: nivel de T5YIE, último dato diario publicado en t
+    fijada_a_priori: sí
+  objetivo: P(I alta) del nowcast
+  signo_esperado: positivo
+  horizonte: 0-12 meses
+  disponibilidad: 2003-01 -> hoy; retardo 1 día
+  evaluacion: igual que H-MOD-001, sobre el eje I
+  criterio_exito: igual que H-MOD-001
+  advertencias: prima de liquidez de los TIPS (2008) distorsiona el nivel; 2 recesiones
+
+- id: H-MOD-004
+  registrada: 2026-10-15
+  autor: usuario + coordinador (Constructor PIT v0.2)
+  estado: preregistrada (sin datos mirados después de 2004)
+  bloque: tipos
+  modulo: adicional (nowcast)
+  mecanismo: >
+    El tipo real a 10 años (TIPS) es el coste real de la financiación a largo plazo; un tipo real alto frena la
+    inversión, la vivienda y la valoración de activos con retardo.
+  variable:
+    nombre: dfii10
+    definicion: nivel de DFII10, último dato diario publicado en t
+    fijada_a_priori: sí
+  objetivo: P(G alto) del nowcast
+  signo_esperado: negativo
+  horizonte: 6-18 meses
+  disponibilidad: 2003-01 -> hoy; retardo 1 día
+  evaluacion: igual que H-MOD-001
+  criterio_exito: igual que H-MOD-001
+  advertencias: 2 recesiones en su historia
+
+# Sensibilidades de calendario preregistradas (base PIT v0.2). No son hipótesis de relación: el arnés las publica
+# junto a la evaluación única.
+- id: S-PIT-001
+  registrada: 2026-10-15
+  autor: usuario + coordinador (Validador I-3, Estratega C3)
+  estado: preregistrada
+  tipo: sensibilidad de calendario
+  definicion: >
+    Encuestas de Filadelfia (actividad, nuevos pedidos, precios pagados) con el dato de t−1 antes de 1990-07 (retardo
+    +25 días tras el fin de mes) en lugar del tercer jueves del mes t. Matriz pit_us_v0.2_vintage_filadelfia_prudente.
+  criterio: el arnés publica las métricas del modelo con las dos matrices; si la diferencia de log-loss ≤ 2004 supera
+    el intervalo bootstrap de la principal, las variables de Filadelfia antes de 1990 pasan a condicionales.
+
+- id: S-PIT-002
+  registrada: 2026-10-15
+  autor: usuario + coordinador (Estratega H4)
+  estado: preregistrada
+  tipo: sensibilidad de definición
+  definicion: >
+    Michigan pasó a encuesta web en 2024 (salto de nivel). En la evaluación única se publica también el modelo con
+    umcsent y mich_infl_exp en Δ12m en lugar de nivel.
