@@ -16,8 +16,9 @@
 # Medición: research/pit_calendar_measured.csv (.venv/bin/python -m src.features.calendar).
 # v0.2 (2026-10-15): BCE 8 d; PERMIT/CMRMTSPL/NFCI/W875RX1 con vintages ALFRED; Michigan directo a 20 d; SPF < 1990 a
 # 90 d; Filadelfia con variante prudente < 1990; CMRMTSPL 90 d < 2000; BIS 20 d; supuestos marcados por tramo.
+# v0.3: NFCI 12 d de reserva (máximo medido en 2000-12; regla 3 = máximo, no p90).
 
-version: "0.2"
+version: "0.3"
 fecha: 2026-10-15
 series:
   # ---------------------------------------------------------------- empleo (Employment Situation, BLS)
@@ -297,10 +298,10 @@ series:
   NFCI:
     publicacion: Chicago Fed NFCI (miércoles, semana que acaba el viernes anterior)
     frecuencia: W
-    retardo_dias: [{desde: 1900-01-01, dias: 7, supuesto: true}]
+    retardo_dias: [{desde: 1900-01-01, dias: 12, supuesto: true}]
     proxies_publicacion: [NFCI]
     vintages: [NFCI]
-    fuente: Vintages ALFRED desde 2011-05 (features/raw/alfred; mediana 5, p90 6). Antes de 2011, supuesto 7 días; historia reestimada.
+    fuente: Vintages ALFRED desde 2011-05 (features/raw/alfred; mediana 5, p90 6, máx 12 en 2011-12). Antes de 2011, supuesto 12 días (el máximo); historia reestimada.
   # ---------------------------------------------------------------- liquidez
   WALCL: {publicacion: "Fed H.4.1, activos totales (miércoles; jueves 16:30)", frecuencia: W, retardo_dias: [{desde: 1900-01-01, dias: 1, supuesto: true}], fuente: "Calendario del H.4.1."}
   WTREGEN: {publicacion: "Fed H.4.1, cuenta del Tesoro (TGA), media de la semana al miércoles", frecuencia: W, retardo_dias: [{desde: 1900-01-01, dias: 1, supuesto: true}], fuente: "Calendario del H.4.1."}

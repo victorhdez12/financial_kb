@@ -239,3 +239,47 @@
   definicion: >
     Michigan pasó a encuesta web en 2024 (salto de nivel). En la evaluación única se publica también el modelo con
     umcsent y mich_infl_exp en Δ12m en lugar de nivel.
+
+# ---------------------------------------------------------------------------------------------
+# Adenda de evaluación (base PIT v0.3, 2026-10-15; Validador v0.2, M-6). COMPLETA H-MOD-001..004 y S-PIT-002 sin
+# editarlas (regla de este fichero). Escrita sin mirar datos ni relaciones con la etiqueta en ningún periodo.
+
+- id: P-EVAL-MOD
+  registrada: 2026-10-15
+  autor: usuario + coordinador (Constructor PIT v0.3)
+  estado: preregistrada (sin datos mirados)
+  completa: [H-MOD-001, H-MOD-002, H-MOD-003, H-MOD-004]
+  evidencia_previa: >
+    Las cuatro variables solo tienen 12-24 meses con fecha de decisión <= 2004 (desde 2003-01/2003-12) y ninguna
+    recesión: toda su evidencia saldrá de la evaluación única del periodo bloqueado. No se ajusta nada con ellas antes.
+  modelo_base: >
+    El modelo principal preregistrado por el arnés (entregable 3) en modo vintage, con su conjunto de variables de la
+    época E4 congelado ANTES de la evaluación única, reentrenado en el mismo walk-forward (ventana expansiva, embargo de
+    6 meses, etiquetas de entrenamiento recalculadas con datos <= T). El modelo con módulo = el mismo + la variable, con
+    la misma especificación y los mismos hiperparámetros. Sensibilidad: lo mismo en latest_truncated.
+  metrica:
+    eje_G: log-loss binaria de P(G alto) del modelo frente al objetivo blando p_g_high de la etiqueta oficial (H-MOD-001, 002, 004)
+    eje_I: log-loss binaria de P(I alta) frente al objetivo blando p_i_high de la etiqueta oficial (H-MOD-003)
+    muestra: meses puntuables (weight > 0, no provisionales) del periodo bloqueado en que la variable tiene valor
+    contraste: diferencia media de log-loss (base − base + módulo); > 0 = el módulo mejora
+  bootstrap: >
+    Bootstrap por bloques circular sobre la serie mensual de diferencias de log-loss, bloques de 12 meses (≥ 2× el
+    embargo; la etiqueta solapa ~9 meses), 5.000 réplicas, semilla 20261015, intervalo percentil al 95 %.
+  multiplicidad: >
+    Corrección de Holm sobre las 4 hipótesis H-MOD (α familiar = 0,05), con el p-valor bootstrap unilateral
+    (proporción de réplicas con diferencia <= 0). Se informa también sin corregir.
+  criterio_exito: >
+    Mejora media > 0, significativa tras Holm, signo del coeficiente o de la dependencia parcial igual al preregistrado
+    en cada H-MOD, y sin cambio de signo de la mejora entre 2005-2014 y 2015 en adelante (estabilidad).
+
+- id: P-EVAL-S-PIT-002
+  registrada: 2026-10-15
+  autor: usuario + coordinador (Constructor PIT v0.3)
+  estado: preregistrada (sin datos mirados)
+  completa: [S-PIT-002]
+  criterio: >
+    Se evalúan dos especificaciones del mismo modelo: Michigan en nivel (principal) y en Δ12m. Se adopta Δ12m para
+    producción solo si su log-loss (ejes G e I, como en P-EVAL-MOD) en los meses puntuables desde 2024-01 (encuesta web)
+    mejora la del nivel con el intervalo bootstrap al 95 % (bloques de 12 meses) que excluye el cero, sin empeorar la
+    log-loss del resto del periodo bloqueado en más que la anchura de su intervalo. Si no, se mantiene el nivel. Ambas
+    se publican siempre.

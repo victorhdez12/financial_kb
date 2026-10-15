@@ -1,6 +1,6 @@
 ---
 documento: calendario de publicación point-in-time
-version: 0.2
+version: 0.3
 fecha: 2026-10-15
 ficheros: research/pit_calendar.yaml (máquina), research/pit_calendar_measured.csv (medición), src/features/calendar.py, src/features/alfred_raw.py
 ---
@@ -22,8 +22,11 @@ el 1 de enero cae en sábado, el 31 de diciembre es festivo federal (p. ej. la d
    200 días después de su periodo (ALFRED añadió en 1994 el IPC de 1947-71 y en 1999 el PPI de 1913-95), no es una
    primera publicación: se usa mín(calendario, esa vintage).
 3. **Calendario.** Antes del archivo de vintages, o en series sin vintages: ancla (fin del periodo de referencia; inicio
-   del trimestre para el SPF) + `retardo_dias`, **conservador**: el máximo medido en la época más antigua con medición,
-   redondeado hacia arriba, o un supuesto documentado (`supuesto: true`).
+   del trimestre para el SPF) + `retardo_dias`, **conservador**: el **máximo** medido en la época más antigua con
+   vintages propias, redondeado hacia arriba, o un supuesto documentado (`supuesto: true`). Excepciones documentadas
+   (el test exige ahí el p90): CMRMTSPL, cuya única medición (2013+) incluye los cierres del Gobierno y no representa el
+   tramo anterior a 2013 donde se usa la reserva; Filadelfia, cuyo máximo (18 días) es una vintage ALFRED que falta en
+   2015-05.
 4. **Sin vintages que lo recojan → no disponible.** Si d es posterior a lo que cubren las vintages, no se usa (aunque la
    última vintage del warehouse lo tenga). Así el resultado no cambia si el warehouse se trunca en t.
 5. **Monotonía:** una observación cuenta como disponible cuando lo están también todas las anteriores.
@@ -54,7 +57,7 @@ mismo suelo.
 | W875RX1 (labels/raw, sin vintages en el warehouse) | 2010-05 | — | — | 29 / 32 / 83 (2010+) | | 35 / fechas de PCEPI |
 | CMRMTSPL (features/raw/alfred) | 2013-06 | — | — | — | 60 / 66 / 114 | 90 < 2000, 70 en 2000-12 (supuestos) |
 | PERMIT (features/raw/alfred) | 1999-08 | — | — | 17 / 20 / 22 | 18 / 20 / 101 | 23 (supuesto) |
-| NFCI (features/raw/alfred, semanal) | 2011-05 | — | — | 5 / 6 / 12 | 5 / 6 / 20 | 7 (supuesto) |
+| NFCI (features/raw/alfred, semanal) | 2011-05 | — | — | 5 / 6 / 12 | 5 / 6 / 20 | 12 (supuesto; v0.2: 7) |
 | AWHMAN / AHETPI (Employment Situation) | 1961-11 / 1999-08 | 5,5 / 10 / 16 | 5 / 8 / 19 | 5 / 7,5 / 10 | 5 / 8 / 51 | 16 / fechas de PAYEMS |
 | CUSR0000SASLE (CPI) | 2011-04 | — | — | 15 / 18 / 19 | 13 / 18 / 30 | 32 / fechas de CPIAUCSL |
 | Filadelfia ×3 (mismo mes) | 2015-04 | — | — | — | −12 / −10 / 18 | −7 (supuesto; prudente +25 antes de 1990-07) |
@@ -74,7 +77,7 @@ tardaba más y era más variable antes de 1980 (p90 28, máx 33); el M2 pasó de
 | SPF | inicio del trimestre + **90 días hasta 1990-T2** / + 50 | ASA-NBER: difusión no documentada → el trimestre siguiente |
 | BIS NEER | **20 días** | agregado de tipos de mercado; siempre t−1 |
 | BCE (estado semanal) | **8 días** desde el lunes con que el warehouse fecha la semana | estado del viernes, publicado el martes siguiente |
-| NFCI | vintages desde 2011; antes 7 días | p90 medido 6 |
+| NFCI | vintages desde 2011; antes **12 días** (v0.3) | máximo medido en 2000-12 (regla 3) |
 | Mercados diarios, medias mensuales de mercado, H.4.1, DTS, Pink Sheet, BoJ, GZ/EBP | sin cambios respecto a la v0.1 (1 / 1 / 1 / 1 / 7 / 7 / 35 días) | |
 
 Cada tramo de `retardo_dias` lleva su marca `supuesto` (true = no medido), corrigiendo la v0.1 (CMRMTSPL antes de 2013,

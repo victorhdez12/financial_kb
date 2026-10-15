@@ -47,7 +47,7 @@ from src.warehouse.build import VIEWS_SQL
 
 REPO = Path(__file__).resolve().parents[2]
 WL_PATH = REPO / "research" / "pit_whitelist.yaml"
-VERSION = "0.2"
+VERSION = "0.3"
 MODES = ("vintage", "latest_truncated")
 GRID_START = "1950-01-01"
 # un valor deja de valer (NaN) si su periodo de referencia terminó hace más de estos días (series cortadas)
@@ -229,6 +229,26 @@ def needed_series(wl: dict, cal: dict[str, CalEntry]) -> list[str]:
     for s in list(sids):
         sids |= set(cal[s].proxies) | set(cal[s].vintages)
     return sorted(sids)
+
+
+def effective_principal_desde(wl: dict) -> dict[str, str | None]:
+    """Regla general (Validador v0.2, I-1): una variable entra en el modelo principal desde el `principal_desde` MÁS
+    TARDÍO entre el suyo y el de todas sus entradas, recorriendo el grafo de dependencias de las derivadas. Fechas en
+    ISO (AAAA-MM-DD); None = sin restricción."""
+    specs = {v["nombre"]: v for v in wl["variables"]}
+    memo: dict[str, str | None] = {}
+
+    def eff(name: str, stack: tuple = ()) -> str | None:
+        if name in stack:
+            raise ValueError(f"dependencia circular en la lista blanca: {' → '.join(stack + (name,))}")
+        if name not in memo:
+            v = specs[name]
+            dates = [str(v["principal_desde"])] if v.get("principal_desde") else []
+            dates += [d for e in (v.get("entradas") or []) if (d := eff(e, stack + (name,)))]
+            memo[name] = max(dates) if dates else None
+        return memo[name]
+
+    return {n: eff(n) for n in specs}
 
 
 def public_columns(wl: dict) -> list[str]:
@@ -429,6 +449,10 @@ def build_matrix(con, mode: str, grid: pd.DataFrame | None = None, wl: dict | No
                                 "principal_desde")}
 
     pub = public_columns(wl)
+    eff = effective_principal_desde(wl)
+    for c in pub:
+        info[c]["principal_desde_efectivo"] = eff[c]
+        info[c]["principal_desde_heredado"] = bool(eff[c]) and eff[c] != info[c].get("principal_desde")
     X = pd.DataFrame({c: cols[c] for c in pub}, index=pd.DatetimeIndex(idx, name="decision_date"))
     if check_forbidden:
         R.assert_no_forbidden(X.columns, extra=forbidden)   # segunda barrera
@@ -448,6 +472,27 @@ def build_matrix(con, mode: str, grid: pd.DataFrame | None = None, wl: dict | No
 
 # ------------------------------------------------------------------ persistencia point-in-time (baseline)
 PRED_COLS = [f"pers_{q}" for q in R.QUADRANTS]
+# Hash del meta.json de la etiqueta v1.1 (fuera de git). Los parámetros NO se leen de él: s_G y s_I salen de R.PARAMS
+# (código en git) y el empalme se recalcula desde la instantánea congelada de la etiqueta (hash en R.FROZEN). El meta
+# solo se usa para comprobar que coinciden; si su hash cambia, falla (Validador v0.2, M-1).
+LABEL_META_SHA256 = {"1.1": "240a10cd405faed561b446f5922292e288df5b256ea3140b839f924363f9677c"}
+
+
+def label_params(inputs: dict | None = None) -> dict:
+    """s_G, s_I (fijos en R.PARAMS) y empalme IPC→PCE (recalculado desde la instantánea de la etiqueta), comprobados
+    contra el meta.json congelado de la etiqueta."""
+    p = R.PARAMS
+    if inputs is None:
+        inputs, _ = R.read_snapshot()            # verifica el hash de la instantánea (R.FROZEN)
+    splice = R.inflation_axis(inputs["levels"], p).attrs["splice"]["adj_pp"]
+    mp = R.out_path().with_suffix(".meta.json")
+    if file_sha(mp) != LABEL_META_SHA256[p.version]:
+        raise RuntimeError(f"{mp.name} no coincide con el hash registrado en LABEL_META_SHA256")
+    meta = json.loads(mp.read_text())
+    if (meta["s_G"], meta["s_I"]) != (p.s_G_fixed, p.s_I_fixed) or \
+            abs(meta["splice_cpi_core"]["adj_pp"] - splice) > 1e-12:
+        raise RuntimeError("los parámetros de la etiqueta no coinciden con su meta congelado")
+    return {"s_G": p.s_G_fixed, "s_I": p.s_I_fixed, "splice": splice, "label_lag": meta["label_lag"]["label_lag"]}
 
 
 def persistence(con, mode: str, grid: pd.DataFrame | None = None, start: str = "1955-01-01",
@@ -459,7 +504,7 @@ def persistence(con, mode: str, grid: pd.DataFrame | None = None, start: str = "
     grid = decision_grid() if grid is None else grid
     grid = grid[grid["decision_date"] >= pd.Timestamp(start)]
     inputs, _ = R.read_snapshot()
-    meta = json.loads(R.out_path().with_suffix(".meta.json").read_text())
+    lp = label_params()
     cal = cal or load_calendar()
     wh = Warehouse(con, raw=raw)
     snapv = {sid: VintageSet(v, sid) for sid, (v, _) in inputs["vintages"].items() if len(v)}
@@ -480,8 +525,8 @@ def persistence(con, mode: str, grid: pd.DataFrame | None = None, start: str = "
                 lv[sid] = R._cal(snap)
             else:
                 lv[sid] = R._cal(s[av[sid].reindex(s.index).to_numpy() <= np.datetime64(t)])
-        lab, _ = R.make_label({"levels": lv, "usrec": inputs["usrec"]}, R.PARAMS, meta["s_G"], meta["s_I"],
-                              splice=meta["splice_cpi_core"]["adj_pp"])
+        lab, _ = R.make_label({"levels": lv, "usrec": inputs["usrec"]}, R.PARAMS, lp["s_G"], lp["s_I"],
+                              splice=lp["splice"])
         if lab.empty:
             continue
         last = lab.iloc[-1]
@@ -536,13 +581,32 @@ FROZEN: dict[str, dict] = {
 }
 
 
+# Candidatas: hashes calculados, pendientes del veredicto del Validador. Pasan a FROZEN solo tras él (I-4). La v0.2 entró
+# en FROZEN antes del veredicto por un error de orden; queda congelada como registro, pero está SUSTITUIDA por la v0.3.
+CANDIDATE: dict[str, dict] = {
+    # v0.3 (2026-10-15): lista blanca y calendario nuevos sobre la instantánea de datos de la v0.2 (mismo hash)
+    "0.3": {
+        "data_sha256_file": "db06b89c63d7c89c896c76a13127739237c67e6594224a4d7375a5bf5c4a6261",
+        "data_sha256_content": "069b9d5cece116c8771c4d84c6f26ecc21d599f942f27f29b79bfbac9ded6b64",
+        "whitelist_sha256": "321bb0748bab37a777d2c2b8ed576247ce03c3d9c22aaf2a048b08afe40bc180",
+        "calendar_sha256": "373ced7b907e08728464935a64d523b0aa0150e899f44735c6613870c4cbc421",
+        "info_sha256": "897102e5a1afdb76fe6dd36e5941e8ab14c87c0f37e5b5c5c83e495cefac1119",
+        "grid_end": "2026-09-30",
+    },
+}
+# versión → versión de la instantánea de DATOS que usa (la v0.3 reutiliza la de la v0.2, sin releer el warehouse)
+DATA_VERSION = {"0.2": "0.2", "0.3": "0.2"}
+SUPERSEDED = {"0.2": "0.3"}
+
+
 def inputs_dir() -> Path:
     return out_dir() / "inputs"
 
 
 def snapshot_paths(version: str = VERSION) -> dict[str, Path]:
     d = inputs_dir()
-    return {"data": d / f"pit_us_v{version}_inputs.parquet", "whitelist": d / f"pit_us_v{version}_whitelist.yaml",
+    return {"data": d / f"pit_us_v{DATA_VERSION.get(version, version)}_inputs.parquet",
+            "whitelist": d / f"pit_us_v{version}_whitelist.yaml",
             "calendar": d / f"pit_us_v{version}_calendar.yaml", "info": d / f"pit_us_v{version}_inputs.json"}
 
 
@@ -608,19 +672,58 @@ def write_snapshot(con, version: str = VERSION, force: bool = False) -> dict:
     return frozen
 
 
+def write_candidate(version: str = VERSION, force: bool = False) -> dict:
+    """Versión nueva de lista blanca/calendario sobre la instantánea de DATOS existente (DATA_VERSION): copia los yaml
+    de research/, escribe el info (con el hash de los datos reutilizados) y devuelve los hashes de la candidata. No lee
+    el warehouse."""
+    import shutil
+    if version in FROZEN:
+        raise SystemExit(f"la v{version} está congelada (FROZEN)")
+    paths = snapshot_paths(version)
+    dv = DATA_VERSION[version]
+    data_ref = FROZEN.get(dv) or CANDIDATE.get(dv)
+    if not data_ref or file_sha(paths["data"]) != data_ref["data_sha256_file"]:
+        raise RuntimeError(f"la instantánea de datos v{dv} no coincide con su hash")
+    if paths["whitelist"].exists() and not force:
+        raise SystemExit(f"{paths['whitelist']} ya existe (usa --force para rehacer una candidata)")
+    old = json.loads(snapshot_paths(dv)["info"].read_text())
+    info = {**old, "version": version, "datos_de": dv, "creado": pd.Timestamp.now().isoformat(timespec="seconds")}
+    for k in ("whitelist", "calendar", "info"):
+        if paths[k].exists():
+            paths[k].chmod(0o644)
+    shutil.copyfile(WL_PATH, paths["whitelist"])
+    shutil.copyfile(CAL_PATH, paths["calendar"])
+    paths["info"].write_text(json.dumps(info, indent=1))
+    backup = inputs_dir() / "backup"
+    for k in ("whitelist", "calendar", "info"):
+        b = backup / paths[k].name
+        if b.exists():
+            b.chmod(0o644)
+        shutil.copyfile(paths[k], b)
+        b.chmod(0o444)
+        paths[k].chmod(0o444)
+    return {"data_sha256_file": data_ref["data_sha256_file"], "data_sha256_content": data_ref["data_sha256_content"],
+            "whitelist_sha256": file_sha(paths["whitelist"]), "calendar_sha256": file_sha(paths["calendar"]),
+            "info_sha256": file_sha(paths["info"]), "grid_end": info["grid_end"]}
+
+
+def snapshot_ref(version: str) -> dict | None:
+    return FROZEN.get(version) or CANDIDATE.get(version)
+
+
 def read_snapshot(version: str = VERSION, paths: dict[str, Path] | None = None):
     """(conexión DuckDB en memoria con observations/catalog/vistas, lista blanca, ruta del calendario, info).
-    Falla si algún fichero no coincide con FROZEN."""
+    Falla si algún fichero no coincide con FROZEN o, para una candidata, con CANDIDATE."""
     paths = paths or snapshot_paths(version)
-    ref = FROZEN.get(version)
+    ref = snapshot_ref(version)
     if ref:
         for key, k in (("data", "data_sha256_file"), ("whitelist", "whitelist_sha256"),
                        ("calendar", "calendar_sha256"), ("info", "info_sha256")):
             if file_sha(paths[key]) != ref[k]:
-                raise RuntimeError(f"la instantánea {paths[key].name} no coincide con la congelada de la v{version}")
+                raise RuntimeError(f"la instantánea {paths[key].name} no coincide con la registrada de la v{version}")
     df = pd.read_parquet(paths["data"])
     if ref and frame_sha(df) != ref["data_sha256_content"]:
-        raise RuntimeError(f"el contenido de la instantánea v{version} no coincide con FROZEN")
+        raise RuntimeError(f"el contenido de la instantánea v{version} no coincide con el registrado")
     info = json.loads(paths["info"].read_text())
     return snapshot_warehouse(df, info["creado"]), load_whitelist(paths["whitelist"]), paths["calendar"], info
 
@@ -673,7 +776,14 @@ def write(res: dict, version: str = VERSION, suffix: str = "") -> Path:
     meta = {"version": version, "creado": pd.Timestamp.now().isoformat(timespec="seconds"),
             "fecha_decision": "último día hábil del mes (calendario federal EE. UU.)",
             "grid": [f"{res['grid']['decision_date'].min():%Y-%m-%d}", f"{res['grid']['decision_date'].max():%Y-%m-%d}"],
-            "instantanea_entradas": {"info": res.get("info"), "frozen": FROZEN.get(version)},
+            "instantanea_entradas": {"info": res.get("info"), "frozen": FROZEN.get(version),
+                                     "candidata": CANDIDATE.get(version),
+                                     "estado": ("congelada" if version in FROZEN else
+                                                "candidata (pendiente del Validador)" if version in CANDIDATE
+                                                else "sin registrar")},
+            "sustituye_a": [v for v, n in SUPERSEDED.items() if n == version],
+            "label_params": {k: v for k, v in label_params().items()},
+            "label_meta_sha256": LABEL_META_SHA256.get(R.PARAMS.version),
             "code_sha256": {p.name: file_sha(p) for p in sorted((REPO / "src" / "features").glob("*.py"))},
             "label_snapshot": R.FROZEN.get(R.PARAMS.version), "files": {}, "columns": {}, "baseline": {},
             "regla_arnes": ("modo principal vintage; latest_truncated como sensibilidad; puntuar en los dos; "
@@ -701,14 +811,21 @@ def write(res: dict, version: str = VERSION, suffix: str = "") -> Path:
 def main() -> None:
     ap = argparse.ArgumentParser(description="Base point-in-time: instantánea, matriz y baseline de persistencia")
     ap.add_argument("--freeze", action="store_true", help="warehouse vivo + raw → instantánea de entradas")
+    ap.add_argument("--candidate", action="store_true",
+                    help="lista blanca y calendario nuevos sobre la instantánea de datos existente (sin warehouse)")
     ap.add_argument("--force", action="store_true", help="sobrescribe una instantánea candidata (no congelada)")
     ap.add_argument("--live", action="store_true", help="construye desde el warehouse vivo (*_live, seguimiento)")
     ap.add_argument("--no-baseline", action="store_true")
     a = ap.parse_args()
     if a.freeze:
         frozen = write_snapshot(db.connect(), force=a.force)
-        print("Instantánea escrita. Añade a FROZEN en src/features/pit.py:")
+        print("Instantánea escrita. Añade sus hashes a CANDIDATE en src/features/pit.py (a FROZEN solo tras el veredicto):")
         print(json.dumps({VERSION: frozen}, indent=1))
+        return
+    if a.candidate:
+        cand = write_candidate(force=a.force)
+        print("Candidata escrita. Añade a CANDIDATE en src/features/pit.py (no a FROZEN hasta el veredicto):")
+        print(json.dumps({VERSION: cand}, indent=1))
         return
     if a.live:
         con = db.connect()

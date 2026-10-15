@@ -52,22 +52,44 @@ def full(snap, forbidden):
                               raw=False) for m in P.MODES}
 
 
-# ------------------------------------------------------------------ (h) instantánea congelada
-def test_h_snapshot_matches_frozen():
-    ref = P.FROZEN[P.VERSION]
+# ------------------------------------------------------------------ (h) instantánea congelada / candidata
+def test_h_current_version_is_candidate_not_frozen():
+    """I-4: una versión entra en FROZEN solo tras el veredicto del Validador. La v0.3 es candidata."""
+    assert P.VERSION in P.CANDIDATE and P.VERSION not in P.FROZEN
+    assert P.SUPERSEDED.get("0.2") == P.VERSION
+
+
+def test_h_snapshot_matches_registered():
+    ref = P.snapshot_ref(P.VERSION)
     assert P.file_sha(SNAP["data"]) == ref["data_sha256_file"]
     assert P.frame_sha(pd.read_parquet(SNAP["data"])) == ref["data_sha256_content"]
     assert P.file_sha(SNAP["whitelist"]) == ref["whitelist_sha256"]
     assert P.file_sha(SNAP["calendar"]) == ref["calendar_sha256"]
+    assert P.file_sha(SNAP["info"]) == ref["info_sha256"]
     for p in SNAP.values():   # solo lectura, con copia de respaldo idéntica
         assert not (p.stat().st_mode & 0o222), p
         assert P.file_sha(p.parent / "backup" / p.name) == P.file_sha(p)
 
 
+@pytest.mark.parametrize("version", sorted(P.FROZEN))
+def test_h_frozen_versions_intact(version):
+    """Las versiones congeladas (también la v0.2, sustituida) siguen intactas."""
+    ref, paths = P.FROZEN[version], P.snapshot_paths(version)
+    assert P.file_sha(paths["data"]) == ref["data_sha256_file"]
+    assert P.file_sha(paths["whitelist"]) == ref["whitelist_sha256"]
+    assert P.file_sha(paths["calendar"]) == ref["calendar_sha256"]
+
+
+def test_h_same_data_as_v02():
+    assert P.CANDIDATE["0.3"]["data_sha256_file"] == P.FROZEN["0.2"]["data_sha256_file"]
+    assert P.snapshot_paths("0.3")["data"] == P.snapshot_paths("0.2")["data"]
+
+
 def test_h_research_files_equal_snapshot():
     """La lista blanca y el calendario de research/ no pueden cambiar sin una versión nueva."""
-    assert P.file_sha(P.WL_PATH) == P.FROZEN[P.VERSION]["whitelist_sha256"]
-    assert P.file_sha(CAL_PATH) == P.FROZEN[P.VERSION]["calendar_sha256"]
+    ref = P.snapshot_ref(P.VERSION)
+    assert P.file_sha(P.WL_PATH) == ref["whitelist_sha256"]
+    assert P.file_sha(CAL_PATH) == ref["calendar_sha256"]
 
 
 def test_h_tampered_snapshot_rejected(tmp_path):
@@ -81,16 +103,81 @@ def test_h_tampered_snapshot_rejected(tmp_path):
         P.read_snapshot(paths=paths)
 
 
-def test_h_official_matrix_reproducible(full):
-    meta = json.loads((P.out_dir() / f"pit_us_v{P.VERSION}.meta.json").read_text())
-    for m in P.MODES:
-        assert P.frame_sha(full[m][0]) == meta["files"][f"pit_us_v{P.VERSION}_{m}.parquet"]["sha256_content"], m
-    assert meta["instantanea_entradas"]["frozen"] == P.FROZEN[P.VERSION]
+@pytest.fixture(scope="module")
+def official_rebuild(snap, full, forbidden):
+    """Reconstrucción completa: los 2 modos, la variante de Filadelfia y los baselines (misma muestra)."""
+    phil = P.build_matrix(snap["con"], "vintage", snap["grid"], wl=snap["wl"],
+                          cal=load_calendar(snap["cal_path"], variant="prudente"), forbidden=forbidden, raw=False)
+    base = P.common_sample({m: P.persistence(snap["con"], m, snap["grid"], cal=snap["cal"], raw=False)
+                            for m in P.MODES})
+    return {"vintage": full["vintage"][0], "latest_truncated": full["latest_truncated"][0],
+            "vintage_filadelfia_prudente": phil[0]}, base
 
 
-def test_h_snapshot_writer_refuses_frozen():
+def test_h_official_outputs_reproducible(official_rebuild):
+    mats, base = official_rebuild
+    od = P.out_dir()
+    meta = json.loads((od / f"pit_us_v{P.VERSION}.meta.json").read_text())
+    for name, X in mats.items():
+        assert P.frame_sha(X) == meta["files"][f"pit_us_v{P.VERSION}_{name}.parquet"]["sha256_content"], name
+    for m, B in base.items():
+        f = od / f"baseline_persistence_v{P.VERSION}_{m}.parquet"
+        pd.testing.assert_frame_equal(pd.read_parquet(f), B.reset_index(), obj=f.name)
+        assert P.file_sha(f) == meta["files"][f.name]["sha256_file"]
+    assert meta["instantanea_entradas"]["candidata"] == P.CANDIDATE[P.VERSION]
+    assert meta["label_meta_sha256"] == P.LABEL_META_SHA256[R.PARAMS.version]
+
+
+def test_h_snapshot_writers_refuse_frozen():
     with pytest.raises(SystemExit):
-        P.write_snapshot(None, version=P.VERSION)
+        P.write_snapshot(None, version="0.2")
+    with pytest.raises(SystemExit):
+        P.write_candidate(version="0.2")
+
+
+def test_h_label_params_pinned(tmp_path, monkeypatch):
+    """M-1: s_G, s_I y el empalme salen de la etiqueta congelada; un meta.json alterado hace fallar."""
+    lp = P.label_params()
+    assert (lp["s_G"], lp["s_I"]) == (0.40, 0.31) and abs(lp["splice"] - 0.20435090125244157) < 1e-12
+    meta = json.loads(R.out_path().with_suffix(".meta.json").read_text())
+    meta["s_G"] = 0.41
+    fake = tmp_path / R.out_path().name
+    fake.with_suffix(".meta.json").write_text(json.dumps(meta))
+    monkeypatch.setattr(P.R, "out_path", lambda p=R.PARAMS: fake)
+    with pytest.raises(RuntimeError):
+        P.label_params()
+
+
+# ------------------------------------------------------------------ principal_desde: herencia por dependencias (I-1)
+def _ancestors(specs: dict, name: str) -> set:
+    seen, todo = set(), list(specs[name].get("entradas") or [])
+    while todo:
+        n = todo.pop()
+        if n not in seen:
+            seen.add(n)
+            todo += list(specs[n].get("entradas") or [])
+    return seen
+
+
+def test_i1_principal_desde_inherited_through_graph(snap):
+    """Recorrido independiente del grafo: el principal_desde efectivo = el más tardío del nodo y de TODOS sus
+    ancestros; coincide con el código y con el meta."""
+    specs = {v["nombre"]: v for v in snap["wl"]["variables"]}
+    meta = json.loads((P.out_dir() / f"pit_us_v{P.VERSION}.meta.json").read_text())["columns"]["vintage"]
+    eff = P.effective_principal_desde(snap["wl"])
+    for name in P.public_columns(snap["wl"]):
+        dates = [str(specs[n]["principal_desde"]) for n in {name} | _ancestors(specs, name)
+                 if specs[n].get("principal_desde")]
+        want = max(dates) if dates else None
+        assert eff[name] == want, name
+        assert meta[name]["principal_desde_efectivo"] == want, name
+    assert eff["infl_energy_pressure"] == "1978-01-01"            # hereda de headline_minus_core_6m
+    assert {n for n in P.public_columns(snap["wl"]) if meta[n]["principal_desde_heredado"]} == {"infl_energy_pressure"}
+
+
+def test_i2_vix_conditional_before_2003(snap):
+    v = next(x for x in snap["wl"]["variables"] if x["nombre"] == "vix")
+    assert str(v["principal_desde"]) == "2003-09-22"
 
 
 # ------------------------------------------------------------------ (a) publicación ≤ t, recalculada aparte
@@ -252,8 +339,18 @@ def test_v_assumed_lags_vs_alfred(snap, sid, lag, until, share):
     assert len(d) > 100 and (d <= lag).mean() >= share, d.describe()
 
 
+# Regla 3 (pit_calendar.md): retardo de reserva ≥ MÁXIMO medido en la época más antigua con vintages propias, salvo
+# excepciones documentadas, donde ese máximo no representa el tramo en que se usa la reserva.
+FALLBACK_EXCEPTIONS = {
+    "CMRMTSPL": "solo hay medición 2013+, con los cierres de 2013 y 2025 (máx. 114); la reserva se usa antes de 2013 "
+                "(90/70 d ≥ p90 66)",
+    "GACDFSA066MSFRBPHI": "máx. 18 = vintage ALFRED que falta en 2015-05 (Validador M-7); p90 −10",
+    "NOCDFSA066MSFRBPHI": "igual que GACDFSA066MSFRBPHI",
+    "PPCDFSA066MSFRBPHI": "igual que GACDFSA066MSFRBPHI",
+}
+
+
 def test_calendar_fallback_lags_cover_measured():
-    """El retardo de reserva no es menor que el p90 medido en la época más antigua (vintages propias)."""
     cal = load_calendar()
     m = pd.read_csv(MEASURED_PATH)
     m = m[m["epoca"] != "todas"]
@@ -264,7 +361,8 @@ def test_calendar_fallback_lags_cover_measured():
         if mm.empty:
             continue
         earliest = mm.sort_values("desde").iloc[0]
-        assert e.lags[0][1] >= earliest["p90"], (sid, e.lags, earliest.to_dict())
+        need = earliest["p90"] if sid in FALLBACK_EXCEPTIONS else earliest["max"]
+        assert e.lags[0][1] >= need, (sid, e.lags, earliest.to_dict())
 
 
 # ------------------------------------------------------------------ (b) truncamiento
@@ -338,9 +436,14 @@ def test_c_placebo_detects_leak(full):
     F = X.loc[common].to_numpy(float)
     honest = PL.placebo_skills(F, y, common, n_perm=8)
     leaky = PL.placebo_skills(F, y, common, n_perm=8, leak=_leak)
+    t4 = PL.placebo_skills(F, y, common, n_perm=8, leak=lambda ys, rng: persistence_onehot(ys, lag=4))
     assert PL.placebo_check(honest), honest           # sin fuga: pasa
-    assert not PL.placebo_check(leaky), leaky         # con fuga: falla
-    assert (leaky > PL.PLACEBO_TOL).all(), leaky      # la detecta en cada permutación
+    assert not PL.placebo_check(leaky), leaky         # con fuga fuerte (σ = 0,5, elegida tras un fallo): falla
+    assert (leaky > PL.PLACEBO_TOL).all(), leaky
+    # control a priori (Validador v0.2, definido por el mecanismo): la etiqueta de t−4 en vez de t−5, es decir, una
+    # fuga de calendario de 1 mes. Debe hacer fallar el placebo en todas las permutaciones
+    assert not PL.placebo_check(t4), t4
+    assert (t4 > PL.PLACEBO_TOL).all(), t4
 
 
 # ------------------------------------------------------------------ (d) señal plantada

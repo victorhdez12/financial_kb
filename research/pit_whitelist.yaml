@@ -12,6 +12,8 @@
 #   desde            (opcional) la columna es NaN antes de esta fecha de decisión (sin mecanismo / sin datos fiables)
 #   principal_desde  (opcional) antes de esta fecha la variable es CONDICIONAL: fuera del modelo principal (la serie no
 #                    existía en tiempo real con esa definición). El arnés no la usa antes en el modelo principal.
+#                    REGLA GENERAL (v0.3): una derivada hereda el principal_desde MÁS TARDÍO de todas sus entradas,
+#                    recorriendo el grafo (pit.effective_principal_desde); el meta lo publica como principal_desde_efectivo.
 #   admision         regla de admisión (docs/PLAN.md)
 #   unidades/factor  unidades esperadas en el catálogo (falla si cambian) y escala fija
 #
@@ -19,8 +21,10 @@
 # tendencia de 10 años (MAD) con histéresis ±0,5 σ y 2 meses; tcu_gap; cobre/oro y dólar desde 1973; Michigan desde
 # 1978 con fuente directa; inflación separada en núcleo (pp) y energía (z); A1-A9; curva en 4 estados (25 pb);
 # GZ < 2012, M2 < 1980 e IPC subyacente < 1978 condicionales.
+# v0.3 (2026-10-15, re-auditoría del Validador de la v0.2): herencia de principal_desde por dependencias (afecta a
+# infl_energy_pressure → 1978-01); vix condicional antes de 2003-09-22; fechas de existencia no verificadas declaradas.
 
-version: "0.2"
+version: "0.3"
 fecha: 2026-10-15
 zscore_min_meses: 120          # z-scores expansivos: solo historia <= t, mínimo 10 años
 tendencia_meses: 120           # tendencia unilateral: mediana de los 120 meses hasta t
@@ -48,7 +52,7 @@ variables:
   - {nombre: _tcu, bloque: auxiliar, tipo: serie, series: [TCU], transformacion: {fn: level}, modo: vintage, estado: auxiliar, mecanismo: "Utilización de la capacidad (nivel)."}
   - {nombre: tcu_gap, bloque: crecimiento, tipo: derivada, funcion: gap_mean_prev, entradas: [_tcu], estado: principal_epoca,
      mecanismo: "Utilización de la capacidad frente a su media de los 120 meses previos: holgura industrial sin la deriva secular del nivel (87 en los 60, 77 en 2000-04).", signo_esperado: "+ P(G alto), + P(I alta)",
-     admision: {fuente_viva: FRED/ALFRED, historia: "1967-", pit: "media solo hacia atrás", disponibilidad: "desde 1977 (E1)"}}
+     admision: {fuente_viva: FRED/ALFRED, historia: "1967-", pit: "media solo hacia atrás; vintages desde 1996. SUPUESTO no verificado: que la utilización de la industria TOTAL se publicaba en tiempo real desde 1967 (pudo empezar después que la de manufacturas)", disponibilidad: "desde 1976-02 (E1)"}}
   - {nombre: claims_4w_yoy, bloque: crecimiento, tipo: serie, series: [ICSA], transformacion: {fn: rolling_log_yoy, n: 4}, modo: vintage, estado: principal_epoca,
      mecanismo: "Las peticiones iniciales de paro son el dato de despidos más rápido; su subida anticipa el deterioro del empleo.", signo_esperado: "- P(G alto)",
      admision: {fuente_viva: FRED/ALFRED, historia: "1967-", pit: "ALFRED desde 2009; antes calendario (jueves)", disponibilidad: "desde 1968 (E1)"}}
@@ -86,7 +90,7 @@ variables:
      admision: {fuente_viva: Fed de Filadelfia, historia: "1968-", pit: "encuesta fechada; 90 d antes de 1990-T3, 50 d después", disponibilidad: "desde 1969 (E1)"}}
   - {nombre: spf_anxious, bloque: crecimiento, tipo: serie, series: [spf_anxious_index], transformacion: {fn: level}, modo: latest_truncated, estado: principal_epoca,
      mecanismo: "A5. Probabilidad media de caída del PIB real el trimestre siguiente según el SPF: un juicio fechado, no un modelo reestimado (sustituto PIT de las probabilidades de recesión rechazadas).", signo_esperado: "- P(G alto)",
-     admision: {fuente_viva: Fed de Filadelfia, historia: "1969-", pit: "encuesta fechada", disponibilidad: "desde 1969 (E1)"}}
+     admision: {fuente_viva: Fed de Filadelfia, historia: "1969-", pit: "encuesta fechada; el nombre del índice es posterior, pero la probabilidad se preguntaba desde 1968-T4", disponibilidad: "desde 1969 (E1)"}}
   - {nombre: growth_rt, bloque: crecimiento, tipo: derivada, funcion: trend_zmean, entradas: [indpro_3m_ann, payems_3m_ann, w875rx1_3m_ann, cmrmtspl_3m_ann], min_entradas: 2, estado: principal,
      mecanismo: "Análogo PIT unilateral de G: para cada entrada, (ritmo − mediana de los 120 meses hasta t) / (1,4826 · MAD expansiva de esa desviación); media de las disponibles (≥ 2).", signo_esperado: "+ P(G alto)",
      admision: {fuente_viva: sí, historia: "1950-", pit: "tendencia y escala solo hacia atrás", disponibilidad: "desde ~1965"}}
@@ -103,7 +107,7 @@ variables:
      admision: {fuente_viva: FRED/ALFRED, historia: "1958-", pit: "igual que core_cpi_6m_ann", disponibilidad: "principal desde 1978"}}
   - {nombre: core_services_cpi_6m_ann, bloque: inflacion, tipo: serie, series: [CUSR0000SASLE], transformacion: {fn: pct_ann, k: 6}, modo: vintage, estado: principal, principal_desde: 1978-01-01,
      mecanismo: "A1. Servicios sin energía (~60 % de la subyacente: vivienda, sanidad, transporte): la parte persistente que determina I en t+1…t+3.", signo_esperado: "+ P(I alta)",
-     admision: {fuente_viva: FRED/ALFRED, historia: "1967-", pit: "fechas de CPIAUCSL desde 1972; vintages propias desde 2011; agregado especial: condicional antes de 1978 como el IPC subyacente", disponibilidad: "principal desde 1978"}}
+     admision: {fuente_viva: FRED/ALFRED, historia: "1967-", pit: "fechas de CPIAUCSL desde 1972; vintages propias desde 2011; agregado especial cuya primera publicación NO está verificada (supuesto: 1978, como el IPC subyacente)", disponibilidad: "principal desde 1978"}}
   - {nombre: headline_cpi_6m_ann, bloque: inflacion, tipo: serie, series: [CPIAUCSL], transformacion: {fn: pct_ann, k: 6}, modo: vintage, estado: principal,
      mecanismo: "Inflación general (incluye energía y alimentos).", signo_esperado: "+ P(I alta)",
      admision: {fuente_viva: FRED/ALFRED, historia: "1947-", pit: "ALFRED desde 1972-07; antes 32 d (t−2, conservador)", disponibilidad: "completa"}}
@@ -130,7 +134,7 @@ variables:
      admision: {fuente_viva: sí, historia: "1965-", pit: "sí", disponibilidad: "principal desde 1978"}}
   - {nombre: infl_energy_pressure, bloque: inflacion, tipo: derivada, funcion: zmean, entradas: [oil_yoy, ppi_yoy, headline_minus_core_6m], min_entradas: 2, estado: principal,
      mecanismo: "Compuesto de energía en z expansivos: petróleo, PPI y general − subyacente (la capa de shock; la subyacente manda en el nivel).", signo_esperado: "+ P(I alta) a corto plazo",
-     admision: {fuente_viva: sí, historia: "1950-", pit: "z expansivo sobre la trayectoria PIT", disponibilidad: "desde ~1967"}}
+     admision: {fuente_viva: sí, historia: "1950-", pit: "z expansivo sobre la trayectoria PIT", disponibilidad: "condicional antes de 1978-01: lo HEREDA de headline_minus_core_6m (IPC subyacente); regla general de herencia, no se declara a mano"}}
   - {nombre: philly_prices_paid, bloque: inflacion, tipo: serie, series: [PPCDFSA066MSFRBPHI], transformacion: {fn: level}, modo: latest_truncated, estado: principal_epoca,
      mecanismo: "A7. Precios pagados de la encuesta de Filadelfia: el único dato de precios del propio mes t; adelanta el PPI y la inflación general.", signo_esperado: "+ P(I alta)",
      admision: {fuente_viva: FRED, historia: "1968-", pit: "como philly_activity (variante prudente < 1990)", disponibilidad: "desde 1968-05 (E1)"}}
@@ -198,9 +202,9 @@ variables:
   - {nombre: nfci, bloque: financieras, tipo: serie, series: [NFCI], transformacion: {fn: level}, modo: vintage, estado: condicional, principal_desde: 2011-05-01,
      mecanismo: "Condiciones financieras (Chicago Fed); por encima de 0 = más tensas que la media.", signo_esperado: "- P(G alto)",
      admision: {fuente_viva: FRED/ALFRED, historia: "1971-", pit: "modelo reestimado cada semana; vintages desde 2011", disponibilidad: "condicional antes de 2011"}}
-  - {nombre: vix, bloque: financieras, tipo: serie, series: [VIXCLS], transformacion: {fn: level}, modo: latest_truncated, estado: principal_epoca,
-     mecanismo: "Volatilidad implícita = aversión al riesgo.", signo_esperado: "- P(G alto)",
-     admision: {fuente_viva: FRED, historia: "1990-; 2 recesiones ≤ 2004", pit: "mercado", disponibilidad: "desde 1990 (E4): la investigación ≤ 2004 no la puede validar"}}
+  - {nombre: vix, bloque: financieras, tipo: serie, series: [VIXCLS], transformacion: {fn: level}, modo: latest_truncated, estado: principal_epoca, principal_desde: 2003-09-22,
+     mecanismo: "Volatilidad implícita = aversión al riesgo. Definición actual (S&P 500, sin modelo) desde 2003-09-22; VIXCLS 1990-2003 es una reconstrucción de 2003 (el VIX de 1993 era el actual VXO). Sin empalme con VXO salvo petición del usuario.", signo_esperado: "- P(G alto)",
+     admision: {fuente_viva: FRED, historia: "1990-; 2 recesiones ≤ 2004", pit: "mercado; definición de 2003: condicional antes", disponibilidad: "condicional antes de 2003-09-22"}}
   - {nombre: eq_ret_6m, bloque: financieras, tipo: serie, series: [shiller_sp_price], transformacion: {fn: log_diff, k: 6}, modo: latest_truncated, estado: principal,
      mecanismo: "La bolsa descuenta beneficios futuros y anticipa el crecimiento.", signo_esperado: "+ P(G alto)",
      admision: {fuente_viva: Shiller, historia: "1871-", pit: "media mensual de precios de mercado", disponibilidad: "completa"}}
