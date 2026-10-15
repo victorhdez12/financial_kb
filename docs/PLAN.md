@@ -162,6 +162,13 @@ El backtest usa un **embargo de 6 meses**, porque la etiqueta usa datos hasta t+
 - **Baseline honesto que hay que batir: persistencia point-in-time**, es decir, la última etiqueta que realmente se conoce en t (**63,6 % de acierto, log-loss blanda 1,235**; ficha v1.1 §12 y `label_v1.1_checks.md` §6b). La persistencia "mes anterior" (89 %) y la etiqueta final desplazada 5 meses (68 %) tienen fuga y no valen como referencia. El baseline y las variables se construyen con el mismo `vintage_mode`. La métrica principal sigue siendo la log-loss.
 - **Variables que nacen dentro del periodo bloqueado** (`cboe_vx` 2004, `mpls_mpd` 2006): no se seleccionan ni se ajustan explorando datos de 2005-2026. Se definen **a priori por teoría económica y se preregistran** (`research/hypotheses.yaml`, H-DER-001 y H-DER-002). Se evalúan como **módulo adicional** dentro de la evaluación única del walk-forward point-in-time, cuando cumplan la historia mínima de la regla de admisión.
 
+### Capas ex post y decisiones tras la revisión económica de la etiqueta (usuario, 2026-10-15)
+- La etiqueta v1.1 **no se toca**: es el objetivo del nowcast. Revisión: `docs/reviews/2026-10-15_estratega_macro_etiqueta.md`.
+- **Nombre visible** del cuadrante `late_cycle`: "Crecimiento con inflación alta" (solo en informes y gráficos; el identificador no cambia).
+- **Capas ex post preregistradas** (`research/hypotheses.yaml`, L-CAP-001/002/003): dirección de la inflación, shock energético y holgura laboral. Son columnas aparte, prohibidas como variables; sirven a la Etapa 2 (cuadrante × recesión × dirección, mismo signo en 1955-79 y 1980-2004) y a los informes.
+- **Pospuesto a su fase:** etiqueta v2.0 con inflación frente a expectativas (Livingston, SPF, Michigan), solo si la Etapa 2 lo justifica con datos ≤ 2004; capa EUR; fiscalidad española (rotar con fondos traspasables, no ETF) en la fase de cartera.
+- Toda mirada a rendimientos se anota en `research/trial_log.md`.
+
 ### Investigación de relaciones adelantadas
 Programa propio en `docs/models/research_program.md`: hipótesis con mecanismo y preregistradas, prueba de universalidad (JST, OCDE, zona euro), métodos de alerta temprana y contenido incremental fuera de muestra, control de comparaciones múltiples. Las reglas validadas alimentan el modelo, las reglas de oro y un panel de alertas; el sistema de reglas compite con el GBM. Futuros y derivados: variables y "sorpresa frente a lo descontado".
 

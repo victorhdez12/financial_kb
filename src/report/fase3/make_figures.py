@@ -30,11 +30,11 @@ OUT = ROOT / "obsidian" / "Reports" / "Fase 3" / "img"
 Q = ["expansion", "late_cycle", "stagflation", "low_growth_disinfl"]
 QNAME = {
     "expansion": "Expansión",
-    "late_cycle": "Late cycle / sobrecalentamiento",
+    "late_cycle": "Crecimiento con inflación alta",  # id late_cycle (v1.1); puede ser recuperación temprana o sobrecalentamiento
     "stagflation": "Estanflación",
     "low_growth_disinfl": "Crecimiento bajo / desinflación",
 }
-QSHORT = {"expansion": "Expansión", "late_cycle": "Late cycle", "stagflation": "Estanflación",
+QSHORT = {"expansion": "Expansión", "late_cycle": "Crec. con infl. alta", "stagflation": "Estanflación",
           "low_growth_disinfl": "Crec. bajo / desinfl."}
 QCOL = {"expansion": "#1a9e77", "late_cycle": "#e6a000", "stagflation": "#d64545",
         "low_growth_disinfl": "#2b6fd1"}
@@ -242,7 +242,7 @@ def fig_mapa(lab, cifras):
     ax.text(xl[1] - 0.1, 2.6, "umbral κ = 2,5 %", ha="right", va="bottom", fontsize=8, color=INK)
     ax.text(0.08, yl[1] - 0.2, "← por debajo de tendencia | por encima →", ha="center", va="top",
             fontsize=8, color=INK)
-    corners = [(3.0, 0.0, "Expansión", "expansion"), (3.0, 10.8, "Late cycle", "late_cycle"),
+    corners = [(3.0, 0.0, "Expansión", "expansion"), (3.0, 10.8, "Crec. con\ninfl. alta", "late_cycle"),
                (-3.0, 10.8, "Estanflación", "stagflation"), (-3.0, 0.0, "Crec. bajo /\ndesinflación",
                                                                "low_growth_disinfl")]
     for x, y, t, q in corners:

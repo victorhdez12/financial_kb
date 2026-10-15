@@ -63,3 +63,64 @@
   advertencias: >
     Nace en 2006, dentro del periodo bloqueado: no hay ningún dato en el periodo de investigación.
     Toda su evaluación es fuera de muestra. Solo 2 recesiones en su historia.
+
+# ---------------------------------------------------------------------------------------------
+# Capas ex post de la etiqueta (decisión del usuario, 2026-10-15, tras la revisión del Estratega
+# macro: docs/reviews/2026-10-15_estratega_macro_etiqueta.md). NO cambian la etiqueta v1.1: son
+# columnas aparte, ex post como `usrec`, y PROHIBIDAS como variables de los modelos (entran en la
+# lista negra). Sirven para la Etapa 2 (activos por régimen) y para los informes. Definiciones
+# fijadas por teoría ANTES de evaluarlas; no se exploran variantes. Ver research/trial_log.md: la
+# capa L-CAP-001 ya se miró una vez (1955-2004) en esa revisión y cuenta como prueba.
+
+- id: L-CAP-001
+  registrada: 2026-10-15
+  autor: usuario + coordinador (propuesta del Estratega macro)
+  estado: preregistrada; ya contrastada una vez en 1955-2004 (trial_log 2026-10-15)
+  tipo: capa ex post (no es variable)
+  nombre: infl_dir (dirección de la inflación)
+  mecanismo: >
+    Los precios de los activos responden a la aceleración o desaceleración de la inflación más que a su
+    nivel: una inflación que acelera endurece la política monetaria esperada y sube la prima por plazo
+    (malo para bonos y para la valoración de la bolsa); una que desacelera hace lo contrario.
+  definicion: >
+    dI_t = I_t - I_{t-6}, con I el eje de inflación de la etiqueta v1.1 (PCE subyacente 6 m centrada,
+    empalmada). P(acelera)_t = Phi(dI_t / (s_I * sqrt(2))), s_I = 0,31 pp. Etiqueta dura: "acelera" si
+    P >= 0,5. Frontera si max(P, 1-P) < 0,55.
+  uso: cuadrante x recesión x dirección en la Etapa 2; contraste principal preregistrado =
+    "G bajo e inflación acelerando" frente al resto (bolsa y 60/40 frente a oro y materias primas).
+  exito_etapa2: mismo signo del contraste en 1955-79 y 1980-2004; el periodo bloqueado se evalúa una vez.
+
+- id: L-CAP-002
+  registrada: 2026-10-15
+  autor: usuario + coordinador (propuesta del Estratega macro)
+  estado: preregistrada (sin datos mirados)
+  tipo: capa ex post (no es variable)
+  nombre: energy_shock (shock energético)
+  mecanismo: >
+    Los shocks de oferta energética mueven la inflación general, la renta real de los hogares, los
+    breakevens y las materias primas aunque la subyacente apenas cambie (1986, 1999-2000, 2026). El eje
+    de la etiqueta usa la subyacente a propósito; esta capa recoge lo que deja fuera.
+  definicion: >
+    gap_t = I^general_t - I_t, con I^general la misma transformación (6 m centrada, anualizada) sobre
+    PCEPI (desde 1959; antes, sin capa). oil_t = variación a/a del precio del crudo: WPU0561 (PPI crudo,
+    1947->) hasta 1985-12 y MCOILWTICO desde 1986-01 (empalme en nivel, anotado).
+    Shock alcista si gap_t > +1,0 pp o oil_t > +40 %; bajista si gap_t < -1,0 pp o oil_t < -40 %;
+    neutro en otro caso. Si las dos señales se contradicen, manda gap_t.
+  uso: capa de informe y condicionante en la Etapa 2 (materias primas, breakevens, renta variable energía).
+
+- id: L-CAP-003
+  registrada: 2026-10-15
+  autor: usuario + coordinador (propuesta del Estratega macro)
+  estado: preregistrada (sin datos mirados)
+  tipo: capa ex post (no es variable)
+  nombre: slack (holgura del mercado laboral)
+  mecanismo: >
+    Dentro de "crecimiento con inflación alta" (id late_cycle) conviven recuperaciones tempranas (paro
+    por encima de su nivel de equilibrio, inflación que tiende a bajar) y sobrecalentamientos (paro por
+    debajo, presión salarial). La holgura los distingue y cambia el posicionamiento (duración, crédito).
+  definicion: >
+    slack_t = UNRATE_t (media de 3 m centrada) - NROU_t (CBO, trimestral interpolada a mensual; solo
+    fechas <= t, nunca las proyecciones). Holgura si slack_t > +0,5 pp; tensión si < -0,5 pp; neutro
+    entre medias. Ex post: última vintage de UNRATE y NROU.
+  uso: subdividir "crecimiento con inflación alta" en recuperación (holgura) frente a sobrecalentamiento
+    (tensión) en informes y en la Etapa 2.
