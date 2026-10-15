@@ -1,8 +1,8 @@
 ---
 documento: ficha de la etiqueta de régimen
-version: 1.0
-fecha: 2026-10-14
-estado: CONGELADA (aprobada por el usuario el 2026-10-14). Cualquier cambio = v1.1 / v2.0 con revalidación completa
+version: 1.1
+fecha: 2026-10-15
+estado: CONGELADA (v1.0 el 2026-10-14; v1.1 aprobada por el usuario el 2026-10-15 tras la validación). Cualquier cambio = v1.2 / v2.0 con revalidación completa
 ---
 
 # Ficha de la etiqueta de régimen — nowcast EE. UU.
@@ -59,7 +59,12 @@ están INDPRO y PAYEMS, y esos meses se marcan con `cobertura_g = 2`.
 
 **Serie principal:** PCE subyacente (`PCEPILFE`), desde 1959 (primer valor centrado: 1959-04). Es la medida de
 referencia de la Fed.
-- 1957-04 a 1959-03: IPC subyacente (`CPILFESL`) menos 0,4 pp (diferencia media IPC − PCE subyacentes), anotado.
+- 1957-04 a 1959-03: IPC subyacente (`CPILFESL`) **más un ajuste de empalme medido con una regla fija**: la media de
+  (PCE − IPC) subyacentes, ya transformados en I, en los **24 primeros meses en que coexisten** (1959-04 → 1961-03):
+  **+0,20 pp** (`splice_months = 24`; queda en `meta.json`, `splice_cpi_core`). La v1.0 restaba 0,4 pp (diferencia media
+  de toda la muestra, que no representa el empalme). Con 69 meses (1959-04 → 1964-12) sale +0,06 pp; las dos son
+  estadísticamente indistinguibles y con cualquier ajuste entre 0 y +0,30 pp la etiqueta dura es idéntica. Se eligen
+  24 meses por estar más cerca del empalme (I continua: 2,22 → 2,22). Decisión del usuario, 2026-10-15.
 - 1950-01 a 1957-03: IPC general (`CPIAUCSL`), marcado `fuente_i = headline`. Es un periodo con más ruido (guerra de
   Corea); 1950-1954 tiene peso 0 (§7).
 
@@ -78,7 +83,7 @@ Cada eje se convierte en una probabilidad según su distancia al umbral, escalad
 s<sub>G</sub> y s<sub>I</sub> salen del ruido de revisión de ALFRED en las mismas unidades del eje y en la v1.0 son
 **fijas**: **s<sub>G</sub> = 0,40** (z; INDPRO + PAYEMS, 1955-2024) y **s<sub>I</sub> = 0,31 pp** (PCE subyacente,
 2000-2024). La estimación con los cuatro indicadores daba 0,33, pero solo cubre 2013-2024, un periodo de revisiones
-pequeñas. Detalle en `docs/models/label_v1.0_checks.md`.
+pequeñas. Detalle en `docs/models/label_v1.1_checks.md`.
 
 Φ = normal acumulada. Ejemplo con s<sub>G</sub> = 0,5: G = 0 da 50 %; G = +0,5 da 84 %; G = +1 da 98 %.
 
@@ -121,6 +126,12 @@ pequeñas. Detalle en `docs/models/label_v1.0_checks.md`.
 - **Uso en el backtest:** los meses con `provisional = true` o `weight = 0` no puntúan ni entrenan, con
   **`embargo_months = 6`** entre entrenamiento y prueba (la etiqueta de t usa datos hasta t+4). Ambos valores están en
   el `meta.json`.
+- **Ruido de la inflación que no desaparece (Validador, v1.0 M1):** el estudio de revisión solo revisa el crecimiento.
+  Con las vintages ALFRED del PCE subyacente (variante C, 49 cortes 2000-2024), incluso con k = 84 meses la concordancia
+  de la etiqueta dura se queda en ~94 % (Δp ≈ 0,07; |ΔI| ≈ 0,17-0,19 pp): las revisiones generales de la NIPA reescriben
+  la inflación de meses "maduros". La primera publicación de I tiene además un sesgo medio de −0,16 pp
+  (`I_first_release_bias_pp`). Es un techo de acierto inevitable, no un fallo: ningún modelo en tiempo real puede
+  acertar el 100 %. No cambia los 54 meses provisionales.
 - Con el inicio pasa lo mismo: 1950-1954 tienen la ventana truncada hacia atrás y se marcan
   `tendencia_truncada = true`.
 - **Final de la muestra con ventanas centradas:** G(t) necesita niveles hasta t+4 e I(t) hasta t+3, así que la etiqueta
@@ -157,18 +168,24 @@ el acierto esperado de la etiqueta dura (media de la probabilidad máxima).
   aún no hay casi ningún dato oficial.
 - Variante a evaluar también: día 15 del mes t+1, con el empleo y el IPC de t ya publicados. Se informa aparte.
 
-## 10. Versionado
+## 10. Versionado y congelación
 
-- Esta ficha es la **v1.0, CONGELADA**. Se etiqueta en git (`label-v1.0`). La serie está en
-  `data/archive/labels/regime_us_v1.0.parquet` y su `meta.json` guarda los parámetros, el hash del contenido y el
-  SHA-256 del código que la genera (`src/labels/regime_us.py`).
-- **Cualquier cambio posterior** (de definición, parámetros o series) crea una **v1.1 o v2.0**, obliga a repetir
-  **todas** las validaciones (§8 y estudio de revisión) y queda anotado en el registro de pruebas. Las nuevas
-  publicaciones de datos solo actualizan los meses provisionales; no cambian la versión.
+- Esta ficha es la **v1.1, CONGELADA** (tag git `label-v1.1`; la v1.0 sigue en `label-v1.0`). La serie está en
+  `data/archive/labels/regime_us_v1.1.parquet`; su `meta.json` guarda parámetros, hash del contenido y SHA-256 del código.
+- **La etiqueta oficial sale solo de la instantánea de entradas** (`data/archive/labels/inputs/regime_us_v1.1_inputs.parquet`:
+  niveles de las 7 series, USREC, vintages usadas y lista de series prohibidas), nunca del warehouse vivo. Los hashes de
+  la instantánea y de la etiqueta están **en git** (`FROZEN` en `src/labels/regime_us.py`); `read_snapshot` se niega a
+  usar una instantánea distinta y los tests comprueban la etiqueta bit a bit. Comando: `python -m src.labels.regime_us --from-snapshot`.
+- **Los datos nuevos sí cambian meses maduros** si se recalcula con el warehouse vivo: σ<sub>i</sub> se calcula con toda
+  la muestra (cada dato nuevo reescala G) y la última vintage revisa la historia (empleo, NIPA). Por eso: (a) `--live`
+  genera `regime_us_v1.1_live.parquet`, que es solo de seguimiento y **no** es la etiqueta oficial; (b) una instantánea
+  nueva = **versión nueva** (v1.2 / v2.0), con revalidación completa (§8 y estudio de revisión) y su ventana de cambios
+  declarada; (c) un test compara las filas maduras con la versión anterior y falla si cambian fuera de lo declarado.
+- Una versión pasa a `FROZEN` solo tras el veredicto del Validador y la aprobación del usuario.
 
-## 11. Parámetros finales v1.0 (congelados el 2026-10-14)
+## 11. Parámetros finales (v1.0 el 2026-10-14; v1.1 el 2026-10-15)
 
-| parámetro | valor v1.0 | alternativa descartada |
+| parámetro | valor | alternativa descartada |
 |---|---|---|
 | Umbral de inflación κ | 2,5 % PCE subyacente | 2,0 % (objetivo exacto) / 3,0 % |
 | Escala s<sub>G</sub> | **0,40 z, fija** (ruido de revisión ALFRED de INDPRO + PAYEMS, 1955-2024; MAD × 1,4826 de primera publicación − última vintage) | 0,33 (cuatro indicadores, solo 2013-2024) |
@@ -180,9 +197,47 @@ el acierto esperado de la etiqueta dura (media de la probabilidad máxima).
 | Umbral de frontera | máx. prob. < 0,55 | < 0,6 |
 | Meses provisionales | **54** (estudio de revisión, §7) | 24 / 36 |
 | Embargo del backtest | **6 meses** | — |
+| Empalme IPC → PCE subyacente | **+0,20 pp**, media de los 24 primeros meses comunes (`splice_months = 24`) | −0,4 pp fijo (v1.0) / 69 meses (+0,06) |
+| Retardo de la etiqueta (`label_lag`) | **5 meses** (G e I) | — |
+| Periodo bloqueado (`holdout_start`) | **2005-01 → abierto** | 2016-2026 |
 | Fecha de decisión | último día hábil de t | día 15 de t+1 |
 
-## 12. Registro de cambios
+## 12. Uso en los modelos (obligatorio)
+
+- **Columnas prohibidas:** ninguna columna de la etiqueta (`G`, `I`, `p_*`, `label_hard`, `max_prob`, `frontera`,
+  `provisional`, `tendencia_truncada`, `cobertura_g`, `fuente_i`, `usrec`, `weight`), ni `USREC`, ni las 485 series del
+  warehouse con `pit_role` forecast/lookahead (p. ej. `GDPPOT`, `NGDPPOT`, `fed_ebp_recession_prob`) puede ser variable,
+  **ni tampoco sus derivadas** (`usrec_lag1`, `G_lag5`, `p_expansion_lag5`, `GDPPOT_yoy`, cualquier `label_*`). Lo
+  comprueba `assert_no_forbidden()` por raíz del nombre (nombre + separador `_ . - ` + sufijo, sin distinguir
+  mayúsculas); sin argumentos usa la lista del `meta.json` oficial. El arnés la llama antes de entrenar.
+- **Persistencia point-in-time** (el baseline que hay que batir): en la fecha de decisión t (último día hábil) la última
+  etiqueta calculable es la de **t − 5** (`label_lag`), **recalculada solo con los datos publicados en t**. Acierto
+  **63,6 %**, log-loss blanda 1,235 (797 meses puntuables; 62,9 % en entrenamiento ≤ 2004). La persistencia "mes
+  anterior" (89 %) y la etiqueta final desplazada 5 meses (68 %) tienen fuga y no valen. Detalle:
+  `docs/models/label_v1.1_checks.md` §6b.
+- **Limitación declarada (Validador M-4):** esa persistencia trunca la última vintage en el tiempo, pero no usa los datos
+  tal como se publicaron (variante A del estudio de revisión, no la C). El arnés debe construir el baseline y las
+  variables con el **mismo `vintage_mode`**, para que la comparación sea justa.
+- **Etiquetas de entrenamiento sin fuga de tendencia:** en cada corte T del walk-forward, la etiqueta de entrenamiento se
+  recalcula solo con datos ≤ T (`make_label(cutoff=T)`); la etiqueta oficial solo se usa para **puntuar**.
+- **Embargo:** 6 meses entre entrenamiento y prueba. Los meses `provisional` o con `weight = 0` no entrenan ni puntúan.
+- **Periodo bloqueado: 2005-01 → abierto.** La investigación y el diseño del modelo base usan solo datos ≤ 2004-12; el
+  bloque se evalúa una vez, con todo preregistrado (`docs/PLAN.md`).
+
+## 13. Registro de cambios
+
+### v1.1 (2026-10-15, CONGELADA, aprobada por el usuario tras la validación)
+
+1. **Empalme IPC → PCE subyacente medido** (§4): +0,20 pp con los 24 primeros meses comunes, en lugar de −0,4 pp fijo.
+   Cambia I solo en 1957-04 → 1959-03 (|ΔI| máx. 0,60 pp) y la etiqueta dura en 6 meses de 1957 (crecimiento bajo →
+   estanflación). G, σ<sub>i</sub>, κ, frontera, ventanas, escalas, meses provisionales y embargo no cambian.
+2. **Entradas congeladas:** instantánea con SHA-256; hashes en git (`FROZEN`); tests de hash, de instantánea alterada y
+   de filas maduras frente a la v1.0 (§10).
+3. **Lista negra en código y ficha** (§12), con derivadas por raíz del nombre y tests.
+4. **Uso point-in-time documentado** (§12): `label_lag = 5`, persistencia PIT 63,6 %, `holdout_start = 2005-01`.
+5. **Ficha corregida:** la §10 de la v1.0 decía que los datos nuevos solo actualizan los meses provisionales; era falso.
+   Se documenta el ruido de la inflación (§7).
+6. Validación: `docs/validation/2026-10-15_label_v1.1.md` (⚠️ con condiciones, cerradas en este cambio).
 
 ### v1.0 (2026-10-14, CONGELADA, aprobada por el usuario)
 

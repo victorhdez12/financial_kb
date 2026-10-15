@@ -109,7 +109,7 @@ Sustituye y concreta el "Motor de decisión" de arriba: HMM, análogos y Bayes p
 - Test automático de fuga: ninguna variable puede tener fecha de publicación posterior a t.
 
 ### Capa 2 — Modelos
-- **Baselines obligatorios** (el listón que hay que batir): persistencia ("mismo régimen que el mes anterior"), clasificador de reglas actual, logística/probit con 5-10 variables (curva, EBP, Sahm, inflación subyacente), Markov switching.
+- **Baselines obligatorios** (el listón que hay que batir): persistencia point-in-time (la última etiqueta que se conoce en t, la de t − 5, recalculada con los datos publicados en t; ficha §12), clasificador de reglas actual, logística/probit con 5-10 variables (curva, EBP, Sahm, inflación subyacente), Markov switching.
 - **Aspirante:** LightGBM/XGBoost/CatBoost con árboles poco profundos, regularización fuerte y restricciones de monotonía donde haya sentido económico. Solo entra si bate a los baselines fuera de muestra.
 - Ensemble: combinar modelos **distintos** (GBM + logística + Markov), no tres GBM.
 - **Dos etapas:** (1) probabilidad de régimen + confianza calibrada; (2) preferencia relativa de factores/activos condicionada al régimen, con shrinkage hacia la media (pocos meses por régimen).
@@ -159,7 +159,7 @@ El backtest usa un **embargo de 6 meses**, porque la etiqueta usa datos hasta t+
 - **Periodo bloqueado: 2005-01 → abierto.** La investigación empírica de relaciones y el diseño del modelo base usan **solo datos con fecha ≤ 2004-12**. El periodo bloqueado se evalúa **una sola vez**, con todo preregistrado; sus ampliaciones (a medida que maduran los meses provisionales) también se preregistran.
 - **Etiqueta de entrenamiento sin fuga de tendencia (obligatorio):** en cada corte T del walk-forward, la etiqueta de entrenamiento se **recalcula solo con los datos disponibles hasta T**. Prohibido usar la etiqueta final precalculada para entrenar. La puntuación sí se hace contra la etiqueta oficial congelada.
 - **Columnas prohibidas:** el arnés llama a `assert_no_forbidden()` (lista negra de `src/labels/`) antes de entrenar.
-- **Baseline honesto que hay que batir: persistencia point-in-time**, es decir, la última etiqueta que realmente se conoce en t (≈ 68 % de acierto según el Validador; la cifra exacta y su log-loss están en la ficha v1.1). La persistencia "mes anterior" (89 %) tiene fuga y no vale como referencia. La métrica principal sigue siendo la log-loss.
+- **Baseline honesto que hay que batir: persistencia point-in-time**, es decir, la última etiqueta que realmente se conoce en t (**63,6 % de acierto, log-loss blanda 1,235**; ficha v1.1 §12 y `label_v1.1_checks.md` §6b). La persistencia "mes anterior" (89 %) y la etiqueta final desplazada 5 meses (68 %) tienen fuga y no valen como referencia. El baseline y las variables se construyen con el mismo `vintage_mode`. La métrica principal sigue siendo la log-loss.
 - **Variables que nacen dentro del periodo bloqueado** (`cboe_vx` 2004, `mpls_mpd` 2006): no se seleccionan ni se ajustan explorando datos de 2005-2026. Se definen **a priori por teoría económica y se preregistran** (`research/hypotheses.yaml`, H-DER-001 y H-DER-002). Se evalúan como **módulo adicional** dentro de la evaluación única del walk-forward point-in-time, cuando cumplan la historia mínima de la regla de admisión.
 
 ### Investigación de relaciones adelantadas

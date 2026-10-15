@@ -1,4 +1,4 @@
-"""Etiqueta de régimen EE. UU. v1.1 — CONGELADA (ficha: docs/models/label_spec.md).
+"""Etiqueta de régimen EE. UU. v1.1 (ficha: docs/models/label_spec.md; congelada = está en FROZEN).
 
 Ejecutar:
     .venv/bin/python -m src.labels.regime_us --from-snapshot   # etiqueta oficial, solo desde la instantánea
@@ -80,6 +80,18 @@ QUADRANTS = ("expansion", "late_cycle", "stagflation", "low_growth_disinfl")
 # v0.1 → v0.2: el cuadrante G↓ I↓ se llamaba "slowdown" (desaceleración/recesión). La palabra
 # "recesión" queda reservada a la capa `usrec`.
 ALIASES = {"slowdown": "low_growth_disinfl", "p_slowdown": "p_low_growth_disinfl"}
+
+# Versiones congeladas: hashes de la instantánea de entradas y de la etiqueta oficial. Están en git
+# para que la referencia no dependa del meta.json (fuera de git). Una versión solo pasa a FROZEN
+# tras el veredicto del Validador y la aprobación del usuario; `read_snapshot` y los tests las
+# comprueban. `mature_changes_vs`: única ventana en la que puede cambiar una fila madura frente a
+# la versión anterior (cambios declarados en la ficha §12).
+FROZEN = {
+    "1.1": {"snapshot_sha256_file": "9cc855f86c6375e7dbc0610abd0c47773c27c3d7a804db14cf90acffa9f08238",
+            "snapshot_sha256_content": "7317d42bbfd9de7414399caf96baf9d6308b98003fc27fa1ebbf8b27abb3e48e",
+            "label_sha256_content": "8425b403f14626a1728a0f66446565dd205720993a30e5fa4fe337385329c30b",
+            "mature_changes_vs": ("1.0", "1957-04-01", "1959-03-01")},
+}
 EXTRA_VINTAGES = ("W875RX1", "CMRMTSPL")    # no están en el warehouse; se guardan en labels/raw
 
 
@@ -412,8 +424,13 @@ def write_snapshot(inputs: dict, p: Params = PARAMS, force: bool = False) -> Pat
 def read_snapshot(p: Params = PARAMS) -> tuple[dict, dict]:
     path = snapshot_path(p)
     df = pd.read_parquet(path)
-    return frame_to_inputs(df), {"path": str(path), "sha256_file": file_sha(path),
-                                 "sha256_content": content_hash(df), "rows": len(df)}
+    info = {"path": str(path), "sha256_file": file_sha(path), "sha256_content": content_hash(df), "rows": len(df)}
+    ref = FROZEN.get(p.version)
+    if ref and (info["sha256_file"] != ref["snapshot_sha256_file"]
+                or info["sha256_content"] != ref["snapshot_sha256_content"]):
+        raise RuntimeError(f"la instantánea {path} no coincide con la congelada de la v{p.version} "
+                           f"({info['sha256_file'][:8]} ≠ {ref['snapshot_sha256_file'][:8]})")
+    return frame_to_inputs(df), info
 
 
 def file_sha(path: Path) -> str:
@@ -430,15 +447,38 @@ LABEL_COLUMNS = ("G", "I", "p_g_high", "p_i_high", "p_expansion", "p_late_cycle"
 FORBIDDEN_FEATURES = frozenset(LABEL_COLUMNS) | {"USREC"}
 
 
-def assert_no_forbidden(columns, extra=None) -> None:
-    """Falla si alguna columna de la matriz de variables es una columna prohibida. El arnés debe
-    llamarla con la lista de variables y, en `extra`, `meta['forbidden_features']['series']`."""
-    forb = set(FORBIDDEN_FEATURES) | set(extra or ())
-    low = {f.lower() for f in forb if len(f) > 1}
-    bad = [c for c in columns if c in forb or (len(str(c)) > 1 and str(c).lower() in low)
-           or str(c).startswith("label_")]
+SEPARATORS = ("_", ".", "-", " ")
+
+
+def forbidden_root(col, forb) -> str | None:
+    """Raíz prohibida de `col`, o None. Coincide sin distinguir mayúsculas con un nombre prohibido
+    exacto o con uno seguido de separador y sufijo derivado (`usrec_lag1`, `G_lag5`,
+    `p_expansion_lag5`, `GDPPOT_yoy`); también cualquier `label_*`."""
+    c = str(col).lower()
+    if c.startswith("label_"):
+        return "label_*"
+    for f in forb:
+        fl = f.lower()
+        if c == fl or (c.startswith(fl) and c[len(fl)] in SEPARATORS):
+            return f
+    return None
+
+
+def assert_no_forbidden(columns, extra=None, meta: dict | None = None) -> None:
+    """Falla si alguna columna de la matriz de variables es prohibida o derivada de una prohibida.
+    Incluye siempre las series forecast/lookahead de la versión: las de `extra`, las de `meta`
+    o, si no se pasan, las del meta.json oficial (si no existe, falla: no se valida a medias)."""
+    if extra is None:
+        if meta is None:
+            path = out_path().with_suffix(".meta.json")
+            if not path.exists():
+                raise FileNotFoundError(f"falta {path}: sin la lista de series prohibidas no se puede validar")
+            meta = json.loads(path.read_text())
+        extra = meta["forbidden_features"]["series"]
+    forb = sorted(set(FORBIDDEN_FEATURES) | set(extra), key=len, reverse=True)
+    bad = {str(c): r for c in columns if (r := forbidden_root(c, forb))}
     if bad:
-        raise AssertionError(f"columnas prohibidas como variables: {sorted(map(str, bad))}")
+        raise AssertionError(f"columnas prohibidas como variables: {bad}")
 
 
 def months_back(sid: str) -> int:
@@ -542,7 +582,7 @@ def build_from_inputs(inputs: dict, p: Params = PARAMS, snap_info: dict | None =
     out, gc = make_label(inputs, p, s_G, s_I)
     ll = label_lag(p)
     meta = {
-        "version": p.version, "status": "CONGELADA" if p.version.startswith("1.") else "borrador",
+        "version": p.version, "status": "CONGELADA" if p.version in FROZEN else "candidata",
         "params": asdict(p), "s_G": float(s_G), "s_I": float(s_I), "how_G": how_G, "how_I": how_I,
         "splice_cpi_core": gc["splice"],
         "alfred_estimates": {"s_G_4ind": sc["detail"]["G_composite"]["mad_sd"],
@@ -564,7 +604,8 @@ def build_from_inputs(inputs: dict, p: Params = PARAMS, snap_info: dict | None =
                            "nunca es variable (forbidden_features)")},
         "forbidden_features": {"label_columns": sorted(FORBIDDEN_FEATURES),
                                "series": inputs.get("forbidden_series", []),
-                               "rule": "ninguna puede ser variable; el arnés llama a assert_no_forbidden"},
+                               "rule": ("ninguna puede ser variable, ni sus derivadas (nombre + separador + sufijo); "
+                                        "el arnés llama a assert_no_forbidden")},
         "label_lag": ll, "holdout_start": p.holdout_start,
         "embargo_months": p.embargo_months, "provisional_months": p.provisional_months,
         "sigma_i": {k: v["sigma"] for k, v in gc["comp"].items()},

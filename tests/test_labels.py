@@ -49,7 +49,7 @@ def test_hard_label_is_argmax(built):
     assert (df["frontera"] == (df["max_prob"] < R.PARAMS.frontier)).all()
 
 
-def test_provisional_last_24(built):
+def test_provisional_last_n(built):
     df, _ = built
     n = R.PARAMS.provisional_months
     assert df["provisional"].sum() == n
@@ -132,3 +132,82 @@ def test_reproducible(built):
     df1, _ = built
     df2, _ = R.build()
     assert R.content_hash(df1) == R.content_hash(df2)
+
+
+# ------------------------------------------------------------------ versión congelada (Validador, A-2)
+FROZEN = R.FROZEN.get(R.PARAMS.version)
+frozen_only = pytest.mark.skipif(FROZEN is None, reason="versión candidata: aún no está en FROZEN")
+
+
+@frozen_only
+def test_snapshot_matches_frozen():
+    """La instantánea de entradas es la congelada (SHA en git, no solo en el meta.json)."""
+    _, info = R.read_snapshot()
+    assert info["sha256_file"] == FROZEN["snapshot_sha256_file"]
+    assert info["sha256_content"] == FROZEN["snapshot_sha256_content"]
+
+
+def test_read_snapshot_rejects_tampered(tmp_path, monkeypatch):
+    """`read_snapshot` falla si la instantánea no es la congelada."""
+    if FROZEN is None:
+        pytest.skip("versión candidata")
+    df = pd.read_parquet(R.snapshot_path())
+    df.loc[df.index[0], "value"] = df["value"].iloc[0] + 1.0
+    fake = tmp_path / "inputs.parquet"
+    df.to_parquet(fake, index=False)
+    monkeypatch.setattr(R, "snapshot_path", lambda p=R.PARAMS: fake)
+    with pytest.raises(RuntimeError, match="no coincide"):
+        R.read_snapshot()
+
+
+@frozen_only
+def test_label_hash_is_frozen(built):
+    """La etiqueta reconstruida desde la instantánea es bit a bit la congelada."""
+    df, _ = built
+    assert R.content_hash(df) == FROZEN["label_sha256_content"]
+
+
+@frozen_only
+def test_official_file_is_frozen():
+    """El parquet oficial en disco no ha sido reescrito."""
+    df = pd.read_parquet(R.out_path())
+    assert R.content_hash(df) == FROZEN["label_sha256_content"]
+
+
+@frozen_only
+def test_mature_rows_vs_previous_version(built):
+    """Frente a la versión anterior, las filas maduras solo cambian en la ventana declarada (§12).
+    Si una versión futura reescribe filas maduras fuera de lo declarado, este test falla."""
+    prev, lo, hi = FROZEN["mature_changes_vs"]
+    path = R.out_dir() / f"regime_us_v{prev}.parquet"
+    if not path.exists():
+        pytest.skip(f"falta {path}")
+    old = pd.read_parquet(path).set_index("date")
+    new = built[0].set_index("date")
+    mature = new.index[~new["provisional"]].intersection(old.index[~old["provisional"]])
+    outside = mature[(mature < pd.Timestamp(lo)) | (mature > pd.Timestamp(hi))]
+    cols = [c for c in new.columns if c in old.columns]
+    a, b = new.loc[outside, cols], old.loc[outside, cols]
+    num = a.select_dtypes("number").columns
+    assert np.allclose(a[num].astype(float), b[num].astype(float), atol=1e-12, equal_nan=True)
+    assert a.drop(columns=num).equals(b.drop(columns=num))
+
+
+@pytest.mark.parametrize("col", ["usrec", "USREC_lag1", "G_lag5", "p_expansion_lag5", "label_hard",
+                                 "label_anything", "i.ma3", "GDPPOT_yoy", "max_prob-12m"])
+def test_forbidden_rejects(col):
+    with pytest.raises(AssertionError):
+        R.assert_no_forbidden([col], extra=["GDPPOT"])
+
+
+@pytest.mark.parametrize("col", ["INDPRO", "PAYEMS_yoy", "fed_ebp", "cboe_vx_slope", "GS10", "ice_hy_oas"])
+def test_forbidden_allows(col):
+    R.assert_no_forbidden([col], extra=["GDPPOT"])
+
+
+def test_forbidden_uses_official_meta_by_default():
+    """Sin `extra`, la lista de series forecast/lookahead sale del meta.json oficial."""
+    if not R.out_path().with_suffix(".meta.json").exists():
+        pytest.skip("falta el meta.json oficial")
+    with pytest.raises(AssertionError):
+        R.assert_no_forbidden(["GDPPOT_gap"])
