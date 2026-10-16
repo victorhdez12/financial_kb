@@ -1,4 +1,4 @@
-"""Tests de la base point-in-time v0.2 (docs/models/pit_base.md §5). Corren sobre la INSTANTÁNEA CONGELADA de entradas.
+"""Tests de la base point-in-time v0.3 (docs/models/pit_base.md §5). Corren sobre la INSTANTÁNEA CONGELADA de entradas.
 
 (h) hashes: la instantánea, la lista blanca y el calendario coinciden con FROZEN; una copia alterada se rechaza; la
     matriz oficial se reproduce bit a bit;
@@ -57,6 +57,53 @@ def test_h_current_version_is_candidate_not_frozen():
     """I-4: una versión entra en FROZEN solo tras el veredicto del Validador. La v0.3 es candidata."""
     assert P.VERSION in P.CANDIDATE and P.VERSION not in P.FROZEN
     assert P.SUPERSEDED.get("0.2") == P.VERSION
+
+
+HASH_KEYS = ("data_sha256_file", "data_sha256_content", "whitelist_sha256", "calendar_sha256", "info_sha256", "grid_end")
+
+
+def test_h_frozen_entries_follow_procedure():
+    """B-5 (procedimiento de congelación): una versión congelada tras la v0.2 conserva su entrada en CANDIDATE con los
+    mismos hashes y apunta a un veredicto del Validador que existe. (La v0.2 se congeló antes del veredicto, I-4.)
+    Hoy no hay ninguna: la v0.3 sigue candidata."""
+    for version, ref in P.FROZEN.items():
+        if version == "0.2":
+            continue
+        assert {k: ref[k] for k in HASH_KEYS} == {k: P.CANDIDATE[version][k] for k in HASH_KEYS}, version
+        assert (P.REPO / ref["veredicto"]).is_file(), version
+
+
+def test_h_write_snapshot_refuses_shared_data(tmp_path, monkeypatch):
+    """H-2: una versión cuya instantánea de datos es de otra versión (DATA_VERSION) no puede reescribirla, ni con
+    force=True (`--freeze --force`). En un directorio temporal, nunca sobre los datos reales."""
+    monkeypatch.setattr(P, "out_dir", lambda: tmp_path / "features")
+    monkeypatch.setattr(P, "DATA_VERSION", {**P.DATA_VERSION, "9.1": "9.0"})
+    for version in ("0.3", "9.1"):
+        paths = P.snapshot_paths(version)
+        assert tmp_path in paths["data"].parents and paths["data"].name != f"pit_us_v{version}_inputs.parquet"
+        paths["data"].parent.mkdir(parents=True, exist_ok=True)
+        (paths["data"].parent / "backup").mkdir(exist_ok=True)
+        files = [paths["data"], paths["data"].parent / "backup" / paths["data"].name]
+        for f in files:
+            if not f.exists():
+                f.write_bytes(b"instantanea compartida")
+                f.chmod(0o444)
+        before = {f: (P.file_sha(f), f.stat().st_mode) for f in files}
+        for force in (False, True):
+            with pytest.raises(SystemExit, match="no es suya"):
+                P.write_snapshot(None, version=version, force=force)
+        assert {f: (P.file_sha(f), f.stat().st_mode) for f in files} == before   # ni contenido ni permisos
+        assert not paths["whitelist"].exists() and not paths["info"].exists()
+    assert P.DATA_VERSION["0.3"] != "0.3"   # el caso real que protege el guarda
+
+
+def test_h_write_snapshot_own_data_not_blocked(tmp_path, monkeypatch):
+    """El guarda H-2 no bloquea una versión nueva con datos propios: pasa los guardas y solo falla al leer el warehouse
+    (con=None). Directorio temporal."""
+    monkeypatch.setattr(P, "out_dir", lambda: tmp_path / "features")
+    assert P.DATA_VERSION.get("9.2", "9.2") == "9.2" and "9.2" not in P.FROZEN
+    with pytest.raises(AttributeError):
+        P.write_snapshot(None, version="9.2", force=True)
 
 
 def test_h_snapshot_matches_registered():
@@ -178,6 +225,21 @@ def test_i1_principal_desde_inherited_through_graph(snap):
 def test_i2_vix_conditional_before_2003(snap):
     v = next(x for x in snap["wl"]["variables"] if x["nombre"] == "vix")
     assert str(v["principal_desde"]) == "2003-09-22"
+
+
+def test_h1_tcu_gap_conditional_before_1984(snap):
+    """H-1 (decisión del usuario, 2026-10-16): la utilización de la industria total existe desde 1983 (G.17 de la Fed)
+    → tcu_gap condicional antes de 1984-01-01. Toda variable que dependa de _tcu/tcu_gap lo hereda (hoy, ninguna)."""
+    specs = {v["nombre"]: v for v in snap["wl"]["variables"]}
+    assert str(specs["tcu_gap"]["principal_desde"]) == "1984-01-01"
+    eff = P.effective_principal_desde(snap["wl"])
+    meta = json.loads((P.out_dir() / f"pit_us_v{P.VERSION}.meta.json").read_text())["columns"]
+    for mode in meta:
+        assert meta[mode]["tcu_gap"]["principal_desde_efectivo"] == "1984-01-01", mode
+        assert meta[mode]["tcu_gap"]["principal_desde_heredado"] is False, mode
+    users = [n for n in P.public_columns(snap["wl"]) if {"_tcu", "tcu_gap"} & ({n} | _ancestors(specs, n))]
+    assert users == ["tcu_gap"]
+    assert all(eff[n] is not None and eff[n] >= "1984-01-01" for n in users)
 
 
 # ------------------------------------------------------------------ (a) publicación ≤ t, recalculada aparte

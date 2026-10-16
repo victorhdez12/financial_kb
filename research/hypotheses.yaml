@@ -283,3 +283,10 @@
     mejora la del nivel con el intervalo bootstrap al 95 % (bloques de 12 meses) que excluye el cero, sin empeorar la
     log-loss del resto del periodo bloqueado en más que la anchura de su intervalo. Si no, se mantiene el nivel. Ambas
     se publican siempre.
+  aclaracion_2026-10-16: >
+    ACLARACIÓN, no cambio post hoc (Validador v0.3, B-6; escrita sin mirar datos ni relaciones con la etiqueta en ningún
+    periodo, antes de cualquier evaluación). "Su log-loss (ejes G e I)" se lee en la interpretación más exigente: Δ12m
+    se adopta solo si la mejora con el intervalo bootstrap al 95 % que excluye el cero se cumple EN LOS DOS EJES por
+    separado (G frente a p_g_high e I frente a p_i_high, como en P-EVAL-MOD), y la condición de no empeorar el resto del
+    periodo bloqueado también se exige en cada eje. Si falla en cualquiera de los dos, se mantiene el nivel. El texto
+    original no decía otra cosa (umcsent pesa en G y mich_infl_exp en I, y las dos cambian a la vez).

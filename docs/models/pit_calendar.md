@@ -66,6 +66,14 @@ mismo suelo.
 tardaba más y era más variable antes de 1980 (p90 28, máx 33); el M2 pasó del H.6 semanal al mensual en 2021 (p90 16 →
 27); los máximos de 2013+ son los cierres del Gobierno (2013 y 2025: el IPC de octubre de 2025 nunca se publicó).
 
+**TCU: calendario frente a existencia (v0.3 tras re-auditoría, H-1).** El calendario de TCU (fechas del G.17 vía
+INDPRO, 33 días de reserva antes de 1996-11) dice **cuándo** se publicaba el comunicado, no que la utilización de la
+industria total existiera. Según la historia oficial del G.17 (Federal Reserve, *History of the Capacity and Capacity
+Utilization Index*, https://www.federalreserve.gov/RELEASES/G17/Hist/HistCap.htm): *"In 1983, the scope of the capacity
+system was increased to cover mining and utilities"*. Antes de 1983 solo existían en tiempo real la utilización de
+manufacturas (Bulletin, 1968) y la de materiales (1973-08); TCU es una reconstrucción. Por eso `tcu_gap` es condicional
+antes de **1984-01-01** (fecha prudente: la fuente no da el mes) en la lista blanca; el calendario no cambia.
+
 ## 3. Series sin medición o con tramos supuestos (v0.2)
 
 | serie | regla | justificación |
@@ -77,7 +85,7 @@ tardaba más y era más variable antes de 1980 (p90 28, máx 33); el M2 pasó de
 | SPF | inicio del trimestre + **90 días hasta 1990-T2** / + 50 | ASA-NBER: difusión no documentada → el trimestre siguiente |
 | BIS NEER | **20 días** | agregado de tipos de mercado; siempre t−1 |
 | BCE (estado semanal) | **8 días** desde el lunes con que el warehouse fecha la semana | estado del viernes, publicado el martes siguiente |
-| NFCI | vintages desde 2011; antes **12 días** (v0.3) | máximo medido en 2000-12 (regla 3) |
+| NFCI | vintages desde 2011; antes **12 días** (v0.3) | máximo medido (regla 3): 12 días en 2011-12, dentro de la época 2000-12 de la tabla §2 (las vintages empiezan en 2011-05) |
 | Mercados diarios, medias mensuales de mercado, H.4.1, DTS, Pink Sheet, BoJ, GZ/EBP | sin cambios respecto a la v0.1 (1 / 1 / 1 / 1 / 7 / 7 / 35 días) | |
 
 Cada tramo de `retardo_dias` lleva su marca `supuesto` (true = no medido), corrigiendo la v0.1 (CMRMTSPL antes de 2013,

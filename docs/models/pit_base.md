@@ -1,12 +1,12 @@
 ---
 documento: base point-in-time de variables (Fase 3, entregable 2)
 version: 0.3
-fecha: 2026-10-15
+fecha: 2026-10-16
 estado: CANDIDATA (hashes en CANDIDATE y en el meta; entra en FROZEN solo tras el ✅ del Validador). Sustituye a la v0.2
 codigo: src/features/{calendar,pit,placebo,alfred_raw}.py, src/ingest/umich.py
 datos: <FIN_DATA_ROOT>/features/ (data/archive/features/)
-tests: tests/test_pit_leaks.py (+ tests/pit_helpers.py), 41 tests
-revisiones: docs/validation/2026-10-15_pit_base_v0.1.md, docs/validation/2026-10-15_pit_base_v0.2.md (Validador ⚠️, muy cerca de ✅), docs/reviews/2026-10-15_estratega_macro_pit_base.md
+tests: tests/test_pit_leaks.py (+ tests/pit_helpers.py), 51 tests (96 en toda la suite)
+revisiones: docs/validation/2026-10-15_pit_base_v0.1.md, docs/validation/2026-10-15_pit_base_v0.2.md (Validador ⚠️, muy cerca de ✅), docs/validation/2026-10-16_pit_base_v0.3.md (⚠️ con 2 condiciones mecánicas, H-1 y H-2, resueltas en esta revisión), docs/reviews/2026-10-15_estratega_macro_pit_base.md
 ---
 
 # Base point-in-time de variables (nowcast EE. UU.), v0.3
@@ -37,11 +37,11 @@ Uso:
 .venv/bin/python -m src.ingest.umich            # Michigan directo (ya en INGEST_DAILY del Makefile)
 .venv/bin/python -m src.features.alfred_raw     # vintages ALFRED fuera del warehouse
 .venv/bin/python -m src.features.calendar       # (re)mide retardos
-.venv/bin/python -m src.features.pit --freeze   # warehouse vivo + raw → instantánea de datos (se niega con una versión en FROZEN)
+.venv/bin/python -m src.features.pit --freeze   # warehouse vivo + raw → instantánea de datos (se niega con una versión en FROZEN o que reutiliza datos de otra, H-2)
 .venv/bin/python -m src.features.pit --candidate  # lista blanca/calendario nuevos sobre la instantánea de datos existente
 .venv/bin/python -m src.features.pit            # matriz OFICIAL desde la instantánea (~95 s)
 .venv/bin/python -m src.features.pit --live     # seguimiento desde el warehouse vivo (*_live; no oficial)
-.venv/bin/python -m pytest -q tests             # 92 tests (~2,5 min)
+.venv/bin/python -m pytest -q tests             # 96 tests (~2,5 min)
 ```
 
 ## 2. Principios de construcción
@@ -50,7 +50,9 @@ Uso:
   la instantánea (`grid_end` = 2026-09-30).
 - **Solo desde la instantánea.** La matriz oficial lee únicamente la instantánea (sin warehouse vivo ni raw);
   `read_snapshot` se niega a usar ficheros cuyo SHA-256 no coincida con `FROZEN` o, para una candidata, con
-  `CANDIDATE`; `write_snapshot` y `write_candidate` no tocan una versión congelada. Una actualización diaria del
+  `CANDIDATE`; `write_snapshot` y `write_candidate` no tocan una versión congelada, y `write_snapshot` se niega también (incluso con
+  `--force`) cuando la instantánea de datos de la versión es de otra (`DATA_VERSION`, p. ej. la v0.3 usa la de la v0.2):
+  no puede sobrescribir la instantánea compartida ni su respaldo (Validador v0.3, H-2). Una actualización diaria del
   warehouse no cambia la matriz oficial.
 - **Parámetros de la etiqueta para la persistencia** (`label_params`): s_G y s_I de `R.PARAMS` (código en git) y el
   empalme recalculado desde la instantánea congelada de la etiqueta (hash en `R.FROZEN`). El `meta.json` de la etiqueta
@@ -64,8 +66,9 @@ Uso:
   **condicional** (existe en la matriz, pero el arnés no la usa en el modelo principal).
 - **Regla general de herencia (v0.3):** una derivada entra en el modelo principal desde el `principal_desde` **más
   tardío de todas sus entradas**, recorriendo el grafo de dependencias en código (`effective_principal_desde`). El meta
-  lo publica por columna como `principal_desde_efectivo` (y `principal_desde_heredado`). Hoy solo cambia
-  `infl_energy_pressure` (→ 1978-01, por `headline_minus_core_6m`).
+  lo publica por columna como `principal_desde_efectivo` (y `principal_desde_heredado`). Hoy solo hereda
+  `infl_energy_pressure` (→ 1978-01, por `headline_minus_core_6m`); ninguna derivada usa `tcu_gap` ni `_tcu`, así que su
+  `principal_desde` (1984-01) no se propaga (lo comprueba un test).
 
 ## 3. Modos y regla del arnés (decisión B)
 
@@ -95,7 +98,8 @@ Uso:
 
 ## 4. Variables (58) y cobertura
 
-Estados: **principal** 36 (de ellas 9 solo desde su `principal_desde_efectivo`, una por herencia), **principal_epoca** 13, **condicional** 5,
+Estados: **principal** 36 (de ellas 9 solo desde su `principal_desde_efectivo`, una por herencia), **principal_epoca** 13 (de ellas 2
+solo desde su `principal_desde`: `tcu_gap` 1984-01 y `vix` 2003-09), **condicional** 5,
 **modulo_adicional** 4. "Recesiones" = recesiones NBER que empiezan después del primer dato utilizable en el modelo
 principal (máx. de primer dato y `principal_desde`), en total y ≤ 2004 (regla 2: ≥ 3).
 
@@ -105,7 +109,7 @@ principal (máx. de primer dato y `principal_desde`), en total y ≤ 2004 (regla
 | `unrate_sahm` | crecimiento | principal | — | UNRATE · sahm | vintage | 1950-01 | 1960-03 | 11 (9) |
 | `unrate_gap10y` (A3) | crecimiento | principal | — | UNRATE − mediana de los 120 meses previos | derivada | 1959-01 | 1960-03 | 9 (7) |
 | `indpro_3m_ann` | crecimiento | principal | — | INDPRO · log_diff_ann k=3 | vintage | 1950-01 | 1950-01 | 11 (9) |
-| `tcu_gap` | crecimiento | principal_epoca | — | TCU − media de los 120 meses previos | derivada | 1976-02 | 1996-11 | 6 (4) |
+| `tcu_gap` | crecimiento | principal_epoca | **1984-01** | TCU − media de los 120 meses previos (industria total desde 1983) | derivada | 1976-02 | 1996-11 | 4 (2) |
 | `claims_4w_yoy` | crecimiento | principal_epoca | — | ICSA · rolling_log_yoy n=4 | vintage | 1968-02 | 2009-05 | 8 (6) |
 | `awhman_d3` | crecimiento | principal | — | AWHMAN · diff k=3 | latest_truncated | 1950-01 | — | 11 (9) |
 | `permit_yoy` | crecimiento | principal | — | PERMIT · log_diff k=12 | vintage | 1961-02 | 1999-08 | 8 (6) |
@@ -158,22 +162,25 @@ principal (máx. de primer dato y `principal_desde`), en total y ≤ 2004 (regla
 | `dfii10` | financieras | modulo_adicional (H-MOD-004) | — | DFII10 · level | latest_truncated | 2003-01 | — | 2 (0) |
 
 **Épocas** (regla 4): E0 1960+ (27 principales sin `principal_desde_efectivo`), E1 1968-77 (Filadelfia, peticiones de paro,
-CMRMTSPL, SPF, `tcu_gap` desde 1976), E2 1973 (`usd_neer_yoy`, `copper_gold_6m`), E3 1978-81 (bloque del IPC
-subyacente, `infl_energy_pressure`, Michigan, SPF IPC), 1980 (`m2_real_yoy`), E4 2003-09 (VIX, solo en el periodo
-bloqueado). La matriz no lleva indicadores de disponibilidad. `spf_cpi_4q` cumple la regla 2 con su historia total,
-pero solo tiene 2 recesiones ≤ 2004; `vix` no tiene ninguna en el modelo principal ≤ 2004: la investigación ≤ 2004 no
-las puede validar.
+CMRMTSPL, SPF), E2 1973 (`usd_neer_yoy`, `copper_gold_6m`), E3 1978-81 (bloque del IPC subyacente,
+`infl_energy_pressure`, Michigan, SPF IPC), 1980 (`m2_real_yoy`), 1984 (`tcu_gap`; v0.3 tras re-auditoría: antes era
+E1 desde 1976), E4 2003-09 (VIX, solo en el periodo bloqueado). La matriz no lleva indicadores de disponibilidad.
+`spf_cpi_4q` y `tcu_gap` cumplen la regla 2 con su historia total, pero solo tienen 2 recesiones ≤ 2004 (1990 y
+2001); `vix` no tiene ninguna en el modelo principal ≤ 2004: la investigación ≤ 2004 no las puede validar del todo.
+Para 1976-83 la alternativa sería la utilización de manufacturas (CUMFNS, publicada desde 1968), pero sería una
+variable nueva (v0.4 y preregistro), no un arreglo de esta.
 
 **Descriptivos sin etiqueta (≤ 2004, en trial_log):** `growth_rt_state` cambia 0,44 veces/año (v0.1: 1,06; objetivo
 Fase 1: 0,43). Los 4 estados de la curva marcan el 59 % de los meses (11/16/20/11 %).
 
-## 5. Tests (47 en `tests/test_pit_leaks.py`; 92 en total, en verde). Corren sobre la instantánea
+## 5. Tests (51 en `tests/test_pit_leaks.py`; 96 en total, en verde). Corren sobre la instantánea
 
 | grupo | qué comprueba | resultado |
 |---|---|---|
-| (h) instantánea | la v0.3 está en `CANDIDATE` y **no** en `FROZEN`; datos = los de la v0.2 (mismo hash); instantánea, lista blanca, calendario e info = `CANDIDATE`; solo lectura y respaldo idéntico; las versiones congeladas (v0.2) siguen intactas; `research/*.yaml` = copias de la v0.3; copia alterada rechazada; los dos escritores se niegan con una versión congelada; **reproducción de las 3 matrices y de los 2 baselines** frente al meta; parámetros de la etiqueta fijados (un `meta.json` alterado hace fallar) | ok |
+| (h) instantánea | la v0.3 está en `CANDIDATE` y **no** en `FROZEN`; toda versión congelada tras la v0.2 conserva su entrada en `CANDIDATE` con los mismos hashes y un `veredicto` que existe (B-5); `write_snapshot` se niega, también con `force=True`, cuando los datos son de otra versión, sin tocar contenido ni permisos (H-2, en un directorio temporal); datos = los de la v0.2 (mismo hash); instantánea, lista blanca, calendario e info = `CANDIDATE`; solo lectura y respaldo idéntico; las versiones congeladas (v0.2) siguen intactas; `research/*.yaml` = copias de la v0.3; copia alterada rechazada; los dos escritores se niegan con una versión congelada; **reproducción de las 3 matrices y de los 2 baselines** frente al meta; parámetros de la etiqueta fijados (un `meta.json` alterado hace fallar) | ok |
 | (I-1) herencia | recorrido independiente del grafo: el `principal_desde_efectivo` de cada columna = el más tardío del nodo y de todos sus ancestros, en código y en el meta; solo `infl_energy_pressure` hereda (1978-01) | ok |
 | (I-2) VIX | `principal_desde` = 2003-09-22 | ok |
+| (H-1) TCU | `tcu_gap`: `principal_desde` = 1984-01-01, también en el meta de los 3 modos (no heredado); ninguna otra columna depende de `_tcu`/`tcu_gap` | ok |
 | (a) publicación ≤ t | publicación recalculada desde `observations` sin `calendar.py`; sin calendario, ningún dato de un periodo sin terminar; **BCE**: dato usado siempre ≥ 8 días antes de t | 0 celdas fuera |
 | (v) valores | ≥ 150 celdas por modo recalculadas con SQL y la transformación escrita en el test (sin `src.features`) | iguales (rtol 1e-9) |
 | (v) calendario frente a otra fuente | **proxies "mismo comunicado"** verificadas con las vintages propias de 8 series (AWHMAN, AHETPI, UNRATE → PAYEMS; servicios, subyacente → IPC; W875RX1, PCE subyacente → PCEPI; TCU → INDPRO): la serie nunca se publica después que su proxy (mismo día en el 100 % de 150-800 fechas). **Supuestos frente a ALFRED**: Filadelfia −7 d (≥ 95 %, 2015+), PERMIT 23 d (100 % de 1999-2012), CMRMTSPL 70 d (≥ 90 %). Reserva ≥ p90 medido en la época más antigua | ok |
@@ -202,7 +209,11 @@ placebo en la v0.3):
 | | ruido | −0,005 [−0,019; 0,001] | < 0,02 |
 
 Lectura: el placebo detecta fugas fuertes y fugas de calendario de la etiqueta de ≥ 1 mes, pero **no fugas débiles
-(σ ≥ 1,5)**. La señal plantada detecta fugas de un mes entero, pero **no un retardo demasiado corto en una serie sin
+(σ ≥ 1,5)**. **La lectura robusta del control t−4 es la media** de las 8 permutaciones (0,087 frente a 0,005 del
+control negativo t−5), no cada permutación: la mínima con t−4 es 0,030 frente a una tolerancia de 0,02, y el control
+negativo t−5 (copia exacta de la persistencia) llega a 0,105 en una permutación por el efecto del L2 sobre una columna
+duplicada. El test es determinista (semilla fija), así que no es inestable, pero el margen por permutación es pequeño
+(Validador v0.3, B-3). La señal plantada detecta fugas de un mes entero, pero **no un retardo demasiado corto en una serie sin
 vintages**: eso solo lo pueden ver los tests (a)/(v) donde hay una fuente externa. Por eso los supuestos sin fuente
 siguen siendo riesgo declarado.
 
@@ -225,14 +236,23 @@ vintage no puede calcular (falta historia de PAYEMS en sus primeras vintages).
 1. **Historia reconstruida.** Antes del archivo de vintages, latest_truncated usa datos revisados con fechas correctas.
    Las series que no existían en tiempo real con su definición pasan a condicionales hasta su `principal_desde`: PCE
    subyacente (2000), CFNAI y NFCI (2011), GZ (2012), EBP (siempre), M2 (1980), IPC subyacente y servicios (1978),
-   VIX (2003-09-22: VIXCLS 1990-2003 es una reconstrucción; sin empalme con VXO) y, por herencia, toda derivada de
-   ellas (`infl_energy_pressure` 1978).
+   VIX (2003-09-22: VIXCLS 1990-2003 es una reconstrucción; sin empalme con VXO), **utilización de la industria total
+   (`tcu_gap`, 1984-01-01)** y, por herencia, toda derivada de ellas (`infl_energy_pressure` 1978).
+   - **TCU (H-1, decisión del usuario del 16-oct):** fuente primaria, Federal Reserve, *History of the Capacity and
+     Capacity Utilization Index* (G.17), https://www.federalreserve.gov/RELEASES/G17/Hist/HistCap.htm: *"In 1983, the
+     scope of the capacity system was increased to cover mining and utilities"* (la de manufacturas se publicaba en el
+     Bulletin desde 1968 y la de materiales desde 1973-08). La utilización de la industria total (TCU) antes de 1983 es
+     una reconstrucción; la fuente no da el mes, así que se usa la fecha prudente 1984-01-01. Además, la media de 120
+     meses de `gap_mean_prev` se apoya en esa historia reconstruida hasta ~1993.
+   - **Escala de `infl_energy_pressure` (B-1):** es condicional antes de 1978, pero su z expansivo de 1978 en adelante
+     se escala con toda la historia previa de sus entradas, incluida la de `headline_minus_core_6m` (A8) de 1967-77,
+     que usa el IPC subyacente reconstruido. El Validador lo midió sin etiqueta frente a una variante que escala A8 solo
+     con datos ≥ 1978: correlación 0,978 en 1978-87 (máx. |dif| 1,10; signo distinto en el 2,5 % de los meses) y 1,000
+     en 1988-2004 (máx. |dif| 0,09). Efecto pequeño; se documenta y no se cambia.
 2. **Fechas de existencia no verificadas (supuestos, Validador M-2):** la búsqueda de fuentes primarias no dio
    resultado para ninguna de estas (solo aparecen las series reconstruidas):
    - **servicios sin energía** (`CUSR0000SASLE`, agregado especial): se le aplica el mismo 1978 que al IPC subyacente;
-   - **TCU de la industria total**: `tcu_gap` es principal_epoca desde 1976-02 suponiendo que la utilización de la
-     industria total se publicaba en tiempo real; pudo empezar después que la de manufacturas (decisión del usuario:
-     mantener, o poner `principal_desde` en la fecha que se verifique);
+   - ~~TCU de la industria total~~: **verificada en contra** (v0.3 tras re-auditoría, H-1): ver el punto 1;
    - **`spf_anxious`**: el nombre del índice es posterior, pero la probabilidad de caída del PIB se preguntaba desde
      1968-T4 (aceptable).
 3. **IPC subyacente:** la fecha de primera publicación del agregado "sin alimentos ni energía" **no está verificada** con
@@ -265,6 +285,38 @@ SAHMREALTIME, capa EUR, capas L-CAP (entran sus análogos PIT), Michigan vía FR
 (v0.3).
 
 ## 9. Registro de cambios
+
+### v0.3 tras re-auditoría 16-oct (`docs/validation/2026-10-16_pit_base_v0.3.md`, ⚠️ con 2 condiciones)
+
+Sigue siendo la **v0.3 candidata** (no estaba congelada): misma instantánea de datos `pit_us_v0.2_inputs.parquet` (no
+se toca), lista blanca rehecha con `--candidate --force` y hashes nuevos en `CANDIDATE` (`whitelist_sha256`
+`55fb4314…`, `info_sha256` `7c1b1419…`; datos y calendario iguales).
+
+| # | cambio | origen | dónde |
+|---|---|---|---|
+| H-1 | **`tcu_gap` condicional antes de 1984-01-01** (decisión del usuario, 16-oct). Fuente primaria: historia del G.17 de la Fed (*"In 1983, the scope of the capacity system was increased to cover mining and utilities"*). Mismo patrón que `vix`. Ninguna derivada usa `_tcu`/`tcu_gap`: no se propaga (test) | Validador H-1 | lista blanca, test H-1, §4, §7.1, `pit_calendar.md` |
+| H-2 | **`write_snapshot` se niega** (también con `--freeze --force`) cuando la instantánea de datos de la versión es de otra (`DATA_VERSION`), antes de tocar ningún fichero o permiso. Tests en directorio temporal (y uno de que no bloquea una versión con datos propios) | Validador H-2 | `pit.py`, tests (h) |
+| B-1 | Escala del z de `infl_energy_pressure` tras 1978 con la historia 1967-77 del IPC subyacente reconstruido (correlación 0,978 en 1978-87) documentada | Validador B-1 | §7.1 |
+| B-2 | Entradas de la v0.3 en el trial log (placebo con control t−4; lo que miró el Validador) | Validador B-2 | `research/trial_log.md` |
+| B-3 | La lectura robusta del control t−4 es la media | Validador B-3 | §5 |
+| B-4 | Erratas: nº de tests en la cabecera; máximo de NFCI medido en 2011-12 | Validador B-4 | cabecera, `pit_calendar.md` |
+| B-5 | **Procedimiento de congelación** escrito (abajo) y test que lo exige. La v0.3 **no** entra en FROZEN ni lleva tag | Validador B-5 | `pit.py` (comentario de `CANDIDATE`), test (h) |
+| B-6 | Aclaración en P-EVAL-S-PIT-002: la mejora se exige en **los dos ejes** (G e I) | Validador B-6 | `research/hypotheses.yaml` |
+
+**Efecto frente a `64186fe`:** 0 celdas cambian. Las 3 matrices, los 3 linajes y los 2 baselines son **idénticos bit a
+bit** (mismos `sha256_file` y `sha256_content`: vintage `6858f6c9…`/`eb7d5dfb…`, latest_truncated `3d81ec88…`/`6a0c3945…`,
+Filadelfia prudente `b8df8844…`/`c4169c7c…`, baselines `aedd3c8d…` y `99e5ba71…`). En el meta solo cambian
+`principal_desde` y `principal_desde_efectivo` de `tcu_gap` (3 modos × 2 campos: — → 1984-01-01), los hashes de la
+lista blanca y del info en `candidata`, `code_sha256` de `pit.py` y las marcas de tiempo `creado`.
+
+**Procedimiento de congelación (B-5)**, solo tras el ✅ del Validador y la aprobación del usuario:
+1. Conservar la entrada `CANDIDATE["0.3"]` tal cual y añadir `FROZEN["0.3"]` con los mismos hashes más
+   `"veredicto": "docs/validation/<fecha>_pit_base_v0.3.md"` (`test_h_frozen_entries_follow_procedure` exige que
+   coincidan y que el fichero exista; `test_h_official_outputs_reproducible` sigue comparando el meta con `CANDIDATE`).
+2. Cambiar `test_h_current_version_is_candidate_not_frozen` por la comprobación de que la v0.3 está en FROZEN.
+3. Opcional: regenerar el meta (`python -m src.features.pit`) para que `estado` diga "congelada"; los `sha256` de
+   matrices, linajes y baselines no cambian.
+4. Tag `pit-v0.3`. A partir de ahí `--freeze` y `--candidate` se niegan para la v0.3.
 
 ### v0.2 → v0.3 (re-auditoría del Validador, `docs/validation/2026-10-15_pit_base_v0.2.md`)
 

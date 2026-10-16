@@ -23,9 +23,11 @@
 # GZ < 2012, M2 < 1980 e IPC subyacente < 1978 condicionales.
 # v0.3 (2026-10-15, re-auditoría del Validador de la v0.2): herencia de principal_desde por dependencias (afecta a
 # infl_energy_pressure → 1978-01); vix condicional antes de 2003-09-22; fechas de existencia no verificadas declaradas.
+# v0.3 tras re-auditoría (2026-10-16, Validador H-1, decisión del usuario): tcu_gap condicional antes de 1984-01-01
+# (la utilización de la industria total existe desde 1983; G.17 de la Fed). Ninguna derivada usa tcu_gap.
 
 version: "0.3"
-fecha: 2026-10-15
+fecha: 2026-10-16
 zscore_min_meses: 120          # z-scores expansivos: solo historia <= t, mínimo 10 años
 tendencia_meses: 120           # tendencia unilateral: mediana de los 120 meses hasta t
 mad_min_meses: 60              # escala MAD expansiva de (g - tendencia): mínimo 5 años
@@ -50,9 +52,9 @@ variables:
      mecanismo: "Producción industrial, el componente más cíclico del conjunto coincidente del NBER.", signo_esperado: "+ P(G alto)",
      admision: {fuente_viva: FRED/ALFRED, historia: "1919-", pit: "ALFRED desde 1927", disponibilidad: "completa"}}
   - {nombre: _tcu, bloque: auxiliar, tipo: serie, series: [TCU], transformacion: {fn: level}, modo: vintage, estado: auxiliar, mecanismo: "Utilización de la capacidad (nivel)."}
-  - {nombre: tcu_gap, bloque: crecimiento, tipo: derivada, funcion: gap_mean_prev, entradas: [_tcu], estado: principal_epoca,
-     mecanismo: "Utilización de la capacidad frente a su media de los 120 meses previos: holgura industrial sin la deriva secular del nivel (87 en los 60, 77 en 2000-04).", signo_esperado: "+ P(G alto), + P(I alta)",
-     admision: {fuente_viva: FRED/ALFRED, historia: "1967-", pit: "media solo hacia atrás; vintages desde 1996. SUPUESTO no verificado: que la utilización de la industria TOTAL se publicaba en tiempo real desde 1967 (pudo empezar después que la de manufacturas)", disponibilidad: "desde 1976-02 (E1)"}}
+  - {nombre: tcu_gap, bloque: crecimiento, tipo: derivada, funcion: gap_mean_prev, entradas: [_tcu], estado: principal_epoca, principal_desde: 1984-01-01,
+     mecanismo: "Utilización de la capacidad frente a su media de los 120 meses previos: holgura industrial sin la deriva secular del nivel (87 en los 60, 77 en 2000-04). La utilización de la industria TOTAL (manufacturas + minería + servicios públicos) no existía en tiempo real antes de 1983: condicional antes de 1984-01 (como el VIX). La media de 120 meses se apoya en esa historia reconstruida hasta ~1993.", signo_esperado: "+ P(G alto), + P(I alta)",
+     admision: {fuente_viva: FRED/ALFRED, historia: "1967- (reconstruida antes de 1983)", pit: "media solo hacia atrás; vintages desde 1996. VERIFICADO (Validador v0.3, H-1; decisión del usuario 2026-10-16): Federal Reserve, History of the Capacity and Capacity Utilization Index (G.17), federalreserve.gov/RELEASES/G17/Hist/HistCap.htm: 'In 1983, the scope of the capacity system was increased to cover mining and utilities' (manufacturas en el Bulletin desde 1968; materiales desde 1973-08). La fuente no da el mes de 1983: fecha prudente 1984-01-01", disponibilidad: "serie desde 1976-02; principal desde 1984-01 (condicional antes)"}}
   - {nombre: claims_4w_yoy, bloque: crecimiento, tipo: serie, series: [ICSA], transformacion: {fn: rolling_log_yoy, n: 4}, modo: vintage, estado: principal_epoca,
      mecanismo: "Las peticiones iniciales de paro son el dato de despidos más rápido; su subida anticipa el deterioro del empleo.", signo_esperado: "- P(G alto)",
      admision: {fuente_viva: FRED/ALFRED, historia: "1967-", pit: "ALFRED desde 2009; antes calendario (jueves)", disponibilidad: "desde 1968 (E1)"}}

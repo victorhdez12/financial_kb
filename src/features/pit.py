@@ -583,14 +583,22 @@ FROZEN: dict[str, dict] = {
 
 # Candidatas: hashes calculados, pendientes del veredicto del Validador. Pasan a FROZEN solo tras él (I-4). La v0.2 entró
 # en FROZEN antes del veredicto por un error de orden; queda congelada como registro, pero está SUSTITUIDA por la v0.3.
+# PROCEDIMIENTO DE CONGELACIÓN (Validador v0.3, B-5), solo tras el ✅ del Validador y la aprobación del usuario:
+#   1. Se CONSERVA la entrada de CANDIDATE tal cual (el meta.json la publica en "candidata" y el test de reproducción
+#      la compara) y se añade a FROZEN una copia idéntica de sus hashes más la clave
+#      "veredicto": "docs/validation/<fecha>_pit_base_v<versión>.md" (el fichero debe existir; lo comprueba un test).
+#   2. Opcional: regenerar el meta (`python -m src.features.pit`) para que su "estado" diga "congelada". Las matrices,
+#      los linajes y los baselines no cambian (mismos sha256); el test de reproducción sigue pasando.
+#   3. Tag git `pit-v<versión>`. Nunca `--freeze` ni `--candidate` sobre una versión en FROZEN (se niegan).
 CANDIDATE: dict[str, dict] = {
-    # v0.3 (2026-10-15): lista blanca y calendario nuevos sobre la instantánea de datos de la v0.2 (mismo hash)
+    # v0.3 (2026-10-15; lista blanca rehecha el 2026-10-16 tras la re-auditoría: tcu_gap condicional < 1984, H-1):
+    # lista blanca y calendario nuevos sobre la instantánea de datos de la v0.2 (mismo hash)
     "0.3": {
         "data_sha256_file": "db06b89c63d7c89c896c76a13127739237c67e6594224a4d7375a5bf5c4a6261",
         "data_sha256_content": "069b9d5cece116c8771c4d84c6f26ecc21d599f942f27f29b79bfbac9ded6b64",
-        "whitelist_sha256": "321bb0748bab37a777d2c2b8ed576247ce03c3d9c22aaf2a048b08afe40bc180",
+        "whitelist_sha256": "55fb431466c721880ddf76f2407d3f88f498866a9865f12a2a8850020712324b",
         "calendar_sha256": "373ced7b907e08728464935a64d523b0aa0150e899f44735c6613870c4cbc421",
-        "info_sha256": "897102e5a1afdb76fe6dd36e5941e8ab14c87c0f37e5b5c5c83e495cefac1119",
+        "info_sha256": "7c1b141976f548cdabc60f874d9f2114734f036ee2698c27f169e2fc57684081",
         "grid_end": "2026-09-30",
     },
 }
@@ -641,6 +649,10 @@ def write_snapshot(con, version: str = VERSION, force: bool = False) -> dict:
     paths = snapshot_paths(version)
     if version in FROZEN:
         raise SystemExit(f"la v{version} está congelada (FROZEN): su instantánea no se toca; crea una versión nueva")
+    dv = DATA_VERSION.get(version, version)
+    if dv != version:   # Validador v0.3, H-2: la instantánea de datos es de otra versión (compartida): nunca se reescribe
+        raise SystemExit(f"la v{version} usa la instantánea de datos de la v{dv} ({paths['data'].name}), que no es "
+                         f"suya: write_snapshot no la toca ni con --force; crea una versión nueva con datos propios")
     if paths["data"].exists() and not force:
         raise SystemExit(f"{paths['data']} ya existe (usa --force solo para una candidata no congelada)")
     paths["data"].parent.mkdir(parents=True, exist_ok=True)
