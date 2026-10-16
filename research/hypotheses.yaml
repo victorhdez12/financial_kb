@@ -290,3 +290,30 @@
     separado (G frente a p_g_high e I frente a p_i_high, como en P-EVAL-MOD), y la condición de no empeorar el resto del
     periodo bloqueado también se exige en cada eje. Si falla en cualquiera de los dos, se mantiene el nivel. El texto
     original no decía otra cosa (umcsent pesa en G y mich_infl_exp en I, y las dos cambian a la vez).
+
+- id: H-M1-001
+  registrada: 2026-10-16
+  autor: Constructor (entregable 4), a partir del conjunto a priori del Estratega (revisión del arnés §4)
+  tipo: hipotesis_modelo
+  especificacion: docs/models/m1_spec.md (v1.0) y config/harness/m1_logit_axis_v1.yaml
+  modelo: >
+    M1 = dos logísticas binarias por eje (objetivo blando p_g_high / p_i_high, pesos de madurez), combinadas como
+    producto (AxisModel). Cada eje: logit de la persistencia PIT del eje (como M0, eps 1e-3, L2 1,0) + variables de la
+    lista blanca principal v0.3 estandarizadas con el entrenamiento del corte, L2 = 6,0 (escala de suma) fijada a priori.
+    Eje I con IPC subyacente (M1, desde 1978) y, como especificación de la época anterior, con IPC general.
+  mecanismo: >
+    El nowcast de la etiqueta tiene un componente de previsión de ~4 meses. El momentum coincidente (growth_rt), la
+    entrada no lineal del paro (Sahm), el crédito (Baa), la bolsa (descuenta el futuro) y la curva (hazard de final de
+    ciclo) informan de los giros de G que la persistencia ve 5-6 meses tarde. En I, la subyacente de 6 meses ya cubre
+    la mitad de la ventana de la etiqueta.
+  signos_esperados:
+    G: {growth_rt: "+", unrate_sahm: "-", baa_spread: "-", eq_ret_6m: "+", curve_10y3m: "+ (débil; se informa, no decide)", logit_pers_g: "+"}
+    I: {core_cpi_6m_ann: "+", headline_cpi_6m_ann: "+ (solo época previa al subyacente)", logit_pers_i: "+"}
+  contraste: >
+    M1 − M0 (persistencia calibrada) en log-loss blanda de 4 cuadrantes, modo vintage, en el walk-forward del arnés v2.
+    En desarrollo (≤ 2004) solo se informa (m1_spec.md §7); la prueba que decide es la evaluación única preregistrada
+    (P-EVAL-BASE), que no forma parte de esta entrada.
+  placebo: >
+    Antes de mirar la etiqueta real: placebo pareado con la L2 de M1 (m1_spec.md §5). Fuga si la media sobre 20
+    semillas > 0,02 nats; aviso si prueba de signo unilateral p < 0,01 o t > 3.
+  alarma: una mejora frente a M0 > 0,25 nats en desarrollo se trata como sospecha de fuga y se audita antes de creerla.
