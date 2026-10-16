@@ -686,6 +686,8 @@ def main():
     fig_persistencia(cifras)
     fig_rendimientos(cifras)
     comp_reglas(lab, rules, cifras)
+    from src.report.fase3 import make_figures_pit  # base PIT v0.3: gráficos 11-13 y clave pit_base
+    make_figures_pit.run(cifras)
     (OUT / "cifras.json").write_text(json.dumps(cifras, ensure_ascii=False, indent=1, default=str))
     print("escrito", OUT / "cifras.json")
 

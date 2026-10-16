@@ -1,20 +1,29 @@
 ---
 tipo: informe_resultados
 fase: 3
-version: 0.2 (etiqueta v1.1, validaciones y revisión económica)
-actualizado: 2026-10-15
+version: 0.3 (base point-in-time v0.3 congelada; etiqueta v1.1)
+actualizado: 2026-10-16
 autor: Reportero
-graficos: src/report/fase3/make_figures.py
+graficos: src/report/fase3/make_figures.py (+ make_figures_pit.py)
 cifras_derivadas: "obsidian/Reports/Fase 3/img/cifras.json"
 ---
 
 # Fase 3 · Informe de resultados
 
 > [!info] Cómo leer este informe
-> Está pensado para leerse sin saber econometría. Cada cifra importante lleva su fuente: un fichero del proyecto o el warehouse. Las cifras que he calculado yo para este informe (por ejemplo, la comparación con el clasificador de reglas) salen del script `src/report/fase3/make_figures.py` y quedan guardadas en `img/cifras.json`. Las palabras técnicas están en el [[#10. Glosario|glosario]] del final.
+> Está pensado para leerse sin saber econometría. Cada cifra importante lleva su fuente: un fichero del proyecto o el warehouse. Las cifras que he calculado yo para este informe (por ejemplo, la comparación con el clasificador de reglas) salen de los scripts `src/report/fase3/make_figures.py` y `make_figures_pit.py` y quedan guardadas en `img/cifras.json`. Las palabras técnicas están en el [[#11. Glosario|glosario]] del final.
 > Ver también [[Proyecto/Estado del proyecto]], [[Proyecto/Etiqueta de régimen]] y [[Proyecto/Agentes]].
 
-> [!note] Qué ha cambiado desde la versión del 14-oct
+> [!note] Qué ha cambiado desde la versión del 15-oct (v0.2 → v0.3)
+> - **Entregable (2) terminado:** la **base point-in-time v0.3 está congelada** (16-oct, tag `pit-v0.3`) tras tres rondas del Validador: v0.1 ⚠️ → v0.2 ⚠️ → v0.3 ⚠️ con 2 condiciones → ✅. Todo en el nuevo **§8**.
+> - **Nuevo listón para el arnés**, por modo y solo ≤ 2004 (579 meses): persistencia PIT con datos tal como se publicaron (**vintage**) 61,14 % / log-loss 1,2997; con datos revisados cortados en t (**latest_truncated**) 63,04 % / 1,1824 (§8.5).
+> - **Lista blanca de 58 variables** (36 principales, 13 por época, 5 condicionales, 4 de módulo adicional) y el porqué de las condicionales: `vix` < 2003-09, `tcu_gap` < 1984 (fuente del G.17, **decisión del usuario del 16-oct**), `infl_energy_pressure` heredada < 1978 (§8.3).
+> - **Tests de fugas superados**, con su tabla de potencia honesta: lo que detectan y lo que no (§8.4).
+> - 3 gráficos nuevos (11-13): cobertura de variables por época, retrasos de publicación medidos y listón por modo.
+> - Semáforo actualizado: el criterio "sin fugas" pasa a ✅ para la base de variables. El arnés walk-forward (entregable 3) arrancó el 16-oct.
+> - Secciones renumeradas: "Qué viene después" pasa a §9, "Limitaciones" a §10 y el glosario a §11. Los gráficos 01-10 se han regenerado el 16-oct (mismas cifras salvo pequeños cambios del catálogo en §2).
+
+> [!note]- Cambios de la v0.2 (15-oct), para referencia
 > - La etiqueta pasa a la **v1.1, congelada y validada ✅** (§3.8 y §4). Todos los gráficos usan ya la v1.1.
 > - Nuevo **§4 Validación independiente**: la v1.0 salió ⚠️ con condiciones; la v1.1, ⚠️ y después ✅ en la re-auditoría de cierre.
 > - Nuevo **§5 El listón que hay que batir**: la persistencia point-in-time acierta el **63,6 %**. El 89 % del "mes anterior" hace trampa.
@@ -36,9 +45,9 @@ Queremos que el sistema diga **cada mes en qué "clima económico" (régimen) es
 | # | entregable | estado |
 |---|---|---|
 | 1 | Etiqueta de régimen (la "respuesta correcta") | ✅ **v1.1 congelada y validada** el 15-oct (tag `label-v1.1`) |
-| 2 | Base point-in-time + calendario de publicación + test de fugas | ▶ **en marcha** (Constructor, lanzado el 15-oct) |
-| 3 | Arnés walk-forward (embargo de 6 m, 2005-01 → bloqueado, registro de pruebas) | ⏳ pendiente |
-| 4 | Modelos sencillos: persistencia, reglas, logística, Markov | ⏳ pendiente. El listón de la persistencia ya está medido: **63,6 %** (§5) |
+| 2 | Base point-in-time + calendario de publicación + test de fugas | ✅ **v0.3 congelada y validada** el 16-oct (tag `pit-v0.3`; §8) |
+| 3 | Arnés walk-forward (embargo de 6 m, 2005-01 → bloqueado, registro de pruebas) | ▶ **en marcha** (Constructor, lanzado el 16-oct) |
+| 4 | Modelos sencillos: persistencia, reglas, logística, Markov | ⏳ pendiente. El listón de la persistencia ya está medido por modo, ≤ 2004: **61,1 %** (vintage) y 63,0 % (latest_truncated) (§8.5) |
 | 5 | GBM, solo si bate a los anteriores | ⏳ pendiente |
 | 6 | Calibración | ⏳ pendiente |
 | — | En paralelo: investigación de relaciones adelantadas | 🟡 programa escrito y 5 hipótesis preregistradas (2 de derivados, 3 capas ex post); sin resultados de modelos |
@@ -47,15 +56,15 @@ Queremos que el sistema diga **cada mes en qué "clima económico" (régimen) es
 
 | criterio | estado |
 |---|---|
-| Bate a la persistencia en log-loss fuera de muestra, también en el periodo bloqueado, con intervalos que no incluyen el cero | ⬜ sin modelos aún. Lo que sí hay: el **listón medido** (persistencia PIT, log-loss 1,235; §5) |
+| Bate a la persistencia en log-loss fuera de muestra, también en el periodo bloqueado, con intervalos que no incluyen el cero | ⬜ sin modelos aún. Lo que sí hay: el **listón medido por modo** en la base PIT (≤ 2004: log-loss 1,2997 vintage y 1,1824 latest_truncated; §8.5) |
 | Probabilidades calibradas | ⬜ |
-| Sin fugas: test point-in-time, placebo y señal plantada superados | 🟡 lista negra de columnas en código con tests; la base PIT, el placebo y la señal plantada están en construcción |
+| Sin fugas: test point-in-time, placebo y señal plantada superados | ✅ **para la base de variables** (v0.3: 0 celdas publicadas después de t, placebo, control "etiqueta de t−4", señal plantada y lista negra; §8.4). Falta repetir el placebo sobre las predicciones de cada modelo en el arnés. Con potencia limitada declarada |
 | Relaciones con mecanismo, estables por épocas y países, que sobreviven a la corrección por comparaciones múltiples | ⬜ hay registro de hipótesis y de pruebas; sin resultados |
-| Veredicto ✅ del Validador independiente | 🟡 ✅ para la **etiqueta v1.1**; falta todo lo demás |
-| Ficha del modelo + informe de resultados | 🟡 este informe va por la v0.2; la ficha del modelo no existe todavía |
+| Veredicto ✅ del Validador independiente | 🟡 ✅ para la **etiqueta v1.1** y la **base PIT v0.3**; faltan el arnés y los modelos |
+| Ficha del modelo + informe de resultados | 🟡 este informe va por la v0.3; la ficha del modelo no existe todavía |
 | Sustituye al clasificador de reglas en el reporte semanal | ⬜ |
 
-**En una frase:** la "respuesta correcta" ya está definida, congelada, validada por un auditor independiente y revisada por un economista, y sabemos qué nota tiene que batir un modelo (63,6 % de acierto). Todavía no hay ningún modelo.
+**En una frase:** ya están congeladas y validadas las dos piezas del examen: la "respuesta correcta" (etiqueta v1.1) y **lo que el modelo puede mirar cada mes** (base point-in-time v0.3, sin fugas detectables). Sabemos qué nota tiene que batir un modelo con datos tal como se publicaron (61,1 % de acierto, log-loss 1,30, ≤ 2004). Todavía no hay ningún modelo.
 
 ### Régimen actual según la etiqueta (provisional)
 
@@ -81,29 +90,29 @@ La coincidencia del 52 % es un cálculo mío y solo **orientativo**[^comp]. Los 
 
 ## 2. Los datos
 
-*(Sin cambios de fondo desde el 14-oct; el gráfico se ha regenerado el 15-oct y da las mismas cifras.)*
+*(Sin cambios de fondo desde el 14-oct; el gráfico se ha regenerado el 16-oct y el catálogo ha crecido en 3 series.)*
 
 ### Qué tenemos
 
-- **15.610 series** de **55 fuentes** en la base de datos (`data/warehouse.duckdb`, tabla `catalog`)[^cob], con unos 12,5 millones de observaciones[^estado]. Además hay vintages ALFRED (las versiones "tal como se publicaron") de 18 series clave, con 185.606 filas (tabla `vintages`).
+- **15.613 series** de **55 fuentes** en la base de datos (`data/warehouse.duckdb`, tabla `catalog`)[^cob], con unos 12,5 millones de observaciones[^estado]. Además hay vintages ALFRED (las versiones "tal como se publicaron") de 18 series clave, con 185.606 filas (tabla `vintages`).
 - El 58 % de las series es de EE. UU. (9.099 con `country_iso3 = USA`). El resto cubre la zona euro, España, Alemania, Reino Unido, Japón y el resto del mundo.
 - **Por bloque económico** (agrupando la columna `category` del catálogo):
 
 | bloque | series |
 |---|---|
 | Tipos y crédito | 6.559 |
-| Crecimiento, empleo y vivienda | 3.504 |
+| Crecimiento, empleo y vivienda | 3.505 |
 | Dinero y liquidez | 1.884 |
 | Mercados (bolsa, divisas, valoración) | 1.646 |
-| Inflación y materias primas | 1.125 |
+| Inflación y materias primas | 1.127 |
 | Fiscal, geopolítica y otros | 892 |
 
-- **Historia:** 1.569 series tienen dato en 1900, 4.686 en 1950 y 9.728 en 2000[^cob]. Las más largas vienen de NBER Macrohistory, JST (18 países desde 1870), Shiller, el Banco de Inglaterra y MeasuringWorth.
+- **Historia:** 1.569 series tienen dato en 1900, 4.686 en 1950 y 9.731 en 2000[^cob]. Las más largas vienen de NBER Macrohistory, JST (18 países desde 1870), Shiller, el Banco de Inglaterra y MeasuringWorth.
 - **Actualización automática:** launchd actualiza los datos de lunes a sábado a las 7:30 y los domingos a las 7:00 (todo + auditoría + reporte), con una tarea de arranque que recupera la actualización si el Mac estaba apagado[^estado].
 
 ![[Reports/Fase 3/img/01_cobertura_por_bloque.png]]
 
-*Cómo leerlo:* cada franja de color es un bloque, y la altura total es el número de series con algún dato ese año. La caída de los últimos años no quiere decir que se pierdan datos. Una serie solo cuenta en 2026 si ya tiene un dato de 2026 (hoy son 7.646), y muchas son anuales, se publican con retraso o están cerradas. La caída puntual de 1941-45 **no la he investigado**; probablemente se debe a series que se interrumpen durante la guerra.
+*Cómo leerlo:* cada franja de color es un bloque, y la altura total es el número de series con algún dato ese año. La caída de los últimos años no quiere decir que se pierdan datos. Una serie solo cuenta en 2026 si ya tiene un dato de 2026 (hoy son 7.649), y muchas son anuales, se publican con retraso o están cerradas. La caída puntual de 1941-45 **no la he investigado**; probablemente se debe a series que se interrumpen durante la guerra.
 
 ### Cómo se auditaron
 El **Auditor de datos** no modifica nada: solo comprueba. Su última auditoría completa (14-oct) dio **0 problemas críticos y 33 altos** (32 ya explicados y un falso positivo) y un **error real** en la EPA del INE de 1976-2001, corregido el mismo día. No afectaba a ninguna serie de EE. UU. ni al régimen[^aud][^estado].
@@ -307,7 +316,8 @@ La versión ingenua ("lo mismo que el mes anterior") acierta el **89 %**. Pero *
 ### 5.3 Qué significa
 - **El listón oficial es la persistencia point-in-time:** log-loss blanda **1,235** (menor es mejor) y 63,6 % de acierto. El PLAN y la ficha ya lo recogen así[^spec].
 - Un modelo que "solo" acierte el 70 % puede ser bueno; uno que diga el 90 % casi seguro tiene una fuga.
-- **Limitación declarada:** esta persistencia trunca los datos en el tiempo, pero usa la última versión revisada, no los datos tal como se publicaron. El arnés tiene que tratar el baseline y las variables del modelo igual, para que la comparación sea justa[^spec][^val11].
+- **Limitación declarada:** esta persistencia trunca los datos en el tiempo, pero usa la última versión revisada, no los datos tal como se publicaron. El arnés tiene que tratar el baseline y las variables del modelo igual, para que la comparación sea justa[^spec][^val11]. **Resuelto en la base PIT v0.3 (§8.5):** la persistencia se calcula en los dos modos sobre los mismos meses ≤ 2004, y con datos tal como se publicaron baja a 61,1 %.
+- **Ojo con el 63,6 %:** se mide en los 797 meses puntuables hasta 2021-10, que **incluyen el periodo bloqueado** (2005 →). El Validador lo señaló como no comparable con las cifras de entrenamiento[^valpit1]. Para el arnés, el listón de referencia es el de §8.5 (≤ 2004, por modo); el periodo bloqueado se puntuará una sola vez, al final.
 
 ---
 
@@ -398,18 +408,160 @@ Primera entrada: la revisión del Estratega (1955-2004, 2 particiones probadas)[
 
 ---
 
-## 8. Qué viene después
+## 8. La base point-in-time v0.3 (entregable 2) · congelada el 16-oct
+
+> [!success] Estado
+> **Congelada el 16-oct-2026 como v0.3** (entrada en `FROZEN` de `src/features/pit.py` y **tag `pit-v0.3`**), tras el ✅ del Validador y la aprobación del usuario. 97/97 tests en verde[^bitpit]. La matriz no ha cambiado ni una celda desde la versión auditada[^valpit3].
+
+### 8.1 Qué es y por qué importa
+
+La etiqueta (§3) es la **respuesta correcta del examen**. La base point-in-time (PIT) es **la otra mitad: lo que el alumno puede mirar durante el examen**. Para cada mes t, una fila con las variables que un modelo podrá usar, construida **solo con lo que estaba publicado el último día hábil del mes t** (la fecha de decisión)[^pit].
+
+¿Por qué hace falta tanto cuidado? Porque los datos que vemos hoy **no son los que se veían entonces**:
+- **Llegan tarde.** El IPC de marzo se publica a mediados de abril; el PIB del trimestre, un mes después de acabar. Si el modelo usa el dato de marzo para decidir a finales de marzo, está haciendo trampa.
+- **Se revisan.** El empleo o el PIB de 2008 que vemos hoy han sido corregidos varias veces. El primer dato publicado era otro, a veces bastante distinto.
+- **Algunas series no existían.** Muchas series "de 1960" se calcularon años después hacia atrás. En 1975 nadie podía mirarlas.
+
+Un modelo entrenado con datos de hoy aparentaría acertar más de lo que podría en la realidad. Eso es una **fuga**, el error más peligroso de un backtest (glosario).
+
+**Dos versiones de la matriz, y se puntúan las dos**[^pit]:
+
+| modo | qué ve el modelo en el mes t | papel |
+|---|---|---|
+| **vintage** | Cada serie **tal como se publicó** en t (archivo ALFRED de la Fed de San Luis; RTDSM de Filadelfia para el PIB de 1965-91; vintages propias de varias series) | **Principal** (decisión del usuario del 15-oct) |
+| **latest_truncated** | La **versión revisada de hoy**, pero cortada: cada dato solo cuenta desde el día en que se publicó | Sensibilidad |
+
+**Cifras de la matriz congelada:** 921 fechas de decisión (1950-01 → 2026-09) × **58 columnas**, construidas desde **61 series** guardadas en una **instantánea** de 1,30 M filas con huella SHA-256. La matriz oficial solo se puede construir desde esa instantánea: una actualización diaria de la base de datos no la cambia. Además hay un **linaje por celda** (qué serie y qué observación se usó en cada casilla) y una variante prudente de la encuesta de Filadelfia (S-PIT-001)[^pit][^pitmeta].
+
+### 8.2 El calendario de publicación: medido, no supuesto
+
+Para saber **qué día se conocía cada dato** se miden los retrasos reales con las versiones archivadas (ALFRED): la diferencia entre el fin del periodo y la **primera publicación**[^cal].
+
+![[Reports/Fase 3/img/12_pit_retardos_publicacion.png]]
+
+*Cómo leerlo:* cada fila es una serie; cada color, una época. El punto es el retraso típico (mediana); la línea llega hasta el p90 (9 de cada 10 publicaciones tardan menos); la cruz es el máximo. La franja verde son los datos que llegan antes de que acabe el mes siguiente.
+
+- **Los datos se publican cada vez antes.** La mediana del IPC baja de **21 días antes de 1980 a 13 desde 2013**. La producción industrial era más lenta y variable antes de 1980 (p90 de 28 días, máximo 33)[^cal][^cifraspit].
+- **Los máximos de 2013+ son los cierres del Gobierno** (2013 y 2025). El IPC de octubre de 2025 **nunca se publicó**; la matriz lo respeta: en noviembre de 2025 el último IPC disponible es el de septiembre[^cal][^valpit3].
+- **Antes de que exista el archivo de vintages** (p. ej. el IPC antes de 1972) se usa un retraso de **reserva conservador: el máximo** medido en la época más antigua, o un supuesto documentado y marcado como tal[^cal].
+- **Series del mismo comunicado de prensa** (p. ej. el paro y el empleo, o la utilización de capacidad y la producción industrial) toman la fecha de la serie con vintages. Se comprobó que salen el mismo día en el 100 % de 150-800 fechas por par[^cal].
+- **Efecto secundario útil:** el calendario muestra que el clasificador de reglas de la Fase 1 (`src/regime/asof.py`) supone 15 días para el IPC, y **no es conservador** (mediana 19-21 y máximo 31-32 antes de 2000). Queda como propuesta; no se ha tocado[^cal].
+
+### 8.3 La lista blanca: qué variables pueden entrar
+
+Solo pueden entrar en un modelo las variables de la **lista blanca** (`research/pit_whitelist.yaml`). Cada una lleva su mecanismo económico, su transformación **fijada antes de mirar la etiqueta** y su regla de admisión. La lista negra de la etiqueta (§3.8) queda como segunda barrera[^wl].
+
+**Regla de admisión** (PLAN, 14-oct): (1) fuente viva; (2) historia de ≥ 3 recesiones o ≥ 6 cambios de régimen; (3) retraso de publicación documentado y que no sea una previsión; (4) que la disponibilidad no delate la época[^plan]. A eso la v0.2-v0.3 añadió un criterio: **la serie tenía que existir en tiempo real con esa definición**. Si no, la variable es **condicional** antes de esa fecha (`principal_desde`): está en la matriz, pero el modelo principal no la usa y solo entra en sensibilidad[^pit].
+
+| estado | nº | qué significa |
+|---|---|---|
+| **Principal** | **36** | Entra en el modelo principal. 9 de ellas solo desde su `principal_desde` (una, por herencia) |
+| **Principal por época** | **13** | Entra desde que empieza su historia (Filadelfia 1968, peticiones de paro, SPF, Michigan 1978…). 2 de ellas tienen además fecha de existencia: `tcu_gap` (1984-01) y `vix` (2003-09) |
+| **Condicional** | **5** | Fuera del modelo principal hasta su fecha: PCE subyacente (2000-08), CFNAI y NFCI (2011-05), diferencial GZ (2012-01), EBP (nunca) |
+| **Módulo adicional** | **4** | Liquidez neta, balances de bancos centrales, inflación implícita y tipo real (desde 2003). Preregistradas; se evalúan aparte, en la evaluación única |
+| *Total* | *58* | *+ 26 auxiliares internas y **21 candidatas rechazadas** con su motivo (USREC, GDPPOT, probabilidades de recesión de terceros…)* |
+
+Fuente: `docs/models/pit_base.md` §1 y §4; recuento comprobado en el meta (`img/cifras.json` → `pit_base.cobertura`)[^pit][^cifraspit].
+
+![[Reports/Fase 3/img/11_pit_cobertura_variables.png]]
+
+*Cómo leerlo:* altura = número de columnas con dato en cada fecha de decisión. Azul y verde son las que puede usar el modelo principal; naranja, las que existen en la matriz pero aún no eran "reales" en esa fecha; violeta, el módulo adicional. Cada línea discontinua es una **época** en la que entra un bloque de variables. En diciembre de 1960 el modelo principal tiene 21 columnas; en diciembre de 1977, 35; en diciembre de 1983, 47; en diciembre de 2004, 50[^cifraspit]. A la derecha de 2005 solo se cuentan columnas: **no se ha mirado ninguna relación con la etiqueta en el periodo bloqueado**.
+
+**Tres ejemplos de condicionales, y por qué:**
+
+| variable | condicional antes de | por qué |
+|---|---|---|
+| `vix` (volatilidad implícita del S&P 500) | **2003-09-22** | El VIX con su definición actual se publica desde septiembre de 2003. El de 1990-2003 es una reconstrucción posterior y no se empalma con el antiguo VXO. No tiene ninguna recesión ≤ 2004 en el modelo principal[^pit][^valpit2] |
+| `tcu_gap` (utilización de la capacidad frente a su media de 10 años) | **1984-01-01** | **Fuente primaria** (historia oficial del G.17 de la Fed): *"In 1983, the scope of the capacity system was increased to cover mining and utilities"*. Antes de 1983 solo existía la utilización de **manufacturas**; la de la **industria total** es una reconstrucción. La fuente no da el mes, así que se usa la fecha prudente. Coste: se queda con 2 recesiones ≤ 2004 (antes 4)[^valpit3][^pit] |
+| `infl_energy_pressure` (presión inflacionista de energía) | **1978-01** (heredada) | Una de sus tres entradas es "general − subyacente", y el IPC subyacente es condicional antes de 1978. **Regla general de herencia (v0.3):** una variable derivada solo entra cuando han entrado *todas* sus entradas. La comprueba el código recorriendo el grafo de dependencias; hoy solo afecta a esta variable[^pit][^valpit3] |
+
+### 8.4 Tests de fugas: qué se comprobó y hasta dónde llegan
+
+51 tests específicos (97 en todo el proyecto, todos en verde) corren sobre la instantánea congelada. Además, el Validador los reprodujo con su propio código (SQL directo, sin usar el del Constructor)[^pit][^valpit3][^bitpit].
+
+| prueba | qué pregunta | resultado |
+|---|---|---|
+| **Publicación ≤ t** | ¿Alguna celda usa un dato publicado después de la fecha de decisión? | **0 celdas** en las 3 matrices (comprobado también por el Validador) |
+| **Valores recalculados a mano** | ¿La matriz dice lo que debe? | Validador: **3.328 celdas** recalculadas con SQL, todas iguales, y la observación usada coincide con el linaje |
+| **Truncamiento** | Si se borra todo lo posterior a t, ¿cambia la fila t? | Idéntica en 5 cortes (1962, 1979, 1996, 2004, 2014) × 2 modos |
+| **Placebo** | Con la etiqueta barajada, ¿el modelo "aprende" algo? | Sin fuga: habilidad −0,14 (no aprende, correcto). Con una fuga fuerte inyectada: +0,42, detectada 8/8 |
+| **Control "etiqueta de t−4"** | ¿Detecta una fuga de calendario de **un solo mes**? (usar la etiqueta de t−4 en lugar de la de t−5) | Sí: habilidad media 0,087 frente a 0,005 del control sin fuga; falla 8/8, como debe |
+| **Señal plantada** | En datos inventados con una relación conocida, ¿la encuentra, y solo con el retraso correcto? | Calendario correcto: 0,279, dentro del intervalo fijado a priori [0,20; 0,40] en 20/20 semillas. Con una fuga de 1 mes: 0,542, por encima de 0,42 en 20/20 |
+| **Lista negra** | ¿Se cuela alguna columna de la etiqueta, la recesión o una previsión? | Ninguna; se rechazan `USREC`, `usrec_lag1` y `GDPPOT` |
+
+**Potencia honesta: lo que estos tests NO pueden ver.** Un test que nunca falla no sirve de nada, así que el Validador midió cuándo detecta cada uno una fuga y cuándo no[^pit][^valpit3]:
+
+| prueba | caso | habilidad media [mín; máx] | ¿lo detecta? |
+|---|---|---|---|
+| Placebo (8 permutaciones) | sin fuga | −0,138 [−0,207; −0,061] | pasa (correcto) |
+| | fuga fuerte (ruido σ = 0,5) | 0,421 [0,370; 0,497] | sí, 8/8 |
+| | fuga media (σ = 1,0) | 0,071 [0,002; 0,153] | en la media sí; no en todas las permutaciones |
+| | **fuga débil (σ ≥ 1,5)** | ≤ −0,04 | **no** |
+| | etiqueta de t−4 (control) | 0,087 [0,030; 0,183] | sí, 8/8 (la lectura robusta es la **media**: el margen por permutación es pequeño) |
+| Señal plantada (20 semillas) | calendario correcto | 0,279 [0,230; 0,344] | 20/20 en el intervalo |
+| | fuga de 1 mes | 0,542 [0,460; 0,663] | 20/20 |
+| | **retraso demasiado corto en una serie sin vintages** | 0,304 [0,263; 0,363] | **0/20: pasa inadvertido** |
+
+**En llano:** los tests cazan fugas fuertes y errores de calendario de un mes entero, pero **no fugas débiles** ni un retraso demasiado optimista en una serie que no tiene archivo de versiones. Esto último solo se puede cubrir comparando con una fuente externa, y donde no la hay queda como **supuesto declarado** (§8.7).
+
+### 8.5 El listón que tendrá que batir el arnés
+
+La persistencia point-in-time (§5) se recalcula ahora **dentro de la base PIT**, en los dos modos y **sobre los mismos meses**, para que cada modelo se compare con la persistencia de su mismo modo (regla del arnés)[^pit][^pitmeta].
+
+![[Reports/Fase 3/img/13_pit_liston_modos.png]]
+
+| modo | meses (≤ 2004) | acierto | log-loss blanda |
+|---|---|---|---|
+| **vintage** (principal) | 579 (1956-10 → 2004-12) | **61,14 %** | **1,2997** |
+| latest_truncated (sensibilidad) | 579 (mismos meses) | 63,04 % | 1,1824 |
+
+Fuente: `pit_us_v0.3.meta.json` → `baseline`; reproducido por el Validador y recalculado para este informe desde los parquets de la persistencia y la etiqueta, recortados a ≤ 2004 (`img/cifras.json` → `pit_base.liston_hasta_2004`, coinciden)[^pitmeta][^valpit3][^cifraspit].
+
+- **Con los datos tal como se publicaron, la persistencia acierta menos** (61,1 % frente a 63,0 %) y es peor en log-loss. Es lo esperable: los primeros datos son más ruidosos. Por eso no sería justo comparar un modelo "vintage" con una persistencia hecha con datos revisados.
+- **Muestra:** empieza en 1956-10 porque el modo vintage no puede calcular los 16 primeros meses (a las primeras vintages del empleo les falta historia). La cifra de la ficha (62,9 %, 1,227 en 595 meses) usa latest_truncated con esos 16 meses de más; no es comparable[^pit].
+- Todo es **≤ 2004**: el periodo bloqueado no se ha puntuado.
+
+### 8.6 Historial de validación: v0.1 ⚠️ → v0.2 ⚠️ → v0.3 ⚠️ → ✅
+
+| fecha | versión | veredicto | lo principal |
+|---|---|---|---|
+| 15-oct | **v0.1** (46 variables) | ⚠️ condicionada (Validador) · ⚠️ "sirve con cambios" (Estratega macro) | Sin fugas detectables (696/696 celdas recalculadas). Pero: dependía de la base de datos viva (sin instantánea); el **placebo no podía detectar fugas** (pasaba con una variable con fuga en 20/20 semillas); el umbral de la señal plantada se había bajado **después** de ver el resultado; fuga pequeña en el BCE; GZ, M2 e IPC subyacente usados antes de existir. El Estratega pidió rehacer el indicador de crecimiento, quitar "relojes de época" y separar inflación subyacente y energía[^valpit1][^bit] |
+| 15-oct | **v0.2** (58 variables) | ⚠️ muy cerca de ✅ | Instantánea congelada, reproducción bit a bit sin base de datos, placebo y señal plantada con potencia real. Faltaba: herencia de fechas (`infl_energy_pressure`), VIX condicional, anotar dos ajustes de tests en el registro de pruebas y un **error de orden** (la v0.2 se congeló antes del veredicto; se corrigió creando la v0.3)[^valpit2] |
+| 16-oct | **v0.3** | ⚠️ con **2 condiciones** | Todo lo anterior cerrado; 3.328 celdas por SQL; 92/92 tests. Nuevo: **H-1** fuente primaria contra `tcu_gap` antes de 1983; **H-2** el comando `--freeze --force` podía sobrescribir la instantánea compartida con la v0.2[^valpit3] |
+| 16-oct | **v0.3 corregida** | ✅ **aprobada** | Comprobación de cierre: H-1 y H-2 resueltos, **0 celdas cambian**, 96/96 tests. El usuario aprueba congelar → `FROZEN` + tag `pit-v0.3` (97/97)[^valpit3][^bitpit] |
+
+> [!info] Decisión del usuario sobre `tcu_gap` (16-oct)
+> El Validador encontró la fuente primaria y recomendó hacerla condicional; si se mantenía desde 1976 debía quedar como "aceptación explícita de riesgo contra la evidencia". El usuario eligió **condicional antes de 1984-01**, el mismo criterio que con el VIX. No cambia ningún valor de la matriz, solo cuándo puede usarla el modelo principal. La alternativa para 1976-83 (utilización de manufacturas, publicada desde 1968) sería una variable nueva: v0.4 y preregistro[^bitpit][^valpit3].
+
+> [!tip] Por qué tantas vueltas
+> Tres rondas para una tabla de datos pueden parecer muchas. Pero cada ronda encontró algo que habría inflado los resultados **sin dar ningún aviso**: un placebo que no podía fallar, series usadas antes de existir, un umbral fijado después de ver el resultado. Es la misma lección que la v0.1 de la etiqueta (§3.8).
+
+### 8.7 Limitaciones declaradas de la base PIT
+
+- **Supuestos sin fuente primaria.** No hay fuente externa para los retrasos de: la encuesta de Filadelfia en 1968-90 (se publica además una variante prudente), el SPF antes de 1990 (90 días), Michigan (fuente directa sin versiones, 20 días), Pink Sheet del Banco Mundial, BIS, GZ/EBP, BoJ y BCE[^pit][^valpit3].
+- **Inicio del IPC subyacente en 1978:** la fecha en que el BLS empezó a publicar el IPC "sin alimentos ni energía" **no está verificada** con una fuente primaria; 1978-01 es un supuesto prudente del Validador. Lo mismo vale para los servicios sin energía. Hasta 1983 el IPC incluía los intereses hipotecarios: es lo que se veía entonces y no se corrige[^pit].
+- **Potencia limitada de placebo y señal plantada:** no detectan fugas débiles ni un retraso demasiado corto en series sin vintages (§8.4).
+- **Historia reconstruida en la escala de algunas variables:** `infl_energy_pressure` se escala desde 1978 con historia anterior reconstruida; el Validador midió el efecto (correlación 0,978 en 1978-87) y es pequeño. La media de 10 años de `tcu_gap` se apoya en historia reconstruida hasta ~1993[^pit].
+- **Pocas recesiones para algunas variables:** `tcu_gap` y `spf_cpi_4q` solo tienen 2 recesiones ≤ 2004 en el modelo principal, y `vix` ninguna: la investigación ≤ 2004 no las puede validar del todo[^pit].
+- **El paso "dato revisado → primer dato publicado" puede hacer de reloj.** En modo vintage, cada serie cambia de tipo de ruido el día en que empieza su archivo (IPC subyacente 1996-12, M2 1980-02…). El arnés debe comprobar que cada variable se comporta igual a los dos lados[^pit].
+- **Empalmes en fechas fijas** (petróleo PPI → WTI en 1987, curva oficial en 1982, TGA en 2005-10) y **petróleo administrado antes de 1973**, que no debe leerse como "años 60 tranquilos"[^pit].
+- **El meta de la matriz sigue diciendo "candidata"**: no se regeneró al congelar (era opcional según el procedimiento); los hashes son idénticos a los de `FROZEN`[^bitpit].
+
+---
+
+## 9. Qué viene después
 
 En orden, según `docs/PLAN.md` y el estado del proyecto[^obj][^plan]:
 
-1. **▶ Base point-in-time (en marcha desde el 15-oct).** El Constructor prepara:
-   - un **calendario de publicación** con los retrasos medidos con ALFRED (`docs/models/pit_calendar.md`);
-   - una **lista blanca** de variables con mecanismo económico y regla de admisión;
-   - el constructor de la matriz PIT (`src/features/`, con datos tal como se publicaron o con la última versión truncada);
-   - los **tests de fugas** (publicación posterior a la decisión, truncamiento, placebo, señal plantada, lista negra).
-   La exploración usa solo datos hasta 2004. Al terminar: Validador → Estratega macro → correcciones → re-auditoría[^bit].
-2. **Arnés walk-forward.** Entrena con el pasado y prueba en el futuro inmediato, mes a mes. Lleva 6 meses de embargo y **recalcula las etiquetas de entrenamiento solo con datos ≤ corte** (condición A2). No toca 2005-01 → hasta la evaluación final, que se hace una sola vez. Apunta todas las pruebas en el registro.
-3. **Modelos sencillos:** persistencia point-in-time (el listón, 63,6 %), clasificador de reglas, regresión logística con 5-10 variables con sentido económico y un modelo de Markov.
+1. ✅ **Base point-in-time: congelada el 16-oct (v0.3, §8).**
+2. **▶ Arnés walk-forward (en marcha desde el 16-oct).** Entrena con el pasado y prueba en el futuro inmediato, mes a mes. Lleva 6 meses de embargo y **recalcula las etiquetas de entrenamiento solo con datos ≤ corte** (condición A2). Tiene que cumplir las reglas que deja escritas la base PIT[^pit]:
+   - entrenar y puntuar en **vintage** y repetir en **latest_truncated**, comparando cada modelo con la persistencia **de su mismo modo** y en los mismos meses;
+   - no usar ninguna variable antes de su `principal_desde_efectivo`;
+   - comprobar que cada variable se comporta igual antes y después de que empiece su archivo de versiones;
+   - publicar las sensibilidades preregistradas S-PIT-001 (Filadelfia prudente) y S-PIT-002 (Michigan en variación a 12 meses);
+   - repetir el placebo sobre sus propias predicciones.
+   Bloqueo técnico del periodo ≥ 2005-01 hasta la evaluación final, que se hace una sola vez. Apunta todas las pruebas en el registro[^bitpit].
+3. **Modelos sencillos:** persistencia point-in-time (el listón: 61,1 % en vintage, ≤ 2004), clasificador de reglas, regresión logística con 5-10 variables con sentido económico y un modelo de Markov.
 4. **GBM**, solo si bate a los sencillos fuera de muestra.
 5. **Calibración:** que cuando el modelo diga "70 %", acierte de verdad alrededor del 70 % de las veces.
 6. **Investigación de relaciones adelantadas** (en paralelo), con hipótesis preregistradas. Las dos de derivados (H-DER-001, la pendiente de la curva de futuros del VIX; H-DER-002, la volatilidad implícita de los bonos) nacen en 2004-2006 y solo se evaluarán dentro de la evaluación única[^hyp].
@@ -426,7 +578,7 @@ En orden, según `docs/PLAN.md` y el estado del proyecto[^obj][^plan]:
 
 ---
 
-## 9. Limitaciones
+## 10. Limitaciones
 
 - **Todavía no hay modelo.** No hay ninguna evidencia aún de que se pueda adivinar el régimen mejor que la persistencia point-in-time.
 - **La etiqueta es una definición, no una verdad revelada.** Otras elecciones razonables cambiarían entre el 3,7 % y el 12,1 % de los meses. El umbral κ es lo que más pesa, sobre todo en los 90 y 2000[^val10].
@@ -437,14 +589,15 @@ En orden, según `docs/PLAN.md` y el estado del proyecto[^obj][^plan]:
 - **Supuesto de independencia entre crecimiento e inflación:** correlación −0,13 en toda la muestra, pero 0,27 desde 1984, cerca del umbral de revisión de 0,3[^chk].
 - **La muestra que puntúa termina en octubre de 2021**; el periodo bloqueado (2005 →) tiene 202 meses maduros y casi nada de estanflación ni de crecimiento con inflación alta maduros. El eje de inflación solo se pondrá a prueba de verdad con 2021-2023, hoy provisional[^val10].
 - **Pocos episodios:** unas 11 recesiones y 86 tramos de régimen en 1955-2021. Cualquier resultado tendrá intervalos amplios.
-- **La persistencia point-in-time usa la última versión de los datos**, no los datos tal como se publicaron (§5.3).
+- **La persistencia point-in-time de §5 usa la última versión de los datos**; la de la base PIT (§8.5) ya se calcula también con los datos tal como se publicaron.
+- **Base PIT:** supuestos de calendario sin fuente primaria (Filadelfia 1968-90, SPF < 1990, Michigan, BIS, GZ/EBP, BoJ, BCE, Pink Sheet), inicio del IPC subyacente en 1978 sin verificar y potencia limitada de placebo y señal plantada. Detalle en §8.7.
 - **La comparación con el clasificador de reglas (52 %) es orientativa** y no es limpia: sus reglas se diseñaron conociendo 2008 y 2020.
 - **Datos:** huecos de pago, fuentes congeladas, licencias no comerciales y series que se reescriben hacia atrás.
 - **Solo EE. UU.**: la zona euro y la capa EUR quedan fuera de esta fase.
 
 ---
 
-## 10. Glosario
+## 11. Glosario
 
 | término | qué significa aquí |
 |---|---|
@@ -466,6 +619,10 @@ En orden, según `docs/PLAN.md` y el estado del proyecto[^obj][^plan]:
 | **Periodo bloqueado** | 2005-01 → abierto: se reserva y solo se usa una vez, al final, como examen definitivo |
 | **Empalme** | Unir dos series que miden lo mismo de forma distinta (aquí, IPC subyacente antes de 1959 y PCE subyacente después) con un ajuste para que no haya un salto artificial |
 | **Instantánea (snapshot) y hash** | Copia congelada de los datos de entrada, con una "huella digital" (SHA-256) que cambia si se altera un solo número |
+| **Modo vintage / latest_truncated** | Dos formas de ver el pasado. *Vintage*: cada dato tal como se publicó entonces. *Latest_truncated*: el dato revisado de hoy, pero solo desde el día en que se publicó por primera vez |
+| **Variable condicional** | Variable que está en la matriz pero que el modelo principal no puede usar antes de una fecha (`principal_desde`), porque la serie no existía en tiempo real con esa definición |
+| **Calendario de publicación** | Qué día se conocía cada dato. Medido con las versiones archivadas (ALFRED) o, si no las hay, con un retraso de reserva conservador |
+| **Potencia de un test** | Su capacidad de fallar cuando hay un problema. Un test de fugas sin potencia "aprueba" siempre y no sirve |
 | **Lista negra / lista blanca** | Negra: columnas que nunca pueden ser variables (la etiqueta, la recesión, previsiones). Blanca: las únicas variables admitidas, con fecha de publicación conocida |
 | **Capa ex post** | Información añadida a la etiqueta que también mira al futuro (recesión, dirección de la inflación, shock energético, holgura). Sirve para describir e invertir, nunca como variable |
 | **Dirección de la inflación** | Si la inflación acelera o frena (I<sub>t</sub> − I<sub>t−6</sub>), frente a su nivel |
@@ -477,14 +634,14 @@ En orden, según `docs/PLAN.md` y el estado del proyecto[^obj][^plan]:
 ---
 
 ### Reproducir los gráficos
-`.venv/bin/python -m src.report.fase3.make_figures` lee la etiqueta v1.1 (y la v1.0, v0.2 y v0.1 para las comparaciones), el estudio de revisión, el warehouse (solo lectura), la tabla §6b de `label_v1.1_checks.md` y las tablas §3.1 de la revisión del Estratega. Escribe los 10 PNG y `img/cifras.json`.
+`.venv/bin/python -m src.report.fase3.make_figures` lee la etiqueta v1.1 (y la v1.0, v0.2 y v0.1 para las comparaciones), el estudio de revisión, el warehouse (solo lectura), la tabla §6b de `label_v1.1_checks.md` y las tablas §3.1 de la revisión del Estratega. Al final llama a `make_figures_pit` (también ejecutable solo: `.venv/bin/python -m src.report.fase3.make_figures_pit`), que lee el meta y la matriz vintage de la base PIT v0.3, `research/pit_calendar_measured.csv` y las persistencias PIT con la etiqueta, **ambas recortadas a ≤ 2004 antes de cruzarlas**. Escribe los 13 PNG y `img/cifras.json` (clave `pit_base` para la base PIT).
 
 [^obj]: `obsidian/Proyecto/Estado del proyecto.md`, secciones "🎯 Objetivo de la Fase 3" y "▶ Retomar aquí (15-oct)".
 [^ult]: `data/archive/labels/regime_us_v1.1.parquet`, fila 2026-04 (también en `docs/models/label_v1.1_checks.md` §7).
 [^ult24]: `data/archive/labels/regime_us_v1.1.parquet`, últimos 24 meses (2024-05 → 2026-04); detalle en `img/cifras.json` → `ultimos24`.
 [^reglas]: Tabla `regime_monthly` de `data/warehouse.duckdb` (columna `quadrant`, consultada el 15-oct); `img/cifras.json` → `ultimos24.reglas_ultimos`.
 [^comp]: Cálculo del Reportero en `src/report/fase3/make_figures.py` (`comp_reglas`), guardado en `img/cifras.json` → `reglas_vs_etiqueta` (51,6 %; 52,6 % sin frontera). Meses con weight = 1 y no provisionales, 1955-01 → 2021-10. Correspondencia: Goldilocks = expansión, Reflación = crecimiento con inflación alta, Estanflación = estanflación, Deflación/recesión = crecimiento bajo.
-[^cob]: Tablas `catalog` y `series_summary` de `data/warehouse.duckdb` (15-oct-2026); `img/cifras.json` → `cobertura`.
+[^cob]: Tablas `catalog` y `series_summary` de `data/warehouse.duckdb` (16-oct-2026); `img/cifras.json` → `cobertura`.
 [^estado]: `obsidian/Proyecto/Estado del proyecto.md` (15.610 series y 12,53 M de filas; automatización; arreglo de INE).
 [^aud]: `docs/data/audit_2026-10-14.md`.
 [^fut]: `docs/data/futures_derivatives_2026-10-14.md`, §1.2, §2 y §3.
@@ -503,3 +660,12 @@ En orden, según `docs/PLAN.md` y el estado del proyecto[^obj][^plan]:
 [^bit]: `obsidian/Proyecto/Bitácora.md`, entradas del 2026-10-15 (decisiones del usuario, tag `label-v1.1`, blindaje `6aaf3f7`, lanzamiento de la base PIT).
 [^plan]: `docs/PLAN.md`, secciones "Fase 3 — arquitectura de modelos" y "Periodo bloqueado y reglas del arnés".
 [^ag]: `obsidian/Proyecto/Agentes.md`, §5.
+[^pit]: `docs/models/pit_base.md` (base PIT v0.3): §1 ficheros, §2 principios, §3 modos y reglas del arnés, §4 variables y épocas, §5 tests y potencia, §6 persistencia, §7 limitaciones, §9 registro de cambios.
+[^pitmeta]: `~/financial_archive/features/pit_us_v0.3.meta.json` (`grid`, `files`, `columns`, `baseline`, `instantanea_entradas`).
+[^cal]: `docs/models/pit_calendar.md` §1-§4 y `research/pit_calendar_measured.csv`.
+[^wl]: `research/pit_whitelist.yaml` (lista blanca v0.3, cabecera y entradas de `tcu_gap`, `vix`, `infl_energy_pressure`).
+[^cifraspit]: `img/cifras.json` → `pit_base` (cobertura, retardos y listón ≤ 2004), calculado por `src/report/fase3/make_figures_pit.py`.
+[^valpit1]: `docs/validation/2026-10-15_pit_base_v0.1.md` (Validador, ⚠️ condicionada), §1-§2.
+[^valpit2]: `docs/validation/2026-10-15_pit_base_v0.2.md` (Validador, ⚠️ muy cerca de ✅), I-1 a I-4.
+[^valpit3]: `docs/validation/2026-10-16_pit_base_v0.3.md` (Validador: ⚠️ con H-1 y H-2; "Comprobación de cierre" ✅), §1-§4 y §6.
+[^bitpit]: `obsidian/Proyecto/Bitácora.md`, entradas del 2026-10-16 (decisión sobre `tcu_gap`, correcciones `5b93ebe`, ✅ de cierre, congelación y tag `pit-v0.3`, lanzamiento del arnés).
