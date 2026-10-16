@@ -314,7 +314,61 @@ después del commit del código. Los ajustes post hoc se anotan en el trial log 
 
 ## 8. Baselines v2 (≤ 2004)
 
-PENDIENTE_TABLA_BASELINES
+**Corrida oficial:** `20261016-132138_baselines_v2_1a6d6df8` con `config/harness/baselines_v2.yaml`.
+- Código en el commit `e58a054`, `git_dirty: false`.
+- Hash de resultados `1a6d6df8…`; redondeado (r10) `509dba25…`.
+- Refit mensual, embargo 6, mínimo de entrenamiento 120 m + 2 recesiones + 8 cambios de G, peso de madurez.
+- **Ventana fija 1975-01 → 2004-12 (360 meses)**, la misma para todos los modelos y modos; sin avisos.
+- Sin ninguna variable macro.
+
+**Listón de la v1 intacto:** la persistencia cruda en su muestra completa 1956-10 → 2004-12 (579 meses) da
+61,14 % / **1,2997** (vintage) y 63,04 % / **1,1824** (latest_truncated), igual que en la v1.
+
+| modo | modelo | acierto | log-loss 4 c. | log-loss G | log-loss I | Brier |
+|---|---|---|---|---|---|---|
+| vintage | persistencia cruda | 65,28 % | 1,1522 | 0,8575 | 0,2751 | 0,3132 |
+| vintage | **M0 (persistencia calibrada)** | **68,33 %** | **0,8110** | **0,5993** | **0,2117** | 0,2565 |
+| vintage | climatología | 30,56 % | 1,3863 | 0,6931 | 0,6876 | 0,5250 |
+| latest_truncated | persistencia cruda | 68,33 % | 1,0216 | 0,7722 | 0,2329 | 0,2502 |
+| latest_truncated | **M0** | 68,06 % | **0,7873** | **0,5717** | 0,2156 | 0,2376 |
+| latest_truncated | climatología | 30,56 % | 1,3864 | 0,6930 | 0,6864 | 0,5249 |
+
+**M0 frente a la persistencia cruda** (mejora = log-loss de la persistencia − log-loss de M0; IC 95 % por bloques de
+12 m; los de 24 m son casi iguales):
+
+| corte | vintage | latest_truncated |
+|---|---|---|
+| total (4 cuadrantes) | **+0,341** [+0,145; +0,579] (b24: [+0,157; +0,551]) | +0,234 [+0,052; +0,459] |
+| eje G | +0,258 [+0,081; +0,478] | +0,201 [+0,030; +0,410] |
+| eje I | +0,063 [+0,007; +0,129] | +0,017 [−0,022; +0,059] |
+| meses de **giro** (90) | **+1,270** [+0,583; +2,078] | +1,075 [+0,487; +1,761] |
+| meses **estables** (270) | +0,032 [−0,083; +0,152] | −0,046 [−0,133; +0,043] |
+| 1975-79 / 1980-2004 | +0,314 / +0,347 | +0,254 / +0,230 |
+| 1975-89 / 1990-2004 | +0,374 / +0,309 | +0,325 / +0,143 |
+| frontera / no frontera | +0,583 / +0,325 | +0,454 / +0,219 |
+| episodios ganados: NBER ± 6 / rachas ≥ 6 m / giros de G | 4 de 5 / 13 de 18 / **15 de 16** (signo p = 0,0005) | 5 de 5 / 10 de 18 / 12 de 16 (p = 0,077) |
+| retraso medio de detección de giros de G (16 giros) | 4,00 → 3,81 meses | 3,75 → 3,88 meses |
+| falsas alarmas por año (parte estable) | 0,40 → 0,30 | 0,40 → 0,40 |
+
+**Lectura:**
+- **La calibración sola vale ~0,34 nats en vintage.** M0 recorta la seguridad de la persistencia: en el eje G, la
+  pendiente del logit de la persistencia es ~0,24.
+  - Casi toda la ganancia está en los meses de giro (2,46 → 1,19 nats), y sin coste en los estables.
+  - Esto confirma el diagnóstico del Estratega: el listón crudo era demasiado bajo. **M0 es el listón principal:**
+    un aspirante que solo "aprenda a dudar" no lo bate.
+- **La calibración no adelanta la detección.** El retraso de detección (~4 meses) y las falsas alarmas apenas cambian:
+  M0 no sabe **cuándo** gira el ciclo, solo duda más.
+  - Ese es el margen para las variables: ≤ 3 meses de retraso con ≤ 0,5 falsas alarmas al año (Estratega).
+  - En los meses de giro, M0 sigue a 1,19 nats frente al suelo de ~0,48.
+- **Sensibilidad de modo:** M0 pierde solo 0,024 nats [−0,000; +0,046] al pasar a vintage, frente a 0,131 de la
+  persistencia cruda. La calibración absorbe buena parte del coste de usar las primeras publicaciones.
+- **Independencia de ejes (§5b):** la correlación de los residuos G-I es 0,015 (vintage) y 0,035 (latest_truncated),
+  muy por debajo del umbral de 0,2.
+- **Calibración por tramos (M0, eje G, vintage):** M0 queda algo infraconfiado por encima de 0,5 (en el tramo
+  0,7-0,8 predice 0,75 y observa 0,94). Se informa; no se ajusta nada.
+- **Holm** frente a M0 (persistencia cruda y climatología): p ajustada 1,0 en los dos modos. Ningún baseline bate a M0.
+- La corrida v1 (`20261016-092402_baselines_v1_27cae755`) queda como registro histórico. La v1 no tenía M0, pesos ni
+  ventana fija, así que sus cifras de climatología no son comparables.
 
 ## 9. Tests
 
