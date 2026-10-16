@@ -31,7 +31,7 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 ## ▶ Retomar aquí (16-oct)
 
-**Base PIT v0.3 CONGELADA** (tag `pit-v0.3`; veredicto ✅ `docs/validation/2026-10-16_pit_base_v0.3.md`; `tcu_gap` principal desde 1984-01 por decisión del usuario). Siguiente: Reportero (base PIT en el informe) → **entregable (3) arnés walk-forward** (ver punto 5 de abajo) → circuito Validador + Estratega.
+**Base PIT v0.3 CONGELADA** (tag `pit-v0.3`; veredicto ✅ `docs/validation/2026-10-16_pit_base_v0.3.md`; `tcu_gap` principal desde 1984-01 por decisión del usuario). Informe v0.3 hecho (`fbc5166`). **Arnés walk-forward v1 hecho** (`b01e7ee`, 115 tests, listón reproducido exacto) → en revisión: Validador (`docs/validation/2026-10-16_harness_v1.md`) + Estratega (`docs/reviews/2026-10-16_estratega_macro_harness.md`). Si no existen al retomar, relanzarlos (encargos en la Bitácora del 16-oct). Luego: paquete de correcciones + 5 decisiones del usuario (Bitácora) → Constructor → re-auditoría → entregable (4) baselines con variables.
 
 ## Retomar (15-oct, tarde) — histórico
 
