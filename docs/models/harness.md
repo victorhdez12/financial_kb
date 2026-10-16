@@ -1,13 +1,13 @@
 ---
 documento: arnés de backtest walk-forward (Fase 3, entregable 3)
-version: 2.0 (candidato; pendiente de la re-auditoría del Validador)
+version: 2.1 (candidato; pendiente de la re-auditoría del Validador; v2.0 = e58a054, ⚠️ condicional)
 fecha: 2026-10-16
-codigo: src/models/{harness,pit_labels,vault,metrics,base,trials,placebo}.py
-config: config/harness/baselines_v2.yaml (v1: baselines_v1.yaml, histórica)
-tests: tests/test_harness.py (17) + tests/test_harness_v2.py (30); suite completa: ver §9
+codigo: src/models/{harness,pit_labels,vault,metrics,base,trials,placebo,probes}.py
+config: config/harness/baselines_v2_1.yaml (v2: baselines_v2.yaml; v1: baselines_v1.yaml, históricas); sonda de P-EVAL-BASE: p_eval_base_probe.yaml
+tests: tests/test_harness.py (17) + tests/test_harness_v2.py (48); suite completa: ver §9
 datos: solo ≤ 2004-12 (periodo bloqueado 2005-01 → INTOCABLE)
 depende_de: etiqueta v1.1 (tag label-v1.1; adenda de uso 2026-10-16), base PIT v0.3 (tag pit-v0.3)
-revisiones: docs/validation/2026-10-16_harness_v1.md (⚠️), docs/reviews/2026-10-16_estratega_macro_harness.md (⚠️)
+revisiones: docs/validation/2026-10-16_harness_v1.md (⚠️), docs/reviews/2026-10-16_estratega_macro_harness.md (⚠️), docs/validation/2026-10-16_harness_v2.md (⚠️; dev ✅)
 ---
 
 # Arnés de backtest walk-forward (nowcast de régimen EE. UU.)
@@ -19,6 +19,7 @@ entrega con la persistencia cruda, la climatología y **M0, la persistencia cali
 
 ```bash
 .venv/bin/python -m src.models.harness --config config/harness/baselines_v2.yaml --official   # ≤ 2004; código commiteado
+.venv/bin/python -m src.models.harness --dry-run config/harness/p_eval_base_probe.yaml     # ensayo en seco (§4e)
 .venv/bin/python -m src.models.placebo <salida.json>                                        # tabla de potencia (§9b)
 .venv/bin/python -m pytest -q tests/test_harness.py tests/test_harness_v2.py
 ```
@@ -27,14 +28,16 @@ entrega con la persistencia cruda, la climatología y **M0, la persistencia cali
 
 | fichero | qué hace |
 |---|---|
-| `src/models/harness.py` | Configuración (`HarnessConfig`), datos (`PITData`; `ArrayData` para placebo y tests), pesos de madurez, ventanas por eje y mínimos de entrenamiento, walk-forward, puntuación en ventana fija, informe con cortes, `run()` (desarrollo) y **`evaluate_holdout()` (único punto de entrada de la evaluación única)**, CLI |
+| `src/models/harness.py` | Configuración (`HarnessConfig`), datos (`PITData`; `ArrayData` para placebo y tests), pesos de madurez, ventanas por eje y mínimos de entrenamiento, walk-forward, puntuación en ventana fija, informe con cortes, signos y familias de Holm, `run()` (desarrollo), **ensayo en seco** (`dry_run_prereg`) y **`evaluate_holdout()` (único punto de entrada de la evaluación única)**, registro de modelos (`model_registry`: `base` + `models_*.py`), CLI |
 | `src/models/pit_labels.py` | `PITLabeler`: la etiqueta v1.1 completa recalculada con los datos conocidos en T; **barrera** para T ≥ 2005-01 |
 | `src/models/vault.py` | `LabelVault`: única puerta a la etiqueta oficial; desbloqueo con consumo commiteado en git; registros de accesos |
 | `src/models/metrics.py` | log-loss blanda y binaria por eje, Brier, BSS, acierto, bootstrap (12 y 24 m), Holm, prueba de signo, calibración, cortes, episodios, detección de giros |
 | `src/models/base.py` | Interfaz `Model` (con `sample_weight`), `AxisModel` (un modelo por eje), baselines: `PersistencePIT`, `Climatology`, `CalibratedPersistence` (M0) |
 | `src/models/placebo.py` | Placebo pareado y tabla de potencia |
-| `src/models/trials.py` | Registro automático de pruebas |
-| `research/holdout/evaluations.jsonl` | Registro de consumo de la evaluación única (ruta fija, versionado en git; hoy vacío) |
+| `src/models/probes.py` | Sonda `axis_window_probe` para el ensayo en seco: mismas variables por eje que el aspirante, sin usarlas |
+| `src/models/trials.py` | Registro automático de pruebas (rutas fijas durante la evaluación única, N7) |
+| `research/holdout/evaluations.jsonl` | Registro de consumo de la evaluación única (ruta fija, versionado en git y empujado a `origin`; hoy vacío) |
+| `research/holdout/dry_runs.jsonl` | Ensayos en seco registrados (ruta fija, versionado) |
 
 ## 2. Cortes walk-forward, embargo y purga
 
@@ -96,8 +99,8 @@ después. Afecta a todos los modelos que entrenan (climatología y M0 incluidos)
   - `run()` **solo** trabaja en `development`;
   - un `test_end`, una `eval_window` o un corte ≥ 2005-01 lanzan `HoldoutLocked`;
   - `ArrayData.phase` es de solo lectura y siempre vale `development`.
-- **`PITLabeler.at(T ≥ 2005-01)`** (M-1/D4) lanza `HoldoutLocked` y lo registra, salvo con la caja desbloqueada de la
-  evaluación única (identidad, no duck typing).
+- **`PITLabeler.at(T ≥ 2005-01)`** (M-1/D4) y, desde la v2.1, **`PITLabeler.levels_at(T ≥ 2005-01)`** (N4) lanzan
+  `HoldoutLocked` y lo registran, salvo con la caja desbloqueada de la evaluación única (identidad, no duck typing).
 - **`pit.score_training`** (M-1/D5) lee con el filtro `date < 2005-01` y exige `end < 2005-01` (antes `<=`).
   - El cambio está en `src/features/pit.py` y **no cambia ningún fichero congelado** de la v0.3. Las matrices, los
     baselines y el meta no se regeneran.
@@ -112,30 +115,75 @@ después. Afecta a todos los modelos que entrenan (climatología y M0 incluidos)
 - Ejecuta **una** corrida, siempre registrada, y cierra la caja al terminar. Una caja cerrada no lee, ni siquiera
   desde la caché.
 
+**Antes de crear la caja, `evaluate_holdout` exige el ensayo en seco (§4e):** una línea `ok` con el mismo hash de
+configuración + código en `research/holdout/dry_runs.jsonl` (commiteada), y lo **repite** sin tocar ningún registro
+versionado. Si falla, se niega **antes de gastar** nada.
+
 **`LabelVault(mode="holdout_evaluation")` comprueba, antes de leer nada:**
 1. **Solo identificadores de evaluación explícitos** (D9):
    - prefijo `P-EVAL-`;
    - `tipo: evaluacion_holdout`;
    - estado "preregistrada…".
-   Hoy **ninguna** de las 13 hipótesis preregistradas lo cumple. P-EVAL-MOD y P-EVAL-S-PIT-002 no tienen `tipo` y no
-   se editan: se evaluarán **dentro** de P-EVAL-BASE (`incluye`). Un test lo comprueba sobre el `hypotheses.yaml` real.
+   Hoy **ninguna** hipótesis registrada lo cumple (test sobre el `hypotheses.yaml` real). P-EVAL-BASE es un borrador
+   fuera del fichero; P-EVAL-MOD y los H-MOD quedan fuera de P-EVAL-BASE (decisión del usuario 16-oct).
 2. **Confirmación explícita:** `FKB_HOLDOUT_UNLOCK = "EVALUACION-UNICA <prereg_id>"`.
 3. **Git falla cerrado** (D6):
-   - git disponible;
-   - `REPO` = raíz del repositorio;
-   - árbol limpio, **incluidos los ficheros no rastreados**.
-   Cualquier error de git (sin binario, fuera de un repo, `git archive`) = no hay evaluación.
-4. **Registro de consumo en una ruta fija:** `research/holdout/evaluations.jsonl`, relativa al código. Ninguna
-   variable de entorno la cambia; `FKB_TRIALS_DIR` ya no la toca (D2). Además:
-   - debe estar rastreado por git y sin cambios respecto a HEAD;
-   - ninguna línea de ningún commit anterior puede faltar (un id consumido no puede desaparecer, ni commiteando el
-     borrado).
-5. **No consumido:** ni el id ni ninguno de los que `incluye` se han consumido antes, tampoco como parte de otra
-   evaluación.
-6. **Una sola apertura por proceso.**
+   - git disponible y `REPO` = raíz del repositorio;
+   - una **rama** (no HEAD suelto): es la que se empuja;
+   - árbol limpio, **incluidos los no rastreados** y los **ignorados relevantes** (N6, v2.1). Cuentan los ficheros
+     ignorados en `src/`, `config/`, `tests/` y `research/`. No cuentan:
+     - `__pycache__`/`*.pyc`: los genera Python; plantar un `.pyc` es intención, no accidente;
+     - `research/trials/` y `research/holdout/runs/`: son salidas del arnés, no entradas;
+     - `.env` (raíz): guarda las credenciales de las fuentes. Durante la evaluación las rutas de registro son fijas y
+       los datos se comprueban por SHA-256, así que nada de `.env` redirige la evaluación.
 
-**Consumo antes de leer.** Si todo pasa, el consumo se **anota y se commitea** (solo ese fichero) antes de leer. Si el
-commit falla, la caja no se abre y el id queda gastado. Un fallo posterior también gasta la evaluación.
+   Cualquier error de git (sin binario, fuera de un repo, `git archive`) = no hay evaluación.
+4. **Ancla externa** (v2.1; decisión del usuario 16-oct: repositorio privado en GitHub):
+   - remoto con nombre fijo `origin` y URL de GitHub (`https://github.com/…`, `git@github.com:…` o
+     `ssh://git@github.com/…`). La comprobación de la URL solo se relaja en los tests, por inyección explícita
+     (`vault.REMOTE_URL_RE`), nunca por variable de entorno;
+   - con el **cerrojo** tomado (abajo): `git fetch origin`, la rama local **contiene** `origin/<rama>` (si no, el
+     remoto puede tener un consumo que aquí falta), y se empuja HEAD (`git push origin <rama>`, comprobado con
+     `ls-remote`). El preregistro y su configuración quedan en el remoto antes de gastar nada.
+5. **Registro de consumo en una ruta fija:** `research/holdout/evaluations.jsonl`, relativa al código. Ninguna
+   variable de entorno la cambia (D2). Además:
+   - debe estar rastreado por git;
+   - **ninguna línea vista en cualquier versión del fichero** puede faltar. Se miran **todas las refs** (ramas,
+     etiquetas, refs remotas tras el fetch, stash) **y el reflog** (`git rev-list --all --reflog`; M2-1).
+     Un `reset --hard` (N2), una rama creada antes del consumo (N2b) o un push forzado que lo borre del remoto no lo
+     esconden: un consumo visto en cualquier ref, reflog o remoto cuenta como gastado;
+   - un commit en el que el fichero no existe también falla cerrado.
+6. **No consumido:** ni el id ni ninguno de los que `incluye` se han consumido antes, tampoco como parte de otra
+   evaluación.
+7. **Una sola apertura por proceso.** Si ya hay evaluaciones, la nueva es una **ampliación** (B2-1/N9):
+   - declara `amplia: <id anterior>`;
+   - su ventana de evaluación no se solapa con ninguna ya evaluada (el registro guarda la ventana).
+
+**Cerrojo (M2-1, N8).** Desde el paso 4 hasta que el consumo queda anclado, `fcntl.flock` exclusivo y no bloqueante
+sobre `<git-dir>/fkb-holdout.lock`:
+- vive dentro de `.git`, así que no ensucia el árbol;
+- lo libera el sistema si el proceso muere;
+- un segundo proceso falla en el acto ("cerrojo ocupado"). Lo prueba un test con dos procesos y la ventana
+  ensanchada 4 s.
+
+**Consumo antes de leer, anclado fuera de la máquina.** Si todo pasa, con el cerrojo tomado:
+1. se **anota** la línea (con ventana, rama, remoto y `amplia`);
+2. se **commitea** solo ese fichero;
+3. se comprueba que el registro tiene **una** línea del id;
+4. se **empuja** a `origin/<rama>`;
+5. se comprueba que el commit de consumo **está en el remoto** (`git ls-remote` = el commit, y
+   `git branch -r --contains` tras un fetch).
+
+Solo entonces se abre la caja. Si el commit, el push o la comprobación fallan, la caja **no se abre** y el id queda
+gastado (falla cerrado). Un fallo posterior también gasta la evaluación (por eso existe el ensayo en seco).
+
+**Resultados en rutas fijas (N7).** Durante la evaluación, `FKB_TRIALS_DIR`, `FKB_RUNS_DIR` y `FKB_TRIAL_LOG` no
+cuentan. Las rutas son fijas:
+- `research/trials/harness_runs.jsonl`;
+- `research/trial_log.md`;
+- `research/holdout/runs/<run_id>/` (informe y predicciones también en CSV).
+
+Al terminar se commitean y se empujan; si eso falla, solo se avisa, porque el consumo ya está anclado.
 
 **Datos de la evaluación (D3/D3b).**
 - `PITData(phase="holdout_evaluation")` exige, **antes de leer nada**:
@@ -163,9 +211,17 @@ apunta a la sintética, de modo que ninguna vía puede tocar la oficial.
 | id incluido en otra evaluación | `test_included_ids_are_consumed_too` | denegado |
 | reapertura en el mismo proceso | `test_single_opening_per_process` | denegada |
 | consumo antes de leer / fallo a mitad | `test_unlock_consumes_and_commits_before_read`, `test_failed_read_still_spends_the_evaluation` | anotado **y commiteado** antes de la lectura; un fallo lo gasta |
-| caja reutilizada tras la corrida | `test_evaluate_holdout_single_entry_and_closes_vault` | cerrada; segundo `evaluate_holdout` denegado |
+| caja reutilizada tras la corrida | `test_evaluate_holdout_single_entry_and_closes_vault` | cerrada; segundo `evaluate_holdout` denegado; rutas fijas durante la corrida (N7) |
+| **v2.1** sin remoto / remoto que no es GitHub | `test_anchor_requires_github_origin` | denegado antes de gastar |
+| **v2.1** push del consumo rechazado | `test_push_failure_spends_but_never_opens` | gastado y sin abrir; reintento denegado |
+| **v2.1** N2 `reset --hard`, push forzado, N2b rama previa | `test_N2_history_rewrite_does_not_reopen` | denegado (remoto / reflog) |
+| **v2.1** consumo en el remoto que falta en local | `test_remote_consumption_missing_locally_is_seen` | denegado |
+| **v2.1** N8 carrera | `test_lock_blocks_concurrent_unlock`, `test_N8_race_two_processes_second_fails` | el segundo falla por el cerrojo; una sola línea |
+| **v2.1** N6 ignorados relevantes | `test_N6_ignored_relevant_files_are_dirty` | sucio; `__pycache__` no cuenta |
+| **v2.1** N9 ampliación | `test_N9_extension_needs_amplia_and_new_months` | exige `amplia:` y ventana sin solape |
+| **v2.1** sin ensayo en seco / ensayo que falla / de otra configuración | `test_evaluate_holdout_refuses_before_spending_without_dry_run` | denegado antes de gastar |
 
-**Separación física del bloqueado: no se hace en la v2, y es una decisión, no un olvido.** Partir los ficheros en una
+**Separación física del bloqueado: no se hace en la v2/v2.1, y es una decisión, no un olvido.** Partir los ficheros en una
 parte de desarrollo ≤ 2004 y otra cifrada (age/gpg) no protege nada mientras los ficheros completos sigan en disco
 sin cifrar:
 - la etiqueta v1.1, su instantánea de entradas, las matrices v0.3 y los baselines están **congelados** con sus SHA-256
@@ -177,7 +233,9 @@ sin cifrar:
 Hacerlo bien es una operación del **usuario** (cifrar con su clave y retirar los originales legibles) y una versión
 nueva de los artefactos. Lo propongo como decisión pendiente (§10). Mientras tanto la caja fuerte es
 **anti-accidente, no anti-intención**: Python no tiene atributos privados (se puede fijar `_EVAL`, añadir una caja a
-`_ISSUED` o reescribir el registro desde fuera de git), y las vías de §4c leen los ficheros completos.
+`_ISSUED`), y las vías de §4c leen los ficheros completos. Lo que la v2.1 sí cambia frente a la intención: la
+**unicidad** queda anclada en el remoto. Reescribir el historial local o el remoto deja rastro en el otro y en el
+reflog, y un tercero puede comprobar en GitHub el commit de consumo y su fecha antes de los resultados.
 
 ### 4c. Vías restantes (declaradas) y cómo se controlan
 
@@ -188,7 +246,49 @@ nueva de los artefactos. Lo propongo como decisión pendiente (§10). Mientras t
 | `baseline_persistence_v0.3_{vintage,latest_truncated}.parquet` (hasta 2026-09; `pers_*` de t es casi la etiqueta de t − 5) | casi la etiqueta del bloqueado | El arnés no los lee (recalcula la persistencia con `PITLabeler`). El test del listón los lee **con filtro** `decision_date < 2005`. Norma para el resto |
 | Matrices v0.3 y sus `lineage` (variables hasta 2026-09) | variables del bloqueado (sin etiqueta) | `PITData` filtra en desarrollo. Mirar variables sin la etiqueta no evalúa nada, pero cualquier descriptivo ≥ 2005 se anota en el trial log |
 | Figuras del Reportero (`src/report/fase3/make_figures*.py`): **dibujan la etiqueta hasta 2026-04** | la etiqueta del bloqueado, a la vista | Norma: ya están publicadas; no se superpone ninguna predicción de modelo sobre ≥ 2005. Propuesta: que las figuras nuevas recorten a ≤ 2004 o se marquen "solo etiqueta" |
-| Python dentro del proceso (`_EVAL`, `_ISSUED`, `_PROCESS`, monkeypatch) | todo | Norma; separación física como solución de fondo (§10) |
+| `PITLabeler.levels_at(T ≥ 2005)` (N4) | niveles del bloqueado | **Barrera técnica** desde la v2.1 (como `at`) |
+| Python dentro del proceso (`_EVAL`, `_ISSUED`, `_PROCESS`, `REMOTE_URL_RE`, monkeypatch; N1) | todo | Norma; separación física como solución de fondo (§10) |
+| Un id `P-EVAL-…` nuevo con un commit (N9) | otra evaluación | Barrera parcial (v2.1): exige `amplia:` y ventana sin solape con lo ya evaluado; un preregistro nuevo es la vía prevista y queda en git y en el remoto |
+| Disponibilidad de variables ≥ 2005 en el ensayo en seco | solo sí/no por mes de las variables pedidas (sin valores, sin etiqueta) | Necesaria para la cobertura; queda en el registro de accesos y en el trial log |
+
+### 4e. Ensayo en seco de un preregistro (M2-2, v2.1)
+
+`dry_run_prereg(prereg_id | cfg_path)`, `validate_prereg` o `evaluate_holdout(prereg_id, dry_run=True)` ejecutan
+**toda** la configuración de una evaluación única sin abrir la caja ni gastar nada:
+1. **Comprobaciones estáticas:**
+   - fase `holdout_evaluation` e id `P-EVAL-…` que coincide;
+   - `allow_shrink: false` (en la evaluación única la ventana no se reduce);
+   - `eval_window` explícita, desde 2005-01 y antes del primer provisional oficial (meta de la etiqueta);
+   - `test_start`, subperiodos dentro de la ventana y `dry_run_window` ≤ 2004;
+   - `principal` y todos los modelos registrados (`model_registry`: `base`, la sonda y cada `src/models/models_*.py`);
+   - `expected_signs` con claves `<eje>:<variable>` y familias de Holm bien formadas;
+   - los `incluye` existen.
+2. **Elegibilidad analítica en la ventana bloqueada:** para cada corrida (principal y sensibilidades), modo, modelo y
+   eje, en el **primer corte** que toca la ventana. Para una ventana de inicio fijo los recuentos crecen con el corte.
+   - **Meses de entrenamiento:** meses ≤ 2004 con todas las variables (matriz de desarrollo), más meses 2005…corte − 6
+     con todas las variables. Esta parte sale de la **disponibilidad** de la matriz congelada: solo `notna`, sin
+     valores y sin etiqueta, y queda registrada. Con `excluir`, se restan los 53 provisionales recalculados.
+   - **Recesiones NBER y cambios de G:** cotas inferiores con los datos ≤ 2004.
+   - **Supuesto declarado:** `weight > 0` después de 2004 (en la etiqueta solo vale 0 en 1950-54).
+3. **Ensayo:** la misma configuración en desarrollo sobre `dry_run_window` (≤ 2004): mismos modelos, modos,
+   sensibilidades, pesos, signos y Holm, con los subperiodos partidos en las dos mitades de la ventana y
+   `allow_shrink: false`. Comprueba que el informe trae todo lo que pide el preregistro para `principal`:
+   - mejora con IC, eje G, giro/estable y subperiodos;
+   - detección pareada;
+   - signos con `sign_stability`;
+   - las familias de Holm.
+
+Con `record`, cada ensayo deja sus corridas en el registro de pruebas (son corridas de desarrollo reales) y una línea
+en `research/holdout/dry_runs.jsonl` con el **hash de configuración + código** (`src/models` y dependencias de la
+etiqueta PIT). `evaluate_holdout` exige esa línea `ok` con el mismo hash, commiteada, y repite el ensayo (§4b).
+
+**Demostración con P-EVAL-BASE:** `config/harness/p_eval_base_probe.yaml` es la configuración del borrador con la
+sonda `axis_window_probe` en lugar de M1. La sonda declara las mismas variables por eje y no usa ninguna: persistencia
+calibrada por eje y coeficiente 0 por variable.
+- **Primera prueba (sin registrar):** el ensayo **falló** por un motivo real. Con `excluir`, el eje I con el IPC
+  subyacente no es elegible hasta ~1992-11, así que el ensayo en 1990-01 → 2004-12 no cubría su ventana.
+- **Corrección:** se cambió la ventana del **ensayo** (1993-01), no la de la evaluación.
+- **Corrida registrada:** ver la línea `ok` en `dry_runs.jsonl`; elegibilidad en `p_eval_base_draft.md` §9.
 
 ### 4d. Registro de accesos
 
@@ -230,8 +330,11 @@ nueva de los artefactos. Lo propongo como decisión pendiente (§10). Mientras t
   El diagnóstico guarda, por corte y eje, la ventana efectiva, n, recesiones, cambios de G, filas quitadas por `dropna`
   y celdas imputadas. Consecuencia ya visible: un eje G con `growth_rt` no es elegible hasta ~1975-05 (en 1975-01 solo
   conoce el pico de 1969-12); un eje I con el subyacente, hasta ~1988.
-- **L2 fijada a priori:** M0 usa L2 = 1,0 sobre la pendiente (escala de suma). La de M1 se fijará en su preregistro
-  antes de correrlo con variables (`p_eval_base_draft.md` §8).
+- **L2 fijada a priori:** M0 usa L2 = 1,0 sobre la pendiente (escala de suma). La de M1 está en `m1_spec.md` §3
+  (L2 = 6 sobre las variables estandarizadas, 1 sobre el logit de la persistencia).
+- **Coeficientes (v2.1, criterio 5):** `model.coefficients()` en cada corte. Claves `"<eje>:<variable>"` (sonda) o
+  `"<eje>_<variable>"` (M1, `models_logit`), normalizadas a `"<eje>:<variable>"`; el logit de la persistencia es
+  `<eje>:pers`. La interfaz `Model` no cambia (compatible con el entregable 4).
 
 ### 5b. Combinación en 4 cuadrantes y supuesto de independencia condicional
 
@@ -284,15 +387,37 @@ nueva de los artefactos. Lo propongo como decisión pendiente (§10). Mientras t
   - por **cuadrante** oficial;
   - **frontera** frente a no frontera;
   - **calibración** por eje: fiabilidad por tramos de 0,1;
-  - **retraso de detección de los giros de G**: meses desde el cambio oficial del G duro, en rachas nuevas ≥ 6 m,
-    hasta que P(G alto) queda del lado nuevo 3 meses seguidos; si no ocurre, censurado;
+  - **retraso de detección de los giros de G** (definición **v2.1**, M2-3, fijada antes de recalcular nada y anotada
+    en el trial log):
+    - giros = cambios del G duro oficial **sin parpadeos**. Una racha < 6 m toma el valor de la última racha larga,
+      así que los giros alternan de dirección. El mes del giro es el inicio de la racha larga nueva;
+    - **retraso hasta la confirmación**: el mes c del tercer mes seguido de P(G alto) del lado nuevo, buscando desde
+      el giro − 3 m. Retraso = c − giro, **sin cota en 0**: puede ser −1 (se permite anticipar);
+    - no confirmado dentro de la racha nueva = **censurado**: se cuenta aparte y **no entra en la media**;
+    - frente al comparador: retraso **pareado** en los giros que detectan los dos, y censurados de cada uno
+      (`deteccion_frente_al_comparador`);
   - **falsas alarmas**: cruces al lado contrario en la parte estable de las rachas de G ≥ 6 m, a partir del sexto mes,
     por año.
 - **Episodios** (decisión del usuario, fijados a priori), cada uno con el número de episodios ganados y una **prueba
   de signo** binomial:
   1. recesiones NBER ± 6 m;
   2. rachas de la etiqueta dura de **≥ 6 meses** (los parpadeos ya pesan en el corte de giros);
-  3. **giros del eje G**: ventana de −3 a +6 meses alrededor de cada cambio del G duro cuya racha nueva dura ≥ 6 m.
+  3. **giros del eje G** (v2.1): los giros sin parpadeos de arriba, ventana de −3 a +6 meses **sin solape** (si la
+     ventana posterior de un giro alcanza la anterior del siguiente, se recorta para que el siguiente conserve sus 3
+     meses previos).
+
+  Un episodio **truncado** por el borde de la muestra se informa, pero no entra en la prueba de signo (B2-5): por
+  ejemplo, una recesión ya en curso al empezar ("rec 1975-01"), o una ventana ± pad o una racha que tocan el borde.
+  `por_periodo` publica además el rango real cubierto (`desde_real`/`hasta_real`).
+- **Signos de los coeficientes (v2.1, M2-4):** con `expected_signs` en la configuración,
+  `report["signos_coeficientes"][modo/modelo]` publica:
+  - por coeficiente: media y fracción de cortes con el signo preregistrado en la ventana, y `coincide`;
+  - `sign_stability`: todos los cortes, también los anteriores a la ventana; media antes y después de cada salto de
+    vintage con ≥ 12 cortes a cada lado;
+  - `criterio_signos_cumple`: solo cuentan los coeficientes que deciden.
+- **Familias de Holm preregistradas (v2.1, M2-4):** `holm_families` en la configuración. Cada miembro (modelo,
+  comparador, métrica `logloss`/`ll_g`/`ll_i`) con el p preregistrado (`frac_rep_le0` o `p_h0`). Ejemplo, P-EVAL-MOD:
+  cada M1 + módulo frente a M1 en su eje, con `frac_rep_le0`. Salen en `report["holm_familias"]`.
 - **Sensibilidad de modo:** latest_truncated − vintage del mismo modelo, con IC.
 
 ## 7. Registro de pruebas
@@ -314,7 +439,12 @@ después del commit del código. Los ajustes post hoc se anotan en el trial log 
 
 ## 8. Baselines v2 (≤ 2004)
 
-**Corrida oficial:** `20261016-132138_baselines_v2_1a6d6df8` con `config/harness/baselines_v2.yaml`.
+**Corrida oficial v2.1:** `20261016-141704_baselines_v2_1_4261f2ca` con `config/harness/baselines_v2_1.yaml`
+(código en `2fd94e0`, árbol de código limpio; hash `4261f2ca…`, r10 `1ae36a52…`). Misma configuración que la v2:
+**todas las log-loss, Brier y aciertos son idénticos**; cambian solo la detección de giros y los episodios (v2.1,
+tabla de abajo). La corrida v2 queda como histórica:
+
+**Corrida oficial v2 (histórica):** `20261016-132138_baselines_v2_1a6d6df8` con `config/harness/baselines_v2.yaml`.
 - Código en el commit `e58a054`, `git_dirty: false`.
 - Hash de resultados `1a6d6df8…`; redondeado (r10) `509dba25…`.
 - Refit mensual, embargo 6, mínimo de entrenamiento 120 m + 2 recesiones + 8 cambios de G, peso de madurez.
@@ -346,9 +476,12 @@ después del commit del código. Los ajustes post hoc se anotan en el trial log 
 | 1975-79 / 1980-2004 | +0,314 / +0,347 | +0,254 / +0,230 |
 | 1975-89 / 1990-2004 | +0,374 / +0,309 | +0,325 / +0,143 |
 | frontera / no frontera | +0,583 / +0,325 | +0,454 / +0,219 |
-| episodios ganados: NBER ± 6 / rachas ≥ 6 m / giros de G | 4 de 5 / 13 de 18 / **15 de 16** (signo p = 0,0005) | 5 de 5 / 10 de 18 / 12 de 16 (p = 0,077) |
-| retraso medio de detección de giros de G (16 giros) | 4,00 → 3,81 meses | 3,75 → 3,88 meses |
+| episodios ganados (v2.1, sin truncados): NBER ± 6 / rachas ≥ 6 m / giros de G | 3 de 4 / 12 de 17 / **10 de 11** (signo p = 0,012) | 4 de 4 / 9 de 17 / 7 de 11 (p = 0,55) |
+| giros de G (v2.1: sin parpadeos) / detectados / censurados | 11 / 10 / 1 (los dos modelos) | 11 / 10 / 1 |
+| retraso medio hasta la **confirmación** (detectados) | 4,9 → **4,6** meses | 3,8 → 3,2 meses |
+| retraso pareado M0 − persistencia (10 pares) | −0,3 meses | −0,6 meses |
 | falsas alarmas por año (parte estable) | 0,40 → 0,30 | 0,40 → 0,40 |
+| *(v2, histórico: 16 "giros", retraso hasta el inicio)* | *4,00 → 3,81* | *3,75 → 3,88* |
 
 **Lectura:**
 - **La calibración sola vale ~0,34 nats en vintage.** M0 recorta la seguridad de la persistencia: en el eje G, la
@@ -356,7 +489,8 @@ después del commit del código. Los ajustes post hoc se anotan en el trial log 
   - Casi toda la ganancia está en los meses de giro (2,46 → 1,19 nats), y sin coste en los estables.
   - Esto confirma el diagnóstico del Estratega: el listón crudo era demasiado bajo. **M0 es el listón principal:**
     un aspirante que solo "aprenda a dudar" no lo bate.
-- **La calibración no adelanta la detección.** El retraso de detección (~4 meses) y las falsas alarmas apenas cambian:
+- **La calibración no adelanta la detección.** El retraso hasta la confirmación (~4,6-4,9 meses en vintage, v2.1; el
+  "~4" de la v2 medía hasta el inicio de la racha y contaba parpadeos) y las falsas alarmas apenas cambian:
   M0 no sabe **cuándo** gira el ciclo, solo duda más.
   - Ese es el margen para las variables: ≤ 3 meses de retraso con ≤ 0,5 falsas alarmas al año (Estratega).
   - En los meses de giro, M0 sigue a 1,19 nats frente al suelo de ~0,48.
@@ -426,15 +560,41 @@ Resultados (`research/trials/placebo_power_v2.json`, 20 semillas por caso):
   calendario de un mes.
 - **Límite declarado:** fugas que aportan menos de ~0,015 nats (σ = 2) quedan bajo el umbral, aunque el 90 % de las
   semillas sea positivo. No cambio el umbral después de ver la tabla.
-- Propuesta para el Validador: una regla complementaria preregistrada para el entregable 4, por ejemplo "aviso si
-  ≥ 80 % de las semillas > 0".
-- Estas cifras miden la potencia frente a columnas **añadidas**. Para un aspirante real (M1), el placebo se aplicará a
-  sus variables con el mismo diseño pareado (con frente a sin la variable), con la etiqueta barajada.
+- **Regla complementaria (v2.1, M2-5; preregistrada antes de correr ningún placebo de un aspirante con ella):**
+  **aviso de fuga** si, sobre las 20 semillas, la prueba de signo unilateral da p < 0,01 (≥ 15 de 20 positivas) **o**
+  t > 3. El aviso obliga a investigar; no falla solo. La regla principal (media > 0,02) no cambia.
+
+  Aplicada a la tabla ya publicada (`placebo.leak_rules`, sin correr nada nuevo):
+
+  | caso | t | signo p | ¿aviso? |
+  |---|---|---|---|
+  | ruido | −4,5 | 0,9998 | no ✔ |
+  | control t−5 | 1,6 | 0,13 | no ✔ |
+  | t+1, σ 2 | 4,4 | 0,0002 | **sí** ✔ |
+  | t, σ 2 | 5,2 | 0,0002 | **sí** ✔ |
+  | t, σ 4 | −0,5 | 0,75 | no (indetectable) |
+
+  Las fugas fuertes (σ 1, calendario) dan fuga y aviso.
+- Estas cifras miden la potencia frente a columnas **añadidas** y con **este** regularizador (L2 = 0,05 frente a la
+  log-loss media), que también encoge la columna sospechosa.
+- **El placebo de un aspirante usa su especificación y su L2** (`placebo.model_placebo(pit, sin, con)`): incremento
+  pareado = log-loss(modelo sin las variables) − log-loss(modelo con ellas), con la etiqueta barajada, las mismas
+  permutaciones y las dos reglas. El de M1 lo hace el entregable 4 (`m1_spec.md` §5).
 
 ## 10. Decisiones pendientes (usuario)
 
-1. **P-EVAL-BASE:** borrador en `docs/models/p_eval_base_draft.md`. No está en `hypotheses.yaml` ni puede abrir nada
-   hasta que lo apruebes y se commitee con su configuración.
+1. **P-EVAL-BASE:** borrador **v2, ejecutable**, en `docs/models/p_eval_base_draft.md`. Solo M1 frente a M0, con el
+   ensayo en seco demostrado con una sonda. No está en `hypotheses.yaml` ni puede abrir nada hasta que:
+   - lo apruebes;
+   - el placebo de M1 salga limpio;
+   - se commiteen su configuración y su ensayo en seco.
+1b. **Ancla en GitHub (pasos tuyos; el arnés no crea el repositorio ni empuja nada fuera de la evaluación):**
+   1. `gh auth login`;
+   2. crear un repositorio **privado** vacío (p. ej. `gh repo create <usuario>/financial_kb --private`);
+   3. `git remote add origin <URL de GitHub>` (el nombre **tiene** que ser `origin`);
+   4. `git push -u origin main`.
+
+   Sin eso, `evaluate_holdout` se niega antes de gastar nada.
 2. **Separación física y cifrado del bloqueado** (§4b): cifrar con tu clave la etiqueta v1.0/v1.1, su instantánea de
    entradas, los baselines y las matrices completas, y dejar en disco solo versiones ≤ 2004. Es una versión nueva de
    artefactos congelados; hasta entonces la caja es anti-accidente.
@@ -443,6 +603,40 @@ Resultados (`research/trials/placebo_power_v2.json`, 20 semillas por caso):
    de correrlo, calibración 4 × 4 de Dirichlet dentro del walk-forward, fuera del criterio de éxito).
 
 ## 11. Registro de cambios
+
+### v2.1 (2026-10-16)
+
+| hallazgo (Validador v2) | cambio |
+|---|---|
+| M2-1 (N2, N2b, N8) | ancla externa (decisión del usuario): `origin` en GitHub, fetch + la rama contiene `origin/<rama>`, push del preregistro y del consumo, comprobados en el remoto antes de leer; registro comprobado contra todas las refs y el reflog; cerrojo `fcntl` exclusivo; una sola línea del id tras el commit |
+| M2-1 (N6, N7) | ignorados relevantes = sucio (con excepciones declaradas); rutas de resultados fijas durante la evaluación |
+| M2-2 | ensayo en seco (`dry_run_prereg`, `evaluate_holdout(dry_run=True)`), exigido con su hash y repetido antes de gastar |
+| A2-1 | `p_eval_base_draft.md` v2: M1 frente a M0, eje I con el subyacente, ventana 2005-01 → 2021-10, sensibilidades en la misma corrida; demostrado con la sonda |
+| M2-3 | detección v2.1: confirmación, censura aparte, giros sin parpadeos, ventanas sin solape, anticipación |
+| M2-4 | signos de los coeficientes y `sign_stability` en el informe; familias de Holm preregistradas con su p |
+| M2-5 | regla complementaria del placebo (signo p < 0,01 o t > 3); `model_placebo` con el modelo del aspirante |
+| B2-1 | barrera en `levels_at` (N4); `amplia:` y ventanas sin solape (N9) |
+| B2-2 | = N6/N7 |
+| B2-5 | episodios truncados fuera de la prueba de signo; `por_periodo` con el rango real |
+| B2-3, B2-4, B2-6, B2-7 | documentadas (§11b) |
+| decisión (b) del usuario | módulos H-MOD fuera de P-EVAL-BASE; nota en `hypotheses.yaml` |
+| entregable 4 | `model_registry()` descubre los `REGISTRY` de `src/models/models_*.py` (M1 sin tocar sus ficheros); claves `G_x` de M1 aceptadas |
+
+### 11b. BAJAS documentadas sin cambio de código
+
+- **B2-3.** Los pesos de madurez salen de un estudio de revisión con cortes de 1975 a 2024, así que incorporan el
+  comportamiento de las revisiones de la **etiqueta** en el periodo bloqueado. No incorporan variables, igual que
+  s_G/s_I (constantes de definición, §3). Van de 0,86 a 1: las sensibilidades `uno`/`excluir` lo cubren. El "a
+  priori" no se puede verificar con git (un solo commit); como la función solo usa el estudio congelado, no había
+  ventaja que buscar.
+- **B2-4.** El recuento de recesiones usa el primer mes con `usrec = 1` (pico + 1). El retraso de los anuncios del
+  NBER antes de 1980 no está documentado en el proyecto. Solo decide la **elegibilidad**, nunca entra como variable,
+  y el margen de 18 meses cubre los anuncios conocidos (4-12 meses).
+- **B2-6.** El orden "eps y L2 de M0 escritos antes de verlo" no se puede verificar (un solo commit). La sensibilidad
+  del Validador (0,8107-0,8159) muestra que no importa.
+- **B2-7.** El `code_sha256["pit.py"]` del meta v0.3 no coincide con `pit.py` en el tag `pit-v0.3`. Ningún test ni
+  artefacto congelado depende de él, y el meta congelado no se toca. La procedencia del código de cada corrida está
+  en `pit_labels_deps` del registro de pruebas.
 
 ### v2.0 (2026-10-16)
 
