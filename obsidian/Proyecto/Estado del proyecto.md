@@ -33,6 +33,14 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Base PIT v0.3 CONGELADA** (tag `pit-v0.3`; veredicto ✅ `docs/validation/2026-10-16_pit_base_v0.3.md`; `tcu_gap` principal desde 1984-01 por decisión del usuario). Informe v0.3 hecho (`fbc5166`). **Arnés walk-forward v1 hecho** (`b01e7ee`, 115 tests, listón reproducido exacto) → en revisión: Validador (`docs/validation/2026-10-16_harness_v1.md`) + Estratega (`docs/reviews/2026-10-16_estratega_macro_harness.md`). Si no existen al retomar, relanzarlos (encargos en la Bitácora del 16-oct). Revisiones hechas (ambas ⚠️; A-1: la evaluación única no estaba garantizada por código; listón → persistencia calibrada M0). Arnés v2 hecho (`2159d53`): re-auditoría ⚠️ (**aprobado para desarrollo y para M1**; evaluación única bloqueada por A2-1, M2-1, M2-2). M0 (persistencia calibrada) es el listón: vintage ≤ 2004 0,811. **En marcha (16-oct, tarde):** Constructor arnés v2.1 (correcciones + ancla GitHub) y Constructor entregable (4) M1 (logística por eje + reglas). **Pendiente del usuario:** `gh auth login` y crear repo privado; aprobar P-EVAL-BASE (borrador). Después: Validador + Estratega sobre ambos.
 
+
+**Si la sesión se corta (16-oct, tarde) — pasos:**
+1. `git log --oneline -15` y `git status`: ver si los dos Constructores (arnés v2.1 y M1) commitearon. Encargos completos en la Bitácora del 16-oct.
+2. Si falta alguno: relanzarlo con su encargo (revisando el trabajo sin commitear). Arnés v2.1 → resumen con cifras de detección de M0; M1 → `docs/models/m1_spec.md` debe estar commiteado ANTES de cualquier resultado.
+3. Al terminar ambos: Validador (re-auditoría v2.1 + auditoría M1) y Estratega (M1) en paralelo → paquete al usuario.
+4. GitHub: el usuario hará `gh auth login`; luego crear repo privado `financial_kb` (`gh repo create financial_kb --private --source . --remote origin --push`). Antes, comprobar que no se sube nada de datos ni `.env`.
+5. Usuario aprueba P-EVAL-BASE (borrador `docs/models/p_eval_base_draft.md`) → registrar → evaluación única (solo con ✅ del Validador y ancla en GitHub).
+
 ## Retomar (15-oct, tarde) — histórico
 
 **Dónde estamos:** Fase 3, entregable (2) **base point-in-time**, a punto de cerrarse.
