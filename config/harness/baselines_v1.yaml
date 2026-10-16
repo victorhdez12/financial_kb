@@ -1,0 +1,15 @@
+# Corrida de validación del arnés con los baselines mínimos (docs/models/harness.md §8). Solo ≤ 2004.
+name: baselines_v1
+models: [persistence_pit, climatology]
+model_params: {climatology: {alpha: 1.0}}
+modes: [vintage, latest_truncated]
+refit_every: 1            # reentreno mensual
+embargo_months: 6
+min_train_months: 12      # la climatología necesita ≥ 12 meses; los modelos con variables usarán más
+test_start: "1956-10"     # primer mes de la persistencia PIT común a los dos modos
+test_end: "2004-12"
+feature_policy: principal
+baseline: persistence_pit
+phase: development
+who: Constructor
+nota: "Validación del arnés (entregable 3); sin variables."
