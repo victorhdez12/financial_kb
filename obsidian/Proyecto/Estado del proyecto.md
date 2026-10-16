@@ -14,7 +14,7 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Tener un nowcast del régimen de EE. UU. validado:** que el sistema diga cada mes en qué cuadrante estamos y con qué probabilidad, usando solo la información disponible en esa fecha, y que esté demostrado en un backtest honesto que lo hace mejor que las alternativas sencillas.
 
-**Entregables, por orden:** (1) ✅ etiqueta **v1.1** congelada y validada ✅ (15-oct, tag `label-v1.1`; [[Proyecto/Etiqueta de régimen]]) · (2) ▶ base point-in-time + calendario de publicación + test de fugas · (3) arnés walk-forward (embargo 6 m, periodo 2016-2026 bloqueado, registro de pruebas) · (4) baselines: persistencia, reglas, logística, Markov · (5) GBM solo si los bate · (6) calibración. En paralelo: investigación de relaciones adelantadas (las validadas entran como variables).
+**Entregables, por orden:** (1) ✅ etiqueta **v1.1** congelada y validada ✅ (15-oct, tag `label-v1.1`; [[Proyecto/Etiqueta de régimen]]) · (2) ✅ base point-in-time **v0.3 congelada** (16-oct, tag `pit-v0.3`, validador ✅) · (3) ▶ arnés walk-forward (embargo 6 m, periodo 2016-2026 bloqueado, registro de pruebas) · (4) baselines: persistencia, reglas, logística, Markov · (5) GBM solo si los bate · (6) calibración. En paralelo: investigación de relaciones adelantadas (las validadas entran como variables).
 
 **Criterios de cierre:**
 - [ ] Bate a la persistencia en log-loss fuera de muestra, también en el periodo bloqueado, con intervalos que no incluyen el cero.
@@ -29,7 +29,11 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Agentes de la fase:** Constructor · Investigador de relaciones · **Validador independiente** · **Reportero** (ver [[Proyecto/Agentes]]). Informe: [[Reports/Fase 3/Informe de resultados]].
 
-## ▶ Retomar aquí (15-oct, tarde) — INSTRUCCIONES PARA SEGUIR
+## ▶ Retomar aquí (16-oct)
+
+**Base PIT v0.3 CONGELADA** (tag `pit-v0.3`; veredicto ✅ `docs/validation/2026-10-16_pit_base_v0.3.md`; `tcu_gap` principal desde 1984-01 por decisión del usuario). Siguiente: Reportero (base PIT en el informe) → **entregable (3) arnés walk-forward** (ver punto 5 de abajo) → circuito Validador + Estratega.
+
+## Retomar (15-oct, tarde) — histórico
 
 **Dónde estamos:** Fase 3, entregable (2) **base point-in-time**, a punto de cerrarse.
 - ✅ (1) Etiqueta **v1.1 congelada** (tag `label-v1.1`, validador ✅). Listón: persistencia PIT.
@@ -38,13 +42,15 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Pasos para seguir (en orden):**
 1. ✅ v0.3 terminada y commiteada.
-2. Mirar si existe `docs/validation/2026-10-15_pit_base_v0.3.md` (veredicto). Si no existe, relanzar al Validador con el encargo de la Bitácora.
+2. (16-oct) Validador relanzado → `docs/validation/2026-10-16_pit_base_v0.3.md`. Si no existe al retomar, relanzarlo con el encargo de la Bitácora.
 3. **Re-auditoría final del Validador** sobre la v0.3 → `docs/validation/<fecha>_pit_base_v0.3.md`. Si da ✅: meter la v0.3 en `FROZEN` (`src/features/pit.py`), tag `pit-v0.3`, instantánea de solo lectura, Bitácora y este Estado.
 4. Reportero: añadir la base PIT al informe ([[Reports/Fase 3/Informe de resultados]]).
 5. Siguiente entregable **(3) arnés walk-forward**: modo principal `vintage` (ALFRED) y `latest_truncated` como sensibilidad, puntuando en los dos sobre los mismos meses; etiqueta de entrenamiento recalculada con datos ≤ T en cada corte; embargo 6 m; periodo bloqueado 2005-01→ intocable; variables solo desde la lista blanca + `assert_no_forbidden`; estabilidad de cada variable a ambos lados del salto revisado → primera publicación; registro de pruebas. Baselines a batir (≤ 2004, 579 meses): vintage 61,1 % / log-loss 1,300; latest_truncated 63,0 % / 1,182.
 6. Circuito en cada hito (preferencia del usuario): Constructor → **Validador** + **Estratega macro** en paralelo → paquete de correcciones al usuario → Constructor → **re-auditoría**.
 
-**Pendiente de decisión del usuario (no urgente):** `principal_desde` prudente para `tcu_gap` (fecha de existencia sin verificar); v0.3 de la lista blanca con `permit_yoy` sobre media de 3 m y "sorpresa de inflación" (propuestas del Estratega no aprobadas aún); empalme VIX con VXO; inicio real del IPC subyacente del BLS (hueco).
+**16-oct:** re-auditoría v0.3 ⚠️ con 2 condiciones (H-1 `tcu_gap` desde 1984-01, **decidido por el usuario**; H-2 guarda de `write_snapshot`) → Constructor corrigiendo → comprobación rápida del Validador → FROZEN + tag.
+
+**Pendiente de decisión del usuario (no urgente):** v0.3 de la lista blanca con `permit_yoy` sobre media de 3 m y "sorpresa de inflación" (propuestas del Estratega no aprobadas aún); empalme VIX con VXO; inicio real del IPC subyacente del BLS (hueco).
 
 ### Retomar (14-oct, histórico)
 

@@ -578,6 +578,17 @@ FROZEN: dict[str, dict] = {
         "info_sha256": "8a01d6f0296bd6b16d2164fba87ab2dfd7f16801ee93809b701d84c5168c38f3",
         "grid_end": "2026-09-30",
     },
+    # v0.3 congelada el 2026-10-16 tras el ✅ del Validador y la aprobación del usuario (procedimiento B-5):
+    # copia de los hashes de CANDIDATE["0.3"]
+    "0.3": {
+        "data_sha256_file": "db06b89c63d7c89c896c76a13127739237c67e6594224a4d7375a5bf5c4a6261",
+        "data_sha256_content": "069b9d5cece116c8771c4d84c6f26ecc21d599f942f27f29b79bfbac9ded6b64",
+        "whitelist_sha256": "55fb431466c721880ddf76f2407d3f88f498866a9865f12a2a8850020712324b",
+        "calendar_sha256": "373ced7b907e08728464935a64d523b0aa0150e899f44735c6613870c4cbc421",
+        "info_sha256": "7c1b141976f548cdabc60f874d9f2114734f036ee2698c27f169e2fc57684081",
+        "grid_end": "2026-09-30",
+        "veredicto": "docs/validation/2026-10-16_pit_base_v0.3.md",
+    },
 }
 
 

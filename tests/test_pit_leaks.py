@@ -53,9 +53,11 @@ def full(snap, forbidden):
 
 
 # ------------------------------------------------------------------ (h) instantánea congelada / candidata
-def test_h_current_version_is_candidate_not_frozen():
-    """I-4: una versión entra en FROZEN solo tras el veredicto del Validador. La v0.3 es candidata."""
-    assert P.VERSION in P.CANDIDATE and P.VERSION not in P.FROZEN
+def test_h_current_version_is_frozen_with_verdict():
+    """I-4: una versión entra en FROZEN solo tras el veredicto del Validador. La v0.3 se congeló el 2026-10-16
+    (✅, docs/validation/2026-10-16_pit_base_v0.3.md) y conserva su entrada en CANDIDATE (B-5)."""
+    assert P.VERSION in P.FROZEN and P.VERSION in P.CANDIDATE
+    assert P.FROZEN[P.VERSION].get("veredicto")
     assert P.SUPERSEDED.get("0.2") == P.VERSION
 
 
@@ -65,7 +67,7 @@ HASH_KEYS = ("data_sha256_file", "data_sha256_content", "whitelist_sha256", "cal
 def test_h_frozen_entries_follow_procedure():
     """B-5 (procedimiento de congelación): una versión congelada tras la v0.2 conserva su entrada en CANDIDATE con los
     mismos hashes y apunta a un veredicto del Validador que existe. (La v0.2 se congeló antes del veredicto, I-4.)
-    Hoy no hay ninguna: la v0.3 sigue candidata."""
+    La v0.3 (congelada el 2026-10-16) es la primera."""
     for version, ref in P.FROZEN.items():
         if version == "0.2":
             continue
@@ -90,7 +92,8 @@ def test_h_write_snapshot_refuses_shared_data(tmp_path, monkeypatch):
                 f.chmod(0o444)
         before = {f: (P.file_sha(f), f.stat().st_mode) for f in files}
         for force in (False, True):
-            with pytest.raises(SystemExit, match="no es suya"):
+            # la v0.3 ya está congelada: se niega antes (FROZEN); la 9.1 ejercita el guarda H-2 en sí
+            with pytest.raises(SystemExit, match="no es suya" if version not in P.FROZEN else "congelada"):
                 P.write_snapshot(None, version=version, force=force)
         assert {f: (P.file_sha(f), f.stat().st_mode) for f in files} == before   # ni contenido ni permisos
         assert not paths["whitelist"].exists() and not paths["info"].exists()
