@@ -90,9 +90,10 @@ def test_registry_names_and_spec():
 def test_configs_load_and_are_development(path):
     cfg = H.HarnessConfig.from_yaml(H.REPO / path)
     cfg.validate()
-    assert cfg.phase == "development" and cfg.test_end <= "2004-12" and not cfg.allow_shrink
+    assert cfg.phase == "development" and cfg.test_end <= "2004-12"
+    assert cfg.allow_shrink == path.endswith("w_excluir.yaml")
     assert cfg.baseline == "m0_calibrated_persistence" and all(m in MR.REGISTRY for m in cfg.models)
-    assert cfg.eval_window[0] in ("1975-06", "1988-06")
+    assert cfg.eval_window[0] in ("1975-06", "1989-10")
     for m in H.build_models(cfg, MR.REGISTRY):
         assert m.name in cfg.models
 

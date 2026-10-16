@@ -77,7 +77,7 @@ Validador v2 §5):
 
 | corrida | ventana | meses | modelos | para qué |
 |---|---|---|---|---|
-| **principal** `m1_logit_axis_v1` | **1988-06 → 2004-12** | 199 | persistencia, climatología, M0, **M1**, M1-general, reglas | M1 frente a M0 (el contraste de P-EVAL-BASE) |
+| **principal** `m1_logit_axis_v1` | **1989-10 → 2004-12** (era 1988-06; §9) | 183 | persistencia, climatología, M0, **M1**, M1-general, reglas | M1 frente a M0 (el contraste de P-EVAL-BASE) |
 | larga `m1_logit_axis_v1_long` | **1975-06 → 2004-12** | 355 | persistencia, climatología, M0, M1-general, reglas | eje G con 5 recesiones (1980, 1981-82, 1990-91, 2001 y la salida de 1975); M1 por épocas |
 
 Las dos en vintage (principal) y latest_truncated (sensibilidad). `test_start` = 1956-10 en todas (M0 y la
@@ -190,3 +190,4 @@ principal.
 |---|---|---|---|
 | 2026-10-16 | `m1_run.placebo_seed`: claves `ll_g`/`ll_i` (commit 353ac63) | error de claves; el placebo falló antes de imprimir nada | nada |
 | 2026-10-16 | `models_rules.rule_states`: si falta `growth_rt` (o Sahm) en las filas, el estado de G es "sin estado" → climatología del corte | con `test_start` 1956-10 el arnés hace elegibles las reglas con `unrate_sahm` y el IPC general antes de que `growth_rt` tenga 120 meses (~1974); las dos corridas oficiales fallaron con `KeyError` antes de puntuar. No afecta a las ventanas de evaluación (desde 1975-06 `growth_rt` ya está admitido) | nada (fallaron antes de puntuar; anotadas en el trial log) |
+| 2026-10-16 | **Ventana principal 1988-06 → 1989-10 → 2004-12** (183 meses); cambio de época de M1 por épocas también en **1989-10**; en la ventana larga, reglas con IPC general en todos los meses (`rules_v1_hl`); en la sensibilidad "excluir", `allow_shrink: true` | el recuento previo (§2b) buscó el **primer** corte elegible y no comprobó que lo siguiera siendo: en vintage la etiqueta recalculada pierde cambios de G en la ventana desde 1978 y el eje I con subyacente (y las reglas por épocas) no son elegibles en 1989-03…09 (6-7 cambios de G < 8). Desde 1989-10 lo son en todos los cortes de los dos modos. Con "excluir" no lo son hasta 1992-11 | nada: las dos corridas fallaron en la comprobación de cobertura, antes de puntuar; las coberturas salen de un recuento sin ajustar modelos |

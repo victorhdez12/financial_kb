@@ -105,4 +105,12 @@ class RulesClassifier(B.Model):
                 **{f"{QUADS[k]}→{QUADS[j]}": float(self.table_[k, j]) for k in range(4) for j in range(4)}}
 
 
-REGISTRY = {"rules_v1": RulesClassifier}
+class RulesClassifierHeadline(RulesClassifier):
+    """Las mismas reglas con el IPC general en todos los meses (sin época del subyacente). Corrección técnica post hoc
+    (m1_spec.md §9): en vintage, la época del subyacente deja las reglas sin elegibilidad en 1989-03…09 (la etiqueta
+    recalculada pierde cambios de G en la ventana desde 1978), así que la ventana larga usa esta variante."""
+    name = "rules_v1_hl"
+    features = (G_VAR, SAHM_VAR, I_HEADLINE)
+
+
+REGISTRY = {"rules_v1": RulesClassifier, "rules_v1_hl": RulesClassifierHeadline}

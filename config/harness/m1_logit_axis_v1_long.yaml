@@ -2,12 +2,12 @@
 # Especificación congelada ANTES de correr nada con la etiqueta. Ventana fija = primer corte elegible del eje G
 # con growth_rt (1975-06, recuento previo sin ajustar modelos) → 2004-12.
 name: m1_logit_axis_v1_long
-models: [persistence_pit, climatology, m0_calibrated_persistence, m1_logit_axis_hl, rules_v1]
+models: [persistence_pit, climatology, m0_calibrated_persistence, m1_logit_axis_hl, rules_v1_hl]   # post hoc técnico (m1_spec.md §9): reglas con IPC general
 model_params:
   climatology: {alpha: 1.0}
   m0_calibrated_persistence: {eps: 0.001, l2: 1.0}
   m1_logit_axis_hl: {l2: 6.0, l2_pers: 1.0, eps: 0.001}
-  rules_v1: {alpha: 1.0}
+  rules_v1_hl: {alpha: 1.0}
 modes: [vintage, latest_truncated]
 refit_every: 1
 embargo_months: 6

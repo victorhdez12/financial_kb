@@ -13,10 +13,10 @@ min_train_recessions: 2
 min_train_g_changes: 8
 test_start: "1956-10"
 test_end: "2004-12"
-eval_window: ["1988-06", "2004-12"]
-allow_shrink: false
+eval_window: ["1989-10", "2004-12"]   # post hoc técnico (m1_spec.md §9): 1988-06 → 1989-10
+allow_shrink: true             # post hoc técnico (m1_spec.md §9): con "excluir" el eje I con subyacente no es elegible hasta 1992-11
 epochs: [["1956-01", "1979-12"], ["1980-01", "2004-12"]]
-subperiods: [["1988-06", "1996-12"], ["1997-01", "2004-12"]]
+subperiods: [["1989-10", "1996-12"], ["1997-01", "2004-12"]]
 feature_policy: principal
 provisional_weighting: excluir
 baseline: m0_calibrated_persistence

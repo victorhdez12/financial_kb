@@ -139,7 +139,7 @@ def _cfg_from(conf: dict, **kw) -> H.HarnessConfig:
 
 
 # ------------------------------------------------------------------ M1 por épocas (m1_spec.md §2b)
-SWITCH = pd.Timestamp("1988-06-01")     # primer corte elegible del eje I con el subyacente (recuento previo)
+SWITCH = pd.Timestamp("1989-10-01")     # desde aquí el eje I con el subyacente es elegible en TODOS los cortes (§9)
 
 
 def epocas(run_long: str, run_core: str, dest: str) -> dict:
