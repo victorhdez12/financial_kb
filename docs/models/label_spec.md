@@ -140,6 +140,26 @@ pequeñas. Detalle en `docs/models/label_v1.1_checks.md`.
 - **Pesos:** columna `weight` = 0 en 1950-1954 (IPC general con la guerra de Corea y tendencia truncada) y 1 en el resto.
   Los meses con peso 0 se conservan en el fichero, pero **no puntúan** (ni en el backtest ni en las comprobaciones).
 
+### Adenda 2026-10-16 al §7: uso de los meses provisionales en el ENTRENAMIENTO (la etiqueta v1.1 no cambia)
+
+Decisión del usuario del 2026-10-16, tras la validación del arnés v1 (Validador M-4; Estratega 3a). Esta adenda **no
+cambia la etiqueta v1.1** (ni el fichero, ni sus hashes, ni `provisional_months = 54`, ni la regla de puntuación). Solo
+cambia cómo se usan en el entrenamiento las etiquetas **recalculadas en cada corte T** (§12):
+
+- Donde arriba dice "no puntúan **ni entrenan**", para el entrenamiento rige ahora: los últimos 54 meses de la etiqueta
+  **recalculada en T** (provisionales en T) **entrenan con un peso de madurez** w(k) < 1. Los provisionales de la
+  etiqueta **oficial** (desde 2021-11) siguen sin entrenar ni puntuar, y la puntuación no cambia.
+- **Función fijada a priori** desde el estudio de revisión congelado (`label_revision_study.md`, tabla por k), antes de
+  correr ningún modelo con variables y sin mirar resultados del arnés: c(k) = mínimo de la concordancia de las
+  variantes A y B; c̃(k) = min{c(k′): k′ ≥ k} (envolvente inferior monótona); w(k) = c̃(k) / c̃(60) con c̃(60) = 97 %.
+  Resultado: w = 0,858 para k ≤ 12; 0,897 para 13-42; 0,928 para 43-48; 0,969 para 49-54; 0,979 para k = 55; 1 para
+  k ≥ 56 y para los meses no provisionales. k = meses entre el corte y el mes objetivo en la convención del estudio
+  (k = (m0 − s) − 1 en el arnés). Código: `src/models/harness.py` (`maturity_weight`); justificación:
+  `docs/models/harness.md` §3b.
+- **Sensibilidades preregistradas** (se publican siempre, nunca para elegir después): peso 1 y excluir.
+- Motivo: excluirlos deja la última etiqueta de entrenamiento en T − 59 (el modelo aprende con 5 años de retraso);
+  incluirlos con peso 1 da el mismo peso a etiquetas con un 13-17 % de desacuerdo con su versión madura.
+
 ## 8. Comprobaciones antes de congelar (sentido, no ajuste)
 
 Sirven para detectar errores de cálculo, **no para ajustar los parámetros** hasta que la etiqueta "cuente la historia
@@ -233,7 +253,16 @@ el acierto esperado de la etiqueta dura (media de la probabilidad máxima).
 - **Periodo bloqueado: 2005-01 → abierto.** La investigación y el diseño del modelo base usan solo datos ≤ 2004-12; el
   bloque se evalúa una vez, con todo preregistrado (`docs/PLAN.md`).
 
+- **Adenda 2026-10-16 (uso en entrenamiento; ver la adenda al §7):** los provisionales de la etiqueta **recalculada**
+  en cada corte entrenan con el peso de madurez w(k) fijado a priori; "peso 1" y "excluir" son sensibilidades
+  preregistradas. Los provisionales de la etiqueta oficial y los meses con `weight = 0` siguen sin entrenar ni puntuar.
+
 ## 13. Registro de cambios
+
+### Adenda de uso 2026-10-16 (no es una versión nueva: la etiqueta v1.1 y sus hashes no cambian)
+
+1. Los meses provisionales de la etiqueta **recalculada en T** entrenan con un peso de madurez fijado a priori desde el
+   estudio de revisión (adendas al §7 y §12). Decisión del usuario tras la validación del arnés v1 (M-4).
 
 ### v1.1 (2026-10-15, CONGELADA, aprobada por el usuario tras la validación)
 

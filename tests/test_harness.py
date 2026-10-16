@@ -6,7 +6,8 @@
     posteriores a T − embargo, y una columna con la etiqueta (o cualquier columna fuera de la matriz congelada) es
     imposible de meter; con datos de placebo, una variable con la etiqueta FUTURA se detecta;
 (3) embargo: mínimo 6 meses (menos se rechaza) y aplicado en cada corte;
-(4) placebo: etiqueta barajada en bloques de 24 meses → sin habilidad;
+(4) placebo PAREADO (v2): etiqueta barajada en bloques de 24 meses, 20 permutaciones; control t−5 sin fuga, fuga débil
+    de t + 1 detectada;
 (5) reproducibilidad: misma config → mismo hash de resultados;
 (6) periodo bloqueado ≥ 2005-01: la caja fuerte no decodifica filas ≥ 2005, deniega y registra; la evaluación única
     exige preregistro + confirmación y es de un solo uso;
@@ -15,19 +16,17 @@
 from __future__ import annotations
 
 import json
-import shutil
 
 import numpy as np
 import pandas as pd
 import pytest
 
 from src.features import pit as P
-from src.features.placebo import PLACEBO_TOL, fit_logit, predict_logit
 from src.labels import regime_us as R
 from src.models import base as B
 from src.models import harness as H
 from src.models import vault as V
-from src.models.metrics import P_COLS, QUADS
+from src.models.metrics import P_COLS
 
 HOLDOUT = pd.Timestamp(R.PARAMS.holdout_start)
 LISTON = {"vintage": (0.6113989637305699, 1.299697368353707),
@@ -53,9 +52,17 @@ def datas():
     return {m: H.PITData(m) for m in P.MODES}
 
 
+def C(**kw):
+    """Configuración de prueba con los mínimos de entrenamiento de la v1 (12 meses, sin recesiones ni cambios de G),
+    para que los tests de mecánica no dependan de la regla de §5 (que tiene sus propios tests)."""
+    return H.HarnessConfig(**{"min_train_months": 12, "min_train_recessions": 0, "min_train_g_changes": 0, **kw})
+
+
 @pytest.fixture(scope="module")
 def res(datas):
-    return H.run(H.HarnessConfig.from_yaml(H.REPO / "config" / "harness" / "baselines_v1.yaml"), datas=datas)
+    """Los baselines de la v1 (persistencia y climatología, min_train 12) sobre la muestra completa 1956-10 → 2004-12."""
+    return H.run(C(name="baselines_v1_equiv", models=("persistence_pit", "climatology"),
+                   model_params={"climatology": {"alpha": 1.0}}), datas=datas)
 
 
 # ------------------------------------------------------------------ modelos de prueba (no son aspirantes)
@@ -66,35 +73,12 @@ class Spy(B.Model):
     def __init__(self, features=(), uses_persistence=False):
         self.features, self.uses_persistence, self.calls = features, uses_persistence, []
 
-    def fit(self, X, Y, y, info):
+    def fit(self, X, Y, y, info, sample_weight=None):
         self.calls.append({"m0": info["refit_month"], "T": info["decision_date"], "months": X.index, "Y": Y,
-                           "cols": list(X.columns)})
+                           "cols": list(X.columns), "w": sample_weight})
 
     def predict_proba(self, X, info):
         return np.full((len(X), 4), 0.25)
-
-
-class LogitFixture(B.Model):
-    """Logística multinomial fija (src/features/placebo.py) para el placebo y la fuga plantada. Solo tests."""
-
-    def __init__(self, name, features=(), lam=0.05):
-        self.name, self.features, self.uses_persistence, self.lam = name, features, True, lam
-
-    def _design(self, X):
-        Z = X[B.PERS_COLS[1:]].to_numpy(float)
-        if self.cols:
-            Z = np.hstack([Z, (X[self.cols].to_numpy(float) - self.mu) / self.sd])
-        return Z
-
-    def fit(self, X, Y, y, info):
-        self.cols = [c for c in X.columns if c not in B.PERS_COLS]
-        F = X[self.cols].to_numpy(float)
-        self.mu, self.sd = F.mean(axis=0), F.std(axis=0) + 1e-9
-        yi = np.array([QUADS.index(v) for v in y])
-        self.W = fit_logit(self._design(X), yi, 4, self.lam, per_obs=False)
-
-    def predict_proba(self, X, info):
-        return predict_logit(self.W, self._design(X))
 
 
 def spy_run(data, cfg, model):
@@ -136,8 +120,7 @@ def test_both_modes_scored_on_same_months(res):
 def test_training_labels_recomputed_with_data_up_to_T(datas):
     """Cada fit recibe la etiqueta recalculada con los datos conocidos en T (no la final) y nada posterior a T − 6."""
     d = datas["vintage"]
-    cfg = H.HarnessConfig(name="t", models=("persistence_pit",), test_start="1978-01", test_end="1985-12",
-                          refit_every=12)
+    cfg = C(name="t", models=("persistence_pit",), test_start="1978-01", test_end="1985-12", refit_every=12)
     calls = spy_run(d, cfg, Spy())
     official = d.score_labels("2004-12")
     differs = 0
@@ -152,7 +135,7 @@ def test_training_labels_recomputed_with_data_up_to_T(datas):
 
 def test_label_columns_cannot_enter(datas):
     d = datas["vintage"]
-    cfg = H.HarnessConfig(name="t", models=("persistence_pit",), test_start="1990-01", test_end="1990-06")
+    cfg = C(name="t", models=("persistence_pit",), test_start="1990-01", test_end="1990-06")
     for cols in (("label_hard",), ("p_expansion",), ("usrec",), ("G",), ("xyz_future",)):
         with pytest.raises(KeyError):
             H.walk_forward(d, [Spy(features=cols)], cfg)
@@ -174,43 +157,24 @@ def test_tampered_matrix_rejected(tmp_path, monkeypatch):
         H.PITData("vintage")
 
 
-def _future_label_leak(tgt, rng):
-    """Variable con la etiqueta FUTURA (objetivo de t + 1) + ruido: información que en t no existe."""
-    f = tgt[P_COLS[1:]].shift(-1)
-    return pd.DataFrame(f.to_numpy() + rng.normal(0, 0.3, f.shape), index=f.index,
-                        columns=["leak_a", "leak_b", "leak_c"])
-
-
-PLACEBO_VARS = ("curve_10y3m", "payems_3m_ann", "indpro_3m_ann", "unrate_sahm", "headline_cpi_6m_ann", "ppi_yoy",
-                "baa_spread", "ff_d12m")   # las 8 variables a priori del placebo de la base PIT (trial log)
-
-
-def _placebo_skill(pit, seed, leak=None):
-    data = H.placebo_data(pit, seed, leak=leak)
-    feats = PLACEBO_VARS + (("leak_a", "leak_b", "leak_c") if leak else ())
-    reg = {"logit_base": lambda: LogitFixture("logit_base"), "logit_vars": lambda: LogitFixture("logit_vars", feats)}
-    cfg = H.HarnessConfig(name="placebo", models=("logit_base", "logit_vars"), modes=(data.mode,),
-                          test_start="1975-01", refit_every=12, min_train_months=60, baseline="logit_base")
-    r = H.run(cfg, registry=reg, datas={data.mode: data})
-    assert r["entry"]["kind"] == ["placebo"]
-    return r["report"]["frente_al_baseline"][f"{data.mode}/logit_vars"]["mejora_logloss"]["mean"]
-
-
-def test_placebo_no_skill_and_future_label_detected(datas):
-    """(4) Con la etiqueta ≤ 2004 barajada en bloques de 24 meses, las 8 variables no tienen habilidad; (2) una
-    variable con la etiqueta de t + 1 hace FALLAR el placebo (fuga detectada)."""
-    clean = np.array([_placebo_skill(datas["vintage"], s) for s in (1, 2, 3)])
-    leaky = np.array([_placebo_skill(datas["vintage"], s, _future_label_leak) for s in (1, 2, 3)])
-    assert clean.mean() < PLACEBO_TOL, clean
-    assert (leaky > 0.1).all(), leaky
+@pytest.mark.parametrize("case,leak_expected", [("control_t-5_sin_fuga", False), ("futura_t+1_sd1", True)])
+def test_placebo_paired_specific_and_powerful(datas, case, leak_expected):
+    """(4) Placebo PAREADO (M-5; src/models/placebo.py, regla fijada antes de correr la tabla): etiqueta ≤ 2004 barajada
+    en bloques de 24, 20 permutaciones, base con la persistencia blanda y dura. El control t−5 (la persistencia en
+    forma dura: SIN fuga) no se marca como fuga; la etiqueta de t + 1 con ruido σ = 1 (fuga débil, que la regla
+    absoluta de la v1 dejaba pasar) sí."""
+    from src.models import placebo as PL
+    r = PL.evaluate(datas["vintage"], PL.CASES[case])
+    assert r["n_semillas"] == PL.N_SEEDS == 20
+    assert r["fuga_detectada"] is leak_expected, r
 
 
 # ------------------------------------------------------------------ (3) embargo
 def test_embargo_minimum_and_applied(datas):
     with pytest.raises(ValueError, match="embargo"):
         H.HarnessConfig(name="t", embargo_months=3).validate()
-    cfg = H.HarnessConfig(name="t", models=("persistence_pit",), test_start="1990-01", test_end="1991-12",
-                          refit_every=3, embargo_months=9)
+    cfg = C(name="t", models=("persistence_pit",), test_start="1990-01", test_end="1991-12",
+            refit_every=3, embargo_months=9)
     calls = spy_run(datas["latest_truncated"], cfg, Spy())
     assert len(calls) == 8
     for c in calls:
@@ -218,8 +182,8 @@ def test_embargo_minimum_and_applied(datas):
 
 
 def test_refit_every_and_predictions_use_cut_model(datas):
-    cfg = H.HarnessConfig(name="t", models=("persistence_pit", "climatology"), modes=("vintage",),
-                          test_start="1990-01", test_end="1991-12", refit_every=6)
+    cfg = C(name="t", models=("persistence_pit", "climatology"), modes=("vintage",),
+            test_start="1990-01", test_end="1991-12", refit_every=6)
     preds, _ = H.walk_forward(datas["vintage"], H.build_models(cfg), cfg)
     c = preds[preds["model"] == "climatology"]
     assert sorted(c["refit_month"].unique()) == list(pd.date_range("1990-01-01", periods=4, freq="6MS"))
@@ -230,8 +194,7 @@ def test_refit_every_and_predictions_use_cut_model(datas):
 # ------------------------------------------------------------------ (7) política de variables
 def test_feature_policy_principal_desde_and_conditionals(datas):
     d = datas["vintage"]
-    cfg = H.HarnessConfig(name="t", models=("persistence_pit",), test_start="1975-01", test_end="2004-12",
-                          refit_every=60)
+    cfg = C(name="t", models=("persistence_pit",), test_start="1975-01", test_end="2004-12", refit_every=60)
     spy = Spy(features="principal")
     calls = spy_run(d, cfg, spy)
     by = {c["m0"].year: c for c in calls}
@@ -249,8 +212,8 @@ def test_feature_policy_principal_desde_and_conditionals(datas):
     with pytest.raises(ValueError, match="no admitidas"):
         spy_run(d, cfg, Spy(features=("core_pce_6m_ann",)))
     sens = H.PITData("vintage", policy="sensibilidad")
-    c90 = spy_run(sens, H.HarnessConfig(name="t", models=("persistence_pit",), test_start="1990-01",
-                                        test_end="1990-01", feature_policy="sensibilidad"),
+    c90 = spy_run(sens, C(name="t", models=("persistence_pit",), test_start="1990-01",
+                          test_end="1990-01", feature_policy="sensibilidad"),
                   Spy(features=("core_pce_6m_ann",)))
     assert c90[0]["cols"] == ["core_pce_6m_ann"]
 
@@ -267,12 +230,12 @@ def test_sign_stability_utility(datas):
 
 # ------------------------------------------------------------------ (5) reproducibilidad y (7) registro
 def test_reproducible_same_config_same_hash():
-    cfg = H.HarnessConfig(name="repro", modes=("vintage",), test_start="1995-01", test_end="1999-12", refit_every=3)
+    cfg = C(name="repro", modes=("vintage",), test_start="1995-01", test_end="1999-12", refit_every=3)
     a = H.run(cfg, datas={"vintage": H.PITData("vintage")}, record=False)
     b = H.run(cfg, datas={"vintage": H.PITData("vintage")}, record=False)
     assert a["results_sha256"] == b["results_sha256"]
-    c = H.run(H.HarnessConfig(name="repro", modes=("vintage",), test_start="1995-01", test_end="1999-12",
-                              refit_every=6), datas={"vintage": H.PITData("vintage")}, record=False)
+    c = H.run(C(name="repro", modes=("vintage",), test_start="1995-01", test_end="1999-12",
+                refit_every=6), datas={"vintage": H.PITData("vintage")}, record=False)
     assert c["results_sha256"] != a["results_sha256"]
 
 
@@ -317,8 +280,7 @@ def test_harness_refuses_holdout(datas):
                       "usrec": 0}, index=idx)
     ad = H.ArrayData(pd.DataFrame({"x": 0.0}, index=idx), t, {"x": {"estado": "principal", "start": None}},
                      kind="synthetic")
-    cfg = H.HarnessConfig(name="t", models=("persistence_pit",), test_start="2004-01", test_end="2004-12",
-                          refit_every=1)
+    cfg = C(name="t", models=("persistence_pit",), test_start="2004-01", test_end="2004-12", refit_every=1)
     with pytest.raises(V.HoldoutLocked):
         ad.check_cut(pd.Timestamp("2005-01-01"))
     with pytest.raises(V.HoldoutLocked):
@@ -326,53 +288,5 @@ def test_harness_refuses_holdout(datas):
     H.walk_forward(ad, [B.PersistencePIT()], cfg)       # hasta 2004-12 sí funciona
     assert len(lab) == 660
 
-
-def test_holdout_evaluation_needs_prereg_confirmation_and_is_single_use(tmp_path, monkeypatch, trial_dirs):
-    # sin preregistro, con uno inexistente y sin confirmación explícita: denegado antes de leer nada
-    for pid in (None, "NO-EXISTE"):
-        with pytest.raises(V.HoldoutLocked):
-            V.LabelVault(mode="holdout_evaluation", prereg_id=pid)
-    with pytest.raises(V.HoldoutLocked, match="FKB_HOLDOUT_UNLOCK"):
-        V.LabelVault(mode="holdout_evaluation", prereg_id="P-EVAL-MOD")
-    with pytest.raises(V.HoldoutLocked):
-        H.run(H.HarnessConfig(name="t", phase="holdout_evaluation", prereg_id="P-EVAL-MOD", test_end="2026-01"))
-    # camino de desbloqueo, en una etiqueta SINTÉTICA (nunca la oficial): funciona una sola vez
-    idx = pd.date_range("2000-01-01", "2008-12-01", freq="MS")
-    fake = tmp_path / "fake_label.parquet"
-    pd.DataFrame({"date": idx, "p_expansion": 1.0}).to_parquet(fake, index=False)
-    monkeypatch.setenv(V.UNLOCK_ENV, "EVALUACION-UNICA P-EVAL-MOD")
-    df = V.LabelVault(mode="holdout_evaluation", prereg_id="P-EVAL-MOD", path=fake).load()
-    assert df.index.max() == pd.Timestamp("2008-12-01")
-    with pytest.raises(V.HoldoutLocked, match="ya se evaluó"):
-        V.LabelVault(mode="holdout_evaluation", prereg_id="P-EVAL-MOD", path=fake)
-    used = (trial_dirs / "trials" / "holdout_evaluations.jsonl").read_text()
-    assert "P-EVAL-MOD" in used
-
-
-def test_holdout_run_opens_the_vault_once(monkeypatch):
-    """En la evaluación única la caja fuerte se abre UNA vez por corrida y la comparten los dos modos (abrirla gasta
-    el preregistro). Con dobles de prueba: no se lee ningún dato."""
-    opened, built = [], []
-
-    class FakeVault:
-        def __init__(self, mode, prereg_id=None, **k):
-            self.mode = mode
-            opened.append(prereg_id)
-
-    class FakeData:
-        def __init__(self, mode, variant, phase, prereg_id, policy, vault=None):
-            self.phase = phase
-            built.append(vault)
-
-    class Stop(Exception):
-        pass
-
-    def stop(*a, **k):
-        raise Stop
-
-    monkeypatch.setattr(H, "LabelVault", FakeVault)
-    monkeypatch.setattr(H, "PITData", FakeData)
-    monkeypatch.setattr(H, "walk_forward", stop)
-    with pytest.raises(Stop):
-        H.run(H.HarnessConfig(name="t", phase="holdout_evaluation", prereg_id="P-EVAL-MOD", test_end="2026-01"))
-    assert opened == ["P-EVAL-MOD"] and len(built) == 2 and built[0] is built[1]
+# La evaluación única (desbloqueo, consumo, ataques del Validador) se prueba en tests/test_harness_v2.py, sobre un
+# repositorio git temporal y una etiqueta sintética.

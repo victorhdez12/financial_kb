@@ -1,27 +1,37 @@
-"""Interfaz de modelo del arnés y baselines mínimos (docs/models/harness.md §5).
+"""Interfaz de modelo del arnés y baselines (docs/models/harness.md §5).
 
-Un modelo declara qué necesita y el arnés le da SOLO eso, ya filtrado (lista blanca, estados, épocas, embargo):
+Un modelo declara qué necesita y el arnés le da SOLO eso, ya filtrado (lista blanca, estados, ventana, embargo):
 
-    class MiModelo(Model):
-        name = "logit_v1"
-        features = ("curve_10y3m", "unrate_sahm")   # () = sin variables; "principal" = todas las admitidas
-        uses_persistence = True                      # añade pers_* (persistencia PIT de cada mes) a X
-        def fit(self, X, Y, y, info): ...            # X: variables del entrenamiento; Y: probabilidades blandas
-                                                     # (n × 4, etiqueta RECALCULADA con datos ≤ T); y: etiqueta dura
-        def predict_proba(self, X, info): ...        # → n × 4, columnas en el orden de QUADS
+    class MiModelo(Model):                            # modelo de 4 cuadrantes
+        name = "x"
+        features = ("curve_10y3m", "unrate_sahm")     # () = sin variables; "principal" = todas las admitidas
+        uses_persistence = True                       # añade pers_* y pers_hard_* (persistencia PIT) a X
+        def fit(self, X, Y, y, info, sample_weight=None): ...
+        def predict_proba(self, X, info): ...         # → n × 4, columnas en el orden de QUADS
 
-`info` lleva el corte (`refit_month`, `decision_date`), el modo y los meses de entrenamiento. El modelo nunca ve la
-etiqueta oficial ni meses posteriores al corte menos el embargo. Para enchufar logística, Markov, GBM o calibración
-basta con una subclase registrada en `REGISTRY`.
+    class MiModeloPorEje(AxisModel):                  # un modelo por eje (G, I), combinado como producto
+        name = "y"
+        axis_features = {"G": ("growth_rt", "baa_spread"), "I": ("core_cpi_6m_ann",)}   # nombres explícitos
+        uses_persistence = True                       # añade pers_axis (P(eje alto) de la persistencia PIT)
+        def fit_axis(self, axis, X, t, w, info): ...  # t: objetivo blando del eje (p_g_high / p_i_high recalculado)
+        def predict_axis(self, axis, X, info): ...    # → n, P(eje alto)
+
+`Y` = probabilidades blandas de la etiqueta RECALCULADA con datos ≤ T (n × 4); `y` = etiqueta dura recalculada;
+`sample_weight` = peso de madurez de cada mes (harness.md §3b; 1 = maduro). `info` lleva el corte, la fecha de
+decisión, el modo, los meses de entrenamiento y las variables. El modelo nunca ve la etiqueta oficial ni meses
+posteriores al corte menos el embargo.
 """
 from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+from scipy.optimize import minimize
 
 from src.models.metrics import QUADS
 
 PERS_COLS = [f"pers_{q}" for q in QUADS]
+PERS_HARD_COLS = [f"pers_hard_{q}" for q in QUADS]      # persistencia en forma dura (one-hot de pers_hard)
+PERS_AXIS = {"G": "pers_axis_growth", "I": "pers_axis_infl"}   # P(eje alto) de la persistencia PIT
 
 
 class Model:
@@ -30,7 +40,8 @@ class Model:
     uses_persistence = False
     needs_training = True
 
-    def fit(self, X: pd.DataFrame, Y: np.ndarray, y: np.ndarray, info: dict) -> None:  # pragma: no cover
+    def fit(self, X: pd.DataFrame, Y: np.ndarray, y: np.ndarray, info: dict,
+            sample_weight: np.ndarray | None = None) -> None:  # pragma: no cover
         raise NotImplementedError
 
     def predict_proba(self, X: pd.DataFrame, info: dict) -> np.ndarray:  # pragma: no cover
@@ -41,14 +52,27 @@ class Model:
                 "uses_persistence": self.uses_persistence, "params": getattr(self, "params", {})}
 
 
+class AxisModel(Model):
+    """Modelo por eje: el arnés entrena G e I por separado, cada uno con SUS variables y SU ventana (la del inicio más
+    tardío de sus propias variables), y combina P(G)·P(I) en 4 cuadrantes (supuesto de independencia condicional:
+    harness.md §5b)."""
+    axis_features: dict[str, tuple[str, ...]] = {"G": (), "I": ()}
+
+    def fit_axis(self, axis: str, X: pd.DataFrame, t: np.ndarray, w: np.ndarray, info: dict) -> None:  # pragma: no cover
+        raise NotImplementedError
+
+    def predict_axis(self, axis: str, X: pd.DataFrame, info: dict) -> np.ndarray:  # pragma: no cover
+        raise NotImplementedError
+
+
 class PersistencePIT(Model):
-    """Listón: la última etiqueta conocida en t (la de t − 5), recalculada con los datos publicados en t, en el mismo
-    modo que las variables (ficha §12). No entrena."""
+    """Persistencia cruda (referencia): la última etiqueta conocida en t (la de t − 5), recalculada con los datos
+    publicados en t, en el mismo modo que las variables (ficha §12). No entrena."""
     name = "persistence_pit"
     uses_persistence = True
     needs_training = False
 
-    def fit(self, X, Y, y, info):
+    def fit(self, X, Y, y, info, sample_weight=None):
         return None
 
     def predict_proba(self, X, info):
@@ -56,7 +80,7 @@ class PersistencePIT(Model):
 
 
 class Climatology(Model):
-    """Frecuencias marginales expansivas: media de las probabilidades blandas de la etiqueta de entrenamiento
+    """Frecuencias marginales expansivas: media PONDERADA de las probabilidades blandas de la etiqueta de entrenamiento
     (recalculada con datos ≤ T) con un prior de Dirichlet uniforme (alpha por clase)."""
     name = "climatology"
 
@@ -64,15 +88,69 @@ class Climatology(Model):
         self.params = {"alpha": alpha}
         self.p_ = None
 
-    def fit(self, X, Y, y, info):
+    def fit(self, X, Y, y, info, sample_weight=None):
         a = self.params["alpha"]
-        self.p_ = (np.asarray(Y, float).sum(axis=0) + a) / (len(Y) + a * len(QUADS))
+        w = np.ones(len(Y)) if sample_weight is None else np.asarray(sample_weight, float)
+        self.p_ = (w @ np.asarray(Y, float) + a) / (w.sum() + a * len(QUADS))
 
     def predict_proba(self, X, info):
         return np.tile(self.p_, (len(X), 1))
 
 
-REGISTRY = {"persistence_pit": PersistencePIT, "climatology": Climatology}
+def fit_binary_logit(Z: np.ndarray, t: np.ndarray, w: np.ndarray, l2: float) -> np.ndarray:
+    """Logística binaria con objetivo BLANDO t ∈ [0, 1], pesos w y L2 = l2·‖β‖² (constante sin penalizar; escala de
+    suma, no por observación). Devuelve [constante, β...]."""
+    Z, t, w = np.asarray(Z, float), np.asarray(t, float), np.asarray(w, float)
+    Xb = np.hstack([np.ones((len(Z), 1)), Z])
+
+    def f(b):
+        s = Xb @ b
+        ls = np.logaddexp(0, s)                  # log(1 + e^s)
+        loss = (w * (ls - t * s)).sum() + l2 * (b[1:] ** 2).sum()
+        p = 1 / (1 + np.exp(-s))
+        g = Xb.T @ (w * (p - t))
+        g[1:] += 2 * l2 * b[1:]
+        return loss, g
+
+    return minimize(f, np.zeros(Xb.shape[1]), jac=True, method="L-BFGS-B").x
+
+
+def logit(p: np.ndarray, eps: float) -> np.ndarray:
+    p = np.clip(np.asarray(p, float), eps, 1 - eps)
+    return np.log(p / (1 - p))
+
+
+class CalibratedPersistence(AxisModel):
+    """M0, persistencia CALIBRADA (listón principal; Estratega E1, decisión del usuario 2026-10-16). Por eje:
+        P(eje alto) = Λ(a + b · logit(clip(pers_axis, eps)))
+    con pers_axis = P(eje alto) de la persistencia PIT del mes, ajustada en cada corte del walk-forward con la etiqueta
+    recalculada con datos ≤ T (objetivo blando p_g_high / p_i_high, pesos de madurez). Sin ninguna variable macro.
+    Parámetros fijados A PRIORI (antes de correrlo): eps = 1e-3 (limita el apalancamiento de las probabilidades
+    extremas de la persistencia), L2 = 1,0 sobre b (escala de suma; con ≥ 120 meses es casi nula)."""
+    name = "m0_calibrated_persistence"
+    uses_persistence = True
+    axis_features = {"G": (), "I": ()}
+
+    def __init__(self, eps: float = 1e-3, l2: float = 1.0):
+        self.params = {"eps": eps, "l2": l2}
+        self.coef_: dict[str, np.ndarray] = {}
+
+    def _z(self, axis, X):
+        return logit(X[PERS_AXIS[axis]].to_numpy(float), self.params["eps"])[:, None]
+
+    def fit_axis(self, axis, X, t, w, info):
+        self.coef_[axis] = fit_binary_logit(self._z(axis, X), t, w, self.params["l2"])
+
+    def predict_axis(self, axis, X, info):
+        b = self.coef_[axis]
+        return 1 / (1 + np.exp(-(b[0] + self._z(axis, X)[:, 0] * b[1])))
+
+    def coefficients(self) -> dict:
+        return {f"{ax}_{k}": float(v[i]) for ax, v in self.coef_.items() for i, k in enumerate(("a", "b"))}
+
+
+REGISTRY = {"persistence_pit": PersistencePIT, "climatology": Climatology,
+            "m0_calibrated_persistence": CalibratedPersistence}
 
 
 def make(name: str, **kw) -> Model:

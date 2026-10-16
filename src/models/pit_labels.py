@@ -11,6 +11,10 @@ Es exactamente el cálculo de `src.features.pit.persistence` (mismo bucle, misma
 devolviendo la etiqueta entera en lugar de su última fila: la última fila es la persistencia PIT (lo comprueba
 `tests/test_harness.py` bit a bit frente a los baselines congelados) y el resto son las ETIQUETAS DE ENTRENAMIENTO del
 corte T (prohibido entrenar con la etiqueta final precalculada).
+
+Barrera (Validador v1, M-1/D4): `at(T)` con T ≥ 2005-01 recalcularía la etiqueta del periodo bloqueado desde la
+instantánea (que llega a 2026). Solo se permite con una caja fuerte de evaluación desbloqueada (identidad, no duck
+typing); si no, se registra y lanza `HoldoutLocked`.
 """
 from __future__ import annotations
 
@@ -23,6 +27,7 @@ import pandas as pd
 from src.features import pit as P
 from src.features.calendar import VintageSet, availability, load_calendar
 from src.labels import regime_us as R
+from src.models import vault as V
 
 KEEP = ["date", "G", "I", "p_g_high", "p_i_high", *[f"p_{q}" for q in R.QUADRANTS], "label_hard", "weight",
         "provisional"]
@@ -38,10 +43,10 @@ def _sha(paths) -> str:
 class PITLabeler:
     """Etiqueta recalculada con los datos conocidos en cada fecha de decisión (un modo)."""
 
-    def __init__(self, mode: str, pit_version: str = P.VERSION):
+    def __init__(self, mode: str, pit_version: str = P.VERSION, vault=None):
         if mode not in P.MODES:
             raise ValueError(f"modo desconocido: {mode}")
-        self.mode = mode
+        self.mode, self.vault = mode, vault
         con, self.wl, cal_path, _info = P.read_snapshot(pit_version)  # verifica hashes (P.FROZEN)
         self.inputs, _ = R.read_snapshot()                           # verifica hashes (R.FROZEN)
         self.lp = P.label_params(self.inputs)                        # s_G, s_I, empalme (hash del meta fijado)
@@ -73,6 +78,10 @@ class PITLabeler:
     def at(self, t) -> pd.DataFrame:
         """Etiqueta completa calculable en la fecha de decisión t (columnas KEEP; vacía si no hay ninguna)."""
         t = pd.Timestamp(t)
+        if t >= V.HOLDOUT_START and not V.is_open_holdout_vault(self.vault):
+            why = f"PITLabeler.at({t:%Y-%m-%d}): etiqueta recalculada del periodo bloqueado sin evaluación única"
+            V.log_access({"mode": "pit_labeler", "granted": False, "why": why, "labeler_mode": self.mode})
+            raise V.HoldoutLocked(why)
         if t not in self._cache:
             lab, _ = R.make_label({"levels": self.levels_at(t), "usrec": self.inputs["usrec"]}, R.PARAMS,
                                   self.lp["s_G"], self.lp["s_I"], splice=self.lp["splice"])

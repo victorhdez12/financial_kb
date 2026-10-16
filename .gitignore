@@ -25,3 +25,6 @@ data/processed/*
 # Obsidian workspace state
 obsidian/.obsidian/workspace*.json
 obsidian/.trash/
+
+# Registro completo de accesos y corridas sin registrar (ruta fija, fuera de git; src/models/vault.py)
+research/trials/full/

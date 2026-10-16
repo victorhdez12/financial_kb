@@ -541,11 +541,12 @@ def persistence(con, mode: str, grid: pd.DataFrame | None = None, start: str = "
 
 def score_training(pred: pd.DataFrame, end: str = "2004-12-01") -> dict:
     """Métricas del baseline SOLO en el periodo de entrenamiento (≤ 2004-12; nunca el bloqueado)."""
-    lab = pd.read_parquet(R.out_path()).set_index("date")
+    hold = pd.Timestamp(R.PARAMS.holdout_start)
+    lab = pd.read_parquet(R.out_path(), filters=[("date", "<", hold.to_datetime64())]).set_index("date")
     lab = lab[(lab["weight"] > 0) & ~lab["provisional"] & (lab.index <= pd.Timestamp(end))]
     p = pred.set_index("month")
     common = lab.index.intersection(p.index)
-    assert common.max() <= pd.Timestamp(R.PARAMS.holdout_start), "no se puntúa el periodo bloqueado"
+    assert pd.Timestamp(end) < hold and common.max() < hold, "no se puntúa el periodo bloqueado"
     P = np.clip(p.loc[common, PRED_COLS].to_numpy(float), 1e-4, 1)   # mismo recorte que labels/checks.py
     P = P / P.sum(axis=1, keepdims=True)
     T = lab.loc[common, [f"p_{q}" for q in R.QUADRANTS]].to_numpy(float)

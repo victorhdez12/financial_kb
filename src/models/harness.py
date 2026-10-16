@@ -1,30 +1,32 @@
-"""Arnés de backtest walk-forward del nowcast de régimen (Fase 3, entregable 3; docs/models/harness.md).
+"""Arnés de backtest walk-forward del nowcast de régimen (Fase 3, entregable 3; docs/models/harness.md, v2).
 
-Reglas (docs/PLAN.md "Validación", "Periodo bloqueado y reglas del arnés"; ficha de la etiqueta §7 y §12;
-docs/models/pit_base.md §3):
+Reglas (docs/PLAN.md "Validación", "Periodo bloqueado y reglas del arnés"; ficha de la etiqueta §7, §12 y adenda
+2026-10-16; docs/models/pit_base.md §3):
 
-1. Cortes walk-forward con ventana EXPANSIVA; reentreno cada `refit_every` meses (1 = mensual). En el corte de mes m0
-   (fecha de decisión T0 = último día hábil de m0) se entrena y se predicen los meses m0 … m0 + k − 1, cada uno con las
-   variables de SU fecha de decisión.
-2. Embargo ≥ 6 meses: solo entrenan los meses s ≤ m0 − embargo. Purga: la ventana de la etiqueta de s llega a s + 4;
-   se exige s + 4 < m0 (lo cubre el embargo; se comprueba en cada corte).
-3. ETIQUETA DE ENTRENAMIENTO RECALCULADA con los datos conocidos en T0 (src/models/pit_labels.py, mismo modo que las
-   variables). La etiqueta oficial congelada v1.1 solo se usa para PUNTUAR, a través de la caja fuerte (vault.py).
-4. Periodo bloqueado 2005-01 → abierto: en `development` no se carga ninguna fila ≥ 2005-01 (ni etiqueta ni
-   variables) y cualquier corte o mes de prueba ≥ 2005-01 lanza `HoldoutLocked`. La evaluación única
-   (`holdout_evaluation`) exige preregistro + confirmación explícita (vault.py) y NO se ejecuta en desarrollo.
-5. Variables solo de la matriz PIT congelada v0.3 (hash fijado), por nombre de columna; estados y fechas según
-   `principal_desde_efectivo` (política `principal`) y `assert_no_forbidden()` antes de cada `fit`.
-6. Modo principal `vintage`; `latest_truncated` como sensibilidad, puntuados sobre los MISMOS meses.
-7. Cada corrida queda en el registro de pruebas (trials.py).
+1. Cortes walk-forward con ventana EXPANSIVA; reentreno cada `refit_every` meses. En el corte de mes m0 (fecha de
+   decisión T0 = último día hábil de m0) se entrena y se predicen m0 … m0 + k − 1, cada uno con SU fecha de decisión.
+2. Embargo ≥ 6 meses (s ≤ m0 − embargo); purga s + 4 < m0 (se comprueba en cada corte).
+3. ETIQUETA DE ENTRENAMIENTO RECALCULADA con los datos conocidos en T0 (pit_labels.py, mismo modo que las variables),
+   con PESO DE MADUREZ en los meses provisionales recalculados (§3b, función fijada a priori desde el estudio de
+   revisión). La etiqueta oficial congelada v1.1 solo PUNTÚA, a través de la caja fuerte (vault.py).
+4. Periodo bloqueado 2005-01 →: `run()` solo trabaja en `development`. La evaluación única tiene UN punto de entrada,
+   `evaluate_holdout(prereg_id)`, que crea él mismo la caja fuerte (que consume el preregistro) y los datos.
+5. Variables solo de la matriz PIT congelada v0.3 (hash fijado), por nombre; `assert_no_forbidden()` antes de cada fit.
+   Modelos por eje (`AxisModel`): cada eje con sus variables y SU ventana; mínimo de entrenamiento por eje: meses,
+   recesiones NBER y cambios de G (§5).
+6. Ventana de evaluación FIJA (`eval_window`): todos los modelos deben predecir todos sus meses; si no, error (o aviso
+   registrado con `allow_shrink`).
+7. Modo principal `vintage`; `latest_truncated` como sensibilidad, puntuados sobre los MISMOS meses.
+8. Cada corrida queda en el registro de pruebas (trials.py); con `record=False`, una línea mínima en la ruta fija.
 
-    .venv/bin/python -m src.models.harness --config config/harness/baselines_v1.yaml
+    .venv/bin/python -m src.models.harness --config config/harness/baselines_v2.yaml --official
 """
 from __future__ import annotations
 
 import argparse
 import hashlib
 import json
+import warnings
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
@@ -36,6 +38,7 @@ from src.features import pit as P
 from src.labels import regime_us as R
 from src.models import base as B
 from src.models import metrics as M
+from src.models import vault as V
 from src.models.pit_labels import PITLabeler
 from src.models.vault import HOLDOUT_START, LABEL_FILE_SHA256, HoldoutLocked, LabelVault, log_access
 
@@ -44,7 +47,6 @@ QUADS, P_COLS, PERS_COLS = M.QUADS, M.P_COLS, B.PERS_COLS
 LABEL_FORWARD = R.pace_need(R.PARAMS)            # 4: la etiqueta de s usa niveles hasta s + 4
 MIN_EMBARGO = R.PARAMS.embargo_months             # 6
 PIT_VERSION = "0.3"
-# SHA-256 de las matrices oficiales v0.3 (meta de la base PIT; reproducidas bit a bit por el Validador el 2026-10-16)
 MATRIX_SHA256 = {
     "vintage": "6858f6c93bfe692ab7a9452f22db1986ba52f32e1300703c12ae60fb2b9c0fa9",
     "latest_truncated": "3d81ec88b17a5390e8b7c2099ef1a4406009a43b1e1f1751522b7767f9ff025b",
@@ -52,6 +54,38 @@ MATRIX_SHA256 = {
 }
 ESTADOS = {"principal": ("principal", "principal_epoca"),
            "sensibilidad": ("principal", "principal_epoca", "condicional")}
+AXES = ("G", "I")
+AXIS_VEC = {"G": M.G_HIGH, "I": M.I_HIGH}
+_EVAL: dict = {"vault": None}        # contexto de la evaluación única (solo lo fija evaluate_holdout)
+
+# ------------------------------------------------------------------ peso de madurez (harness.md §3b; ficha, adenda)
+# Fijado A PRIORI (2026-10-16, antes de correr ningún modelo con variables) desde el estudio de revisión congelado
+# (docs/models/label_revision_study.md, "Tabla por k": concordancia de la etiqueta dura recalculada en T con la
+# completa, variantes A y B). No usa ningún resultado del arnés ni la tabla del Validador (M-4).
+#   c(k)  = min(concordancia A, concordancia B) en cada k de la tabla (la variante más conservadora);
+#   c~(k) = min{c(k') : k' de la tabla, k' ≥ k}  (envolvente inferior monótona: nunca premia un k por ruido);
+#   w(k)  = c~(k) / c~(60)  (c~(60) = 97,0 % = concordancia madura); w = 1 para los meses NO provisionales.
+# k del estudio = meses entre el corte y el mes objetivo; la última fila del estudio es k = 4 y la de at(T) es
+# m0 − 5, así que k_estudio = (m0 − s) − 1.
+REVISION_STUDY_CONCORDANCE = {   # k: (A %, B %)
+    4: (92.6, 89.4), 5: (87.2, 85.1), 6: (84.0, 86.2), 7: (84.0, 85.1), 8: (89.4, 88.3), 9: (90.5, 90.5),
+    10: (93.7, 90.5), 11: (88.4, 86.3), 12: (83.2, 86.3), 18: (87.5, 88.5), 24: (89.7, 90.7), 30: (90.8, 90.8),
+    36: (89.9, 90.9), 42: (89.0, 87.0), 48: (92.0, 90.0), 54: (96.0, 94.0), 55: (96.0, 95.0), 60: (98.0, 97.0),
+    66: (98.0, 97.0), 72: (98.0, 97.0), 78: (98.0, 98.0), 84: (99.0, 97.0)}
+_KS = sorted(REVISION_STUDY_CONCORDANCE)
+
+
+def _cmin(k: int) -> float:
+    ks = [x for x in _KS if x >= k] or [_KS[-1]]
+    return min(min(REVISION_STUDY_CONCORDANCE[x]) for x in ks)
+
+
+def maturity_weight(k_study: int) -> float:
+    """w(k) del estudio de revisión (k = meses entre el corte y el mes objetivo, convención del estudio)."""
+    return _cmin(max(int(k_study), _KS[0])) / _cmin(60)
+
+
+WEIGHTING = ("madurez", "uno", "excluir")
 
 
 def _month(d) -> pd.Timestamp:
@@ -60,6 +94,17 @@ def _month(d) -> pd.Timestamp:
 
 def _add(m: pd.Timestamp, k: int) -> pd.Timestamp:
     return m + pd.DateOffset(months=k)
+
+
+def _mdiff(a: pd.Timestamp, b) -> np.ndarray:
+    """Meses a − b (b escalar o índice)."""
+    b = pd.DatetimeIndex(b) if not isinstance(b, pd.Timestamp) else b
+    return (a.year - b.year) * 12 + (a.month - b.month)
+
+
+def _warn(avisos: list, msg: str) -> None:
+    avisos.append(msg)
+    warnings.warn(msg, stacklevel=3)
 
 
 # ------------------------------------------------------------------ configuración
@@ -72,12 +117,19 @@ class HarnessConfig:
     matrix_variant: str = ""                # "" = oficial; "filadelfia_prudente" = S-PIT-001 (solo vintage)
     refit_every: int = 1
     embargo_months: int = MIN_EMBARGO
-    min_train_months: int = 12
+    min_train_months: int = 120             # §5: mínimo de entrenamiento (decisión del usuario, 2026-10-16)
+    min_train_recessions: int = 2           #     ≥ 2 recesiones NBER (pico ≤ último mes de entrenamiento − 12)
+    min_train_g_changes: int = 8            #     ≥ 8 cambios del eje G (etiqueta recalculada) en la ventana
     test_start: str = "1956-10"
     test_end: str = "2004-12"
+    eval_window: tuple | None = None        # ventana de evaluación FIJA (desde, hasta); None = (test_start, test_end)
+    allow_shrink: bool = False              # True: si un modelo no cubre la ventana, aviso registrado (no error)
+    epochs: tuple = (("1956-01", "1979-12"), ("1980-01", "2004-12"))
+    subperiods: tuple = ()                  # estabilidad del signo (p. ej. 2005-14 / 2015+ en la evaluación única)
     feature_policy: str = "principal"
-    exclude_recomputed_provisional: bool = False
-    baseline: str = "persistence_pit"
+    provisional_weighting: str = "madurez"  # §3b: "madurez" (principal), "uno" y "excluir" (sensibilidades)
+    baseline: str = "persistence_pit"       # comparador principal (M0 en las corridas con modelos)
+    reference: str | None = None            # comparador secundario que se informa (p. ej. persistence_pit)
     phase: str = "development"
     prereg_id: str | None = None
     who: str = "Constructor"
@@ -90,12 +142,25 @@ class HarnessConfig:
             raise ValueError("refit_every ≥ 1")
         if self.feature_policy not in ESTADOS:
             raise ValueError(f"política de variables desconocida: {self.feature_policy}")
-        if self.baseline not in self.models:
-            raise ValueError("el baseline tiene que estar entre los modelos (misma muestra)")
-        if self.phase == "development" and _month(self.test_end) >= HOLDOUT_START:
-            raise HoldoutLocked(f"test_end {self.test_end} dentro del periodo bloqueado (≥ {HOLDOUT_START:%Y-%m})")
+        if self.provisional_weighting not in WEIGHTING:
+            raise ValueError(f"ponderación de provisionales desconocida: {self.provisional_weighting}")
+        if self.baseline not in self.models or (self.reference and self.reference not in self.models):
+            raise ValueError("el baseline y la referencia tienen que estar entre los modelos (misma muestra)")
         if self.phase not in ("development", "holdout_evaluation"):
             raise ValueError(f"fase desconocida: {self.phase}")
+        ends = [self.test_end] + ([self.eval_window[1]] if self.eval_window else [])
+        if self.phase == "development" and max(_month(e) for e in ends) >= HOLDOUT_START:
+            raise HoldoutLocked(f"test_end/eval_window dentro del periodo bloqueado (≥ {HOLDOUT_START:%Y-%m})")
+        if self.phase == "holdout_evaluation" and _EVAL["vault"] is None:
+            raise HoldoutLocked("la fase holdout_evaluation solo se ejecuta a través de evaluate_holdout(prereg_id)")
+        if self.eval_window and (_month(self.eval_window[0]) < _month(self.test_start)
+                                 or _month(self.eval_window[1]) > _month(self.test_end)):
+            raise ValueError("eval_window fuera de [test_start, test_end]")
+
+    @property
+    def window(self) -> tuple[pd.Timestamp, pd.Timestamp]:
+        w = self.eval_window or (self.test_start, self.test_end)
+        return _month(w[0]), _month(w[1])
 
     @classmethod
     def from_yaml(cls, path) -> "HarnessConfig":
@@ -103,10 +168,27 @@ class HarnessConfig:
         for k in ("models", "modes"):
             if k in d:
                 d[k] = tuple(d[k])
+        for k in ("eval_window",):
+            if d.get(k) is not None:
+                d[k] = tuple(d[k])
+        for k in ("epochs", "subperiods"):
+            if k in d:
+                d[k] = tuple(tuple(x) for x in d[k])
         return cls(**d)
 
 
 # ------------------------------------------------------------------ datos
+def _pers_extras(p: pd.DataFrame) -> pd.DataFrame:
+    """Columnas derivadas de la persistencia PIT: one-hot de la dura y P(eje alto)."""
+    p = p.copy()
+    for q, c in zip(QUADS, B.PERS_HARD_COLS):
+        p[c] = (p["pers_hard"] == q).astype(float)
+    P4 = p[PERS_COLS].to_numpy(float)
+    for ax, col in B.PERS_AXIS.items():
+        p[col] = P4 @ AXIS_VEC[ax]
+    return p
+
+
 class PITData:
     """Matriz PIT congelada + etiqueta de entrenamiento recalculada + etiqueta oficial (caja fuerte), para un modo."""
     kind = "pit"
@@ -114,10 +196,20 @@ class PITData:
     def __init__(self, mode: str, variant: str = "", phase: str = "development", prereg_id: str | None = None,
                  policy: str = "principal", vault: LabelVault | None = None):
         self.mode, self.phase, self.policy = mode, phase, policy
-        # una sola caja fuerte por corrida (en holdout, abrirla gasta el preregistro: run() la crea y la comparte)
-        self.vault = vault or LabelVault(mode=phase, prereg_id=prereg_id)
-        if self.vault.mode != phase:
-            raise ValueError("la caja fuerte y los datos están en fases distintas")
+        if phase == "holdout_evaluation":
+            # identidad y tipo exacto, del preregistro y del contexto de evaluate_holdout: ANTES de leer nada (D3b)
+            if not V.is_open_holdout_vault(vault, prereg_id) or _EVAL["vault"] is not vault:
+                log_access({"mode": phase, "granted": False, "why": "PITData sin la caja fuerte de evaluate_holdout",
+                            "prereg_id": prereg_id})
+                raise HoldoutLocked("PITData en holdout_evaluation exige la caja fuerte creada por evaluate_holdout")
+        elif phase == "development":
+            if vault is None:
+                vault = LabelVault()
+            if type(vault) is not LabelVault or vault.mode != "development":
+                raise TypeError("PITData en desarrollo exige una LabelVault de desarrollo")
+        else:
+            raise ValueError(f"fase desconocida: {phase}")
+        self.vault = vault
         name = f"{mode}_{variant}" if variant else mode
         if name not in MATRIX_SHA256:
             raise ValueError(f"matriz desconocida: {name}")
@@ -132,7 +224,7 @@ class PITData:
         X["month"] = X["decision_date"].dt.to_period("M").dt.to_timestamp()
         self.decision = X.set_index("month")["decision_date"]
         self.X = X.drop(columns=["decision_date"]).set_index("month")
-        self.labeler = PITLabeler(mode, PIT_VERSION)
+        self.labeler = PITLabeler(mode, PIT_VERSION, vault=vault if phase == "holdout_evaluation" else None)
         wl = self.labeler.wl
         public = set(P.public_columns(wl))
         if set(self.X.columns) != public:
@@ -149,6 +241,9 @@ class PITData:
             starts = [s for s in starts if s is not None]
             self.colinfo[c] = {"estado": spec[c]["estado"], "start": max(starts) if starts else None,
                                "principal_desde_efectivo": eff.get(c)}
+        u = self.labeler.inputs["usrec"].dropna()
+        u.index = u.index.to_period("M").to_timestamp()
+        self.usrec = u[u.index < HOLDOUT_START] if phase == "development" else u
         meta = json.loads(R.out_path().with_suffix(".meta.json").read_text())
         last = pd.Timestamp(meta["last"])
         self.first_official_provisional = _add(last, -(meta["provisional_months"] - 1))
@@ -166,15 +261,16 @@ class PITData:
         return lab[lab.index < self.first_official_provisional]    # provisionales oficiales: nunca entrenan
 
     def pers_rows(self, months) -> pd.DataFrame:
-        """Persistencia PIT (pers_*) de los meses pedidos, cada uno en su fecha de decisión (con caché)."""
+        """Persistencia PIT (pers_*, pers_hard_*, pers_axis_*) de los meses pedidos, en su fecha de decisión."""
         self._pers = self._pers if self._pers is not None else {}
         for m in months:
-            if m not in self._pers:
+            if m not in self._pers and m in self.decision.index:
                 self._pers[m] = self.labeler.persistence(self.decision[m])
-        rows = {m: self._pers[m] for m in months if self._pers[m] is not None}
+        rows = {m: self._pers[m] for m in months if self._pers.get(m) is not None}
         cols = ["label_month", *PERS_COLS, "pers_hard"]
-        return pd.DataFrame.from_dict(rows, orient="index", columns=cols).sort_index() if rows else \
-            pd.DataFrame(columns=cols)
+        df = pd.DataFrame.from_dict(rows, orient="index", columns=cols).sort_index() if rows else \
+            pd.DataFrame(columns=cols, index=pd.DatetimeIndex([]))
+        return _pers_extras(df)
 
     def persistence_frame(self) -> pd.DataFrame:
         return self.pers_rows(self.decision.index)
@@ -189,18 +285,23 @@ class PITData:
 
 
 class ArrayData:
-    """Datos en memoria para el placebo y los tests (NO es evidencia: el registro lo marca con su `kind`).
-    `target`: DataFrame mensual con p_* , label_hard, weight, provisional y usrec. La etiqueta de s se considera
-    conocida en m0 si s ≤ m0 − label_lag (5), como la etiqueta real; la persistencia de t es el objetivo de t − 5."""
+    """Datos en memoria para el placebo y los tests (NO es evidencia: el registro lo marca con su `kind`). Siempre en
+    `development`. `target`: DataFrame mensual con p_*, label_hard, weight, provisional y usrec. La etiqueta de s se
+    considera conocida en m0 si s ≤ m0 − label_lag (5); la persistencia de t es el objetivo de t − 5."""
 
     def __init__(self, X: pd.DataFrame, target: pd.DataFrame, colinfo: dict, kind: str = "placebo",
                  mode: str = "synthetic", label_lag: int = 5):
         if kind == "pit":
             raise ValueError("ArrayData no puede hacerse pasar por datos PIT")
         self.X, self.target, self.colinfo, self.kind, self.mode = X, target, colinfo, kind, mode
-        self.phase, self.lag = "development", label_lag
+        self.lag = label_lag
         self.decision = pd.Series(X.index + pd.offsets.MonthEnd(0), index=X.index)
         self.first_official_provisional = pd.Timestamp("2262-01-01")
+        self.usrec = target["usrec"].astype(float) if "usrec" in target else pd.Series(0.0, index=target.index)
+
+    @property
+    def phase(self) -> str:          # de solo lectura: ArrayData nunca está en holdout_evaluation
+        return "development"
 
     def check_cut(self, m0):
         if m0 >= HOLDOUT_START:
@@ -214,7 +315,7 @@ class ArrayData:
         p = self.target[P_COLS].shift(self.lag, freq="MS").reindex(self.X.index)
         p.columns = PERS_COLS
         p["pers_hard"] = self.target["label_hard"].shift(self.lag, freq="MS").reindex(self.X.index)
-        return p.dropna()
+        return _pers_extras(p.dropna())
 
     def pers_rows(self, months):
         return self.persistence_frame().reindex(months).dropna()
@@ -232,8 +333,8 @@ class ArrayData:
 
 def placebo_data(pit: PITData, seed: int, block: int = 24, leak=None, end: str = "2004-12") -> ArrayData:
     """Placebo (pit_base.md §3, regla 6): las variables PIT reales con la etiqueta oficial ≤ 2004 BARAJADA en bloques
-    de `block` meses (filas enteras: p_*, label_hard, usrec). Sin fuga, ningún modelo puede tener habilidad sobre la
-    persistencia del objetivo barajado. `leak(target_barajado, rng) -> DataFrame` añade columnas con fuga (tests)."""
+    de `block` meses (filas enteras: p_*, label_hard, usrec). `leak(target_barajado, rng) -> DataFrame` añade columnas
+    con fuga (tests y tabla de potencia)."""
     from src.features.placebo import block_shuffle
     rng = np.random.default_rng(seed)
     lab = pit.score_labels(end)
@@ -266,8 +367,8 @@ def vintage_breaks(pit: PITData) -> dict[str, list[pd.Timestamp]]:
 
 
 def sign_stability(coefs: pd.DataFrame, breaks: dict[str, list[pd.Timestamp]], min_refits: int = 12) -> pd.DataFrame:
-    """`coefs`: coeficiente (o importancia con signo) de cada variable por corte (índice = refit_month). Para cada
-    variable y salto con ≥ `min_refits` cortes a cada lado: media antes/después y si conserva el signo."""
+    """`coefs`: coeficiente de cada variable por corte (índice = refit_month). Para cada variable y salto con
+    ≥ `min_refits` cortes a cada lado: media antes/después y si conserva el signo."""
     rows = []
     for c in coefs.columns:
         for b in breaks.get(c, []):
@@ -280,8 +381,19 @@ def sign_stability(coefs: pd.DataFrame, breaks: dict[str, list[pd.Timestamp]], m
 
 
 # ------------------------------------------------------------------ selección de variables
+def _check_requested(model_name: str, req, data, cfg) -> None:
+    unknown = [c for c in req if c not in data.X.columns]
+    if unknown:
+        raise KeyError(f"{model_name}: variables fuera de la matriz PIT congelada: {unknown}")
+    bad = [c for c in req if data.colinfo[c]["estado"] not in ESTADOS[cfg.feature_policy]]
+    if bad:
+        raise ValueError(f"{model_name}: variables no admitidas con la política {cfg.feature_policy}: {bad}")
+
+
 def resolve_features(model: B.Model, data, cfg: HarnessConfig, train_months: pd.DatetimeIndex) -> tuple[list, list]:
-    """Columnas que el modelo puede usar en este corte y columnas descartadas (con motivo)."""
+    """Columnas que un modelo de 4 cuadrantes puede usar en este corte y columnas descartadas (con motivo).
+    Con `features="principal"` la ventana salta a cada nueva columna (política de épocas implícita de la v1; se
+    conserva solo para pruebas: los aspirantes son `AxisModel` con variables explícitas y ventana fija por eje)."""
     if not model.features:
         return [], []
     allowed = ESTADOS[cfg.feature_policy]
@@ -289,12 +401,7 @@ def resolve_features(model: B.Model, data, cfg: HarnessConfig, train_months: pd.
         req = [c for c in data.X.columns if data.colinfo[c]["estado"] in allowed]
     else:
         req = list(model.features)
-        unknown = [c for c in req if c not in data.X.columns]
-        if unknown:
-            raise KeyError(f"{model.name}: variables fuera de la matriz PIT congelada: {unknown}")
-        bad = [c for c in req if data.colinfo[c]["estado"] not in allowed]
-        if bad:
-            raise ValueError(f"{model.name}: variables no admitidas con la política {cfg.feature_policy}: {bad}")
+        _check_requested(model.name, req, data, cfg)
     use, drop = [], []
     for c in req:
         st = data.colinfo[c]["start"]
@@ -303,10 +410,57 @@ def resolve_features(model: B.Model, data, cfg: HarnessConfig, train_months: pd.
     return use, drop
 
 
+def axis_window_start(feats, data) -> pd.Timestamp | None:
+    """Inicio FIJO de la ventana de un eje: el inicio más tardío de SUS variables (no depende de otros ejes)."""
+    st = [data.colinfo[c]["start"] for c in feats]
+    if any(s is None for s in st):
+        raise ValueError(f"variables sin datos: {feats}")
+    return max(st) if st else None
+
+
+def count_recessions(usrec: pd.Series, start: pd.Timestamp, last_train: pd.Timestamp) -> int:
+    """Recesiones NBER con pico en [primer mes de entrenamiento, último − 12]: el anuncio del pico llega con 4-12 meses de retraso, así
+    que solo cuentan las que se conocían en el corte (umbral de admisión; nunca entra como variable)."""
+    u = usrec.fillna(0).astype(int)
+    peaks = u.index[(u == 1) & (u.shift(1, fill_value=0) == 0)]
+    return int(((peaks >= start) & (peaks <= _add(last_train, -12))).sum())
+
+
+def count_g_changes(Y: np.ndarray) -> int:
+    g = (np.asarray(Y, float) @ M.G_HIGH >= 0.5).astype(int)
+    return int((np.diff(g) != 0).sum()) if len(g) > 1 else 0
+
+
+def train_weights(tr: pd.DataFrame, m0: pd.Timestamp, how: str) -> pd.Series:
+    """Peso de cada mes de entrenamiento (§3b): madurez (principal), uno o excluir (provisionales recalculados → 0)."""
+    prov = tr["provisional"].astype(bool).to_numpy() if "provisional" in tr else np.zeros(len(tr), bool)
+    w = tr["weight"].to_numpy(float).copy()
+    if how == "excluir":
+        w[prov] = 0.0
+    elif how == "madurez":
+        k = _mdiff(m0, tr.index) - 1
+        w[prov] *= np.array([maturity_weight(x) for x in k[prov]])
+    return pd.Series(w, index=tr.index)
+
+
 # ------------------------------------------------------------------ walk-forward
+def _eligible(cfg, n, n_rec, n_gch) -> bool:
+    return n >= cfg.min_train_months and n_rec >= cfg.min_train_recessions and n_gch >= cfg.min_train_g_changes
+
+
+def _check_phase(data, cfg) -> None:
+    if data.phase != cfg.phase:
+        raise ValueError("los datos no están en la fase de la configuración")
+    if cfg.phase == "holdout_evaluation":
+        if not isinstance(data, PITData) or type(data) is not PITData or _EVAL["vault"] is None \
+                or data.vault is not _EVAL["vault"] or not V.is_open_holdout_vault(data.vault, cfg.prereg_id):
+            raise HoldoutLocked("holdout_evaluation exige PITData con la caja fuerte abierta por evaluate_holdout")
+
+
 def walk_forward(data, models: list[B.Model], cfg: HarnessConfig, spy=None) -> tuple[pd.DataFrame, list[dict]]:
     """Predicciones fuera de muestra de cada modelo (un modo). `spy(model, info, X, Y)` solo para tests."""
     cfg.validate()
+    _check_phase(data, cfg)
     months = data.X.index
     test = months[(months >= _month(cfg.test_start)) & (months <= _month(cfg.test_end))]
     preds, diag = [], []
@@ -316,66 +470,146 @@ def walk_forward(data, models: list[B.Model], cfg: HarnessConfig, spy=None) -> t
         data.check_cut(block[-1])
         lab = data.train_targets(m0)
         cut = _add(m0, -cfg.embargo_months)
-        ok = (lab.index <= cut) & (lab["weight"] > 0)
-        if cfg.exclude_recomputed_provisional:
-            ok &= ~lab["provisional"].astype(bool)
-        tr = lab[ok]
+        tr = lab[(lab.index <= cut) & (lab["weight"] > 0)]
         tr = tr[tr.index.isin(months)]
         if len(tr):
             assert tr.index.max() <= cut and _add(tr.index.max(), LABEL_FORWARD) < m0, "embargo/purga violados"
+        wts = train_weights(tr, m0, cfg.provisional_weighting)
+        tr, wts = tr[wts > 0], wts[wts > 0]
         for model in models:
-            use, drop = resolve_features(model, data, cfg, tr.index)
-            Xtr = data.X.loc[tr.index if model.needs_training else tr.index[:0], use]
-            if use:
-                start = max(data.colinfo[c]["start"] for c in use)
-                Xtr = Xtr[Xtr.index >= start].dropna()
-            if model.uses_persistence:
-                Xtr = Xtr.join(data.pers_rows(Xtr.index)[PERS_COLS], how="inner")
-            R.assert_no_forbidden(list(Xtr.columns))
-            assert set(Xtr.columns) <= set(data.X.columns) | set(PERS_COLS)
-            Y, y = tr.loc[Xtr.index, P_COLS].to_numpy(float), tr.loc[Xtr.index, "label_hard"].to_numpy()
-            info = {"refit_month": m0, "decision_date": data.decision[m0], "mode": data.mode,
-                    "train_months": Xtr.index, "features": use}
-            if model.needs_training and len(Xtr) < cfg.min_train_months:
-                diag.append({"model": model.name, "refit_month": m0, "n_train": len(Xtr), "skipped": True})
+            if isinstance(model, B.AxisModel):
+                out, d = _fit_predict_axes(model, data, cfg, tr, wts, m0, block, spy)
+            else:
+                out, d = _fit_predict_4(model, data, cfg, tr, wts, m0, block, spy)
+            diag.append(d)
+            if out is None or len(out) == 0:
                 continue
-            if spy is not None:
-                spy(model, info, Xtr, Y)
-            model.fit(Xtr, Y, y, info)
-            Xte = data.X.loc[block, use]
-            n_imp = int(Xte.isna().sum().sum())
-            if n_imp:
-                Xte = Xte.fillna(Xtr[use].mean())
-            if model.uses_persistence:
-                Xte = Xte.join(data.pers_rows(block)[PERS_COLS], how="inner")
-            if len(Xte) == 0:
-                continue
-            Pm = np.asarray(model.predict_proba(Xte, info), float)
-            if Pm.shape != (len(Xte), len(QUADS)) or not np.isfinite(Pm).all():
-                raise ValueError(f"{model.name}: predict_proba devolvió {Pm.shape} / no finito")
-            out = pd.DataFrame(Pm, columns=P_COLS, index=Xte.index)
             out.insert(0, "refit_month", m0)
             out.insert(0, "model", model.name)
             out.insert(0, "mode", data.mode)
-            out["n_train"] = len(Xtr)
             preds.append(out)
-            diag.append({"model": model.name, "refit_month": m0, "n_train": len(Xtr), "features": use,
-                         "dropped": drop, "imputed_cells": n_imp,
-                         "coef": model.coefficients() if hasattr(model, "coefficients") else None})
     P_ = pd.concat(preds).rename_axis("month").reset_index() if preds else pd.DataFrame()
     return P_, diag
 
 
+def _fit_predict_4(model, data, cfg, tr, wts, m0, block, spy):
+    use, drop = resolve_features(model, data, cfg, tr.index)
+    Xtr = data.X.loc[tr.index if model.needs_training else tr.index[:0], use]
+    n_drop = 0
+    if use:
+        start = max(data.colinfo[c]["start"] for c in use)
+        Xtr = Xtr[Xtr.index >= start]
+        n0 = len(Xtr)
+        Xtr = Xtr.dropna()
+        n_drop = n0 - len(Xtr)
+    if model.uses_persistence:
+        Xtr = Xtr.join(data.pers_rows(Xtr.index)[PERS_COLS + B.PERS_HARD_COLS], how="inner")
+    R.assert_no_forbidden(list(Xtr.columns))
+    assert set(Xtr.columns) <= set(data.X.columns) | set(PERS_COLS) | set(B.PERS_HARD_COLS)
+    Y, y, w = tr.loc[Xtr.index, P_COLS].to_numpy(float), tr.loc[Xtr.index, "label_hard"].to_numpy(), \
+        wts.loc[Xtr.index].to_numpy(float)
+    info = {"refit_month": m0, "decision_date": data.decision[m0], "mode": data.mode,
+            "train_months": Xtr.index, "features": use}
+    n_rec = count_recessions(data.usrec, Xtr.index.min() if len(Xtr) else None, Xtr.index.max()) if len(Xtr) else 0
+    n_gch = count_g_changes(Y)
+    d = {"model": model.name, "refit_month": m0, "n_train": len(Xtr), "n_recesiones": n_rec, "n_cambios_g": n_gch,
+         "dropna_filas": n_drop}
+    if model.needs_training and not _eligible(cfg, len(Xtr), n_rec, n_gch):
+        return None, {**d, "skipped": True}
+    if spy is not None:
+        spy(model, info, Xtr, Y)
+    model.fit(Xtr, Y, y, info, sample_weight=w)
+    Xte = data.X.loc[block, use]
+    n_imp = int(Xte.isna().sum().sum())
+    if n_imp:
+        Xte = Xte.fillna(Xtr[use].mean())
+    if model.uses_persistence:
+        Xte = Xte.join(data.pers_rows(block)[PERS_COLS + B.PERS_HARD_COLS], how="inner")
+    if len(Xte) == 0:
+        return None, d
+    Pm = np.asarray(model.predict_proba(Xte, info), float)
+    if Pm.shape != (len(Xte), len(QUADS)) or not np.isfinite(Pm).all():
+        raise ValueError(f"{model.name}: predict_proba devolvió {Pm.shape} / no finito")
+    out = pd.DataFrame(Pm, columns=P_COLS, index=Xte.index)
+    out["n_train"] = len(Xtr)
+    d.update({"features": use, "dropped": drop, "imputed_cells": n_imp, "peso_medio": float(w.mean()) if len(w) else None,
+              "coef": model.coefficients() if hasattr(model, "coefficients") else None})
+    return out, d
+
+
+def _fit_predict_axes(model, data, cfg, tr, wts, m0, block, spy):
+    """Un modelo por eje con SU ventana (inicio más tardío de sus variables) y SU elegibilidad; producto de ejes."""
+    d = {"model": model.name, "refit_month": m0, "ejes": {}}
+    pa, ok = {}, True
+    pers_te = data.pers_rows(block) if model.uses_persistence else None
+    for ax in AXES:
+        feats = list(model.axis_features.get(ax, ()))
+        _check_requested(model.name, feats, data, cfg)
+        start = axis_window_start(feats, data)
+        sub = tr if start is None else tr[tr.index >= start]
+        Xtr = data.X.loc[sub.index, feats]
+        n0 = len(Xtr)
+        Xtr = Xtr.dropna()
+        n_drop = n0 - len(Xtr)
+        if model.uses_persistence:
+            Xtr = Xtr.join(data.pers_rows(Xtr.index)[[B.PERS_AXIS[ax]]], how="inner")
+        R.assert_no_forbidden(list(Xtr.columns))
+        assert set(Xtr.columns) <= set(data.X.columns) | set(B.PERS_AXIS.values())
+        Y = sub.loc[Xtr.index, P_COLS].to_numpy(float)
+        t, w = Y @ AXIS_VEC[ax], wts.loc[Xtr.index].to_numpy(float)
+        n_rec = count_recessions(data.usrec, Xtr.index.min(), Xtr.index.max()) if len(Xtr) else 0
+        n_gch = count_g_changes(Y)
+        de = {"ventana_desde": None if start is None else f"{start:%Y-%m}",
+              "primer_mes": f"{Xtr.index.min():%Y-%m}" if len(Xtr) else None, "n_train": len(Xtr),
+              "n_recesiones": n_rec, "n_cambios_g": n_gch, "dropna_filas": n_drop, "features": feats}
+        d["ejes"][ax] = de
+        if not _eligible(cfg, len(Xtr), n_rec, n_gch):
+            de["skipped"], ok = True, False
+            continue
+        info = {"refit_month": m0, "decision_date": data.decision[m0], "mode": data.mode, "axis": ax,
+                "train_months": Xtr.index, "features": feats}
+        if spy is not None:
+            spy(model, info, Xtr, Y)
+        model.fit_axis(ax, Xtr, t, w, info)
+        Xte = data.X.loc[block, feats]
+        n_imp = int(Xte.isna().sum().sum())
+        if n_imp:
+            Xte = Xte.fillna(Xtr[feats].mean())
+        if model.uses_persistence:
+            Xte = Xte.join(pers_te[[B.PERS_AXIS[ax]]], how="inner")
+        de["imputed_cells"] = n_imp
+        if len(Xte):
+            p = np.asarray(model.predict_axis(ax, Xte, info), float)
+            if p.shape != (len(Xte),) or not np.isfinite(p).all():
+                raise ValueError(f"{model.name}: predict_axis({ax}) devolvió {p.shape} / no finito")
+            pa[ax] = pd.Series(p, index=Xte.index)
+    if hasattr(model, "coefficients"):
+        d["coef"] = model.coefficients()
+    if not ok or len(pa) < 2:
+        d["skipped"] = not ok
+        return None, d
+    idx = pa["G"].index.intersection(pa["I"].index)
+    out = pd.DataFrame(M.combine_axes(pa["G"].loc[idx], pa["I"].loc[idx]), columns=P_COLS, index=idx)
+    out["n_train"] = min(e["n_train"] for e in d["ejes"].values())
+    return out, d
+
+
 # ------------------------------------------------------------------ puntuación
-def score(preds: pd.DataFrame, labels: dict[str, pd.DataFrame], cfg: HarnessConfig) -> tuple[pd.DataFrame, dict]:
-    """Puntúa contra la etiqueta oficial (por modo) en los meses COMUNES a todos los modelos y modos."""
+def scorable(lab: pd.DataFrame, cfg: HarnessConfig) -> pd.DataFrame:
     end = _month(cfg.test_end)
-    rows = []
+    lab = lab[(lab["weight"] > 0) & ~lab["provisional"].astype(bool) & (lab.index <= end)]
+    if cfg.phase == "development":
+        lab = lab[lab.index < HOLDOUT_START]
+    return lab
+
+
+def score(preds: pd.DataFrame, labels: dict[str, pd.DataFrame], cfg: HarnessConfig) -> tuple[pd.DataFrame, dict]:
+    """Puntúa contra la etiqueta oficial (por modo) en la ventana de evaluación FIJA (`eval_window`), común a todos los
+    modelos y modos. Si algún modelo no la cubre: error, o con `allow_shrink` aviso registrado y muestra común."""
+    w0, w1 = cfg.window
+    rows, avisos = [], []
     for (mode, model), g in preds.groupby(["mode", "model"], sort=True):
-        lab = labels[mode]
-        lab = lab[(lab["weight"] > 0) & ~lab["provisional"].astype(bool) & (lab.index <= end)]
-        if cfg.phase == "development":
-            lab = lab[lab.index < HOLDOUT_START]
+        lab = scorable(labels[mode], cfg)
         g = g.set_index("month")
         common = g.index.intersection(lab.index)
         sc = M.monthly_scores(g.loc[common, P_COLS].to_numpy(), lab.loc[common, P_COLS].to_numpy(),
@@ -384,53 +618,122 @@ def score(preds: pd.DataFrame, labels: dict[str, pd.DataFrame], cfg: HarnessConf
         sc.insert(0, "model", model)
         sc.insert(0, "mode", mode)
         rows.append(sc)
-    S = pd.concat(rows, ignore_index=True)
-    n_series = S.groupby(["mode", "model"]).ngroups
-    cnt = S.groupby("month").size()
-    common = cnt.index[cnt == n_series]
-    S = S[S["month"].isin(common)].sort_values(["mode", "model", "month"]).reset_index(drop=True)
+    S_all = pd.concat(rows, ignore_index=True)
+    target = None
+    for mode in labels:
+        lab = scorable(labels[mode], cfg)
+        tm = set(lab.index[(lab.index >= w0) & (lab.index <= w1)])
+        target = tm if target is None else target & tm
+    target = sorted(target)
+    series = {k: set(g["month"]) for k, g in S_all.groupby(["mode", "model"])}
+    missing = {f"{k[0]}/{k[1]}": len(set(target) - v) for k, v in series.items() if set(target) - v}
+    expected = {(m, n) for m in labels for n in cfg.models}
+    absent = [f"{m}/{n}" for m, n in sorted(expected - set(series))]
+    if missing or absent:
+        msg = (f"la ventana de evaluación {w0:%Y-%m} → {w1:%Y-%m} ({len(target)} meses) no la cubren todos los "
+               f"modelos: faltan meses {missing}; sin predicciones {absent}")
+        if not cfg.allow_shrink:
+            raise ValueError(msg + " (allow_shrink: false)")
+        _warn(avisos, msg + " → muestra común REDUCIDA (allow_shrink)")
+    keep = set(target)
+    for v in series.values():
+        keep &= v
+    S = S_all[S_all["month"].isin(keep)].sort_values(["mode", "model", "month"]).reset_index(drop=True)
     rep = report(S, labels, cfg)
+    rep["avisos"] = avisos
+    rep["ventana_evaluacion"] = {"desde": f"{w0:%Y-%m}", "hasta": f"{w1:%Y-%m}", "meses_puntuables": len(target),
+                                 "meses_usados": int(S["month"].nunique()), "reducida": len(keep) < len(target)}
+    rep["cobertura_completa_por_modelo"] = {f"{m}/{n}": {**M.summary(g), "desde": f"{g['month'].min():%Y-%m}"}
+                                            for (m, n), g in S_all.groupby(["mode", "model"], sort=True)}
     return S, rep
 
 
+def _cmp(ref: pd.DataFrame, g: pd.DataFrame, cuts: pd.DataFrame, eps: list, cfg: HarnessConfig, lab) -> dict:
+    """Comparación mes a mes de un modelo frente a un comparador (mismos meses)."""
+    d = ref["logloss"] - g["logloss"]
+    out = {"mejora_logloss": M.boot_mean(d.to_numpy()),
+           "mejora_logloss_b24": M.boot_mean(d.to_numpy(), M.BOOT24),
+           "mejora_ll_g": M.boot_mean((ref["ll_g"] - g["ll_g"]).to_numpy()),
+           "mejora_ll_i": M.boot_mean((ref["ll_i"] - g["ll_i"]).to_numpy()),
+           "mejora_brier": M.boot_mean((ref["brier"] - g["brier"]).to_numpy()),
+           "bss": M.boot_bss(g["brier"].to_numpy(), ref["brier"].to_numpy()),
+           "dif_acierto": M.boot_mean((g["hit"] - ref["hit"]).to_numpy()),
+           "por_decada": {int(k): float(x.mean()) for k, x in d.groupby(d.index.year // 10 * 10)}}
+    per = {}
+    for a, b in list(cfg.epochs) + list(cfg.subperiods):
+        sel = (d.index >= _month(a)) & (d.index <= _month(b))
+        if sel.any():
+            per[f"{a}→{b}"] = {"n": int(sel.sum()), "mejora_logloss": float(d[sel].mean()),
+                               "mejora_ll_g": float((ref["ll_g"] - g["ll_g"])[sel].mean()),
+                               "mejora_ll_i": float((ref["ll_i"] - g["ll_i"])[sel].mean())}
+    out["por_periodo"] = per
+    signs = [np.sign(v["mejora_logloss"]) for k, v in per.items()
+             if tuple(k.split("→")) in {tuple(map(str, s)) for s in cfg.subperiods}]
+    out["subperiodos_mismo_signo"] = bool(len(set(signs)) == 1) if signs else None
+    c = cuts.loc[d.index]
+    out["cortes"] = {
+        "giro": M.boot_mean(d[c["giro"]].to_numpy()), "estable": M.boot_mean(d[~c["giro"]].to_numpy()),
+        "giro_ll_g": float((ref["ll_g"] - g["ll_g"])[c["giro"]].mean()) if c["giro"].any() else None,
+        **{f"desde_cambio_{k}": float(x.mean()) for k, x in d.groupby(c["desde_cambio"])},
+        **{f"cuadrante_{k}": float(x.mean()) for k, x in d.groupby(c["cuadrante"])},
+        "frontera": float(d[c["frontera"]].mean()) if c["frontera"].any() else None,
+        "no_frontera": float(d[~c["frontera"]].mean())}
+    ep = []
+    for e in eps:
+        sel = (d.index >= e["desde"]) & (d.index <= e["hasta"])
+        if sel.any():
+            ep.append({"tipo": e["tipo"], "id": e["id"], "n": int(sel.sum()), "mejora_logloss": float(d[sel].mean())})
+    res = {}
+    for t in ("recesion_nber", "racha_regimen", "giro_g"):
+        xs = [e for e in ep if e["tipo"] == t]
+        wins = sum(e["mejora_logloss"] > 0 for e in xs)
+        res[t] = {"n_episodios": len(xs), "gana": int(wins), "prueba_signo_p": M.sign_test(wins, len(xs))}
+    out["por_episodio"] = {"episodios": ep, "resumen": res}
+    return out
+
+
 def report(S: pd.DataFrame, labels: dict, cfg: HarnessConfig) -> dict:
-    base = cfg.baseline
     out = {"muestra": {"n": int(S["month"].nunique()), "desde": f"{S['month'].min():%Y-%m}",
                        "hasta": f"{S['month'].max():%Y-%m}"},
-           "modelos": {}, "frente_al_baseline": {}, "sensibilidad_modo": {}, "por_decada": {}, "por_episodio": {}}
-    S = S.assign(decada=(S["month"].dt.year // 10 * 10))
-    for (mode, model), g in S.groupby(["mode", "model"], sort=True):
-        out["modelos"][f"{mode}/{model}"] = M.summary(g)
-        out["por_decada"][f"{mode}/{model}"] = {int(d): M.summary(x) for d, x in g.groupby("decada")}
+           "modelos": {}, "frente_al_baseline": {}, "frente_a_referencia": {}, "holm": {}, "sensibilidad_modo": {},
+           "por_decada": {}, "por_periodo": {}, "calibracion": {}, "deteccion_giros_g": {}, "dependencia_ejes": {},
+           "cortes_modelo": {}}
     for mode, gm in S.groupby("mode", sort=True):
-        ref = gm[gm["model"] == base].set_index("month")
         lab = labels[mode]
-        eps = M.episodes(lab[lab.index.isin(ref.index)])
-        for model, g in gm.groupby("model", sort=True):
-            if model == base:
-                continue
-            g = g.set_index("month").loc[ref.index]
+        months = pd.DatetimeIndex(sorted(gm["month"].unique()))
+        lab_s = lab.loc[months]
+        cuts = M.month_cuts(lab.loc[lab.index <= months.max()]).loc[months]
+        eps = M.episodes(lab_s)
+        tg, ti = lab_s[P_COLS].to_numpy(float) @ M.G_HIGH, lab_s[P_COLS].to_numpy(float) @ M.I_HIGH
+        by = {m: g.set_index("month").loc[months] for m, g in gm.groupby("model", sort=True)}
+        for model, g in by.items():
             key = f"{mode}/{model}"
-            out["frente_al_baseline"][key] = {
-                "mejora_logloss": M.boot_mean(ref["logloss"].to_numpy() - g["logloss"].to_numpy()),
-                "mejora_brier": M.boot_mean(ref["brier"].to_numpy() - g["brier"].to_numpy()),
-                "bss": M.boot_bss(g["brier"].to_numpy(), ref["brier"].to_numpy()),
-                "dif_acierto": M.boot_mean(g["hit"].to_numpy() - ref["hit"].to_numpy()),
-                "por_decada": {int(d): float((ref.loc[x.index, "logloss"] - x["logloss"]).mean())
-                               for d, x in g.assign(decada=g.index.year // 10 * 10).groupby("decada")},
-            }
-            ep = []
-            for e in eps:
-                sel = (g.index >= e["desde"]) & (g.index <= e["hasta"])
-                if sel.sum() == 0:
+            out["modelos"][key] = M.summary(g)
+            out["por_decada"][key] = {int(k): M.summary(x) for k, x in g.groupby(g.index.year // 10 * 10)}
+            out["por_periodo"][key] = {f"{a}→{b}": M.summary(g[(g.index >= _month(a)) & (g.index <= _month(b))])
+                                       for a, b in list(cfg.epochs) + list(cfg.subperiods)
+                                       if ((g.index >= _month(a)) & (g.index <= _month(b))).any()}
+            out["cortes_modelo"][key] = {"giro": M.summary(g[cuts["giro"].to_numpy()]),
+                                         "estable": M.summary(g[~cuts["giro"].to_numpy()])}
+            out["calibracion"][key] = {"G": M.calibration(g["pg"], tg), "I": M.calibration(g["pi"], ti)}
+            out["deteccion_giros_g"][key] = M.detection(g["pg"], lab_s)
+            rg, ri = tg - g["pg"].to_numpy(), ti - g["pi"].to_numpy()
+            out["dependencia_ejes"][key] = {"corr_residuos_G_I": float(np.corrcoef(rg, ri)[0, 1])
+                                            if rg.std() > 0 and ri.std() > 0 else None}
+        for comp, slot in ((cfg.baseline, "frente_al_baseline"), (cfg.reference, "frente_a_referencia")):
+            if not comp or comp not in by:
+                continue
+            ref = by[comp]
+            for model, g in by.items():
+                if model == comp:
                     continue
-                ep.append({"tipo": e["tipo"], "id": e["id"], "n": int(sel.sum()),
-                           "mejora_logloss": float((ref.loc[sel, "logloss"] - g.loc[sel, "logloss"]).mean())})
-            out["por_episodio"][key] = {
-                "episodios": ep,
-                "resumen": {t: {"n_episodios": sum(1 for e in ep if e["tipo"] == t),
-                                "gana_al_baseline": sum(1 for e in ep if e["tipo"] == t and e["mejora_logloss"] > 0)}
-                            for t in ("recesion_nber", "racha_regimen")}}
+                r = _cmp(ref, g, cuts, eps, cfg, lab_s)
+                dg = out["deteccion_giros_g"]
+                r["retraso_medio_menos_comparador"] = dg[f"{mode}/{model}"]["retraso_medio"] - \
+                    dg[f"{mode}/{comp}"]["retraso_medio"]
+                out[slot][f"{mode}/{model}"] = r
+        fam = {k: v["mejora_logloss"]["p_h0"] for k, v in out["frente_al_baseline"].items() if k.startswith(mode + "/")}
+        out["holm"][mode] = {"familia": "frente al baseline (p_h0, unilateral)", "ajustado": M.holm(fam)}
     modes = sorted(S["mode"].unique())
     if "vintage" in modes and "latest_truncated" in modes:
         for model in sorted(S["model"].unique()):
@@ -442,13 +745,11 @@ def report(S: pd.DataFrame, labels: dict, cfg: HarnessConfig) -> dict:
 
 
 def persistence_reference(datas: dict, cfg: HarnessConfig) -> dict:
-    """Listón de la ficha/pit_base §6: persistencia PIT en su muestra completa común a los dos modos (≤ 2004)."""
+    """Listón de la ficha/pit_base §6: persistencia PIT cruda en su muestra completa común a los dos modos (≤ 2004)."""
     pers = {m: d.persistence_frame() for m, d in datas.items()}
-    out = {}
-    common = None
+    out, common = {}, None
     for m, p in pers.items():
-        lab = datas[m].score_labels(cfg.test_end)
-        lab = lab[(lab["weight"] > 0) & ~lab["provisional"].astype(bool)]
+        lab = scorable(datas[m].score_labels(cfg.test_end), cfg)
         idx = p.index.intersection(lab.index)
         common = idx if common is None else common.intersection(idx)
     for m, p in pers.items():
@@ -464,26 +765,31 @@ def build_models(cfg: HarnessConfig, registry: dict | None = None) -> list[B.Mod
     return [reg[n](**cfg.model_params.get(n, {})) for n in cfg.models]
 
 
-def results_hash(preds: pd.DataFrame, rep: dict) -> str:
+def _round(o, nd=10):
+    if isinstance(o, float):
+        return round(o, nd) if o == o else None
+    if isinstance(o, dict):
+        return {str(k): _round(v, nd) for k, v in o.items()}
+    if isinstance(o, (list, tuple)):
+        return [_round(v, nd) for v in o]
+    return o
+
+
+def results_hash(preds: pd.DataFrame, rep: dict, nd: int | None = None) -> str:
+    """Hash de predicciones + informe. nd=None: bit a bit (predicciones a 12 decimales, informe tal cual, como la v1);
+    nd=10: todo redondeado a 10 decimales (estable entre máquinas y versiones de BLAS)."""
     p = preds.sort_values(["mode", "model", "month"]).reset_index(drop=True)
-    p = p.assign(**{c: p[c].round(12) for c in P_COLS})
+    p = p.assign(**{c: p[c].round(12 if nd is None else nd) for c in P_COLS})
     h = hashlib.sha256(pd.util.hash_pandas_object(p, index=False).values.tobytes())
-    h.update(json.dumps(rep, sort_keys=True, default=str).encode())
+    h.update(json.dumps(rep if nd is None else _round(rep, nd), sort_keys=True, default=str).encode())
     return h.hexdigest()
 
 
-def run(cfg: HarnessConfig, registry: dict | None = None, datas: dict | None = None, record: bool = True,
-        spy=None) -> dict:
-    """Corrida completa: walk-forward en cada modo, puntuación en meses comunes, informe y registro de pruebas."""
+def _run(cfg: HarnessConfig, datas: dict, registry: dict | None, record: bool, spy=None) -> dict:
     from src.models import trials
     cfg.validate()
-    if datas is None:
-        # se niega aquí mismo (antes de leer nada) si falta el preregistro o la confirmación; una sola apertura
-        vault = LabelVault(mode=cfg.phase, prereg_id=cfg.prereg_id)
-        datas = {m: PITData(m, cfg.matrix_variant if m == "vintage" else "", cfg.phase, cfg.prereg_id,
-                            cfg.feature_policy, vault=vault) for m in cfg.modes}
-    if any(getattr(d, "phase", "development") != cfg.phase for d in datas.values()):
-        raise ValueError("los datos no están en la fase de la configuración")
+    for d in datas.values():
+        _check_phase(d, cfg)
     preds, diags = [], {}
     for mode, data in datas.items():
         p, d = walk_forward(data, build_models(cfg, registry), cfg, spy=spy)
@@ -492,27 +798,81 @@ def run(cfg: HarnessConfig, registry: dict | None = None, datas: dict | None = N
     preds = pd.concat(preds, ignore_index=True)
     labels = {m: d.score_labels(cfg.test_end) for m, d in datas.items()}
     S, rep = score(preds, labels, cfg)
+    avisos = rep["avisos"]
+    for mode, dl in diags.items():
+        n_drop = sum(x.get("dropna_filas", 0) + sum(e.get("dropna_filas", 0) for e in x.get("ejes", {}).values())
+                     for x in dl)
+        if n_drop:
+            _warn(avisos, f"{mode}: dropna quitó {n_drop} filas de entrenamiento (suma sobre cortes y modelos)")
     if all(getattr(d, "kind", "") == "pit" for d in datas.values()):
         rep["persistencia_muestra_completa"] = persistence_reference(datas, cfg)
     res = {"config": asdict(cfg), "preds": preds, "scores": S, "report": rep, "diag": diags,
-           "results_sha256": results_hash(preds, rep), "kind": sorted({d.kind for d in datas.values()}),
-           "data_hashes": {m: d.hashes() for m, d in datas.items()}}
+           "results_sha256": results_hash(preds, rep), "results_sha256_r10": results_hash(preds, rep, 10),
+           "kind": sorted({d.kind for d in datas.values()}), "data_hashes": {m: d.hashes() for m, d in datas.items()}}
     if record:
         res["entry"] = trials.record(res)
+    else:
+        V.log_unrecorded_run({"name": cfg.name, "phase": cfg.phase, "kind": res["kind"], "models": list(cfg.models),
+                              "results_sha256": res["results_sha256"], "muestra": rep["muestra"]})
     return res
+
+
+def run(cfg: HarnessConfig, registry: dict | None = None, datas: dict | None = None, record: bool = True,
+        spy=None) -> dict:
+    """Corrida de DESARROLLO (≤ 2004): walk-forward en cada modo, puntuación en la ventana fija, informe y registro.
+    La evaluación única no pasa por aquí: `evaluate_holdout(prereg_id)`."""
+    if cfg.phase != "development":
+        raise HoldoutLocked("run() solo trabaja en development; la evaluación única es evaluate_holdout(prereg_id)")
+    cfg.validate()
+    if datas is None:
+        vault = LabelVault()
+        datas = {m: PITData(m, cfg.matrix_variant if m == "vintage" else "", "development", None,
+                            cfg.feature_policy, vault=vault) for m in cfg.modes}
+    return _run(cfg, datas, registry, record, spy)
+
+
+def evaluate_holdout(prereg_id: str) -> dict:
+    """ÚNICO punto de entrada de la evaluación del periodo bloqueado. Lee la configuración que fija el preregistro
+    (`config_arnes`, commiteada), abre la caja fuerte (que comprueba todo y CONSUME el preregistro antes de leer),
+    construye él mismo los datos y ejecuta UNA corrida con los modelos registrados, siempre registrada. No acepta
+    datos, modelos ni registros externos. Al terminar, la caja se cierra."""
+    entry = V.eval_entry(prereg_id)
+    cfg_path = entry.get("config_arnes")
+    if not cfg_path:
+        raise HoldoutLocked(f"{prereg_id} no declara `config_arnes` (configuración congelada de la corrida)")
+    cfg = HarnessConfig.from_yaml(REPO / cfg_path)
+    if cfg.phase != "holdout_evaluation" or cfg.prereg_id != prereg_id:
+        raise HoldoutLocked(f"{cfg_path}: fase/prereg_id no coinciden con {prereg_id}")
+    if _EVAL["vault"] is not None:
+        raise HoldoutLocked("ya hay una evaluación única en curso en este proceso")
+    vault = LabelVault(mode="holdout_evaluation", prereg_id=prereg_id)   # consume el preregistro
+    _EVAL["vault"] = vault
+    try:
+        datas = {m: PITData(m, cfg.matrix_variant if m == "vintage" else "", cfg.phase, prereg_id,
+                            cfg.feature_policy, vault=vault) for m in cfg.modes}
+        return _run(cfg, datas, None, record=True)
+    finally:
+        vault.close()
+        _EVAL["vault"] = None
 
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Arnés walk-forward (desarrollo: solo ≤ 2004)")
     ap.add_argument("--config", required=True)
+    ap.add_argument("--official", action="store_true",
+                    help="corrida oficial: exige src/, config/ y tests/ commiteados (git_dirty = false)")
     a = ap.parse_args()
+    if a.official:
+        dirty = V._git_strict("status", "--porcelain", "--", "src", "config", "tests").strip()
+        if dirty:
+            raise SystemExit(f"--official con código sin commitear:\n{dirty}")
     cfg = HarnessConfig.from_yaml(a.config)
     res = run(cfg)
     rep = res["report"]
-    print(json.dumps({"muestra": rep["muestra"], "modelos": rep["modelos"],
+    print(json.dumps({"muestra": rep["muestra"], "modelos": rep["modelos"], "avisos": rep["avisos"],
                       "persistencia_muestra_completa": rep.get("persistencia_muestra_completa"),
-                      "run_id": res["entry"]["run_id"], "results_sha256": res["results_sha256"]},
-                     indent=1, ensure_ascii=False))
+                      "run_id": res["entry"]["run_id"], "results_sha256": res["results_sha256"],
+                      "results_sha256_r10": res["results_sha256_r10"]}, indent=1, ensure_ascii=False))
 
 
 if __name__ == "__main__":
