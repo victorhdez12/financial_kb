@@ -31,7 +31,7 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 ## ▶ Retomar aquí (16-oct)
 
-**Base PIT v0.3 CONGELADA** (tag `pit-v0.3`; veredicto ✅ `docs/validation/2026-10-16_pit_base_v0.3.md`; `tcu_gap` principal desde 1984-01 por decisión del usuario). Informe v0.3 hecho (`fbc5166`). **Arnés walk-forward v1 hecho** (`b01e7ee`, 115 tests, listón reproducido exacto) → en revisión: Validador (`docs/validation/2026-10-16_harness_v1.md`) + Estratega (`docs/reviews/2026-10-16_estratega_macro_harness.md`). Si no existen al retomar, relanzarlos (encargos en la Bitácora del 16-oct). Luego: paquete de correcciones + 5 decisiones del usuario (Bitácora) → Constructor → re-auditoría → entregable (4) baselines con variables.
+**Base PIT v0.3 CONGELADA** (tag `pit-v0.3`; veredicto ✅ `docs/validation/2026-10-16_pit_base_v0.3.md`; `tcu_gap` principal desde 1984-01 por decisión del usuario). Informe v0.3 hecho (`fbc5166`). **Arnés walk-forward v1 hecho** (`b01e7ee`, 115 tests, listón reproducido exacto) → en revisión: Validador (`docs/validation/2026-10-16_harness_v1.md`) + Estratega (`docs/reviews/2026-10-16_estratega_macro_harness.md`). Si no existen al retomar, relanzarlos (encargos en la Bitácora del 16-oct). Revisiones hechas (ambas ⚠️; A-1: la evaluación única no estaba garantizada por código; listón → persistencia calibrada M0). **Usuario aprobó todo** (decisiones en la Bitácora del 16-oct) → **Constructor haciendo el arnés v2** → re-auditoría del Validador → usuario aprueba P-EVAL-BASE (borrador `docs/models/p_eval_base_draft.md`) → entregable (4) modelos con variables (logística por eje del Estratega).
 
 ## Retomar (15-oct, tarde) — histórico
 
