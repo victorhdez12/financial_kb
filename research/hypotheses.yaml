@@ -317,3 +317,11 @@
     Antes de mirar la etiqueta real: placebo pareado con la L2 de M1 (m1_spec.md §5). Fuga si la media sobre 20
     semillas > 0,02 nats; aviso si prueba de signo unilateral p < 0,01 o t > 3.
   alarma: una mejora frente a M0 > 0,25 nats en desarrollo se trata como sospecha de fuga y se audita antes de creerla.
+
+# ---------------------------------------------------------------------------------------------
+# NOTA (2026-10-16; decisión del usuario tras la re-auditoría del arnés v2, A2-1). No edita ninguna entrada ni cambia
+# ningún estado. P-EVAL-BASE (borrador: docs/models/p_eval_base_draft.md v2) evalúa SOLO el modelo base (M1 frente a
+# M0). Los módulos H-MOD-001…004 y su adenda P-EVAL-MOD quedan FUERA de P-EVAL-BASE (no se incluyen ni se gastan): se
+# evaluarán más adelante con su PROPIO preregistro de evaluación (tipo evaluacion_holdout), cuando tengan historia
+# suficiente para el mínimo de entrenamiento del arnés (sus variables empiezan en 2003; hoy no serían elegibles hasta
+# ~2021-09). S-PIT-001 y S-PIT-002/P-EVAL-S-PIT-002 tampoco se gastan en P-EVAL-BASE: M1 no usa Filadelfia ni Michigan.
