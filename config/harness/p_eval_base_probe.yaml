@@ -1,0 +1,64 @@
+# SONDA de la configuración de P-EVAL-BASE (BORRADOR, NO registrado; docs/models/p_eval_base_draft.md §3).
+# Es la configuración que tendrá P-EVAL-BASE con UNA sola diferencia: `axis_window_probe` ocupa el lugar de M1. La sonda
+# declara las mismas variables por eje que M1 (mismas ventanas, mínimos, dropna y cobertura) pero NO usa ninguna
+# variable macro (persistencia calibrada por eje; coeficiente 0 en cada variable). Sirve para demostrar con el ensayo en
+# seco que la configuración es ejecutable:
+#   .venv/bin/python -m src.models.harness --dry-run config/harness/p_eval_base_probe.yaml
+# La configuración definitiva (config/harness/p_eval_base.yaml) se escribirá al registrar el preregistro: esta misma
+# con M1 (nombre y parámetros congelados del entregable 4) en lugar de la sonda, en `models`, `principal`,
+# `model_params`, `expected_signs`, `holm_families` y `sensitivities`.
+name: p_eval_base
+prereg_id: P-EVAL-BASE
+phase: holdout_evaluation
+principal: axis_window_probe
+models: [axis_window_probe, m0_calibrated_persistence, persistence_pit, climatology]
+model_params:
+  axis_window_probe:
+    axis_features:
+      G: [growth_rt, unrate_sahm, baa_spread, eq_ret_6m, curve_10y3m]
+      I: [core_cpi_6m_ann]
+  m0_calibrated_persistence: {eps: 0.001, l2: 1.0}
+  climatology: {alpha: 1.0}
+modes: [vintage, latest_truncated]       # vintage = principal; latest_truncated = sensibilidad de modo (misma corrida)
+refit_every: 1
+embargo_months: 6
+min_train_months: 120
+min_train_recessions: 2
+min_train_g_changes: 8
+test_start: "1975-06"                    # primer corte elegible del eje G; los cortes < 2005 no puntúan (signos/saltos)
+test_end: "2021-10"                      # último mes no provisional de la etiqueta oficial v1.1
+eval_window: ["2005-01", "2021-10"]
+allow_shrink: false
+epochs: []
+subperiods: [["2005-01", "2014-12"], ["2015-01", "2021-10"]]
+feature_policy: principal
+provisional_weighting: madurez
+baseline: m0_calibrated_persistence
+reference: persistence_pit
+dry_run_window: ["1993-01", "2004-12"]   # ensayo en seco: el eje I con `excluir` es elegible desde ~1992-11 (el 1.er ensayo con 1990-01 lo detectó)
+expected_signs:
+  axis_window_probe:
+    "G:growth_rt": "+"
+    "G:unrate_sahm": "-"
+    "G:baa_spread": "-"
+    "G:eq_ret_6m": "+"
+    "G:curve_10y3m": {signo: "+", decide: false}
+    "G:pers": "+"
+    "I:core_cpi_6m_ann": "+"
+    "I:pers": "+"
+holm_families:
+  - nombre: secundarias_frente_a_M0
+    modo: vintage
+    p: p_h0
+    miembros:
+      - {id: eje_G, modelo: axis_window_probe, metrica: ll_g, comparador: m0_calibrated_persistence}
+      - {id: eje_I, modelo: axis_window_probe, metrica: ll_i, comparador: m0_calibrated_persistence}
+sensitivities:
+  - {name: s_pit_001_filadelfia, modes: [vintage], matrix_variant: filadelfia_prudente,
+     models: [axis_window_probe, m0_calibrated_persistence], reference: null}
+  - {name: pesos_uno, modes: [vintage], provisional_weighting: uno,
+     models: [axis_window_probe, m0_calibrated_persistence], reference: null}
+  - {name: pesos_excluir, modes: [vintage], provisional_weighting: excluir,
+     models: [axis_window_probe, m0_calibrated_persistence], reference: null}
+who: Constructor
+nota: "SONDA de P-EVAL-BASE (sin variables macro); solo para el ensayo en seco."

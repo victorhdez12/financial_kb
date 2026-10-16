@@ -63,7 +63,16 @@ class PITLabeler:
         con.close()
         self._cache: dict[pd.Timestamp, pd.DataFrame] = {}
 
+    def _guard(self, t: pd.Timestamp, what: str) -> None:
+        if t >= V.HOLDOUT_START and not V.is_open_holdout_vault(self.vault):
+            why = f"PITLabeler.{what}({t:%Y-%m-%d}): etiqueta recalculada del periodo bloqueado sin evaluación única"
+            V.log_access({"mode": "pit_labeler", "granted": False, "why": why, "labeler_mode": self.mode})
+            raise V.HoldoutLocked(why)
+
     def levels_at(self, t: pd.Timestamp) -> dict[str, pd.Series]:
+        """Niveles conocidos en t. Barrera (Validador v2, N4/B2-1): t ≥ 2005-01 solo con la caja de la evaluación."""
+        t = pd.Timestamp(t)
+        self._guard(t, "levels_at")
         lv = {}
         for sid, s in self.levels.items():
             vs = self.snapv.get(sid) if self.mode == "vintage" else None
@@ -78,10 +87,7 @@ class PITLabeler:
     def at(self, t) -> pd.DataFrame:
         """Etiqueta completa calculable en la fecha de decisión t (columnas KEEP; vacía si no hay ninguna)."""
         t = pd.Timestamp(t)
-        if t >= V.HOLDOUT_START and not V.is_open_holdout_vault(self.vault):
-            why = f"PITLabeler.at({t:%Y-%m-%d}): etiqueta recalculada del periodo bloqueado sin evaluación única"
-            V.log_access({"mode": "pit_labeler", "granted": False, "why": why, "labeler_mode": self.mode})
-            raise V.HoldoutLocked(why)
+        self._guard(t, "at")
         if t not in self._cache:
             lab, _ = R.make_label({"levels": self.levels_at(t), "usrec": self.inputs["usrec"]}, R.PARAMS,
                                   self.lp["s_G"], self.lp["s_I"], splice=self.lp["splice"])

@@ -27,7 +27,7 @@ import argparse
 import hashlib
 import json
 import warnings
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, replace
 from pathlib import Path
 
 import numpy as np
@@ -38,6 +38,7 @@ from src.features import pit as P
 from src.labels import regime_us as R
 from src.models import base as B
 from src.models import metrics as M
+from src.models import probes  # noqa: F401  (registra la sonda del ensayo en seco)
 from src.models import vault as V
 from src.models.pit_labels import PITLabeler
 from src.models.vault import HOLDOUT_START, LABEL_FILE_SHA256, HoldoutLocked, LabelVault, log_access
@@ -134,6 +135,13 @@ class HarnessConfig:
     prereg_id: str | None = None
     who: str = "Constructor"
     nota: str = ""
+    # --- preregistro de la evaluación única (v2.1; harness.md §4e, §6)
+    principal: str | None = None            # modelo de la hipótesis principal (p. ej. M1)
+    dry_run_window: tuple | None = None     # ventana ≤ 2004 del ENSAYO EN SECO (misma configuración, sin abrir nada)
+    sensitivities: tuple = ()               # corridas secundarias en la MISMA evaluación: [{name, modes, matrix_variant,
+    #                                         provisional_weighting, models, model_params, …}]
+    expected_signs: dict = field(default_factory=dict)   # {modelo: {"<eje>:<variable>": "+"/"-" o {signo, decide}}}
+    holm_families: tuple = ()               # [{nombre, modo, comparador, modelos, metrica (str o {modelo: métrica}), p}]
 
     def validate(self) -> None:
         if self.embargo_months < MIN_EMBARGO:
@@ -168,9 +176,12 @@ class HarnessConfig:
         for k in ("models", "modes"):
             if k in d:
                 d[k] = tuple(d[k])
-        for k in ("eval_window",):
+        for k in ("eval_window", "dry_run_window"):
             if d.get(k) is not None:
                 d[k] = tuple(d[k])
+        for k in ("sensitivities", "holm_families"):
+            if k in d:
+                d[k] = tuple(d[k] or ())
         for k in ("epochs", "subperiods"):
             if k in d:
                 d[k] = tuple(tuple(x) for x in d[k])
@@ -663,7 +674,8 @@ def _cmp(ref: pd.DataFrame, g: pd.DataFrame, cuts: pd.DataFrame, eps: list, cfg:
     for a, b in list(cfg.epochs) + list(cfg.subperiods):
         sel = (d.index >= _month(a)) & (d.index <= _month(b))
         if sel.any():
-            per[f"{a}→{b}"] = {"n": int(sel.sum()), "mejora_logloss": float(d[sel].mean()),
+            per[f"{a}→{b}"] = {"n": int(sel.sum()), "desde_real": f"{d.index[sel].min():%Y-%m}",
+                               "hasta_real": f"{d.index[sel].max():%Y-%m}", "mejora_logloss": float(d[sel].mean()),
                                "mejora_ll_g": float((ref["ll_g"] - g["ll_g"])[sel].mean()),
                                "mejora_ll_i": float((ref["ll_i"] - g["ll_i"])[sel].mean())}
     out["por_periodo"] = per
@@ -682,12 +694,14 @@ def _cmp(ref: pd.DataFrame, g: pd.DataFrame, cuts: pd.DataFrame, eps: list, cfg:
     for e in eps:
         sel = (d.index >= e["desde"]) & (d.index <= e["hasta"])
         if sel.any():
-            ep.append({"tipo": e["tipo"], "id": e["id"], "n": int(sel.sum()), "mejora_logloss": float(d[sel].mean())})
+            ep.append({"tipo": e["tipo"], "id": e["id"], "n": int(sel.sum()), "mejora_logloss": float(d[sel].mean()),
+                       "truncado": bool(e.get("truncado"))})
     res = {}
     for t in ("recesion_nber", "racha_regimen", "giro_g"):
-        xs = [e for e in ep if e["tipo"] == t]
+        xs = [e for e in ep if e["tipo"] == t and not e["truncado"]]      # B2-5: los truncados no deciden
         wins = sum(e["mejora_logloss"] > 0 for e in xs)
-        res[t] = {"n_episodios": len(xs), "gana": int(wins), "prueba_signo_p": M.sign_test(wins, len(xs))}
+        res[t] = {"n_episodios": len(xs), "gana": int(wins), "prueba_signo_p": M.sign_test(wins, len(xs)),
+                  "truncados": sum(e["tipo"] == t and e["truncado"] for e in ep)}
     out["por_episodio"] = {"episodios": ep, "resumen": res}
     return out
 
@@ -729,11 +743,13 @@ def report(S: pd.DataFrame, labels: dict, cfg: HarnessConfig) -> dict:
                     continue
                 r = _cmp(ref, g, cuts, eps, cfg, lab_s)
                 dg = out["deteccion_giros_g"]
-                r["retraso_medio_menos_comparador"] = dg[f"{mode}/{model}"]["retraso_medio"] - \
-                    dg[f"{mode}/{comp}"]["retraso_medio"]
+                r["deteccion_frente_al_comparador"] = M.detection_vs(dg[f"{mode}/{model}"], dg[f"{mode}/{comp}"])
                 out[slot][f"{mode}/{model}"] = r
         fam = {k: v["mejora_logloss"]["p_h0"] for k, v in out["frente_al_baseline"].items() if k.startswith(mode + "/")}
         out["holm"][mode] = {"familia": "frente al baseline (p_h0, unilateral)", "ajustado": M.holm(fam)}
+        for f in cfg.holm_families:
+            if f.get("modo", "vintage") == mode:
+                out.setdefault("holm_familias", {})[f["nombre"]] = holm_family(f, by)
     modes = sorted(S["mode"].unique())
     if "vintage" in modes and "latest_truncated" in modes:
         for model in sorted(S["model"].unique()):
@@ -741,6 +757,88 @@ def report(S: pd.DataFrame, labels: dict, cfg: HarnessConfig) -> dict:
             lt = S[(S["mode"] == "latest_truncated") & (S["model"] == model)].set_index("month").loc[v.index]
             out["sensibilidad_modo"][model] = {"latest_menos_vintage_logloss":
                                                M.boot_mean(v["logloss"].to_numpy() - lt["logloss"].to_numpy())}
+    return out
+
+
+HOLM_P = ("frac_rep_le0", "p_h0")
+METRICS = ("logloss", "ll_g", "ll_i")
+
+
+def family_members(f: dict) -> list[dict]:
+    """Miembros de una familia de Holm: `miembros: [{id, modelo, metrica, comparador?}]` o, abreviado, `modelos` +
+    `metrica` (str o {modelo: métrica}) + `comparador`."""
+    if f.get("miembros"):
+        return [{"id": x.get("id", f"{x['modelo']}/{x.get('metrica', 'logloss')}"), "modelo": x["modelo"],
+                 "metrica": x.get("metrica", "logloss"), "comparador": x.get("comparador", f.get("comparador"))}
+                for x in f["miembros"]]
+    met = f.get("metrica", "logloss")
+    return [{"id": m, "modelo": m, "metrica": met[m] if isinstance(met, dict) else met, "comparador": f["comparador"]}
+            for m in f.get("modelos", [])]
+
+
+def holm_family(f: dict, by: dict) -> dict:
+    """Holm sobre una familia PREREGISTRADA (M2-4): cada miembro frente a SU comparador, en SU métrica (p. ej. P-EVAL-MOD:
+    M1 + módulo frente a M1, eje G o I según el módulo) con el p preregistrado (`frac_rep_le0` en P-EVAL-MOD)."""
+    pname = f.get("p", "frac_rep_le0")
+    ps, det = {}, {}
+    for x in family_members(f):
+        b = M.boot_mean((by[x["comparador"]][x["metrica"]] - by[x["modelo"]][x["metrica"]]).to_numpy())
+        ps[x["id"]], det[x["id"]] = b[pname], {**x, **b}
+    return {"p": pname, "sin_corregir": ps, "ajustado": M.holm(ps), "detalle": det}
+
+
+def _sign_spec(v) -> tuple[float, bool]:
+    if isinstance(v, dict):
+        return (1.0 if str(v["signo"]).startswith("+") else -1.0), bool(v.get("decide", True))
+    return (1.0 if str(v).startswith("+") else -1.0), True
+
+
+def _coef_key(k: str) -> str:
+    """Claves de `coefficients()`: "<eje>:<variable>" (sonda) o "<eje>_<variable>" (M1, `models_logit`) → "<eje>:…"."""
+    return k if ":" in k else (f"{k[0]}:{k[2:]}" if k[:2] in ("G_", "I_") else k)
+
+
+def coefficient_signs(diags: dict, datas: dict, cfg: HarnessConfig) -> dict:
+    """Criterio 5 del preregistro (M2-4): signo de cada coeficiente preregistrado y su estabilidad a ambos lados de los
+    saltos de vintage. Coeficientes = `model.coefficients()` en cada corte (claves "<eje>:<variable>").
+    - `signos`: en los cortes cuyo mes cae en la ventana de evaluación: media, fracción de cortes con el signo esperado
+      y `coincide` = signo de la media igual al preregistrado.
+    - `sign_stability`: con TODOS los cortes del walk-forward (también los anteriores a la ventana), media antes y después
+      de cada salto con ≥ 12 cortes a cada lado (`vintage_breaks`; la variable es la parte tras "<eje>:").
+    - `criterio_signos_cumple`: todos los que deciden coinciden y conservan el signo en todos sus saltos evaluables."""
+    out = {}
+    w0, w1 = cfg.window
+    for model, exp in (cfg.expected_signs or {}).items():
+        for mode, dl in diags.items():
+            key = f"{mode}/{model}"
+            rows = {x["refit_month"]: x["coef"] for x in dl if x["model"] == model and x.get("coef")}
+            if not rows:
+                out[key] = {"error": f"{model} no expone coefficients() o no se ajustó"}
+                continue
+            C = pd.DataFrame.from_dict(rows, orient="index").sort_index().rename(columns=_coef_key)
+            Cw = C[(C.index >= w0) & (C.index <= w1)]
+            per = {}
+            for k, v in exp.items():
+                sg, decide = _sign_spec(v)
+                if k not in C or Cw[k].dropna().empty:
+                    per[k] = {"esperado": "+" if sg > 0 else "-", "decide": decide, "error": "sin coeficiente"}
+                    continue
+                x = Cw[k].dropna()
+                per[k] = {"esperado": "+" if sg > 0 else "-", "decide": decide, "n_cortes": int(len(x)),
+                          "media": float(x.mean()), "frac_signo_esperado": float((np.sign(x) == sg).mean()),
+                          "coincide": bool(np.sign(x.mean()) == sg)}
+            data = datas[mode]
+            vb = vintage_breaks(data) if getattr(data, "kind", "") == "pit" else {}
+            keys = [k for k in exp if k in C]
+            st = sign_stability(C[keys], {k: vb.get(k.split(":", 1)[-1], []) for k in keys})
+            st_rows = st.to_dict("records") if len(st) else []
+            dec = [k for k, v in exp.items() if _sign_spec(v)[1]]
+            ok = all(per[k].get("coincide") is True for k in dec) and \
+                all(r["mismo_signo"] for r in st_rows if r["variable"] in dec)
+            out[key] = {"signos": per, "sign_stability": [{**r, "media_antes": float(r["media_antes"]),
+                                                            "media_despues": float(r["media_despues"])}
+                                                           for r in st_rows],
+                        "criterio_signos_cumple": bool(ok)}
     return out
 
 
@@ -760,8 +858,23 @@ def persistence_reference(datas: dict, cfg: HarnessConfig) -> dict:
 
 
 # ------------------------------------------------------------------ corrida completa
+def model_registry() -> dict:
+    """Modelos registrados: los de `base` (+ la sonda) y el `REGISTRY` de cada módulo `src/models/models_*.py` (M1 y
+    los demás aspirantes del entregable 4). `evaluate_holdout` y el ensayo en seco usan este registro (no aceptan uno
+    externo)."""
+    import importlib
+    reg = dict(B.REGISTRY)
+    for f in sorted(Path(__file__).resolve().parent.glob("models_*.py")):
+        mod = importlib.import_module(f"src.models.{f.stem}")
+        for k, v in getattr(mod, "REGISTRY", {}).items():
+            if k in reg and reg[k] is not v:
+                raise ValueError(f"modelo {k!r} registrado dos veces ({f.name})")
+            reg[k] = v
+    return reg
+
+
 def build_models(cfg: HarnessConfig, registry: dict | None = None) -> list[B.Model]:
-    reg = registry or B.REGISTRY
+    reg = registry or model_registry()
     return [reg[n](**cfg.model_params.get(n, {})) for n in cfg.models]
 
 
@@ -806,6 +919,8 @@ def _run(cfg: HarnessConfig, datas: dict, registry: dict | None, record: bool, s
             _warn(avisos, f"{mode}: dropna quitó {n_drop} filas de entrenamiento (suma sobre cortes y modelos)")
     if all(getattr(d, "kind", "") == "pit" for d in datas.values()):
         rep["persistencia_muestra_completa"] = persistence_reference(datas, cfg)
+    if cfg.expected_signs:
+        rep["signos_coeficientes"] = coefficient_signs(diags, datas, cfg)
     res = {"config": asdict(cfg), "preds": preds, "scores": S, "report": rep, "diag": diags,
            "results_sha256": results_hash(preds, rep), "results_sha256_r10": results_hash(preds, rep, 10),
            "kind": sorted({d.kind for d in datas.values()}), "data_hashes": {m: d.hashes() for m, d in datas.items()}}
@@ -831,11 +946,315 @@ def run(cfg: HarnessConfig, registry: dict | None = None, datas: dict | None = N
     return _run(cfg, datas, registry, record, spy)
 
 
-def evaluate_holdout(prereg_id: str) -> dict:
-    """ÚNICO punto de entrada de la evaluación del periodo bloqueado. Lee la configuración que fija el preregistro
-    (`config_arnes`, commiteada), abre la caja fuerte (que comprueba todo y CONSUME el preregistro antes de leer),
-    construye él mismo los datos y ejecuta UNA corrida con los modelos registrados, siempre registrada. No acepta
-    datos, modelos ni registros externos. Al terminar, la caja se cierra."""
+# ------------------------------------------------------------------ ensayo en seco y evaluación única (§4e, §4b)
+DRY_RUNS_REL = "research/holdout/dry_runs.jsonl"     # registro de ensayos en seco (ruta fija, versionado)
+SENS_KEYS = {"name", "modes", "matrix_variant", "provisional_weighting", "feature_policy", "models", "model_params",
+             "baseline", "reference", "expected_signs", "holm_families", "nota"}
+REQUIRED_EVAL = ("mejora_logloss", "mejora_ll_g", "cortes", "subperiodos_mismo_signo", "deteccion_frente_al_comparador")
+
+
+def suite(cfg: HarnessConfig) -> list[HarnessConfig]:
+    """La corrida principal y sus sensibilidades preregistradas (misma evaluación, mismos meses)."""
+    out = [replace(cfg, sensitivities=())]
+    for sd in cfg.sensitivities:
+        sd = dict(sd)
+        bad = set(sd) - SENS_KEYS
+        if bad or "name" not in sd:
+            raise ValueError(f"sensibilidad mal declarada ({sorted(bad)} / sin name): {sd}")
+        nm = sd.pop("name")
+        for k in ("modes", "models"):
+            if k in sd:
+                sd[k] = tuple(sd[k])
+        out.append(replace(cfg, name=f"{cfg.name}__{nm}", sensitivities=(), **sd))
+    return out
+
+
+def prereg_config_sha(cfg_file) -> str:
+    """Hash del ensayo en seco: bytes de la configuración + código de src/models + dependencias de la etiqueta PIT."""
+    from src.models import trials
+    code = trials.code_sha()
+    h = hashlib.sha256(Path(cfg_file).read_bytes())
+    h.update(code["src_models"].encode())
+    h.update(code["pit_labels_deps"].encode())
+    return h.hexdigest()
+
+
+def _cuts(cfg: HarnessConfig) -> list[pd.Timestamp]:
+    """Cortes (primer mes de cada bloque de reentreno) cuyo bloque toca la ventana de evaluación."""
+    ms = pd.date_range(_month(cfg.test_start), _month(cfg.test_end), freq="MS")
+    w0, w1 = cfg.window
+    return [ms[b] for b in range(0, len(ms), cfg.refit_every)
+            if ((ms[b:b + cfg.refit_every] >= w0) & (ms[b:b + cfg.refit_every] <= w1)).any()]
+
+
+def holdout_feature_availability(data: PITData, variant: str, cols: list, end: pd.Timestamp) -> pd.DataFrame:
+    """Disponibilidad (SOLO notna, nunca valores) de las variables pedidas en la matriz congelada entre 2005-01 y `end`.
+    No toca la etiqueta. Queda en el registro de accesos (descriptivo de variables ≥ 2005: pit_base.md §4c)."""
+    name = f"{data.mode}_{variant}" if variant else data.mode
+    path = P.out_dir() / f"pit_us_v{PIT_VERSION}_{name}.parquet"
+    if P.file_sha(path) != MATRIX_SHA256[name]:
+        raise RuntimeError(f"{path.name} no coincide con la matriz congelada")
+    if not cols:
+        return pd.DataFrame(index=pd.DatetimeIndex([]))
+    X = pd.read_parquet(path, columns=["decision_date", *cols],
+                        filters=[("decision_date", ">=", HOLDOUT_START.to_datetime64()),
+                                 ("decision_date", "<=", (end + pd.offsets.MonthEnd(0)).to_datetime64())])
+    m = X[cols].notna()
+    m.index = X["decision_date"].dt.to_period("M").dt.to_timestamp()
+    log_access({"mode": "dry_run", "granted": True, "event": "disponibilidad_variables (solo notna, sin etiqueta)",
+                "matrix": path.name, "cols": cols, "hasta": f"{end:%Y-%m}"})
+    return m
+
+
+def holdout_eligibility(model: B.Model, data: PITData, cfg: HarnessConfig, variant: str) -> list[dict]:
+    """Elegibilidad ANALÍTICA en la ventana bloqueada sin abrir nada (M2-2): en el PRIMER corte que toca la ventana
+    (los recuentos crecen con el corte para una ventana de inicio fijo), por eje:
+    - meses de entrenamiento = meses ≤ 2004 con todas las variables (matriz de desarrollo) + meses 2005…corte − 6 con
+      todas las variables (disponibilidad de la matriz, solo notna); con `excluir`, − 53 provisionales recalculados.
+      Supuesto declarado: `weight > 0` después de 2004 (en la etiqueta solo vale 0 en 1950-54, el arranque);
+    - recesiones NBER y cambios de G: COTAS INFERIORES con los datos ≤ 2004 (usrec y etiqueta oficial de desarrollo).
+    """
+    if not model.needs_training:
+        return [{"modelo": model.name, "eje": "-", "elegible": True, "motivo": "no entrena"}]
+    cuts = _cuts(cfg)
+    if not cuts:
+        return [{"modelo": model.name, "eje": "-", "elegible": False, "motivo": "ningún corte toca la ventana"}]
+    m0 = cuts[0]
+    last = _add(m0, -cfg.embargo_months)
+    lab = data.vault.load()
+    lab = lab[lab["weight"] > 0]
+    specs = ({ax: list(model.axis_features.get(ax, ())) for ax in AXES} if isinstance(model, B.AxisModel)
+             else {"4c": [] if not model.features or model.features == "principal" else list(model.features)})
+    out = []
+    for ax, feats in specs.items():
+        _check_requested(model.name, feats, data, cfg)
+        start = axis_window_start(feats, data) if feats else None
+        start = start if start is not None else lab.index.min()
+        dev = data.X.loc[(data.X.index >= start) & (data.X.index <= min(last, _add(HOLDOUT_START, -1))), feats]
+        dev = dev[dev.index.isin(lab.index)]
+        n = int(dev.notna().all(axis=1).sum()) if feats else len(dev)
+        if last >= HOLDOUT_START:
+            av = holdout_feature_availability(data, variant, feats, last)
+            n += int(av.all(axis=1).sum()) if feats else len(pd.date_range(HOLDOUT_START, last, freq="MS"))
+        if cfg.provisional_weighting == "excluir":
+            n -= 53
+        lb_end = min(last, _add(HOLDOUT_START, -1))
+        n_rec = count_recessions(data.usrec, start, lb_end)
+        Y = lab.loc[(lab.index >= start) & (lab.index <= lb_end), P_COLS].to_numpy(float)
+        n_g = count_g_changes(Y)
+        ok = _eligible(cfg, n, n_rec, n_g)
+        out.append({"modelo": model.name, "eje": ax, "primer_corte": f"{m0:%Y-%m}", "ventana_desde": f"{start:%Y-%m}",
+                    "n_train": n, "n_recesiones_cota": n_rec, "n_cambios_g_cota": n_g, "elegible": bool(ok),
+                    "holgura_cambios_g": n_g >= 2 * cfg.min_train_g_changes})
+    return out
+
+
+def _check_eval_config(cfg: HarnessConfig, pid: str | None, entry: dict | None) -> list[str]:
+    err = []
+    if cfg.phase != "holdout_evaluation":
+        err.append(f"phase = {cfg.phase} (debe ser holdout_evaluation)")
+    if pid and cfg.prereg_id != pid:
+        err.append(f"prereg_id {cfg.prereg_id} ≠ {pid}")
+    if not str(cfg.prereg_id or "").startswith(V.EVAL_PREFIX):
+        err.append(f"prereg_id {cfg.prereg_id!r} no es un id de evaluación ({V.EVAL_PREFIX}…)")
+    if cfg.allow_shrink:
+        err.append("allow_shrink: true (en la evaluación única la ventana NO se puede reducir)")
+    if not cfg.eval_window:
+        err.append("falta eval_window (ventana de evaluación explícita)")
+    meta = json.loads(R.out_path().with_suffix(".meta.json").read_text())
+    fop = _add(pd.Timestamp(meta["last"]), -(meta["provisional_months"] - 1))
+    w0, w1 = cfg.window
+    if w0 < HOLDOUT_START:
+        err.append(f"eval_window empieza en {w0:%Y-%m}, antes del periodo bloqueado")
+    if w1 >= fop or _month(cfg.test_end) >= fop:
+        err.append(f"eval_window/test_end llegan a provisionales oficiales (desde {fop:%Y-%m})")
+    if _month(cfg.test_start) > w0:
+        err.append("test_start posterior al inicio de eval_window")
+    for a, b in cfg.subperiods:
+        if _month(a) < w0 or _month(b) > w1:
+            err.append(f"subperiodo {a}→{b} fuera de eval_window")
+    if not cfg.dry_run_window or _month(cfg.dry_run_window[1]) >= HOLDOUT_START:
+        err.append("falta dry_run_window (≤ 2004) para el ensayo en seco")
+    if not cfg.principal or cfg.principal not in cfg.models:
+        err.append(f"principal {cfg.principal!r} no está entre los modelos")
+    unknown = [m for m in cfg.models if m not in model_registry()]
+    if unknown:
+        err.append(f"modelos no registrados: {unknown}")
+    for m, exp in (cfg.expected_signs or {}).items():
+        if m not in cfg.models:
+            err.append(f"expected_signs: {m} no está entre los modelos")
+        for k in exp:
+            if ":" not in k or k.split(":")[0] not in AXES:
+                err.append(f"expected_signs[{m}]: clave {k!r} (formato '<G|I>:<variable>')")
+    for f in cfg.holm_families:
+        try:
+            mem = family_members(f)
+        except (KeyError, TypeError) as e:
+            err.append(f"familia de Holm {f.get('nombre')} mal formada ({e!r})")
+            continue
+        miss = sorted({y for x in mem for y in (x["modelo"], x["comparador"]) if y not in cfg.models})
+        if not mem or miss or f.get("p", "frac_rep_le0") not in HOLM_P or "nombre" not in f:
+            err.append(f"familia de Holm {f.get('nombre')}: sin miembros / modelos {miss} / p {f.get('p')}")
+        bad = [x["metrica"] for x in mem if x["metrica"] not in METRICS]
+        if bad:
+            err.append(f"familia de Holm {f.get('nombre')}: métrica desconocida {bad}")
+    if entry is not None:
+        known = {h.get("id") for h in V._hypotheses()}
+        miss = [x for x in entry.get("incluye") or [] if x not in known]
+        if miss:
+            err.append(f"incluye ids inexistentes: {miss}")
+    return err
+
+
+def dry_run_prereg(prereg_id: str | None = None, cfg_path: str | None = None, record: bool = True,
+                   _datas: dict | None = None) -> dict:
+    """ENSAYO EN SECO de una evaluación única (M2-2): ejecuta TODA la configuración del preregistro sin abrir la caja ni
+    gastar nada.
+    1. Comprobaciones estáticas (`_check_eval_config`): fase, id, ventana explícita dentro de los meses puntuables del
+       bloqueado, `allow_shrink: false`, subperiodos, modelos registrados, signos y familias de Holm bien formadas.
+    2. Elegibilidad ANALÍTICA de cada modelo, eje, modo y sensibilidad en el primer corte de la ventana bloqueada
+       (`holdout_eligibility`; variables solo por disponibilidad, recesiones y cambios de G como cotas ≤ 2004).
+    3. ENSAYO: la misma configuración (modelos, modos, sensibilidades, pesos, métricas, signos, Holm) en desarrollo sobre
+       `dry_run_window` (≤ 2004), subperiodos = sus dos mitades, `allow_shrink: false`; comprueba que el informe trae
+       todo lo que pide el preregistro.
+    Con `record`, añade una línea a `research/holdout/dry_runs.jsonl` (ruta fija) con el hash de configuración + código:
+    `evaluate_holdout` exige una línea `ok` con ese hash, commiteada, y repite el ensayo antes de gastar nada.
+    Acepta un borrador (solo `cfg_path`) o un id registrado (`prereg_id`, lee su `config_arnes`)."""
+    entry = None
+    if cfg_path is None:
+        entry = V.eval_entry(prereg_id)
+        cfg_path = entry.get("config_arnes")
+        if not cfg_path:
+            raise HoldoutLocked(f"{prereg_id} no declara `config_arnes`")
+    cfg_file = Path(cfg_path) if Path(cfg_path).is_absolute() else REPO / cfg_path
+    cfg = HarnessConfig.from_yaml(cfg_file)
+    pid = prereg_id or cfg.prereg_id
+    errors = _check_eval_config(cfg, pid, entry)
+    elig, runs_, avisos = [], [], []
+    datas = dict(_datas or {})
+    vault = None
+
+    def get(mode, variant, policy):
+        nonlocal vault
+        k = (mode, variant, policy)
+        if k not in datas:
+            vault = vault or LabelVault()
+            datas[k] = PITData(mode, variant, "development", None, policy, vault=vault)
+        return datas[k]
+
+    try:
+        sts = suite(cfg)
+    except ValueError as e:
+        errors.append(str(e))
+        sts = []
+    if not errors:
+        for sc in sts:
+            for mode in sc.modes:
+                var = sc.matrix_variant if mode == "vintage" else ""
+                data = get(mode, var, sc.feature_policy)
+                for model in build_models(sc):
+                    try:
+                        rows = holdout_eligibility(model, data, sc, var)
+                    except (KeyError, ValueError) as e:
+                        errors.append(f"{sc.name}/{mode}/{model.name}: {e}")
+                        continue
+                    for r in rows:
+                        elig.append({"corrida": sc.name, "modo": mode, **r})
+                        if not r["elegible"]:
+                            errors.append(f"{sc.name}/{mode}/{model.name}/{r['eje']}: NO elegible en el primer corte "
+                                          f"de la ventana ({r})")
+        d0, d1 = _month(cfg.dry_run_window[0]), _month(cfg.dry_run_window[1])
+        mid = _add(d0, (len(pd.date_range(d0, d1, freq="MS")) // 2) - 1)
+        for sc in sts:
+            dev = replace(sc, phase="development", prereg_id=None, name=f"{sc.name}__ensayo",
+                          test_start=f"{min(_month(sc.test_start), d0):%Y-%m}", test_end=f"{d1:%Y-%m}",
+                          eval_window=(f"{d0:%Y-%m}", f"{d1:%Y-%m}"), allow_shrink=False,
+                          subperiods=((f"{d0:%Y-%m}", f"{mid:%Y-%m}"), (f"{_add(mid, 1):%Y-%m}", f"{d1:%Y-%m}")),
+                          nota=f"ENSAYO EN SECO de {pid} (≤ 2004; no abre nada). {sc.nota}".strip())
+            try:
+                res = run(dev, datas={m: get(m, sc.matrix_variant if m == "vintage" else "", sc.feature_policy)
+                                      for m in sc.modes}, record=record)
+            except Exception as e:  # noqa: BLE001 — el ensayo informa de cualquier fallo
+                errors.append(f"{dev.name}: {type(e).__name__}: {e}")
+                continue
+            rep = res["report"]
+            avisos += [f"{dev.name}: {a}" for a in rep.get("avisos", [])]
+            runs_.append({"name": dev.name, "results_sha256": res["results_sha256"],
+                          "run_id": res.get("entry", {}).get("run_id")})
+            if rep["ventana_evaluacion"]["reducida"]:
+                errors.append(f"{dev.name}: ventana reducida")
+            for mode in sc.modes:
+                if sc.principal and sc.principal != sc.baseline and sc.principal in sc.models:
+                    c = rep["frente_al_baseline"].get(f"{mode}/{sc.principal}")
+                    miss = [k for k in REQUIRED_EVAL if c is None or c.get(k) is None]
+                    if miss:
+                        errors.append(f"{dev.name}/{mode}: el informe no calcula {miss} para {sc.principal}")
+                for m in sc.expected_signs or {}:
+                    sg = rep.get("signos_coeficientes", {}).get(f"{mode}/{m}")
+                    if not sg or "error" in sg or any("error" in v for v in sg["signos"].values()):
+                        errors.append(f"{dev.name}/{mode}: signos de {m} no calculables ({sg and sg.get('error')})")
+            for f in sc.holm_families:
+                if f.get("modo", "vintage") in sc.modes and f["nombre"] not in rep.get("holm_familias", {}):
+                    errors.append(f"{dev.name}: familia de Holm {f['nombre']} sin calcular")
+    out = {"prereg_id": pid, "config": str(cfg_path), "config_sha": prereg_config_sha(cfg_file),
+           "ok": not errors, "errores": errors, "avisos": avisos, "elegibilidad": elig, "ensayos": runs_,
+           "ventana_evaluacion": [f"{x:%Y-%m}" for x in cfg.window], "dry_run_window": list(cfg.dry_run_window or [])}
+    if record:
+        from src.models import trials
+        V._append(V.REPO / DRY_RUNS_REL, {"ts": pd.Timestamp.now().isoformat(timespec="seconds"),
+                                          "git_head": V._git("rev-parse", "HEAD"), "code": trials.code_sha(), **out})
+    return out
+
+
+validate_prereg = dry_run_prereg
+
+
+def _preflight(prereg_id: str, cfg_path: str) -> dict:
+    """Antes de gastar nada: un ensayo en seco `ok` con el MISMO hash (configuración + código) anotado en
+    `research/holdout/dry_runs.jsonl` (y commiteado: lo exige el árbol limpio de la caja), y el ensayo REPETIDO ahora
+    (sin tocar ningún registro versionado). Cualquier fallo → HoldoutLocked y no se consume nada."""
+    sha = prereg_config_sha(REPO / cfg_path)
+    f = V.REPO / DRY_RUNS_REL
+    recs = [json.loads(x) for x in f.read_text().splitlines() if x.strip()] if f.exists() else []
+    if not any(r.get("ok") and r.get("config_sha") == sha and r.get("prereg_id") == prereg_id for r in recs):
+        raise HoldoutLocked(f"{prereg_id}: no hay ensayo en seco aprobado para esta configuración y este código "
+                            f"(hash {sha[:12]}): evaluate_holdout('{prereg_id}', dry_run=True), commitea "
+                            f"{DRY_RUNS_REL} y vuelve")
+    V._QUIET["on"] = True
+    try:
+        dr = dry_run_prereg(prereg_id, record=False)
+    finally:
+        V._QUIET["on"] = False
+    if not dr["ok"]:
+        raise HoldoutLocked(f"{prereg_id}: el ensayo en seco FALLA; no se gasta nada: {dr['errores'][:5]}")
+    return dr
+
+
+def _commit_results(prereg_id: str, results: dict) -> None:
+    """Tras la evaluación: commitea y empuja los resultados (rutas fijas). Si falla, solo avisa: el consumo ya está
+    anclado y los resultados quedan en disco."""
+    paths = ["research/trials/harness_runs.jsonl", "research/trial_log.md", "research/trials/label_access.jsonl"]
+    for r in results.values():
+        d = Path(r.get("entry", {}).get("artefactos", ""))
+        paths += [str((d / x).relative_to(V.REPO)) for x in ("report.json", "predictions.csv") if (d / x).exists()]
+    try:
+        V._git_strict("add", "-f", "--", *[x for x in paths if (V.REPO / x).exists()])
+        V._git_strict("commit", "-q", "-m", f"Holdout evaluation results: {prereg_id}")
+        V._git_strict("push", "-q", V.REMOTE_NAME, f"HEAD:refs/heads/{V._branch()}")
+    except HoldoutLocked as e:
+        warnings.warn(f"resultados de {prereg_id} NO commiteados/empujados ({e}); súbelos a mano", stacklevel=2)
+
+
+def evaluate_holdout(prereg_id: str, dry_run: bool = False) -> dict:
+    """ÚNICO punto de entrada de la evaluación del periodo bloqueado.
+    - `dry_run=True`: ensayo en seco (`dry_run_prereg`), registrado; no abre ni gasta nada.
+    - Si no: lee la configuración que fija el preregistro (`config_arnes`, commiteada), exige y REPITE el ensayo en seco
+      (`_preflight`; si falla, se niega ANTES de gastar), abre la caja fuerte (que comprueba todo, toma el cerrojo,
+      CONSUME el preregistro y lo ancla en el remoto antes de leer), construye él mismo los datos y ejecuta la corrida
+      principal y sus sensibilidades, siempre registradas en rutas FIJAS (N7). No acepta datos, modelos ni registros
+      externos. Al terminar, la caja se cierra y los resultados se commitean y empujan."""
+    if dry_run:
+        return dry_run_prereg(prereg_id=prereg_id, record=True)
     entry = V.eval_entry(prereg_id)
     cfg_path = entry.get("config_arnes")
     if not cfg_path:
@@ -845,23 +1264,43 @@ def evaluate_holdout(prereg_id: str) -> dict:
         raise HoldoutLocked(f"{cfg_path}: fase/prereg_id no coinciden con {prereg_id}")
     if _EVAL["vault"] is not None:
         raise HoldoutLocked("ya hay una evaluación única en curso en este proceso")
-    vault = LabelVault(mode="holdout_evaluation", prereg_id=prereg_id)   # consume el preregistro
+    _preflight(prereg_id, cfg_path)
+    vault = LabelVault(mode="holdout_evaluation", prereg_id=prereg_id, window=cfg.window)   # consume y ancla
     _EVAL["vault"] = vault
+    V._FIXED["on"] = True
     try:
-        datas = {m: PITData(m, cfg.matrix_variant if m == "vintage" else "", cfg.phase, prereg_id,
-                            cfg.feature_policy, vault=vault) for m in cfg.modes}
-        return _run(cfg, datas, None, record=True)
+        results, cache = {}, {}
+        for sc in suite(cfg):
+            datas = {}
+            for m in sc.modes:
+                k = (m, sc.matrix_variant if m == "vintage" else "", sc.feature_policy)
+                if k not in cache:
+                    cache[k] = PITData(m, k[1], cfg.phase, prereg_id, sc.feature_policy, vault=vault)
+                datas[m] = cache[k]
+            results[sc.name] = _run(sc, datas, None, record=True)
+        _commit_results(prereg_id, results)
+        return {"principal": results[cfg.name], "sensibilidades": {k: v for k, v in results.items() if k != cfg.name}}
     finally:
         vault.close()
         _EVAL["vault"] = None
+        V._FIXED["on"] = False
 
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Arnés walk-forward (desarrollo: solo ≤ 2004)")
-    ap.add_argument("--config", required=True)
+    ap.add_argument("--config", help="configuración de desarrollo")
     ap.add_argument("--official", action="store_true",
                     help="corrida oficial: exige src/, config/ y tests/ commiteados (git_dirty = false)")
+    ap.add_argument("--dry-run", metavar="CONFIG_O_ID",
+                    help="ensayo en seco de una evaluación única (configuración de un borrador o id P-EVAL-…)")
     a = ap.parse_args()
+    if a.dry_run:
+        arg = a.dry_run
+        dr = dry_run_prereg(prereg_id=arg) if arg.startswith(V.EVAL_PREFIX) else dry_run_prereg(cfg_path=arg)
+        print(json.dumps({k: dr[k] for k in ("prereg_id", "config", "config_sha", "ok", "errores", "avisos",
+                                             "ensayos")}, indent=1, ensure_ascii=False, default=str))
+        print(pd.DataFrame(dr["elegibilidad"]).to_string())
+        raise SystemExit(0 if dr["ok"] else 1)
     if a.official:
         dirty = V._git_strict("status", "--porcelain", "--", "src", "config", "tests").strip()
         if dirty:

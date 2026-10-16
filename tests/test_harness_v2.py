@@ -68,8 +68,10 @@ HYP = [
     {"id": "P-EVAL-SOLO", "tipo": "evaluacion_holdout", "estado": "preregistrada (sintética)"},
     {"id": "P-EVAL-NOTIPO", "estado": "preregistrada (sintética)"},
     {"id": "P-EVAL-BORRADOR", "tipo": "evaluacion_holdout", "estado": "borrador"},
+    {"id": "P-EVAL-AMPL", "tipo": "evaluacion_holdout", "estado": "preregistrada (sintética)", "amplia": "P-EVAL-TEST"},
     {"id": "H-TEST-1", "estado": "preregistrada (sintética)"},
 ]
+REMOTE_RE_REAL = V.REMOTE_URL_RE
 
 
 @pytest.fixture
@@ -82,12 +84,17 @@ def evalrepo(tmp_path, monkeypatch):
     (repo / "config" / "eval_test.yaml").write_text(yaml.safe_dump(
         {"name": "eval_test", "phase": "holdout_evaluation", "prereg_id": "P-EVAL-TEST", "test_end": "2012-12"}))
     (repo / ".gitignore").write_text("research/trials/\n")
-    _git(repo, "init", "-q")
+    _git(repo, "init", "-q", "-b", "main")
     _git(repo, "config", "user.email", "t@t")
     _git(repo, "config", "user.name", "t")
     _git(repo, "add", "-A")
     _git(repo, "commit", "-q", "-m", "init")
+    remote = tmp_path / "remote.git"                     # "GitHub" simulado: un repositorio bare local
+    subprocess.run(["git", "init", "-q", "--bare", "-b", "main", str(remote)], check=True)
+    _git(repo, "remote", "add", "origin", str(remote))
     fake = _fake_label(tmp_path / "fake_label.parquet")
+    # la comprobación de URL de GitHub se relaja SOLO aquí, por inyección explícita (nunca por variable de entorno)
+    monkeypatch.setattr(V, "REMOTE_URL_RE", __import__("re").compile("^" + __import__("re").escape(str(remote)) + "$"))
     monkeypatch.setattr(V, "REPO", repo)
     monkeypatch.setattr(H, "REPO", repo)
     monkeypatch.setattr(R, "out_path", lambda *a, **k: fake)     # ninguna vía llega a la etiqueta oficial
@@ -95,7 +102,7 @@ def evalrepo(tmp_path, monkeypatch):
     monkeypatch.setitem(H._EVAL, "vault", None)
     monkeypatch.setenv("FKB_TRIALS_DIR", str(repo / "research" / "trials"))
     monkeypatch.setenv(V.UNLOCK_ENV, "EVALUACION-UNICA P-EVAL-TEST")
-    return {"repo": repo, "fake": fake}
+    return {"repo": repo, "fake": fake, "remote": remote}
 
 
 def _open(pid="P-EVAL-TEST", **kw):
@@ -113,7 +120,8 @@ def test_unlock_consumes_and_commits_before_read(evalrepo, monkeypatch):
 
     def spy(path, *a, **k):
         seen.append(_registry(repo))           # en el momento de leer, el consumo ya está escrito…
-        seen.append(_git(repo, "status", "--porcelain").strip())   # …y commiteado
+        seen.append(_git(repo, "status", "--porcelain").strip())   # …commiteado…
+        seen.append(_git(evalrepo["remote"], "log", "-1", "--format=%H %s", "main").strip())   # …y en el remoto
         return real(path, *a, **k)
 
     monkeypatch.setattr(V.pd, "read_parquet", spy)
@@ -121,6 +129,8 @@ def test_unlock_consumes_and_commits_before_read(evalrepo, monkeypatch):
     df = v.load()
     assert df.index.max() == pd.Timestamp("2012-12-01")
     assert seen[0][0]["prereg_id"] == "P-EVAL-TEST" and seen[0][0]["n"] == 1 and seen[1] == ""
+    head = _git(repo, "rev-parse", "HEAD").strip()
+    assert seen[2] == f"{head} Holdout evaluation consumed: P-EVAL-TEST"
     assert "Holdout evaluation consumed: P-EVAL-TEST" in _git(repo, "log", "--format=%s")
     monkeypatch.setitem(V._PROCESS, "opened", None)
     with pytest.raises(V.HoldoutLocked, match="ya evaluado"):
@@ -316,16 +326,18 @@ def test_evaluate_holdout_single_entry_and_closes_vault(evalrepo, monkeypatch):
         def __init__(self, mode, variant, phase, prereg_id, policy, vault=None):
             assert V.is_open_holdout_vault(vault, "P-EVAL-TEST") and H._EVAL["vault"] is vault
             assert _registry(evalrepo["repo"])[0]["prereg_id"] == "P-EVAL-TEST"
+            assert V._FIXED["on"] and V.trials_dir() == evalrepo["repo"] / "research" / "trials"   # N7
             built.append(vault)
             raise Stop
 
     monkeypatch.setattr(H, "PITData", FakeData)
+    monkeypatch.setattr(H, "_preflight", lambda *a: {"ok": True})        # el ensayo en seco se prueba aparte
     with pytest.raises(TypeError):
         H.evaluate_holdout("P-EVAL-TEST", datas={})                     # no acepta datos externos
     with pytest.raises(Stop):
         H.evaluate_holdout("P-EVAL-TEST")
     v = built[0]
-    assert not v.unlocked and H._EVAL["vault"] is None
+    assert not v.unlocked and H._EVAL["vault"] is None and not V._FIXED["on"]
     with pytest.raises(V.HoldoutLocked, match="cerrada"):
         v.load()
     monkeypatch.setitem(V._PROCESS, "opened", None)
@@ -537,7 +549,8 @@ def test_detection_delay_and_false_alarms():
     pred = pd.Series(np.r_[np.full(24, 0.8), np.full(4, 0.8), np.full(20, 0.2)], index=idx)
     pred.iloc[10] = 0.3                                                        # una falsa alarma en la parte estable
     d = M.detection(pred, lab)
-    assert d["n_giros"] == 1 and d["giros"][0]["retraso"] == 4 and d["giros"][0]["detectado"]
+    # v2.1: retraso hasta la CONFIRMACIÓN (3.er mes seguido del lado nuevo): cambio en 28 → confirmado en 30 → 6
+    assert d["n_giros"] == 1 and d["giros"][0]["retraso"] == 6 and d["giros"][0]["detectado"]
     assert d["falsas_alarmas"] == 1
 
 
@@ -553,6 +566,8 @@ def test_episodes_definition():
     gi = [e for e in eps if e["tipo"] == "giro_g"]
     assert len(gi) == 1 and gi[0]["desde"] == pd.Timestamp("1991-10-01")    # −3 m del giro 1992-01
     assert sum(e["tipo"] == "recesion_nber" for e in eps) == 1
+    # B2-5: las rachas que tocan el borde de la muestra se marcan truncadas (no entran en la prueba de signo)
+    assert [e["truncado"] for e in rachas] == [True, False, True]
     cuts = M.month_cuts(lab)
     assert cuts.loc["1991-01-01", "giro"] and not cuts.loc["1990-11-01", "giro"]
 
@@ -584,3 +599,317 @@ def test_unrecorded_run_leaves_a_line(vint):
     H.run(C(name="unrec", models=("persistence_pit",), modes=("vintage",), test_start="1990-01", test_end="1990-03"),
           datas={"vintage": vint}, record=False)
     assert len(f.read_text().splitlines()) == n0 + 1
+
+
+# ================================================================== v2.1: M2-3 detección de giros
+def _glab(g, start="1990-01-01"):
+    idx = pd.date_range(start, periods=len(g), freq="MS")
+    g = np.asarray(g, float)
+    return pd.DataFrame({"p_g_high": g, "label_hard": np.where(g > 0.5, "expansion", "low_growth_disinfl"),
+                         "usrec": 0}, index=idx)
+
+
+def test_M23_turns_skip_blinks_and_alternate():
+    """Giros tras parpadeos (regla a priori): una racha < 6 m toma el valor de la última racha larga; los giros alternan
+    y el mes del giro es el inicio de la racha larga nueva. Caso del Validador: G↑, parpadeo ↓, G↑ → UN solo giro."""
+    g = [0] * 12 + [1] * 8 + [0] * 3 + [1] * 10 + [0] * 4 + [1] * 2 + [0] * 12
+    lab = _glab(g)
+    t = M.g_turns(lab)
+    assert [(x["mes"], x["nuevo"]) for x in t] == [(lab.index[12], 1), (lab.index[39], 0)]
+    assert all(a["nuevo"] != b["nuevo"] for a, b in zip(t, t[1:]))
+    w = M.turn_windows([{"mes": pd.Timestamp("2000-01-01")}, {"mes": pd.Timestamp("2000-07-01")}])
+    assert w[0][1] < w[1][0] and w[1][0] == pd.Timestamp("2000-04-01")      # sin solape; el 2.º conserva sus −3 m
+
+
+def test_M23_detection_confirmation_censoring_anticipation():
+    lab = _glab([1] * 24 + [0] * 24)
+    turn = lab.index[24]
+    late = pd.Series(np.r_[np.full(28, 0.8), np.full(20, 0.2)], index=lab.index)
+    early = pd.Series(np.r_[np.full(22, 0.8), np.full(26, 0.2)], index=lab.index)      # cambia 2 m ANTES del giro
+    never = pd.Series(np.full(48, 0.8), index=lab.index)
+    dl, de, dn = (M.detection(x, lab) for x in (late, early, never))
+    assert dl["giros"][0]["retraso"] == 6 and dl["giros"][0]["confirmacion"] == f"{turn + pd.DateOffset(months=6):%Y-%m}"
+    assert de["giros"][0]["retraso"] == 0                                  # confirmado en el mes del giro: no se acota
+    early2 = pd.Series(np.r_[np.full(21, 0.8), np.full(27, 0.2)], index=lab.index)
+    assert M.detection(early2, lab)["giros"][0]["retraso"] == -1           # anticipación: retraso negativo
+    assert dn["censurados"] == 1 and dn["detectados"] == 0 and np.isnan(dn["retraso_medio"])   # censura aparte
+    v = M.detection_vs(de, dl)
+    assert v["n_pares"] == 1 and v["retraso_pareado_medio"] == -6
+    v2 = M.detection_vs(dn, dl)
+    assert v2["n_pares"] == 0 and v2["censurados_modelo"] == 1 and v2["censurados_comparador"] == 0
+
+
+# ================================================================== v2.1: M2-4 signos, sign_stability y Holm por familia
+def test_M24_coefficient_signs_and_stability(vint):
+    months = pd.date_range("1990-01-01", "2004-12-01", freq="MS")
+    diags = {"vintage": [{"model": "m", "refit_month": m,
+                          "coef": {"I:core_cpi_6m_ann": 0.5 if m < pd.Timestamp("1996-12-01") else -0.2,
+                                   "G:growth_rt": 0.3, "G:curve_10y3m": -0.1}} for m in months]}
+    cfg = C(name="t", models=("m",), baseline="m", modes=("vintage",), test_start="1990-01", test_end="2004-12",
+            eval_window=("1998-01", "2004-12"),
+            expected_signs={"m": {"I:core_cpi_6m_ann": "+", "G:growth_rt": "+",
+                                  "G:curve_10y3m": {"signo": "+", "decide": False}}})
+    out = H.coefficient_signs(diags, {"vintage": vint}, cfg)["vintage/m"]
+    assert out["signos"]["G:growth_rt"]["coincide"] and not out["signos"]["I:core_cpi_6m_ann"]["coincide"]
+    assert out["signos"]["G:curve_10y3m"]["decide"] is False
+    st = {r["variable"]: r for r in out["sign_stability"]}
+    assert st["I:core_cpi_6m_ann"]["salto"] == "1996-12" and not st["I:core_cpi_6m_ann"]["mismo_signo"]
+    assert out["criterio_signos_cumple"] is False
+    diags["vintage"] = [{**d, "coef": {**d["coef"], "I:core_cpi_6m_ann": 0.4}} for d in diags["vintage"]]
+    assert H.coefficient_signs(diags, {"vintage": vint}, cfg)["vintage/m"]["criterio_signos_cumple"] is True
+
+
+def test_M24_holm_family_with_preregistered_p():
+    """P-EVAL-MOD: cada módulo frente a M1 en SU eje, Holm con `frac_rep_le0` (no p_h0 ni frente al baseline)."""
+    rng = np.random.default_rng(3)
+    n = 120
+    base = pd.DataFrame({"logloss": 1.0, "ll_g": 0.6 + rng.normal(0, .1, n), "ll_i": 0.3 + rng.normal(0, .1, n)})
+    by = {"m1": base, "mod_g": base.assign(ll_g=base["ll_g"] - 0.05), "mod_i": base.assign(ll_i=base["ll_i"] + 0.0)}
+    f = {"nombre": "P-EVAL-MOD", "comparador": "m1", "modelos": ["mod_g", "mod_i"],
+         "metrica": {"mod_g": "ll_g", "mod_i": "ll_i"}, "p": "frac_rep_le0"}
+    out = H.holm_family(f, by)
+    assert out["p"] == "frac_rep_le0" and out["sin_corregir"]["mod_g"] == 0.0
+    assert out["sin_corregir"]["mod_i"] == 1.0 and out["detalle"]["mod_g"]["metrica"] == "ll_g"
+    assert out["ajustado"] == M.holm(out["sin_corregir"])
+
+
+# ================================================================== v2.1: M2-5 regla complementaria del placebo
+def test_M25_placebo_complementary_rule_on_power_table():
+    from src.models import placebo as PL
+    tab = json.loads((V.REPO / "research" / "trials" / "placebo_power_v2.json").read_text())
+    warn = {k: PL.leak_rules(v["pareado"])["aviso_fuga"] for k, v in tab.items() if k != "regla"}
+    assert not warn["sin_fuga_ruido"] and not warn["control_t-5_sin_fuga"] and not warn["contemporanea_t_sd4"]
+    assert warn["futura_t+1_sd2"] and warn["contemporanea_t_sd2"]        # σ = 2: la regla del 0,02 no las ve
+    assert not PL.leak_rules(tab["futura_t+1_sd2"]["pareado"])["fuga_detectada"]
+
+
+def test_M25_model_placebo_uses_the_models_own_spec(vint):
+    """Mecánica: el placebo de un aspirante usa SUS modelos (aquí M0 frente a la sonda, que no usa variables: el
+    incremento pareado es exactamente 0 y no hay ni fuga ni aviso)."""
+    from src.models import placebo as PL
+    from src.models.probes import AxisWindowProbe
+    r = PL.model_placebo(vint, lambda: B.CalibratedPersistence(),
+                         lambda: AxisWindowProbe({"G": ["unrate_sahm"], "I": ["headline_cpi_6m_ann"]}),
+                         seeds=(1, 2), test_start="1990-01", refit_every=60)
+    assert r["n_semillas"] == 2 and abs(r["pareado_media"]) < 1e-9 and not r["fuga_detectada"] and not r["aviso_fuga"]
+
+
+# ================================================================== v2.1: N4 levels_at
+def test_N4_levels_at_blocks_holdout(vint):
+    with pytest.raises(V.HoldoutLocked, match="levels_at"):
+        vint.labeler.levels_at(pd.Timestamp("2006-03-31"))
+    assert vint.labeler.levels_at(pd.Timestamp("2004-12-31"))
+
+
+# ================================================================== v2.1: M2-1 ancla externa, refs, reflog y cerrojo
+def test_anchor_requires_github_origin(evalrepo, monkeypatch):
+    repo = evalrepo["repo"]
+    _git(repo, "remote", "remove", "origin")
+    with pytest.raises(V.HoldoutLocked, match="sin remoto 'origin'"):
+        _open()
+    _git(repo, "remote", "add", "origin", str(evalrepo["remote"]))
+    monkeypatch.setattr(V, "REMOTE_URL_RE", REMOTE_RE_REAL)              # la comprobación real: solo GitHub
+    with pytest.raises(V.HoldoutLocked, match="no es una URL de GitHub"):
+        _open()
+    assert _registry(repo) == []
+    for url in ("https://github.com/usuario/financial_kb.git", "git@github.com:usuario/financial_kb.git"):
+        assert REMOTE_RE_REAL.match(url)
+    assert not REMOTE_RE_REAL.match("https://gitlab.com/u/r.git") and not REMOTE_RE_REAL.match(str(evalrepo["remote"]))
+
+
+def test_push_failure_spends_but_never_opens(evalrepo, monkeypatch):
+    remote = evalrepo["remote"]
+    hook = remote / "hooks" / "pre-receive"
+    hook.write_text('#!/bin/sh\nwhile read old new ref; do git log -1 --format=%s "$new" | grep -q consumed && exit 1; '
+                    'done\nexit 0\n')
+    hook.chmod(0o755)
+    with pytest.raises(V.HoldoutLocked, match="NO commiteado/anclado"):
+        _open()
+    assert [r["prereg_id"] for r in _registry(evalrepo["repo"])] == ["P-EVAL-TEST"]     # gastado…
+    assert not any(V.is_open_holdout_vault(v) for v in list(V._ISSUED))                 # …y sin abrir
+    hook.unlink()
+    monkeypatch.setitem(V._PROCESS, "opened", None)
+    with pytest.raises(V.HoldoutLocked, match="ya evaluado"):
+        _open()
+
+
+def test_N2_history_rewrite_does_not_reopen(evalrepo, monkeypatch):
+    repo = evalrepo["repo"]
+    _open()
+    init = _git(repo, "rev-list", "--max-parents=0", "HEAD").strip()
+    # (a) reset --hard: el remoto conserva el consumo (la rama local ya no lo contiene)
+    _git(repo, "reset", "-q", "--hard", init)
+    monkeypatch.setitem(V._PROCESS, "opened", None)
+    with pytest.raises(V.HoldoutLocked, match="no contiene origin/main"):
+        _open()
+    # (b) además, push forzado que borra el consumo del remoto: el reflog lo conserva
+    _git(repo, "push", "-q", "-f", "origin", "HEAD:main")
+    with pytest.raises(V.HoldoutLocked, match="perdió"):
+        _open()
+    # (c) N2b: rama creada antes del consumo
+    _git(repo, "checkout", "-q", "-b", "limpia", init)
+    with pytest.raises(V.HoldoutLocked, match="perdió"):
+        _open()
+    assert len([r for r in _registry(repo)]) == 0                    # en el árbol actual no está…
+    assert "consumed" in _git(repo, "log", "-g", "--all", "--format=%s")   # …pero el reflog lo guarda
+
+
+def test_remote_consumption_missing_locally_is_seen(evalrepo, monkeypatch, tmp_path):
+    repo, remote = evalrepo["repo"], evalrepo["remote"]
+    _git(repo, "push", "-q", "origin", "main")
+    other = tmp_path / "otra_maquina"
+    subprocess.run(["git", "clone", "-q", str(remote), str(other)], check=True)
+    _git(other, "config", "user.email", "o@o")
+    _git(other, "config", "user.name", "o")
+    with open(other / V.REGISTRY_REL, "a") as fh:
+        fh.write(json.dumps({"n": 1, "prereg_id": "P-EVAL-TEST", "incluye": ["H-TEST-1"]}) + "\n")
+    _git(other, "commit", "-q", "-am", "Holdout evaluation consumed: P-EVAL-TEST")
+    _git(other, "push", "-q", "origin", "main")
+    with pytest.raises(V.HoldoutLocked, match="no contiene origin/main"):
+        _open()
+    _git(repo, "checkout", "-q", "-b", "otra")                        # desde otra rama: el remoto lo delata igual
+    with pytest.raises(V.HoldoutLocked, match="perdió"):
+        _open()
+    assert _registry(repo) == []
+
+
+def test_lock_blocks_concurrent_unlock(evalrepo):
+    with V.holdout_lock():
+        with pytest.raises(V.HoldoutLocked, match="cerrojo"):
+            _open()
+    assert _registry(evalrepo["repo"]) == []
+
+
+_RACE = """
+import re, sys, time
+sys.path.insert(0, sys.argv[4])
+from pathlib import Path
+from src.labels import regime_us as R
+from src.models import vault as V
+V.REPO = Path(sys.argv[1])
+R.out_path = lambda *a, **k: Path(sys.argv[2])
+V.REMOTE_URL_RE = re.compile(".*")
+orig = V._check_registry_history
+def slow():
+    r = orig(); time.sleep(float(sys.argv[3])); return r
+V._check_registry_history = slow
+try:
+    V.LabelVault(mode="holdout_evaluation", prereg_id="P-EVAL-TEST")
+    print("OPENED")
+except V.HoldoutLocked as e:
+    print("DENIED", str(e).splitlines()[0])
+"""
+
+
+def test_N8_race_two_processes_second_fails(evalrepo, tmp_path):
+    """N8: dos procesos con el mismo id y la ventana entre leer el registro y anotar el consumo ensanchada (4 s): el
+    cerrojo hace que el segundo falle; el registro acaba con UNA línea."""
+    import os
+    import sys
+    script = tmp_path / "race.py"
+    script.write_text(_RACE)
+    env = {**os.environ, "FKB_TRIALS_DIR": str(tmp_path / "tr"), V.UNLOCK_ENV: "EVALUACION-UNICA P-EVAL-TEST"}
+    args = [sys.executable, str(script), str(evalrepo["repo"]), str(evalrepo["fake"]), "4",
+            str(V.Path(H.__file__).resolve().parents[2])]
+    ps = [subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env=env)
+          for _ in range(2)]
+    outs = [p.communicate(timeout=120) for p in ps]
+    res = sorted(o[0].strip() for o in outs)
+    assert sum(r.startswith("OPENED") for r in res) == 1, outs
+    assert any("cerrojo" in r for r in res), outs
+    assert len(_registry(evalrepo["repo"])) == 1
+
+
+def test_N6_ignored_relevant_files_are_dirty(evalrepo):
+    repo = evalrepo["repo"]
+    (repo / ".gitignore").write_text("research/trials/\n*.local.yaml\n__pycache__/\n")
+    _git(repo, "commit", "-q", "-am", "ignore")
+    (repo / "config" / "x.local.yaml").write_text("a: 1\n")
+    with pytest.raises(V.HoldoutLocked, match="IGNORADOS"):
+        _open()
+    (repo / "config" / "x.local.yaml").unlink()
+    (repo / "config" / "__pycache__").mkdir()
+    (repo / "config" / "__pycache__" / "m.cpython-312.pyc").write_bytes(b"x")    # generado por Python: no cuenta
+    assert _open().unlocked
+
+
+def test_N9_extension_needs_amplia_and_new_months(evalrepo, monkeypatch):
+    _open(window=("2005-01", "2010-12"))
+    monkeypatch.setitem(V._PROCESS, "opened", None)
+    monkeypatch.setenv(V.UNLOCK_ENV, "EVALUACION-UNICA P-EVAL-SOLO")
+    with pytest.raises(V.HoldoutLocked, match="amplia"):
+        _open("P-EVAL-SOLO", window=("2011-01", "2012-12"))
+    monkeypatch.setenv(V.UNLOCK_ENV, "EVALUACION-UNICA P-EVAL-AMPL")
+    with pytest.raises(V.HoldoutLocked, match="solapa"):
+        _open("P-EVAL-AMPL", window=("2010-06", "2012-12"))
+    v = _open("P-EVAL-AMPL", window=("2011-01", "2012-12"))
+    assert v.unlocked and _registry(evalrepo["repo"])[-1]["ventana"] == ["2011-01", "2012-12"]
+
+
+# ================================================================== v2.1: M2-2 ensayo en seco
+def test_evaluate_holdout_refuses_before_spending_without_dry_run(evalrepo, monkeypatch):
+    with pytest.raises(V.HoldoutLocked, match="ensayo en seco"):
+        H.evaluate_holdout("P-EVAL-TEST")
+    assert _registry(evalrepo["repo"]) == []
+    # un ensayo aprobado con el hash correcto, commiteado, pero que AHORA falla: se niega antes de gastar
+    repo = evalrepo["repo"]
+    sha = H.prereg_config_sha(repo / "config" / "eval_test.yaml")
+    (repo / H.DRY_RUNS_REL).write_text(json.dumps({"prereg_id": "P-EVAL-TEST", "ok": True, "config_sha": sha}) + "\n")
+    _git(repo, "add", "-A")
+    _git(repo, "commit", "-q", "-m", "dry run")
+    monkeypatch.setattr(H, "dry_run_prereg", lambda *a, **k: {"ok": False, "errores": ["no elegible"]})
+    with pytest.raises(V.HoldoutLocked, match="FALLA"):
+        H.evaluate_holdout("P-EVAL-TEST")
+    assert _registry(repo) == []
+    # el hash cambia con la configuración: un ensayo de otra configuración no vale
+    (repo / "config" / "eval_test.yaml").write_text((repo / "config" / "eval_test.yaml").read_text() + "nota: x\n")
+    _git(repo, "commit", "-q", "-am", "cambia config")
+    with pytest.raises(V.HoldoutLocked, match="no hay ensayo en seco"):
+        H.evaluate_holdout("P-EVAL-TEST")
+
+
+def _probe_cfg(tmp_path, **kw):
+    d = {"name": "probe_test", "prereg_id": "P-EVAL-PRUEBA", "phase": "holdout_evaluation",
+         "principal": "axis_window_probe", "models": ["axis_window_probe", "m0_calibrated_persistence"],
+         "model_params": {"axis_window_probe": {"axis_features": {"G": ["growth_rt", "unrate_sahm"],
+                                                                  "I": ["core_cpi_6m_ann"]}}},
+         "modes": ["vintage"], "refit_every": 12, "test_start": "1985-01", "test_end": "2021-10",
+         "eval_window": ["2005-01", "2021-10"], "epochs": [], "subperiods": [["2005-01", "2014-12"],
+                                                                            ["2015-01", "2021-10"]],
+         "baseline": "m0_calibrated_persistence", "dry_run_window": ["1995-01", "2004-12"],
+         "expected_signs": {"axis_window_probe": {"G:growth_rt": "+", "I:core_cpi_6m_ann": "+"}},
+         "holm_families": [{"nombre": "f", "p": "p_h0", "miembros": [
+             {"id": "g", "modelo": "axis_window_probe", "metrica": "ll_g", "comparador": "m0_calibrated_persistence"}]}],
+         "sensitivities": [{"name": "uno", "provisional_weighting": "uno"}], **kw}
+    f = tmp_path / "probe.yaml"
+    f.write_text(yaml.safe_dump(d, allow_unicode=True))
+    return f
+
+
+def test_dry_run_executes_the_whole_config_without_opening(vint, tmp_path):
+    n0 = len(V.registry_path().read_text().splitlines())
+    dr = H.dry_run_prereg(cfg_path=str(_probe_cfg(tmp_path)), record=False, _datas={("vintage", "", "principal"): vint})
+    assert dr["ok"], dr["errores"]
+    el = {(e["corrida"], e["modelo"], e["eje"]): e for e in dr["elegibilidad"]}
+    g = el[("probe_test", "axis_window_probe", "G")]
+    assert g["elegible"] and g["primer_corte"] == "2005-01" and g["n_recesiones_cota"] >= 2
+    assert ("probe_test__uno", "axis_window_probe", "I") in el and len(dr["ensayos"]) == 2
+    assert len(V.registry_path().read_text().splitlines()) == n0           # nada consumido
+
+
+def test_dry_run_catches_ineligible_models_and_bad_config(vint, tmp_path):
+    f = _probe_cfg(tmp_path, allow_shrink=True, eval_window=["2004-06", "2021-12"])
+    dr = H.dry_run_prereg(cfg_path=str(f), record=False, _datas={("vintage", "", "principal"): vint})
+    e = " | ".join(dr["errores"])
+    assert not dr["ok"] and "allow_shrink" in e and "antes del periodo bloqueado" in e and "provisionales" in e
+    # A2-1: un módulo H-MOD (dfii10, desde 2003) no está admitido en la política principal ni sería elegible en 2005
+    f = _probe_cfg(tmp_path, model_params={"axis_window_probe": {"axis_features": {
+        "G": ["growth_rt", "dfii10"], "I": ["core_cpi_6m_ann"]}}})
+    dr = H.dry_run_prereg(cfg_path=str(f), record=False, _datas={("vintage", "", "principal"): vint})
+    assert not dr["ok"] and any("dfii10" in x for x in dr["errores"])
+    # mínimo de entrenamiento inalcanzable en el primer corte de la ventana → NO elegible, antes de gastar nada
+    f = _probe_cfg(tmp_path, min_train_months=500)
+    dr = H.dry_run_prereg(cfg_path=str(f), record=False, _datas={("vintage", "", "principal"): vint})
+    bad = [x for x in dr["elegibilidad"] if not x["elegible"]]
+    assert not dr["ok"] and any("NO elegible" in x for x in dr["errores"])
+    assert {x["eje"] for x in bad} == {"G", "I"} and all(x["n_train"] < 500 for x in bad)

@@ -17,6 +17,13 @@ Diseño (fijado el 2026-10-16 ANTES de correrlo):
   la penalización. Ahora la L2 solo penaliza las variables añadidas; la persistencia (blanda y dura) de la base va
   sin penalizar (`fit_logit_masked`).
 - Se publica también el placebo absoluto de la v1 (base + vars frente a base).
+- REGLA COMPLEMENTARIA (preregistrada el 2026-10-16 ANTES de correr ningún placebo de un aspirante; propuesta del
+  Validador v2, M2-5): **aviso de fuga** si, sobre las 20 semillas, la prueba de signo unilateral da p < 0,01 (≥ 15 de
+  20 positivas) **o** t = media / (sd/√20) > 3. El aviso obliga a investigar la columna; no falla automáticamente.
+  La regla principal (media > 0,02) no cambia.
+- PLACEBO DE UN ASPIRANTE (`model_placebo`): con la especificación y la L2 DEL PROPIO modelo (no la L2 = 0,05 de esta
+  tabla, que solo mide la potencia de ESTE regularizador): incremento pareado = log-loss(modelo sin las variables
+  sospechosas) − log-loss(modelo con ellas), con la etiqueta barajada y las mismas permutaciones.
 
     .venv/bin/python -m src.models.placebo <salida.json>     # tabla de potencia completa (~minutos)
 """
@@ -35,10 +42,13 @@ from scipy.optimize import minimize
 from src.features.placebo import block_shuffle, predict_logit
 from src.models import base as B
 from src.models import harness as H
+from src.models import metrics as M
 from src.models.metrics import P_COLS, QUADS
 
 PAIRED_TOL = 0.02
 N_SEEDS = 20
+WARN_SIGN_P = 0.01          # regla complementaria (M2-5): prueba de signo unilateral sobre las semillas…
+WARN_T = 3.0                # …o t de la media > 3 → AVISO de fuga (investigar; no falla automáticamente)
 PLACEBO_VARS = ("curve_10y3m", "payems_3m_ann", "indpro_3m_ann", "unrate_sahm", "headline_cpi_6m_ann", "ppi_yoy",
                 "baa_spread", "ff_d12m")   # las 8 variables a priori del placebo de la base PIT
 CAND = ("cand_a", "cand_b", "cand_c")
@@ -145,14 +155,49 @@ def paired_skill(pit, seed: int, leak, record: bool = False) -> dict:
             "pareado_nulo": m[f"{k}/vars_null"]["logloss"] - m[f"{k}/vars_cand"]["logloss"]}
 
 
+def leak_rules(p) -> dict:
+    """Regla principal (media > 0,02) y regla complementaria (aviso: signo unilateral p < 0,01 o t > 3)."""
+    p = np.asarray(p, float)
+    n = len(p)
+    sd = p.std(ddof=1) if n > 1 else float("nan")
+    t = float(p.mean() / (sd / np.sqrt(n))) if n > 1 and sd > 0 else float("nan")
+    sp = M.sign_test_greater(int((p > 0).sum()), n)
+    return {"fuga_detectada": bool(p.mean() > PAIRED_TOL), "signo_p_unilateral": sp, "t": t,
+            "aviso_fuga": bool(sp < WARN_SIGN_P or (t == t and t > WARN_T))}
+
+
 def evaluate(pit, leak, seeds=tuple(range(1, N_SEEDS + 1))) -> dict:
     rows = [paired_skill(pit, s, leak) for s in seeds]
     a, p = np.array([r["absoluto"] for r in rows]), np.array([r["pareado"] for r in rows])
     pn = np.array([r["pareado_nulo"] for r in rows])
     return {"n_semillas": len(rows), "pareado_media": float(p.mean()), "pareado_sd": float(p.std(ddof=1)),
-            "pareado_frac_>0": float((p > 0).mean()), "fuga_detectada": bool(p.mean() > PAIRED_TOL),
+            "pareado_frac_>0": float((p > 0).mean()), **leak_rules(p),
             "pareado_nulo_media": float(pn.mean()), "absoluto_media": float(a.mean()), "absoluto_regla_v1_falla": bool(a.mean() > PAIRED_TOL),
             "pareado": [round(float(x), 5) for x in p]}
+
+
+def _named(model: B.Model, name: str) -> B.Model:
+    model.name = name
+    return model
+
+
+def model_placebo(pit, make_without, make_with, seeds=tuple(range(1, N_SEEDS + 1)), test_start: str = "1975-01",
+                  refit_every: int = 12, min_train_months: int = 60, record: bool = False) -> dict:
+    """Placebo pareado de un ASPIRANTE con SU especificación y SU regularizador (M2-5). `make_without()` / `make_with()`
+    devuelven el modelo sin y con las variables sospechosas (p. ej. M0 y M1, o M1 − v y M1). Etiqueta oficial ≤ 2004
+    barajada en bloques de 24 meses, mismas permutaciones para los dos; reglas: `leak_rules`."""
+    rows = []
+    for seed in seeds:
+        data = H.placebo_data(pit, seed)
+        reg = {"sin": lambda: _named(make_without(), "sin"), "con": lambda: _named(make_with(), "con")}
+        cfg = H.HarnessConfig(name="placebo_aspirante", models=("sin", "con"), modes=(data.mode,),
+                              test_start=test_start, refit_every=refit_every, min_train_months=min_train_months,
+                              min_train_recessions=0, min_train_g_changes=0, baseline="sin", epochs=())
+        m = H.run(cfg, registry=reg, datas={data.mode: data}, record=record)["report"]["modelos"]
+        rows.append(m[f"{data.mode}/sin"]["logloss"] - m[f"{data.mode}/con"]["logloss"])
+    p = np.array(rows)
+    return {"n_semillas": len(p), "pareado_media": float(p.mean()), "pareado_frac_>0": float((p > 0).mean()),
+            **leak_rules(p), "pareado": [round(float(x), 5) for x in p]}
 
 
 CASES = {"sin_fuga_ruido": noise(),

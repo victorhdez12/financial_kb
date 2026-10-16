@@ -8,6 +8,9 @@ Cada corrida añade:
 - sus predicciones, puntuaciones e informe en `<runs>/<run_id>/` (fuera de git: `FIN_DATA_ROOT/models/runs`).
 
 `<trials>` = research/trials (FKB_TRIALS_DIR en los tests); el trial log = research/trial_log.md (FKB_TRIAL_LOG).
+Durante la evaluación única (N7) las tres rutas son FIJAS y relativas al código, sin variables de entorno:
+research/trials, research/trial_log.md y research/holdout/runs/<run_id>/ (con las predicciones también en CSV, que se
+puede versionar).
 """
 from __future__ import annotations
 
@@ -19,20 +22,25 @@ import platform
 from pathlib import Path
 
 from src.models import pit_labels
-from src.models.vault import REPO, _git, trials_dir
+from src.models import vault as V
+from src.models.vault import _git, trials_dir
 from src.warehouse import db
 
 
 def runs_dir() -> Path:
+    if V._FIXED["on"]:
+        return V.REPO / "research" / "holdout" / "runs"
     return Path(os.environ.get("FKB_RUNS_DIR", db.DATA_ROOT / "models" / "runs"))
 
 
 def trial_log_path() -> Path:
-    return Path(os.environ.get("FKB_TRIAL_LOG", REPO / "research" / "trial_log.md"))
+    if V._FIXED["on"]:
+        return V.REPO / "research" / "trial_log.md"
+    return Path(os.environ.get("FKB_TRIAL_LOG", V.REPO / "research" / "trial_log.md"))
 
 
 def code_sha() -> dict:
-    files = sorted((REPO / "src" / "models").glob("*.py"))
+    files = sorted((Path(__file__).resolve().parent).glob("*.py"))      # el código que se ejecuta
     h = hashlib.sha256()
     for f in files:
         h.update(f.read_bytes())
@@ -62,6 +70,8 @@ def record(res: dict) -> dict:
     d = runs_dir() / run_id
     d.mkdir(parents=True, exist_ok=True)
     res["preds"].to_parquet(d / "predictions.parquet", index=False)
+    if V._FIXED["on"]:
+        res["preds"].to_csv(d / "predictions.csv", index=False)
     res["scores"].to_parquet(d / "scores.parquet", index=False)
     (d / "report.json").write_text(json.dumps({"config": cfg, "report": rep, "diag": res["diag"]}, indent=1,
                                               ensure_ascii=False, default=str))

@@ -120,6 +120,13 @@ def sign_test(wins: int, n: int) -> float:
     return float(min(1.0, 2 * p))
 
 
+def sign_test_greater(wins: int, n: int) -> float:
+    """Prueba de signo UNILATERAL: P(Binomial(n, 1/2) ≥ wins)."""
+    if n == 0:
+        return float("nan")
+    return float(sum(math.comb(n, j) for j in range(wins, n + 1)) / 2 ** n)
+
+
 def summary(sc: pd.DataFrame) -> dict:
     out = {"n": int(len(sc)), "logloss": float(sc["logloss"].mean()), "brier": float(sc["brier"].mean()),
            "acierto": float(sc["hit"].mean())}
@@ -149,36 +156,73 @@ def runs(s: pd.Series) -> list[tuple[pd.Timestamp, pd.Timestamp, object, int]]:
     return [(g.index[0], g.index[-1], g.iloc[0], len(g)) for _, g in s.groupby(rid)]
 
 
+def g_smoothed(lab: pd.DataFrame, min_run: int = 6) -> pd.Series:
+    """Eje G duro oficial SIN parpadeos (regla fijada a priori, Validador v2 M2-3): una racha de menos de `min_run`
+    meses toma el valor de la última racha larga (≥ `min_run`) anterior; las rachas cortas del principio de la muestra
+    (sin racha larga previa) conservan su valor. Así dos giros seguidos nunca van en la misma dirección."""
+    g = g_hard(lab)
+    out, prev_long = g.copy(), None
+    for a, b, v, n in runs(g):
+        if n >= min_run:
+            prev_long = v
+        elif prev_long is not None:
+            out[(out.index >= a) & (out.index <= b)] = prev_long
+    return out
+
+
 def g_turns(lab: pd.DataFrame, min_run: int = 6) -> list[dict]:
-    """Giros del eje G: cambio del G duro oficial cuya nueva racha dura ≥ `min_run` meses."""
+    """Giros del eje G (definición v2.1, fijada a priori; M2-3): cambios de la serie SIN parpadeos (`g_smoothed`).
+    El mes del giro es el primer mes de la racha larga (≥ `min_run`) del lado nuevo; `hasta` es el final de esa racha
+    (con los parpadeos que absorbe). Los giros alternan de dirección por construcción."""
     out = []
-    rr = runs(g_hard(lab))
-    for i, (a, b, v, n) in enumerate(rr):
-        if i == 0 or n < min_run:
+    for i, (a, b, v, n) in enumerate(runs(g_smoothed(lab, min_run))):
+        if i == 0:
             continue
         out.append({"mes": a, "hasta": b, "nuevo": int(v), "n": n})
     return out
 
 
+def turn_windows(turns: list[dict], window=(-3, 6)) -> list[tuple[pd.Timestamp, pd.Timestamp]]:
+    """Ventanas SIN solape alrededor de cada giro (M2-3): [mes − 3, mes + 6], y si la ventana posterior de un giro
+    alcanza la anterior del siguiente, se recorta para que el siguiente conserve sus 3 meses previos."""
+    out = []
+    for i, t in enumerate(turns):
+        a = t["mes"] + pd.DateOffset(months=window[0])
+        b = t["mes"] + pd.DateOffset(months=window[1])
+        if i + 1 < len(turns):
+            nxt = turns[i + 1]["mes"] + pd.DateOffset(months=window[0])
+            b = min(b, nxt - pd.DateOffset(months=1))
+        if out:
+            a = max(a, out[-1][1] + pd.DateOffset(months=1))
+        out.append((a, b))
+    return out
+
+
 def episodes(lab: pd.DataFrame, pad: int = 6, min_run: int = 6, turn_window=(-3, 6)) -> list[dict]:
-    """Episodios fijados a priori (decisión del usuario, 2026-10-16):
+    """Episodios fijados a priori (decisión del usuario, 2026-10-16; giros redefinidos en la v2.1, M2-3):
     (a) recesiones NBER (`usrec` oficial) ± `pad` meses;
     (b) rachas de la etiqueta dura oficial de ≥ `min_run` meses (los parpadeos ya pesan en el corte de giros);
-    (c) giros del eje G (racha nueva ≥ `min_run`), ventana de −3 a +6 meses alrededor del cambio."""
+    (c) giros del eje G (`g_turns`, sin parpadeos), ventana de −3 a +6 meses SIN solape (`turn_windows`).
+    `truncado` (B2-5): el episodio empieza o acaba en el borde de la muestra (recesión ya en curso al empezar, o su
+    ventana ± pad sale de la muestra; racha que empieza en el primer mes o acaba en el último). Los truncados se
+    informan pero NO entran en la prueba de signo."""
     out = []
+    first, last = lab.index.min(), lab.index.max()
     u = lab["usrec"].fillna(0).astype(int)
     starts = u.index[(u == 1) & (u.shift(1, fill_value=0) == 0)]
     ends = u.index[(u == 1) & (u.shift(-1, fill_value=0) == 0)]
     for s, e in zip(starts, ends):
-        out.append({"tipo": "recesion_nber", "id": f"rec {s:%Y-%m}",
-                    "desde": s - pd.DateOffset(months=pad), "hasta": e + pd.DateOffset(months=pad)})
+        a, b = s - pd.DateOffset(months=pad), e + pd.DateOffset(months=pad)
+        out.append({"tipo": "recesion_nber", "id": f"rec {s:%Y-%m}", "desde": a, "hasta": b,
+                    "truncado": bool(s == first or a < first or b > last)})
     for a, b, v, n in runs(lab["label_hard"]):
         if n >= min_run:
-            out.append({"tipo": "racha_regimen", "id": f"{v} {a:%Y-%m}", "desde": a, "hasta": b})
-    for t in g_turns(lab, min_run):
-        out.append({"tipo": "giro_g", "id": f"G{'↑' if t['nuevo'] else '↓'} {t['mes']:%Y-%m}",
-                    "desde": t["mes"] + pd.DateOffset(months=turn_window[0]),
-                    "hasta": t["mes"] + pd.DateOffset(months=turn_window[1])})
+            out.append({"tipo": "racha_regimen", "id": f"{v} {a:%Y-%m}", "desde": a, "hasta": b,
+                        "truncado": bool(a == first or b == last)})
+    tt = g_turns(lab, min_run)
+    for t, (a, b) in zip(tt, turn_windows(tt, turn_window)):
+        out.append({"tipo": "giro_g", "id": f"G{'↑' if t['nuevo'] else '↓'} {t['mes']:%Y-%m}", "desde": a, "hasta": b,
+                    "truncado": bool(a < first or b > last)})
     return out
 
 
@@ -199,26 +243,33 @@ def month_cuts(lab: pd.DataFrame, lag: int = 5) -> pd.DataFrame:
     return out
 
 
-def detection(pg: pd.Series, lab: pd.DataFrame, min_run: int = 6, sustain: int = 3) -> dict:
-    """Retraso de detección de los giros de G y falsas alarmas (Estratega E6).
-    - Retraso: meses desde el cambio oficial hasta el primer mes en que P(G alto) queda del lado nuevo de 0,5 durante
-      `sustain` meses seguidos (o hasta el final de la racha si es más corta). Si no ocurre dentro de la racha: no
-      detectado (censurado en la longitud de la racha).
+def detection(pg: pd.Series, lab: pd.DataFrame, min_run: int = 6, sustain: int = 3, lead: int = 3) -> dict:
+    """Retraso de detección de los giros de G y falsas alarmas (Estratega E6; definición v2.1 fijada a priori, M2-3).
+    - Giros: `g_turns` (sin parpadeos, alternos) de la etiqueta oficial en la muestra puntuada.
+    - Confirmación: primer mes c en el que P(G alto) lleva `sustain` meses seguidos (c − 2, c − 1, c) del lado nuevo
+      de 0,5, buscando desde el mes del giro − `lead` (se permite ANTICIPAR) hasta el final de la racha nueva.
+    - Retraso = c − mes del giro: va de −`lead` + `sustain` − 1 (= −1 con 3 y 3: confirmado un mes antes del giro)…
+      en adelante; NO se acota en 0. Un modelo que confirma antes del giro puntúa mejor que uno que confirma después.
+    - Censurado: no se confirma dentro de la racha nueva (o de la muestra). Se cuenta APARTE y NO entra en la media.
     - Falsas alarmas: en la parte estable de las rachas de G ≥ `min_run` (a partir del mes `min_run` de la racha),
-      número de veces que P(G alto) pasa al lado contrario al oficial; tasa por año de meses estables."""
+      número de veces que P(G alto) pasa al lado contrario al oficial; tasa por año de meses estables (sin cambios)."""
     gh = g_hard(lab).reindex(pg.index)
     side = (pg >= 0.5).astype(int)
     delays = []
     for t in g_turns(lab.loc[lab.index.isin(pg.index)], min_run):
-        seg = side[(side.index >= t["mes"]) & (side.index <= t["hasta"])]
-        need = min(sustain, len(seg))
-        d = None
-        for i in range(len(seg) - need + 1):
-            if (seg.iloc[i:i + need] == t["nuevo"]).all():
-                d = i
+        lo = t["mes"] - pd.DateOffset(months=lead)
+        seg = side[(side.index >= lo) & (side.index <= t["hasta"])]
+        c = None
+        for i in range(sustain - 1, len(seg)):
+            if (seg.iloc[i - sustain + 1:i + 1] == t["nuevo"]).all():
+                c = seg.index[i]
                 break
-        delays.append({"mes": f"{t['mes']:%Y-%m}", "nuevo": t["nuevo"], "retraso": d if d is not None else len(seg),
-                       "detectado": d is not None})
+        rec = {"mes": f"{t['mes']:%Y-%m}", "nuevo": t["nuevo"], "racha_meses": t["n"], "detectado": c is not None,
+               "retraso": None}
+        if c is not None:
+            rec["retraso"] = int((c.year - t["mes"].year) * 12 + c.month - t["mes"].month)
+            rec["confirmacion"] = f"{c:%Y-%m}"
+        delays.append(rec)
     stable = pd.Series(False, index=pg.index)
     for a, b, _, n in runs(gh.dropna()):
         if n >= min_run:
@@ -226,8 +277,20 @@ def detection(pg: pd.Series, lab: pd.DataFrame, min_run: int = 6, sustain: int =
     wrong = (side != gh) & stable
     fa = int((wrong & ~wrong.shift(1, fill_value=False)).sum())
     yrs = stable.sum() / 12
-    det = [d["retraso"] for d in delays]
-    return {"giros": delays, "n_giros": len(delays), "retraso_medio": float(np.mean(det)) if det else np.nan,
-            "detectados": int(sum(d["detectado"] for d in delays)),
+    det = [d["retraso"] for d in delays if d["detectado"]]
+    return {"definicion": "v2.1 (confirmación, censura aparte, sin parpadeos, anticipación ≤ %d m)" % lead,
+            "giros": delays, "n_giros": len(delays), "detectados": len(det), "censurados": len(delays) - len(det),
+            "retraso_medio": float(np.mean(det)) if det else np.nan,
             "falsas_alarmas": fa, "meses_estables": int(stable.sum()),
             "falsas_alarmas_por_año": float(fa / yrs) if yrs else np.nan}
+
+
+def detection_vs(dm: dict, dc: dict) -> dict:
+    """Comparación PAREADA del retraso (modelo − comparador) en los giros detectados por los DOS; censurados aparte.
+    < 0 = el modelo confirma antes."""
+    cm = {g["mes"]: g for g in dc["giros"]}
+    pairs = [g["retraso"] - cm[g["mes"]]["retraso"] for g in dm["giros"]
+             if g["detectado"] and g["mes"] in cm and cm[g["mes"]]["detectado"]]
+    return {"n_pares": len(pairs), "retraso_pareado_medio": float(np.mean(pairs)) if pairs else np.nan,
+            "censurados_modelo": dm["censurados"], "censurados_comparador": dc["censurados"],
+            "falsas_alarmas_año_modelo_menos_comparador": dm["falsas_alarmas_por_año"] - dc["falsas_alarmas_por_año"]}
