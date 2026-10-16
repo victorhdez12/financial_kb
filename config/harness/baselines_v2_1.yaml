@@ -1,0 +1,26 @@
+# Corrida de los baselines del arnés v2.1 (docs/models/harness.md §8): misma configuración que baselines_v2.yaml; cambian
+# solo la detección de giros (M2-3) y los episodios truncados (B2-5). Solo ≤ 2004. Sin variables macro.
+name: baselines_v2_1
+models: [persistence_pit, climatology, m0_calibrated_persistence]
+model_params:
+  climatology: {alpha: 1.0}
+  m0_calibrated_persistence: {eps: 0.001, l2: 1.0}   # fijados a priori (base.py)
+modes: [vintage, latest_truncated]
+refit_every: 1                 # reentreno mensual
+embargo_months: 6
+min_train_months: 120          # §5 (decisión del usuario, 2026-10-16)
+min_train_recessions: 2
+min_train_g_changes: 8
+test_start: "1956-10"          # la persistencia cruda predice desde aquí (listón de la muestra completa)
+test_end: "2004-12"
+eval_window: ["1975-01", "2004-12"]   # ventana de evaluación FIJA de desarrollo (Estratega E9); no depende de los modelos
+allow_shrink: false
+epochs: [["1956-01", "1979-12"], ["1980-01", "2004-12"]]
+subperiods: [["1975-01", "1989-12"], ["1990-01", "2004-12"]]
+feature_policy: principal
+provisional_weighting: madurez
+baseline: m0_calibrated_persistence    # listón principal: persistencia calibrada (M0)
+reference: persistence_pit             # persistencia cruda: referencia que se informa
+phase: development
+who: Constructor
+nota: "Baselines del arnés v2.1 (detección de giros v2.1, episodios truncados); sin variables macro."
