@@ -71,8 +71,8 @@ def placebo_seed(pit, seed: int, spec: str, leak=None) -> dict:
         a, b = m[f"{k}/m0_calibrated_persistence"], m[f"{k}/{spec}"]
     else:
         a, b = m[f"{k}/{spec}"], m[f"{k}/m1_plus_c"]
-    out.update({"delta": a["logloss"] - b["logloss"], "delta_g": a["logloss_g"] - b["logloss_g"],
-                "delta_i": a["logloss_i"] - b["logloss_i"]})
+    out.update({"delta": a["logloss"] - b["logloss"], "delta_g": a["ll_g"] - b["ll_g"],
+                "delta_i": a["ll_i"] - b["ll_i"]})
     return out
 
 
