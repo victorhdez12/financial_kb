@@ -232,3 +232,6 @@ Nota en `research/hypotheses.yaml` (sin cambiar estados). El arnés ya calcula l
 3. ¿Las sensibilidades de L2 de M1 (`m1_logit_axis_l2lo/l2hi`, `m1_spec.md` §6) también en la evaluación única, como
    secundarias? Hoy no están (menos comparaciones).
 4. Configurar el remoto de GitHub (harness.md §10).
+
+---
+**Nota del coordinador (2026-10-16, decisión del usuario):** criterio de éxito cambiado **antes** de cualquier evaluación del periodo bloqueado: giros ≥ 0 frente a M0, falsas alarmas ≤ 0,5/año, mejora total ≥ 0,05 nats (sustituye "≥ 0,25 nats en giros"). Anotado en `research/trial_log.md` como post hoc respecto a los resultados de desarrollo de M1 v1. El borrador se rehará con esto cuando haya M1 v2; **no se gasta el periodo bloqueado en M1 v1**.
