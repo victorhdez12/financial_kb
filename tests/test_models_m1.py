@@ -202,3 +202,13 @@ def test_real_pit_columns_and_windows_spy_only():
     assert d[("m1_logit_axis", "G", t86)][0] == pd.Timestamp("1963-11-01")
     assert "core_cpi_6m_ann" not in d[("rules_v1", None, t86)][1]
     assert "core_cpi_6m_ann" in d[("rules_v1", None, t88)][1] and d[("rules_v1", None, t88)][0] == pd.Timestamp("1978-01-01")
+
+
+def test_rules_without_growth_rt_fall_back_to_climatology():
+    """Corrección técnica post hoc (m1_spec.md §9): antes de que el arnés admita growth_rt, sin estado → climatología."""
+    idx = pd.date_range("1960-01-01", periods=30, freq="MS")
+    X = pd.DataFrame({"unrate_sahm": 0.0, "headline_cpi_6m_ann": 3.0}, index=idx)
+    Y = np.tile([0.4, 0.3, 0.2, 0.1], (30, 1))
+    r = RU.RulesClassifier()
+    r.fit(X, Y, None, {})
+    np.testing.assert_allclose(r.predict_proba(X.iloc[[-1]], {})[0], r.clim_)

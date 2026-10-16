@@ -183,3 +183,10 @@ principal.
 - Épocas por eje como especificación del arnés (dos ventanas preregistradas por eje y cambio en una fecha fija), en
   lugar del empalme de puntuaciones de dos corridas.
 - `report()` con signos de coeficientes y `sign_stability` (Validador M2-4; en curso en la v2.1).
+
+## 9. Cambios post hoc (técnicos; ninguno tras ver resultados)
+
+| fecha | cambio | por qué | qué se había visto |
+|---|---|---|---|
+| 2026-10-16 | `m1_run.placebo_seed`: claves `ll_g`/`ll_i` (commit 353ac63) | error de claves; el placebo falló antes de imprimir nada | nada |
+| 2026-10-16 | `models_rules.rule_states`: si falta `growth_rt` (o Sahm) en las filas, el estado de G es "sin estado" → climatología del corte | con `test_start` 1956-10 el arnés hace elegibles las reglas con `unrate_sahm` y el IPC general antes de que `growth_rt` tenga 120 meses (~1974); las dos corridas oficiales fallaron con `KeyError` antes de puntuar. No afecta a las ventanas de evaluación (desde 1975-06 `growth_rt` ya está admitido) | nada (fallaron antes de puntuar; anotadas en el trial log) |

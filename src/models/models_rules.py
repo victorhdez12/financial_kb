@@ -38,6 +38,9 @@ def rule_states(H: pd.DataFrame, ivar: str) -> pd.DataFrame:
     """Estados de las reglas mes a mes sobre una historia mensual (índice = mes; huecos = NaN)."""
     idx = pd.date_range(H.index.min(), H.index.max(), freq="MS")
     H = H.reindex(idx)
+    for c in (G_VAR, SAHM_VAR):          # antes de que el arnés admita growth_rt (época): sin estado de G
+        if c not in H:
+            H[c] = np.nan
     g = H[G_VAR]
     gd6 = g - g.shift(6)
     up = (g > 0) & ((gd6 > 0) | gd6.isna()) & ~(H[SAHM_VAR] >= SAHM_TRIGGER)
