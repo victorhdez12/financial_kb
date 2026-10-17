@@ -28,3 +28,7 @@ obsidian/.trash/
 
 # Registro completo de accesos y corridas sin registrar (ruta fija, fuera de git; src/models/vault.py)
 research/trials/full/
+.DS_Store
+.venv/
+obsidian.zip
+obsidian/Proyecto/Actualizaciones.md
