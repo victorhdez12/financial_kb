@@ -435,3 +435,17 @@ Las entradas más recientes van arriba. Ver también [[Proyecto/Estado del proye
   considero mejor, un **nowcast estructural de G** (regresión del G continuo con adelantos de 0-5 m). Decisiones del
   usuario en §4 (reservar bloqueado, congelar v0.4, aspirante(s), `baa_gap10y` fuera, v1/v2 informativas, cálculo de
   potencia antes de P-EVAL-BASE v4, eje I = M0).
+- **Validador: base PIT v0.4 + A3-1 + M1 v2 + P-EVAL-BASE v3** (`docs/validation/2026-10-23_pit_v0.4_m1v2.md`, solo
+  lectura; nada ≥ 2005 de la etiqueta, nada registrado). (1) **v0.4 ✅ → se puede congelar** (FROZEN + tag `pit-v0.4`,
+  con la aprobación del usuario): 4 derivadas recalculadas a mano (error 0, NaN idénticos en las 3 matrices), linaje ≤
+  fecha de decisión, v0.3 bit a bit (8 ficheros y bloque FROZEN = tag `pit-v0.3`); la lectura pareada del t−4 añadida
+  post hoc endurece el test (la media se mantiene y pasa, +0,030), así que es neutra; los descriptivos ≥ 2005 sin
+  etiqueta los permite `harness.md`, y no contaminan. (2) **A3-1 ✅**: falla cerrado; se llama antes de consumir en la
+  apertura, en `evaluate_holdout` y en el ensayo registrado; la protección real de `main` cumple las tres condiciones;
+  ningún force-push en la actividad de GitHub. (3) **M1 v2 ✅**: la spec se empujó a las 09:11:29Z, antes de la primera
+  carga de la etiqueta (11:11:41, placebo barajado) y de las corridas (11:18); código idéntico entre la spec y las
+  corridas; las 3 corridas (`results_sha256`) y el placebo se reproducen bit a bit; "no bate a M0" es correcto.
+  (4) **P-EVAL-BASE v3 ⚠️**: aún no hay configuración v3 ni ensayo en seco (M4-1); quita "eje G > 0" y cambia la
+  promoción de "< 0" a "≤ 0" sin declararlo (M4-2); A8.2/A8.3 siguen abiertas (M4-3). Bajos: cita de la norma (§4c no
+  existe), lecturas de la etiqueta sin registrar (test y PITLabeler), registrar el cambio de `_check_eval_config` en
+  `harness.md` §11.
