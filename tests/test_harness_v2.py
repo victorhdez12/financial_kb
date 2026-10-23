@@ -95,6 +95,9 @@ def evalrepo(tmp_path, monkeypatch):
     fake = _fake_label(tmp_path / "fake_label.parquet")
     # la comprobación de URL de GitHub se relaja SOLO aquí, por inyección explícita (nunca por variable de entorno)
     monkeypatch.setattr(V, "REMOTE_URL_RE", __import__("re").compile("^" + __import__("re").escape(str(remote)) + "$"))
+    # protección de rama (A3-1): el remoto bare local no es GitHub; se simula una protección correcta, también por
+    # inyección explícita (los tests de A3-1 la sustituyen por respuestas simuladas de `gh api`)
+    monkeypatch.setattr(V, "check_branch_protection", lambda branch=None: {"ok": True, "simulada": True})
     monkeypatch.setattr(V, "REPO", repo)
     monkeypatch.setattr(H, "REPO", repo)
     monkeypatch.setattr(R, "out_path", lambda *a, **k: fake)     # ninguna vía llega a la etiqueta oficial
@@ -789,6 +792,7 @@ from src.models import vault as V
 V.REPO = Path(sys.argv[1])
 R.out_path = lambda *a, **k: Path(sys.argv[2])
 V.REMOTE_URL_RE = re.compile(".*")
+V.check_branch_protection = lambda *a, **k: {"ok": True}
 orig = V._check_registry_history
 def slow():
     r = orig(); time.sleep(float(sys.argv[3])); return r
@@ -914,3 +918,108 @@ def test_dry_run_catches_ineligible_models_and_bad_config(vint, tmp_path):
     assert not dr["ok"] and any("NO elegible" in x for x in dr["errores"])
     assert {x["eje"] for x in bad} == {"G", "I"} and all(x["n_train"] < 500 for x in bad)
 
+
+# ================================================================== A3-1: protección de rama en GitHub comprobada por código
+GOOD_PROTECTION = {"url": "https://api.github.com/repos/u/r/branches/main/protection",
+                   "allow_force_pushes": {"enabled": False}, "allow_deletions": {"enabled": False},
+                   "enforce_admins": {"url": "…", "enabled": True}, "required_linear_history": {"enabled": False}}
+
+
+def test_A31_protection_problems_on_simulated_responses():
+    assert V.protection_problems(GOOD_PROTECTION) == []
+    for key, bad in (("allow_force_pushes", True), ("allow_deletions", True), ("enforce_admins", False)):
+        r = json.loads(json.dumps(GOOD_PROTECTION))
+        r[key]["enabled"] = bad
+        assert len(V.protection_problems(r)) == 1 and key in V.protection_problems(r)[0]
+    assert len(V.protection_problems({})) == 3                                    # claves ausentes: incumple
+    assert len(V.protection_problems({"allow_force_pushes": False, "allow_deletions": None,
+                                      "enforce_admins": {"enabled": "true"}})) == 3   # mal formadas: incumple
+
+
+def test_A31_github_slug():
+    assert V.github_slug("https://github.com/victorhdez12/financial_kb.git") == ("victorhdez12", "financial_kb")
+    assert V.github_slug("git@github.com:victorhdez12/financial_kb.git") == ("victorhdez12", "financial_kb")
+    assert V.github_slug("https://github.com/u/r") == ("u", "r")
+    with pytest.raises(V.HoldoutLocked):
+        V.github_slug("/tmp/remote.git")
+
+
+def _gh_check(monkeypatch, response):
+    """check_branch_protection REAL (no la simulada del fixture) con `gh api` simulado y un origin de GitHub."""
+    calls = []
+    monkeypatch.setattr(V, "check_remote", lambda: "https://github.com/u/r.git")
+
+    def fake(path):
+        calls.append(path)
+        if isinstance(response, Exception):
+            raise response
+        return response
+
+    monkeypatch.setattr(V, "_gh_api", fake)
+    return calls
+
+
+def test_A31_check_branch_protection_ok_and_fails_closed(monkeypatch):
+    real = V.check_branch_protection
+    calls = _gh_check(monkeypatch, GOOD_PROTECTION)
+    out = real("main")
+    assert out["ok"] and out["repo"] == "u/r" and calls == ["repos/u/r/branches/main/protection"]
+    assert (out["allow_force_pushes"], out["allow_deletions"], out["enforce_admins"]) == (False, False, True)
+    bad = {**GOOD_PROTECTION, "allow_force_pushes": {"enabled": True}}
+    _gh_check(monkeypatch, bad)
+    with pytest.raises(V.HoldoutLocked, match="allow_force_pushes"):
+        real("main")
+    _gh_check(monkeypatch, V.HoldoutLocked("gh api …: 404 Branch not protected"))
+    with pytest.raises(V.HoldoutLocked, match="404"):
+        real("main")
+
+
+def test_A31_gh_api_fails_closed(monkeypatch):
+    class Proc:
+        def __init__(self, rc, out, err=""):
+            self.returncode, self.stdout, self.stderr = rc, out, err
+
+    monkeypatch.setattr(V.subprocess, "run", lambda *a, **k: Proc(1, "", "HTTP 404: Branch not protected"))
+    with pytest.raises(V.HoldoutLocked, match="404"):
+        V._gh_api("repos/u/r/branches/main/protection")
+    monkeypatch.setattr(V.subprocess, "run", lambda *a, **k: Proc(0, "no es json"))
+    with pytest.raises(V.HoldoutLocked, match="JSON"):
+        V._gh_api("x")
+    monkeypatch.setattr(V.subprocess, "run", lambda *a, **k: Proc(0, "[1, 2]"))
+    with pytest.raises(V.HoldoutLocked, match="inesperada"):
+        V._gh_api("x")
+
+    def boom(*a, **k):
+        raise FileNotFoundError("gh")
+
+    monkeypatch.setattr(V.subprocess, "run", boom)
+    with pytest.raises(V.HoldoutLocked, match="gh no disponible"):
+        V._gh_api("x")
+    monkeypatch.setattr(V.subprocess, "run", lambda *a, **k: Proc(0, json.dumps(GOOD_PROTECTION)))
+    assert V._gh_api("x") == GOOD_PROTECTION
+
+
+def test_A31_unlock_aborts_without_protection_and_spends_nothing(evalrepo, monkeypatch):
+    def nope(branch=None):
+        raise V.HoldoutLocked(f"la rama {branch} no tiene la protección exigida (A3-1)")
+
+    monkeypatch.setattr(V, "check_branch_protection", nope)
+    with pytest.raises(V.HoldoutLocked, match="protección exigida"):
+        _open()
+    assert _registry(evalrepo["repo"]) == []                                   # nada consumido
+    assert _git(evalrepo["remote"], "rev-list", "--all").strip() == ""          # nada empujado
+    with pytest.raises(V.HoldoutLocked, match="protección exigida"):
+        H.evaluate_holdout("P-EVAL-TEST")
+    assert _registry(evalrepo["repo"]) == []
+
+
+def test_A31_registered_dry_run_needs_protection(monkeypatch, tmp_path):
+    def nope(branch=None):
+        raise V.HoldoutLocked("sin protección (A3-1)")
+
+    monkeypatch.setattr(V, "check_branch_protection", nope)
+    seen = []
+    monkeypatch.setattr(V, "_append", lambda path, rec: seen.append(path))
+    with pytest.raises(V.HoldoutLocked, match="A3-1"):
+        H.dry_run_prereg(cfg_path=str(_probe_cfg(tmp_path)), record=True)
+    assert seen == []                                                          # no deja ninguna línea "ok"

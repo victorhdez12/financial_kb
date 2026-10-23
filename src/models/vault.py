@@ -14,6 +14,8 @@ Es una barrera **anti-accidente, no anti-intención**: Python no tiene atributos
     3. git disponible, `REPO` = raíz del repositorio, una RAMA (no HEAD suelto) y árbol limpio: incluidos los no
        rastreados y los IGNORADOS relevantes (en src/, config/, tests/, research/; salvo `__pycache__`/`*.pyc`, el
        registros `research/trials/` (salidas del arnés, no entradas) y las salidas `research/holdout/runs/`; N6). Git **falla cerrado**;
+    4b. PROTECCIÓN DE RAMA (Validador A3-1): la rama de evaluación de `origin` en GitHub prohíbe push forzado y borrado
+       e incluye a los administradores (`check_branch_protection`, vía `gh api`); si no se puede comprobar, aborta;
     4. ANCLA EXTERNA (decisión del usuario 16-oct): remoto `origin` configurado con URL de GitHub; con el CERROJO
        exclusivo ya tomado (fcntl en `<git-dir>/fkb-holdout.lock`; un segundo proceso falla, N8): `git fetch origin`,
        la rama local contiene `origin/<rama>`, y se empuja HEAD (el preregistro queda en el remoto antes de gastar);
@@ -234,6 +236,69 @@ def check_remote() -> str:
     return url
 
 
+# ------------------------------------------------------------------ protección de rama en GitHub (Validador A3-1)
+# La unicidad de la evaluación solo cae si se REESCRIBE el remoto (push forzado o borrado de la rama; Validador v2.1
+# T3/T4). Lo impide la protección de rama de GitHub; el código la COMPRUEBA antes de abrir la caja (y en el ensayo en
+# seco registrado, paso previo a registrar un P-EVAL-…): si falta, no es la esperada o no se puede consultar → aborta.
+GITHUB_SLUG_RE = re.compile(r"github\.com[:/]([\w.-]+)/([\w.-]+?)(?:\.git)?/?$")
+PROTECTION_REQUIRED = {"allow_force_pushes": False, "allow_deletions": False, "enforce_admins": True}
+
+
+def github_slug(url: str) -> tuple[str, str]:
+    """(propietario, repositorio) de una URL de GitHub (https o ssh); si no lo es → HoldoutLocked."""
+    m = GITHUB_SLUG_RE.search(url.strip())
+    if not m:
+        raise HoldoutLocked(f"no se puede leer propietario/repositorio de GitHub en {url!r}")
+    return m.group(1), m.group(2)
+
+
+def _gh_api(path: str) -> dict:
+    """`gh api <path>` (JSON). Falla CERRADO: sin `gh`, sin sesión, 404/403 o salida no JSON → HoldoutLocked."""
+    try:
+        r = subprocess.run(["gh", "api", path], capture_output=True, text=True, timeout=60,
+                           env={**os.environ, "GH_PROMPT_DISABLED": "1"})
+    except Exception as e:  # noqa: BLE001
+        raise HoldoutLocked(f"gh no disponible ({e!r}): no se puede comprobar la protección de rama") from e
+    if r.returncode != 0:
+        raise HoldoutLocked(f"gh api {path} falló ({r.returncode}): {(r.stderr or r.stdout).strip()[:200]}")
+    try:
+        out = json.loads(r.stdout)
+    except ValueError as e:
+        raise HoldoutLocked(f"gh api {path}: respuesta no JSON") from e
+    if not isinstance(out, dict):
+        raise HoldoutLocked(f"gh api {path}: respuesta inesperada")
+    return out
+
+
+def protection_problems(prot: dict) -> list[str]:
+    """Qué falta en la respuesta de `branches/<rama>/protection` frente a PROTECTION_REQUIRED (vacío = cumple). Una
+    clave ausente o mal formada cuenta como incumplida."""
+    out = []
+    for key, want in PROTECTION_REQUIRED.items():
+        v = prot.get(key)
+        got = v.get("enabled") if isinstance(v, dict) else None
+        if got is not want:
+            out.append(f"{key}.enabled = {got!r} (se exige {want})")
+    return out
+
+
+def check_branch_protection(branch: str | None = None) -> dict:
+    """Comprueba en GitHub que la rama de evaluación de `origin` está protegida con allow_force_pushes = false,
+    allow_deletions = false y enforce_admins = true (`gh api repos/<o>/<r>/branches/<rama>/protection`). Si no se puede
+    consultar o no cumple → HoldoutLocked (no se abre ni se gasta nada)."""
+    branch = branch or _branch()
+    url = check_remote()
+    owner, repo = github_slug(url)
+    path = f"repos/{owner}/{repo}/branches/{branch}/protection"
+    prot = _gh_api(path)
+    probs = protection_problems(prot)
+    if probs:
+        raise HoldoutLocked(f"la rama {branch} de {owner}/{repo} no tiene la protección exigida (A3-1): "
+                            + "; ".join(probs))
+    return {"repo": f"{owner}/{repo}", "rama": branch, "ok": True,
+            **{k: prot[k]["enabled"] for k in PROTECTION_REQUIRED}}
+
+
 def _remote_head(branch: str) -> str:
     out = _git_strict("ls-remote", REMOTE_NAME, f"refs/heads/{branch}").split()
     return out[0] if out else ""
@@ -329,6 +394,7 @@ class LabelVault:
             if ign:
                 raise HoldoutLocked("árbol de git sucio: ficheros IGNORADOS relevantes (N6): " + ", ".join(ign[:10]))
             check_remote()                                                          # 4
+            check_branch_protection(branch)                                         # 4b (A3-1): sin reescritura
         except HoldoutLocked as e:
             self._deny(str(e))
         try:

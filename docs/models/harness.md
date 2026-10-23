@@ -604,6 +604,16 @@ Resultados (`research/trials/placebo_power_v2.json`, 20 semillas por caso):
 
 ## 11. Registro de cambios
 
+### v2.2 (2026-10-23)
+
+| # | cambio | origen | dónde |
+|---|---|---|---|
+| A3-1 | **Protección de rama comprobada por código.** `vault.check_branch_protection(rama)` consulta `gh api repos/<o>/<r>/branches/<rama>/protection` (propietario/repositorio leídos de la URL de `origin`) y exige `allow_force_pushes.enabled = false`, `allow_deletions.enabled = false` y `enforce_admins.enabled = true`. Falla **cerrado**: sin `gh`, sin sesión, 404/403, JSON raro, clave ausente o mal formada → `HoldoutLocked`. Se llama (1) en `LabelVault._unlock`, paso 4b, **antes** del cerrojo, del push y del consumo (nada se gasta si falla); (2) al principio de `evaluate_holdout`; (3) en `dry_run_prereg` con `record=True` (el ensayo registrado es el paso previo a registrar un `P-EVAL-…`: sin protección no queda ninguna línea `ok`). CLI: `python -m src.models.harness --check-protection`. Comprobado el 23-oct en `victorhdez12/financial_kb` (público): `main` con las tres condiciones | Validador v2.1, A3-1 | `vault.py`, `harness.py`; tests `test_A31_*` (respuestas de `gh api` simuladas) |
+| — | **`pit_version` por configuración** (v0.3 por defecto; hashes de las matrices en `MATRIX_SHA256_BY_VERSION`). Una versión **candidata** (la v0.4) solo se acepta en desarrollo: `HarnessConfig.validate` y `PITData` en `holdout_evaluation` exigen una versión en `P.FROZEN` | base PIT v0.4 / M1 v2 | `harness.py` |
+
+Nota operativa: la protección de rama en un repositorio **privado** exige GitHub Pro (403 sin él). Si el repositorio
+vuelve a privado sin Pro, `check_branch_protection` falla y no hay evaluación única (falla cerrado, como debe).
+
 ### v2.1 (2026-10-16)
 
 | hallazgo (Validador v2) | cambio |

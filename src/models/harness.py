@@ -1146,6 +1146,8 @@ def dry_run_prereg(prereg_id: str | None = None, cfg_path: str | None = None, re
     `evaluate_holdout` exige una línea `ok` con ese hash, commiteada, y repite el ensayo antes de gastar nada.
     Acepta un borrador (solo `cfg_path`) o un id registrado (`prereg_id`, lee su `config_arnes`)."""
     entry = None
+    if record:   # A3-1: el ensayo registrado es el paso previo a registrar/ejecutar un P-EVAL: sin protección, no
+        V.check_branch_protection()
     if cfg_path is None:
         entry = V.eval_entry(prereg_id)
         cfg_path = entry.get("config_arnes")
@@ -1289,6 +1291,7 @@ def evaluate_holdout(prereg_id: str, dry_run: bool = False) -> dict:
         raise HoldoutLocked(f"{cfg_path}: fase/prereg_id no coinciden con {prereg_id}")
     if _EVAL["vault"] is not None:
         raise HoldoutLocked("ya hay una evaluación única en curso en este proceso")
+    V.check_branch_protection()                       # A3-1: antes de cualquier otra cosa (la caja lo repite)
     _preflight(prereg_id, cfg_path)
     vault = LabelVault(mode="holdout_evaluation", prereg_id=prereg_id, window=cfg.window)   # consume y ancla
     _EVAL["vault"] = vault
@@ -1319,7 +1322,12 @@ def main() -> None:
                     help="corrida oficial: exige src/, config/ y tests/ commiteados (git_dirty = false)")
     ap.add_argument("--dry-run", metavar="CONFIG_O_ID",
                     help="ensayo en seco de una evaluación única (configuración de un borrador o id P-EVAL-…)")
+    ap.add_argument("--check-protection", action="store_true",
+                    help="comprueba la protección de la rama de evaluación en GitHub (A3-1) y sale")
     a = ap.parse_args()
+    if a.check_protection:
+        print(json.dumps(V.check_branch_protection(), ensure_ascii=False))
+        return
     if a.dry_run:
         arg = a.dry_run
         dr = dry_run_prereg(prereg_id=arg) if arg.startswith(V.EVAL_PREFIX) else dry_run_prereg(cfg_path=arg)
