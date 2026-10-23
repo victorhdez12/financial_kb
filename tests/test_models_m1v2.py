@@ -119,3 +119,19 @@ def test_candidate_pit_not_allowed_in_holdout():
         H.PITData("vintage", phase="holdout_evaluation", prereg_id="P-EVAL-X", pit_version="0.4")
     with pytest.raises(ValueError, match="desconocida"):
         H.HarnessConfig(name="x", pit_version="9.9").validate()
+
+
+def test_dry_run_flags_candidate_pit_before_spending(tmp_path):
+    """Una configuración de evaluación con la base v0.4 candidata la rechaza el ensayo en seco (que `_preflight` repite
+    ANTES de abrir la caja): nunca llega a `_run` con el preregistro ya consumido."""
+    import yaml
+    d = {"name": "x", "prereg_id": "P-EVAL-X", "phase": "holdout_evaluation", "pit_version": "0.4",
+         "principal": "m1v2_logit_axis", "models": ["m1v2_logit_axis", "m0_calibrated_persistence"],
+         "modes": ["vintage"], "test_start": "1978-07", "test_end": "2021-10", "eval_window": ["2005-01", "2021-10"],
+         "baseline": "m0_calibrated_persistence", "dry_run_window": ["1995-01", "2004-12"]}
+    cfg = H.HarnessConfig(**{**d, "models": tuple(d["models"]), "modes": tuple(d["modes"]),
+                             "eval_window": tuple(d["eval_window"]), "dry_run_window": tuple(d["dry_run_window"])})
+    errs = H._check_eval_config(cfg, "P-EVAL-X", None)
+    assert any("no está congelada" in e for e in errs)
+    assert not any("no está congelada" in e for e in H._check_eval_config(
+        H.HarnessConfig(**{**cfg.__dict__, "pit_version": "0.3"}), "P-EVAL-X", None))

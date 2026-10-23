@@ -410,3 +410,15 @@ Las entradas más recientes van arriba. Ver también [[Proyecto/Estado del proye
   1,7·(core − 2,9)/0,75 (sensibilidades s = 0,5 y 1,0); sin Sahm en nivel; Filadelfia fuera (no está en la lista final
   del Estratega). Ventanas (recuento sin ajustar modelos): principal 1989-10 → 2004-12 (la de M1 v1), larga del eje G
   1978-07 → 2004-12. Una sola pasada.
+- **Constructor: placebo de M1 v2 limpio** antes de la etiqueta real (commit `e5a5fd3`): M1 v2 Δ −0,876 (el offset
+  estructural de I solo puede perjudicar con la etiqueta barajada, anticipado en la spec), eje G aislado −0,025; ni fuga
+  ni aviso; la regla complementaria detecta t+1/t σ 2 y calendario t−4.
+- **Constructor: M1 v2, única pasada de desarrollo — NEGATIVA** (`docs/models/m1_v2_results_dev.md`). Principal
+  1989-10 → 2004 (vintage): **M1 v2 − M0 −0,017 [−0,131; +0,078]** (M1 v1 −0,019); v2 − v1 +0,001. Giros −0,035 (v1
+  −0,160), estables −0,012, **falsas alarmas 0,75/año** (M0 0,19; v1 0,56), retraso 2,8 m (M0 4,4). Eje G aislado
+  1978-07 → 2004: +0,035 [−0,035; +0,099], giros +0,003, FA 0,56/año. Sensibilidades s: 0,5 → −0,063; 1,0 → −0,007.
+  Signos: `baa_gap10y` al revés en el 100 % de los cortes, `sahm_d3m` ≈ 0. No cumple el criterio (total, giros, FA,
+  signos). No se itera. Borrador **P-EVAL-BASE v3** (M1 v1 + v2 frente a M0, Holm k = 2) escrito, **no registrado**.
+  Además: el ensayo en seco rechaza una base PIT no congelada (antes de consumir nada).
+- **Pendiente del usuario:** ¿gastar el bloqueado en M1 v1 + v2 (casi seguro "no") o esperar al Markov con
+  transiciones variables? Congelar la v0.4 tras el Validador. Lanzar Validador (v0.4, A3-1, M1 v2) y Estratega (M1 v2).

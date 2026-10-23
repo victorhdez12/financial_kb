@@ -1,0 +1,115 @@
+{
+ "run_id": "20261023-111824_m1v2_principal_512ecfcc",
+ "a": "m0_calibrated_persistence",
+ "b": "m1v2_logit_axis",
+ "latest_truncated": {
+  "n": 183,
+  "mejora_logloss": {
+   "mean": 0.0031624798,
+   "lo": -0.1073368494,
+   "hi": 0.0953565407,
+   "frac_rep_le0": 0.4522,
+   "p_h0": 0.4994,
+   "n": 183,
+   "block": 12
+  },
+  "mejora_ll_g": {
+   "mean": -0.0096676238,
+   "lo": -0.0955682258,
+   "hi": 0.0586015205,
+   "frac_rep_le0": 0.5704,
+   "p_h0": 0.6202,
+   "n": 183,
+   "block": 12
+  },
+  "mejora_ll_i": {
+   "mean": 0.0131428818,
+   "lo": -0.0450495246,
+   "hi": 0.0641105913,
+   "frac_rep_le0": 0.313,
+   "p_h0": 0.3292,
+   "n": 183,
+   "block": 12
+  },
+  "giro": {
+   "mean": -0.0574647452,
+   "lo": -0.3858078233,
+   "hi": 0.1878051814,
+   "frac_rep_le0": 0.6116,
+   "p_h0": 0.6694,
+   "n": 42,
+   "block": 12
+  },
+  "estable": {
+   "mean": 0.0212216532,
+   "lo": -0.0834834601,
+   "hi": 0.1069286435,
+   "frac_rep_le0": 0.322,
+   "p_h0": 0.3518,
+   "n": 141,
+   "block": 12
+  },
+  "deteccion_b_frente_a_a": {
+   "n_pares": 5,
+   "retraso_pareado_medio": -0.6,
+   "censurados_modelo": 0,
+   "censurados_comparador": 0,
+   "falsas_alarmas_año_modelo_menos_comparador": 0.0
+  }
+ },
+ "vintage": {
+  "n": 183,
+  "mejora_logloss": {
+   "mean": -0.0172350241,
+   "lo": -0.1306914157,
+   "hi": 0.0779802772,
+   "frac_rep_le0": 0.6116,
+   "p_h0": 0.6446,
+   "n": 183,
+   "block": 12
+  },
+  "mejora_ll_g": {
+   "mean": -0.0124570658,
+   "lo": -0.107621098,
+   "hi": 0.0667678646,
+   "frac_rep_le0": 0.587,
+   "p_h0": 0.6272,
+   "n": 183,
+   "block": 12
+  },
+  "mejora_ll_i": {
+   "mean": -0.0044779246,
+   "lo": -0.0567120066,
+   "hi": 0.0394338798,
+   "frac_rep_le0": 0.5652,
+   "p_h0": 0.5892,
+   "n": 183,
+   "block": 12
+  },
+  "giro": {
+   "mean": -0.0348948582,
+   "lo": -0.3479639596,
+   "hi": 0.2058723063,
+   "frac_rep_le0": 0.562,
+   "p_h0": 0.6104,
+   "n": 42,
+   "block": 12
+  },
+  "estable": {
+   "mean": -0.011974648,
+   "lo": -0.1192467724,
+   "hi": 0.078686272,
+   "frac_rep_le0": 0.5672,
+   "p_h0": 0.6144,
+   "n": 141,
+   "block": 12
+  },
+  "deteccion_b_frente_a_a": {
+   "n_pares": 5,
+   "retraso_pareado_medio": -1.6,
+   "censurados_modelo": 0,
+   "censurados_comparador": 0,
+   "falsas_alarmas_año_modelo_menos_comparador": 0.5625
+  }
+ }
+}

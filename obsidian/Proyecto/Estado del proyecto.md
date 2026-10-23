@@ -29,7 +29,22 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Agentes de la fase:** Constructor · Investigador de relaciones · **Validador independiente** · **Reportero** (ver [[Proyecto/Agentes]]). Informe: [[Reports/Fase 3/Informe de resultados]].
 
-## ▶ Retomar aquí (23-oct)
+## ▶ Retomar aquí (23-oct, tarde)
+
+**Hecho hoy (Constructor):** base PIT **v0.4 candidata** (`657b6eb`; 4 derivadas de riesgo de giro; v0.3 intacta y
+congelada; v0.4 en `CANDIDATE`, no en `FROZEN`) · **A3-1** comprobación de la protección de rama por código (`f1ccc8f`;
+comprobada en GitHub: ok) · **spec M1 v2** a priori (`4d2b1ac`, H-M1-002 contaminada) · placebo limpio (`e5a5fd3`) ·
+**una pasada de desarrollo: M1 v2 no bate a M0** (−0,017 nats; giros −0,035; falsas alarmas 0,75/año; `baa_gap10y` con
+signo contrario) — `docs/models/m1_v2_results_dev.md` · borrador **P-EVAL-BASE v3** (M1 v1 + v2 frente a M0, Holm k = 2;
+NO registrado). 215 tests.
+
+**Siguiente:** Validador (base v0.4 + A3-1 + M1 v2) y Estratega (M1 v2) en paralelo → usuario decide: (a) congelar la
+v0.4; (b) ¿evaluación única con M1 v1 + v2 (casi seguro "no") o esperar al Markov con transiciones variables (Filardo)
+y evaluarlos juntos? No registrar P-EVAL-BASE sin esa decisión. Ojo: protección de rama solo mientras el repo sea
+público (sin Pro).
+
+### Retomar (23-oct, mañana) — histórico
+
 
 **Decidido (23-oct):** M1 v2 + base PIT v0.4 (propuesta del Estratega §4-§5). Repo GitHub **público** con protección de `main` (sin force-push/borrado, admins incluidos) → A3-1 cubierta en GitHub. **En marcha:** Constructor (v0.4 → M1 v2 spec a priori → una corrida de desarrollo ≤ 2004; + comprobación por código de la protección de rama). Después: Validador + Estratega en paralelo → usuario → registrar P-EVAL-BASE (v1 + v2 vs M0, Holm k=2) → evaluación única. Si la sesión se corta: `git log --oneline -15`, ver qué commiteó el Constructor y relanzar con el encargo de la Bitácora del 23-oct. Ojo: si el repo vuelve a privado sin Pro se pierde la protección → evaluación única mientras sea público.
 

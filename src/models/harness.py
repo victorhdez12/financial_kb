@@ -1084,6 +1084,9 @@ def _check_eval_config(cfg: HarnessConfig, pid: str | None, entry: dict | None) 
         err.append(f"prereg_id {cfg.prereg_id!r} no es un id de evaluación ({V.EVAL_PREFIX}…)")
     if cfg.allow_shrink:
         err.append("allow_shrink: true (en la evaluación única la ventana NO se puede reducir)")
+    if cfg.pit_version not in P.FROZEN:   # una base PIT candidata fallaría en _run DESPUÉS de consumir: se para aquí
+        err.append(f"pit_version {cfg.pit_version} no está congelada (FROZEN): la evaluación única exige una base "
+                   "PIT con el ✅ del Validador")
     if not cfg.eval_window:
         err.append("falta eval_window (ventana de evaluación explícita)")
     meta = json.loads(R.out_path().with_suffix(".meta.json").read_text())
