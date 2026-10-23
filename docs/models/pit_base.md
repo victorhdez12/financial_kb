@@ -1,15 +1,20 @@
 ---
 documento: base point-in-time de variables (Fase 3, entregable 2)
-version: 0.3
-fecha: 2026-10-16
-estado: CANDIDATA (hashes en CANDIDATE y en el meta; entra en FROZEN solo tras el ✅ del Validador). Sustituye a la v0.2
+version: 0.4
+fecha: 2026-10-23
+estado: v0.4 CANDIDATA (hashes en CANDIDATE y en el meta; entra en FROZEN solo tras el ✅ del Validador y la aprobación del usuario). La v0.3 sigue CONGELADA (tag pit-v0.3) y es la que usan M1 v1 y los baselines
 codigo: src/features/{calendar,pit,placebo,alfred_raw}.py, src/ingest/umich.py
 datos: <FIN_DATA_ROOT>/features/ (data/archive/features/)
-tests: tests/test_pit_leaks.py (+ tests/pit_helpers.py), 51 tests (96 en toda la suite)
-revisiones: docs/validation/2026-10-15_pit_base_v0.1.md, docs/validation/2026-10-15_pit_base_v0.2.md (Validador ⚠️, muy cerca de ✅), docs/validation/2026-10-16_pit_base_v0.3.md (⚠️ con 2 condiciones mecánicas, H-1 y H-2, resueltas en esta revisión), docs/reviews/2026-10-15_estratega_macro_pit_base.md
+tests: tests/test_pit_leaks.py (+ tests/pit_helpers.py) y tests/test_pit_v04.py (v0.4)
+revisiones: docs/validation/2026-10-15_pit_base_v0.1.md, docs/validation/2026-10-15_pit_base_v0.2.md, docs/validation/2026-10-16_pit_base_v0.3.md (✅), docs/reviews/2026-10-15_estratega_macro_pit_base.md, docs/reviews/2026-10-16_estratega_macro_m1.md (§5: origen de la v0.4)
 ---
 
-# Base point-in-time de variables (nowcast EE. UU.), v0.3
+# Base point-in-time de variables (nowcast EE. UU.), v0.4
+
+> **v0.4 (2026-10-23)** = v0.3 + 4 derivadas de **riesgo de giro** (`curve_min12`, `baa_gap10y`, `baa_d6m`,
+> `sahm_d3m`; Estratega, revisión de M1 §5). Las 58 columnas de la v0.3, sus linajes y los baselines son **idénticos
+> bit a bit** (test). Detalle, controles y hashes en §9 "v0.3 → v0.4". El resto de este documento describe la v0.3 y
+> vale igual para la v0.4 salvo donde se dice.
 
 ## 1. Qué hay
 
@@ -96,7 +101,7 @@ Uso:
 6. Repetir el placebo (`src/features/placebo.py`) sobre sus propias predicciones: sin fuga debe pasar y con una fuga
    inyectada debe fallar.
 
-## 4. Variables (58) y cobertura
+## 4. Variables (58 en la v0.3; 62 en la v0.4: las 4 nuevas en §9 "v0.3 → v0.4") y cobertura
 
 Estados: **principal** 36 (de ellas 9 solo desde su `principal_desde_efectivo`, una por herencia), **principal_epoca** 13 (de ellas 2
 solo desde su `principal_desde`: `tcu_gap` 1984-01 y `vix` 2003-09), **condicional** 5,
@@ -285,6 +290,54 @@ SAHMREALTIME, capa EUR, capas L-CAP (entran sus análogos PIT), Michigan vía FR
 (v0.3).
 
 ## 9. Registro de cambios
+
+### v0.3 → v0.4 (2026-10-23; decisión del usuario sobre la revisión del Estratega de M1, §5)
+
+**Qué es.** Cuatro derivadas nuevas, fijadas a priori con su mecanismo (lista blanca, bloque "RIESGO DE GIRO"),
+calculadas sobre la rejilla mensual con valores ya PIT de columnas de la v0.3 (solo hacia atrás). Misma instantánea de
+datos (la de la v0.2, `DATA_VERSION["0.4"] = "0.2"`) y mismo calendario que la v0.3 (mismo hash). Ninguna celda de la
+v0.3 cambia.
+
+| variable | definición (a priori) | función | mecanismo (Estratega §5) | signo | primer dato |
+|---|---|---|---|---|---|
+| `curve_min12` | mínimo de `curve_10y3m` en t−11 … t (12 valores presentes) | `rolling_min`, n = 12 (nueva) | una inversión **reciente** eleva el riesgo de caída a 6-18 meses; evita el "falso amanecer" de la pendiente actual tras los recortes | + | 1954-04 |
+| `baa_gap10y` | `baa_spread` − mediana de los 120 meses previos (≥ 90 %) | `gap_median_prev` (existente) | precio del riesgo de crédito frente a lo normal, sin la deriva secular | − | 1962-05 |
+| `baa_d6m` | Δ6m de `baa_spread` | `diff6` (existente) | empeoramiento del crédito = entrada; compresión = salida (simétrico) | − | 1953-11 |
+| `sahm_d3m` | Δ3m de `unrate_sahm` (cada valor, el publicado en su fecha) | `diff3` (existente) | señal de entrada de la Sahm con signo coherente al salir (la Sahm en nivel sigue alta en el rebote) | − | 1950-04 |
+
+- Estado `principal`, sin `principal_desde` (sus entradas no lo tienen; `effective_principal_desde` = ninguno).
+- `claims_4w_yoy` y Filadelfia (filas 1 y 6 de la tabla del Estratega) **ya estaban** en la v0.3: no cambian.
+- Contaminación declarada: las cuatro se proponen **después** de ver M1 v1 (trial log, C3/C4 del Estratega). Las
+  definiciones no se han ajustado mirando su relación con la etiqueta.
+- Lista blanca: 62 públicas + 26 auxiliares (antes 58 + 26).
+
+**Hashes (CANDIDATE["0.4"], `src/features/pit.py`; matrices en `harness.MATRIX_SHA256_BY_VERSION["0.4"]`):**
+lista blanca `0df63c84…`, info `90515a5f…`, datos `db06b89c…` (= v0.2), calendario `373ced7b…` (= v0.3);
+matrices vintage `938d3d36…`, latest_truncated `58cf9c30…`, Filadelfia prudente `ef6121e6…`; baselines
+`aedd3c8d…` / `99e5ba71…` (**los mismos ficheros que la v0.3**).
+
+**Controles (los mismos que la v0.3, más los específicos; `tests/test_pit_v04.py`, 20 tests; la suite de la v0.3,
+`tests/test_pit_leaks.py`, corre ahora sobre la v0.4):**
+
+| control | qué comprueba | resultado |
+|---|---|---|
+| (s) superconjunto | 3 matrices: las 58 columnas de la v0.3 y sus linajes idénticos; baselines bit a bit (mismo SHA-256); meta "candidata" | ok |
+| (v) a mano | las 4 derivadas recalculadas con numpy desde sus columnas base, en las 3 matrices (NaN incluidos); primeras fechas | ok (rtol 1e-12) |
+| (p) PIT | perturbar el futuro de la entrada no cambia la derivada ≤ t (3 cortes × 4 funciones); recalcular con la rejilla truncada en t da el mismo valor (1979-10, 2004-12, 2 modos); además el test (b) de la v0.3 (5 cortes × 2 modos con el warehouse truncado) cubre las 62 columnas | ok |
+| (a), (e), (f) | publicación ≤ t, lista negra, solo `observed`: la suite de la v0.3 sobre la v0.4 (las derivadas heredan el linaje de sus entradas) | ok |
+| (c) placebo | 12 columnas (las 8 del placebo de la v0.3 + las 4 nuevas), etiqueta ≤ 2004 barajada en bloques de 24, 8 permutaciones: **sin fuga −0,235** (pasa); **fuga fuerte +0,373** (falla 8/8); **control t−4: media +0,030** (falla; 5/8 > 0,02) y **pareado t−4 − sin fuga +0,22 … +0,33 (8/8)** | ok |
+| (d) señal plantada | serie sintética con primera publicación a 20 días y revisión a 110: las 4 derivadas reproducen exactamente la transformación de la primera publicación de t−1; con fuga de calendario (dato de t en t) la diferencia se ve (> 0,05) | ok |
+
+**Aviso (placebo):** con 12 columnas el sesgo del L2 del placebo mínimo es mayor (−0,235 frente a −0,138 con 8) y la
+media del control t−4 queda cerca del umbral (0,030 frente a 0,087 en la v0.3). La lectura robusta es la **pareada**
+(misma permutación). El criterio pareado se añadió **después** de ver estas cifras (con la etiqueta barajada; anotado
+en el trial log como post hoc del test).
+
+**Congelación:** procedimiento B-5 tras el ✅ del Validador y la aprobación del usuario (FROZEN["0.4"] = copia de
+CANDIDATE["0.4"] + veredicto; tag `pit-v0.4`; `SUPERSEDED["0.3"] = "0.4"` en ese momento). Hasta entonces el arnés solo
+la acepta en desarrollo (`pit_version: "0.4"`; `evaluate_holdout` y `PITData` en `holdout_evaluation` exigen una
+versión en FROZEN).
+
 
 ### v0.3 tras re-auditoría 16-oct (`docs/validation/2026-10-16_pit_base_v0.3.md`, ⚠️ con 2 condiciones)
 

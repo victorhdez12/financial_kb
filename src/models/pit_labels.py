@@ -43,7 +43,7 @@ def _sha(paths) -> str:
 class PITLabeler:
     """Etiqueta recalculada con los datos conocidos en cada fecha de decisión (un modo)."""
 
-    def __init__(self, mode: str, pit_version: str = P.VERSION, vault=None):
+    def __init__(self, mode: str, pit_version: str = "0.3", vault=None):   # la congelada (la v0.4 da lo mismo)
         if mode not in P.MODES:
             raise ValueError(f"modo desconocido: {mode}")
         self.mode, self.vault = mode, vault

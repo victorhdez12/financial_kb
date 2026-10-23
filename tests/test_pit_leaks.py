@@ -1,4 +1,5 @@
-"""Tests de la base point-in-time v0.3 (docs/models/pit_base.md §5). Corren sobre la INSTANTÁNEA CONGELADA de entradas.
+"""Tests de la base point-in-time v0.4 candidata (docs/models/pit_base.md §5). Corren sobre la INSTANTÁNEA de entradas
+(datos de la v0.2, congelados; lista blanca y calendario de la v0.4 en CANDIDATE). La v0.3 sigue congelada e intacta.
 
 (h) hashes: la instantánea, la lista blanca y el calendario coinciden con FROZEN; una copia alterada se rechaza; la
     matriz oficial se reproduce bit a bit;
@@ -53,12 +54,20 @@ def full(snap, forbidden):
 
 
 # ------------------------------------------------------------------ (h) instantánea congelada / candidata
-def test_h_current_version_is_frozen_with_verdict():
+def test_h_v03_frozen_with_verdict():
     """I-4: una versión entra en FROZEN solo tras el veredicto del Validador. La v0.3 se congeló el 2026-10-16
     (✅, docs/validation/2026-10-16_pit_base_v0.3.md) y conserva su entrada en CANDIDATE (B-5)."""
-    assert P.VERSION in P.FROZEN and P.VERSION in P.CANDIDATE
-    assert P.FROZEN[P.VERSION].get("veredicto")
-    assert P.SUPERSEDED.get("0.2") == P.VERSION
+    assert "0.3" in P.FROZEN and "0.3" in P.CANDIDATE
+    assert P.FROZEN["0.3"].get("veredicto")
+    assert P.SUPERSEDED.get("0.2") == "0.3"
+
+
+def test_h_current_version_is_candidate_not_frozen():
+    """La v0.4 (2026-10-23) es CANDIDATA: hashes en CANDIDATE y NO en FROZEN hasta el ✅ del Validador y la aprobación
+    del usuario (procedimiento B-5). Reutiliza los datos de la v0.2 y el calendario de la v0.3 (mismos hashes)."""
+    assert P.VERSION == "0.4" and P.VERSION in P.CANDIDATE and P.VERSION not in P.FROZEN
+    assert P.DATA_VERSION["0.4"] == "0.2"
+    assert P.CANDIDATE["0.4"]["calendar_sha256"] == P.FROZEN["0.3"]["calendar_sha256"]
 
 
 HASH_KEYS = ("data_sha256_file", "data_sha256_content", "whitelist_sha256", "calendar_sha256", "info_sha256", "grid_end")
@@ -131,8 +140,9 @@ def test_h_frozen_versions_intact(version):
 
 
 def test_h_same_data_as_v02():
-    assert P.CANDIDATE["0.3"]["data_sha256_file"] == P.FROZEN["0.2"]["data_sha256_file"]
-    assert P.snapshot_paths("0.3")["data"] == P.snapshot_paths("0.2")["data"]
+    for v in ("0.3", "0.4"):
+        assert P.CANDIDATE[v]["data_sha256_file"] == P.FROZEN["0.2"]["data_sha256_file"]
+        assert P.snapshot_paths(v)["data"] == P.snapshot_paths("0.2")["data"]
 
 
 def test_h_research_files_equal_snapshot():
@@ -179,10 +189,11 @@ def test_h_official_outputs_reproducible(official_rebuild):
 
 
 def test_h_snapshot_writers_refuse_frozen():
-    with pytest.raises(SystemExit):
-        P.write_snapshot(None, version="0.2")
-    with pytest.raises(SystemExit):
-        P.write_candidate(version="0.2")
+    for v in ("0.2", "0.3"):
+        with pytest.raises(SystemExit):
+            P.write_snapshot(None, version=v)
+        with pytest.raises(SystemExit):
+            P.write_candidate(version=v)
 
 
 def test_h_label_params_pinned(tmp_path, monkeypatch):

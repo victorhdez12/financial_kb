@@ -25,9 +25,14 @@
 # infl_energy_pressure → 1978-01); vix condicional antes de 2003-09-22; fechas de existencia no verificadas declaradas.
 # v0.3 tras re-auditoría (2026-10-16, Validador H-1, decisión del usuario): tcu_gap condicional antes de 1984-01-01
 # (la utilización de la industria total existe desde 1983; G.17 de la Fed). Ninguna derivada usa tcu_gap.
+# v0.4 (2026-10-23, decisión del usuario sobre la revisión del Estratega de M1, docs/reviews/2026-10-16_estratega_macro_m1.md
+# §5): 4 derivadas de RIESGO DE GIRO fijadas a priori con su mecanismo (curve_min12, baa_gap10y, baa_d6m, sahm_d3m),
+# calculadas sobre la rejilla con valores ya PIT de columnas de la v0.3 (curve_10y3m, baa_spread, unrate_sahm). Las 58
+# columnas de la v0.3 no cambian (misma instantánea de datos y mismas funciones). claims_4w_yoy y Filadelfia ya estaban
+# en la v0.3 (filas 1 y 6 de la tabla del Estratega): no se tocan.
 
-version: "0.3"
-fecha: 2026-10-16
+version: "0.4"
+fecha: 2026-10-23
 zscore_min_meses: 120          # z-scores expansivos: solo historia <= t, mínimo 10 años
 tendencia_meses: 120           # tendencia unilateral: mediana de los 120 meses hasta t
 mad_min_meses: 60              # escala MAD expansiva de (g - tendencia): mínimo 5 años
@@ -215,6 +220,23 @@ variables:
   - {nombre: copper_gold_6m, bloque: financieras, tipo: derivada, funcion: ratio_log_diff6, entradas: [_copper, _gold], estado: principal, desde: 1973-01-01,
      mecanismo: "Cobre (demanda industrial) frente a oro (refugio). Desde 1973-01: antes el oro estaba fijado o con doble mercado y el canal refugio no existía.", signo_esperado: "+ P(G alto)",
      admision: {fuente_viva: Banco Mundial, historia: "1973-", pit: "supuesto 7 días", disponibilidad: "desde 1973-01"}}
+
+  # ======================================================================= RIESGO DE GIRO (v0.4)
+  # Estratega, revisión de M1 (2026-10-16) §5, tabla filas 2-5. Derivadas de columnas ya PIT de la v0.3, calculadas en la
+  # rejilla mensual solo hacia atrás (valores conocidos en cada fecha de decisión ≤ t). Definiciones fijadas ANTES de
+  # mirar ninguna relación de estas columnas con la etiqueta. Contaminación declarada: se proponen tras ver M1 v1.
+  - {nombre: curve_min12, bloque: financieras, tipo: derivada, funcion: rolling_min, n: 12, entradas: [curve_10y3m], estado: principal,
+     mecanismo: "Mínimo de la pendiente 10a-3m en los 12 meses hasta t (t−11 … t). Una inversión RECIENTE eleva el riesgo de caída de G a 6-18 meses; recoge el adelanto de la curva en lugar de su pendiente actual, que tras los recortes se empina y da el 'falso amanecer' (Estratega §1, §5).", signo_esperado: "+ P(G alto)",
+     admision: {fuente_viva: FRED, historia: "1954-", pit: "mínimo de valores de curve_10y3m ya conocidos en cada t (mercado)", disponibilidad: "desde 1954-04 (12 meses de curva)"}}
+  - {nombre: baa_gap10y, bloque: financieras, tipo: derivada, funcion: gap_median_prev, entradas: [baa_spread], estado: principal,
+     mecanismo: "Diferencial Baa − 10 años menos su mediana de los 120 meses previos (t−120 … t−1; 90 % de la ventana): precio del riesgo de crédito frente a lo normal, sin la deriva secular del nivel (~1 pp en los 50, 2-3 pp en los 80).", signo_esperado: "- P(G alto)",
+     admision: {fuente_viva: FRED, historia: "1953-", pit: "mediana solo hacia atrás de valores ya conocidos (mercado)", disponibilidad: "desde ~1962-05 (108 de 120 meses)"}}
+  - {nombre: baa_d6m, bloque: financieras, tipo: derivada, funcion: diff6, entradas: [baa_spread], estado: principal,
+     mecanismo: "Cambio de 6 meses del diferencial Baa − 10 años. El EMPEORAMIENTO del crédito coincide con la entrada en la caída de G y la COMPRESIÓN con la salida: señal simétrica.", signo_esperado: "- P(G alto)",
+     admision: {fuente_viva: FRED, historia: "1953-", pit: "diferencia de valores ya conocidos en t y t−6 (mercado)", disponibilidad: "desde 1953-11"}}
+  - {nombre: sahm_d3m, bloque: crecimiento, tipo: derivada, funcion: diff3, entradas: [unrate_sahm], estado: principal,
+     mecanismo: "Cambio de 3 meses del indicador de Sahm (cada valor, el publicado en su fecha de decisión). Sube al entrar en recesión y baja al salir: conserva la señal de entrada de la Sahm con un signo coherente en las dos fases (la Sahm en nivel sigue alta en el rebote posrecesión; Estratega §2).", signo_esperado: "- P(G alto)",
+     admision: {fuente_viva: FRED/ALFRED, historia: "1948-", pit: "diferencia de valores de unrate_sahm ya conocidos en t y t−3 (vintages de UNRATE desde 1960-03)", disponibilidad: "desde ~1951"}}
 
   # ======================================================================= LIQUIDEZ
   - {nombre: _m2_yoy, bloque: auxiliar, tipo: serie, series: [M2SL], transformacion: {fn: pct_ann, k: 12}, modo: vintage, estado: auxiliar, mecanismo: "M2 a/a."}

@@ -11,7 +11,9 @@ Reglas (docs/PLAN.md "Validación", "Periodo bloqueado y reglas del arnés"; fic
    revisión). La etiqueta oficial congelada v1.1 solo PUNTÚA, a través de la caja fuerte (vault.py).
 4. Periodo bloqueado 2005-01 →: `run()` solo trabaja en `development`. La evaluación única tiene UN punto de entrada,
    `evaluate_holdout(prereg_id)`, que crea él mismo la caja fuerte (que consume el preregistro) y los datos.
-5. Variables solo de la matriz PIT congelada v0.3 (hash fijado), por nombre; `assert_no_forbidden()` antes de cada fit.
+5. Variables solo de la matriz PIT de la versión de la configuración (`pit_version`; v0.3 por defecto), con su hash
+   fijado aquí, por nombre; `assert_no_forbidden()` antes de cada fit. Una versión CANDIDATA (p. ej. la v0.4, aún sin el
+   ✅ del Validador) solo sirve en desarrollo; la evaluación única exige una versión en `P.FROZEN`.
    Modelos por eje (`AxisModel`): cada eje con sus variables y SU ventana; mínimo de entrenamiento por eje: meses,
    recesiones NBER y cambios de G (§5).
 6. Ventana de evaluación FIJA (`eval_window`): todos los modelos deben predecir todos sus meses; si no, error (o aviso
@@ -47,12 +49,20 @@ REPO = Path(__file__).resolve().parents[2]
 QUADS, P_COLS, PERS_COLS = M.QUADS, M.P_COLS, B.PERS_COLS
 LABEL_FORWARD = R.pace_need(R.PARAMS)            # 4: la etiqueta de s usa niveles hasta s + 4
 MIN_EMBARGO = R.PARAMS.embargo_months             # 6
-PIT_VERSION = "0.3"
-MATRIX_SHA256 = {
-    "vintage": "6858f6c93bfe692ab7a9452f22db1986ba52f32e1300703c12ae60fb2b9c0fa9",
-    "latest_truncated": "3d81ec88b17a5390e8b7c2099ef1a4406009a43b1e1f1751522b7767f9ff025b",
-    "vintage_filadelfia_prudente": "b8df88442043edc946b41530e4d24fcfeeb4c81c2bcca0ccc917d1f8fa223f5e",
+PIT_VERSION = "0.3"                               # versión por defecto (congelada; la de M1 v1 y los baselines)
+MATRIX_SHA256_BY_VERSION = {
+    "0.3": {   # congelada (FROZEN, tag pit-v0.3)
+        "vintage": "6858f6c93bfe692ab7a9452f22db1986ba52f32e1300703c12ae60fb2b9c0fa9",
+        "latest_truncated": "3d81ec88b17a5390e8b7c2099ef1a4406009a43b1e1f1751522b7767f9ff025b",
+        "vintage_filadelfia_prudente": "b8df88442043edc946b41530e4d24fcfeeb4c81c2bcca0ccc917d1f8fa223f5e",
+    },
+    "0.4": {   # CANDIDATA (2026-10-23): v0.3 + 4 derivadas de riesgo de giro; solo desarrollo hasta el ✅ del Validador
+        "vintage": "938d3d361d3a706383e587441f6e1402d43699ae72f625a47ef10e77ec487374",
+        "latest_truncated": "58cf9c303266eb5d53528c228a310193b62872e01d089b7eec74f3621f637ab0",
+        "vintage_filadelfia_prudente": "ef6121e659ea688f982213084007e6c562fcfe4b81d0f2fe1ac082aa261e70be",
+    },
 }
+MATRIX_SHA256 = MATRIX_SHA256_BY_VERSION[PIT_VERSION]
 ESTADOS = {"principal": ("principal", "principal_epoca"),
            "sensibilidad": ("principal", "principal_epoca", "condicional")}
 AXES = ("G", "I")
@@ -128,6 +138,7 @@ class HarnessConfig:
     epochs: tuple = (("1956-01", "1979-12"), ("1980-01", "2004-12"))
     subperiods: tuple = ()                  # estabilidad del signo (p. ej. 2005-14 / 2015+ en la evaluación única)
     feature_policy: str = "principal"
+    pit_version: str = PIT_VERSION          # matriz PIT (hash en MATRIX_SHA256_BY_VERSION); candidata solo en desarrollo
     provisional_weighting: str = "madurez"  # §3b: "madurez" (principal), "uno" y "excluir" (sensibilidades)
     baseline: str = "persistence_pit"       # comparador principal (M0 en las corridas con modelos)
     reference: str | None = None            # comparador secundario que se informa (p. ej. persistence_pit)
@@ -156,6 +167,11 @@ class HarnessConfig:
             raise ValueError("el baseline y la referencia tienen que estar entre los modelos (misma muestra)")
         if self.phase not in ("development", "holdout_evaluation"):
             raise ValueError(f"fase desconocida: {self.phase}")
+        if self.pit_version not in MATRIX_SHA256_BY_VERSION:
+            raise ValueError(f"versión PIT desconocida: {self.pit_version}")
+        if self.phase == "holdout_evaluation" and self.pit_version not in P.FROZEN:
+            raise HoldoutLocked(f"la evaluación única exige una base PIT congelada: v{self.pit_version} no está en "
+                                "FROZEN (falta el ✅ del Validador y la aprobación del usuario)")
         ends = [self.test_end] + ([self.eval_window[1]] if self.eval_window else [])
         if self.phase == "development" and max(_month(e) for e in ends) >= HOLDOUT_START:
             raise HoldoutLocked(f"test_end/eval_window dentro del periodo bloqueado (≥ {HOLDOUT_START:%Y-%m})")
@@ -205,8 +221,12 @@ class PITData:
     kind = "pit"
 
     def __init__(self, mode: str, variant: str = "", phase: str = "development", prereg_id: str | None = None,
-                 policy: str = "principal", vault: LabelVault | None = None):
-        self.mode, self.phase, self.policy = mode, phase, policy
+                 policy: str = "principal", vault: LabelVault | None = None, pit_version: str = PIT_VERSION):
+        self.mode, self.phase, self.policy, self.pit_version = mode, phase, policy, pit_version
+        if pit_version not in MATRIX_SHA256_BY_VERSION:
+            raise ValueError(f"versión PIT desconocida: {pit_version}")
+        if phase == "holdout_evaluation" and pit_version not in P.FROZEN:
+            raise HoldoutLocked(f"la evaluación única exige una base PIT congelada (v{pit_version} no está en FROZEN)")
         if phase == "holdout_evaluation":
             # identidad y tipo exacto, del preregistro y del contexto de evaluate_holdout: ANTES de leer nada (D3b)
             if not V.is_open_holdout_vault(vault, prereg_id) or _EVAL["vault"] is not vault:
@@ -222,12 +242,13 @@ class PITData:
             raise ValueError(f"fase desconocida: {phase}")
         self.vault = vault
         name = f"{mode}_{variant}" if variant else mode
-        if name not in MATRIX_SHA256:
+        shas = MATRIX_SHA256_BY_VERSION[pit_version]
+        if name not in shas:
             raise ValueError(f"matriz desconocida: {name}")
-        path = P.out_dir() / f"pit_us_v{PIT_VERSION}_{name}.parquet"
-        if P.file_sha(path) != MATRIX_SHA256[name]:
-            raise RuntimeError(f"{path.name} no coincide con la matriz congelada v{PIT_VERSION}")
-        self.matrix_name, self.matrix_sha = path.name, MATRIX_SHA256[name]
+        path = P.out_dir() / f"pit_us_v{pit_version}_{name}.parquet"
+        if P.file_sha(path) != shas[name]:
+            raise RuntimeError(f"{path.name} no coincide con la matriz registrada de la v{pit_version}")
+        self.matrix_name, self.matrix_sha = path.name, shas[name]
         filters = [("decision_date", "<", HOLDOUT_START.to_datetime64())] if phase == "development" else None
         X = pd.read_parquet(path, filters=filters)
         if phase == "development":
@@ -235,7 +256,7 @@ class PITData:
         X["month"] = X["decision_date"].dt.to_period("M").dt.to_timestamp()
         self.decision = X.set_index("month")["decision_date"]
         self.X = X.drop(columns=["decision_date"]).set_index("month")
-        self.labeler = PITLabeler(mode, PIT_VERSION, vault=vault if phase == "holdout_evaluation" else None)
+        self.labeler = PITLabeler(mode, pit_version, vault=vault if phase == "holdout_evaluation" else None)
         wl = self.labeler.wl
         public = set(P.public_columns(wl))
         if set(self.X.columns) != public:
@@ -290,7 +311,9 @@ class PITData:
         return self.vault.load(end=end)
 
     def hashes(self) -> dict:
-        return {"matrix": {self.matrix_name: self.matrix_sha}, "pit_snapshot": P.FROZEN[PIT_VERSION],
+        return {"matrix": {self.matrix_name: self.matrix_sha}, "pit_snapshot": P.snapshot_ref(self.pit_version),
+                "pit_version": self.pit_version,
+                "pit_estado": "congelada" if self.pit_version in P.FROZEN else "candidata",
                 "label_snapshot": R.FROZEN[R.PARAMS.version],
                 "label_file_sha256": LABEL_FILE_SHA256[R.PARAMS.version]}
 
@@ -367,7 +390,8 @@ def placebo_data(pit: PITData, seed: int, block: int = 24, leak=None, end: str =
 def vintage_breaks(pit: PITData) -> dict[str, list[pd.Timestamp]]:
     """Saltos revisado → primera publicación (`vintage_desde`) y de composición de cada columna (pit_base.md §3,
     regla 3). Solo para diagnosticar: nunca entran como variable."""
-    meta = json.loads((P.out_dir() / f"pit_us_v{PIT_VERSION}.meta.json").read_text())["columns"][pit.mode]
+    meta = json.loads((P.out_dir() / f"pit_us_v{getattr(pit, 'pit_version', PIT_VERSION)}.meta.json").read_text()
+                      )["columns"][pit.mode]
     out = {}
     for c, info in meta.items():
         b = [_month(info["vintage_desde"])] if info.get("vintage_desde") else []
@@ -942,7 +966,7 @@ def run(cfg: HarnessConfig, registry: dict | None = None, datas: dict | None = N
     if datas is None:
         vault = LabelVault()
         datas = {m: PITData(m, cfg.matrix_variant if m == "vintage" else "", "development", None,
-                            cfg.feature_policy, vault=vault) for m in cfg.modes}
+                            cfg.feature_policy, vault=vault, pit_version=cfg.pit_version) for m in cfg.modes}
     return _run(cfg, datas, registry, record, spy)
 
 
@@ -991,8 +1015,9 @@ def holdout_feature_availability(data: PITData, variant: str, cols: list, end: p
     """Disponibilidad (SOLO notna, nunca valores) de las variables pedidas en la matriz congelada entre 2005-01 y `end`.
     No toca la etiqueta. Queda en el registro de accesos (descriptivo de variables ≥ 2005: pit_base.md §4c)."""
     name = f"{data.mode}_{variant}" if variant else data.mode
-    path = P.out_dir() / f"pit_us_v{PIT_VERSION}_{name}.parquet"
-    if P.file_sha(path) != MATRIX_SHA256[name]:
+    ver = getattr(data, "pit_version", PIT_VERSION)
+    path = P.out_dir() / f"pit_us_v{ver}_{name}.parquet"
+    if P.file_sha(path) != MATRIX_SHA256_BY_VERSION[ver][name]:
         raise RuntimeError(f"{path.name} no coincide con la matriz congelada")
     if not cols:
         return pd.DataFrame(index=pd.DatetimeIndex([]))
@@ -1139,7 +1164,7 @@ def dry_run_prereg(prereg_id: str | None = None, cfg_path: str | None = None, re
         k = (mode, variant, policy)
         if k not in datas:
             vault = vault or LabelVault()
-            datas[k] = PITData(mode, variant, "development", None, policy, vault=vault)
+            datas[k] = PITData(mode, variant, "development", None, policy, vault=vault, pit_version=cfg.pit_version)
         return datas[k]
 
     try:
@@ -1275,7 +1300,8 @@ def evaluate_holdout(prereg_id: str, dry_run: bool = False) -> dict:
             for m in sc.modes:
                 k = (m, sc.matrix_variant if m == "vintage" else "", sc.feature_policy)
                 if k not in cache:
-                    cache[k] = PITData(m, k[1], cfg.phase, prereg_id, sc.feature_policy, vault=vault)
+                    cache[k] = PITData(m, k[1], cfg.phase, prereg_id, sc.feature_policy, vault=vault,
+                                       pit_version=cfg.pit_version)
                 datas[m] = cache[k]
             results[sc.name] = _run(sc, datas, None, record=True)
         _commit_results(prereg_id, results)

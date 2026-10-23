@@ -1,4 +1,4 @@
-"""Matriz de variables point-in-time para el nowcast de régimen EE. UU. (docs/models/pit_base.md, v0.2).
+"""Matriz de variables point-in-time para el nowcast de régimen EE. UU. (docs/models/pit_base.md, v0.4).
 
 Para cada fecha de decisión t (último día hábil del mes, calendario federal de EE. UU.; ficha de la etiqueta §9)
 devuelve el valor de cada variable de la LISTA BLANCA (research/pit_whitelist.yaml) usando solo lo publicado
@@ -47,7 +47,7 @@ from src.warehouse.build import VIEWS_SQL
 
 REPO = Path(__file__).resolve().parents[2]
 WL_PATH = REPO / "research" / "pit_whitelist.yaml"
-VERSION = "0.3"
+VERSION = "0.4"                # v0.4 CANDIDATA (2026-10-23); la v0.3 sigue congelada (FROZEN) para M1 v1
 MODES = ("vintage", "latest_truncated")
 GRID_START = "1950-01-01"
 # un valor deja de valer (NaN) si su periodo de referencia terminó hace más de estos días (series cortadas)
@@ -195,6 +195,8 @@ DERIVED: dict[str, Callable] = {
     "diff3": lambda df, c, wl, sp: df[c[0]] - df[c[0]].shift(3),
     "diff6": lambda df, c, wl, sp: df[c[0]] - df[c[0]].shift(6),
     "diff12": lambda df, c, wl, sp: df[c[0]] - df[c[0]].shift(12),
+    # v0.4: mínimo de los n valores PIT hasta t (t − n + 1 … t), con los n presentes (curve_min12)
+    "rolling_min": lambda df, c, wl, sp: df[c[0]].rolling(int(sp["n"]), min_periods=int(sp["n"])).min(),
     "level_d3m": lambda df, c, wl, sp: ((df[c[0]] + df[c[1]]) / 2).diff(3),
     "diff_ab": lambda df, c, wl, sp: df[c[0]] - df[c[1]],
     "baa_spread": lambda df, c, wl, sp: df[c[0]].combine_first(df[c[1]] - df[c[2]]),
@@ -613,9 +615,20 @@ CANDIDATE: dict[str, dict] = {
         "info_sha256": "7c1b141976f548cdabc60f874d9f2114734f036ee2698c27f169e2fc57684081",
         "grid_end": "2026-09-30",
     },
+    # v0.4 (2026-10-23): 4 derivadas de riesgo de giro (curve_min12, baa_gap10y, baa_d6m, sahm_d3m; Estratega, revisión
+    # de M1 §5) sobre la instantánea de datos de la v0.2 (mismo hash) y el calendario de la v0.3 (mismo hash). FUERA de
+    # FROZEN hasta el ✅ del Validador y la aprobación del usuario (procedimiento B-5)
+    "0.4": {
+        "data_sha256_file": "db06b89c63d7c89c896c76a13127739237c67e6594224a4d7375a5bf5c4a6261",
+        "data_sha256_content": "069b9d5cece116c8771c4d84c6f26ecc21d599f942f27f29b79bfbac9ded6b64",
+        "whitelist_sha256": "0df63c84c2431434fa7c3fb7d9a735eb31319b421ef8f5bcf4000c740b45e561",
+        "calendar_sha256": "373ced7b907e08728464935a64d523b0aa0150e899f44735c6613870c4cbc421",
+        "info_sha256": "90515a5f8b11dbdd37ee4005359cdcbeb39b0cc0084beb7c0fb591225c10f01c",
+        "grid_end": "2026-09-30",
+    },
 }
 # versión → versión de la instantánea de DATOS que usa (la v0.3 reutiliza la de la v0.2, sin releer el warehouse)
-DATA_VERSION = {"0.2": "0.2", "0.3": "0.2"}
+DATA_VERSION = {"0.2": "0.2", "0.3": "0.2", "0.4": "0.2"}
 SUPERSEDED = {"0.2": "0.3"}
 
 

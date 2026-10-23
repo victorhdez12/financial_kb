@@ -323,7 +323,7 @@ def test_evaluate_holdout_single_entry_and_closes_vault(evalrepo, monkeypatch):
         pass
 
     class FakeData:
-        def __init__(self, mode, variant, phase, prereg_id, policy, vault=None):
+        def __init__(self, mode, variant, phase, prereg_id, policy, vault=None, pit_version=None):
             assert V.is_open_holdout_vault(vault, "P-EVAL-TEST") and H._EVAL["vault"] is vault
             assert _registry(evalrepo["repo"])[0]["prereg_id"] == "P-EVAL-TEST"
             assert V._FIXED["on"] and V.trials_dir() == evalrepo["repo"] / "research" / "trials"   # N7
@@ -913,3 +913,4 @@ def test_dry_run_catches_ineligible_models_and_bad_config(vint, tmp_path):
     bad = [x for x in dr["elegibilidad"] if not x["elegible"]]
     assert not dr["ok"] and any("NO elegible" in x for x in dr["errores"])
     assert {x["eje"] for x in bad} == {"G", "I"} and all(x["n_train"] < 500 for x in bad)
+
