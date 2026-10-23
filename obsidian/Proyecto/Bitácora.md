@@ -449,3 +449,5 @@ Las entradas más recientes van arriba. Ver también [[Proyecto/Estado del proye
   promoción de "< 0" a "≤ 0" sin declararlo (M4-2); A8.2/A8.3 siguen abiertas (M4-3). Bajos: cita de la norma (§4c no
   existe), lecturas de la etiqueta sin registrar (test y PITLabeler), registrar el cambio de `_check_eval_config` en
   `harness.md` §11.
+- **Decisiones del usuario (23-oct, tarde):** (1) congelar v0.4 ✅; (2) reservar el bloqueado (M1 v1/v2 → informativas fuera de Holm); (3) **los dos aspirantes** (Markov TVTP eje G + nowcast estructural de G, Holm k ≤ 2); (4) cálculo de potencia antes de P-EVAL-BASE v4. Además pide **buscar en internet métodos de mejora** y probarlos.
+- Lanzados en paralelo: **Constructor** (congelar v0.4 + tag, potencia del bloqueado, arnés con G continuo; sin specs) e **Investigador** (búsqueda web → `docs/research/2026-10-23_mejoras_nowcast_regimen.md`). Después: specs a priori de los dos aspirantes incorporando las mejores ideas → corrida de desarrollo → Validador + Estratega.
