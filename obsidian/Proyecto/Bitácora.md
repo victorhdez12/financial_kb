@@ -391,3 +391,22 @@ Las entradas más recientes van arriba. Ver también [[Proyecto/Estado del proye
 - Hecho: repo **público**; protección de `main` activada (`allow_force_pushes=false`, `allow_deletions=false`, `enforce_admins=true`) → condición A3-1 del Validador cubierta en GitHub; falta que el código la compruebe antes de registrar P-EVAL-BASE.
 - ⚠️ Nota: si el repo vuelve a privado sin Pro, la protección se pierde → hacer la evaluación única **mientras sea público** (o pagar Pro).
 - Lanzado **Constructor (base PIT v0.4 + M1 v2 + comprobación de protección de rama)**.
+- **Constructor: base PIT v0.4 candidata** (commit `657b6eb`): 4 derivadas de riesgo de giro del Estratega §5 —
+  `curve_min12` (mínimo de la curva en 12 m), `baa_gap10y` (Baa frente a su mediana de 10 años), `baa_d6m` (Δ6m del
+  Baa), `sahm_d3m` (Δ3m de la Sahm)— fijadas a priori con mecanismo y signo. `claims_4w_yoy` y Filadelfia ya estaban en
+  la v0.3. Misma instantánea de datos y mismo calendario: las 58 columnas de la v0.3, linajes y baselines **idénticos
+  bit a bit**. En `CANDIDATE`, **no** en `FROZEN` (falta el ✅ del Validador). Tests nuevos (`tests/test_pit_v04.py`,
+  20): superconjunto, valores a mano, causalidad, truncamiento, placebo (sin fuga −0,235; fuga +0,373; t−4 media
+  +0,030, pareado +0,22…+0,33 en 8/8 — lectura pareada añadida tras ver el margen, anotada como post hoc del test),
+  señal plantada. El arnés admite `pit_version` (la candidata solo en desarrollo).
+- **Constructor: A3-1 del Validador** (commit `f1ccc8f`): `check_branch_protection` consulta `gh api
+  …/branches/main/protection` y exige `allow_force_pushes=false`, `allow_deletions=false`, `enforce_admins=true`;
+  falla cerrado. Se llama al abrir la caja (antes del cerrojo y del consumo), en `evaluate_holdout` y en el ensayo en
+  seco registrado. Comprobado hoy en GitHub: ok. CLI `python -m src.models.harness --check-protection`. Tests con
+  respuestas simuladas.
+- **Constructor: especificación a priori de M1 v2** commiteada y empujada **antes** de cualquier corrida con la
+  etiqueta (commit `4d2b1ac`; `docs/models/m1_v2_spec.md`, H-M1-002 **declarada contaminada**). Eje G: growth_rt,
+  claims_4w_yoy, curve_min12, baa_gap10y, baa_d6m, eq_ret_6m, sahm_d3m (L2 = 6); eje I estructural
+  1,7·(core − 2,9)/0,75 (sensibilidades s = 0,5 y 1,0); sin Sahm en nivel; Filadelfia fuera (no está en la lista final
+  del Estratega). Ventanas (recuento sin ajustar modelos): principal 1989-10 → 2004-12 (la de M1 v1), larga del eje G
+  1978-07 → 2004-12. Una sola pasada.

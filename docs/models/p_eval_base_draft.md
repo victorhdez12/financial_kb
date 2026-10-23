@@ -1,14 +1,126 @@
 ---
 documento: BORRADOR del preregistro de la evaluación única del modelo base (P-EVAL-BASE)
-version: 2.0 (rehecho tras la re-auditoría del arnés v2, A2-1; ejecutable con el arnés v2.1)
-fecha: 2026-10-16
+version: 3.0 (2026-10-23; M1 v1 y M1 v2 frente a M0 con Holm k = 2; criterio de éxito del 16-oct; base PIT v0.4)
+fecha: 2026-10-23
 estado: BORRADOR. NO está en research/hypotheses.yaml y NO abre el periodo bloqueado. Pendiente de la aprobación del
-  usuario; después, del placebo de M1 sin fuga ni aviso, de su configuración commiteada y de su ensayo en seco.
-autor: Constructor (arnés v2.1), a partir de las decisiones del usuario (16-oct), la revisión del Estratega, el
-  Validador v2 (§9 y A2-1) y la especificación de M1 (docs/models/m1_spec.md v1.0, H-M1-001)
+  usuario; antes de registrarlo: Validador + Estratega sobre la v0.4 y M1 v2, base PIT v0.4 CONGELADA, placebos sin
+  fuga ni aviso, configuración commiteada, ensayo en seco `ok` y protección de rama comprobada por el código (A3-1).
+autor: Constructor (M1 v2), sobre el borrador v2 (arnés v2.1) y la revisión del Estratega de M1 (§4-iv)
 ---
 
-# P-EVAL-BASE (borrador v2, ejecutable)
+# P-EVAL-BASE (borrador v3)
+
+Escrito **sin mirar ningún dato ≥ 2005** de la etiqueta ni ninguna relación entre variables y etiqueta ≥ 2005. La
+versión v2 de este borrador (M1 v1 sola frente a M0) queda debajo, en §B, como historia: **la v3 la sustituye**.
+
+## A1. Qué cambia frente a la v2
+
+- **Dos hipótesis, no una:** M1 v1 (`m1_logit_axis`, H-M1-001) y M1 v2 (`m1v2_logit_axis`, H-M1-002), cada una frente a
+  M0, en la **misma** apertura y sobre los **mismos** meses. **Holm con k = 2** sobre las dos (Estratega §4-ii): la
+  elección entre v1 y v2 no se hace con datos de desarrollo y el coste de la búsqueda queda contado.
+- **Criterio de éxito del 16-oct** (aceptado por el usuario antes de mirar el bloqueado; trial log): giros ≥ 0 frente a
+  M0 (sustituye a "> 0"/"≥ 0,25"), **falsas alarmas ≤ 0,5 al año**, mejora total ≥ 0,05 nats con IC > 0.
+- **Base PIT v0.4** (`pit_version: "0.4"`) para las dos: las 58 columnas de M1 v1 son idénticas bit a bit en la v0.4
+  (test), así que M1 v1 da lo mismo con una u otra matriz. La v0.4 tiene que estar **congelada** (el arnés lo exige).
+- **Protección de rama** comprobada por el código antes de abrir (A3-1, arnés v2.2).
+
+## A2. Hipótesis (dos) y corrección
+
+| id | modelo | contraste | modo | ventana |
+|---|---|---|---|---|
+| H1 | **M1 v1** `m1_logit_axis` (`m1_spec.md` v1.0, sin cambios) | mejora de log-loss blanda de 4 cuadrantes frente a M0 | vintage | 2005-01 → 2021-10 |
+| H2 | **M1 v2** `m1v2_logit_axis` (`m1_v2_spec.md` v1.0, sin cambios) | ídem | vintage | 2005-01 → 2021-10 |
+
+- **Holm (k = 2), α = 0,05, unilateral**, sobre `p_h0` de la mejora de log-loss de cada una frente a M0 (bootstrap
+  circular por bloques de 12 meses, 5.000 réplicas, semilla 20261015). Familia `principal_holm_k2` en la configuración.
+- **Qué se declara:** un modelo **pasa** si cumple TODOS los criterios de A3 **y** su p ajustada por Holm < 0,05. Si
+  pasan los dos, se promociona el de mayor mejora media (decisión mecánica, fijada ahora). Si no pasa ninguno, M0 sigue
+  siendo el modelo base.
+- M1 v2 está **contaminada** por el desarrollo (H-M1-002): la evaluación única es su única prueba limpia.
+- Secundarias informativas (no entran en Holm): M1 v2 − M1 v1 pareado; ejes G e I de cada una frente a M0 (familia
+  `secundarias_ejes`, Holm aparte, informativa); sensibilidades de §A5.
+
+## A3. Criterio de éxito (cada hipótesis; se exigen TODOS) y su clave en el informe
+
+Clave base: `c = report["frente_al_baseline"]["vintage/<modelo>"]`; detección: `d = report["deteccion_giros_g"]`.
+
+| # | criterio | clave |
+|---|---|---|
+| 1 | Mejora media frente a M0 **≥ 0,05 nats** y **límite inferior del IC 95 % > 0** | `c.mejora_logloss.mean ≥ 0,05` y `c.mejora_logloss.lo > 0` |
+| 2 | **Giros no peor que M0:** mejora en los meses de giro **≥ 0** | `c.cortes.giro.mean ≥ 0` |
+| 3 | **Estables:** no empeora más de 0,05 nats | `c.cortes.estable.mean ≥ −0,05` |
+| 4 | **Falsas alarmas de G ≤ 0,5 al año** (definición v2.1) | `d["vintage/<modelo>"].falsas_alarmas_por_año ≤ 0,5` |
+| 5 | **Mismo signo** de la mejora en 2005-01 → 2014-12 y 2015-01 → 2021-10 | `c.subperiodos_mismo_signo == true` |
+| 6 | **Signos** de los coeficientes que deciden iguales a los preregistrados en la ventana y estables en los saltos de vintage (los saltos son anteriores a 2005: esa mitad la decide el desarrollo; Validador A3-6) | `report["signos_coeficientes"]["vintage/<modelo>"].criterio_signos_cumple` |
+| 7 | **Holm k = 2:** p ajustada < 0,05 | `report["holm_familias"]["principal_holm_k2"].ajustado[<id>] < 0,05` |
+
+**Advertencia conocida (desarrollo):** M1 v1 tiene la Sahm con el signo contrario al preregistrado en ~100 % de los
+cortes ≤ 2004, así que su criterio 6 fallará casi con certeza. Se mantiene tal cual (cambiarlo sería post hoc puro;
+Validador §4-1). M1 v1 entra para que la familia cuente las dos especificaciones probadas.
+
+**Promoción a la Etapa 2:** además, detección de giros de G no peor que M0: `c.deteccion_frente_al_comparador.
+retraso_pareado_medio ≤ 0` y `censurados_modelo ≤ censurados_comparador`. Con pocos giros en 2005-2021 se lee como
+"no empeora", no como prueba.
+
+## A4. Modelos y especificaciones (congeladas en git antes de desbloquear)
+
+| modelo | especificación | variables | parámetros |
+|---|---|---|---|
+| M0 `m0_calibrated_persistence` | harness.md §8 | — (persistencia calibrada por eje) | eps 1e-3, L2 1,0 |
+| M1 v1 `m1_logit_axis` | `m1_spec.md` v1.0 | G: growth_rt, unrate_sahm, baa_spread, eq_ret_6m, curve_10y3m (débil, no decide); I: core_cpi_6m_ann | L2 6,0; pers L2 1,0; eps 1e-3 |
+| M1 v2 `m1v2_logit_axis` | `m1_v2_spec.md` v1.0 | G: growth_rt, claims_4w_yoy, curve_min12, baa_gap10y, baa_d6m, eq_ret_6m, sahm_d3m; I estructural: 1,7·(core − 2,9)/0,75 | L2 6,0; pers L2 1,0; eps 1e-3; s = 0,75 |
+| persistencia cruda, climatología | harness.md §8 | — | referencias |
+
+- **Arnés:** refit mensual, embargo 6, purga, pesos de madurez, mínimos por eje (120 m, ≥ 2 recesiones, ≥ 8 cambios de
+  G), política `principal`, `pit_version: "0.4"`.
+- **`test_start` = 1978-07** (primer corte en que el eje G de M1 v2 es elegible en todos los cortes; el de M1 v1 lo es
+  desde 1975-06, el eje I con el subyacente desde 1989-10). Los cortes < 2005 no puntúan: dan la trayectoria de los
+  coeficientes y `sign_stability`.
+
+## A5. Sensibilidades (misma apertura, se publican siempre, no deciden)
+
+| corrida | qué cambia | modelos |
+|---|---|---|
+| principal, `latest_truncated` | modo | M1 v1, M1 v2, M0, persistencia, climatología |
+| `s_i_050`, `s_i_100` | escala del eje I estructural s = 0,5 / 1,0 (`m1_v2_spec.md` §4) | M1 v2 (variantes), M0 |
+| `pesos_uno`, `pesos_excluir` | ponderación de los provisionales recalculados | M1 v1, M1 v2, M0 |
+| `s_pit_001_filadelfia` | matriz con Filadelfia prudente | M1 v1, M1 v2, M0 (ninguno usa Filadelfia: debe salir idéntica; comprobación mecánica) |
+
+`incluye: []` (como en la v2, §B-1b): S-PIT-001/002 y los H-MOD no se gastan.
+
+## A6. Muestra, inferencia y alarmas
+
+Como en la v2 (§B-4, §B-5, §B-7): ventana fija 2005-01 → 2021-10 (`allow_shrink: false`; 202 meses; 2022 fuera por
+provisional), subperiodos 2005-14 / 2015-21-10, bootstrap por bloques de 12 (24 como sensibilidad), prueba de signo por
+episodio. **Alarma de fuga:** una mejora > 0,25 nats se audita antes de creerla.
+
+## A7. Procedimiento (cuando el usuario lo apruebe; nada de esto está hecho)
+
+1. Validador y Estratega revisan la base PIT v0.4 y M1 v2 (desarrollo). Con ✅: **congelar la v0.4** (B-5, tag
+   `pit-v0.4`).
+2. Escribir `config/harness/p_eval_base.yaml` (= la sonda `p_eval_base_probe.yaml` con `pit_version: "0.4"`,
+   `test_start: 1978-07`, los modelos de A4, `principal: m1v2_logit_axis`, `expected_signs` de los dos, las familias
+   `principal_holm_k2` (miembros H1, H2; `p_h0`; métrica `logloss`; comparador M0) y `secundarias_ejes`, y las
+   sensibilidades de A5) y commitearla.
+3. `python -m src.models.harness --check-protection` (A3-1) y **ensayo en seco** registrado
+   (`--dry-run config/harness/p_eval_base.yaml`; también comprueba la protección), commiteado.
+4. Añadir a `research/hypotheses.yaml` la entrada `P-EVAL-BASE` (`tipo: evaluacion_holdout`, `incluye: []`,
+   `config_arnes: config/harness/p_eval_base.yaml`, `documento: docs/models/p_eval_base_draft.md (v3, aprobado)`).
+5. `FKB_HOLDOUT_UNLOCK="EVALUACION-UNICA P-EVAL-BASE"` + `evaluate_holdout("P-EVAL-BASE")`: comprueba otra vez la
+   protección de rama, repite el ensayo, consume y ancla en GitHub antes de leer. **Una vez.** Mientras el repositorio
+   sea **público** (en privado sin Pro no hay protección de rama → el código se niega).
+
+## A8. Decisiones para el usuario
+
+1. Aprobar este borrador v3 (o cambiarlo) **antes** de ver los resultados de desarrollo de M1 v2, si se quiere que la
+   elección no dependa de ellos. (Si se aprueba después, constará en el trial log.)
+2. Regla de desempate si pasan las dos (A2): mayor mejora media. ¿De acuerdo?
+3. ¿Incluir las sensibilidades `pesos_*` y Filadelfia también para M1 v1 (más corridas, mismas comparaciones)?
+
+---
+
+# §B. Borrador v2 (2026-10-16) — HISTORIA, sustituido por la v3
+
 
 Escrito **sin mirar ningún dato ≥ 2005** de la etiqueta ni ninguna relación entre variables macro y la etiqueta en
 ningún periodo. Lo único que se ha mirado de 2005 en adelante es la **disponibilidad** (sí/no) de las variables de M1
