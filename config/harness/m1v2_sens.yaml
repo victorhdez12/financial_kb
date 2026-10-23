@@ -1,0 +1,28 @@
+# M1 v2 (H-M1-002), SENSIBILIDADES PREREGISTRADAS de la escala del eje I estructural (s = 0,5 y 1,0 pp; m1_v2_spec.md
+# §4). Se publican siempre y NO eligen. Misma ventana que la principal, vintage.
+name: m1v2_sens
+pit_version: "0.4"
+models: [m0_calibrated_persistence, m1v2_logit_axis_s050, m1v2_logit_axis_s100]
+model_params:
+  m0_calibrated_persistence: {eps: 0.001, l2: 1.0}
+  m1v2_logit_axis_s050: {l2: 6.0, l2_pers: 1.0, eps: 0.001, i_slope: 1.7, i_center: 2.9, i_scale: 0.5}
+  m1v2_logit_axis_s100: {l2: 6.0, l2_pers: 1.0, eps: 0.001, i_slope: 1.7, i_center: 2.9, i_scale: 1.0}
+modes: [vintage]
+refit_every: 1
+embargo_months: 6
+min_train_months: 120
+min_train_recessions: 2
+min_train_g_changes: 8
+test_start: "1956-10"
+test_end: "2004-12"
+eval_window: ["1989-10", "2004-12"]
+allow_shrink: false
+epochs: [["1956-01", "1979-12"], ["1980-01", "2004-12"]]
+subperiods: [["1989-10", "1996-12"], ["1997-01", "2004-12"]]
+feature_policy: principal
+provisional_weighting: madurez
+baseline: m0_calibrated_persistence
+reference: null
+phase: development
+who: Constructor (M1 v2)
+nota: "Sensibilidad preregistrada de M1 v2: escala del eje I estructural s = 0,5 y 1,0 (la principal es 0,75); no elige."

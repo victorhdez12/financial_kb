@@ -325,3 +325,46 @@
 # evaluarán más adelante con su PROPIO preregistro de evaluación (tipo evaluacion_holdout), cuando tengan historia
 # suficiente para el mínimo de entrenamiento del arnés (sus variables empiezan en 2003; hoy no serían elegibles hasta
 # ~2021-09). S-PIT-001 y S-PIT-002/P-EVAL-S-PIT-002 tampoco se gastan en P-EVAL-BASE: M1 no usa Filadelfia ni Michigan.
+
+# ---------------------------------------------------------------------------------------------
+- id: H-M1-002
+  registrada: 2026-10-23
+  autor: Constructor (M1 v2), a partir de la revisión del Estratega de M1 (docs/reviews/2026-10-16_estratega_macro_m1.md §4-ii, §5, §6) y la decisión del usuario del 23-oct
+  tipo: hipotesis_modelo
+  contaminada: >
+    SÍ. Hipótesis nueva post hoc: sus tres cambios se proponen DESPUÉS de ver los resultados de desarrollo ≤ 2004 de
+    M1 v1 (H-M1-001) y los cálculos C3/C4 del Estratega (relaciones variable-etiqueta ≤ 2004). En desarrollo no puede
+    demostrar nada; decide la evaluación única con M1 v1 y M1 v2 juntas frente a M0 (Holm k = 2). Cuenta como un
+    ensayo más (M1 v1 = 1, M1 v2 = 2).
+  especificacion: docs/models/m1_v2_spec.md (v1.0) y config/harness/m1v2_principal.yaml (+ m1v2_long.yaml, m1v2_sens.yaml)
+  base_pit: "0.4 (candidata; congelar antes de cualquier evaluación única)"
+  modelo: >
+    M1 v2 = dos logísticas binarias por eje (objetivo blando, pesos de madurez), producto de ejes (AxisModel). Eje G:
+    logit de la persistencia PIT del eje (eps 1e-3, L2 1,0) + growth_rt, claims_4w_yoy, curve_min12, baa_gap10y,
+    baa_d6m, eq_ret_6m, sahm_d3m estandarizadas con el entrenamiento del corte, L2 = 6,0. Eje I ESTRUCTURAL: logit
+    P(I alta) = c + b·logit(pers_i) + 1,7·(core_cpi_6m_ann − 2,9)/0,75 (pendiente fija; solo c y b se estiman);
+    sensibilidades s = 0,5 y 1,0 preregistradas (no eligen).
+  cambios_frente_a_H-M1-001: >
+    (1) sin unrate_sahm en nivel (signo contrario en ~100 % de los cortes: efecto rebote), entra sahm_d3m (−);
+    (2) eje I estructural con el subyacente (pendiente libre mal identificada); (3) variables de riesgo de giro de la
+    base PIT v0.4 en el eje G en lugar de curve_10y3m y baa_spread en nivel; entra claims_4w_yoy.
+  mecanismo: >
+    Los coincidentes dicen el estado y llegan tarde (ningún dato coincidente ve el giro antes de k ≈ +2); lo que puede
+    ver el mes t es la información del propio mes (peticiones de paro, mercados) y el RIESGO DE GIRO: una inversión
+    reciente de la curva (6-18 meses), el crédito caro frente a lo normal y su empeoramiento, y la subida de la Sahm.
+    En I, la etiqueta es nivel del subyacente frente a κ: un offset estructural con la pendiente de la ficha evita
+    estimar una pendiente que en 1978-88 no se identifica.
+  signos_esperados:
+    G: {growth_rt: "+", claims_4w_yoy: "-", curve_min12: "+", baa_gap10y: "-", baa_d6m: "-", eq_ret_6m: "+", sahm_d3m: "-", logit_pers_g: "+"}
+    I: {core_cpi_6m_ann: "+ (FIJO: 1,7/s por pp; no se estima)", logit_pers_i: "+"}
+  contraste: >
+    M1 v2 − M0 (persistencia calibrada) en log-loss blanda de 4 cuadrantes, vintage, walk-forward del arnés v2.1. En
+    desarrollo (≤ 2004) una sola pasada, solo se informa (m1_v2_spec.md §7); la prueba que decide es la evaluación
+    única (P-EVAL-BASE, borrador v3: M1 v1 y M1 v2 frente a M0, Holm k = 2), que no forma parte de esta entrada.
+  criterio_de_referencia: >
+    El aceptado por el usuario para P-EVAL-BASE (16-oct): giros ≥ 0 frente a M0, falsas alarmas ≤ 0,5 al año, mejora
+    total ≥ 0,05 nats (con IC > 0). En desarrollo se informa sin decidir.
+  placebo: >
+    Antes de mirar la etiqueta real: placebo pareado con la L2 de M1 v2 (m1_v2_spec.md §5). Fuga si la media sobre 20
+    semillas > 0,02 nats; aviso si prueba de signo unilateral p < 0,01 o t > 3.
+  alarma: una mejora frente a M0 > 0,25 nats en desarrollo se trata como sospecha de fuga y se audita antes de creerla.
