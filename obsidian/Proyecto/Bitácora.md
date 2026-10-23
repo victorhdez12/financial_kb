@@ -382,3 +382,12 @@ Las entradas más recientes van arriba. Ver también [[Proyecto/Estado del proye
   - A3-1 (MEDIA): reabrir es posible si se reescribe el remoto con force-push + `gc` del reflog → **condición para registrar P-EVAL-BASE: protección de rama en GitHub (sin force-push ni borrado) comprobada por el código**. BAJA: acta obligatoria de `_commit_results`; hash del ensayo sin `hypotheses.yaml`; doble conteo de anticipación tras censurado; estabilidad de signos decidida por cortes < 2005.
   - Coincide con el Estratega: **no gastar el periodo bloqueado en M1 v1**; M1 v2 como hipótesis nueva marcada contaminada (quitar Sahm lineal); eje I subyacente (no cambiar al general).
 - **Decisiones del usuario (16-oct, noche):** (1) **acepta el criterio nuevo** (giros ≥ 0 frente a M0, falsas alarmas ≤ 0,5/año, total ≥ 0,05 nats), anotado en trial log y en el borrador P-EVAL-BASE; (2) **parar aquí**: el plan M1 v2 + base PIT v0.4 (o Markov) queda **pendiente de decidir** otro día. No se gasta el periodo bloqueado en M1 v1.
+
+## 2026-10-23
+
+- **Retomado.** Automatización ok (diaria 23-oct ✅; semanal 22-oct ⚠️ en 5 fuentes por DNS al arrancar sin red, transitorio). Informe semanal 22-oct commiteado.
+- **GitHub:** `gh` con sesión, `origin` = github.com/victorhdez12/financial_kb, `main` al día. La protección de rama en repo privado exige GitHub Pro (403).
+- **Decisiones del usuario (23-oct):** (1) **seguir con M1 v2 + base PIT v0.4** (propuesta del Estratega, `docs/reviews/2026-10-16_estratega_macro_m1.md` §4-§5); (2) **repo público por ahora** (volver a privado si se comercializa). Revisado antes el historial: sin claves de `.env`, sin datos (solo CSV de auditoría de metadatos).
+- Hecho: repo **público**; protección de `main` activada (`allow_force_pushes=false`, `allow_deletions=false`, `enforce_admins=true`) → condición A3-1 del Validador cubierta en GitHub; falta que el código la compruebe antes de registrar P-EVAL-BASE.
+- ⚠️ Nota: si el repo vuelve a privado sin Pro, la protección se pierde → hacer la evaluación única **mientras sea público** (o pagar Pro).
+- Lanzado **Constructor (base PIT v0.4 + M1 v2 + comprobación de protección de rama)**.

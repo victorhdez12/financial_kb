@@ -1,6 +1,6 @@
 ---
 tipo: estado_proyecto
-actualizado: 2026-10-15
+actualizado: 2026-10-23
 fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 ---
 
@@ -29,7 +29,11 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Agentes de la fase:** Constructor · Investigador de relaciones · **Validador independiente** · **Reportero** (ver [[Proyecto/Agentes]]). Informe: [[Reports/Fase 3/Informe de resultados]].
 
-## ▶ Retomar aquí (16-oct)
+## ▶ Retomar aquí (23-oct)
+
+**Decidido (23-oct):** M1 v2 + base PIT v0.4 (propuesta del Estratega §4-§5). Repo GitHub **público** con protección de `main` (sin force-push/borrado, admins incluidos) → A3-1 cubierta en GitHub. **En marcha:** Constructor (v0.4 → M1 v2 spec a priori → una corrida de desarrollo ≤ 2004; + comprobación por código de la protección de rama). Después: Validador + Estratega en paralelo → usuario → registrar P-EVAL-BASE (v1 + v2 vs M0, Holm k=2) → evaluación única. Si la sesión se corta: `git log --oneline -15`, ver qué commiteó el Constructor y relanzar con el encargo de la Bitácora del 23-oct. Ojo: si el repo vuelve a privado sin Pro se pierde la protección → evaluación única mientras sea público.
+
+## Retomar (16-oct) — histórico
 
 **Base PIT v0.3 CONGELADA** (tag `pit-v0.3`; veredicto ✅ `docs/validation/2026-10-16_pit_base_v0.3.md`; `tcu_gap` principal desde 1984-01 por decisión del usuario). Informe v0.3 hecho (`fbc5166`). **Arnés walk-forward v1 hecho** (`b01e7ee`, 115 tests, listón reproducido exacto) → en revisión: Validador (`docs/validation/2026-10-16_harness_v1.md`) + Estratega (`docs/reviews/2026-10-16_estratega_macro_harness.md`). Si no existen al retomar, relanzarlos (encargos en la Bitácora del 16-oct). Revisiones hechas (ambas ⚠️; A-1: la evaluación única no estaba garantizada por código; listón → persistencia calibrada M0). Arnés v2 hecho (`2159d53`): re-auditoría ⚠️ (**aprobado para desarrollo y para M1**; evaluación única bloqueada por A2-1, M2-1, M2-2). M0 (persistencia calibrada) es el listón: vintage ≤ 2004 0,811. **En marcha (16-oct, tarde):** Constructor arnés v2.1 (correcciones + ancla GitHub) y Constructor entregable (4) M1 (logística por eje + reglas). **Pendiente del usuario:** `gh auth login` y crear repo privado; aprobar P-EVAL-BASE (borrador). Después: Validador + Estratega sobre ambos.
 

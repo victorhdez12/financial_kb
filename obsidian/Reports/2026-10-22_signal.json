@@ -1,0 +1,476 @@
+{
+  "asof": "2026-10-22",
+  "generated_at": "2026-10-22T11:31:26",
+  "vintage_mode": "alfred",
+  "regime": {
+    "quadrant": "Goldilocks",
+    "G": 0.0,
+    "G_d6": 0.14,
+    "G_state": "up",
+    "I_state": "down",
+    "core_6m": 2.8,
+    "core_accel_3m": -0.37,
+    "I_composite_z": 0.53,
+    "sahm": 0.0,
+    "sahm_trigger": false
+  },
+  "changes": {
+    "1m": {
+      "date": "2026-09",
+      "quadrant": "Deflación/recesión",
+      "G": -0.04,
+      "I_state": "down",
+      "debt_phase": "expansión temprana",
+      "credit_light": "verde",
+      "liquidity": "escasa"
+    },
+    "3m": {
+      "date": "2026-07",
+      "quadrant": "Estanflación",
+      "G": -0.12,
+      "I_state": "up",
+      "debt_phase": "expansión tardía",
+      "credit_light": "verde",
+      "liquidity": "neutral"
+    },
+    "6m": {
+      "date": "2026-04",
+      "quadrant": "Estanflación",
+      "G": -0.14,
+      "I_state": "up",
+      "debt_phase": "expansión tardía",
+      "credit_light": "verde",
+      "liquidity": "neutral"
+    }
+  },
+  "debt_cycle": {
+    "phase": "expansión temprana",
+    "reason": "mantiene",
+    "curve": 0.88,
+    "inverted_months": 0,
+    "ff_d12": -0.47,
+    "real_ff": 1.18,
+    "tcu": 76.85
+  },
+  "long_cycle": {
+    "stage": "tardío",
+    "flags": "deuda_pub>100%_y_sube, deficit<-5%_sin_recesion",
+    "debt_gdp": 122.59,
+    "deficit_gdp": -5.77,
+    "fed_interest_receipts_pct": 33.55,
+    "private_credit_gdp": 140.3
+  },
+  "liquidity": {
+    "state": "neutral",
+    "score": -0.45,
+    "m2_minus_gdp": -0.65,
+    "net_liquidity_bn": 5872.0,
+    "net_liq_yoy": 4.67,
+    "dfii10": 2.77,
+    "nfci": -0.5
+  },
+  "credit": {
+    "light": "verde",
+    "reds": 0,
+    "ambers": 0,
+    "n": 9,
+    "baa_spread_pct": 34.0,
+    "baa_spread_d3": -0.2,
+    "hy_oas_pct": 81.0,
+    "hy_oas_d3": 0.49,
+    "indicators": {
+      "baa_spread": {
+        "status": "verde",
+        "value": 1.44
+      },
+      "hy_oas": {
+        "status": "verde",
+        "value": 3.33
+      },
+      "nfci": {
+        "status": "verde",
+        "value": -0.5
+      },
+      "anfci": {
+        "status": "verde",
+        "value": -0.52
+      },
+      "nfci_credit": {
+        "status": "verde",
+        "value": -0.03
+      },
+      "stlfsi": {
+        "status": "verde",
+        "value": -0.72
+      },
+      "sloos_ci": {
+        "status": "verde",
+        "value": 0.0
+      },
+      "delinq_all": {
+        "status": "verde",
+        "value": 1.42
+      },
+      "ted": {
+        "status": null,
+        "value": null
+      },
+      "curve": {
+        "status": "verde",
+        "value": 0.88
+      }
+    }
+  },
+  "indicators": [
+    {
+      "indicador": "Compuesto de crecimiento G (z)",
+      "valor": 0.0,
+      "unidad": "z",
+      "serie": "derivado",
+      "fecha_dato": "2026-10-22",
+      "percentil_hist": 42.0,
+      "desde": "1950"
+    },
+    {
+      "indicador": "Producción industrial a/a",
+      "valor": 2.25,
+      "unidad": "%",
+      "serie": "INDPRO",
+      "fecha_dato": "2026-09-01",
+      "percentil_hist": 44.0,
+      "desde": "1950"
+    },
+    {
+      "indicador": "Nóminas no agrícolas a/a",
+      "valor": 0.31,
+      "unidad": "%",
+      "serie": "PAYEMS",
+      "fecha_dato": "2026-09-01",
+      "percentil_hist": 21.0,
+      "desde": "1950"
+    },
+    {
+      "indicador": "PIB real t/t anualizado",
+      "valor": 2.22,
+      "unidad": "%",
+      "serie": "GDPC1",
+      "fecha_dato": "2026-04-01",
+      "percentil_hist": 39.0,
+      "desde": "1950"
+    },
+    {
+      "indicador": "Tasa de paro",
+      "valor": 4.2,
+      "unidad": "%",
+      "serie": "UNRATE",
+      "fecha_dato": "2026-09-01",
+      "percentil_hist": 23.0,
+      "desde": "1950"
+    },
+    {
+      "indicador": "Regla de Sahm",
+      "valor": 0.0,
+      "unidad": "pp",
+      "serie": "UNRATE",
+      "fecha_dato": "2026-09-01",
+      "percentil_hist": 42.0,
+      "desde": "1950"
+    },
+    {
+      "indicador": "IPC subyacente 6m anualizado",
+      "valor": 2.85,
+      "unidad": "%",
+      "serie": "CPILFESL",
+      "fecha_dato": "2026-09-01",
+      "percentil_hist": 53.0,
+      "desde": "1957"
+    },
+    {
+      "indicador": "PCE subyacente 6m anualizado",
+      "valor": 2.74,
+      "unidad": "%",
+      "serie": "PCEPILFE",
+      "fecha_dato": "2026-08-01",
+      "percentil_hist": 55.0,
+      "desde": "1959"
+    },
+    {
+      "indicador": "PPI a/a",
+      "valor": 12.84,
+      "unidad": "%",
+      "serie": "PPIACO",
+      "fecha_dato": "2026-09-01",
+      "percentil_hist": 93.0,
+      "desde": "1950"
+    },
+    {
+      "indicador": "Inflación implícita 5a (T5YIE)",
+      "valor": 2.4,
+      "unidad": "%",
+      "serie": "T5YIE",
+      "fecha_dato": "2026-10-21",
+      "percentil_hist": 80.0,
+      "desde": "2003"
+    },
+    {
+      "indicador": "Fed funds",
+      "valor": 3.75,
+      "unidad": "%",
+      "serie": "FEDFUNDS",
+      "fecha_dato": "2026-09-01",
+      "percentil_hist": 44.0,
+      "desde": "1954"
+    },
+    {
+      "indicador": "Tipo real fed funds",
+      "valor": 1.18,
+      "unidad": "pp",
+      "serie": "derivado",
+      "fecha_dato": "2026-10-22",
+      "percentil_hist": 51.0,
+      "desde": "1954"
+    },
+    {
+      "indicador": "Curva 10a−3m",
+      "valor": 0.88,
+      "unidad": "pp",
+      "serie": "T10Y3M",
+      "fecha_dato": "2026-10-21",
+      "percentil_hist": 37.0,
+      "desde": "1950"
+    },
+    {
+      "indicador": "Tipo real 10a (DFII10)",
+      "valor": 2.77,
+      "unidad": "%",
+      "serie": "DFII10",
+      "fecha_dato": "2026-10-20",
+      "percentil_hist": 99.0,
+      "desde": "2003"
+    },
+    {
+      "indicador": "Diferencial Baa−10a",
+      "valor": 1.44,
+      "unidad": "pp",
+      "serie": "BAA10Y",
+      "fecha_dato": "2026-10-20",
+      "percentil_hist": 31.0,
+      "desde": "1950"
+    },
+    {
+      "indicador": "HY OAS",
+      "valor": 3.33,
+      "unidad": "pp",
+      "serie": "BAMLH0A0HYM2",
+      "fecha_dato": "2026-10-20",
+      "percentil_hist": 81.0,
+      "desde": "2023"
+    },
+    {
+      "indicador": "NFCI",
+      "valor": -0.5,
+      "unidad": "índice",
+      "serie": "NFCI",
+      "fecha_dato": "2026-10-16",
+      "percentil_hist": 39.0,
+      "desde": "1971"
+    },
+    {
+      "indicador": "STLFSI",
+      "valor": -0.72,
+      "unidad": "índice",
+      "serie": "STLFSI4",
+      "fecha_dato": "2026-10-09",
+      "percentil_hist": 12.0,
+      "desde": "1994"
+    },
+    {
+      "indicador": "SLOOS C&I endurecimiento neto",
+      "valor": 0.0,
+      "unidad": "%",
+      "serie": "DRTSCILM",
+      "fecha_dato": "2026-07-01",
+      "percentil_hist": 51.0,
+      "desde": "1990"
+    },
+    {
+      "indicador": "Morosidad total préstamos bancarios",
+      "valor": 1.42,
+      "unidad": "%",
+      "serie": "DRALACBS",
+      "fecha_dato": "2026-04-01",
+      "percentil_hist": 8.0,
+      "desde": "1985"
+    },
+    {
+      "indicador": "VIX",
+      "valor": 17.31,
+      "unidad": "índice",
+      "serie": "VIXCLS",
+      "fecha_dato": "2026-10-20",
+      "percentil_hist": 49.0,
+      "desde": "1990"
+    },
+    {
+      "indicador": "M2 a/a − PIB nominal a/a",
+      "valor": -0.65,
+      "unidad": "pp",
+      "serie": "derivado",
+      "fecha_dato": "2026-10-22",
+      "percentil_hist": 43.0,
+      "desde": "1960"
+    },
+    {
+      "indicador": "Liquidez neta Fed (WALCL−TGA−RRP)",
+      "valor": 5872.03,
+      "unidad": "mm USD",
+      "serie": "derivado",
+      "fecha_dato": "2026-10-22",
+      "percentil_hist": 83.0,
+      "desde": "2002"
+    },
+    {
+      "indicador": "Deuda pública / PIB",
+      "valor": 122.59,
+      "unidad": "%",
+      "serie": "GFDEGDQ188S",
+      "fecha_dato": "2026-01-01",
+      "percentil_hist": 98.0,
+      "desde": "1966"
+    },
+    {
+      "indicador": "Utilización de capacidad",
+      "valor": 76.85,
+      "unidad": "%",
+      "serie": "TCU",
+      "fecha_dato": "2026-09-01",
+      "percentil_hist": 21.0,
+      "desde": "1967"
+    }
+  ],
+  "analogs": [
+    {
+      "date": "1955-07",
+      "distance": 0.41,
+      "quadrant": "Goldilocks",
+      "debt_phase": "endurecimiento",
+      "credit_light": "verde",
+      "G": 0.53,
+      "core_6m": -0.45,
+      "fwd_12m_pct": {
+        "acciones EE. UU. (TR)": 18.6,
+        "bonos 10a (TR)": -0.1,
+        "oro": null
+      },
+      "G_12m_later": -0.09,
+      "nber_recession_next_12m": false,
+      "events": [
+        "Currency crisis Russia 1956-1957 (1956-01)",
+        "Currency crisis Australia 1954-1955 (1954-01)",
+        "Argentine Military (1955-06)"
+      ]
+    },
+    {
+      "date": "1978-03",
+      "distance": 0.44,
+      "quadrant": "Estanflación",
+      "debt_phase": "endurecimiento",
+      "credit_light": "verde",
+      "G": 0.51,
+      "core_6m": 6.14,
+      "fwd_12m_pct": {
+        "acciones EE. UU. (TR)": 18.6,
+        "bonos 10a (TR)": 1.9,
+        "oro": 31.5
+      },
+      "G_12m_later": 0.76,
+      "nber_recession_next_12m": false,
+      "events": [
+        "Currency crisis Mauritius 1979 (1979-01)",
+        "Inflation crisis Mauritius 1979-1981 (1979-01)",
+        "Second Ogaden Phase 3 (1978-03)"
+      ]
+    },
+    {
+      "date": "1959-09",
+      "distance": 0.44,
+      "quadrant": "Goldilocks",
+      "debt_phase": "endurecimiento",
+      "credit_light": "verde",
+      "G": 0.83,
+      "core_6m": 2.12,
+      "fwd_12m_pct": {
+        "acciones EE. UU. (TR)": -0.6,
+        "bonos 10a (TR)": 9.9,
+        "oro": null
+      },
+      "G_12m_later": -0.32,
+      "nber_recession_next_12m": true,
+      "events": [
+        "US recession 1960-04 to 1961-02 (1960-04)",
+        "Currency crisis Russia 1960-1962 (1960-01)",
+        "Currency crisis Australia 1958-1959 (1958-01)"
+      ]
+    },
+    {
+      "date": "1964-08",
+      "distance": 0.45,
+      "quadrant": "Goldilocks",
+      "debt_phase": "endurecimiento",
+      "credit_light": "verde",
+      "G": 0.41,
+      "core_6m": 0.95,
+      "fwd_12m_pct": {
+        "acciones EE. UU. (TR)": 8.6,
+        "bonos 10a (TR)": 3.5,
+        "oro": null
+      },
+      "G_12m_later": 0.62,
+      "nber_recession_next_12m": false,
+      "events": [
+        "Dominican Republic (1965-04)",
+        "Currency crisis Russia 1965-1967 (1965-01)",
+        "Currency crisis Australia 1964-1965 (1964-01)"
+      ]
+    },
+    {
+      "date": "1988-11",
+      "distance": 0.45,
+      "quadrant": "Estanflación",
+      "debt_phase": "desapalancamiento",
+      "credit_light": "rojo",
+      "G": 0.39,
+      "core_6m": 4.9,
+      "fwd_12m_pct": {
+        "acciones EE. UU. (TR)": 29.7,
+        "bonos 10a (TR)": 18.5,
+        "oro": -6.2
+      },
+      "G_12m_later": 0.03,
+      "nber_recession_next_12m": false,
+      "events": [
+        "Banking crisis Australia 1989-1992 (1989-01)",
+        "Systemic banking crisis Australia 1989 (1989-01)",
+        "Systemic banking crisis United States 1988 (1988-01)"
+      ]
+    }
+  ],
+  "analog_method": {
+    "dims": [
+      "G",
+      "G_d6",
+      "z_core_gap",
+      "z_curve",
+      "z_real_ff",
+      "z_baa_spread",
+      "liquidity_score"
+    ],
+    "return_series": {
+      "acciones EE. UU. (TR)": "shiller_nominal_stock_tr_ret_m",
+      "bonos 10a (TR)": "shiller_nominal_bond_tr_ret_m",
+      "oro": "gold_usd_monthly"
+    },
+    "horizon_months": 12
+  },
+  "disclaimer": "Apoyo a la decisión, no asesoramiento financiero. Cifras calculadas por Python a partir de datos públicos; pueden contener errores o revisiones. Ninguna decisión debe basarse solo en este reporte."
+}
