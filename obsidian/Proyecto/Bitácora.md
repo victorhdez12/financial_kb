@@ -422,3 +422,16 @@ Las entradas más recientes van arriba. Ver también [[Proyecto/Estado del proye
   Además: el ensayo en seco rechaza una base PIT no congelada (antes de consumir nada).
 - **Pendiente del usuario:** ¿gastar el bloqueado en M1 v1 + v2 (casi seguro "no") o esperar al Markov con
   transiciones variables? Congelar la v0.4 tras el Validador. Lanzar Validador (v0.4, A3-1, M1 v2) y Estratega (M1 v2).
+- **Estratega macro: revisión de M1 v2** (`docs/reviews/2026-10-23_estratega_macro_m1v2.md`). ❌ **no gastar el
+  bloqueado en M1 v1 + v2** (no registrar P-EVAL-BASE v3) · ✅ proceso · ⚠️ siguiente aspirante con restricciones.
+  Diagnóstico: (1) **horizonte**: G(t) tiene 1/3 conocido en t (tasas t−3…t−1) y 2/3 de previsión a 0-4 m; las
+  variables de 6-18 m (`curve_min12`) dan los giros antes pero 0,75 falsas alarmas/año; (2) **forma**: `baa_gap10y` al
+  revés = rebote (*plucking*): con `baa_d6m` dentro mide el crédito caro de hace 6 m que ya no empeora (≈ +0,46/pp gap
+  t−6, −0,21/pp Δ6m); máximo en el valle NBER y > 0,7 pp hasta +12 m (descriptivo C5 sin etiqueta); mismo mecanismo
+  que la Sahm en v1; `sahm_d3m` redundante con las peticiones de paro (corr 0,66); (3) **potencia**: hace falta ≈ 0,10
+  nats observados en el bloqueado para pasar. Propuesta: Markov TVTP solo eje G (estados = etiqueta, transiciones con
+  `curve_min12`/`baa_d6m` y `baa_d6m`/`eq_ret_6m`, γ ≥ 0, emisión `growth_rt` + peticiones de paro templada λ = 1/3,
+  anclaje en la persistencia PIT, calibración, referencia de transiciones constantes) **y**, como alternativa que
+  considero mejor, un **nowcast estructural de G** (regresión del G continuo con adelantos de 0-5 m). Decisiones del
+  usuario en §4 (reservar bloqueado, congelar v0.4, aspirante(s), `baa_gap10y` fuera, v1/v2 informativas, cálculo de
+  potencia antes de P-EVAL-BASE v4, eje I = M0).
