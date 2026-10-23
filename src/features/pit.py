@@ -47,7 +47,7 @@ from src.warehouse.build import VIEWS_SQL
 
 REPO = Path(__file__).resolve().parents[2]
 WL_PATH = REPO / "research" / "pit_whitelist.yaml"
-VERSION = "0.4"                # v0.4 CANDIDATA (2026-10-23); la v0.3 sigue congelada (FROZEN) para M1 v1
+VERSION = "0.4"                # v0.4 CONGELADA (2026-10-23, tag pit-v0.4); la v0.3 sigue congelada para M1 v1 y baselines
 MODES = ("vintage", "latest_truncated")
 GRID_START = "1950-01-01"
 # un valor deja de valer (NaN) si su periodo de referencia terminó hace más de estos días (series cortadas)
@@ -592,6 +592,17 @@ FROZEN: dict[str, dict] = {
         "grid_end": "2026-09-30",
         "veredicto": "docs/validation/2026-10-16_pit_base_v0.3.md",
     },
+    # v0.4 congelada el 2026-10-23 tras el ✅ del Validador (docs/validation/2026-10-23_pit_v0.4_m1v2.md §1) y la
+    # aprobación del usuario (procedimiento B-5): copia de los hashes de CANDIDATE["0.4"]
+    "0.4": {
+        "data_sha256_file": "db06b89c63d7c89c896c76a13127739237c67e6594224a4d7375a5bf5c4a6261",
+        "data_sha256_content": "069b9d5cece116c8771c4d84c6f26ecc21d599f942f27f29b79bfbac9ded6b64",
+        "whitelist_sha256": "0df63c84c2431434fa7c3fb7d9a735eb31319b421ef8f5bcf4000c740b45e561",
+        "calendar_sha256": "373ced7b907e08728464935a64d523b0aa0150e899f44735c6613870c4cbc421",
+        "info_sha256": "90515a5f8b11dbdd37ee4005359cdcbeb39b0cc0084beb7c0fb591225c10f01c",
+        "grid_end": "2026-09-30",
+        "veredicto": "docs/validation/2026-10-23_pit_v0.4_m1v2.md",
+    },
 }
 
 
@@ -616,8 +627,8 @@ CANDIDATE: dict[str, dict] = {
         "grid_end": "2026-09-30",
     },
     # v0.4 (2026-10-23): 4 derivadas de riesgo de giro (curve_min12, baa_gap10y, baa_d6m, sahm_d3m; Estratega, revisión
-    # de M1 §5) sobre la instantánea de datos de la v0.2 (mismo hash) y el calendario de la v0.3 (mismo hash). FUERA de
-    # FROZEN hasta el ✅ del Validador y la aprobación del usuario (procedimiento B-5)
+    # de M1 §5) sobre la instantánea de datos de la v0.2 (mismo hash) y el calendario de la v0.3 (mismo hash). Congelada
+    # el 2026-10-23 (FROZEN["0.4"], B-5); esta entrada se conserva tal cual
     "0.4": {
         "data_sha256_file": "db06b89c63d7c89c896c76a13127739237c67e6594224a4d7375a5bf5c4a6261",
         "data_sha256_content": "069b9d5cece116c8771c4d84c6f26ecc21d599f942f27f29b79bfbac9ded6b64",
@@ -629,7 +640,7 @@ CANDIDATE: dict[str, dict] = {
 }
 # versión → versión de la instantánea de DATOS que usa (la v0.3 reutiliza la de la v0.2, sin releer el warehouse)
 DATA_VERSION = {"0.2": "0.2", "0.3": "0.2", "0.4": "0.2"}
-SUPERSEDED = {"0.2": "0.3"}
+SUPERSEDED = {"0.2": "0.3", "0.3": "0.4"}   # la v0.3 sigue congelada y utilizable (M1 v1, baselines)
 
 
 def inputs_dir() -> Path:

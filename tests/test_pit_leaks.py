@@ -62,12 +62,15 @@ def test_h_v03_frozen_with_verdict():
     assert P.SUPERSEDED.get("0.2") == "0.3"
 
 
-def test_h_current_version_is_candidate_not_frozen():
-    """La v0.4 (2026-10-23) es CANDIDATA: hashes en CANDIDATE y NO en FROZEN hasta el ✅ del Validador y la aprobación
-    del usuario (procedimiento B-5). Reutiliza los datos de la v0.2 y el calendario de la v0.3 (mismos hashes)."""
-    assert P.VERSION == "0.4" and P.VERSION in P.CANDIDATE and P.VERSION not in P.FROZEN
+def test_h_current_version_is_frozen_with_verdict():
+    """La v0.4 se congeló el 2026-10-23 (✅, docs/validation/2026-10-23_pit_v0.4_m1v2.md §1; procedimiento B-5): está en
+    FROZEN con veredicto y conserva su entrada en CANDIDATE. Reutiliza los datos de la v0.2 y el calendario de la v0.3
+    (mismos hashes). La v0.3 sigue congelada (SUPERSEDED solo alimenta el meta)."""
+    assert P.VERSION == "0.4" and P.VERSION in P.FROZEN and P.VERSION in P.CANDIDATE
+    assert P.FROZEN["0.4"].get("veredicto")
     assert P.DATA_VERSION["0.4"] == "0.2"
     assert P.CANDIDATE["0.4"]["calendar_sha256"] == P.FROZEN["0.3"]["calendar_sha256"]
+    assert P.SUPERSEDED.get("0.3") == "0.4" and "0.3" in P.FROZEN
 
 
 HASH_KEYS = ("data_sha256_file", "data_sha256_content", "whitelist_sha256", "calendar_sha256", "info_sha256", "grid_end")
@@ -76,7 +79,7 @@ HASH_KEYS = ("data_sha256_file", "data_sha256_content", "whitelist_sha256", "cal
 def test_h_frozen_entries_follow_procedure():
     """B-5 (procedimiento de congelación): una versión congelada tras la v0.2 conserva su entrada en CANDIDATE con los
     mismos hashes y apunta a un veredicto del Validador que existe. (La v0.2 se congeló antes del veredicto, I-4.)
-    La v0.3 (congelada el 2026-10-16) es la primera."""
+    La v0.3 (congelada el 2026-10-16) es la primera; la v0.4 (2026-10-23), la segunda."""
     for version, ref in P.FROZEN.items():
         if version == "0.2":
             continue

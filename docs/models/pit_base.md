@@ -2,11 +2,11 @@
 documento: base point-in-time de variables (Fase 3, entregable 2)
 version: 0.4
 fecha: 2026-10-23
-estado: v0.4 CANDIDATA (hashes en CANDIDATE y en el meta; entra en FROZEN solo tras el ✅ del Validador y la aprobación del usuario). La v0.3 sigue CONGELADA (tag pit-v0.3) y es la que usan M1 v1 y los baselines
+estado: v0.4 CONGELADA el 2026-10-23 (FROZEN, tag pit-v0.4; ✅ docs/validation/2026-10-23_pit_v0.4_m1v2.md, aprobación del usuario). La v0.3 sigue CONGELADA (tag pit-v0.3) y es la que usan M1 v1 y los baselines
 codigo: src/features/{calendar,pit,placebo,alfred_raw}.py, src/ingest/umich.py
 datos: <FIN_DATA_ROOT>/features/ (data/archive/features/)
 tests: tests/test_pit_leaks.py (+ tests/pit_helpers.py) y tests/test_pit_v04.py (v0.4)
-revisiones: docs/validation/2026-10-15_pit_base_v0.1.md, docs/validation/2026-10-15_pit_base_v0.2.md, docs/validation/2026-10-16_pit_base_v0.3.md (✅), docs/reviews/2026-10-15_estratega_macro_pit_base.md, docs/reviews/2026-10-16_estratega_macro_m1.md (§5: origen de la v0.4)
+revisiones: docs/validation/2026-10-15_pit_base_v0.1.md, docs/validation/2026-10-15_pit_base_v0.2.md, docs/validation/2026-10-16_pit_base_v0.3.md (✅), docs/validation/2026-10-23_pit_v0.4_m1v2.md (✅ v0.4), docs/reviews/2026-10-15_estratega_macro_pit_base.md, docs/reviews/2026-10-16_estratega_macro_m1.md (§5: origen de la v0.4)
 ---
 
 # Base point-in-time de variables (nowcast EE. UU.), v0.4
@@ -333,10 +333,28 @@ media del control t−4 queda cerca del umbral (0,030 frente a 0,087 en la v0.3)
 (misma permutación). El criterio pareado se añadió **después** de ver estas cifras (con la etiqueta barajada; anotado
 en el trial log como post hoc del test).
 
-**Congelación:** procedimiento B-5 tras el ✅ del Validador y la aprobación del usuario (FROZEN["0.4"] = copia de
-CANDIDATE["0.4"] + veredicto; tag `pit-v0.4`; `SUPERSEDED["0.3"] = "0.4"` en ese momento). Hasta entonces el arnés solo
-la acepta en desarrollo (`pit_version: "0.4"`; `evaluate_holdout` y `PITData` en `holdout_evaluation` exigen una
-versión en FROZEN).
+**Congelación (hecha el 2026-10-23).** Veredicto ✅ del Validador (`docs/validation/2026-10-23_pit_v0.4_m1v2.md` §1)
+y aprobación del usuario (decisión 1 del 23-oct, tarde). Procedimiento B-5:
+- `FROZEN["0.4"]` = copia idéntica de los hashes de `CANDIDATE["0.4"]` + `"veredicto"`; la entrada de CANDIDATE se
+  conserva tal cual (test `test_h_frozen_entries_follow_procedure`).
+- `SUPERSEDED["0.3"] = "0.4"`: solo alimenta el campo `sustituye_a` del meta. La v0.3 **sigue congelada y utilizable**
+  (`pit_version: "0.3"`, la de M1 v1 y los baselines; el arnés la sigue usando por defecto).
+- Tag git `pit-v0.4` (empujado a GitHub).
+- **Solo lectura:** la instantánea de entradas (lista blanca, calendario, info; los datos son los de la v0.2) ya era
+  0444 con copia 0444 en `inputs/backup/`; al congelar se ponen también en 0444 las 3 matrices, sus 3 linajes, los 2
+  baselines y el meta de la v0.4 en `features/`. `write_snapshot`/`write_candidate` se niegan sobre una versión en
+  FROZEN.
+- El meta no se regenera (paso 2 opcional, como en la v0.3): dice "candidata" porque se escribió antes del veredicto,
+  con los mismos hashes que FROZEN (test).
+- Comprobado tras congelar: los baselines v1/v2/v2.1, M1 v1 y M1 v2 reproducen su `results_sha256` bit a bit (ver
+  Bitácora del 23-oct).
+
+Desde la congelación, `evaluate_holdout` y `PITData` en `holdout_evaluation` aceptan la v0.4.
+
+**Nota (Validador B1-3, baja):** la lista blanca dice que `sahm_d3m` está disponible "desde ~1951"; en la matriz
+empieza en 1950-04 (antes de 1960-03 el valor "vintage" de UNRATE es el último publicado, supuesto declarado). La resta
+mezcla vintages (Sahm(t) en su vintage menos Sahm(t−3) en el suyo): es PIT. No afecta a ventanas ≥ 1978. No se toca la
+lista blanca (cambiaría su hash congelado).
 
 
 ### v0.3 tras re-auditoría 16-oct (`docs/validation/2026-10-16_pit_base_v0.3.md`, ⚠️ con 2 condiciones)

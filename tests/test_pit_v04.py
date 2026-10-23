@@ -1,4 +1,4 @@
-"""Tests de la base PIT v0.4 candidata (docs/models/pit_base.md §9, v0.4): las 4 derivadas de riesgo de giro del
+"""Tests de la base PIT v0.4 (candidata hasta el 23-oct; congelada, tag pit-v0.4) (docs/models/pit_base.md §9, v0.4): las 4 derivadas de riesgo de giro del
 Estratega (revisión de M1 §5) y los mismos controles que la v0.3, aplicados a las columnas nuevas.
 
 (s) superconjunto: las 58 columnas de la v0.3, sus linajes y los baselines son idénticos bit a bit en la v0.4;
@@ -59,9 +59,12 @@ def test_s_baselines_bit_identical(mode):
 
 
 def test_s_meta_registers_candidate():
+    """El meta se escribió con la v0.4 candidata (23-oct, 10:58) y no se regenera al congelar (B-5, paso 2 opcional,
+    igual que la v0.3): registra los hashes de CANDIDATE, que son los mismos que los de FROZEN["0.4"]."""
     meta = json.loads((P.out_dir() / "pit_us_v0.4.meta.json").read_text())
     assert meta["instantanea_entradas"]["estado"].startswith("candidata")
     assert meta["instantanea_entradas"]["candidata"] == P.CANDIDATE["0.4"] and meta["instantanea_entradas"]["frozen"] is None
+    assert {k: v for k, v in P.FROZEN["0.4"].items() if k != "veredicto"} == P.CANDIDATE["0.4"]
     for name in MATS:
         assert P.file_sha(P.out_dir() / f"pit_us_v0.4_{name}.parquet") == meta["files"][f"pit_us_v0.4_{name}.parquet"]["sha256_file"]
 
