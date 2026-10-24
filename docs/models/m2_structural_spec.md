@@ -1,6 +1,6 @@
 ---
 documento: especificación a priori de M2, nowcast ESTRUCTURAL del eje G (factor coincidente con ragged edge + composición exacta de Ĝ)
-version: 1.1 (2026-10-24; v1.0 = 1a5f1f9. Ambas congeladas ANTES de cualquier contacto con la etiqueta PARA M2/M3/pool y empujadas a origin antes de implementar nada que lea datos; cambios v1.0 → v1.1 en §9)
+version: 1.2 (2026-10-24; v1.1 = d1bde77, v1.0 = 1a5f1f9. Las tres congeladas ANTES de cualquier contacto con la etiqueta PARA M2/M3/pool y empujadas a origin antes de implementar nada que lea datos; cambios v1.0 → v1.1 → v1.2 en §9)
 fecha: 2026-10-24
 hipotesis: H-M2-001 (research/hypotheses.yaml) — DECLARADA CONTAMINADA (post hoc respecto a M1 v1/v2; ver §0)
 equivale_a: "H-M2-002 / m2_struct_g" de la revisión del Estratega (docs/reviews/2026-10-23_estratega_macro_m1v2.md §3.2), en la versión del Investigador (docs/research/2026-10-23_mejoras_nowcast_regimen.md §3.2, §3.4)
@@ -94,6 +94,15 @@ posterior se anota en §9 con lo que se había visto.
     ningún otro cambio) y esa versión (`m2_struct_g` con la marca `philly_pre1990_nan`) es la **única** que se usa
     después: en las demás corridas de M2, como emisión de M3, como componente del pool y en P-EVAL-BASE. Si no se
     dispara, sigue la principal. En los dos casos la corrida `s_pit_001` se publica.
+  - **Series exigidas (v1.2, Validador N-2):** d<sup>pr</sup> y d<sup>fp</sup> tienen que ser **finitas en todos** los
+    meses puntuados de `m2_long` (vintage), estar **alineadas por mes** y tener **el mismo índice** (los mismos meses,
+    en el mismo orden). Si no, la regla lanza un error y **se para**: no se toma la intersección ni se elige nada
+    (`regime_components.s_pit_001_triggered`, con test).
+  - **Marca de configuración (v1.2, Validador N-6):** la versión se escribe como
+    `model_params.m2_struct_g: {philly_pre1990_nan: false}` (no se dispara) o `{philly_pre1990_nan: true}` (se
+    dispara). Los modelos que dependen de M2 (`m3_tvtp_g`, `m3_ctp_g`, `pool_g`, sus variantes y las sensibilidades de
+    M2 y M3) **heredan** el valor de `m2_struct_g` (el arnés lo copia y da error si alguno declara otro). Entra en el
+    hash de configuración. En 6c solo se rellena ese booleano.
   - **Orden:** se resuelve (§6, pasos 6a-6c) y se commitea **antes** de cualquier corrida de M3 o del pool.
 
 ## 3. Modelo del factor (fijado)
@@ -136,11 +145,14 @@ Observaciones estandarizadas x<sub>j,m</sub> (j = 1…6; m = mes):
   de la corrida, sin parámetros previos, se usa el punto final del optimizador y se anota igual. Se informa el número
   de reestimaciones sin convergencia.
 - **Cadencia (PIT):** el arnés llama a `fit` cada mes (refit_every = 1). Los parámetros, d<sub>i</sub> y las medias se
-  **reestiman en el primer corte y después solo en los cortes de enero**, con los datos conocidos en ese corte, y
-  arrancando del óptimo anterior. Entre eneros, el filtro corre cada mes con los parámetros vigentes sobre los datos
+  **reestiman en el primer corte y después solo en los cortes de enero**, con los datos conocidos en ese corte (con el
+  arranque determinista fijo del punto anterior; v1.2, Validador N-1: se borra «arrancando del óptimo anterior», que
+  contradecía ese punto). Entre eneros, el filtro corre cada mes con los parámetros vigentes sobre los datos
   conocidos en la fecha de decisión. Todo ≤ corte. Con el arranque fijo, una corrida que empieza en enero (p. ej. el
   ensayo en seco, `dry_run_window` 1993-01) da en cada enero los **mismos parámetros** que la corrida desde
-  `test_start` (test de implementación); entre el primer corte y el primer enero la corrida no es comparable y no se
+  `test_start` (test de implementación), **en todas las reestimaciones con `fit_converged = true` en las dos
+  corridas** (v1.2, Validador N-4: con la regla de no convergencia, un enero sin convergencia vuelve a hacer depender
+  los parámetros de la historia de la corrida; esas excepciones se informan con su mes y no cuentan como fallo del test); entre el primer corte y el primer enero la corrida no es comparable y no se
   puntúa (los cortes antes de W<sub>G</sub> no se puntúan).
 - **Estado aumentado para la previsión:** para la composición (§4) el estado incluye los retardos **0…12** de f (13;
   v1.1, por f<sub>m−12</sub> en la ecuación de las peticiones), 0…7 de u<sub>i</sub> (las 4 coincidentes: 32),
@@ -289,8 +301,9 @@ sensibilidad post hoc; se deja para una spec aparte si el usuario lo pide, para 
    retardos 1-24** (`mejora_logloss.acf_1_24`; Validador M-3) y la detección declarada 3 m × 80/20
    (`m3_tvtp_spec.md` §6) para todos los modelos.
 5. **Estudio de eventos por episodio** (`pool_spec.md` §5b; decisión del usuario 24-oct, C): d<sub>t</sub> frente a M0
-   en k = −6 … +8 alrededor de cada giro v2.1 de G y por episodio; M2 se incluye en las corridas `m2_long` y
-   `m2_m1cmp`.
+   en k = −6 … +8 alrededor de cada giro v2.1 de G y por episodio; M2 se incluye en las corridas `m2_m1cmp` y en la
+   corrida principal **resuelta** por S-PIT-001: `m2_long` si no se dispara, `m2_long_phnan` si se dispara (v1.2,
+   Validador N-3). Las predicciones P1, P4 y P7 sobre M2 se leen en esa corrida resuelta.
 6. Diagnóstico `fit_converged` por reestimación (§3).
 
 ## 9. Cambios post hoc (técnicos) y fechas fijadas por regla
@@ -300,6 +313,8 @@ sensibilidad post hoc; se deja para una spec aparte si el usuario lo pide, para 
 | — | (aquí irán W<sub>G</sub>, la tabla v(edad) y la resolución de S-PIT-001) | | |
 | 2026-10-24 | **v1.0 → v1.1** (push a priori, antes de implementar y de cualquier contacto con la etiqueta para M2/M3/pool) | ver la tabla de cambios v1.1, abajo | nada de M2/M3/pool: sin implementación, sin datos, sin corridas. Solo las revisiones del Validador y del Estratega (documentales y sintéticas) |
 | 2026-10-24 | ninguno (nota de proceso, **completada en v1.1**, Validador B-1) | lecturas de la etiqueta del 24-oct **anteriores** al push de v1.0 (09:53:14Z), todas en `development` y ≤ 2004-12 (o caché ≤ 2004; las denegadas son tests de la barrera ≥ 2005), según `research/trials/full/label_access.jsonl` y `research/trials/label_access.jsonl` (horas del registro en local, UTC+2; aquí en UTC): **(1)** suite completa 08:47:38-08:52:20Z (102 accesos, 5 denegados); **(2)** suite completa 08:57:31-09:02:12Z (ídem); **(3)** `src/models/power.py` 09:05:52Z (1 acceso, también en el registro principal: marca de giros ≤ 2004 para la potencia); **(4)** reproducciones de M1 v1 con `record=False` 09:10:59-09:13:25Z y 09:20:10-09:20:14Z (18 accesos); **(5)** suite completa 09:47:59-09:51:07Z (102 accesos, 5 denegados). Ninguna después del push de v1.0 ni hasta el push de v1.1 | (1), (2), (5): nada de M2, M3 ni del pool (no existían); los tests preexistentes solo reproducen M0, baselines, placebos y ensayos en seco ya conocidos desde el 16-oct. (3): las d<sub>t</sub> de M1 y los MDE de `power_holdout.md` **sí informan el diseño** (`sd_mensual`, puerta de gasto, expectativa de A7), declarado en §0. (4): resultados de M1 v1 ya conocidos. La spec ya estaba escrita y no se cambió por ninguna de ellas. "Antes de cualquier contacto con la etiqueta" significa **para M2/M3/pool** |
+| 2026-10-24 | **v1.1 → v1.2** (push a priori, antes de implementar nada que lea datos y antes de cualquier contacto con la etiqueta para M2/M3/pool) | ver la tabla de cambios v1.2, abajo (Validador, re-auditoría `docs/validation/2026-10-24_specs_pool_v4_reaudit.md`, N-1…N-7) | nada de M2/M3/pool: sin implementación, datos ni corridas |
+| 2026-10-24 | ninguno (nota de proceso, v1.2, Validador N-7) | lectura de la etiqueta **posterior** al push de v1.1 (10:46:29Z) y anterior al de v1.2: **(6)** suite completa 10:47:11-10:50:19Z (102 accesos ≤ 2004-12, 90 desde la caché, 5 denegados de la barrera ≥ 2005, todos de pytest con `git_head` = `d1bde77`). No hay ninguna otra entre los dos pushes (el Validador solo leyó registros y datos sintéticos) | nada de M2, M3 ni del pool (no existían): los tests preexistentes reproducen M0, baselines, placebos y ensayos en seco ya conocidos. Posterior al push de v1.1: no afecta a la prioridad |
 
 **Cambios v1.0 → v1.1** (2026-10-24; ninguno se ha probado con datos):
 
@@ -313,3 +328,14 @@ sensibilidad post hoc; se deja para una spec aparte si el usuario lo pide, para 
 | 6 | §2, §6 | S-PIT-001 "tal como está preregistrada", resuelta después de `m2_long`, sin orden respecto a M3/pool | regla operativa (\|Δ<sub>S</sub>\| > semiamplitud del IC 95 %), orden 6a-6e, resolución empujada antes de M3/pool, la versión resultante es la única aguas abajo | Validador M-4 |
 | 7 | §8 | — | ACF de d (1-24) y estudio de eventos por episodio para M2 | Validador M-3.2; decisión del usuario 24-oct (C) |
 | 8 | §9 | nota de proceso con una sola pasada de la suite | todas las lecturas del 24-oct ≤ 2004 | Validador B-1 |
+
+**Cambios v1.1 → v1.2** (2026-10-24; re-auditoría del Validador; ninguno cambia el modelo ni se ha probado con datos):
+
+| # | sección | v1.1 | v1.2 | motivo |
+|---|---|---|---|---|
+| 1 | §3 (cadencia) | "…y arrancando del óptimo anterior" | frase borrada: el arranque es el determinista fijo | Validador N-1 (contradicción interna) |
+| 2 | §2 (S-PIT-001) | la regla solo exigía la misma forma | d<sup>pr</sup>, d<sup>fp</sup> finitas en todos los meses, alineadas y con el mismo índice; si no, error y parada | Validador N-2 (con un NaN la regla "no se disparaba" en silencio) |
+| 3 | §2 (S-PIT-001) | "la marca `philly_pre1990_nan`" sin parámetro | `model_params.m2_struct_g: {philly_pre1990_nan: false\|true}`, heredado por M3, `m3_ctp_g`, el pool y las sensibilidades | Validador N-6 |
+| 4 | §3 (test del ensayo en seco) | igualdad de parámetros en cada enero | solo en las reestimaciones con `fit_converged = true` en las dos corridas; las excepciones se informan | Validador N-4 |
+| 5 | §8-5 | estudio de eventos de M2 en `m2_long` | en la corrida **resuelta** por S-PIT-001 (`m2_long` o `m2_long_phnan`) y en `m2_m1cmp`; P1, P4 y P7 sobre M2 se leen ahí | Validador N-3 |
+| 6 | §9 | — | nota de proceso con la suite posterior al push de v1.1 | Validador N-7 |

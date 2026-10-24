@@ -1,12 +1,12 @@
 ---
 documento: especificación a priori del POOL de log-scores {M0, M2 estructural, M3 TVTP} del eje G con recalibración beta (BLP), contraste principal único de P-EVAL-BASE v4
-version: 1.1 (2026-10-24; v1.0 = 1a5f1f9. Ambas congeladas ANTES de cualquier contacto con la etiqueta PARA M2/M3/pool y empujadas antes de implementar; cambios en §8)
+version: 1.2 (2026-10-24; v1.1 = d1bde77, v1.0 = 1a5f1f9. Las tres congeladas ANTES de cualquier contacto con la etiqueta PARA M2/M3/pool y empujadas antes de implementar; cambios en §8)
 fecha: 2026-10-24
 hipotesis: H-POOL-001 (research/hypotheses.yaml) — DECLARADA CONTAMINADA (elegida el 23-24 oct tras ver M1 v1/v2; ver §0)
 origen: decisión del usuario (24-oct): contraste principal = pool de log-scores + recalibración beta, Holm k = 1; docs/research/2026-10-23_mejoras_nowcast_regimen.md §3.1 y §5.6
 codigo: src/models/regime_components.py (esqueleto, constantes y la transformación beta; sin implementar el ajuste); implementación futura en src/models/models_pool.py
 tests: tests/test_regime_components.py (solo datos sintéticos)
-depende_de: m2_structural_spec.md v1.1, m3_tvtp_spec.md v1.1, arnés v2.4 (§6)
+depende_de: m2_structural_spec.md v1.2, m3_tvtp_spec.md v1.2, arnés v2.4 (§6)
 revisiones: docs/validation/2026-10-24_specs_pool_v4.md (B-1, B-6, M-3, M-4), docs/reviews/2026-10-24_estratega_macro_specs_pool.md (§3, §4.2)
 ---
 
@@ -38,7 +38,8 @@ pasada de desarrollo**; no se itera ni se elige entre variantes con datos de des
 ## 2. Componentes y entrada
 
 - **Componentes (exactamente 3, en este orden):** k = 0 M0 `m0_calibrated_persistence`, k = 1 `m2_struct_g`, k = 2
-  `m3_tvtp_g`, con sus specs congeladas (M2 en la versión que resulte de S-PIT-001, `m2_structural_spec.md` §2). **No** entran `m3_ctp_g`, M1 v1/v2 ni las sensibilidades.
+  `m3_tvtp_g`, con sus specs congeladas (M2 en la versión que resulte de S-PIT-001, `m2_structural_spec.md` §2);
+  la marca `model_params.m2_struct_g.philly_pre1990_nan` la heredan `pool_g` y sus variantes, v1.2, Validador N-6). **No** entran `m3_ctp_g`, M1 v1/v2 ni las sensibilidades.
 - **Entrada:** p<sub>k,s</sub> = P(G alto) **fuera de muestra** del componente k para el mes s, la que el walk-forward
   produjo en el corte de s (en tiempo real), en el mismo modo. Nunca una predicción reajustada después. Recorte
   [1e-6, 1 − 1e-6].
@@ -129,8 +130,9 @@ incluye claramente el 0, gastar el bloqueado tiene una potencia < 30 % (`power_h
   eje G), modo vintage, en k = −6 … +8 meses alrededor de **cada giro v2.1 de G** del arnés (A→B y B→A por separado;
   como el C3 del 16-oct), y su media por episodio en tres tramos: **antes** (k = −6 … −1), **entrada/salida**
   (k = 0 … +4) y **después** (k = +5 … +8). Más la media en los meses estables de la ventana. Cada modelo, en las
-  corridas donde aparece (M2 y M3 en `m2_long`/`m3_long` desde W<sub>G</sub>, con 1980 y 1981-82; el pool en
-  `pool_dev`, desde su activación).
+  corridas donde aparece (M2 en la corrida principal **resuelta** por S-PIT-001, `m2_long` o `m2_long_phnan`, y M3 en
+  `m3_long`, desde W<sub>G</sub>, con 1980 y 1981-82; el pool en `pool_dev`, desde su activación; v1.2, Validador
+  N-3: las predicciones P1, P4 y P7 sobre M2 se leen en la corrida resuelta).
 - **Nada de esto es criterio** ni cambia ninguno: es lectura de desarrollo, que hace comprobables las predicciones
   a priori del Estratega. La "puerta de gasto" (§5) se lee **junto con** estos episodios (Estratega §6-3: la ventana
   del pool solo tiene 1990-91 y 2001).
@@ -202,3 +204,5 @@ de M2 con la versión resuelta → M3 → pool. Ninguna corrida de M3 o del pool
 | — | (aquí irá la ventana principal) | | |
 | 2026-10-24 | **v1.0 → v1.1** (push a priori, antes de implementar y de cualquier contacto con la etiqueta para M2/M3/pool) | (1) §5b: estudio de eventos por episodio con pool, M2 y M3 y las predicciones a priori del Estratega (decisión del usuario, C); (2) §7: orden con la resolución de S-PIT-001 antes de M3/pool (M-4); (3) §4: d<sub>t</sub> exacta salvo recorte (B-6); `mejora_logloss_b24` y ACF 1-24 de d (M-3); (4) depende de M2/M3 v1.1; (5) nota de proceso completa (B-1). Pesos, previas, beta, N<sub>min</sub> y ventanas: **sin cambio** | nada de M2/M3/pool (sin implementación, datos ni corridas) |
 | 2026-10-24 | ninguno (nota de proceso, **completada en v1.1**, Validador B-1) | lecturas de la etiqueta del 24-oct **anteriores** al push de v1.0 (09:53:14Z), todas en `development` y ≤ 2004-12 (o caché ≤ 2004; las denegadas son tests de la barrera ≥ 2005), según `research/trials/full/label_access.jsonl` y `research/trials/label_access.jsonl` (horas del registro en local, UTC+2; aquí en UTC): **(1)** suite completa 08:47:38-08:52:20Z (102 accesos, 5 denegados); **(2)** suite completa 08:57:31-09:02:12Z (ídem); **(3)** `src/models/power.py` 09:05:52Z (1 acceso, también en el registro principal: marca de giros ≤ 2004 para la potencia); **(4)** reproducciones de M1 v1 con `record=False` 09:10:59-09:13:25Z y 09:20:10-09:20:14Z (18 accesos); **(5)** suite completa 09:47:59-09:51:07Z (102 accesos, 5 denegados). Ninguna después del push de v1.0 ni hasta el push de v1.1 | (1), (2), (5): nada de M2, M3 ni del pool (no existían); los tests preexistentes solo reproducen M0, baselines, placebos y ensayos en seco ya conocidos desde el 16-oct. (3): las d<sub>t</sub> de M1 y los MDE de `power_holdout.md` **sí informan el diseño** (`sd_mensual`, puerta de gasto, expectativa de A7), declarado en §0. (4): resultados de M1 v1 ya conocidos. La spec ya estaba escrita y no se cambió por ninguna de ellas. "Antes de cualquier contacto con la etiqueta" significa **para M2/M3/pool** |
+| 2026-10-24 | **v1.1 → v1.2** (push a priori, antes de implementar nada que lea datos y de cualquier contacto con la etiqueta para M2/M3/pool) | re-auditoría del Validador (`docs/validation/2026-10-24_specs_pool_v4_reaudit.md`): (1) §5b: M2 en el estudio de eventos desde la corrida resuelta por S-PIT-001 (N-3); (2) §2: marca de la versión de M2 heredada (N-6); (3) depende de M2/M3 v1.2; (4) nota de proceso (N-7, fila siguiente). Pesos, previas, beta, N<sub>min</sub> y ventanas: **sin cambio** | nada de M2/M3/pool (sin implementación, datos ni corridas) |
+| 2026-10-24 | ninguno (nota de proceso, v1.2, Validador N-7) | lectura de la etiqueta **posterior** al push de v1.1 (10:46:29Z) y anterior al de v1.2: **(6)** suite completa 10:47:11-10:50:19Z (102 accesos ≤ 2004-12, 90 desde la caché, 5 denegados de la barrera ≥ 2005, pytest, `git_head` = `d1bde77`). Ninguna otra entre los dos pushes | nada de M2, M3 ni del pool (no existían); tests preexistentes. Posterior al push de v1.1: no afecta a la prioridad |

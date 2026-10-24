@@ -1,6 +1,6 @@
 ---
 documento: especificación a priori de M3, Markov de 2 estados con transiciones variables (TVTP) SOLO para el eje G, con emisión desde el factor coincidente de M2
-version: 1.1 (2026-10-24; v1.0 = 1a5f1f9. Ambas congeladas ANTES de cualquier contacto con la etiqueta PARA M2/M3/pool y empujadas antes de implementar; cambios en §9)
+version: 1.2 (2026-10-24; v1.1 = d1bde77, v1.0 = 1a5f1f9. Las tres congeladas ANTES de cualquier contacto con la etiqueta PARA M2/M3/pool y empujadas antes de implementar; cambios en §9)
 fecha: 2026-10-24
 hipotesis: H-M3-001 (research/hypotheses.yaml) — DECLARADA CONTAMINADA (post hoc respecto a M1 v1/v2; ver §0)
 equivale_a: "H-M2-001 / m2_tvtp_g" de la revisión del Estratega (docs/reviews/2026-10-23_estratega_macro_m1v2.md §3.1), con la emisión del Investigador (docs/research/2026-10-23_mejoras_nowcast_regimen.md §3.3)
@@ -8,7 +8,7 @@ papel: COMPONENTE del pool (docs/models/pool_spec.md). Frente a M0 y frente a su
 codigo: src/models/regime_components.py (esqueleto y constantes; sin implementar); implementación futura en src/models/models_tvtp.py
 tests: tests/test_regime_components.py (solo datos sintéticos)
 datos: base PIT v0.4 CONGELADA (tag pit-v0.4) + la emisión de M2 (m2_structural_spec.md); desarrollo solo ≤ 2004-12
-depende_de: m2_structural_spec.md v1.1 (factor y Ĝ en tiempo real; en la versión que resulte de S-PIT-001, M2 §2), arnés v2.4 (§8 de M2 y §8 de aquí)
+depende_de: m2_structural_spec.md v1.2 (factor y Ĝ en tiempo real; en la versión que resulte de S-PIT-001, M2 §2), arnés v2.4 (§8 de M2 y §8 de aquí)
 revisiones: docs/validation/2026-10-24_specs_pool_v4.md (M-1, M-4, B-1, B-4, B-5), docs/reviews/2026-10-24_estratega_macro_specs_pool.md (§2.4)
 ---
 
@@ -118,7 +118,9 @@ con transiciones constantes y la calibración lo lleva a ≈ M0.
 
 - **Orden (v1.1, M-4):** ninguna corrida de M3 empieza antes de que la resolución de S-PIT-001 esté commiteada y
   empujada (`m2_structural_spec.md` §6, paso 6c). M3 usa como emisión **la versión de M2 que resulte** (la principal o
-  la de Filadelfia < 1990-07 = NaN); no se corre M3 con la otra.
+  la de Filadelfia < 1990-07 = NaN); no se corre M3 con la otra. La marca es
+  `model_params.m2_struct_g.philly_pre1990_nan` (M2 §2, v1.2, Validador N-6): `m3_tvtp_g`, `m3_ctp_g` y las
+  sensibilidades de M3 la heredan de `m2_struct_g` (el arnés la copia; error si alguno declara otra).
 - **Ventanas:** las de M2 (`m2_structural_spec.md` §6, misma regla W<sub>G</sub>; la larga es la ventana de M3) y la
   comparable 1989-10 → 2004-12. Mismos ajustes del arnés (refit 1, embargo 6, madurez, `pit_version` 0.4, vintage +
   latest_truncated, `allow_shrink: false`, `test_start` 1956-10).
@@ -138,7 +140,10 @@ con transiciones constantes y la calibración lo lleva a ≈ M0.
   - Umbral 0,01 en unidades de z (efecto de odds ≈ 1 % por desviación típica; por debajo, "pegado a 0"; Estratega
     §2.4). Desigualdad **estricta**: γ = 0 exacto, 1e-10 o 0,01 exacto **no** cuentan.
   - Denominador = cortes de la ventana en que el modelo debía ajustarse; un corte sin coeficientes (no elegible o
-    sin ajuste) cuenta como **no cumplido**.
+    sin ajuste) cuenta como **no cumplido**. **Implementación (v1.2, Validador N-5):** el arnés pasa como denominador
+    **todos los meses de corte de `eval_window`** en el modo (los 202 del bloqueado con refit 1), nunca el índice de los
+    cortes que tienen coeficientes; el ensayo en seco comprueba que `n_cortes` = número de meses de corte de
+    `dry_run_window`. Tests: cortes sin coeficientes y todos los γ = 0 dan `criterio_fraccion_cumple = false`.
   - Sin cláusula de estabilidad en los saltos de vintage (`sign_stability` se sigue informando, no decide). El
     `criterio_signos_cumple` de `expected_signs` **no** es este criterio: con γ ≥ 0 impuesto se cumple casi siempre.
   - Clave nueva del arnés v2.4: `report["signos_coeficientes"]["vintage/m3_tvtp_g"]["fraccion_umbral"]` con, por
@@ -198,3 +203,5 @@ por M1 v2).
 |---|---|---|---|
 | 2026-10-24 | **v1.0 → v1.1** (push a priori, antes de implementar y de cualquier contacto con la etiqueta para M2/M3/pool) | (1) §5, §8: criterio de signos = γ<sub>j</sub> > 0,01 en ≥ 50 % de los cortes, cada γ por separado, ventana del bloqueado, clave nueva (decisión del usuario 24-oct; Validador M-1; Estratega §2.4); (2) §5: orden tras la resolución de S-PIT-001 (M-4); (3) §2: coherencia de la emisión con M2 (B-4); (4) §3: calibración dentro de muestra declarada y `maxiter`/`gtol` fijados (B-5); (5) depende de M2 v1.1 (peticiones de paro con f<sub>m</sub> − f<sub>m−12</sub>; el texto de M3 no cambia por ello); (6) estudio de eventos en `pool_spec.md` §5b; (7) nota de proceso completa (B-1) | nada de M2/M3/pool (sin implementación, datos ni corridas) |
 | 2026-10-24 | ninguno (nota de proceso, **completada en v1.1**, Validador B-1) | lecturas de la etiqueta del 24-oct **anteriores** al push de v1.0 (09:53:14Z), todas en `development` y ≤ 2004-12 (o caché ≤ 2004; las denegadas son tests de la barrera ≥ 2005), según `research/trials/full/label_access.jsonl` y `research/trials/label_access.jsonl` (horas del registro en local, UTC+2; aquí en UTC): **(1)** suite completa 08:47:38-08:52:20Z (102 accesos, 5 denegados); **(2)** suite completa 08:57:31-09:02:12Z (ídem); **(3)** `src/models/power.py` 09:05:52Z (1 acceso, también en el registro principal: marca de giros ≤ 2004 para la potencia); **(4)** reproducciones de M1 v1 con `record=False` 09:10:59-09:13:25Z y 09:20:10-09:20:14Z (18 accesos); **(5)** suite completa 09:47:59-09:51:07Z (102 accesos, 5 denegados). Ninguna después del push de v1.0 ni hasta el push de v1.1 | (1), (2), (5): nada de M2, M3 ni del pool (no existían); los tests preexistentes solo reproducen M0, baselines, placebos y ensayos en seco ya conocidos desde el 16-oct. (3): las d<sub>t</sub> de M1 y los MDE de `power_holdout.md` **sí informan el diseño** (`sd_mensual`, puerta de gasto, expectativa de A7), declarado en §0. (4): resultados de M1 v1 ya conocidos. La spec ya estaba escrita y no se cambió por ninguna de ellas. "Antes de cualquier contacto con la etiqueta" significa **para M2/M3/pool** |
+| 2026-10-24 | **v1.1 → v1.2** (push a priori, antes de implementar nada que lea datos y de cualquier contacto con la etiqueta para M2/M3/pool) | re-auditoría del Validador (`docs/validation/2026-10-24_specs_pool_v4_reaudit.md`): (1) §5, criterio 8: denominador = todos los meses de corte de `eval_window`, nunca el índice de los cortes con coeficientes; tests con cortes sin coeficientes y con γ = 0; el ensayo en seco comprueba `n_cortes` (N-5); (2) §5: la marca de la versión de M2 es `model_params.m2_struct_g.philly_pre1990_nan`, heredada (N-6); (3) depende de M2 v1.2; (4) nota de proceso (N-7, fila siguiente). Modelo, previas, ventanas y criterio: **sin cambio** | nada de M2/M3/pool (sin implementación, datos ni corridas) |
+| 2026-10-24 | ninguno (nota de proceso, v1.2, Validador N-7) | lectura de la etiqueta **posterior** al push de v1.1 (10:46:29Z) y anterior al de v1.2: **(6)** suite completa 10:47:11-10:50:19Z (102 accesos ≤ 2004-12, 90 desde la caché, 5 denegados de la barrera ≥ 2005, pytest, `git_head` = `d1bde77`). Ninguna otra entre los dos pushes | nada de M2, M3 ni del pool (no existían); tests preexistentes. Posterior al push de v1.1: no afecta a la prioridad |

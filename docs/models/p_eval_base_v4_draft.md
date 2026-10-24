@@ -1,6 +1,6 @@
 ---
 documento: BORRADOR del preregistro de la evaluación única del modelo base (P-EVAL-BASE), versión 4
-version: 4.1-borrador (2026-10-24; contraste único pool − M0, Holm k = 1, criterio 1 con IC 95 %, criterio 8 de signos de M3; 4.0 = 1a5f1f9)
+version: 4.2-borrador (2026-10-24; contraste único pool − M0, Holm k = 1, criterio 1 con IC 95 %, criterio 8 de signos de M3; 4.1 = d1bde77, 4.0 = 1a5f1f9; 4.2: N-5/N-6 del Validador, componentes en v1.2)
 fecha: 2026-10-24
 estado: BORRADOR. NO está en research/hypotheses.yaml y NO abre el periodo bloqueado. Sustituye a la v3
   (docs/models/p_eval_base_draft.md, que queda como historia). Antes de registrarlo, todo lo de §A9.
@@ -32,6 +32,7 @@ decisiones de diseño.
 | 10 | `test_start` = 1978-07 | **1956-10** | los cortes < 2005 no puntúan; construyen la historia fuera de muestra de M2/M3 que necesita el pool (A4). Declarado aquí (Validador B-7, residuo de M4-2) | Constructor |
 | 11 | — | **S-PIT-001** resuelta en desarrollo con regla operativa, antes de M3 y del pool; la versión de M2 resultante es la única de A4 | Validador M-4 (`m2_structural_spec.md` §2, §6) | Constructor |
 | 12 | — | componentes en sus specs **v1.1** (M2: peticiones de paro con f<sub>m</sub> − f<sub>m−12</sub>; V<sub>rev</sub> declarado no PIT + sensibilidad PIT) | Estratega (imprescindible 1); Validador M-2; usuario 24-oct (B) | Constructor / usuario |
+| 13 | — | **v4.2**: componentes en **v1.2**; marca `model_params.m2_struct_g.philly_pre1990_nan` en A8, heredada; denominador del criterio 8 = todos los meses de corte de `eval_window`, comprobado en el ensayo en seco | Validador N-5, N-6 (re-auditoría 24-oct); sin cambio de criterio ni de diseño | Constructor |
 
 Los cambios 1-3 y 6-9 son decisiones del usuario **antes** de abrir el bloqueado; se anotan en `research/trial_log.md`
 como cambios de diseño posteriores a los resultados de desarrollo de M1 v1/v2 (no del bloqueado).
@@ -44,7 +45,7 @@ el criterio de signos ya está decidido, fila 3).
 
 | id | modelo | contraste | modo | ventana |
 |---|---|---|---|---|
-| H1 | **`pool_g`** (`pool_spec.md` v1.1, H-POOL-001), con sus componentes M0, `m2_struct_g` (`m2_structural_spec.md` v1.1, H-M2-001, en la versión que resulte de S-PIT-001) y `m3_tvtp_g` (`m3_tvtp_spec.md` v1.1, H-M3-001) | mejora de log-loss blanda de 4 cuadrantes frente a M0 (`m0_calibrated_persistence`): d<sub>t</sub> = ll(M0)<sub>t</sub> − ll(pool)<sub>t</sub> (`pool_spec.md` §4) | vintage | 2005-01 → 2021-10 |
+| H1 | **`pool_g`** (`pool_spec.md` v1.2, H-POOL-001), con sus componentes M0, `m2_struct_g` (`m2_structural_spec.md` v1.2, H-M2-001, en la versión que resulte de S-PIT-001) y `m3_tvtp_g` (`m3_tvtp_spec.md` v1.2, H-M3-001) | mejora de log-loss blanda de 4 cuadrantes frente a M0 (`m0_calibrated_persistence`): d<sub>t</sub> = ll(M0)<sub>t</sub> − ll(pool)<sub>t</sub> (`pool_spec.md` §4) | vintage | 2005-01 → 2021-10 |
 
 - **Holm con k = 1** (familia `principal_k1`, un miembro: `pool_g` frente a M0, métrica `logloss`, `p_h0`), α = 0,05
   unilateral. Con un solo miembro, Holm es p<sub>h0</sub> < 0,05. Bootstrap circular por bloques de 12 meses, 5.000
@@ -83,9 +84,9 @@ giros en 2005-2021 tiene poca potencia; se lee como indicio, no como prueba.
 | modelo | especificación | variables | papel |
 |---|---|---|---|
 | M0 `m0_calibrated_persistence` | harness.md §8 | — | listón y componente |
-| `m2_struct_g` | `m2_structural_spec.md` v1.1 (versión resuelta por S-PIT-001) | niveles PIT de INDPRO, PAYEMS, W875RX1, CMRMTSPL; `claims_4w_yoy`, `philly_neworders` | componente |
-| `m3_tvtp_g` | `m3_tvtp_spec.md` v1.1 | emisión de M2; transiciones `curve_min12`, `baa_d6m`, `eq_ret_6m` | componente |
-| **`pool_g`** | `pool_spec.md` v1.1 | predicciones fuera de muestra de los tres | **H1** |
+| `m2_struct_g` | `m2_structural_spec.md` v1.2 (versión resuelta por S-PIT-001) | niveles PIT de INDPRO, PAYEMS, W875RX1, CMRMTSPL; `claims_4w_yoy`, `philly_neworders` | componente |
+| `m3_tvtp_g` | `m3_tvtp_spec.md` v1.2 | emisión de M2; transiciones `curve_min12`, `baa_d6m`, `eq_ret_6m` | componente |
+| **`pool_g`** | `pool_spec.md` v1.2 | predicciones fuera de muestra de los tres | **H1** |
 | `m3_ctp_g` | `m3_tvtp_spec.md` §4 | como M3 con γ = 0 | informativa |
 | `m1_logit_axis`, `m1v2_logit_axis` | `m1_spec.md`, `m1_v2_spec.md` | las suyas | informativas, fuera de Holm |
 | persistencia cruda, climatología | harness.md §8 | — | referencias |
@@ -165,6 +166,10 @@ models: [pool_g, m0_calibrated_persistence, m2_struct_g, m3_tvtp_g, m3_ctp_g,   
          m1_logit_axis, m1v2_logit_axis, persistence_pit, climatology]
 model_params:                              # los de cada spec, sin cambios (m1: L2 6,0; M0: eps 1e-3, L2 1,0; …)
   m0_calibrated_persistence: {eps: 0.001, l2: 1.0}
+  m2_struct_g: {philly_pre1990_nan: false}   # S-PIT-001 (M2 §2, 6c): false si no se dispara, true si se dispara.
+                                             # Heredado por m3_tvtp_g, m3_ctp_g, pool_g, sus variantes y las
+                                             # sensibilidades de M2/M3 (el arnés lo copia; error si otro declara
+                                             # un valor distinto). Entra en el hash de configuración (v4.2, N-6)
   climatology: {alpha: 1.0}
 modes: [vintage, latest_truncated]
 refit_every: 1
@@ -194,7 +199,8 @@ sign_fraction:                            # criterio 8 (A3). Clave nueva del arn
     coefs: ["G:gamma1", "G:gamma2", "G:gamma3", "G:gamma4"]
     threshold: 0.01                       # γ > 0,01 estricto
     min_frac: 0.5                         # cada γ por separado; ventana = eval_window
-    missing_counts_as_fail: true
+    missing_counts_as_fail: true          # denominador = TODOS los meses de corte de eval_window (202), nunca el
+                                          # índice de los cortes con coeficientes (v4.2, Validador N-5)
 # bloques de 24 (A6): mejora_logloss_b24, siempre en el informe (sin clave de configuración)
 holm_families:
   - nombre: principal_k1
@@ -232,7 +238,7 @@ El ensayo en seco (harness.md §4e) comprueba en el **primer corte bloqueado** l
 de cada modelo (M2/M3: ventana del eje G desde 1968-05; pool: N<sub>min</sub> = 60 cumplido) y, en
 `dry_run_window` (≤ 2004), que el informe trae **todas** las claves de A3 para `pool_g`, incluida
 `holm_familias.principal_k1`, la detección pareada, `mejora_logloss.sd_mensual`, `mejora_logloss_b24` y la clave del
-criterio 8 (`signos_coeficientes["vintage/m3_tvtp_g"].fraccion_umbral` y `criterio_fraccion_cumple`).
+criterio 8 (`signos_coeficientes["vintage/m3_tvtp_g"].fraccion_umbral` y `criterio_fraccion_cumple`), con `n_cortes` = número de meses de corte de `dry_run_window` para cada γ (v4.2, N-5).
 
 ## A9. Condiciones para registrar (todas; nada de esto está hecho)
 

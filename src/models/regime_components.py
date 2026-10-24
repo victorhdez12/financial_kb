@@ -126,14 +126,25 @@ def gamma_fraction_criterion(coefs: pd.DataFrame, cut_months, threshold: float =
 
 
 def s_pit_001_triggered(d_principal, d_prudente, ci_lo: float, ci_hi: float) -> dict:
-    """Regla operativa de S-PIT-001 para M2 (m2_structural_spec.md v1.1 §2): d = ll(M0) − ll(M2) en los MISMOS meses
+    """Regla operativa de S-PIT-001 para M2 (m2_structural_spec.md v1.2 §2): d = ll(M0) − ll(M2) en los MISMOS meses
     con la matriz principal y la prudente; se dispara si |media(d_prudente) − media(d_principal)| > (hi − lo)/2 del
-    IC 95 % de mejora_logloss de M2 frente a M0 (matriz principal)."""
+    IC 95 % de mejora_logloss de M2 frente a M0 (matriz principal).
+    v1.2 (Validador N-2): las dos series tienen que ser FINITAS en todos los meses, con la misma longitud y, si son
+    pd.Series, con el MISMO índice (mismos meses, mismo orden). Si no: ValueError y se para (nunca intersección)."""
+    if isinstance(d_principal, pd.Series) or isinstance(d_prudente, pd.Series):
+        if not (isinstance(d_principal, pd.Series) and isinstance(d_prudente, pd.Series)):
+            raise ValueError("S-PIT-001: las dos series deben venir con su índice de meses (pd.Series)")
+        if not d_principal.index.equals(d_prudente.index):
+            raise ValueError("S-PIT-001: las dos series no están alineadas por mes (índices distintos)")
     a, b = np.asarray(d_principal, float), np.asarray(d_prudente, float)
-    if a.shape != b.shape:
+    if a.ndim != 1 or a.shape != b.shape or not len(a):
         raise ValueError("S-PIT-001: las dos series deben cubrir los mismos meses")
+    if not (np.isfinite(a).all() and np.isfinite(b).all()):
+        raise ValueError("S-PIT-001: d no finita en algún mes (NaN/inf): la regla no se puede aplicar")
+    if not (np.isfinite(ci_lo) and np.isfinite(ci_hi)) or ci_hi < ci_lo:
+        raise ValueError("S-PIT-001: IC no válido")
     delta, h = float(b.mean() - a.mean()), (float(ci_hi) - float(ci_lo)) / 2
-    return {"delta": delta, "semiamplitud": h, "dispara": bool(abs(delta) > h)}
+    return {"delta": delta, "semiamplitud": h, "dispara": bool(abs(delta) > h), "n_meses": int(len(a))}
 
 
 def blp_transform(p, a: float, b: float, clip: float = POOL.clip) -> np.ndarray:

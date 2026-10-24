@@ -388,7 +388,7 @@
     SÍ (diseño post hoc tras M1 v1/v2 en desarrollo ≤ 2004). Atenuante: no ajusta ningún parámetro con la etiqueta
     (factor por máxima verosimilitud sobre las series; σ̂ del filtro, de las revisiones y de la tendencia). Una pasada
     de desarrollo; en la evaluación única solo como componente del pool. Cuenta como un ensayo.
-  especificacion: docs/models/m2_structural_spec.md (v1.1; v1.0 = 1a5f1f9; cambios en su §9)
+  especificacion: docs/models/m2_structural_spec.md (v1.2; v1.1 = d1bde77; v1.0 = 1a5f1f9; cambios en su §9)
   base_pit: "0.4 (congelada, tag pit-v0.4)"
   modelo: >
     m2_struct_g = factor dinámico (1 factor AR(2), idiosincráticos AR(1)) sobre las tasas mensuales PIT de INDPRO,
@@ -409,7 +409,7 @@
     SÍ (familia propuesta tras M1 v1; variables de transición elegidas tras M1 v2). Estima con la etiqueta (≈ 8-10
     transiciones por sentido): mandan las previas. Una pasada de desarrollo; en la evaluación única solo como
     componente del pool. Cuenta como un ensayo; su referencia m3_ctp_g (γ = 0) cuenta como otro.
-  especificacion: docs/models/m3_tvtp_spec.md (v1.1; v1.0 = 1a5f1f9; cambios en su §9)
+  especificacion: docs/models/m3_tvtp_spec.md (v1.2; v1.1 = d1bde77; v1.0 = 1a5f1f9; cambios en su §9)
   base_pit: "0.4 (congelada, tag pit-v0.4)"
   modelo: >
     m3_tvtp_g = Markov de 2 estados del eje G (estados = etiqueta dura recalculada ≤ T), anclado en la persistencia PIT
@@ -431,7 +431,7 @@
     SÍ (herramienta genérica, pero elegida tras ver M1 v1/v2; componentes contaminados). Una pasada de desarrollo; la
     prueba que decide es la evaluación única (P-EVAL-BASE v4, borrador, no registrado), donde es el ÚNICO contraste
     principal (Holm k = 1). Cuenta como un ensayo.
-  especificacion: docs/models/pool_spec.md (v1.1; v1.0 = 1a5f1f9; cambios en su §8)
+  especificacion: docs/models/pool_spec.md (v1.2; v1.1 = d1bde77; v1.0 = 1a5f1f9; cambios en su §8)
   modelo: >
     pool_g = B_{a,b}(Σ w_k p_k) sobre las P(G alto) fuera de muestra de M0, m2_struct_g y m3_tvtp_g; MAP conjunto
     (Ranjan-Gneiting) con las log-scores maduras (s ≤ m0 − 6, etiqueta recalculada ≤ m0, pesos de madurez), previa de

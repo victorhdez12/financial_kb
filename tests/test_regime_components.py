@@ -148,3 +148,23 @@ def test_s_pit_001_rule():
 def test_m3_optimizer_constants_fixed():
     assert C.TVTP.opt_maxiter == 500 and C.TVTP.opt_gtol == 1e-8
     assert C.TVTP.sign_coefs == ("G:gamma1", "G:gamma2", "G:gamma3", "G:gamma4")
+
+
+def test_s_pit_001_requires_finite_aligned_series():
+    """Validador N-2: con un NaN la regla no puede "no dispararse" en silencio; índices distintos → error."""
+    idx = pd.period_range("1980-01", periods=50, freq="M").to_timestamp()
+    d = pd.Series(np.zeros(50), index=idx)
+    bad = d - 1.0
+    bad.iloc[3] = np.nan                                                  # Δ real = −1 nat con un NaN
+    with pytest.raises(ValueError):
+        C.s_pit_001_triggered(d, bad, -0.02, 0.06)
+    with pytest.raises(ValueError):
+        C.s_pit_001_triggered(d.to_numpy(), bad.to_numpy(), -0.02, 0.06)
+    with pytest.raises(ValueError):                                       # mismos valores, meses desplazados
+        C.s_pit_001_triggered(d, pd.Series(d.to_numpy(), index=idx + pd.DateOffset(months=1)), -0.02, 0.06)
+    with pytest.raises(ValueError):
+        C.s_pit_001_triggered(d, d.to_numpy(), -0.02, 0.06)
+    with pytest.raises(ValueError):
+        C.s_pit_001_triggered(d, d, float("nan"), 0.06)
+    r = C.s_pit_001_triggered(d, d - 1.0, -0.02, 0.06)
+    assert r["dispara"] is True and r["n_meses"] == 50
