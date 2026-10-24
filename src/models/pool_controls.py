@@ -45,7 +45,7 @@ def m2_planted(seed: int = 7, start: str = "1980-01", end: str = "2004-08") -> d
     tl["philly_neworders"] = 12 * TRUE["lam"]["philly_neworders"] / v.sd["philly_neworders"]
     return {"semilla": seed, "cortes": len(df), "cobertura_80": cov80, "cumple_0.75_0.85": 0.75 <= cov80 <= 0.85,
             "cobertura_50": float((z.abs() < norm.ppf(0.75)).mean()), "rmse": float(np.sqrt(((df["G"] - df["mu"]) ** 2).mean())),
-            "sd_media": float(df["sd"].mean()),
+            "sd_media": float(df["sd"].mean()), "spec": "m2_structural_spec.md v1.3 (σ̂² = V_conj + V_rev)",
             "lambda": {c: {"est": float(v.params[i]), "verdad": float(tl[c])} for i, c in enumerate(cols)},
             "phi": {"est": [float(x) for x in v.params[6:8]], "verdad": list(TRUE["phi"])},
             "rho": {c: {"est": float(v.params[8 + i]), "verdad": TRUE["rho"][c]} for i, c in enumerate(cols)},
@@ -135,3 +135,33 @@ def main() -> None:
                   f"M2 cobertura 80 % = {m2['cobertura_80']:.3f} ({'cumple' if m2['cumple_0.75_0.85'] else 'NO cumple'} "
                   f"0,75-0,85); M3 ruido Δll = {out['m3']['ruido']['ll_tvtp_menos_ctp_media']:+.4f}. "
                   f"`{dest.relative_to(PD.H.REPO)}`")
+
+
+SEEDS_V13 = (3, 7, 11, 21)          # m2_structural_spec.md v1.3 §6: fijadas antes de correrlo; las 4 en [0,75; 0,85]
+
+
+def m2_cover_v13(seed: int) -> dict:
+    """Control de cobertura de la v1.3 para UNA semilla (se corren en paralelo y se combinan con `combine_v13`)."""
+    MS.clear_engines()
+    r = m2_planted(seed=seed)
+    PD._dump(PD.OUT / f"controles_m2_v13_semilla{seed}.json", r)
+    return r
+
+
+def combine_v13() -> dict:
+    import json
+    rs = {sd: json.loads((PD.OUT / f"controles_m2_v13_semilla{sd}.json").read_text()) for sd in SEEDS_V13}
+    cov = {sd: r["cobertura_80"] for sd, r in rs.items()}
+    ok = all(0.75 <= c <= 0.85 for c in cov.values())
+    out = {"spec": "m2_structural_spec.md v1.3 §6", "semillas": list(SEEDS_V13), "cobertura_80": cov,
+           "cobertura_50": {sd: r["cobertura_50"] for sd, r in rs.items()},
+           "rmse": {sd: r["rmse"] for sd, r in rs.items()}, "sd_media": {sd: r["sd_media"] for sd, r in rs.items()},
+           "las_cuatro_en_[0.75,0.85]": ok}
+    PD._dump(PD.OUT / "controles_m2_v13.json", out)
+    PD._trial_log("Constructor (M2 v1.3)", "**Control de señal plantada de M2 v1.3** (σ̂² = V_conj + V_rev; semillas 3, "
+                  "7, 11, 21 fijadas en la spec antes de correrlo; sintético, sin etiqueta)", "sintético",
+                  "4 semillas × 296 cortes",
+                  "cobertura del 80 %: " + ", ".join(f"{sd}: {c:.3f}" for sd, c in cov.items())
+                  + f" → {'las cuatro en [0,75; 0,85]' if ok else 'ALGUNA FUERA: parada, pregunta al usuario'}. "
+                  "`research/trials/m2/controles_m2_v13.json`")
+    return out

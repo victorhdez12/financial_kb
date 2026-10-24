@@ -4,7 +4,7 @@ Factor dinámico de 1 factor (statsmodels `MLEModel`, `struct_factor.py`) sobre 
 PAYEMS, W875RX1 y CMRMTSPL frente a su mediana de 120 meses, `claims_4w_yoy` (carga en f_m − f_{m−12}) y
 `philly_neworders`, con el ragged edge real; Ĝ = el código de la etiqueta (`R.growth_components`/`R.growth_axis`)
 sobre los niveles conocidos en la fecha de decisión extendidos con las tasas previstas hasta t+4;
-σ̂² = V_filtro + V_rev + V_tend; el arnés (v2.3, §5c) convierte (Ĝ, σ̂) en P(G alto) = Φ(Ĝ/√(σ̂² + s_G²)). Eje I = M0.
+σ̂² = V_conj + V_rev (v1.3: error conjunto medido sin etiqueta; V_filtro y V_tend, diagnóstico); el arnés (v2.3, §5c) convierte (Ĝ, σ̂) en P(G alto) = Φ(Ĝ/√(σ̂² + s_G²)). Eje I = M0.
 M2 NO usa la etiqueta para nada (el objetivo continuo que pasa el arnés solo se guarda para diagnósticos).
 
 Datos que pide al arnés v2.4 (nunca abre ficheros): `info["pit_levels"](fecha)` (niveles conocidos en la fecha de
@@ -154,6 +154,8 @@ class FactorVersion:
     kept_previous: bool
     fit_info: dict
     v_tend: float = float("nan")
+    v_conj: float = float("nan")      # v1.3: σ̂² = V_conj + V_rev
+    n_conj: int = 0
     start_notes: list = field(default_factory=list)
     from_T: pd.Timestamp | None = None  # mes de la versión de la que vienen los parámetros (si se conservaron)
 
@@ -290,6 +292,25 @@ def v_tend(levels: dict, mT: pd.Timestamp) -> float:
     return float(np.mean(np.square(errs))) if errs else 0.0
 
 
+def v_conj(cfg: StructCfg, v: "FactorVersion", L: dict, feats: pd.DataFrame | None, T: pd.Timestamp) -> tuple:
+    """V_conj (spec v1.3 §4): varianza del error CONJUNTO medida en pseudo-tiempo-real con los niveles de T y la
+    versión de T: para s de 1968-06 a T − 65, niveles de T de cada coincidente truncados en s − ℓ_i (ℓ_i = borde
+    desigual del corte T), variables ≤ s; e_s = Ĝ^ps_s − G_s(niveles de T); V_conj = media de e_s² (finitos)."""
+    lv = {k: R._cal(x) for k, x in L["levels"].items() if k in COINC and x is not None and len(x.dropna())}
+    full = label_G(lv)["G"]
+    ell = {k: _mdiff(T, x.last_valid_index()) for k, x in lv.items()}
+    errs = []
+    for s_ in pd.date_range(DATA_START, _add(T, -S.trend_err_lag), freq="MS"):
+        Lp = {"levels": {k: x[x.index <= _add(s_, -ell[k])] for k, x in lv.items()},
+              "from_vintage": {k: False for k in lv}}
+        Lp["levels"] = {k: x for k, x in Lp["levels"].items() if len(x.dropna())}
+        fs = feats[feats.index <= s_] if feats is not None else None
+        g = ghat(cfg, v, Lp, fs, s_)["G"]
+        if np.isfinite(g) and s_ in full.index and np.isfinite(full[s_]):
+            errs.append(g - full[s_])
+    return (float(np.mean(np.square(errs))) if errs else float("nan")), len(errs)
+
+
 def revision_errors(vint_levels: dict, ref_rates: pd.Series, s_month: pd.Timestamp, max_month=None) -> pd.DataFrame:
     """Errores r(vintage de s) − r(referencia) por edad = s − m, para los meses observados en la vintage de s."""
     r = rates(vint_levels)
@@ -367,6 +388,60 @@ def build_revision_table(labeler, decision: pd.Series, end: str = "2004-12") -> 
     return out
 
 
+def ghat(cfg: StructCfg, v: FactorVersion, L: dict, feats: pd.DataFrame | None, mt: pd.Timestamp) -> dict:
+    """Ĝ_t y V_filtro (spec §3-§4) con los niveles L = {"levels", "from_vintage"} y las variables `feats` (≤ mt)."""
+    dev, meta = dev_frame(L["levels"], feats, mt, cfg)
+    X = standardize(dev, v, cfg)
+    mod, a, P = F.filter_last(X.to_numpy(float), cfg.kinds, v.params, ar_order=cfg.ar_order)
+    lam = v.params[:len(cfg.cols)]
+    win = [_add(mt, k) for k in OFFSETS]
+    ext, rows, rowkeys = {}, [], []
+    for j, sid in enumerate(COINC):
+        mj = meta.get(sid)
+        if mj is None:
+            continue
+        lv, last = mj["level"], mj["last"]
+        ok = np.isfinite(mj["tau_f"]) and np.isfinite(v.d.get(sid, np.nan))
+        if not ok:
+            ext[sid] = lv
+            continue
+        if last < _add(mt, -4):
+            raise ValueError(f"M2: {sid} con última observación {last:%Y-%m} anterior a t−3 ({mt:%Y-%m})")
+        fut = pd.date_range(_add(last, 1), _add(mt, HORIZON), freq="MS")
+        rhat = []
+        for m in fut:
+            lag = _mdiff(_add(mt, HORIZON), m)
+            vec = np.zeros(len(a))
+            vec[lag] = lam[j]
+            vec[mod.u_index(j, lag)] += 1.0
+            rhat.append(mj["tau_f"] + v.d[sid] * float(vec @ a))
+            if m in win:
+                rows.append(v.d[sid] * vec)
+                rowkeys.append((sid, m))
+        ext[sid] = extend_level(lv, pd.Series(rhat, index=fut))
+    ga = label_G(ext)
+    G = float(ga["G"].get(mt, np.nan))
+    n = int(ga["cobertura_g"].get(mt, 0))
+    z = ga.attrs["z"]
+    incl = [s for s in z.columns if mt in z.index and np.isfinite(z.at[mt, s])]
+    sig = ga.attrs["sigma"]
+
+    def coef(sid, m):
+        return float(C.pace_rate_coeffs(sig[sid], n)[OFFSETS.index(_mdiff(m, mt))])
+
+    vf = 0.0
+    if rows:
+        A = np.array(rows)
+        Sig = A @ P @ A.T
+        c = np.array([coef(s, m) if s in incl else 0.0 for s, m in rowkeys])
+        vf = float(c @ Sig @ c)
+    rev_terms = [(sid, _mdiff(mt, m), coef(sid, m) ** 2) for sid in incl if L["from_vintage"].get(sid)
+                 for m in win if m <= meta[sid]["last"]]
+    out = {"G": G, "n": n, "V_filtro": max(vf, 0.0), "f": float(a[HORIZON]), "incluidas": incl,
+           "rev_terms": rev_terms}
+    return out
+
+
 # ------------------------------------------------------------------ motor compartido (M2, sus sensibilidades y M3)
 class FactorEngine:
     """Estimación del factor por versión (reestimación de un corte) y nowcasts por (versión, mes), cacheados. Las
@@ -422,6 +497,7 @@ class FactorEngine:
         else:
             v = FactorVersion(T=T, params=params, d=d, mean=mean, sd=sd, converged=conv, kept_previous=False,
                               fit_info=finfo, v_tend=vt, start_notes=notes)
+        v.v_conj, v.n_conj = v_conj(cfg, v, self.levels_at(info, dec), self.feats_upto(info, T), T)
         self.versions[key] = v
         return v
 
@@ -474,58 +550,8 @@ class FactorEngine:
                    "rev_terms": []}
             self.nowcasts[key] = out
             return out
-        cfg = self.cfg
         dec = info["decision_calendar"][mt]
-        L = self.levels_at(info, dec)
-        dev, meta = dev_frame(L["levels"], self.feats_upto(info, mt), mt, cfg)
-        X = standardize(dev, v, cfg)
-        mod, a, P = F.filter_last(X.to_numpy(float), cfg.kinds, v.params, ar_order=cfg.ar_order)
-        lam = v.params[:len(cfg.cols)]
-        win = [_add(mt, k) for k in OFFSETS]
-        ext, rows, rowkeys = {}, [], []
-        for j, sid in enumerate(COINC):
-            mj = meta.get(sid)
-            if mj is None:
-                continue
-            lv, last = mj["level"], mj["last"]
-            ok = np.isfinite(mj["tau_f"]) and np.isfinite(v.d.get(sid, np.nan))
-            if not ok:
-                ext[sid] = lv
-                continue
-            if last < _add(mt, -4):
-                raise ValueError(f"M2: {sid} con última observación {last:%Y-%m} anterior a t−3 ({mt:%Y-%m})")
-            fut = pd.date_range(_add(last, 1), _add(mt, HORIZON), freq="MS")
-            rhat = []
-            for m in fut:
-                lag = _mdiff(_add(mt, HORIZON), m)
-                vec = np.zeros(len(a))
-                vec[lag] = lam[j]
-                vec[mod.u_index(j, lag)] += 1.0
-                rhat.append(mj["tau_f"] + v.d[sid] * float(vec @ a))
-                if m in win:
-                    rows.append(v.d[sid] * vec)
-                    rowkeys.append((sid, m))
-            ext[sid] = extend_level(lv, pd.Series(rhat, index=fut))
-        ga = label_G(ext)
-        G = float(ga["G"].get(mt, np.nan))
-        n = int(ga["cobertura_g"].get(mt, 0))
-        z = ga.attrs["z"]
-        incl = [s for s in z.columns if mt in z.index and np.isfinite(z.at[mt, s])]
-        sig = ga.attrs["sigma"]
-
-        def coef(sid, m):
-            return float(C.pace_rate_coeffs(sig[sid], n)[OFFSETS.index(_mdiff(m, mt))])
-
-        vf = 0.0
-        if rows:
-            A = np.array(rows)
-            Sig = A @ P @ A.T
-            c = np.array([coef(s, m) if s in incl else 0.0 for s, m in rowkeys])
-            vf = float(c @ Sig @ c)
-        rev_terms = [(sid, _mdiff(mt, m), coef(sid, m) ** 2) for sid in incl if L["from_vintage"].get(sid)
-                     for m in win if m <= meta[sid]["last"]]
-        out = {"G": G, "n": n, "V_filtro": max(vf, 0.0), "f": float(a[HORIZON]), "incluidas": incl,
-               "rev_terms": rev_terms}
+        out = ghat(self.cfg, v, self.levels_at(info, dec), self.feats_upto(info, mt), mt)
         self.nowcasts[key] = out
         return out
 
@@ -593,14 +619,16 @@ class StructuralG(B.ContinuousAxisModel):
             self._v = eng.version(m0, info, self._v)
             self._hist.append({"T": f"{m0:%Y-%m}", "fit_converged": bool(self._v.converged),
                                "conserva_anterior": bool(self._v.kept_previous), **self._v.fit_info,
-                               "v_tend": self._v.v_tend, "arranque": list(self._v.start_notes)})
+                               "v_tend": self._v.v_tend, "v_conj": self._v.v_conj,
+                               "n_conj": self._v.n_conj, "arranque": list(self._v.start_notes)})
         return eng
 
     def nowcast(self, mt, info) -> dict:
         eng = engine_for(info, self.cfg)
         tab = self._rev_table(eng, info)
         nc = eng.nowcast(self._v, pd.Timestamp(mt), info, table=tab)
-        return {**nc, "V_tend": self._v.v_tend, "sd": float(np.sqrt(nc["V_filtro"] + nc["V_rev"] + self._v.v_tend))}
+        return {**nc, "V_tend": self._v.v_tend, "V_conj": self._v.v_conj,
+                "sd": float(np.sqrt(self._v.v_conj + nc["V_rev"]))}     # v1.3
 
     # interfaz del arnés --------------------------------------------------------
     def fit_axis_continuous(self, axis, X, g, t, w, info):
@@ -628,7 +656,8 @@ class StructuralG(B.ContinuousAxisModel):
         out.update({f"G:phi{i + 1}": float(v.params[J + i]) for i in range(p)})
         out.update({f"G:rho_{c}": float(v.params[J + p + i]) for i, c in enumerate(cols)})
         out.update({f"G:q_{c}": float(v.params[2 * J + p + i]) for i, c in enumerate(cols)})
-        out.update({"G:v_tend": float(v.v_tend), "G:fit_converged": float(v.converged)})
+        out.update({"G:v_tend": float(v.v_tend), "G:v_conj": float(v.v_conj),
+                    "G:fit_converged": float(v.converged)})
         return out
 
     def diagnostics(self) -> dict:

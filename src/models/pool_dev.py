@@ -257,6 +257,8 @@ def main() -> None:
     p = sp.add_parser("placebo")
     p.add_argument("which", choices=sorted(PLACEBO) + ["all"])
     sp.add_parser("controls")
+    c13 = sp.add_parser("m2cover")
+    c13.add_argument("seed", help="semilla del control v1.3, o 'combine'")
     q = sp.add_parser("spit001")
     q.add_argument("run_long")
     q.add_argument("run_spit")
@@ -269,6 +271,10 @@ def main() -> None:
         for w in (("m2", "m3", "pool") if a.which == "all" else (a.which,)):   # un proceso: cachés compartidas
             print(json.dumps({k: v for k, v in placebo(w).items() if k != "por_semilla"}, indent=1,
                              ensure_ascii=False), flush=True)
+    elif a.cmd == "m2cover":
+        from src.models import pool_controls as PC
+        r = PC.combine_v13() if a.seed == "combine" else PC.m2_cover_v13(int(a.seed))
+        print(json.dumps({k: v for k, v in r.items() if k not in ("lambda", "rho")}, ensure_ascii=False, default=str))
     elif a.cmd == "spit001":
         print(json.dumps(spit001(a.run_long, a.run_spit), indent=1, ensure_ascii=False, default=str))
     else:
