@@ -1,6 +1,6 @@
 ---
 documento: cálculo de potencia de la evaluación única (P-EVAL-BASE v4)
-version: 1.0
+version: 1.1 (2026-10-24: solo texto; tamaño como cota inferior, Validador M-3; decisión del IC ya tomada, B-9. Cifras sin cambio)
 fecha: 2026-10-24
 codigo: src/models/power.py
 resultados: research/trials/power_holdout.json (una pasada, 1.000 evaluaciones ficticias por punto)
@@ -59,12 +59,26 @@ la de la fuente; con w ≈ 0,5, ruido ×0,5). El pool aún no existe: el ×0,5 e
 
 - La dependencia y las colas del bloqueado son como las de 1978/1989-2004. 2005-2021 tiene dos recesiones grandes
   (2008-09, 2020): el escenario ×1,5 cubre parte de ese riesgo, no todo.
-- Los criterios 2-7 de A3 (giros ≥ 0, estables ≥ −0,05, falsas alarmas, subperiodos, signos) no se simulan salvo 2 y 3
-  (columna "criterios 1-3"); la potencia conjunta real es **menor** que la del contraste.
+- Los criterios 2-8 de A3 de la v4 (eje G, giros ≥ 0, estables ≥ −0,05, falsas alarmas, subperiodos, Holm, signos de
+  M3) no se simulan salvo giros y estables (columna "criterios 1-3", numeración de la v3 en la que se calculó: allí el
+  2 era "giros ≥ 0", que es el **3** de la v4); la potencia conjunta real es **menor** que la del contraste.
 - La forma del efecto (uniforme o solo en giros) es un supuesto; la realidad estará entre medias.
-- **Tamaño empírico:** con δ = 0 el contraste "pasa" en el 5-9 % de las evaluaciones con ruido ×1 (nominal: 2,5 % por el
-  criterio 1). El bootstrap por bloques de 12 infraestima algo la varianza de la media en 202 meses con esta dependencia;
-  el umbral de 0,05 nats lo contiene en parte. Con ruido ×0,5 el tamaño es del 0-1 % (manda el umbral de 0,05).
+- **Tamaño empírico:** con δ = 0 el contraste "pasa" en el **≥ 5-9 %** de las evaluaciones con ruido ×1 (nominal: 2,5 %
+  por el criterio 1) **si la dependencia de d no pasa de ≈ 12 meses**. El bootstrap por bloques de 12 infraestima algo
+  la varianza de la media en 202 meses con esta dependencia; el umbral de 0,05 nats lo contiene en parte. Con ruido
+  ×0,5 el tamaño es del 0-1 % (manda el umbral de 0,05).
+- **El 5-9 % es una cota inferior** (v1.1; Validador M-3, `docs/validation/2026-10-24_specs_pool_v4.md`). Las
+  evaluaciones ficticias se generan con bloques **alineados** de 12 meses de la serie de desarrollo, así que la
+  dependencia de d más allá de 12 meses no existe por construcción y el contraste interno (también con bloques de 12)
+  solo puede fallar por la parte de ≤ 12 meses. En una simulación sintética del Validador (800 evaluaciones de 202
+  meses, t<sub>4</sub>, AR(1)), el tamaño real de "lo > 0" es 4,0 / 5,4 / 9,3 / **19,8 %** con φ = 0 / 0,6 / 0,85 /
+  **0,95**, frente a 3,9 / 5,6 / 6,3 / 7,6 % con el generador de este documento. Con la dependencia vista en desarrollo
+  (equivalente a φ ≈ 0,7) el 5-9 % es razonable; si d tiene memoria de años, el tamaño real es mayor. Por eso la
+  corrida de desarrollo del pool informa la ACF de d en los retardos 1-24 y la sensibilidad de bloques de 24
+  (`mejora_logloss_b24`). No se cambia el contraste: la conjunción de criterios y el umbral de 0,05 nats bajan la
+  tasa real de falso pase.
+- **p de las familias informativas** (secundarias, TVTP frente a CTP): `p_h0 < 0,05` por sí solo pasa con efecto 0 el
+  10-15 % de las veces (`p_solo_contraste_holm_k1` del JSON): son liberales, del orden de ×2-3.
 
 ## 3. Resultados
 
@@ -103,9 +117,9 @@ Solo giros (M1v1_total): δ = 0,4 nats por mes de giro (≈ 0,09 de efecto total
   solo si lo decide el usuario y se preregistra en P-EVAL-BASE v4 como tal (columna `p_k1_ic90` del JSON).
 - La ventaja de k = 1 que sí se mantiene: un único contraste, sin elegir a posteriori entre aspirantes.
 
-### 3.4 Criterio 2 (giros ≥ 0) por azar
+### 3.4 Criterio de giros ≥ 0 por azar (criterio 2 de la v3 = criterio 3 de la v4)
 
-Con una mejora de 0,10 nats solo en los meses estables (0 en giros), el criterio 2 se cumple por azar en el 52-54 % de
+Con una mejora de 0,10 nats solo en los meses estables (0 en giros), ese criterio se cumple por azar en el 52-54 % de
 las evaluaciones: con ≈ 46 meses de giro, ese criterio es casi una moneda al aire si el modelo no mejora en los giros.
 
 ## 4. Implicación para el pool
@@ -121,8 +135,8 @@ las evaluaciones: con ≈ 46 meses de giro, ese criterio es casi una moneda al a
   como métrica, no solo la media.
 - **Regla práctica para la corrida de desarrollo del pool** (lectura, no criterio nuevo): si en desarrollo la mejora es
   < 0,05 nats o el IC incluye claramente 0, gastar el bloqueado tiene una potencia baja (< 30 %).
-- **Decisión del usuario pendiente:** criterio 1 con IC 95 % (como está) o 90 % (aprovecha k = 1). Decidir **antes**
-  de la corrida de desarrollo del pool y escribirlo en P-EVAL-BASE v4.
+- **Decidido (usuario, 24-oct):** el criterio 1 se mantiene con **IC 95 %** (no 90 %), escrito en P-EVAL-BASE v4
+  (A1-9). El análisis de M-3 del Validador refuerza esa decisión.
 
 ## 5. Reproducción
 

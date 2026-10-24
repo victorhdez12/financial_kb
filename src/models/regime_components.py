@@ -1,12 +1,13 @@
 """ESQUELETO de los componentes del pool (M2 estructural, M3 TVTP) y del pool, con las constantes de sus specs a priori.
 
-Specs (congeladas antes de cualquier contacto con la etiqueta, 2026-10-24):
+Specs (v1.1, congeladas antes de cualquier contacto con la etiqueta para M2/M3/pool, 2026-10-24; v1.0 = 1a5f1f9):
 - docs/models/m2_structural_spec.md   (H-M2-001, `m2_struct_g`)
 - docs/models/m3_tvtp_spec.md         (H-M3-001, `m3_tvtp_g`, referencia `m3_ctp_g`)
 - docs/models/pool_spec.md            (H-POOL-001, `pool_g`)
 
-Aquí NO hay ningún ajuste: solo constantes fijadas en las specs, tres funciones definitorias (pesos de la etiqueta,
-transformación beta del pool y regla 3 m × 80/20) y clases sin implementar. El módulo NO se llama `models_*.py` a
+Aquí NO hay ningún ajuste: solo constantes fijadas en las specs, funciones definitorias (pesos de la etiqueta, carga
+de las peticiones de paro, transformación beta del pool, regla 3 m × 80/20, criterio 8 de signos de M3 y regla
+operativa de S-PIT-001) y clases sin implementar. El módulo NO se llama `models_*.py` a
 propósito: el registro de modelos del arnés (`harness.model_registry`) no lo carga, así que ninguna configuración puede
 usar estos esqueletos por accidente. La implementación irá en `models_struct.py`, `models_tvtp.py` y `models_pool.py`
 con las extensiones del arnés v2.4 (specs, §8/§6).
@@ -16,6 +17,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import numpy as np
+import pandas as pd
 
 from src.models import base as B
 
@@ -34,7 +36,11 @@ class StructSpec:                                  # m2_structural_spec.md §2-�
     trend_min_obs: int = 90                        # … con ≥ 90 presentes
     factor_order: int = 2
     idio_order: int = 1
-    claims_sum_months: int = 12                    # la tasa interanual carga en la media de 12 meses del factor
+    claims_diff_lag: int = 12                      # v1.1: la tasa interanual (flujo) carga en f_m − f_{m−12}
+    n_coincident_lags: int = 8                     # u_i: retardos 0…7 (t−3 … t+4) en el estado aumentado
+    implementation: str = "statsmodels.MLEModel 0.15.0"   # única (v1.1, B-2)
+    warm_start: bool = False                       # v1.1: arranque determinista fijo en cada reestimación
+    balanced_min_months: int = 60                  # panel balanceado del arranque: si < 60 meses, el de las 4 coincidentes
     meas_var: float = 1e-4                         # regularización numérica fija
     rho_max: float = 0.99
     maxiter: int = 1000
@@ -44,7 +50,16 @@ class StructSpec:                                  # m2_structural_spec.md §2-�
     rev_age_buckets: tuple[str, ...] = ("1", "2", "3", "4", "5", "6", "7-12", ">=13")
     trend_err_start: str = "1965-01"               # V_tend: meses s de 1965-01 a T−65
     trend_err_lag: int = 65
+    rev_var_sample: tuple[str, str] = ("1968-06", "2004-12")   # Var(r_i): última vintage (v1.1, M-2)
+    rev_principal_is_pit: bool = False             # V_rev frente a la última vintage: declarado NO PIT
+    rev_pit_min_lag: int = 24                      # sensibilidad m2_struct_g_revpit: fechas s ≤ T − 24
+    rev_pit_min_pairs: int = 30
     n_params: int = 20
+
+    @property
+    def state_dim(self) -> int:
+        """Estado aumentado (§3): retardos 0…12 de f + 0…7 de u_i (4 coincidentes) + u_c + u_p = 47 (46 en v1.0)."""
+        return (self.claims_diff_lag + 1) + len(self.coincident) * self.n_coincident_lags + len(self.extra_features)
 
 
 @dataclass(frozen=True)
@@ -56,6 +71,12 @@ class TVTPSpec:                                    # m3_tvtp_spec.md §2-§3
     temper_sens: tuple[float, ...] = (1 / 6, 1 / 2)
     pers_eps: float = 1e-3
     cal_l2: float = 1.0
+    opt_maxiter: int = 500                         # logísticas y calibración (v1.1, B-5)
+    opt_gtol: float = 1e-8
+    sign_threshold: float = 0.01                   # criterio 8: γ_j > 0,01 (estricto) …
+    sign_min_frac: float = 0.5                     # … en ≥ 50 % de los cortes, cada γ por separado
+    sign_window: tuple[str, str] = ("2005-01", "2021-10")
+    sign_coefs: tuple[str, ...] = ("G:gamma1", "G:gamma2", "G:gamma3", "G:gamma4")
     n_params: int = 11
 
 
@@ -78,6 +99,41 @@ STRUCT, TVTP, POOL = StructSpec(), TVTPSpec(), PoolSpec()
 def pace_rate_coeffs(sigma: float, n_ind: int) -> np.ndarray:
     """∂G_t/∂r_{i,m} para m = t−3 … t+4 (m2_structural_spec.md §4, V_filtro y V_rev): (1/n)·(2/3)·w/σ_i."""
     return (2.0 / 3.0) * np.asarray(LABEL_PACE_WEIGHTS, float) / (float(sigma) * int(n_ind))
+
+
+def claims_factor_loading(lam: float = 1.0, lag: int = STRUCT.claims_diff_lag) -> np.ndarray:
+    """Carga de `claims_4w_yoy` sobre los retardos 0…lag de f (m2_structural_spec.md v1.1 §3): λ·(f_m − f_{m−12})."""
+    v = np.zeros(lag + 1)
+    v[0], v[lag] = lam, -lam
+    return v
+
+
+def gamma_fraction_criterion(coefs: pd.DataFrame, cut_months, threshold: float = TVTP.sign_threshold,
+                             min_frac: float = TVTP.sign_min_frac, keys=TVTP.sign_coefs) -> dict:
+    """Criterio 8 de P-EVAL-BASE v4 (m3_tvtp_spec.md v1.1 §5): para cada γ por separado, fracción de cortes con
+    γ > threshold (estricto) ≥ min_frac. `coefs`: coeficientes por corte (índice = mes del corte); `cut_months`: los
+    cortes de la ventana en que el modelo debía ajustarse (denominador). Un corte sin coeficiente cuenta como no
+    cumplido. Referencia para la clave `fraccion_umbral` del arnés v2.4."""
+    cuts = pd.Index(cut_months)
+    out = {}
+    for k in keys:
+        x = coefs[k].reindex(cuts) if k in coefs else pd.Series(np.nan, index=cuts)
+        ok = (x > threshold).fillna(False)
+        out[k] = {"umbral": threshold, "n_cortes": int(len(cuts)), "n_sin_coef": int(x.isna().sum()),
+                  "frac": float(ok.mean()) if len(cuts) else float("nan")}
+    cumple = bool(len(cuts)) and all(v["frac"] >= min_frac for v in out.values())
+    return {"fraccion_umbral": out, "criterio_fraccion_cumple": cumple}
+
+
+def s_pit_001_triggered(d_principal, d_prudente, ci_lo: float, ci_hi: float) -> dict:
+    """Regla operativa de S-PIT-001 para M2 (m2_structural_spec.md v1.1 §2): d = ll(M0) − ll(M2) en los MISMOS meses
+    con la matriz principal y la prudente; se dispara si |media(d_prudente) − media(d_principal)| > (hi − lo)/2 del
+    IC 95 % de mejora_logloss de M2 frente a M0 (matriz principal)."""
+    a, b = np.asarray(d_principal, float), np.asarray(d_prudente, float)
+    if a.shape != b.shape:
+        raise ValueError("S-PIT-001: las dos series deben cubrir los mismos meses")
+    delta, h = float(b.mean() - a.mean()), (float(ci_hi) - float(ci_lo)) / 2
+    return {"delta": delta, "semiamplitud": h, "dispara": bool(abs(delta) > h)}
 
 
 def blp_transform(p, a: float, b: float, clip: float = POOL.clip) -> np.ndarray:
@@ -119,7 +175,7 @@ class StructuralG(B.ContinuousAxisModel):
     spec = STRUCT
 
     def fit_axis_continuous(self, axis, X, g, t, w, info):
-        raise NotImplementedError("m2_struct_g: esqueleto (m2_structural_spec.md v1.0); falta el arnés v2.4")
+        raise NotImplementedError("m2_struct_g: esqueleto (m2_structural_spec.md v1.1); falta el arnés v2.4")
 
     def predict_axis_continuous(self, axis, X, info):
         raise NotImplementedError("m2_struct_g: esqueleto")
@@ -147,7 +203,7 @@ class TVTPG(B.AxisModel):
             self.name = "m3_ctp_g"
 
     def fit_axis(self, axis, X, t, w, info):
-        raise NotImplementedError(f"{self.name}: esqueleto (m3_tvtp_spec.md v1.0); falta el arnés v2.4")
+        raise NotImplementedError(f"{self.name}: esqueleto (m3_tvtp_spec.md v1.1); falta el arnés v2.4")
 
     def predict_axis(self, axis, X, info):
         raise NotImplementedError(f"{self.name}: esqueleto")
@@ -164,7 +220,7 @@ class PoolG(B.AxisModel):
     spec = POOL
 
     def fit_axis(self, axis, X, t, w, info):
-        raise NotImplementedError("pool_g: esqueleto (pool_spec.md v1.0); falta el modelo apilado del arnés v2.4")
+        raise NotImplementedError("pool_g: esqueleto (pool_spec.md v1.1); falta el modelo apilado del arnés v2.4")
 
     def predict_axis(self, axis, X, info):
         raise NotImplementedError("pool_g: esqueleto")

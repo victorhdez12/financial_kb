@@ -230,6 +230,12 @@
     +25 días tras el fin de mes) en lugar del tercer jueves del mes t. Matriz pit_us_v0.2_vintage_filadelfia_prudente.
   criterio: el arnés publica las métricas del modelo con las dos matrices; si la diferencia de log-loss ≤ 2004 supera
     el intervalo bootstrap de la principal, las variables de Filadelfia antes de 1990 pasan a condicionales.
+  regla_operativa_2026-10-24: >
+    Concreción para M2 (m2_structural_spec.md v1.1 §2, Validador M-4; el criterio de arriba no cambia): se dispara si
+    |media(d_prudente) − media(d_principal)| > (hi − lo)/2 del IC 95 % de mejora_logloss de m2_struct_g frente a M0 en
+    m2_long, vintage, mismos meses (d = ll(M0) − ll(M2)). Si se dispara, philly_neworders < 1990-07 = NaN en el factor
+    y esa versión es la única aguas abajo (M2, emisión de M3, pool, P-EVAL-BASE). Se resuelve y se empuja ANTES de
+    cualquier corrida de M3 o del pool.
 
 - id: S-PIT-002
   registrada: 2026-10-15
@@ -382,13 +388,16 @@
     SÍ (diseño post hoc tras M1 v1/v2 en desarrollo ≤ 2004). Atenuante: no ajusta ningún parámetro con la etiqueta
     (factor por máxima verosimilitud sobre las series; σ̂ del filtro, de las revisiones y de la tendencia). Una pasada
     de desarrollo; en la evaluación única solo como componente del pool. Cuenta como un ensayo.
-  especificacion: docs/models/m2_structural_spec.md (v1.0)
+  especificacion: docs/models/m2_structural_spec.md (v1.1; v1.0 = 1a5f1f9; cambios en su §9)
   base_pit: "0.4 (congelada, tag pit-v0.4)"
   modelo: >
     m2_struct_g = factor dinámico (1 factor AR(2), idiosincráticos AR(1)) sobre las tasas mensuales PIT de INDPRO,
-    PAYEMS, W875RX1, CMRMTSPL (frente a su mediana de 120 meses) + claims_4w_yoy + philly_neworders, con ragged edge;
+    PAYEMS, W875RX1, CMRMTSPL (frente a su mediana de 120 meses) + claims_4w_yoy (v1.1: carga en f_m − f_{m−12}, flujo;
+    estado aumentado de dimensión 47) + philly_neworders, con ragged edge;
     tasas que faltan de t−3…t+4 previstas por el filtro; Ĝ con el código de la etiqueta; σ̂² = V_filtro + V_rev(edad) +
-    V_tend; P(G alto) = Φ(Ĝ/√(σ̂² + s_G²)). Eje I = M0.
+    V_tend; P(G alto) = Φ(Ĝ/√(σ̂² + s_G²)). Eje I = M0. V_rev(edad) frente a la última vintage: declarado NO PIT
+    (hiperparámetro fijo, como s_G); sensibilidad PIT m2_struct_g_revpit (no principal). S-PIT-001 con regla operativa
+    resuelta antes de M3/pool.
   signos_esperados: {cargas_coincidentes: "+", philly_neworders: "+", claims_4w_yoy: "-", nota: "se informan; no se estiman con la etiqueta"}
   contraste: M2 − M0 en log-loss blanda de 4 cuadrantes (= eje G), vintage; informativo, fuera de Holm.
 
@@ -400,7 +409,7 @@
     SÍ (familia propuesta tras M1 v1; variables de transición elegidas tras M1 v2). Estima con la etiqueta (≈ 8-10
     transiciones por sentido): mandan las previas. Una pasada de desarrollo; en la evaluación única solo como
     componente del pool. Cuenta como un ensayo; su referencia m3_ctp_g (γ = 0) cuenta como otro.
-  especificacion: docs/models/m3_tvtp_spec.md (v1.0)
+  especificacion: docs/models/m3_tvtp_spec.md (v1.1; v1.0 = 1a5f1f9; cambios en su §9)
   base_pit: "0.4 (congelada, tag pit-v0.4)"
   modelo: >
     m3_tvtp_g = Markov de 2 estados del eje G (estados = etiqueta dura recalculada ≤ T), anclado en la persistencia PIT
@@ -408,6 +417,10 @@
     transiciones logit A→B: α − γ1·z(curve_min12) + γ2·z(baa_d6m); B→A: α − γ3·z(baa_d6m) + γ4·z(eq_ret_6m); γ ≥ 0 con
     previa N(0; 0,5²); calibración Platt (L2 1,0). Eje I = M0.
   signos_esperados: {gamma1: "+ (impuesto)", gamma2: "+ (impuesto)", gamma3: "+ (impuesto)", gamma4: "+ (impuesto)"}
+  criterio_signos: >
+    Decisión del usuario 24-oct (criterio 8 de P-EVAL-BASE v4 A3): cada γ_j por separado > 0,01 (estricto) en ≥ 50 % de
+    los cortes vintage de 2005-01 → 2021-10; corte sin coeficientes = no cumplido; sin cláusula de vintage. En
+    desarrollo solo se informa.
   contraste: M3 − M0 y M3 − m3_ctp_g en log-loss del eje G, vintage; informativos, fuera de Holm.
 
 - id: H-POOL-001
@@ -418,12 +431,19 @@
     SÍ (herramienta genérica, pero elegida tras ver M1 v1/v2; componentes contaminados). Una pasada de desarrollo; la
     prueba que decide es la evaluación única (P-EVAL-BASE v4, borrador, no registrado), donde es el ÚNICO contraste
     principal (Holm k = 1). Cuenta como un ensayo.
-  especificacion: docs/models/pool_spec.md (v1.0)
+  especificacion: docs/models/pool_spec.md (v1.1; v1.0 = 1a5f1f9; cambios en su §8)
   modelo: >
     pool_g = B_{a,b}(Σ w_k p_k) sobre las P(G alto) fuera de muestra de M0, m2_struct_g y m3_tvtp_g; MAP conjunto
     (Ranjan-Gneiting) con las log-scores maduras (s ≤ m0 − 6, etiqueta recalculada ≤ m0, pesos de madurez), previa de
     Dirichlet moda (½, ¼, ¼) κ = 20 y ln a, ln b ~ N(0; 0,5²); pool = M0 mientras haya < 60 meses; reestimación mensual
     expansiva. Eje I = M0.
   contraste: pool − M0 en log-loss blanda de 4 cuadrantes, vintage (en desarrollo solo se informa).
-  criterio_de_referencia: el de P-EVAL-BASE v4 §A3 (≥ 0,05 nats con IC 95 % > 0, eje G > 0, giros ≥ 0, estables ≥ −0,05, falsas alarmas ≤ 0,5/año, subperiodos, Holm k = 1).
+  criterio_de_referencia: >
+    el de P-EVAL-BASE v4 §A3 (≥ 0,05 nats con IC 95 % > 0, eje G > 0, giros ≥ 0, estables ≥ −0,05, falsas alarmas ≤
+    0,5/año, subperiodos, Holm k = 1, y criterio 8 — cada γ_j de m3_tvtp_g > 0,01 en ≥ 50 % de los cortes de 2005-01
+    → 2021-10, clave signos_coeficientes["vintage/m3_tvtp_g"].criterio_fraccion_cumple; decisión del usuario
+    24-oct). El criterio 8 recae en un componente: el pool puede no pasar por M3 aunque mejore a M0.
+  predicciones_a_priori: >
+    docs/reviews/2026-10-24_estratega_macro_specs_pool.md §4.2 (P1-P11; commit 1b02ae7), leídas en el estudio de
+    eventos de pool_spec.md §5b; no son criterio.
   alarma: una mejora frente a M0 > 0,25 nats se trata como sospecha de fuga y se audita antes de creerla.

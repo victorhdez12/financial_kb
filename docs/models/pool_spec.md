@@ -1,18 +1,19 @@
 ---
 documento: especificación a priori del POOL de log-scores {M0, M2 estructural, M3 TVTP} del eje G con recalibración beta (BLP), contraste principal único de P-EVAL-BASE v4
-version: 1.0 (congelada ANTES de cualquier contacto con la etiqueta; se empuja a origin antes de implementar nada que lea datos)
+version: 1.1 (2026-10-24; v1.0 = 1a5f1f9. Ambas congeladas ANTES de cualquier contacto con la etiqueta PARA M2/M3/pool y empujadas antes de implementar; cambios en §8)
 fecha: 2026-10-24
 hipotesis: H-POOL-001 (research/hypotheses.yaml) — DECLARADA CONTAMINADA (elegida el 23-24 oct tras ver M1 v1/v2; ver §0)
 origen: decisión del usuario (24-oct): contraste principal = pool de log-scores + recalibración beta, Holm k = 1; docs/research/2026-10-23_mejoras_nowcast_regimen.md §3.1 y §5.6
 codigo: src/models/regime_components.py (esqueleto, constantes y la transformación beta; sin implementar el ajuste); implementación futura en src/models/models_pool.py
 tests: tests/test_regime_components.py (solo datos sintéticos)
-depende_de: m2_structural_spec.md v1.0, m3_tvtp_spec.md v1.0, arnés v2.4 (§6)
+depende_de: m2_structural_spec.md v1.1, m3_tvtp_spec.md v1.1, arnés v2.4 (§6)
+revisiones: docs/validation/2026-10-24_specs_pool_v4.md (B-1, B-6, M-3, M-4), docs/reviews/2026-10-24_estratega_macro_specs_pool.md (§3, §4.2)
 ---
 
 # Pool de log-scores con recalibración beta (especificación a priori)
 
-Se escribe, se commitea y se empuja **antes** de cualquier contacto con la etiqueta. **Una sola pasada de
-desarrollo**; no se itera ni se elige entre variantes con datos de desarrollo.
+Se escribe, se commitea y se empuja **antes** de cualquier contacto con la etiqueta **para M2/M3/pool**. **Una sola
+pasada de desarrollo**; no se itera ni se elige entre variantes con datos de desarrollo.
 
 ## 0. Contaminación declarada
 
@@ -37,7 +38,7 @@ desarrollo**; no se itera ni se elige entre variantes con datos de desarrollo.
 ## 2. Componentes y entrada
 
 - **Componentes (exactamente 3, en este orden):** k = 0 M0 `m0_calibrated_persistence`, k = 1 `m2_struct_g`, k = 2
-  `m3_tvtp_g`, con sus specs congeladas. **No** entran `m3_ctp_g`, M1 v1/v2 ni las sensibilidades.
+  `m3_tvtp_g`, con sus specs congeladas (M2 en la versión que resulte de S-PIT-001, `m2_structural_spec.md` §2). **No** entran `m3_ctp_g`, M1 v1/v2 ni las sensibilidades.
 - **Entrada:** p<sub>k,s</sub> = P(G alto) **fuera de muestra** del componente k para el mes s, la que el walk-forward
   produjo en el corte de s (en tiempo real), en el mismo modo. Nunca una predicción reajustada después. Recorte
   [1e-6, 1 − 1e-6].
@@ -78,11 +79,16 @@ En cada corte m0 (fecha de decisión de m0, refit_every = 1):
 
 - d<sub>t</sub> = ll<sub>4</sub>(M0)<sub>t</sub> − ll<sub>4</sub>(pool)<sub>t</sub>, con ll<sub>4</sub> la log-loss blanda de
   4 cuadrantes del arnés frente a la **etiqueta oficial** (caja fuerte), mes a mes en la ventana de evaluación. Como
-  el eje I es el mismo, **d<sub>t</sub> es exactamente la diferencia de log-loss binaria del eje G** (harness.md §5b):
+  el eje I es el mismo, **d<sub>t</sub> es la diferencia de log-loss binaria del eje G** (harness.md §5b), **exacta salvo
+  cuando actúa el recorte por cuadrante** `metrics.CLIP` = 1e-4 (v1.1, Validador B-6: con P<sub>pool</sub> = 1e-5 la
+  diferencia llega a 1,28 nats en un mes; el recorte del pool, 1e-6, es más fino que el del arnés y se mantiene). El
+  criterio 2 de P-EVAL-BASE usa la binaria (`mejora_ll_g`):
   d<sub>t</sub> = −[t ln p<sub>M0</sub> + (1−t) ln(1−p<sub>M0</sub>)] + [t ln P<sub>pool</sub> + (1−t) ln(1−P<sub>pool</sub>)].
 - Es la clave `report["frente_al_baseline"]["vintage/pool_g"]["mejora_logloss"]` del arnés: media, IC percentil 95 %
   por bootstrap circular por bloques de **12** meses (24 como sensibilidad), 5.000 réplicas, semilla **20261015**,
-  `p_h0` unilateral. Se informa además `sd_mensual` de d (§6-3).
+  `p_h0` unilateral. La sensibilidad de bloques de 24 es la clave `mejora_logloss_b24` (ya la publica el arnés para
+  toda comparación). Se informan además `sd_mensual` de d y su **autocorrelación en los retardos 1-24**
+  (`acf_1_24`; Validador M-3.2) (§6-3).
 - En los meses con |S| < N<sub>min</sub>, d<sub>t</sub> = 0 por construcción (pool = M0). En el bloqueado no ocurre:
   en 2005-01 hay > 20 años de predicciones fuera de muestra de M2 y M3.
 
@@ -117,6 +123,50 @@ cada componente (¿reduce el ruido?, `power_holdout.md` §4); trayectoria de w y
 (`m3_tvtp_spec.md` §6). Lectura de potencia (no criterio): si en desarrollo la mejora del pool es < 0,05 nats o su IC
 incluye claramente el 0, gastar el bloqueado tiene una potencia < 30 % (`power_holdout.md` §4).
 
+### 5b. Estudio de eventos por episodio (v1.1; decisión del usuario 24-oct, C)
+
+- **Qué:** para M2, M3, `m3_ctp_g` y el pool, d<sub>t</sub> = ll(M0)<sub>t</sub> − ll(modelo)<sub>t</sub> (4 cuadrantes =
+  eje G), modo vintage, en k = −6 … +8 meses alrededor de **cada giro v2.1 de G** del arnés (A→B y B→A por separado;
+  como el C3 del 16-oct), y su media por episodio en tres tramos: **antes** (k = −6 … −1), **entrada/salida**
+  (k = 0 … +4) y **después** (k = +5 … +8). Más la media en los meses estables de la ventana. Cada modelo, en las
+  corridas donde aparece (M2 y M3 en `m2_long`/`m3_long` desde W<sub>G</sub>, con 1980 y 1981-82; el pool en
+  `pool_dev`, desde su activación).
+- **Nada de esto es criterio** ni cambia ninguno: es lectura de desarrollo, que hace comprobables las predicciones
+  a priori del Estratega. La "puerta de gasto" (§5) se lee **junto con** estos episodios (Estratega §6-3: la ventana
+  del pool solo tiene 1990-91 y 2001).
+- **Predicciones a priori** (citadas tal cual de `docs/reviews/2026-10-24_estratega_macro_specs_pool.md` §4.2, commit
+  `1b02ae7`, 10:01:25Z del 24-oct, escritas sin ver la etiqueta ni ningún resultado; el informe de desarrollo dirá,
+  para cada una, "se cumple / es falsa / no evaluable" con la regla de su columna "falsa si"):
+
+> Con "giro de G" me refiero a los giros v2.1 del arnés. Las fechas de abajo son la cronología **pública** del NBER, que
+> sirve de orientación; la entrada y la salida de G pueden adelantarse a ella. d = ll(M0) − ll(modelo), y > 0 significa
+> que el modelo es mejor. **Si el diseño funciona:**
+>
+> | # | episodio | modelo | predicción | falsa si |
+> |---|---|---|---|---|
+> | P1 | **1980** (pico 1980-01, valle 1980-07; caída y rebote bruscos: controles de crédito, pico de las peticiones en primavera) | M2, M3 | d > 0 en la **entrada** (k = 0 … +4 desde el giro A→B) y en la **salida** (k = 0 … +4 desde B→A). Es el episodio de mayor ganancia por mes, junto con 2001 | d medio ≤ 0 en la entrada o en la salida |
+> | P2 | **1981-82** (pico 1981-07, valle 1982-11) | M3 | **entrada:** d > 0 en k = 0 … +4 (`curve_min12` muy invertida). **Antes:** coste de falsa alarma en los meses A de 1980-11 … 1981-06 (d < 0 para M3 y menor para M2). **Salida:** d > 0 (rally desde 1982-08 y compresión del crédito) | d ≤ 0 en la entrada o en la salida de M3 |
+> | P3 | **1990-91** (pico 1990-07, valle 1991-03; entrada gradual tras una desaceleración en 1989, recuperación sin empleo) | pool | **entrada:** ganancia pequeña (0 < d < ganancia de 2001). **Salida y 1991-04 … 1992-12:** sin ganancia (d ≈ 0, ≥ −0,05 de media); M3 puede perder por un "falso amanecer" de la bolsa | d medio < −0,05 en 1991-04 … 1992-12, o ganancia en la entrada mayor que en 2001 |
+> | P4 | **2001** (pico 2001-03, valle 2001-11; IP cae desde finales de 2000, peticiones al alza, Filadelfia negativa, curva invertida en 2000) | pool, M2, M3 | **entrada:** d > 0 con claridad en k = 0 … +4: la mayor ganancia de la ventana del pool. **Salida (2002-03, sin empleo):** d ≈ 0 | d medio ≤ 0 en la entrada |
+> | P5 | **Estables** de la ventana del pool | pool | d entre −0,03 y 0. Las posibles falsas alarmas (1998: LTCM, crédito; 1995) cuestan poco en el pool | d medio < −0,05 en los estables |
+> | P6 | **1987** (crack) | M3 | sin falsa alarma: la bolsa no entra en la salida de A | M3 cruza 0,5 hacia "G bajo" a finales de 1987 sin que haya giro |
+>
+> **Predicciones agregadas (desarrollo):**
+> - **P7.** Las ganancias del pool y de M2 se concentran en las **entradas** (A→B), sobre todo las bruscas (1980, 2001).
+>   En las salidas solo ganan en las recuperaciones en V (1980, 1982-83).
+> - **P8.** Pool − M0 en su ventana: **+0,01 a +0,06 nats**. `sd_mensual` de d del pool ≈ 0,5-0,8 veces la de M2.
+> - **P9.** M3 − `m3_ctp_g`: ≤ +0,02 nats en total, con la ganancia concentrada en 1981 (entrada) y 1980/1982 (salida).
+> - **P10.** Fracción de cortes con γ > 0,01: **γ1 (curva) ≥ 50 %** con alta probabilidad; γ2 y γ4 en torno al 50 %;
+>   **γ3 (crédito, salida de B) < 50 %** con probabilidad ≈ 0,5.
+>   - Es un aviso para el usuario: el criterio de signos que eligió puede tumbar el pool por un componente con poco
+>     peso.
+>   - La decisión está tomada y no la reabro. Solo la cuantifico.
+> - **P11.** Pesos del pool en 2004-12: w<sub>M0</sub> ∈ [0,35; 0,7]; w<sub>M2</sub> + w<sub>M3</sub> el resto; la beta
+>   con a, b ≥ 1.
+> - **Prueba del mecanismo.** Si **ni** 1980 **ni** 2001 muestran ganancia en la entrada (P1 y P4 falsas), el mecanismo
+>   (información del mes t sobre la ventana de G) no funciona. Entonces no tiene sentido gastar el bloqueado, sea cual
+>   sea la media.
+
 **Controles antes de la etiqueta real:**
 - **Sintéticos:** (i) con un componente oráculo y dos ruidosos, los pesos convergen al oráculo; (ii) con tres
   componentes sin información, w → la previa y P<sub>pool</sub> ≈ p<sub>0</sub>; (iii) con un pool infradispersado
@@ -140,12 +190,15 @@ incluye claramente el 0, gastar el bloqueado tiene una potencia < 30 % (`power_h
 
 1. Este push (junto con M2, M3 y el borrador P-EVAL-BASE v4). 2. Arnés v2.4 + M2, M3 y pool con tests sintéticos.
 3. Tabla v(edad) de M2 (sin etiqueta). 4. Sonda de elegibilidad (solo recuentos) → fechas en las §9/§8. 5. Placebos
-de M2, M3 y del pool. 6. **Una** corrida de desarrollo de cada configuración (M2, M3, pool). 7. Validador + Estratega
+de M2, M3 y del pool. 6. **Una** corrida de desarrollo de cada configuración, en este orden fijo (v1.1, M-4): M2
+(`m2_long`, `s_pit_001`) → **resolución de S-PIT-001 commiteada y empujada** (`m2_structural_spec.md` §6, 6c) → resto
+de M2 con la versión resuelta → M3 → pool. Ninguna corrida de M3 o del pool antes de ese push. 7. Validador + Estratega
 (specs, desarrollo y P-EVAL-BASE v4) → usuario.
 
 ## 8. Cambios post hoc (técnicos) y fechas fijadas por regla
 
 | fecha | cambio | por qué | qué se había visto |
 |---|---|---|---|
-| — | ninguno por ahora (aquí irá la ventana principal) | | |
-| 2026-10-24 | ninguno (nota de proceso) | antes del push de esta spec se corrió la suite completa (235 tests, 09:47-09:52Z, exigida por el encargo). Sus tests **preexistentes** del arnés (M0, baselines, placebo, ensayo en seco) leen la etiqueta ≤ 2004 en `development` (registro `research/trials/full/label_access.jsonl`) | nada de M2, M3 ni del pool (no existen); la spec ya estaba escrita y no se cambió después |
+| — | (aquí irá la ventana principal) | | |
+| 2026-10-24 | **v1.0 → v1.1** (push a priori, antes de implementar y de cualquier contacto con la etiqueta para M2/M3/pool) | (1) §5b: estudio de eventos por episodio con pool, M2 y M3 y las predicciones a priori del Estratega (decisión del usuario, C); (2) §7: orden con la resolución de S-PIT-001 antes de M3/pool (M-4); (3) §4: d<sub>t</sub> exacta salvo recorte (B-6); `mejora_logloss_b24` y ACF 1-24 de d (M-3); (4) depende de M2/M3 v1.1; (5) nota de proceso completa (B-1). Pesos, previas, beta, N<sub>min</sub> y ventanas: **sin cambio** | nada de M2/M3/pool (sin implementación, datos ni corridas) |
+| 2026-10-24 | ninguno (nota de proceso, **completada en v1.1**, Validador B-1) | lecturas de la etiqueta del 24-oct **anteriores** al push de v1.0 (09:53:14Z), todas en `development` y ≤ 2004-12 (o caché ≤ 2004; las denegadas son tests de la barrera ≥ 2005), según `research/trials/full/label_access.jsonl` y `research/trials/label_access.jsonl` (horas del registro en local, UTC+2; aquí en UTC): **(1)** suite completa 08:47:38-08:52:20Z (102 accesos, 5 denegados); **(2)** suite completa 08:57:31-09:02:12Z (ídem); **(3)** `src/models/power.py` 09:05:52Z (1 acceso, también en el registro principal: marca de giros ≤ 2004 para la potencia); **(4)** reproducciones de M1 v1 con `record=False` 09:10:59-09:13:25Z y 09:20:10-09:20:14Z (18 accesos); **(5)** suite completa 09:47:59-09:51:07Z (102 accesos, 5 denegados). Ninguna después del push de v1.0 ni hasta el push de v1.1 | (1), (2), (5): nada de M2, M3 ni del pool (no existían); los tests preexistentes solo reproducen M0, baselines, placebos y ensayos en seco ya conocidos desde el 16-oct. (3): las d<sub>t</sub> de M1 y los MDE de `power_holdout.md` **sí informan el diseño** (`sd_mensual`, puerta de gasto, expectativa de A7), declarado en §0. (4): resultados de M1 v1 ya conocidos. La spec ya estaba escrita y no se cambió por ninguna de ellas. "Antes de cualquier contacto con la etiqueta" significa **para M2/M3/pool** |

@@ -1,6 +1,6 @@
 ---
 documento: especificación a priori de M2, nowcast ESTRUCTURAL del eje G (factor coincidente con ragged edge + composición exacta de Ĝ)
-version: 1.0 (congelada ANTES de cualquier contacto con la etiqueta; se empuja a origin antes de implementar nada que lea datos)
+version: 1.1 (2026-10-24; v1.0 = 1a5f1f9. Ambas congeladas ANTES de cualquier contacto con la etiqueta PARA M2/M3/pool y empujadas a origin antes de implementar nada que lea datos; cambios v1.0 → v1.1 en §9)
 fecha: 2026-10-24
 hipotesis: H-M2-001 (research/hypotheses.yaml) — DECLARADA CONTAMINADA (post hoc respecto a M1 v1/v2; ver §0)
 equivale_a: "H-M2-002 / m2_struct_g" de la revisión del Estratega (docs/reviews/2026-10-23_estratega_macro_m1v2.md §3.2), en la versión del Investigador (docs/research/2026-10-23_mejoras_nowcast_regimen.md §3.2, §3.4)
@@ -9,12 +9,14 @@ codigo: src/models/regime_components.py (esqueleto y constantes de esta spec; si
 tests: tests/test_regime_components.py (solo datos sintéticos)
 datos: base PIT v0.4 CONGELADA (tag pit-v0.4) + niveles PIT de las 4 series de la etiqueta vía PITLabeler.levels_at (§2); desarrollo solo ≤ 2004-12
 depende_de: arnés v2.3 (eje G continuo, harness.md §5c) + extensiones v2.4 de §8 (sin implementar); etiqueta v1.1 congelada
+revisiones: docs/validation/2026-10-24_specs_pool_v4.md (Validador: M-2, M-4, B-1, B-2), docs/reviews/2026-10-24_estratega_macro_specs_pool.md (Estratega: imprescindible 1)
 ---
 
 # M2: nowcast estructural de G (especificación a priori)
 
-Este documento se escribe, se commitea y se empuja a `origin` **antes** de cualquier contacto con la etiqueta (ni
-oficial ni recalculada, ni siquiera para contar meses elegibles) y antes de implementar el modelo. La marca de tiempo
+Este documento se escribe, se commitea y se empuja a `origin` **antes** de cualquier contacto con la etiqueta **para
+M2, M3 o el pool** (ni oficial ni recalculada, ni siquiera para contar meses elegibles) y antes de implementar el
+modelo. Las lecturas ≤ 2004 de ese día por otros motivos (suite, potencia, reproducción de M1 v1) están en §9. La marca de tiempo
 del push lo demuestra. **Una sola pasada de desarrollo** (§6); no se itera mirando sus resultados. Un cambio técnico
 posterior se anota en §9 con lo que se había visto.
 
@@ -45,6 +47,11 @@ posterior se anota en §9 con lo que se había visto.
   su tendencia. En t se conocen t−3 … t−1 de INDPRO y PAYEMS (6/18 = 1/3 del peso) y menos de W875RX1 y CMRMTSPL. Las
   peticiones de paro (semanales, del propio mes t) y Filadelfia (encuesta del mes t) son los únicos datos del mes t:
   informan del factor en t y, a través de su dinámica, de t+1 … t+4. M0 ve la etiqueta de t−5.
+- **Peticiones de paro = flujo** (v1.1): el nivel de las peticiones iniciales (despidos nuevos) se mueve con el ritmo
+  de crecimiento **del mes** (ln C<sub>m</sub> ≈ a − b·f<sub>m</sub>, como en el índice ADS); su tasa interanual
+  ln C<sub>m</sub> − ln C<sub>m−12</sub> carga, por tanto, en f<sub>m</sub> − f<sub>m−12</sub> (§3), no en la media de
+  12 meses de f (forma de un stock). Con la forma de stock la serie se leería con ≈ 6 meses de retraso al entrar en
+  una recesión y con el signo cambiado al principio de la recuperación (Estratega, revisión del 24-oct §1.2).
 - **Signos esperados** (se informan; no se imponen ni deciden, porque no se estiman con la etiqueta): cargas del
   factor > 0 en las 4 tasas coincidentes y en Filadelfia; < 0 en las peticiones de paro.
 - **Contraste informativo:** M2 − M0 en log-loss blanda de 4 cuadrantes (= la del eje G, porque el eje I de M2 es el de
@@ -73,9 +80,21 @@ posterior se anota en §9 con lo que se había visto.
 - **Variables de la matriz con historia hasta el corte:** el factor necesita `claims_4w_yoy` y `philly_neworders` de
   los meses m0−5 … m0, que el embargo de la etiqueta deja fuera de `Xtr`. Son variables conocidas en m0 (sin etiqueta):
   extensión del arnés §8-2.
-- **S-PIT-001 (Filadelfia prudente antes de 1990-07)** se aplica tal como está preregistrada (§6, corrida
-  `s_pit_001`). Si su criterio se dispara en desarrollo, `philly_neworders` antes de 1990-07 pasa a NaN en el factor
-  (regla mecánica fijada ahora; ningún otro cambio).
+- **S-PIT-001 (Filadelfia prudente antes de 1990-07)** se aplica en desarrollo con esta **regla operativa** (v1.1,
+  Validador M-4; concreta el criterio preregistrado el 15-oct, que no decía qué modelo, qué contraste ni qué
+  intervalo):
+  - d<sup>pr</sup><sub>t</sub> = ll(M0)<sub>t</sub> − ll(M2, matriz principal)<sub>t</sub> en `m2_long`, vintage;
+    d<sup>fp</sup><sub>t</sub> = lo mismo con la matriz `vintage_filadelfia_prudente` (corrida `s_pit_001`), **mismos
+    meses**. M0 no usa Filadelfia, así que es el mismo en las dos.
+  - Δ<sub>S</sub> = media(d<sup>fp</sup>) − media(d<sup>pr</sup>); h = semiamplitud del IC 95 % de `mejora_logloss` de
+    M2 frente a M0 en `m2_long`, vintage, matriz principal = (hi − lo)/2.
+  - **Se dispara si |Δ<sub>S</sub>| > h** (en cualquier sentido: el dato de Filadelfia antes de 1990-07 no es fiable
+    si su calendario cambia el resultado más que el propio error de muestreo).
+  - Si se dispara, `philly_neworders` antes de 1990-07 pasa a **NaN** en el factor (regla mecánica fijada ahora;
+    ningún otro cambio) y esa versión (`m2_struct_g` con la marca `philly_pre1990_nan`) es la **única** que se usa
+    después: en las demás corridas de M2, como emisión de M3, como componente del pool y en P-EVAL-BASE. Si no se
+    dispara, sigue la principal. En los dos casos la corrida `s_pit_001` se publica.
+  - **Orden:** se resuelve (§6, pasos 6a-6c) y se commitea **antes** de cualquier corrida de M3 o del pool.
 
 ## 3. Modelo del factor (fijado)
 
@@ -84,7 +103,7 @@ Observaciones estandarizadas x<sub>j,m</sub> (j = 1…6; m = mes):
     coincidentes i ∈ {INDPRO, PAYEMS, W875RX1, CMRMTSPL}:
         x_i,m = (r_i,m − τʳ_i,m) / d_i  =  λ_i·f_m + u_i,m + ε_i,m
     peticiones de paro (tasa interanual de una media de 4 semanas):
-        x_c,m = λ_c·(1/12)·Σ_{k=0..11} f_{m−k} + u_c,m + ε_c,m
+        x_c,m = λ_c·(f_m − f_{m−12}) + u_c,m + ε_c,m          (v1.1: flujo; = λ_c·Σ_{k=0..11} Δf_{m−k})
     Filadelfia, nuevos pedidos (índice de difusión ≈ ritmo del mes):
         x_p,m = λ_p·f_m + u_p,m + ε_p,m
 
@@ -96,18 +115,37 @@ Observaciones estandarizadas x<sub>j,m</sub> (j = 1…6; m = mes):
   factor relativo a la tendencia de 10 años, como la etiqueta. Para los meses futuros se fija τʳ en su último valor.
 - **d<sub>i</sub>**, y media/desviación de `claims_4w_yoy` y `philly_neworders`: del tramo de estimación del corte
   (ddof = 0). Se congelan junto a los parámetros (abajo).
-- **Parámetros:** 6 cargas λ, φ1, φ2, 6 ρ, 6 q = **20**. Normalización: varianza de η = 1 y λ<sub>PAYEMS</sub> > 0.
+- **Parámetros:** 6 cargas λ, φ1, φ2, 6 ρ, 6 q = **20** (sin cambio en v1.1: λ<sub>c</sub> sigue siendo una carga; signo
+  esperado < 0). Normalización: varianza de η = 1 y λ<sub>PAYEMS</sub> > 0.
   Restricciones: |ρ<sub>j</sub>| < 0,99; (φ1, φ2) en la región estacionaria; q > 0.
-- **Estimación:** máxima verosimilitud exacta del filtro de Kalman con datos faltantes (statsmodels `MLEModel`,
-  0.15.0, o una implementación propia que dé la misma verosimilitud con tolerancia 1e-8 en un test). Optimizador
-  L-BFGS-B, `maxiter` = 1000, `gtol` = 1e-6. **Arranque determinista:** λ = cargas del primer componente principal
-  del panel balanceado más largo; φ y ρ por MCO; q = varianza residual. Sin semillas: no hay nada aleatorio.
+- **Estimación:** máxima verosimilitud exacta del filtro de Kalman con datos faltantes. **Implementación única
+  (v1.1, B-2): statsmodels `MLEModel` 0.15.0** (la instalada en `.venv`); una implementación propia solo puede
+  existir como comprobación en un test (misma verosimilitud, tolerancia 1e-8), nunca para producir predicciones.
+  Optimizador L-BFGS-B, `maxiter` = 1000, `gtol` = 1e-6.
+- **Arranque determinista, siempre el mismo (v1.1, B-2):** en **cada** reestimación se arranca de cero (no del óptimo
+  anterior), así que los parámetros de un corte dependen solo de los datos ≤ ese corte y no del primer corte de la
+  corrida. Valores: λ = cargas del primer componente principal (escaladas a varianza 1 del componente, signo con
+  λ<sub>PAYEMS</sub> > 0) del **panel balanceado más largo** = el tramo contiguo más largo de meses del tramo de
+  estimación con las 6 x<sub>j</sub> presentes; si ese tramo tiene < 60 meses, el de las 4 coincidentes, y las series
+  que quedan fuera arrancan con λ = 0,1 × su signo esperado. Para las peticiones, la regresión del arranque es sobre
+  la diferencia a 12 meses del componente. φ por MCO del AR(2) del componente; ρ por MCO del AR(1) del residuo de
+  cada serie (recortado a ±0,9); q = varianza de ese residuo AR(1) (mínimo 1e-3). Sin semillas: no hay nada
+  aleatorio.
+- **Si L-BFGS-B no converge** (`success = False` o `maxiter` agotado) se conservan los parámetros vigentes (los de la
+  reestimación anterior) y se anota `fit_converged = false` en los diagnósticos del corte; en la primera reestimación
+  de la corrida, sin parámetros previos, se usa el punto final del optimizador y se anota igual. Se informa el número
+  de reestimaciones sin convergencia.
 - **Cadencia (PIT):** el arnés llama a `fit` cada mes (refit_every = 1). Los parámetros, d<sub>i</sub> y las medias se
   **reestiman en el primer corte y después solo en los cortes de enero**, con los datos conocidos en ese corte, y
   arrancando del óptimo anterior. Entre eneros, el filtro corre cada mes con los parámetros vigentes sobre los datos
-  conocidos en la fecha de decisión. Todo ≤ corte.
-- **Estado aumentado para la previsión:** para la composición (§4) el estado incluye los retardos 0…11 de f, 0…7 de
-  u<sub>i</sub> (las 4 coincidentes), u<sub>c</sub> y u<sub>p</sub> (dimensión 46). Con los mismos parámetros, la
+  conocidos en la fecha de decisión. Todo ≤ corte. Con el arranque fijo, una corrida que empieza en enero (p. ej. el
+  ensayo en seco, `dry_run_window` 1993-01) da en cada enero los **mismos parámetros** que la corrida desde
+  `test_start` (test de implementación); entre el primer corte y el primer enero la corrida no es comparable y no se
+  puntúa (los cortes antes de W<sub>G</sub> no se puntúan).
+- **Estado aumentado para la previsión:** para la composición (§4) el estado incluye los retardos **0…12** de f (13;
+  v1.1, por f<sub>m−12</sub> en la ecuación de las peticiones), 0…7 de u<sub>i</sub> (las 4 coincidentes: 32),
+  u<sub>c</sub> y u<sub>p</sub> (2): **dimensión 47** (46 en v1.0). La representación mínima también lleva los retardos
+  0…12 de f. Con los mismos parámetros, la
   verosimilitud es idéntica a la de la representación mínima (test). Se extiende la muestra con 4 meses de NaN
   (t+1 … t+4) y se lee la media y la covarianza del estado en t+4 condicionadas a todo lo observado: dan la
   distribución **conjunta** de todas las tasas que faltan, por serie y mes.
@@ -141,10 +179,25 @@ declarado).
     PAYEMS de la instantánea congelada de la etiqueta, fechas de decisión y meses observados **≤ 2004-12**,
     error = r en la vintage de la fecha − r en la última vintage (la que usa la etiqueta), y v = **error cuadrático
     medio** por edad: 1, 2, 3, 4, 5, 6, 7-12, ≥ 13 meses. Se commitea en `research/trials/m2/revision_var.json` antes
-    de la primera carga de la etiqueta.
+    de la primera carga de la etiqueta para M2. Una sola tabla, la misma en todos los cortes y en el bloqueado.
+  - **Declarado NO PIT (v1.1, decisión del usuario 24-oct sobre M-2):** la referencia (última vintage) incluye
+    revisiones publicadas después de 2004 (*benchmarks*, cambios de base) de meses ≤ 2004, así que en un corte de
+    1985 la escala de V<sub>rev</sub> usa información que no se conocía en 1985. Es **un hiperparámetro de escala
+    fijo**, de la misma naturaleza que s<sub>G</sub> = 0,40 de la ficha (primera publicación − última vintage), y es
+    coherente con el objetivo puntuado (la etiqueta oficial con la última vintage). No lee ningún mes ≥ 2005 ni la
+    etiqueta. Excepción declarada al "todo ≤ corte" de §3: es la única.
+  - **Muestra de Var(r<sub>i</sub>) (v1.1, M-2):** Var(r<sub>i</sub>) = varianza (ddof = 0) de r<sub>i</sub> =
+    100·Δln(nivel) en la **última vintage**, meses **1968-06 → 2004-12**, para las cuatro series; se calcula una vez y
+    se guarda en el mismo `revision_var.json`. ρ̄(edad) = media simple de v<sub>INDPRO</sub>(edad)/Var(r<sub>INDPRO</sub>)
+    y v<sub>PAYEMS</sub>(edad)/Var(r<sub>PAYEMS</sub>), con esa misma muestra.
   - W875RX1 y CMRMTSPL no tienen vintages ≤ 2004 (empiezan en 2010-05 y 2013-06): cuando entren desde una vintage
-    (solo en el bloqueado) se usa v<sub>i</sub>(edad) = ρ̄(edad)·Var(r<sub>i</sub>), con ρ̄ = media de
-    v/Var(r) de INDPRO y PAYEMS (supuesto declarado).
+    (solo en el bloqueado) se usa v<sub>i</sub>(edad) = ρ̄(edad)·Var(r<sub>i</sub>) (supuesto declarado).
+  - **Sensibilidad PIT** `m2_struct_g_revpit` (§7, **no principal**, no entra en el pool ni elige): la tabla se
+    reestima en cada reestimación de enero T solo con vintages publicadas ≤ T: error = r en la vintage de la fecha s −
+    r en la vintage de T, para fechas s ≤ T − 24 meses (la referencia ha tenido ≥ 24 meses para revisar) y meses
+    observados ≤ s, desde la primera vintage disponible; v = error cuadrático medio por tramo de edad; un tramo con
+    < 30 pares toma el valor del tramo más joven con ≥ 30 (si no hay ninguno, V<sub>rev</sub> = 0 en ese corte).
+    Var(r<sub>i</sub>) y ρ̄ con la vintage de T, meses 1968-06 → T. Solo modo `vintage`.
   - No se propaga la revisión a la previsión del filtro (efecto de segundo orden; declarado).
 - **V<sub>tend</sub>** (tendencia truncada y σ<sub>i</sub> con datos ≤ t). Se mide en cada reestimación de enero,
   con los niveles conocidos en el corte T y sin etiqueta: para cada mes s de 1965-01 a T−65,
@@ -181,13 +234,23 @@ puntúa nada, **después** de este push):
 |---|---|---|---|
 | `m2_long` | larga | persistencia, climatología, M0, **m2_struct_g**, `m1v2_g` (referencia) | M2 frente a M0 |
 | `m2_m1cmp` | 1989-10 → 2004-12 | M0, m2_struct_g, `m1v2_logit_axis` | comparación con M1 v2 en sus meses |
-| `m2_sens` | larga, vintage | M0 y las 4 sensibilidades de §7 | sensibilidades (no eligen) |
-| `s_pit_001` | larga, matriz `vintage_filadelfia_prudente` | M0, m2_struct_g | criterio de S-PIT-001 (§2) |
+| `s_pit_001` | larga, matriz `vintage_filadelfia_prudente` | M0, m2_struct_g | regla operativa de S-PIT-001 (§2) |
+| `m2_long_phnan` | larga | como `m2_long`, con `philly_neworders` < 1990-07 = NaN | **solo si S-PIT-001 se dispara**: pasa a ser la corrida principal de M2 |
+| `m2_sens` | larga, vintage | M0 y las 5 sensibilidades de §7 | sensibilidades (no eligen) |
+
+`m2_m1cmp` y `m2_sens` se corren con la versión de M2 que resulte de S-PIT-001 (la principal o la de NaN).
 
 **Orden** (todo al registro de pruebas y al trial log, también lo que falle):
 1. Este push. 2. Extensiones del arnés v2.4 (§8) e implementación, con tests sintéticos (abajo) en verde. 3. Tabla
 v(edad) (§4) sin etiqueta → commit. 4. Sonda de elegibilidad (solo recuentos) → ventanas en §9 → commit. 5. Placebo
-(abajo) → commit. 6. Corridas `--official` en el orden de la tabla, desde un árbol limpio. 7. Validador + Estratega.
+(abajo) → commit. 6. Corridas `--official`, desde un árbol limpio, **en este orden fijo** (v1.1, M-4):
+   - 6a. `m2_long`; 6b. `s_pit_001`;
+   - 6c. **resolución de S-PIT-001** con la regla de §2 (Δ<sub>S</sub>, h, dispara sí/no), escrita en §9 con los dos
+     `run_id`, **commit y push** antes de seguir;
+   - 6d. si se disparó, `m2_long_phnan`;
+   - 6e. `m2_m1cmp` y `m2_sens` con la versión resuelta.
+   Ninguna corrida de M3 ni del pool empieza antes del push de 6c (`m3_tvtp_spec.md` §5, `pool_spec.md` §7).
+7. Validador + Estratega.
 
 **Controles antes de la etiqueta real:**
 - **Señal plantada (sintético):** un panel generado con el modelo de §3 y parámetros conocidos; el estimador recupera
@@ -206,6 +269,7 @@ v(edad) (§4) sin etiqueta → commit. 4. Sonda de elegibilidad (solo recuentos)
 |---|---|---|
 | `m2_struct_g_platt` | capa Λ(c + b·logit P) sobre la P de M2, L2 = 1 sobre b, eps 1e-3 (como M0) | ¿la escala σ̂ está bien? |
 | `m2_struct_g_norev` | V<sub>rev</sub> = 0 | aporte de la varianza de revisión |
+| `m2_struct_g_revpit` | tabla v(edad) PIT: solo vintages ≤ T, reestimada cada enero (§4; v1.1, decisión del usuario sobre M-2) | ¿importa que la principal no sea PIT? |
 | `m2_struct_g_coinc` | factor solo con las 4 coincidentes (sin peticiones de paro ni Filadelfia) | aporte de los datos del mes t |
 | `m2_struct_g_ar1` | factor AR(1) | dinámica del factor |
 | modo `latest_truncated` | (todas las corridas) | sensibilidad de modo |
@@ -221,12 +285,31 @@ sensibilidad post hoc; se deja para una spec aparte si el usuario lo pide, para 
 2. **`info["features_history"]`:** filas de la matriz con las variables declaradas por el modelo, desde el inicio de
    la ventana del eje hasta el mes del corte inclusive (sin columnas de la etiqueta; `assert_no_forbidden`).
 3. **`info["decision_dates"]`** de las filas de prueba (con refit_every = 1, una fila).
-4. Informe: `mejora_logloss.sd_mensual` (desviación de d; `power_holdout.md` §4) y la detección declarada 3 m × 80/20
+4. Informe: `mejora_logloss.sd_mensual` (desviación de d; `power_holdout.md` §4), la **autocorrelación de d en los
+   retardos 1-24** (`mejora_logloss.acf_1_24`; Validador M-3) y la detección declarada 3 m × 80/20
    (`m3_tvtp_spec.md` §6) para todos los modelos.
+5. **Estudio de eventos por episodio** (`pool_spec.md` §5b; decisión del usuario 24-oct, C): d<sub>t</sub> frente a M0
+   en k = −6 … +8 alrededor de cada giro v2.1 de G y por episodio; M2 se incluye en las corridas `m2_long` y
+   `m2_m1cmp`.
+6. Diagnóstico `fit_converged` por reestimación (§3).
 
 ## 9. Cambios post hoc (técnicos) y fechas fijadas por regla
 
 | fecha | cambio | por qué | qué se había visto |
 |---|---|---|---|
-| — | ninguno por ahora (aquí irán W<sub>G</sub> y la tabla v(edad)) | | |
-| 2026-10-24 | ninguno (nota de proceso) | antes del push de esta spec se corrió la suite completa (235 tests, 09:47-09:52Z, exigida por el encargo). Sus tests **preexistentes** del arnés (M0, baselines, placebo, ensayo en seco) leen la etiqueta ≤ 2004 en `development` (registro `research/trials/full/label_access.jsonl`) | nada de M2, M3 ni del pool (no existen); la spec ya estaba escrita y no se cambió después |
+| — | (aquí irán W<sub>G</sub>, la tabla v(edad) y la resolución de S-PIT-001) | | |
+| 2026-10-24 | **v1.0 → v1.1** (push a priori, antes de implementar y de cualquier contacto con la etiqueta para M2/M3/pool) | ver la tabla de cambios v1.1, abajo | nada de M2/M3/pool: sin implementación, sin datos, sin corridas. Solo las revisiones del Validador y del Estratega (documentales y sintéticas) |
+| 2026-10-24 | ninguno (nota de proceso, **completada en v1.1**, Validador B-1) | lecturas de la etiqueta del 24-oct **anteriores** al push de v1.0 (09:53:14Z), todas en `development` y ≤ 2004-12 (o caché ≤ 2004; las denegadas son tests de la barrera ≥ 2005), según `research/trials/full/label_access.jsonl` y `research/trials/label_access.jsonl` (horas del registro en local, UTC+2; aquí en UTC): **(1)** suite completa 08:47:38-08:52:20Z (102 accesos, 5 denegados); **(2)** suite completa 08:57:31-09:02:12Z (ídem); **(3)** `src/models/power.py` 09:05:52Z (1 acceso, también en el registro principal: marca de giros ≤ 2004 para la potencia); **(4)** reproducciones de M1 v1 con `record=False` 09:10:59-09:13:25Z y 09:20:10-09:20:14Z (18 accesos); **(5)** suite completa 09:47:59-09:51:07Z (102 accesos, 5 denegados). Ninguna después del push de v1.0 ni hasta el push de v1.1 | (1), (2), (5): nada de M2, M3 ni del pool (no existían); los tests preexistentes solo reproducen M0, baselines, placebos y ensayos en seco ya conocidos desde el 16-oct. (3): las d<sub>t</sub> de M1 y los MDE de `power_holdout.md` **sí informan el diseño** (`sd_mensual`, puerta de gasto, expectativa de A7), declarado en §0. (4): resultados de M1 v1 ya conocidos. La spec ya estaba escrita y no se cambió por ninguna de ellas. "Antes de cualquier contacto con la etiqueta" significa **para M2/M3/pool** |
+
+**Cambios v1.0 → v1.1** (2026-10-24; ninguno se ha probado con datos):
+
+| # | sección | v1.0 | v1.1 | motivo |
+|---|---|---|---|---|
+| 1 | §1, §3 | `claims_4w_yoy` carga en la media de 12 meses de f, λ<sub>c</sub>·(1/12)·Σ<sub>k=0..11</sub> f<sub>m−k</sub> | carga en **f<sub>m</sub> − f<sub>m−12</sub>** | Estratega (imprescindible 1): la tasa interanual de un **flujo** (despidos nuevos) responde al ritmo del mes; la forma de stock la retrasa ≈ 6 m al entrar y la lee al revés al principio de la recuperación |
+| 2 | §3 | estado aumentado de dimensión 46 (retardos 0…11 de f) | **47** (retardos 0…12 de f) | consecuencia de 1 |
+| 3 | §3 | "statsmodels o implementación propia" | statsmodels `MLEModel` 0.15.0, única | Validador B-2: dos implementaciones con óptimos locales pueden dar parámetros distintos |
+| 4 | §3 | arranque desde el óptimo anterior; panel balanceado sin definir; sin regla de no convergencia | arranque determinista fijo en cada reestimación; panel = tramo contiguo más largo con las 6 (o las 4) series; sin convergencia → parámetros vigentes + `fit_converged = false` | Validador B-2 (dependencia del primer corte; ensayo en seco) |
+| 5 | §4 | V<sub>rev</sub> frente a la última vintage, sin declarar; muestra de Var(r) sin fijar | **declarado no PIT** (como s<sub>G</sub>); Var(r) en la última vintage 1968-06 → 2004-12; sensibilidad PIT `m2_struct_g_revpit` (no principal) | Validador M-2; decisión del usuario 24-oct (B) |
+| 6 | §2, §6 | S-PIT-001 "tal como está preregistrada", resuelta después de `m2_long`, sin orden respecto a M3/pool | regla operativa (\|Δ<sub>S</sub>\| > semiamplitud del IC 95 %), orden 6a-6e, resolución empujada antes de M3/pool, la versión resultante es la única aguas abajo | Validador M-4 |
+| 7 | §8 | — | ACF de d (1-24) y estudio de eventos por episodio para M2 | Validador M-3.2; decisión del usuario 24-oct (C) |
+| 8 | §9 | nota de proceso con una sola pasada de la suite | todas las lecturas del 24-oct ≤ 2004 | Validador B-1 |
