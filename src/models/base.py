@@ -16,6 +16,14 @@ Un modelo declara qué necesita y el arnés le da SOLO eso, ya filtrado (lista b
         def fit_axis(self, axis, X, t, w, info): ...  # t: objetivo blando del eje (p_g_high / p_i_high recalculado)
         def predict_axis(self, axis, X, info): ...    # → n, P(eje alto)
 
+    class MiNowcastG(ContinuousAxisModel):            # eje G CONTINUO (nowcast estructural); el I, como AxisModel
+        continuous_axes = ("G",)
+        def fit_axis_continuous(self, axis, X, g, t, w, info): ...   # g: valor continuo de G recalculado ≤ T
+        def predict_axis_continuous(self, axis, X, info): ...        # → (media, desviación) de G, n y n
+        # el arnés convierte: P(G alto) = Φ(media / √(desv² + s_G²)) (= E[p_g_high] si G ~ N(media, desv²)), lo combina
+        # con el eje I en 4 cuadrantes y lo puntúa como a cualquier modelo (log-loss, giros, falsas alarmas, retraso);
+        # además publica CRPS/RMSE de G (informativos, `report["g_continuo"]`)
+
 `Y` = probabilidades blandas de la etiqueta RECALCULADA con datos ≤ T (n × 4); `y` = etiqueta dura recalculada;
 `sample_weight` = peso de madurez de cada mes (harness.md §3b; 1 = maduro). `info` lleva el corte, la fecha de
 decisión, el modo, los meses de entrenamiento y las variables. El modelo nunca ve la etiqueta oficial ni meses
@@ -63,6 +71,40 @@ class AxisModel(Model):
 
     def predict_axis(self, axis: str, X: pd.DataFrame, info: dict) -> np.ndarray:  # pragma: no cover
         raise NotImplementedError
+
+
+class ContinuousAxisModel(AxisModel):
+    """Modelo por eje en el que los ejes de `continuous_axes` se prevén como un VALOR CONTINUO con su incertidumbre
+    (p. ej. el nowcast estructural de G). El arnés le pasa el valor continuo del eje de la etiqueta recalculada con
+    datos ≤ T (columna "G" o "I" de `PITLabeler.at`, mismos meses, embargo y pesos que el objetivo blando) y convierte
+    la previsión gaussiana N(media, desv²) en P(eje alto) con `gaussian_axis_prob`, usando la escala de medida de la
+    propia etiqueta (s_G = 0,40; para I, centro κ y s_I). Los ejes que no estén en `continuous_axes` siguen la
+    interfaz de AxisModel (`fit_axis`/`predict_axis`)."""
+    continuous_axes: tuple[str, ...] = ("G",)
+
+    def fit_axis_continuous(self, axis: str, X: pd.DataFrame, g: np.ndarray, t: np.ndarray, w: np.ndarray,
+                            info: dict) -> None:  # pragma: no cover
+        raise NotImplementedError
+
+    def predict_axis_continuous(self, axis: str, X: pd.DataFrame, info: dict) -> tuple[np.ndarray, np.ndarray]:
+        raise NotImplementedError  # pragma: no cover
+
+
+def gaussian_axis_prob(mu, sd, s_label: float, center: float = 0.0) -> np.ndarray:
+    """P(eje alto) de una previsión gaussiana del valor continuo del eje: la etiqueta define p_alto = Φ((X − c)/s)
+    (ficha §5; s_G = 0,40, c = 0 para G); si X ~ N(mu, sd²), E[p_alto] = Φ((mu − c)/√(sd² + s²)). Es la previsión que
+    minimiza la log-loss esperada frente al objetivo blando cuando la previsión de X es correcta."""
+    from scipy.stats import norm
+    mu, sd = np.asarray(mu, float), np.asarray(sd, float)
+    return norm.cdf((mu - center) / np.sqrt(sd ** 2 + float(s_label) ** 2))
+
+
+def gaussian_crps(mu, sd, y) -> np.ndarray:
+    """CRPS de N(mu, sd²) frente a y (forma cerrada; Gneiting-Raftery 2007). Mismas unidades que G."""
+    from scipy.stats import norm
+    mu, sd, y = np.asarray(mu, float), np.asarray(sd, float), np.asarray(y, float)
+    z = (y - mu) / sd
+    return sd * (z * (2 * norm.cdf(z) - 1) + 2 * norm.pdf(z) - 1 / np.sqrt(np.pi))
 
 
 class PersistencePIT(Model):

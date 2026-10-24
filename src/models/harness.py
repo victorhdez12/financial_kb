@@ -12,7 +12,7 @@ Reglas (docs/PLAN.md "Validación", "Periodo bloqueado y reglas del arnés"; fic
 4. Periodo bloqueado 2005-01 →: `run()` solo trabaja en `development`. La evaluación única tiene UN punto de entrada,
    `evaluate_holdout(prereg_id)`, que crea él mismo la caja fuerte (que consume el preregistro) y los datos.
 5. Variables solo de la matriz PIT de la versión de la configuración (`pit_version`; v0.3 por defecto), con su hash
-   fijado aquí, por nombre; `assert_no_forbidden()` antes de cada fit. Una versión CANDIDATA (p. ej. la v0.4, aún sin el
+   fijado aquí, por nombre; `assert_no_forbidden()` antes de cada fit. Una versión CANDIDATA (sin el
    ✅ del Validador) solo sirve en desarrollo; la evaluación única exige una versión en `P.FROZEN`.
    Modelos por eje (`AxisModel`): cada eje con sus variables y SU ventana; mínimo de entrenamiento por eje: meses,
    recesiones NBER y cambios de G (§5).
@@ -56,7 +56,7 @@ MATRIX_SHA256_BY_VERSION = {
         "latest_truncated": "3d81ec88b17a5390e8b7c2099ef1a4406009a43b1e1f1751522b7767f9ff025b",
         "vintage_filadelfia_prudente": "b8df88442043edc946b41530e4d24fcfeeb4c81c2bcca0ccc917d1f8fa223f5e",
     },
-    "0.4": {   # CANDIDATA (2026-10-23): v0.3 + 4 derivadas de riesgo de giro; solo desarrollo hasta el ✅ del Validador
+    "0.4": {   # congelada (FROZEN, tag pit-v0.4, 2026-10-23): v0.3 + 4 derivadas de riesgo de giro
         "vintage": "938d3d361d3a706383e587441f6e1402d43699ae72f625a47ef10e77ec487374",
         "latest_truncated": "58cf9c303266eb5d53528c228a310193b62872e01d089b7eec74f3621f637ab0",
         "vintage_filadelfia_prudente": "ef6121e659ea688f982213084007e6c562fcfe4b81d0f2fe1ac082aa261e70be",
@@ -310,6 +310,12 @@ class PITData:
     def score_labels(self, end) -> pd.DataFrame:
         return self.vault.load(end=end)
 
+    def axis_scale(self, axis: str) -> tuple[float, float]:
+        """(centro, escala de medida) con la que la etiqueta convierte el valor continuo del eje en p_alto (ficha §5):
+        G → (0, s_G); I → (κ, s_I). Los mismos s que usa `PITLabeler` (comprobados contra el meta congelado)."""
+        return (0.0, float(self.labeler.lp["s_G"])) if axis == "G" else \
+            (float(R.PARAMS.kappa), float(self.labeler.lp["s_I"]))
+
     def hashes(self) -> dict:
         return {"matrix": {self.matrix_name: self.matrix_sha}, "pit_snapshot": P.snapshot_ref(self.pit_version),
                 "pit_version": self.pit_version,
@@ -359,6 +365,12 @@ class ArrayData:
         if end >= HOLDOUT_START:
             raise HoldoutLocked("periodo bloqueado")
         return self.target[self.target.index <= end]
+
+    def axis_scale(self, axis: str) -> tuple[float, float]:
+        """Como PITData.axis_scale, con los s fijos de la ficha (s_G = 0,40, s_I = 0,31) salvo `axis_scales`."""
+        sc = getattr(self, "axis_scales", None) or {"G": (0.0, R.PARAMS.s_G_fixed),
+                                                    "I": (R.PARAMS.kappa, R.PARAMS.s_I_fixed)}
+        return tuple(map(float, sc[axis]))
 
     def hashes(self):
         return {"array_data": hashlib.sha256(pd.util.hash_pandas_object(self.X).values.tobytes()
@@ -575,7 +587,8 @@ def _fit_predict_4(model, data, cfg, tr, wts, m0, block, spy):
 def _fit_predict_axes(model, data, cfg, tr, wts, m0, block, spy):
     """Un modelo por eje con SU ventana (inicio más tardío de sus variables) y SU elegibilidad; producto de ejes."""
     d = {"model": model.name, "refit_month": m0, "ejes": {}}
-    pa, ok = {}, True
+    pa, ok, cont = {}, True, {}
+    cont_axes = tuple(getattr(model, "continuous_axes", ())) if isinstance(model, B.ContinuousAxisModel) else ()
     pers_te = data.pers_rows(block) if model.uses_persistence else None
     for ax in AXES:
         feats = list(model.axis_features.get(ax, ()))
@@ -605,7 +618,16 @@ def _fit_predict_axes(model, data, cfg, tr, wts, m0, block, spy):
                 "train_months": Xtr.index, "features": feats}
         if spy is not None:
             spy(model, info, Xtr, Y)
-        model.fit_axis(ax, Xtr, t, w, info)
+        if ax in cont_axes:     # eje CONTINUO (§5c): objetivo = valor del eje de la etiqueta recalculada ≤ T
+            if ax not in sub.columns:
+                raise ValueError(f"{model.name}: eje {ax} continuo, pero la etiqueta de entrenamiento no trae '{ax}'")
+            gv = sub.loc[Xtr.index, ax].to_numpy(float)
+            if not np.isfinite(gv).all():
+                raise ValueError(f"{model.name}: valor continuo de {ax} no finito en el entrenamiento")
+            model.fit_axis_continuous(ax, Xtr, gv, t, w, info)
+            de["continuo"] = True
+        else:
+            model.fit_axis(ax, Xtr, t, w, info)
         Xte = data.X.loc[block, feats]
         n_imp = int(Xte.isna().sum().sum())
         if n_imp:
@@ -613,7 +635,19 @@ def _fit_predict_axes(model, data, cfg, tr, wts, m0, block, spy):
         if model.uses_persistence:
             Xte = Xte.join(pers_te[[B.PERS_AXIS[ax]]], how="inner")
         de["imputed_cells"] = n_imp
-        if len(Xte):
+        if len(Xte) and ax in cont_axes:
+            mu, sd = model.predict_axis_continuous(ax, Xte, info)
+            mu, sd = np.asarray(mu, float), np.asarray(sd, float)
+            if mu.shape != (len(Xte),) or sd.shape != (len(Xte),) or not (np.isfinite(mu).all()
+                                                                           and np.isfinite(sd).all()):
+                raise ValueError(f"{model.name}: predict_axis_continuous({ax}) devolvió {mu.shape}/{sd.shape} "
+                                 "/ no finito")
+            if (sd <= 0).any():
+                raise ValueError(f"{model.name}: desviación de {ax} ≤ 0")
+            c, s_lab = data.axis_scale(ax)
+            pa[ax] = pd.Series(B.gaussian_axis_prob(mu, sd, s_lab, c), index=Xte.index)
+            cont[ax] = pd.DataFrame({f"{ax.lower()}_mu": mu, f"{ax.lower()}_sd": sd}, index=Xte.index)
+        elif len(Xte):
             p = np.asarray(model.predict_axis(ax, Xte, info), float)
             if p.shape != (len(Xte),) or not np.isfinite(p).all():
                 raise ValueError(f"{model.name}: predict_axis({ax}) devolvió {p.shape} / no finito")
@@ -626,6 +660,8 @@ def _fit_predict_axes(model, data, cfg, tr, wts, m0, block, spy):
     idx = pa["G"].index.intersection(pa["I"].index)
     out = pd.DataFrame(M.combine_axes(pa["G"].loc[idx], pa["I"].loc[idx]), columns=P_COLS, index=idx)
     out["n_train"] = min(e["n_train"] for e in d["ejes"].values())
+    for ax, cf in cont.items():     # columnas g_mu/g_sd SOLO para modelos continuos (las corridas previas no cambian)
+        out = out.join(cf.loc[idx])
     return out, d
 
 
@@ -675,12 +711,67 @@ def score(preds: pd.DataFrame, labels: dict[str, pd.DataFrame], cfg: HarnessConf
         keep &= v
     S = S_all[S_all["month"].isin(keep)].sort_values(["mode", "model", "month"]).reset_index(drop=True)
     rep = report(S, labels, cfg)
+    gc = continuous_report(preds, labels, S, cfg)
+    if gc:                          # solo si hay modelos continuos: el informe de las corridas previas no cambia
+        rep["g_continuo"] = gc
     rep["avisos"] = avisos
     rep["ventana_evaluacion"] = {"desde": f"{w0:%Y-%m}", "hasta": f"{w1:%Y-%m}", "meses_puntuables": len(target),
                                  "meses_usados": int(S["month"].nunique()), "reducida": len(keep) < len(target)}
     rep["cobertura_completa_por_modelo"] = {f"{m}/{n}": {**M.summary(g), "desde": f"{g['month'].min():%Y-%m}"}
                                             for (m, n), g in S_all.groupby(["mode", "model"], sort=True)}
     return S, rep
+
+
+CONT_COLS = {ax: (f"{ax.lower()}_mu", f"{ax.lower()}_sd") for ax in AXES}
+
+
+def continuous_scores(g: pd.DataFrame, lab: pd.DataFrame, ax: str = "G") -> pd.DataFrame:
+    """Pérdidas mensuales de una previsión continua del eje frente al valor oficial (mismos meses que la log-loss):
+    CRPS gaussiano, error cuadrático y PIT (Φ del valor oficial bajo la previsión; calibración de la incertidumbre)."""
+    from scipy.stats import norm
+    mu_c, sd_c = CONT_COLS[ax]
+    y = lab.loc[g.index, ax].to_numpy(float)
+    mu, sd = g[mu_c].to_numpy(float), g[sd_c].to_numpy(float)
+    return pd.DataFrame({"crps": B.gaussian_crps(mu, sd, y), "sqerr": (y - mu) ** 2, "err": y - mu,
+                         "pit": norm.cdf((y - mu) / sd)}, index=g.index)
+
+
+def continuous_report(preds: pd.DataFrame, labels: dict, S: pd.DataFrame, cfg: HarnessConfig) -> dict:
+    """Métricas INFORMATIVAS del valor continuo de los ejes (§6, v2.3): por modo y modelo continuo, CRPS, RMSE, sesgo,
+    cobertura de los intervalos centrales del 50 % y el 80 % y, entre pares de modelos continuos de la misma corrida,
+    la diferencia de CRPS con el bootstrap del arnés. Mismos meses que la puntuación principal (S). Vacío si no hay
+    ningún modelo continuo. No decide nada: la comparación con M0 es la de la log-loss."""
+    out = {}
+    for ax, (mu_c, _) in CONT_COLS.items():
+        if mu_c not in preds.columns:
+            continue
+        for mode, pm in preds.groupby("mode", sort=True):
+            lab = labels[mode]
+            months = pd.DatetimeIndex(sorted(S.loc[S["mode"] == mode, "month"].unique()))
+            per = {}
+            for model, g in pm.groupby("model", sort=True):
+                g = g.set_index("month")
+                g = g[g[mu_c].notna()]
+                if g.empty:
+                    continue
+                g = g.loc[g.index.intersection(months)]
+                if ax not in lab.columns or g.empty:
+                    continue
+                cs = continuous_scores(g, lab, ax)
+                per[model] = cs
+                out[f"{ax}:{mode}/{model}"] = {
+                    "n": int(len(cs)), "crps": float(cs["crps"].mean()), "rmse": float(np.sqrt(cs["sqerr"].mean())),
+                    "sesgo": float(cs["err"].mean()),
+                    "cobertura_50": float(((cs["pit"] > 0.25) & (cs["pit"] < 0.75)).mean()),
+                    "cobertura_80": float(((cs["pit"] > 0.10) & (cs["pit"] < 0.90)).mean()),
+                    "crps_ic": M.boot_mean(cs["crps"].to_numpy())}
+            names = sorted(per)
+            for i, a in enumerate(names):
+                for b in names[i + 1:]:
+                    common = per[a].index.intersection(per[b].index)
+                    out[f"{ax}:{mode}/{b}_frente_a_{a}"] = {
+                        "mejora_crps": M.boot_mean((per[a].loc[common, "crps"] - per[b].loc[common, "crps"]).to_numpy())}
+    return out
 
 
 def _cmp(ref: pd.DataFrame, g: pd.DataFrame, cuts: pd.DataFrame, eps: list, cfg: HarnessConfig, lab) -> dict:
@@ -1013,7 +1104,7 @@ def _cuts(cfg: HarnessConfig) -> list[pd.Timestamp]:
 
 def holdout_feature_availability(data: PITData, variant: str, cols: list, end: pd.Timestamp) -> pd.DataFrame:
     """Disponibilidad (SOLO notna, nunca valores) de las variables pedidas en la matriz congelada entre 2005-01 y `end`.
-    No toca la etiqueta. Queda en el registro de accesos (descriptivo de variables ≥ 2005: pit_base.md §4c)."""
+    No toca la etiqueta. Queda en el registro de accesos (descriptivo de variables ≥ 2005: harness.md §4c)."""
     name = f"{data.mode}_{variant}" if variant else data.mode
     ver = getattr(data, "pit_version", PIT_VERSION)
     path = P.out_dir() / f"pit_us_v{ver}_{name}.parquet"

@@ -1,10 +1,10 @@
 ---
 documento: arnés de backtest walk-forward (Fase 3, entregable 3)
-version: 2.1 (candidato; pendiente de la re-auditoría del Validador; v2.0 = e58a054, ⚠️ condicional)
+version: 2.3 (23-oct: eje G continuo, §5c; v2.2: A3-1 y pit_version; v2.1 ✅ con condiciones operativas; v2.0 = e58a054)
 fecha: 2026-10-16
 codigo: src/models/{harness,pit_labels,vault,metrics,base,trials,placebo,probes}.py
 config: config/harness/baselines_v2_1.yaml (v2: baselines_v2.yaml; v1: baselines_v1.yaml, históricas); sonda de P-EVAL-BASE: p_eval_base_probe.yaml
-tests: tests/test_harness.py (17) + tests/test_harness_v2.py (48); suite completa: ver §9
+tests: tests/test_harness.py (17) + tests/test_harness_v2.py (48) + tests/test_harness_gcont.py (13, eje continuo); suite completa: ver §9
 datos: solo ≤ 2004-12 (periodo bloqueado 2005-01 → INTOCABLE)
 depende_de: etiqueta v1.1 (tag label-v1.1; adenda de uso 2026-10-16), base PIT v0.3 (tag pit-v0.3)
 revisiones: docs/validation/2026-10-16_harness_v1.md (⚠️), docs/reviews/2026-10-16_estratega_macro_harness.md (⚠️), docs/validation/2026-10-16_harness_v2.md (⚠️; dev ✅)
@@ -350,6 +350,36 @@ calibrada por eje y coeficiente 0 por variable.
   - si en desarrollo es grande (|ρ| > 0,2, umbral fijado ahora), se probará un término de interacción preregistrado
     en el entregable 4, no un cambio post hoc.
 
+### 5c. Eje continuo: previsión de G con su incertidumbre (v2.3, 23-oct)
+
+Lo exige el nowcast estructural de G (Estratega, revisión de M1 v2 §3.2; decisión 3 del usuario). **Solo
+infraestructura: ningún modelo especificado.**
+
+- **Interfaz** (`base.ContinuousAxisModel`, subclase de `AxisModel`): `continuous_axes = ("G",)`;
+  `fit_axis_continuous(axis, X, g, t, w, info)` y `predict_axis_continuous(axis, X, info) → (media, desv.)`. Los
+  ejes que no están en `continuous_axes` (el I) siguen la interfaz de siempre.
+- **Objetivo:** `g` = valor continuo de G de la **etiqueta recalculada con datos ≤ T** (columna `G` de
+  `PITLabeler.at`), en los mismos meses, con el mismo embargo, purga y pesos de madurez que el objetivo blando `t`
+  (que también recibe). Nunca la etiqueta oficial. Si falta la columna o no es finita, error.
+- **De G a probabilidad:** la etiqueta define p_g_high = Φ(G/s_G) (ficha §5, s_G = 0,40). Si G ~ N(μ, σ²),
+  E[p_g_high] = **Φ(μ/√(σ² + s_G²))** (`base.gaussian_axis_prob`; para I, centro κ y s_I). Es la previsión que
+  minimiza la log-loss esperada frente al objetivo blando si la previsión de G es correcta. La escala sale de la
+  etiqueta congelada (`PITData.axis_scale` → `PITLabeler.lp`), no del modelo.
+- **Puntuación:** P(G alto) se combina con P(I alta) en 4 cuadrantes y se puntúa **exactamente igual que M0**:
+  log-loss, ejes, giros/estables, episodios, falsas alarmas, retraso, calibración, Holm. Comparable con M0 sin más.
+- **Métricas informativas** (`report["g_continuo"]`, solo si hay algún modelo continuo; no deciden): por modo y
+  modelo, CRPS gaussiano, RMSE, sesgo y cobertura de los intervalos centrales del 50 % y el 80 % (PIT) sobre los
+  **mismos meses** que la log-loss; y, entre pares de modelos continuos de la misma corrida, la mejora de CRPS con el
+  bootstrap del arnés. M0 no tiene previsión continua: frente a M0 solo cuenta la log-loss.
+- **Predicciones:** columnas `g_mu`, `g_sd` (NaN en los modelos no continuos). **Solo existen si hay algún modelo
+  continuo**: las corridas previas no cambian de columnas, de informe ni de `results_sha256` (comprobado bit a bit:
+  baselines v2.1 y M1 v2; Bitácora del 23-oct).
+- Controles en el arnés: forma (n,) de media y desviación, finitas, desviación > 0; `assert_no_forbidden` sigue
+  actuando (una columna con nombre de la etiqueta, p. ej. `g_true`, se rechaza).
+- Tests: `tests/test_harness_gcont.py` (13, datos sintéticos): transformación frente a Monte Carlo, CRPS en forma
+  cerrada, señal plantada (bate a M0; RMSE del residuo), oráculo (CRPS ≈ 0 y log-loss binaria = entropía del objetivo),
+  sin señal no inventa, embargo del objetivo continuo, errores, y "sin modelos continuos no cambia nada".
+
 ## 6. Puntuación y métricas
 
 - Contra la etiqueta **oficial congelada v1.1** (caja fuerte), meses con `weight > 0`, no provisionales.
@@ -603,6 +633,13 @@ Resultados (`research/trials/placebo_power_v2.json`, 20 semillas por caso):
    de correrlo, calibración 4 × 4 de Dirichlet dentro del walk-forward, fuera del criterio de éxito).
 
 ## 11. Registro de cambios
+
+### v2.3 (2026-10-23, tarde)
+
+| # | cambio | origen | dónde |
+|---|---|---|---|
+| — | **Eje G continuo** (§5c): `ContinuousAxisModel`, `gaussian_axis_prob`, `gaussian_crps`; `_fit_predict_axes` pasa el G continuo de la etiqueta recalculada y convierte (μ, σ) en P(G alto); `continuous_report` → `report["g_continuo"]` (CRPS/RMSE informativos). Sin modelos continuos no cambia nada (columnas, informe, hash) | decisión del usuario 23-oct (3); Estratega M1 v2 §3.2 | `base.py`, `harness.py`; `tests/test_harness_gcont.py` |
+| — | **Cálculo de potencia** de la evaluación única (`src/models/power.py`; `docs/models/power_holdout.md`): solo desarrollo ≤ 2004 y la longitud pública del bloqueado | decisión del usuario 23-oct (4) | `power.py` |
 
 ### v2.2 (2026-10-23)
 
