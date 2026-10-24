@@ -73,11 +73,18 @@ def test_spec_constants():
     assert 6 * 1 + s.factor_order + 6 + 6 == s.n_params        # λ, φ, ρ, q
 
 
-def test_skeletons_not_runnable_nor_registered():
+def test_skeletons_not_runnable_but_implementations_registered():
+    """v2.4: el esqueleto de regime_components sigue sin ser ejecutable; las implementaciones están en
+    models_struct.py, models_tvtp.py y models_pool.py y son las que registra el arnés."""
     from src.models import harness as H
+    from src.models import models_pool, models_struct, models_tvtp
     reg = H.model_registry()
-    for name in ("m2_struct_g", "m3_tvtp_g", "m3_ctp_g", "pool_g"):
-        assert name not in reg
+    assert reg["m2_struct_g"] is models_struct.StructuralG
+    assert reg["m3_tvtp_g"] is models_tvtp.REGISTRY["m3_tvtp_g"] and reg["pool_g"] is models_pool.REGISTRY["pool_g"]
+    for name in ("m3_ctp_g", "pool_g_eq", "pool_g_lin", "pool_g_kull", "pool_g_unif", "m2_struct_g_platt",
+                 "m2_struct_g_norev", "m2_struct_g_revpit", "m2_struct_g_coinc", "m2_struct_g_ar1",
+                 "m3_tvtp_g_l16", "m3_tvtp_g_l12", "m3_tvtp_g_fac", "m3_tvtp_g_nocal"):
+        assert name in reg
     assert C.REGISTRY == {}
     assert C.TVTPG(constant_transitions=True).name == "m3_ctp_g"
     with pytest.raises(NotImplementedError):

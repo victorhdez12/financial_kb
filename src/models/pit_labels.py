@@ -84,6 +84,16 @@ class PITLabeler:
                 lv[sid] = R._cal(s[self.av[sid].reindex(s.index).to_numpy() <= np.datetime64(t)])
         return lv
 
+    def from_vintage(self, t) -> dict[str, bool]:
+        """Por serie, si `levels_at(t)` la toma de una vintage de la instantánea (misma regla que `levels_at`; v2.4)."""
+        t = pd.Timestamp(t)
+        self._guard(t, "from_vintage")
+        out = {}
+        for sid in self.levels:
+            vs = self.snapv.get(sid) if self.mode == "vintage" else None
+            out[sid] = bool(vs is not None and vs.start <= t)
+        return out
+
     def at(self, t) -> pd.DataFrame:
         """Etiqueta completa calculable en la fecha de decisión t (columnas KEEP; vacía si no hay ninguna)."""
         t = pd.Timestamp(t)

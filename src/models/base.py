@@ -90,6 +90,14 @@ class ContinuousAxisModel(AxisModel):
         raise NotImplementedError  # pragma: no cover
 
 
+class StackedAxisModel(AxisModel):
+    """Modelo APILADO (arnés v2.4; pool_spec.md §6): el arnés corre antes, en el mismo corte y modo, los modelos de
+    `components` (que tienen que estar en la corrida) y le pasa en `info["stack_preds"]` sus P(G alto) FUERA DE
+    MUESTRA de todos los meses ≤ el corte (en `fit`) o ≤ el final del bloque (en `predict`), con el corte que produjo
+    cada una (`<comp>@corte`)."""
+    components: tuple[str, ...] = ()
+
+
 def gaussian_axis_prob(mu, sd, s_label: float, center: float = 0.0) -> np.ndarray:
     """P(eje alto) de una previsión gaussiana del valor continuo del eje: la etiqueta define p_alto = Φ((X − c)/s)
     (ficha §5; s_G = 0,40, c = 0 para G); si X ~ N(mu, sd²), E[p_alto] = Φ((mu − c)/√(sd² + s²)). Es la previsión que

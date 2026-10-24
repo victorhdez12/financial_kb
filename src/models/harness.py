@@ -153,6 +153,8 @@ class HarnessConfig:
     #                                         provisional_weighting, models, model_params, …}]
     expected_signs: dict = field(default_factory=dict)   # {modelo: {"<eje>:<variable>": "+"/"-" o {signo, decide}}}
     holm_families: tuple = ()               # [{nombre, modo, comparador, modelos, metrica (str o {modelo: métrica}), p}]
+    sign_fraction: dict = field(default_factory=dict)    # v2.4 (criterio 8): {modelo: {coefs, threshold, min_frac,
+    #                                                       missing_counts_as_fail}}; denominador = cortes de la ventana
 
     def validate(self) -> None:
         if self.embargo_months < MIN_EMBARGO:
@@ -177,6 +179,9 @@ class HarnessConfig:
             raise HoldoutLocked(f"test_end/eval_window dentro del periodo bloqueado (≥ {HOLDOUT_START:%Y-%m})")
         if self.phase == "holdout_evaluation" and _EVAL["vault"] is None:
             raise HoldoutLocked("la fase holdout_evaluation solo se ejecuta a través de evaluate_holdout(prereg_id)")
+        for m, sf in (self.sign_fraction or {}).items():
+            if not sf.get("coefs") or sf.get("missing_counts_as_fail", True) is not True:
+                raise ValueError(f"sign_fraction[{m}]: hace falta `coefs` y missing_counts_as_fail: true (N-5)")
         if self.eval_window and (_month(self.eval_window[0]) < _month(self.test_start)
                                  or _month(self.eval_window[1]) > _month(self.test_end)):
             raise ValueError("eval_window fuera de [test_start, test_end]")
@@ -281,6 +286,23 @@ class PITData:
         self.first_official_provisional = _add(last, -(meta["provisional_months"] - 1))
         self._pers = None
 
+    @property
+    def pit_mode(self) -> str:
+        return self.mode
+
+    @property
+    def data_key(self) -> str:
+        """Identidad de los datos para las cachés de los modelos (v2.4): versión, matriz y modo."""
+        return f"pit|{self.pit_version}|{self.matrix_name}|{self.mode}"
+
+    def pit_levels(self, date) -> dict:
+        """v2.4 (m2_structural_spec.md §8-1): niveles de INDPRO, PAYEMS, W875RX1 y CMRMTSPL conocidos en la fecha de
+        decisión (`PITLabeler.levels_at`, mismo modo, misma barrera ≥ 2005) y, por serie, si vienen de una vintage."""
+        lv = self.labeler.levels_at(date)
+        fv = self.labeler.from_vintage(date)
+        return {"levels": {k: lv[k] for k in R.PARAMS.growth_ids if k in lv},
+                "from_vintage": {k: bool(fv.get(k, False)) for k in R.PARAMS.growth_ids}}
+
     def check_cut(self, m0: pd.Timestamp) -> None:
         if self.phase == "development" and (m0 >= HOLDOUT_START or self.decision[m0] >= HOLDOUT_START):
             log_access({"mode": self.phase, "granted": False, "why": f"corte {m0:%Y-%m} en el periodo bloqueado"})
@@ -330,18 +352,32 @@ class ArrayData:
     considera conocida en m0 si s ≤ m0 − label_lag (5); la persistencia de t es el objetivo de t − 5."""
 
     def __init__(self, X: pd.DataFrame, target: pd.DataFrame, colinfo: dict, kind: str = "placebo",
-                 mode: str = "synthetic", label_lag: int = 5):
+                 mode: str = "synthetic", label_lag: int = 5, levels_fn=None, decision: pd.Series | None = None,
+                 data_key: str | None = None, levels_mode: str = "latest_truncated"):
         if kind == "pit":
             raise ValueError("ArrayData no puede hacerse pasar por datos PIT")
         self.X, self.target, self.colinfo, self.kind, self.mode = X, target, colinfo, kind, mode
         self.lag = label_lag
-        self.decision = pd.Series(X.index + pd.offsets.MonthEnd(0), index=X.index)
+        self.decision = pd.Series(X.index + pd.offsets.MonthEnd(0), index=X.index) if decision is None else \
+            decision.reindex(X.index)
+        self._levels_fn = levels_fn        # v2.4: niveles PIT (placebo de M2/M3: los reales; tests: sintéticos)
+        self._data_key = data_key
+        self.pit_mode = levels_mode
         self.first_official_provisional = pd.Timestamp("2262-01-01")
         self.usrec = target["usrec"].astype(float) if "usrec" in target else pd.Series(0.0, index=target.index)
 
     @property
     def phase(self) -> str:          # de solo lectura: ArrayData nunca está en holdout_evaluation
         return "development"
+
+    @property
+    def data_key(self) -> str:
+        return self._data_key or "array|" + self.hashes()["array_data"][:16]
+
+    def pit_levels(self, date) -> dict:
+        if self._levels_fn is None:
+            raise RuntimeError("ArrayData sin niveles PIT (levels_fn)")
+        return self._levels_fn(date)
 
     def check_cut(self, m0):
         if m0 >= HOLDOUT_START:
@@ -355,7 +391,9 @@ class ArrayData:
         p = self.target[P_COLS].shift(self.lag, freq="MS").reindex(self.X.index)
         p.columns = PERS_COLS
         p["pers_hard"] = self.target["label_hard"].shift(self.lag, freq="MS").reindex(self.X.index)
-        return _pers_extras(p.dropna())
+        p = _pers_extras(p.dropna())
+        p["label_month"] = p.index - pd.DateOffset(months=self.lag)     # v2.4: mes de la persistencia (ancla de M3)
+        return p
 
     def pers_rows(self, months):
         return self.persistence_frame().reindex(months).dropna()
@@ -377,17 +415,22 @@ class ArrayData:
                                              + pd.util.hash_pandas_object(self.target).values.tobytes()).hexdigest()}
 
 
-def placebo_data(pit: PITData, seed: int, block: int = 24, leak=None, end: str = "2004-12") -> ArrayData:
+def placebo_data(pit: PITData, seed: int, block: int = 24, leak=None, end: str = "2004-12",
+                 pit_levels: bool = False) -> ArrayData:
     """Placebo (pit_base.md §3, regla 6): las variables PIT reales con la etiqueta oficial ≤ 2004 BARAJADA en bloques
     de `block` meses (filas enteras: p_*, label_hard, usrec). `leak(target_barajado, rng) -> DataFrame` añade columnas
-    con fuga (tests y tabla de potencia)."""
+    con fuga (tests y tabla de potencia). v2.4, `pit_levels=True` (placebos de M2/M3/pool): además la columna G en las
+    filas barajadas (objetivo continuo, que M2 no usa), los niveles PIT REALES de las 4 coincidentes (no son la
+    etiqueta) y las fechas de decisión reales; sin esa opción el resultado es idéntico al de la v2.3."""
     from src.features.placebo import block_shuffle
     rng = np.random.default_rng(seed)
     lab = pit.score_labels(end)
-    lab = lab[lab["weight"] > 0][[*P_COLS, "label_hard", "usrec"]]
+    lab = lab[lab["weight"] > 0][[*P_COLS, "label_hard", "usrec", *(["G"] if pit_levels else [])]]
     order = block_shuffle(np.arange(len(lab)), block, rng)
     tgt = pd.DataFrame(lab.to_numpy()[order], index=lab.index, columns=lab.columns)
     tgt[P_COLS] = tgt[P_COLS].astype(float)
+    if pit_levels:
+        tgt["G"] = tgt["G"].astype(float)
     tgt["weight"], tgt["provisional"] = 1.0, False
     X = pit.X.loc[pit.X.index.isin(lab.index)].copy()
     colinfo = dict(pit.colinfo)
@@ -395,6 +438,9 @@ def placebo_data(pit: PITData, seed: int, block: int = 24, leak=None, end: str =
         L = leak(tgt, rng).reindex(X.index)
         X = X.join(L)
         colinfo.update({c: {"estado": "principal", "start": L[c].first_valid_index()} for c in L.columns})
+    if pit_levels:
+        return ArrayData(X, tgt, colinfo, kind="placebo", mode=f"placebo_{pit.mode}", levels_fn=pit.pit_levels,
+                         decision=pit.decision, data_key="placebo-of|" + pit.data_key, levels_mode=pit.mode)
     return ArrayData(X, tgt, colinfo, kind="placebo", mode=f"placebo_{pit.mode}")
 
 
@@ -511,6 +557,15 @@ def walk_forward(data, models: list[B.Model], cfg: HarnessConfig, spy=None) -> t
     months = data.X.index
     test = months[(months >= _month(cfg.test_start)) & (months <= _month(cfg.test_end))]
     preds, diag = [], []
+    stacked = [m for m in models if isinstance(m, B.StackedAxisModel)]
+    models = [m for m in models if not isinstance(m, B.StackedAxisModel)] + stacked   # componentes antes (v2.4)
+    names = [m.name for m in models]
+    for sm in stacked:
+        miss = [c for c in sm.components if c not in names or names.index(c) >= names.index(sm.name)]
+        if miss:
+            raise ValueError(f"{sm.name}: componentes que no están en la corrida: {miss}")
+    axis_hist: dict[str, dict] = {m.name: {} for m in models}   # P(G alto) fuera de muestra: mes → (p, corte)
+    usage: dict[str, dict] = {}
     for b in range(0, len(test), cfg.refit_every):
         block = test[b:b + cfg.refit_every]
         m0 = block[0]
@@ -525,7 +580,14 @@ def walk_forward(data, models: list[B.Model], cfg: HarnessConfig, spy=None) -> t
         tr, wts = tr[wts > 0], wts[wts > 0]
         for model in models:
             if isinstance(model, B.AxisModel):
-                out, d = _fit_predict_axes(model, data, cfg, tr, wts, m0, block, spy)
+                extra = {"usage": usage.setdefault(model.name, {"llamadas": 0, "max_fecha": None})}
+                if isinstance(model, B.StackedAxisModel):
+                    extra["stack_preds"] = stack_frame(model, axis_hist, block, cfg)
+                out, d = _fit_predict_axes(model, data, cfg, tr, wts, m0, block, spy, extra)
+                pg = d.pop("_pg", None)
+                if pg is not None:
+                    for mth, v in pg.items():
+                        axis_hist[model.name][mth] = (float(v), m0)
             else:
                 out, d = _fit_predict_4(model, data, cfg, tr, wts, m0, block, spy)
             diag.append(d)
@@ -536,7 +598,31 @@ def walk_forward(data, models: list[B.Model], cfg: HarnessConfig, spy=None) -> t
             out.insert(0, "mode", data.mode)
             preds.append(out)
     P_ = pd.concat(preds).rename_axis("month").reset_index() if preds else pd.DataFrame()
+    for model in models:
+        if hasattr(model, "diagnostics"):
+            diag.append({"model": model.name, "refit_month": None, "diag_modelo": model.diagnostics()})
+    for name, u in usage.items():
+        if u["llamadas"]:
+            log_access({"mode": data.phase, "granted": True, "event": "pit_levels (niveles PIT de las 4 coincidentes; "
+                        "no es la etiqueta)", "model": name, "data": getattr(data, "data_key", ""),
+                        "llamadas": u["llamadas"], "max_fecha": str(u["max_fecha"])}, versioned=False)
     return P_, diag
+
+
+def stack_frame(model, axis_hist: dict, block, cfg: HarnessConfig) -> pd.DataFrame:
+    """v2.4 (pool_spec.md §6-1): P(G alto) FUERA DE MUESTRA de cada componente para todos los meses ≤ el final del
+    bloque en que existan, con el corte que la produjo (`<comp>@corte`). Comprueba que cada p_{k,s} se produjo en el
+    corte cuyo bloque contiene s (nunca una predicción reajustada después)."""
+    end = block[-1]
+    cols = {}
+    for c in model.components:
+        h = {m: v for m, v in axis_hist[c].items() if m <= end}
+        for m, (_, cut) in h.items():
+            if not (cut <= m < _add(cut, cfg.refit_every)):
+                raise AssertionError(f"{model.name}: p de {c} en {m:%Y-%m} producida en el corte {cut:%Y-%m}")
+        cols[c] = pd.Series({m: v[0] for m, v in h.items()}, dtype=float)
+        cols[f"{c}@corte"] = pd.Series({m: v[1] for m, v in h.items()}, dtype="datetime64[ns]")
+    return pd.DataFrame(cols).sort_index()
 
 
 def _fit_predict_4(model, data, cfg, tr, wts, m0, block, spy):
@@ -584,12 +670,44 @@ def _fit_predict_4(model, data, cfg, tr, wts, m0, block, spy):
     return out, d
 
 
-def _fit_predict_axes(model, data, cfg, tr, wts, m0, block, spy):
+def _v24_info(model, data, feats, start, bound_month: pd.Timestamp, usage: dict | None) -> dict:
+    """Entradas del arnés v2.4 (m2_structural_spec.md §8, m3_tvtp_spec.md §8) para los modelos que las declaran
+    (`uses_pit_levels`): niveles PIT con la barrera de fecha, historia de las variables hasta `bound_month` (sin
+    columnas de la etiqueta), calendario de decisiones y la identidad de los datos (cachés)."""
+    if not getattr(model, "uses_pit_levels", False):
+        return {}
+    bound_date = data.decision[bound_month]
+
+    def pit_levels(date):
+        date = pd.Timestamp(date)
+        if date > bound_date:
+            raise HoldoutLocked(f"{model.name}: niveles PIT pedidos en {date:%Y-%m-%d}, posterior a la fecha de "
+                                f"decisión {bound_date:%Y-%m-%d}")
+        if usage is not None:
+            usage["llamadas"] += 1
+            usage["max_fecha"] = date if usage["max_fecha"] is None else max(usage["max_fecha"], date)
+        return data.pit_levels(date)
+
+    idx = data.X.index
+    sel = (idx <= bound_month) & ((idx >= start) if start is not None else True)
+    fh = data.X.loc[sel, list(feats)].copy()
+    R.assert_no_forbidden(list(fh.columns))
+    return {"pit_levels": pit_levels, "features_history": fh,
+            "decision_calendar": data.decision[data.decision.index <= bound_month],
+            "data_key": data.data_key, "pit_mode": getattr(data, "pit_mode", data.mode)}
+
+
+def _fit_predict_axes(model, data, cfg, tr, wts, m0, block, spy, extra: dict | None = None):
     """Un modelo por eje con SU ventana (inicio más tardío de sus variables) y SU elegibilidad; producto de ejes."""
+    extra = extra or {}
     d = {"model": model.name, "refit_month": m0, "ejes": {}}
+    lm = bool(getattr(model, "uses_pers_label_month", False))
+    pcols = (lambda ax: [B.PERS_AXIS[ax], "pers_label_month"] if lm else [B.PERS_AXIS[ax]])
     pa, ok, cont = {}, True, {}
     cont_axes = tuple(getattr(model, "continuous_axes", ())) if isinstance(model, B.ContinuousAxisModel) else ()
     pers_te = data.pers_rows(block) if model.uses_persistence else None
+    if pers_te is not None and lm:
+        pers_te = pers_te.assign(pers_label_month=pers_te["label_month"])
     for ax in AXES:
         feats = list(model.axis_features.get(ax, ()))
         _check_requested(model.name, feats, data, cfg)
@@ -600,9 +718,12 @@ def _fit_predict_axes(model, data, cfg, tr, wts, m0, block, spy):
         Xtr = Xtr.dropna()
         n_drop = n0 - len(Xtr)
         if model.uses_persistence:
-            Xtr = Xtr.join(data.pers_rows(Xtr.index)[[B.PERS_AXIS[ax]]], how="inner")
+            pr = data.pers_rows(Xtr.index)
+            if lm:
+                pr = pr.assign(pers_label_month=pr["label_month"])
+            Xtr = Xtr.join(pr[pcols(ax)], how="inner")
         R.assert_no_forbidden(list(Xtr.columns))
-        assert set(Xtr.columns) <= set(data.X.columns) | set(B.PERS_AXIS.values())
+        assert set(Xtr.columns) <= set(data.X.columns) | set(B.PERS_AXIS.values()) | {"pers_label_month"}
         Y = sub.loc[Xtr.index, P_COLS].to_numpy(float)
         t, w = Y @ AXIS_VEC[ax], wts.loc[Xtr.index].to_numpy(float)
         n_rec = count_recessions(data.usrec, Xtr.index.min(), Xtr.index.max()) if len(Xtr) else 0
@@ -615,7 +736,11 @@ def _fit_predict_axes(model, data, cfg, tr, wts, m0, block, spy):
             de["skipped"], ok = True, False
             continue
         info = {"refit_month": m0, "decision_date": data.decision[m0], "mode": data.mode, "axis": ax,
-                "train_months": Xtr.index, "features": feats}
+                "train_months": Xtr.index, "features": feats, "axis_scale": data.axis_scale(ax),
+                **_v24_info(model, data, feats, start, m0, extra.get("usage"))}
+        if "stack_preds" in extra:
+            sp = extra["stack_preds"]
+            info["stack_preds"] = sp[sp.index <= m0]
         if spy is not None:
             spy(model, info, Xtr, Y)
         if ax in cont_axes:     # eje CONTINUO (§5c): objetivo = valor del eje de la etiqueta recalculada ≤ T
@@ -633,8 +758,13 @@ def _fit_predict_axes(model, data, cfg, tr, wts, m0, block, spy):
         if n_imp:
             Xte = Xte.fillna(Xtr[feats].mean())
         if model.uses_persistence:
-            Xte = Xte.join(pers_te[[B.PERS_AXIS[ax]]], how="inner")
+            Xte = Xte.join(pers_te[pcols(ax)], how="inner")
         de["imputed_cells"] = n_imp
+        if len(Xte):        # v2.4: la predicción de las filas del bloque ve hasta la fecha de decisión de su fila
+            info = {**info, "decision_dates": data.decision.reindex(Xte.index),
+                    **_v24_info(model, data, feats, start, block[-1], extra.get("usage"))}
+            if "stack_preds" in extra:
+                info["stack_preds"] = extra["stack_preds"]
         if len(Xte) and ax in cont_axes:
             mu, sd = model.predict_axis_continuous(ax, Xte, info)
             mu, sd = np.asarray(mu, float), np.asarray(sd, float)
@@ -657,6 +787,7 @@ def _fit_predict_axes(model, data, cfg, tr, wts, m0, block, spy):
     if not ok or len(pa) < 2:
         d["skipped"] = not ok
         return None, d
+    d["_pg"] = pa["G"]
     idx = pa["G"].index.intersection(pa["I"].index)
     out = pd.DataFrame(M.combine_axes(pa["G"].loc[idx], pa["I"].loc[idx]), columns=P_COLS, index=idx)
     out["n_train"] = min(e["n_train"] for e in d["ejes"].values())
@@ -777,7 +908,7 @@ def continuous_report(preds: pd.DataFrame, labels: dict, S: pd.DataFrame, cfg: H
 def _cmp(ref: pd.DataFrame, g: pd.DataFrame, cuts: pd.DataFrame, eps: list, cfg: HarnessConfig, lab) -> dict:
     """Comparación mes a mes de un modelo frente a un comparador (mismos meses)."""
     d = ref["logloss"] - g["logloss"]
-    out = {"mejora_logloss": M.boot_mean(d.to_numpy()),
+    out = {"mejora_logloss": {**M.boot_mean(d.to_numpy()), **M.d_dispersion(d.to_numpy())},
            "mejora_logloss_b24": M.boot_mean(d.to_numpy(), M.BOOT24),
            "mejora_ll_g": M.boot_mean((ref["ll_g"] - g["ll_g"]).to_numpy()),
            "mejora_ll_i": M.boot_mean((ref["ll_i"] - g["ll_i"]).to_numpy()),
@@ -846,6 +977,7 @@ def report(S: pd.DataFrame, labels: dict, cfg: HarnessConfig) -> dict:
                                          "estable": M.summary(g[~cuts["giro"].to_numpy()])}
             out["calibracion"][key] = {"G": M.calibration(g["pg"], tg), "I": M.calibration(g["pi"], ti)}
             out["deteccion_giros_g"][key] = M.detection(g["pg"], lab_s)
+            out.setdefault("deteccion_declarada_8020", {})[key] = M.declared_detection_8020(g["pg"], lab_s)
             rg, ri = tg - g["pg"].to_numpy(), ti - g["pi"].to_numpy()
             out["dependencia_ejes"][key] = {"corr_residuos_G_I": float(np.corrcoef(rg, ri)[0, 1])
                                             if rg.std() > 0 and ri.std() > 0 else None}
@@ -860,6 +992,9 @@ def report(S: pd.DataFrame, labels: dict, cfg: HarnessConfig) -> dict:
                 dg = out["deteccion_giros_g"]
                 r["deteccion_frente_al_comparador"] = M.detection_vs(dg[f"{mode}/{model}"], dg[f"{mode}/{comp}"])
                 out[slot][f"{mode}/{model}"] = r
+                if slot == "frente_al_baseline":    # v2.4 (pool_spec.md §5b): estudio de eventos, informativo
+                    out.setdefault("estudio_eventos", {})[f"{mode}/{model}"] = M.event_study(
+                        ref["logloss"] - g["logloss"], lab_s, ~cuts["giro"])
         fam = {k: v["mejora_logloss"]["p_h0"] for k, v in out["frente_al_baseline"].items() if k.startswith(mode + "/")}
         out["holm"][mode] = {"familia": "frente al baseline (p_h0, unilateral)", "ajustado": M.holm(fam)}
         for f in cfg.holm_families:
@@ -923,12 +1058,17 @@ def coefficient_signs(diags: dict, datas: dict, cfg: HarnessConfig) -> dict:
     - `criterio_signos_cumple`: todos los que deciden coinciden y conservan el signo en todos sus saltos evaluables."""
     out = {}
     w0, w1 = cfg.window
+    for model, sf in (cfg.sign_fraction or {}).items():           # v2.4: criterio 8 (N-5)
+        if model not in cfg.models:
+            continue
+        for mode, dl in diags.items():
+            out.setdefault(f"{mode}/{model}", {}).update(sign_fraction_report(dl, model, sf, cfg))
     for model, exp in (cfg.expected_signs or {}).items():
         for mode, dl in diags.items():
             key = f"{mode}/{model}"
             rows = {x["refit_month"]: x["coef"] for x in dl if x["model"] == model and x.get("coef")}
             if not rows:
-                out[key] = {"error": f"{model} no expone coefficients() o no se ajustó"}
+                out.setdefault(key, {})["error"] = f"{model} no expone coefficients() o no se ajustó"
                 continue
             C = pd.DataFrame.from_dict(rows, orient="index").sort_index().rename(columns=_coef_key)
             Cw = C[(C.index >= w0) & (C.index <= w1)]
@@ -950,11 +1090,53 @@ def coefficient_signs(diags: dict, datas: dict, cfg: HarnessConfig) -> dict:
             dec = [k for k, v in exp.items() if _sign_spec(v)[1]]
             ok = all(per[k].get("coincide") is True for k in dec) and \
                 all(r["mismo_signo"] for r in st_rows if r["variable"] in dec)
-            out[key] = {"signos": per, "sign_stability": [{**r, "media_antes": float(r["media_antes"]),
-                                                            "media_despues": float(r["media_despues"])}
-                                                           for r in st_rows],
-                        "criterio_signos_cumple": bool(ok)}
+            out.setdefault(key, {}).update(
+                {"signos": per, "sign_stability": [{**r, "media_antes": float(r["media_antes"]),
+                                                    "media_despues": float(r["media_despues"])} for r in st_rows],
+                 "criterio_signos_cumple": bool(ok)})
+            if model in (cfg.sign_fraction or {}):
+                out[key]["nota_criterio_signos_cumple"] = (
+                    "con signos impuestos (γ ≥ 0) y decide: false se cumple trivialmente; NO es el criterio 8: "
+                    "ver criterio_fraccion_cumple")
     return out
+
+
+def cut_months(cfg: HarnessConfig) -> pd.DatetimeIndex:
+    """Meses de corte del walk-forward (primer mes de cada bloque) que caen en la ventana de evaluación: el
+    DENOMINADOR del criterio 8 (v2.4, Validador N-5). No depende de qué cortes tienen coeficientes."""
+    ms = pd.date_range(_month(cfg.test_start), _month(cfg.test_end), freq="MS")
+    w0, w1 = cfg.window
+    c = ms[::cfg.refit_every]
+    return c[(c >= w0) & (c <= w1)]
+
+
+def fitted_coef_table(dl: list, model: str, axis: str = "G") -> pd.DataFrame:
+    """Coeficientes de los cortes en que el eje `axis` del modelo se AJUSTÓ (un corte omitido no trae coeficientes,
+    aunque `coefficients()` devuelva los del corte anterior)."""
+    rows = {}
+    for x in dl:
+        if x["model"] != model or x.get("refit_month") is None or not x.get("coef"):
+            continue
+        e = x.get("ejes", {}).get(axis, {})
+        if x.get("skipped") or e.get("skipped") or not e:
+            continue
+        rows[pd.Timestamp(x["refit_month"])] = x["coef"]
+    C = pd.DataFrame.from_dict(rows, orient="index").sort_index() if rows else pd.DataFrame()
+    return C.rename(columns=_coef_key)
+
+
+def sign_fraction_report(dl: list, model: str, sf: dict, cfg: HarnessConfig) -> dict:
+    """Criterio 8 de P-EVAL-BASE v4 (m3_tvtp_spec.md v1.2 §5): para cada coeficiente por separado, fracción de los
+    cortes de la ventana con coef > threshold (estricto) ≥ min_frac; denominador = TODOS los meses de corte de la
+    ventana (`cut_months`), un corte sin coeficientes cuenta como no cumplido (`gamma_fraction_criterion`)."""
+    from src.models.regime_components import gamma_fraction_criterion
+    if sf.get("missing_counts_as_fail", True) is not True:
+        raise ValueError("sign_fraction: missing_counts_as_fail tiene que ser true")
+    C = fitted_coef_table(dl, model)
+    r = gamma_fraction_criterion(C, cut_months(cfg), threshold=float(sf.get("threshold", 0.01)),
+                                 min_frac=float(sf.get("min_frac", 0.5)), keys=tuple(sf["coefs"]))
+    r["denominador"] = "meses de corte de eval_window (cut_months)"
+    return r
 
 
 def persistence_reference(datas: dict, cfg: HarnessConfig) -> dict:
@@ -988,9 +1170,24 @@ def model_registry() -> dict:
     return reg
 
 
+M2_FLAG = "philly_pre1990_nan"     # marca de S-PIT-001 (m2_structural_spec.md v1.2 §2, Validador N-6)
+
+
+def model_kwargs(cfg: HarnessConfig, name: str, factory) -> dict:
+    """Parámetros de un modelo. v2.4 (N-6): los modelos que dependen de M2 (`m2_dependent`) heredan la marca
+    `philly_pre1990_nan` de `model_params.m2_struct_g`; si declaran otra, error."""
+    kw = dict(cfg.model_params.get(name, {}))
+    if getattr(factory, "m2_dependent", False) or getattr(factory, "m3_dependent", False):
+        flag = bool((cfg.model_params.get("m2_struct_g") or {}).get(M2_FLAG, False))
+        if M2_FLAG in kw and bool(kw[M2_FLAG]) != flag:
+            raise ValueError(f"{name}: {M2_FLAG} = {kw[M2_FLAG]} distinto del de m2_struct_g ({flag})")
+        kw[M2_FLAG] = flag
+    return kw
+
+
 def build_models(cfg: HarnessConfig, registry: dict | None = None) -> list[B.Model]:
     reg = registry or model_registry()
-    return [reg[n](**cfg.model_params.get(n, {})) for n in cfg.models]
+    return [reg[n](**model_kwargs(cfg, n, reg[n])) for n in cfg.models]
 
 
 def _round(o, nd=10):
@@ -1034,8 +1231,11 @@ def _run(cfg: HarnessConfig, datas: dict, registry: dict | None, record: bool, s
             _warn(avisos, f"{mode}: dropna quitó {n_drop} filas de entrenamiento (suma sobre cortes y modelos)")
     if all(getattr(d, "kind", "") == "pit" for d in datas.values()):
         rep["persistencia_muestra_completa"] = persistence_reference(datas, cfg)
-    if cfg.expected_signs:
+    if cfg.expected_signs or cfg.sign_fraction:
         rep["signos_coeficientes"] = coefficient_signs(diags, datas, cfg)
+    dg = {f"{mode}/{x['model']}": x["diag_modelo"] for mode, dl in diags.items() for x in dl if "diag_modelo" in x}
+    if dg:                          # v2.4: fit_converged por reestimación (M2 §8-6, M3 §3)
+        rep["diagnostico_ajuste"] = dg
     res = {"config": asdict(cfg), "preds": preds, "scores": S, "report": rep, "diag": diags,
            "results_sha256": results_hash(preds, rep), "results_sha256_r10": results_hash(preds, rep, 10),
            "kind": sorted({d.kind for d in datas.values()}), "data_hashes": {m: d.hashes() for m, d in datas.items()}}
@@ -1064,7 +1264,7 @@ def run(cfg: HarnessConfig, registry: dict | None = None, datas: dict | None = N
 # ------------------------------------------------------------------ ensayo en seco y evaluación única (§4e, §4b)
 DRY_RUNS_REL = "research/holdout/dry_runs.jsonl"     # registro de ensayos en seco (ruta fija, versionado)
 SENS_KEYS = {"name", "modes", "matrix_variant", "provisional_weighting", "feature_policy", "models", "model_params",
-             "baseline", "reference", "expected_signs", "holm_families", "nota"}
+             "baseline", "reference", "expected_signs", "holm_families", "nota", "sign_fraction"}
 REQUIRED_EVAL = ("mejora_logloss", "mejora_ll_g", "cortes", "subperiodos_mismo_signo", "deteccion_frente_al_comparador")
 
 
@@ -1199,6 +1399,12 @@ def _check_eval_config(cfg: HarnessConfig, pid: str | None, entry: dict | None) 
     unknown = [m for m in cfg.models if m not in model_registry()]
     if unknown:
         err.append(f"modelos no registrados: {unknown}")
+    for m, sf in (cfg.sign_fraction or {}).items():
+        if m not in cfg.models:
+            err.append(f"sign_fraction: {m} no está entre los modelos")
+        if not sf.get("coefs") or any(":" not in k or k.split(":")[0] not in AXES for k in sf.get("coefs", [])) \
+                or sf.get("missing_counts_as_fail", True) is not True:
+            err.append(f"sign_fraction[{m}] mal formada (coefs '<G|I>:<nombre>', missing_counts_as_fail: true)")
     for m, exp in (cfg.expected_signs or {}).items():
         if m not in cfg.models:
             err.append(f"expected_signs: {m} no está entre los modelos")
@@ -1308,8 +1514,22 @@ def dry_run_prereg(prereg_id: str | None = None, cfg_path: str | None = None, re
                 if sc.principal and sc.principal != sc.baseline and sc.principal in sc.models:
                     c = rep["frente_al_baseline"].get(f"{mode}/{sc.principal}")
                     miss = [k for k in REQUIRED_EVAL if c is None or c.get(k) is None]
+                    if c is not None and c.get("mejora_logloss", {}).get("sd_mensual") is None:
+                        miss.append("mejora_logloss.sd_mensual")
+                    if c is not None and c.get("mejora_logloss_b24") is None:
+                        miss.append("mejora_logloss_b24")
                     if miss:
                         errors.append(f"{dev.name}/{mode}: el informe no calcula {miss} para {sc.principal}")
+                n_cut = len(cut_months(dev))
+                for m in sc.sign_fraction or {}:
+                    if m not in sc.models:
+                        continue
+                    sg = rep.get("signos_coeficientes", {}).get(f"{mode}/{m}", {})
+                    fu = sg.get("fraccion_umbral")
+                    if not fu or "criterio_fraccion_cumple" not in sg or \
+                            any(v["n_cortes"] != n_cut for v in fu.values()):
+                        errors.append(f"{dev.name}/{mode}: criterio 8 de {m} sin calcular o con n_cortes ≠ {n_cut} "
+                                      "(meses de corte de dry_run_window; N-5)")
                 for m in sc.expected_signs or {}:
                     sg = rep.get("signos_coeficientes", {}).get(f"{mode}/{m}")
                     if not sg or "error" in sg or any("error" in v for v in sg["signos"].values()):

@@ -294,3 +294,78 @@ def detection_vs(dm: dict, dc: dict) -> dict:
     return {"n_pares": len(pairs), "retraso_pareado_medio": float(np.mean(pairs)) if pairs else np.nan,
             "censurados_modelo": dm["censurados"], "censurados_comparador": dc["censurados"],
             "falsas_alarmas_año_modelo_menos_comparador": dm["falsas_alarmas_por_año"] - dc["falsas_alarmas_por_año"]}
+
+
+# ------------------------------------------------------------------ v2.4 (specs a priori de M2/M3/pool)
+def d_dispersion(d: np.ndarray, max_lag: int = 24) -> dict:
+    """Desviación mensual de d (ddof = 1, como `power.py`; power_holdout.md §4) y su autocorrelación muestral en los
+    retardos 1 … 24 (media y varianza de toda la muestra; Validador M-3.2). Informativo."""
+    d = np.asarray(d, float)
+    n = len(d)
+    out = {"sd_mensual": float(d.std(ddof=1)) if n > 1 else float("nan")}
+    x = d - d.mean() if n else d
+    den = float((x ** 2).sum())
+    out["acf_1_24"] = [float((x[k:] * x[:-k]).sum() / den) if den > 0 and k < n else float("nan")
+                       for k in range(1, max_lag + 1)]
+    return out
+
+
+def declared_detection_8020(pg: pd.Series, lab: pd.DataFrame, min_run: int = 6, lead: int = 3,
+                            false_window=(-6, 3)) -> dict:
+    """Regla 3 m × 80/20 (m3_tvtp_spec.md §6; SOLO métrica secundaria, no cambia el criterio 4): giros DECLARADOS con
+    `regime_components.declared_turns_8020` sobre P(G alto); retraso = mes declarado − mes del giro (giros v2.1,
+    `g_turns`) en los giros con una declaración del mismo sentido en [giro − 3, siguiente giro); los demás, censurados;
+    declaraciones falsas = sin giro del mismo sentido en [declaración − 6, declaración + 3], por año de la ventana."""
+    from src.models.regime_components import declared_turns_8020
+    pg = pg.sort_index()
+    _, decl = declared_turns_8020(pg.to_numpy(float))
+    decl = [(pg.index[i], st) for i, st in decl]
+    turns = g_turns(lab.loc[lab.index.isin(pg.index)], min_run)
+    rows = []
+    for i, t in enumerate(turns):
+        lo = t["mes"] - pd.DateOffset(months=lead)
+        hi = turns[i + 1]["mes"] if i + 1 < len(turns) else pg.index.max() + pd.DateOffset(months=1)
+        c = next((m for m, st in decl if st == t["nuevo"] and lo <= m < hi), None)
+        rows.append({"mes": f"{t['mes']:%Y-%m}", "nuevo": t["nuevo"], "declarado": c is not None,
+                     "retraso": None if c is None else int((c.year - t["mes"].year) * 12 + c.month - t["mes"].month)})
+    false = [m for m, st in decl if not any(t["nuevo"] == st and t["mes"] + pd.DateOffset(months=false_window[0])
+                                            <= m <= t["mes"] + pd.DateOffset(months=false_window[1]) for t in turns)]
+    det = [r["retraso"] for r in rows if r["declarado"]]
+    yrs = len(pg) / 12
+    return {"definicion": "3 m × 80/20 (m3_tvtp_spec.md §6), solo informativa", "giros": rows,
+            "n_giros": len(rows), "declarados": len(det), "censurados": len(rows) - len(det),
+            "retraso_medio": float(np.mean(det)) if det else float("nan"),
+            "declaraciones": [{"mes": f"{m:%Y-%m}", "nuevo": int(st)} for m, st in decl],
+            "declarados_falsos": len(false), "declarados_falsos_por_año": float(len(false) / yrs) if yrs else float("nan")}
+
+
+def event_study(d: pd.Series, lab: pd.DataFrame, stable: pd.Series, ks=range(-6, 9), min_run: int = 6) -> dict:
+    """Estudio de eventos por episodio (pool_spec.md §5b; informativo, no es criterio): d_t = ll(M0) − ll(modelo) en
+    k = −6 … +8 alrededor de cada giro v2.1 de G (A→B y B→A por separado), su media por episodio en tres tramos
+    (antes k = −6…−1, entrada/salida k = 0…+4, después k = +5…+8) y la media en los meses estables (corte `estable`
+    del arnés: etiqueta dura oficial t = t − 5)."""
+    d = d.sort_index()
+    turns = g_turns(lab.loc[lab.index.isin(d.index)], min_run)
+    tramos = {"antes": range(-6, 0), "entrada_salida": range(0, 5), "despues": range(5, 9)}
+    eps = []
+    for t in turns:
+        byk = {}
+        for k in ks:
+            m = t["mes"] + pd.DateOffset(months=k)
+            if m in d.index:
+                byk[int(k)] = float(d[m])
+        rec = {"giro": f"{t['mes']:%Y-%m}", "sentido": "A→B" if t["nuevo"] == 0 else "B→A", "d_por_k": byk}
+        for nm, rg in tramos.items():
+            v = [byk[k] for k in rg if k in byk]
+            rec[nm] = float(np.mean(v)) if v else None
+            rec[f"n_{nm}"] = len(v)
+        eps.append(rec)
+    agg = {}
+    for sentido in ("A→B", "B→A"):
+        e = [x for x in eps if x["sentido"] == sentido]
+        agg[sentido] = {nm: (float(np.mean([x[nm] for x in e if x[nm] is not None]))
+                             if any(x[nm] is not None for x in e) else None) for nm in tramos}
+        agg[sentido]["n_episodios"] = len(e)
+    st = stable.reindex(d.index).fillna(False).astype(bool)
+    return {"episodios": eps, "media_por_sentido": agg,
+            "estables": {"n": int(st.sum()), "media": float(d[st].mean()) if st.any() else None}}

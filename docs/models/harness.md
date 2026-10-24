@@ -1,10 +1,10 @@
 ---
 documento: arnés de backtest walk-forward (Fase 3, entregable 3)
-version: 2.3 (23-oct: eje G continuo, §5c; v2.2: A3-1 y pit_version; v2.1 ✅ con condiciones operativas; v2.0 = e58a054)
+version: 2.4 (24-oct: extensiones para M2/M3/pool, §11 v2.4; v2.3: eje G continuo, §5c; v2.2: A3-1 y pit_version; v2.1 ✅ con condiciones operativas; v2.0 = e58a054)
 fecha: 2026-10-16
-codigo: src/models/{harness,pit_labels,vault,metrics,base,trials,placebo,probes}.py
+codigo: src/models/{harness,pit_labels,vault,metrics,base,trials,placebo,probes}.py; v2.4: models_struct.py, struct_factor.py, models_tvtp.py, models_pool.py, pool_dev.py, pool_controls.py
 config: config/harness/baselines_v2_1.yaml (v2: baselines_v2.yaml; v1: baselines_v1.yaml, históricas); sonda de P-EVAL-BASE: p_eval_base_probe.yaml
-tests: tests/test_harness.py (17) + tests/test_harness_v2.py (48) + tests/test_harness_gcont.py (13, eje continuo); suite completa: ver §9
+tests: tests/test_harness.py (17) + tests/test_harness_v2.py (48) + tests/test_harness_gcont.py (13, eje continuo) + tests/test_harness_v24.py (12, v2.4) + tests/test_models_struct.py, tests/test_models_tvtp.py; suite completa: ver §9
 datos: solo ≤ 2004-12 (periodo bloqueado 2005-01 → INTOCABLE)
 depende_de: etiqueta v1.1 (tag label-v1.1; adenda de uso 2026-10-16), base PIT v0.3 (tag pit-v0.3)
 revisiones: docs/validation/2026-10-16_harness_v1.md (⚠️), docs/reviews/2026-10-16_estratega_macro_harness.md (⚠️), docs/validation/2026-10-16_harness_v2.md (⚠️; dev ✅)
@@ -633,6 +633,39 @@ Resultados (`research/trials/placebo_power_v2.json`, 20 semillas por caso):
    de correrlo, calibración 4 × 4 de Dirichlet dentro del walk-forward, fuera del criterio de éxito).
 
 ## 11. Registro de cambios
+
+### v2.4 (2026-10-24): extensiones para M2, M3 y el pool
+
+Pedidas por las specs a priori v1.2 (`m2_structural_spec.md` §8, `m3_tvtp_spec.md` §8, `pool_spec.md` §6) y por la
+re-auditoría del Validador (`docs/validation/2026-10-24_specs_pool_v4_reaudit.md`, N-5/N-6). Implementadas y probadas
+**solo con datos sintéticos** antes de cualquier carga de la etiqueta para M2/M3/pool.
+
+| # | cambio | origen | dónde |
+|---|---|---|---|
+| 1 | **Niveles PIT** para los modelos con `uses_pit_levels`: `info["pit_levels"](fecha)` → niveles de INDPRO, PAYEMS, W875RX1 y CMRMTSPL de `PITLabeler.levels_at` (mismo modo, misma barrera ≥ 2005) y `from_vintage` por serie (`PITLabeler.from_vintage`, misma regla). **Barrera de fecha:** en `fit`, solo fechas ≤ la fecha de decisión del corte; en la predicción, ≤ la de la última fila del bloque (cada fila usa lo suyo). Una fecha posterior → `HoldoutLocked`. Una línea por modelo y corrida en el registro completo de accesos (`pit_levels`, llamadas y fecha máxima; no es la etiqueta) | M2 §8-1 | `harness._v24_info`, `PITData.pit_levels`, `pit_labels.from_vintage` |
+| 2 | **Historia de las variables** `info["features_history"]`: filas de la matriz con las variables del eje, desde el inicio de la ventana del eje hasta el mes del corte (fit) o de la última fila del bloque (predicción), sin imputar y con `assert_no_forbidden`. Más `info["decision_calendar"]` (fecha de decisión de cada mes ≤ esa cota), `info["decision_dates"]` (filas de prueba), `info["data_key"]` (identidad de los datos para las cachés), `info["pit_mode"]` y `info["axis_scale"]` | M2 §8-2, §8-3 | `harness._v24_info` |
+| 3 | `pers_label_month` (mes de la persistencia, ancla de M3) en las filas de entrenamiento y de prueba de los modelos con `uses_pers_label_month` (`ArrayData` lo calcula como mes − 5) | M3 §8-1 | `_fit_predict_axes`, `ArrayData.persistence_frame` |
+| 4 | **Modelo apilado** `B.StackedAxisModel` (`components`): en cada corte los componentes corren antes (el arnés reordena), y el apilado recibe `info["stack_preds"]` con su P(G alto) **fuera de muestra** de todos los meses ≤ el corte (fit) o ≤ el final del bloque (predicción) y el corte que la produjo (`<comp>@corte`); el arnés comprueba que cada p<sub>k,s</sub> salió del corte cuyo bloque contiene s. Componentes que no están en la corrida → error | pool §6-1 | `walk_forward`, `stack_frame` |
+| 5 | **Criterio 8** (`sign_fraction` en la configuración): `report["signos_coeficientes"][modo/modelo]["fraccion_umbral"]` y `criterio_fraccion_cumple` con `regime_components.gamma_fraction_criterion`. **Denominador = todos los meses de corte de `eval_window`** (`cut_months`), nunca el índice de los cortes con coeficientes; solo cuentan los coeficientes de los cortes en que el eje G **se ajustó** (un corte omitido devuelve los del corte anterior y no cuenta); `missing_counts_as_fail` tiene que ser `true`. Si el modelo también tiene `expected_signs`, `criterio_signos_cumple` se publica con la nota de que no es el criterio 8. El ensayo en seco exige la clave y `n_cortes` = meses de corte de `dry_run_window`, además de `mejora_logloss.sd_mensual` y `mejora_logloss_b24` para el principal | Validador M-1, **N-5** | `coefficient_signs`, `sign_fraction_report`, `cut_months`, `dry_run_prereg`, `_check_eval_config` |
+| 6 | **Herencia de la marca de S-PIT-001** (`model_params.m2_struct_g.philly_pre1990_nan`): los modelos `m2_dependent` (M2 y sus sensibilidades, M3 y las suyas, `m3_ctp_g`, el pool y sus variantes) reciben el valor de `m2_struct_g`; si declaran otro, error | **N-6** | `model_kwargs`, `build_models` |
+| 7 | **Informe:** `mejora_logloss.sd_mensual` (ddof 1, como `power.py`) y `mejora_logloss.acf_1_24` en toda comparación; `deteccion_declarada_8020` (3 m × 80/20, solo informativa) y `estudio_eventos` (k = −6 … +8 alrededor de cada giro v2.1 de G, tramos antes / entrada-salida / después y media en los estables; frente al baseline) para todos los modelos; `diagnostico_ajuste` (p. ej. `fit_converged` por reestimación de M2) para los modelos con `diagnostics()` | M2 §8-4…6, M3 §6, §8-3, pool §5b | `metrics.d_dispersion`, `declared_detection_8020`, `event_study`, `report`, `_run` |
+| 8 | **Placebo con niveles PIT** `placebo_data(..., pit_levels=True)`: además de la etiqueta ≤ 2004 barajada, la columna G barajada (objetivo continuo que M2 no usa), los niveles PIT **reales** (no son la etiqueta) y las fechas de decisión reales. Sin la opción, idéntico a la v2.3 | M2 §6, M3 §5, pool §5 | `placebo_data`, `ArrayData` |
+
+**Compatibilidad:** las corridas sin estos modelos conservan predicciones y columnas; su **informe gana** las claves de
+la fila 7 (por tanto su `results_sha256` cambia si se repiten; las predicciones no). Ninguna corrida registrada se ha
+repetido.
+
+**Modelos** (registrados por `model_registry` desde `models_struct.py`, `models_tvtp.py` y `models_pool.py`; el
+esqueleto de `regime_components.py` sigue sin ser ejecutable):
+- `m2_struct_g` y `m2_struct_g_{platt,norev,revpit,coinc,ar1}`; factor en `struct_factor.py` (statsmodels `MLEModel`,
+  estado mínimo 19 y aumentado 47, verosimilitud idéntica); motor compartido con M3 (`models_struct.engine_for`,
+  caché por versión de parámetros y mes);
+- `m3_tvtp_g`, `m3_ctp_g` y `m3_tvtp_g_{l16,l12,fac,nocal}`;
+- `pool_g` y `pool_g_{eq,lin,kull,unif}`.
+
+Los puntos que las specs no fijan y que la implementación resuelve de forma **provisional** están en
+`IMPLEMENTATION_CHOICES` de cada módulo y en la Bitácora del 24-oct, como preguntas para el usuario antes de `m2_long`.
+
 
 ### v2.3 (2026-10-23, tarde)
 
