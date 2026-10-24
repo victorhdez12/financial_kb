@@ -1,6 +1,6 @@
 ---
 documento: especificación a priori de M2, nowcast ESTRUCTURAL del eje G (factor coincidente con ragged edge + composición exacta de Ĝ)
-version: 1.2 (2026-10-24; v1.1 = d1bde77, v1.0 = 1a5f1f9. Las tres congeladas ANTES de cualquier contacto con la etiqueta PARA M2/M3/pool y empujadas a origin antes de implementar nada que lea datos; cambios v1.0 → v1.1 → v1.2 en §9)
+version: 1.3 (2026-10-24; v1.2 = 68e66dd, v1.1 = d1bde77, v1.0 = 1a5f1f9. v1.0-v1.2 congeladas ANTES de cualquier contacto con la etiqueta para M2/M3/pool; v1.3 ANTES de cualquier corrida con la etiqueta REAL: hasta su push la etiqueta solo se ha leído en la sonda de elegibilidad (recuentos) y en placebos barajados ≤ 2004; cambios en §9)
 fecha: 2026-10-24
 hipotesis: H-M2-001 (research/hypotheses.yaml) — DECLARADA CONTAMINADA (post hoc respecto a M1 v1/v2; ver §0)
 equivale_a: "H-M2-002 / m2_struct_g" de la revisión del Estratega (docs/reviews/2026-10-23_estratega_macro_m1v2.md §3.2), en la versión del Investigador (docs/research/2026-10-23_mejoras_nowcast_regimen.md §3.2, §3.4)
@@ -175,10 +175,31 @@ Observaciones estandarizadas x<sub>j,m</sub> (j = 1…6; m = mes):
    la muestra disponible, y media de los z con mínimo 2 indicadores. Ĝ<sub>t</sub> = la columna G en t.
 4. Ningún parámetro libre: los pesos, la tendencia, σ<sub>i</sub> y el mínimo de indicadores son los de la ficha.
 
-**Varianza σ̂²<sub>t</sub> = V<sub>filtro</sub> + V<sub>rev</sub> + V<sub>tend</sub>** (se suponen independientes; supuesto
-declarado).
+**Varianza (v1.3): σ̂²<sub>t</sub> = V<sub>conj</sub> + V<sub>rev,t</sub>.** V<sub>conj</sub> es la varianza del
+error **conjunto** de previsión y de tendencia truncada, medida directamente (incluye su covarianza y el sesgo);
+sustituye a la suma V<sub>filtro</sub> + V<sub>tend</sub> de la v1.2, que suponía los dos errores independientes (el
+control sintético preregistrado lo refutó, §9). V<sub>filtro</sub> y V<sub>tend</sub> se siguen calculando como
+diagnóstico, pero no entran en σ̂.
 
-- **V<sub>filtro</sub>** (tasas que faltan). Linealización de G en las tasas: ∂G<sub>t</sub>/∂r<sub>i,m</sub> =
+- **V<sub>conj</sub> (regla exacta, v1.3).** Se mide en cada reestimación T (primer corte y cada enero), sin etiqueta,
+  con los niveles conocidos en la fecha de decisión de T y la versión de parámetros (λ, φ, ρ, q, d<sub>i</sub>, medias)
+  recién estimada en T, y se congela hasta la siguiente reestimación:
+  1. ℓ<sub>i</sub> = mes de T − último mes observado de la coincidente i en los niveles de T (el borde desigual del
+     corte).
+  2. Para cada mes s de **1968-06 a T − 65** (meses con ventana de tendencia completa en los niveles de T): niveles
+     pseudo-tiempo-real = niveles de T de cada coincidente truncados en s − ℓ<sub>i</sub>; `claims_4w_yoy` y
+     `philly_neworders` de las filas ≤ s (con la marca `philly_pre1990_nan` si aplica). Ĝ<sup>ps</sup><sub>s</sub> =
+     el Ĝ de §3-§4 (mismo código: τʳ de esos datos, filtro con la versión de T, composición con el código de la
+     etiqueta).
+  3. e<sub>s</sub> = Ĝ<sup>ps</sup><sub>s</sub> − G<sub>s</sub>(niveles de T), el segundo con el código de la etiqueta y
+     los niveles completos de T (el de V<sub>tend</sub>).
+  4. V<sub>conj</sub> = media de e<sub>s</sub>² sobre los meses con Ĝ<sup>ps</sup><sub>s</sub> finito.
+  - Declarado: los parámetros de T se estimaron con esos mismos meses (algo optimista) y el borde desigual se toma el
+    del corte T para todos los s.
+  - Las sensibilidades `_coinc` y `_ar1` miden V<sub>conj</sub> con su propio factor; `_norev` hace V<sub>rev</sub> = 0;
+    `_revpit` solo cambia V<sub>rev</sub>.
+
+- **V<sub>filtro</sub>** (tasas que faltan; v1.3: solo diagnóstico). Linealización de G en las tasas: ∂G<sub>t</sub>/∂r<sub>i,m</sub> =
   c<sub>i,m</sub> = (1/n<sub>t</sub>)·(2/3)·w<sub>m−t</sub>/σ<sub>i</sub>, con w = (1, 2, 3, 3, 3, 3, 2, 1) para m = t−3
   … t+4 y n<sub>t</sub> = indicadores presentes. V<sub>filtro</sub> = c′Σc con Σ = covarianza conjunta de las tasas que
   faltan (§3, en unidades de r: d<sub>i</sub>d<sub>j</sub>·Cov). Se ignora el efecto de esas tasas sobre la mediana de
@@ -216,7 +237,8 @@ declarado).
   e<sub>s</sub> = G<sub>s</sub>(niveles de T truncados en s+4) − G<sub>s</sub>(niveles de T), las dos con el código de
   la etiqueta. El primero reproduce la situación del borde (tendencia hacia atrás, σ con datos ≤ s+4) sin error de
   previsión; el segundo es G de la etiqueta recalculada en T con la ventana de tendencia completa.
-  V<sub>tend</sub> = media de e<sub>s</sub>² (incluye el sesgo). Se congela hasta la siguiente reestimación.
+  V<sub>tend</sub> = media de e<sub>s</sub>² (incluye el sesgo). Se congela hasta la siguiente reestimación. (v1.3:
+  solo diagnóstico.)
 - **Probabilidad:** el arnés (v2.3, §5c) convierte (Ĝ<sub>t</sub>, σ̂<sub>t</sub>) en P(G alto) =
   Φ(Ĝ<sub>t</sub>/√(σ̂²<sub>t</sub> + s<sub>G</sub>²)) con s<sub>G</sub> = 0,40 de la ficha. **Sin capa de calibración**
   en la principal: la escala sale de la aritmética de la etiqueta, no de un ajuste.
@@ -267,6 +289,10 @@ v(edad) (§4) sin etiqueta → commit. 4. Sonda de elegibilidad (solo recuentos)
 **Controles antes de la etiqueta real:**
 - **Señal plantada (sintético):** un panel generado con el modelo de §3 y parámetros conocidos; el estimador recupera
   λ, φ, ρ (tolerancias en el test) y la cobertura del intervalo del 80 % de G sintético está entre 0,75 y 0,85.
+  **v1.3 (fijado antes de correrlo):** generador `tests/m2_synth.py`, **semillas 3, 7, 11 y 21**, cortes mensuales
+  1980-01 → 2004-08, G verdadero = el de la etiqueta con los niveles sintéticos completos; **las cuatro** coberturas del
+  80 % tienen que caer en **[0,75; 0,85]**. Si alguna queda fuera, no se itera el diseño: se para y se pregunta al
+  usuario.
 - **PIT por truncamiento:** la predicción en t no cambia si se alteran los niveles o las variables posteriores a la
   fecha de decisión (3 cortes × 2 modos, sintético y con la instantánea ≤ 2004).
 - **Composición:** con tasas futuras conocidas (oráculo sintético), Ĝ = G del código de la etiqueta bit a bit.
@@ -314,6 +340,7 @@ sensibilidad post hoc; se deja para una spec aparte si el usuario lo pide, para 
 | 2026-10-24 | **tabla v(edad)** fijada (§4), antes de cualquier carga de la etiqueta para M2: `research/trials/m2/revision_var.json` (commit `8e34264`, empujado 12:54:43Z) | regla de §4 (vintages ALFRED de INDPRO/PAYEMS de la instantánea, fechas de decisión de la matriz PIT ≤ 2004-12, todos los meses observados ≤ 2004-12; Var(r) 1968-06 → 2004-12) | nada de la etiqueta: solo niveles y vintages |
 | 2026-10-24 | **W<sub>G</sub> = 1978-10** (sonda de elegibilidad, solo recuentos; `research/trials/m2/elegibilidad.json`, `src/models/pool_dev.py probe`, 12:54:51-12:55:47Z) → `m2_long` = 1978-10 → 2004-12, subperiodos [1978-10, 1989-12] y [1990-01, 2004-12] | regla de §6: primer corte desde el que los ejes G de M2 y M3 (y el I) son elegibles en todos los cortes siguientes de los dos modos (120 meses, ≥ 2 recesiones, ≥ 8 cambios de G; ventana del eje G desde 1968-05) | recuentos de meses, recesiones y cambios de G de la etiqueta recalculada ≤ T; ninguna puntuación ni ningún modelo |
 | 2026-10-24 | ninguno — **control de señal plantada NO superado** (§6), anotado; espera decisión del usuario antes de `m2_long` | `src/models/pool_dev.py controls` (sintético): cobertura del intervalo del 80 % de G = **0,878** (semilla 7, 296 cortes; spec: 0,75-0,85); semillas 3/11/21: 0,855 / 0,909 / 0,922 (`research/trials/m2/controles_sinteticos.json`, `controles_m2_semillas_extra.json`). λ, φ, ρ se recuperan bien. Diagnóstico (`controles_m2_diagnostico.json`): V<sub>filtro</sub> y V<sub>tend</sub> están cada uno ≈ calibrados (ECM 0,196 frente a 0,232; 0,089 frente a 0,074), pero el error del filtro y el de la tendencia truncada tienen correlación **−0,31**, y §4 los suma como independientes (supuesto declarado): σ̂ sobrestima | solo datos sintéticos; placebos con la etiqueta barajada (Δ M2 −0,37, M3 −0,016, pool −0,022: sin fuga ni aviso). Ningún dato de la etiqueta real para M2. No se ha cambiado nada del modelo |
+| 2026-10-24 | **v1.2 → v1.3** (decisión del usuario sobre Q0; push a priori antes de cualquier corrida con la etiqueta real) | ver la tabla de cambios v1.3, abajo: el control sintético preregistrado de §6 falló (cobertura del 80 % = 0,878 / 0,855 / 0,909 / 0,922 con las semillas 7 / 3 / 11 / 21) por la correlación −0,31 entre el error del filtro y el de la tendencia | el fallo lo detectó el **sintético**, no la etiqueta. Hasta este push la etiqueta solo se ha leído en la sonda de elegibilidad (recuentos de la etiqueta recalculada ≤ T, 12:54:51-12:55:47Z) y en los placebos con la etiqueta ≤ 2004 **barajada** (12:56-13:07Z), más las suites (tests preexistentes). Ningún resultado de M2 con la etiqueta real |
 | 2026-10-24 | **v1.0 → v1.1** (push a priori, antes de implementar y de cualquier contacto con la etiqueta para M2/M3/pool) | ver la tabla de cambios v1.1, abajo | nada de M2/M3/pool: sin implementación, sin datos, sin corridas. Solo las revisiones del Validador y del Estratega (documentales y sintéticas) |
 | 2026-10-24 | ninguno (nota de proceso, **completada en v1.1**, Validador B-1) | lecturas de la etiqueta del 24-oct **anteriores** al push de v1.0 (09:53:14Z), todas en `development` y ≤ 2004-12 (o caché ≤ 2004; las denegadas son tests de la barrera ≥ 2005), según `research/trials/full/label_access.jsonl` y `research/trials/label_access.jsonl` (horas del registro en local, UTC+2; aquí en UTC): **(1)** suite completa 08:47:38-08:52:20Z (102 accesos, 5 denegados); **(2)** suite completa 08:57:31-09:02:12Z (ídem); **(3)** `src/models/power.py` 09:05:52Z (1 acceso, también en el registro principal: marca de giros ≤ 2004 para la potencia); **(4)** reproducciones de M1 v1 con `record=False` 09:10:59-09:13:25Z y 09:20:10-09:20:14Z (18 accesos); **(5)** suite completa 09:47:59-09:51:07Z (102 accesos, 5 denegados). Ninguna después del push de v1.0 ni hasta el push de v1.1 | (1), (2), (5): nada de M2, M3 ni del pool (no existían); los tests preexistentes solo reproducen M0, baselines, placebos y ensayos en seco ya conocidos desde el 16-oct. (3): las d<sub>t</sub> de M1 y los MDE de `power_holdout.md` **sí informan el diseño** (`sd_mensual`, puerta de gasto, expectativa de A7), declarado en §0. (4): resultados de M1 v1 ya conocidos. La spec ya estaba escrita y no se cambió por ninguna de ellas. "Antes de cualquier contacto con la etiqueta" significa **para M2/M3/pool** |
 | 2026-10-24 | **v1.1 → v1.2** (push a priori, antes de implementar nada que lea datos y antes de cualquier contacto con la etiqueta para M2/M3/pool) | ver la tabla de cambios v1.2, abajo (Validador, re-auditoría `docs/validation/2026-10-24_specs_pool_v4_reaudit.md`, N-1…N-7) | nada de M2/M3/pool: sin implementación, datos ni corridas |
@@ -343,3 +370,11 @@ sensibilidad post hoc; se deja para una spec aparte si el usuario lo pide, para 
 | 5 | §8-5 | estudio de eventos de M2 en `m2_long` | en la corrida **resuelta** por S-PIT-001 (`m2_long` o `m2_long_phnan`) y en `m2_m1cmp`; P1, P4 y P7 sobre M2 se leen ahí | Validador N-3 |
 | 6 | §9 | — | nota de proceso con la suite posterior al push de v1.1 | Validador N-7 |
 | 2026-10-24 | ninguno de diseño (nota de proceso) | filas añadidas en el commit `1cdd9e7` (empujado 13:07:31Z), **después** de las primeras lecturas de la etiqueta para M2/M3/pool: sonda de elegibilidad (recuentos de la etiqueta recalculada ≤ T, 12:54:51-12:55:47Z) y placebos con la etiqueta ≤ 2004 **barajada** (12:56-13:07Z). Solo contienen (a) las fechas que la propia spec fija por regla tras la sonda (W<sub>G</sub>, ventana del pool), (b) la tabla v(edad) ya empujada a las 12:54:43Z y (c) el resultado del control sintético de M2 | ningún resultado con la etiqueta real; el texto del modelo, previas, ventanas por regla y criterios no cambian. La sobrecobertura de M2 queda como **pregunta para el usuario**, no como cambio |
+
+**Cambios v1.2 → v1.3** (2026-10-24; decisión del usuario sobre Q0 tras el control sintético; ninguno probado con la
+etiqueta real):
+
+| # | sección | v1.2 | v1.3 | motivo |
+|---|---|---|---|---|
+| 1 | §4 | σ̂² = V<sub>filtro</sub> + V<sub>rev</sub> + V<sub>tend</sub> (independientes, supuesto declarado) | σ̂² = **V<sub>conj</sub>** + V<sub>rev</sub>, V<sub>conj</sub> = varianza del error conjunto medida directamente en pseudo-tiempo-real con los niveles de T (regla exacta en §4); V<sub>filtro</sub> y V<sub>tend</sub> quedan como diagnóstico | control sintético de §6 no superado (0,878 / 0,855 / 0,909 / 0,922); componentes ≈ calibrados por separado, correlación −0,31 (`research/trials/m2/controles_m2_diagnostico.json`) |
+| 2 | §6 | cobertura del 80 % en [0,75; 0,85] sin semillas fijadas | semillas 3, 7, 11, 21 fijadas antes de correrlo; las cuatro dentro de [0,75; 0,85]; si no, parada y pregunta | decisión del usuario |

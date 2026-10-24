@@ -33,6 +33,7 @@ decisiones de diseño.
 | 11 | — | **S-PIT-001** resuelta en desarrollo con regla operativa, antes de M3 y del pool; la versión de M2 resultante es la única de A4 | Validador M-4 (`m2_structural_spec.md` §2, §6) | Constructor |
 | 12 | — | componentes en sus specs **v1.1** (M2: peticiones de paro con f<sub>m</sub> − f<sub>m−12</sub>; V<sub>rev</sub> declarado no PIT + sensibilidad PIT) | Estratega (imprescindible 1); Validador M-2; usuario 24-oct (B) | Constructor / usuario |
 | 13 | — | **v4.2**: componentes en **v1.2**; marca `model_params.m2_struct_g.philly_pre1990_nan` en A8, heredada; denominador del criterio 8 = todos los meses de corte de `eval_window`, comprobado en el ensayo en seco | Validador N-5, N-6 (re-auditoría 24-oct); sin cambio de criterio ni de diseño | Constructor |
+| 14 | — | `m2_struct_g` en la spec **v1.3**: σ̂² = V<sub>conj</sub> + V<sub>rev</sub> (error conjunto medido sin etiqueta) | el control sintético preregistrado de M2 falló (decisión del usuario sobre Q0); cambio a priori, antes de cualquier corrida con la etiqueta real | usuario / Constructor |
 
 Los cambios 1-3 y 6-9 son decisiones del usuario **antes** de abrir el bloqueado; se anotan en `research/trial_log.md`
 como cambios de diseño posteriores a los resultados de desarrollo de M1 v1/v2 (no del bloqueado).
@@ -45,7 +46,7 @@ el criterio de signos ya está decidido, fila 3).
 
 | id | modelo | contraste | modo | ventana |
 |---|---|---|---|---|
-| H1 | **`pool_g`** (`pool_spec.md` v1.2, H-POOL-001), con sus componentes M0, `m2_struct_g` (`m2_structural_spec.md` v1.2, H-M2-001, en la versión que resulte de S-PIT-001) y `m3_tvtp_g` (`m3_tvtp_spec.md` v1.2, H-M3-001) | mejora de log-loss blanda de 4 cuadrantes frente a M0 (`m0_calibrated_persistence`): d<sub>t</sub> = ll(M0)<sub>t</sub> − ll(pool)<sub>t</sub> (`pool_spec.md` §4) | vintage | 2005-01 → 2021-10 |
+| H1 | **`pool_g`** (`pool_spec.md` v1.2, H-POOL-001), con sus componentes M0, `m2_struct_g` (`m2_structural_spec.md` v1.3, H-M2-001, en la versión que resulte de S-PIT-001) y `m3_tvtp_g` (`m3_tvtp_spec.md` v1.2, H-M3-001) | mejora de log-loss blanda de 4 cuadrantes frente a M0 (`m0_calibrated_persistence`): d<sub>t</sub> = ll(M0)<sub>t</sub> − ll(pool)<sub>t</sub> (`pool_spec.md` §4) | vintage | 2005-01 → 2021-10 |
 
 - **Holm con k = 1** (familia `principal_k1`, un miembro: `pool_g` frente a M0, métrica `logloss`, `p_h0`), α = 0,05
   unilateral. Con un solo miembro, Holm es p<sub>h0</sub> < 0,05. Bootstrap circular por bloques de 12 meses, 5.000
@@ -84,7 +85,7 @@ giros en 2005-2021 tiene poca potencia; se lee como indicio, no como prueba.
 | modelo | especificación | variables | papel |
 |---|---|---|---|
 | M0 `m0_calibrated_persistence` | harness.md §8 | — | listón y componente |
-| `m2_struct_g` | `m2_structural_spec.md` v1.2 (versión resuelta por S-PIT-001) | niveles PIT de INDPRO, PAYEMS, W875RX1, CMRMTSPL; `claims_4w_yoy`, `philly_neworders` | componente |
+| `m2_struct_g` | `m2_structural_spec.md` v1.3 (versión resuelta por S-PIT-001) | niveles PIT de INDPRO, PAYEMS, W875RX1, CMRMTSPL; `claims_4w_yoy`, `philly_neworders` | componente |
 | `m3_tvtp_g` | `m3_tvtp_spec.md` v1.2 | emisión de M2; transiciones `curve_min12`, `baa_d6m`, `eq_ret_6m` | componente |
 | **`pool_g`** | `pool_spec.md` v1.2 | predicciones fuera de muestra de los tres | **H1** |
 | `m3_ctp_g` | `m3_tvtp_spec.md` §4 | como M3 con γ = 0 | informativa |

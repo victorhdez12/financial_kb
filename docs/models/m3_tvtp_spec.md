@@ -8,7 +8,7 @@ papel: COMPONENTE del pool (docs/models/pool_spec.md). Frente a M0 y frente a su
 codigo: src/models/regime_components.py (esqueleto y constantes; sin implementar); implementación futura en src/models/models_tvtp.py
 tests: tests/test_regime_components.py (solo datos sintéticos)
 datos: base PIT v0.4 CONGELADA (tag pit-v0.4) + la emisión de M2 (m2_structural_spec.md); desarrollo solo ≤ 2004-12
-depende_de: m2_structural_spec.md v1.2 (factor y Ĝ en tiempo real; en la versión que resulte de S-PIT-001, M2 §2), arnés v2.4 (§8 de M2 y §8 de aquí)
+depende_de: m2_structural_spec.md v1.3 (factor y Ĝ en tiempo real; en la versión que resulte de S-PIT-001, M2 §2), arnés v2.4 (§8 de M2 y §8 de aquí)
 revisiones: docs/validation/2026-10-24_specs_pool_v4.md (M-1, M-4, B-1, B-4, B-5), docs/reviews/2026-10-24_estratega_macro_specs_pool.md (§2.4)
 ---
 
@@ -207,3 +207,4 @@ por M1 v2).
 | 2026-10-24 | ninguno (nota de proceso, v1.2, Validador N-7) | lectura de la etiqueta **posterior** al push de v1.1 (10:46:29Z) y anterior al de v1.2: **(6)** suite completa 10:47:11-10:50:19Z (102 accesos ≤ 2004-12, 90 desde la caché, 5 denegados de la barrera ≥ 2005, pytest, `git_head` = `d1bde77`). Ninguna otra entre los dos pushes | nada de M2, M3 ni del pool (no existían); tests preexistentes. Posterior al push de v1.1: no afecta a la prioridad |
 | 2026-10-24 | **ventana larga de M3 = W<sub>G</sub> = 1978-10 → 2004-12** (la de M2, misma regla; sonda de elegibilidad, solo recuentos, `research/trials/m2/elegibilidad.json`) | regla de §5 | recuentos; ninguna puntuación ni ningún modelo |
 | 2026-10-24 | ninguno de diseño (nota de proceso) | filas añadidas en el commit `1cdd9e7` (empujado 13:07:31Z), **después** de las primeras lecturas de la etiqueta para M2/M3/pool: sonda de elegibilidad (recuentos de la etiqueta recalculada ≤ T, 12:54:51-12:55:47Z) y placebos con la etiqueta ≤ 2004 **barajada** (12:56-13:07Z). Solo contienen (a) las fechas que la propia spec fija por regla tras la sonda (W<sub>G</sub>, ventana del pool), (b) la tabla v(edad) ya empujada a las 12:54:43Z y (c) el resultado del control sintético de M2 | ningún resultado con la etiqueta real; el texto del modelo, previas, ventanas por regla y criterios no cambian. La sobrecobertura de M2 queda como **pregunta para el usuario**, no como cambio |
+| 2026-10-24 | ninguno en esta spec (nota) | depende ahora de `m2_structural_spec.md` **v1.3** (σ̂ de M2 con el error conjunto; decisión del usuario sobre Q0, push a priori antes de cualquier corrida con la etiqueta real). La emisión de M3 (Ĝ) y la entrada del pool no cambian de definición | solo sonda (recuentos) y placebos barajados ≤ 2004 |

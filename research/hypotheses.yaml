@@ -388,14 +388,14 @@
     SÍ (diseño post hoc tras M1 v1/v2 en desarrollo ≤ 2004). Atenuante: no ajusta ningún parámetro con la etiqueta
     (factor por máxima verosimilitud sobre las series; σ̂ del filtro, de las revisiones y de la tendencia). Una pasada
     de desarrollo; en la evaluación única solo como componente del pool. Cuenta como un ensayo.
-  especificacion: docs/models/m2_structural_spec.md (v1.2; v1.1 = d1bde77; v1.0 = 1a5f1f9; cambios en su §9)
+  especificacion: docs/models/m2_structural_spec.md (v1.3; v1.2 = 68e66dd; v1.1 = d1bde77; v1.0 = 1a5f1f9; cambios en su §9)
   base_pit: "0.4 (congelada, tag pit-v0.4)"
   modelo: >
     m2_struct_g = factor dinámico (1 factor AR(2), idiosincráticos AR(1)) sobre las tasas mensuales PIT de INDPRO,
     PAYEMS, W875RX1, CMRMTSPL (frente a su mediana de 120 meses) + claims_4w_yoy (v1.1: carga en f_m − f_{m−12}, flujo;
     estado aumentado de dimensión 47) + philly_neworders, con ragged edge;
-    tasas que faltan de t−3…t+4 previstas por el filtro; Ĝ con el código de la etiqueta; σ̂² = V_filtro + V_rev(edad) +
-    V_tend; P(G alto) = Φ(Ĝ/√(σ̂² + s_G²)). Eje I = M0. V_rev(edad) frente a la última vintage: declarado NO PIT
+    tasas que faltan de t−3…t+4 previstas por el filtro; Ĝ con el código de la etiqueta; σ̂² = V_conj + V_rev(edad)
+    (v1.3: V_conj = error conjunto de previsión y tendencia, medido sin etiqueta en pseudo-tiempo-real; v1.2: V_filtro + V_tend); P(G alto) = Φ(Ĝ/√(σ̂² + s_G²)). Eje I = M0. V_rev(edad) frente a la última vintage: declarado NO PIT
     (hiperparámetro fijo, como s_G); sensibilidad PIT m2_struct_g_revpit (no principal). S-PIT-001 con regla operativa
     resuelta antes de M3/pool.
   signos_esperados: {cargas_coincidentes: "+", philly_neworders: "+", claims_4w_yoy: "-", nota: "se informan; no se estiman con la etiqueta"}
