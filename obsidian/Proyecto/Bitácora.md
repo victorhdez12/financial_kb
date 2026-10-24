@@ -516,3 +516,4 @@ Las entradas más recientes van arriba. Ver también [[Proyecto/Estado del proye
     desarrollo).
   - **Siguiente:** Validador + Estratega revisan las specs y la v4 → usuario → arnés v2.4 + implementación (tests
     sintéticos) → tabla v(edad) sin etiqueta → sonda de elegibilidad → placebos → **una** corrida de desarrollo ≤ 2004.
+- **2026-10-24 · Decisiones del usuario sobre las specs del pool:** (1) criterio de signos → **alternativa: γ > 0 en ≥ 50 % de los cortes** (no se retira); (2) niveles vía `PITLabeler.levels_at`, sin base v0.5; (3) `incluye: []` (S-PIT-001 se resuelve en desarrollo). Pide mantener el nivel profesional. Lanzados en paralelo: **Validador** (specs M2, M3, pool, P-EVAL-BASE v4) y **Estratega macro** (diseño económico de las specs).
