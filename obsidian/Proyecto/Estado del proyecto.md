@@ -29,7 +29,23 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Agentes de la fase:** Constructor · Investigador de relaciones · **Validador independiente** · **Reportero** (ver [[Proyecto/Agentes]]). Informe: [[Reports/Fase 3/Informe de resultados]].
 
-## ▶ Retomar aquí (24-oct, tarde)
+## ▶ Retomar aquí (24-oct, noche)
+
+**Hecho (Constructor, 24-oct):** specs **v1.2** (N-1…N-7) empujadas a priori (`68e66dd`, **12:15:25Z**); **arnés v2.4** y
+**M2, M3 y pool implementados** con tests sintéticos (`0bd606b`) + tabla v(edad) sin etiqueta (`8e34264`), empujados a
+las 12:54:43Z, antes de la primera lectura de la etiqueta. Sonda: **W_G = 1978-10**, ventana del pool **1985-01 →
+2004-12**. **Placebos sin fuga ni aviso** (M2 −0,37, M3 −0,016, pool −0,022). Configs `m2_long` y `s_pit_001`
+escritas, **no ejecutadas**. P-EVAL-BASE sin registrar.
+
+**⚠️ Para el usuario antes de `m2_long`:** (Q0, bloqueante) el control de **señal plantada de M2 falla**: cobertura del
+80 % = 0,88 (0,85-0,92 en otras semillas; spec 0,75-0,85) porque los errores del filtro y de la tendencia están
+correlacionados (−0,31) y §4 los suma como independientes; decidir si se acepta o se cambia la spec a priori. (Q1)
+revisar las elecciones provisionales de implementación (lista en la Bitácora del 24-oct y en `IMPLEMENTATION_CHOICES`).
+
+**Siguiente:** revisión del usuario → `m2_long` (6a) → `s_pit_001` (6b) → **S-PIT-001 resuelta, commiteada y
+empujada** (6c, `pool_dev spit001`) → resto de M2 → M3 → pool → Validador + Estratega.
+
+### Retomar (24-oct, tarde) — histórico
 
 **Hecho (Constructor, 24-oct):** specs **v1.1** empujadas a priori (`d1bde77`, **10:46:29Z**), antes de implementar y de
 cualquier contacto con la etiqueta para M2/M3/pool: **M2** con las peticiones de paro como flujo (f<sub>m</sub> −
