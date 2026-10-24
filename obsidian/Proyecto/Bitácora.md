@@ -481,3 +481,4 @@ Las entradas más recientes van arriba. Ver también [[Proyecto/Estado del proye
   - **Siguiente:** specs a priori de los componentes del pool (estructural vía factor coincidente con ragged edge;
     Markov TVTP con emisión desde ese factor) + preregistro P-EVAL-BASE v4 con k = 1 → corrida de desarrollo →
     Validador + Estratega.
+- **2026-10-24 · Decisión del usuario:** el criterio 1 se mantiene con **IC 95 %** (no 90 %), porque el bootstrap ya es algo liberal (5-9 % de pases con efecto 0). Lanzado el Constructor: specs a priori de los componentes del pool (estructural vía factor coincidente con ragged edge; Markov TVTP eje G con emisión desde el factor) + recalibración beta + borrador P-EVAL-BASE v4 (k = 1, IC 95 %). Sin corridas.
