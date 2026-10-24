@@ -32,6 +32,13 @@ if [ "$MODO" = pendiente ]; then
   RECUPERADA=" (recuperada al encender)"
 fi
 
+# Esperar a tener red (hasta 10 min): al encender el Mac, la tarea recuperada arrancaba sin DNS y fallaban las
+# primeras fuentes (semanal del 22-oct: fred_us, fred_extended, fed_yieldcurve, us_treasury, shiller_housing).
+for _ in $(seq 1 60); do
+  curl -sS -o /dev/null --max-time 5 https://api.stlouisfed.org/ 2>/dev/null && break
+  sleep 10
+done
+
 case "$MODO" in
   diario)  OBJ=daily ;;
   semanal) OBJ=semanal ;;

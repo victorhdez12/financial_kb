@@ -35,3 +35,6 @@ launchctl bootout   gui/$(id -u) ~/Library/LaunchAgents/com.financialkb.diario.p
 
 ## Fuente nueva
 Añadirla a `INGEST` (y a `INGEST_DAILY` si es diaria) en el `Makefile`. Si una fuente cambia de formato (le pasó al FMI), saldrá en `Actualizaciones.md` como "fuentes con fallo": arreglar su script en `src/ingest/`.
+
+## Espera de red (24-oct-2026)
+`scripts/actualizar.sh` espera hasta 10 min a que responda `https://api.stlouisfed.org/` antes de lanzar `make`. Motivo: la semanal del 22-oct, recuperada al encender el Mac, arrancó sin DNS y fallaron fred_us, fred_extended, fed_yieldcurve, us_treasury y shiller_housing (el resto, ya con red, fue bien).
