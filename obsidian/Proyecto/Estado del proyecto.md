@@ -29,7 +29,23 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Agentes de la fase:** Constructor · Investigador de relaciones · **Validador independiente** · **Reportero** (ver [[Proyecto/Agentes]]). Informe: [[Reports/Fase 3/Informe de resultados]].
 
-## ▶ Retomar aquí (24-oct, mediodía)
+## ▶ Retomar aquí (24-oct, tarde)
+
+**Hecho (Constructor, 24-oct):** specs **v1.1** empujadas a priori (`d1bde77`, **10:46:29Z**), antes de implementar y de
+cualquier contacto con la etiqueta para M2/M3/pool: **M2** con las peticiones de paro como flujo (f<sub>m</sub> −
+f<sub>m−12</sub>, estado 47), V<sub>rev</sub> declarado no PIT + sensibilidad PIT `m2_struct_g_revpit`, regla operativa de
+S-PIT-001 (se resuelve y se empuja **antes** de M3 y del pool); **M3** con el criterio de signos (cada γ > 0,01 en ≥ 50 %
+de los cortes 2005-01 → 2021-10, clave nueva); **pool** con estudio de eventos por episodio y las predicciones a priori
+del Estratega (P1-P11); **P-EVAL-BASE v4.1** (borrador, **no registrado**) con criterio 8, `test_start` declarado, tamaño
+como cota inferior, bloques de 24. 239 tests en verde (suite después del push).
+
+**Siguiente:** (1) **re-auditoría del Validador** (texto v1.1/v4.1) → (2) **usuario** → (3) **extensiones del arnés
+v2.4** (niveles PIT, historia de variables, modelo apilado, `fraccion_umbral`, `sd_mensual`, ACF, 3 m × 80/20, estudio de
+eventos) → (4) **implementación** M2/M3/pool con tests sintéticos → tabla v(edad) sin etiqueta → sonda de elegibilidad
+→ (5) **placebos** → (6) **una corrida de desarrollo ≤ 2004** (M2 → S-PIT-001 → M3 → pool). Ojo: protección de rama solo
+mientras el repo sea público.
+
+### Retomar (24-oct, mediodía) — histórico
 
 **Hecho (Constructor, 24-oct):** specs **a priori** empujadas antes de cualquier contacto con la etiqueta (`1a5f1f9`,
 09:53:15Z): **M2 estructural** (`docs/models/m2_structural_spec.md`: factor coincidente con *ragged edge*, Ĝ con el
