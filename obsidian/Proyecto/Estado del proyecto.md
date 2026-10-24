@@ -1,6 +1,6 @@
 ---
 tipo: estado_proyecto
-actualizado: 2026-10-23
+actualizado: 2026-10-24
 fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 ---
 
@@ -29,7 +29,29 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Agentes de la fase:** Constructor · Investigador de relaciones · **Validador independiente** · **Reportero** (ver [[Proyecto/Agentes]]). Informe: [[Reports/Fase 3/Informe de resultados]].
 
-## ▶ Retomar aquí (23-oct, tarde)
+## ▶ Retomar aquí (24-oct)
+
+**Decidido (usuario, 24-oct):** contraste principal de la evaluación única = **pool de log-scores {M0, estructural de G,
+Markov TVTP eje G} + recalibración beta, Holm k = 1**; estructural y TVTP pasan a ser componentes del pool; M1 v1/v2,
+informativas fuera de Holm.
+
+**Hecho hoy (Constructor):** arnés **v2.3 con eje G continuo** (`d5b1e00`; sin modelos continuos no cambia nada) ·
+**potencia del bloqueado** (`34554c6`, `docs/models/power_holdout.md`): **MDE (80 %) ≈ 0,12-0,15 nats** con el ruido de
+M1 y ≈ 0,07 si el pool lo reduce a la mitad; umbral observado para pasar ≈ 0,10 nats; **k = 1 ≈ k = 2** con el criterio 1
+actual (el IC 95 % > 0 ya exige p < 0,025) · **hash de M1 v1 explicado** (`7656192`, anexo A de `m1_results_dev.md`): lo
+cambió el informe del harness v2.1 (`2fd94e0`, detección de giros v2.1); predicciones idénticas bit a bit, conclusión
+intacta. 229 tests.
+
+**Decisión pendiente del usuario (antes de la corrida de desarrollo del pool):** ¿criterio 1 con IC 95 % (como está) o
+IC 90 % (aprovecha k = 1; MDE −0,01…−0,03 nats)? Es un cambio de criterio: se preregistra en P-EVAL-BASE v4.
+
+**Siguiente:** (1) specs **a priori** de los componentes del pool: estructural vía **factor coincidente con ragged edge**
+(4 series de la etiqueta + peticiones de paro + Filadelfia; Kalman; Ĝ con los pesos de la etiqueta) y **Markov TVTP con
+emisión desde ese factor**; y la del pool (pesos, N<sub>min</sub>, recalibración beta fijada, BLP como sensibilidad) —
+Investigador §5 · (2) **preregistro P-EVAL-BASE v4 con k = 1** (sin registrar hasta el ✅) · (3) una corrida de
+desarrollo ≤ 2004 · (4) Validador + Estratega. Ojo: protección de rama solo mientras el repo sea público.
+
+### Retomar (23-oct, tarde) — histórico
 
 **Hecho hoy (Constructor):** base PIT **v0.4 candidata** (`657b6eb`; 4 derivadas de riesgo de giro; v0.3 intacta y
 congelada; v0.4 en `CANDIDATE`, no en `FROZEN`) · **A3-1** comprobación de la protección de rama por código (`f1ccc8f`;

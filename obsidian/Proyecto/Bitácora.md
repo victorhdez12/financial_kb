@@ -456,3 +456,28 @@ Las entradas más recientes van arriba. Ver también [[Proyecto/Estado del proye
 - **Constructor: base PIT v0.4 CONGELADA** (procedimiento B-5): `FROZEN["0.4"]` = copia de los hashes de `CANDIDATE["0.4"]` + veredicto (`docs/validation/2026-10-23_pit_v0.4_m1v2.md` §1); `SUPERSEDED["0.3"] = "0.4"` (solo meta; la v0.3 sigue congelada y es la de M1 v1 y los baselines, `PIT_VERSION` por defecto sin cambiar); instantánea de entradas ya en 0444 (+ copia 0444 en `inputs/backup/`) y ahora también las 3 matrices, 3 linajes, 2 baselines y el meta de la v0.4 en 0444; tag **`pit-v0.4`** empujado. Tests de "candidata rechazada" pasan a una versión ficticia 9.4. BAJAS documentales del Validador: B1-1 (cita del trial log → `harness.md` §4c), B3-1 (`_check_eval_config` registrado en `harness.md` §11 v2.2), B1-3 anotada en `pit_base.md` §9. Suite: 216 tests en verde. Reproducción tras congelar (`record=False`, registro en el scratchpad): baselines v2.1 y las 3 corridas de M1 v2 **idénticas bit a bit**; M1 v1 (`m1_logit_axis_v1`, `_long`) da otro `results_sha256` **también en el HEAD anterior a cualquier cambio de hoy** (diferencia preexistente; ver la entrada siguiente).
 - **2026-10-24 · Retomada.** El Constructor del 23-oct se cortó a medias: sin commitear quedaron el arnés con G continuo (`harness.py`, `base.py`, `harness.md`, `tests/test_harness_gcont.py`) y `src/models/power.py` (sin ejecutar, sin `docs/models/power_holdout.md`), y falta la "entrada siguiente" sobre el `results_sha256` de M1 v1. Suite con `.venv`: 229 tests en verde. **Decisión del usuario: contraste principal = pool de log-scores {M0, estructural, TVTP} + recalibración beta, Holm k = 1** (propuesta del Investigador); estructural y TVTP pasan a componentes del pool. Lanzado el Constructor para cerrar lo pendiente (potencia con k = 1, hash de M1 v1, commit). En paralelo: diagnóstico de los fallos de la semanal del 22-oct.
 - **2026-10-24 · Fallos de la semanal del 22-oct diagnosticados:** no eran de las fuentes, sino falta de red (DNS sin resolver) en los primeros minutos tras encender el Mac. Arreglo: `scripts/actualizar.sh` espera hasta 10 min a tener red antes de `make`. Las fuentes afectadas se refrescan en la semanal del domingo 25-oct.
+- **Constructor (24-oct): cierre de lo pendiente.**
+  - **Arnés v2.3, eje G continuo** (`d5b1e00`): revisado y commiteado. `ContinuousAxisModel` (previsión N(μ, σ²) de G),
+    P(G alto) = Φ(μ/√(σ² + s_G²)) con la escala de la etiqueta congelada, puntuación igual que M0; CRPS/RMSE/cobertura
+    solo informativos. Objetivo = G de la etiqueta recalculada ≤ T (mismo embargo y pesos). Sin modelos continuos no
+    cambian columnas, informe ni hash. `harness.md` §5c y §11 v2.3; 13 tests. Nada ≥ 2005.
+  - **Potencia del bloqueado** (`34554c6`, `docs/models/power_holdout.md`, `research/trials/power_holdout.json`; una
+    pasada, 1.000 evaluaciones ficticias de 202 meses por punto, contraste exacto del arnés, solo diferencias de
+    desarrollo ≤ 2004). **MDE con 80 % de potencia: 0,10-0,15 nats** (M1v1 total 0,128; M1v2 0,147; eje G largo 0,120);
+    colas ×1,5 → 0,15-0,22; **ruido ×0,5 (supuesto para el pool) → ≈ 0,07**. Umbral observado del criterio 1 ≈ 0,10.
+    **k = 1 y k = 2 dan la misma potencia** (±0,002) porque el "IC 95 % > 0" del criterio 1 ya equivale a p < 0,025;
+    con IC 90 % el MDE bajaría 0,01-0,03 (cambio de criterio → decisión del usuario). Tamaño empírico con efecto 0:
+    5-9 % (nominal 2,5 %): el bootstrap por bloques es algo liberal. El criterio 2 (giros ≥ 0) se cumple por azar el 52 %
+    de las veces si no hay mejora en giros. Con +0,035 (lo mejor de desarrollo) la potencia sería ≈ 15-20 %.
+  - **Hash de M1 v1** (`7656192`, anexo A de `docs/models/m1_results_dev.md`): las corridas se registraron con el
+    código de `1f9c52b` y un minuto después `2fd94e0` (harness v2.1: detección de giros v2.1, episodios truncados)
+    cambió el **informe**; el hash es de predicciones + informe. Comprobado en worktrees temporales (`record=False`,
+    registros en el scratchpad): `1f9c52b` reproduce `3f435b7b…` exacto; `2fd94e0` y el HEAD dan `1371fc71…`;
+    **predicciones idénticas bit a bit** en los tres; las 396 (principal) y 330 (larga) diferencias son solo de
+    detección/episodios/límites de periodo; ninguna de log-loss. **No afecta** a "M1 v1 no bate a M0". Con la detección
+    v2.1, M1 v1: retraso 2,4 m (M0 4,4), FA 0,56/año (principal). Sin datos ni dependencias distintos.
+  - Suite: 229 tests en verde. Nada registrado en `harness_runs.jsonl`; P-EVAL-BASE sin registrar; bases PIT intactas.
+  - **Decisión del usuario pendiente:** criterio 1 con IC 95 % o 90 % (antes de la corrida de desarrollo del pool).
+  - **Siguiente:** specs a priori de los componentes del pool (estructural vía factor coincidente con ragged edge;
+    Markov TVTP con emisión desde ese factor) + preregistro P-EVAL-BASE v4 con k = 1 → corrida de desarrollo →
+    Validador + Estratega.
