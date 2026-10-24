@@ -29,7 +29,23 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Agentes de la fase:** Constructor · Investigador de relaciones · **Validador independiente** · **Reportero** (ver [[Proyecto/Agentes]]). Informe: [[Reports/Fase 3/Informe de resultados]].
 
-## ▶ Retomar aquí (24-oct)
+## ▶ Retomar aquí (24-oct, mediodía)
+
+**Hecho (Constructor, 24-oct):** specs **a priori** empujadas antes de cualquier contacto con la etiqueta (`1a5f1f9`,
+09:53:15Z): **M2 estructural** (`docs/models/m2_structural_spec.md`: factor coincidente con *ragged edge*, Ĝ con el
+código de la etiqueta, σ̂² = filtro + revisión por edad + tendencia, sin parámetros ajustados con la etiqueta), **M3
+TVTP eje G** (`docs/models/m3_tvtp_spec.md`: estados = etiqueta, emisión Ĝ en tiempo real, γ ≥ 0, ancla PIT, referencia
+γ = 0, 3 m × 80/20 secundaria), **pool** (`docs/models/pool_spec.md`: {M0, M2, M3} + BLP por MAP, N<sub>min</sub> 60) y
+borrador **P-EVAL-BASE v4** (`docs/models/p_eval_base_v4_draft.md`: pool − M0, k = 1, IC 95 %, ≥ 0,05; corrige M4-1/2/3;
+**no registrado**). Esqueleto no registrado + 6 tests sintéticos; 235 tests en verde.
+
+**Siguiente:** (1) **Validador + Estratega** revisan las tres specs y la v4 (en paralelo) → (2) **usuario**: aprobar la
+retirada del criterio de signos (A1-3), niveles vía `levels_at` (sin v0.5), `incluye: []` → (3) arnés v2.4 +
+implementación con tests sintéticos → tabla v(edad) sin etiqueta → sonda de elegibilidad (solo recuentos) → placebos
+→ **una corrida de desarrollo ≤ 2004** (M2, M3, pool) → Validador + Estratega → decidir si registrar la v4 (puerta de
+potencia: < 0,05 nats en desarrollo ⇒ potencia < 30 %). Ojo: protección de rama solo mientras el repo sea público.
+
+### Retomar (24-oct, mañana) — histórico
 
 **Decidido (usuario, 24-oct):** contraste principal de la evaluación única = **pool de log-scores {M0, estructural de G,
 Markov TVTP eje G} + recalibración beta, Holm k = 1**; estructural y TVTP pasan a ser componentes del pool; M1 v1/v2,

@@ -482,3 +482,37 @@ Las entradas más recientes van arriba. Ver también [[Proyecto/Estado del proye
     Markov TVTP con emisión desde ese factor) + preregistro P-EVAL-BASE v4 con k = 1 → corrida de desarrollo →
     Validador + Estratega.
 - **2026-10-24 · Decisión del usuario:** el criterio 1 se mantiene con **IC 95 %** (no 90 %), porque el bootstrap ya es algo liberal (5-9 % de pases con efecto 0). Lanzado el Constructor: specs a priori de los componentes del pool (estructural vía factor coincidente con ragged edge; Markov TVTP eje G con emisión desde el factor) + recalibración beta + borrador P-EVAL-BASE v4 (k = 1, IC 95 %). Sin corridas.
+- **2026-10-24 · Constructor: specs a priori del pool y de sus componentes + borrador P-EVAL-BASE v4** (commit
+  `1a5f1f9`, empujado a las **09:53:15Z**; sin corridas, sin ajustar nada, P-EVAL-BASE sin registrar, bases intactas).
+  - **M2 estructural** (`docs/models/m2_structural_spec.md`, H-M2-001): factor dinámico de 1 factor AR(2) con
+    idiosincráticos AR(1) sobre las tasas mensuales PIT de INDPRO, PAYEMS, W875RX1, CMRMTSPL (frente a su mediana de
+    120 m) + `claims_4w_yoy` (carga en la media de 12 m del factor) + `philly_neworders`; *ragged edge* real; 20
+    parámetros por máxima verosimilitud **sin etiqueta** (reestimados cada enero). Ĝ = el **código de la etiqueta**
+    aplicado a los niveles extendidos con las tasas previstas hasta t+4; σ̂² = V<sub>filtro</sub> (covarianza conjunta
+    de las tasas que faltan) + V<sub>rev</sub>(edad) (tabla con vintages ≤ 2004 de INDPRO/PAYEMS, a calcular antes de
+    la etiqueta) + V<sub>tend</sub> (tendencia truncada, medida con datos ≤ T); P = Φ(Ĝ/√(σ̂² + s<sub>G</sub>²)) por la
+    vía del eje G continuo del arnés; sin calibración (Platt como sensibilidad). Niveles vía `PITLabeler.levels_at`
+    (sin base v0.5; requiere el arnés v2.4). Eje I = M0.
+  - **M3 TVTP** (`docs/models/m3_tvtp_spec.md`, H-M3-001): 2 estados = etiqueta; emisión = Ĝ en tiempo real de M2,
+    templada λ = 1/3; transiciones con `curve_min12`, `baa_d6m` / `baa_d6m`, `eq_ret_6m`, γ ≥ 0 y N(0; 0,5²); ancla en
+    el `label_month` de la persistencia PIT; Platt; referencia `m3_ctp_g` (γ = 0). Regla 3 m × 80/20 solo como métrica
+    secundaria.
+  - **Pool** (`docs/models/pool_spec.md`, H-POOL-001): {M0, M2, M3}, BLP de Ranjan-Gneiting por MAP conjunto con las
+    log-scores fuera de muestra maduras (s ≤ m0 − 6), Dirichlet moda (½, ¼, ¼) κ = 20, ln a, ln b ~ N(0; 0,5²),
+    N<sub>min</sub> = 60 (antes, pool = M0), reestimación mensual expansiva; d<sub>t</sub> = ll(M0) − ll(pool) = la del
+    eje G. Sensibilidades: pesos iguales, lineal sin beta, beta de Kull, previa uniforme (no eligen).
+  - **P-EVAL-BASE v4** (`docs/models/p_eval_base_v4_draft.md`, borrador): contraste único pool − M0, k = 1, IC 95 % y
+    ≥ 0,05 nats; corrige M4-1 (configuración fijada en el texto + ensayo en seco como condición), M4-2 (tabla de
+    cambios: "eje G > 0" recuperado, promoción "< 0" de la v2 recuperada, criterio de signos retirado **con motivo y a
+    aprobar por el usuario**) y M4-3 (sin preguntas abiertas). Potencia: MDE ≈ 0,12-0,15 nats (≈ 0,07 si el pool reduce
+    el ruido a la mitad); lo más probable es "M0 sigue".
+  - Esqueleto `src/models/regime_components.py` (no registrado) + `tests/test_regime_components.py` (6, sintéticos);
+    suite completa: **235 tests en verde**. Hipótesis H-M2-001, H-M3-001, H-POOL-001 en `research/hypotheses.yaml`.
+  - **Nota de proceso:** la suite completa se corrió antes del push (09:47-09:52Z); sus tests preexistentes del arnés
+    leen la etiqueta ≤ 2004 en desarrollo (como siempre). Nada de M2/M3/pool existía; las specs ya estaban escritas.
+    Anotado en el §9/§8 de cada spec.
+  - **Decisiones para el usuario:** (1) aprobar o no retirar el criterio de signos (A1-3; alternativa ya escrita);
+    (2) niveles vía `levels_at` en lugar de una base v0.5 (recomendado); (3) `incluye: []` (S-PIT-001 se resuelve en
+    desarrollo).
+  - **Siguiente:** Validador + Estratega revisan las specs y la v4 → usuario → arnés v2.4 + implementación (tests
+    sintéticos) → tabla v(edad) sin etiqueta → sonda de elegibilidad → placebos → **una** corrida de desarrollo ≤ 2004.
