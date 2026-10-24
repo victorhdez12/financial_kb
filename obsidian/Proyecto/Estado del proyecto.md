@@ -29,7 +29,18 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Agentes de la fase:** Constructor · Investigador de relaciones · **Validador independiente** · **Reportero** (ver [[Proyecto/Agentes]]). Informe: [[Reports/Fase 3/Informe de resultados]].
 
-## ▶ Retomar aquí (24-oct, noche)
+## ▶ Retomar aquí (24-oct, noche, M2 v1.3)
+
+**Hecho:** spec **M2 v1.3** empujada a priori (`d8eb113`, 15:55:57Z): σ̂² = V<sub>conj</sub> (error conjunto medido sin
+etiqueta) + V<sub>rev</sub>; implementada (`90f408f`). **Control de 4 semillas NO superado:** cobertura del 80 % 0,834 /
+0,818 / 0,855 / 0,872 (3/7/11/21; dos fuera de [0,75; 0,85]); parada sin iterar. Elecciones de implementación (Q1) en
+`docs/models/implementation_choices_v2.4.md`.
+
+**Siguiente:** **Validador** revisa la v1.3 + Q1 → **usuario** decide sobre el control (aceptar la v1.3 o nuevo cambio a
+priori) → `m2_long` → `s_pit_001` → S-PIT-001 resuelta y empujada → resto de M2 → M3 → pool → Validador + Estratega.
+Nada con la etiqueta sin barajar hasta entonces.
+
+### Retomar (24-oct, noche) — histórico
 
 **Hecho (Constructor, 24-oct):** specs **v1.2** (N-1…N-7) empujadas a priori (`68e66dd`, **12:15:25Z**); **arnés v2.4** y
 **M2, M3 y pool implementados** con tests sintéticos (`0bd606b`) + tabla v(edad) sin etiqueta (`8e34264`), empujados a
