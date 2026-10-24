@@ -10,6 +10,9 @@ autor: Constructor (M1 v2), sobre el borrador v2 (arnés v2.1) y la revisión de
 
 # P-EVAL-BASE (borrador v3)
 
+> **SUSTITUIDO (2026-10-24) por el borrador v4: `docs/models/p_eval_base_v4_draft.md`** (pool − M0, Holm k = 1).
+> Este texto queda como historia.
+
 Escrito **sin mirar ningún dato ≥ 2005** de la etiqueta ni ninguna relación entre variables y etiqueta ≥ 2005. La
 versión v2 de este borrador (M1 v1 sola frente a M0) queda debajo, en §B, como historia: **la v3 la sustituye**.
 
