@@ -663,8 +663,10 @@ esqueleto de `regime_components.py` sigue sin ser ejecutable):
 - `m3_tvtp_g`, `m3_ctp_g` y `m3_tvtp_g_{l16,l12,fac,nocal}`;
 - `pool_g` y `pool_g_{eq,lin,kull,unif}`.
 
-Los puntos que las specs no fijan y que la implementación resuelve de forma **provisional** están en
-`IMPLEMENTATION_CHOICES` de cada módulo y en la Bitácora del 24-oct, como preguntas para el usuario antes de `m2_long`.
+Los puntos que las specs no fijan y que la implementación resuelve de forma **provisional** están reunidos, con su
+justificación, en `docs/models/implementation_choices_v2.4.md` (y en `IMPLEMENTATION_CHOICES` de cada módulo), para el
+Validador y el usuario antes de `m2_long`. **M2 v1.3** (24-oct): σ̂² = V<sub>conj</sub> + V<sub>rev</sub> (error conjunto
+medido sin etiqueta); V<sub>filtro</sub> y V<sub>tend</sub> quedan como diagnóstico.
 
 
 ### v2.3 (2026-10-23, tarde)

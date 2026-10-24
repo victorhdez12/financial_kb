@@ -60,6 +60,8 @@ IMPLEMENTATION_CHOICES = (
     "V_filtro: covarianza de d_i·(λ_i f + u_i), sin el ε de regularización (1e-4)",
     "Ĝ^rt de un mes anterior a 1968-06 (inicio de la ventana de datos del factor): NaN (M3: ese mes del filtro solo "
     "predice; la emisión se estima con los meses finitos)",
+    "V_conj (v1.3): niveles pseudo-tiempo-real con from_vintage = falso (la revisión va en V_rev); meses con Ĝ^ps no "
+    "finito excluidos",
     "tabla v(edad): fechas de decisión de la matriz PIT ≤ 2004-12 en las que la serie entra desde una vintage; "
     "todos los meses observados de esa vintage ≤ 2004-12 (el tramo ≥ 13 incluye todos los meses antiguos)",
 )

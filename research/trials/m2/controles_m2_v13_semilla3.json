@@ -1,0 +1,73 @@
+{
+ "semilla": 3,
+ "cortes": 296,
+ "cobertura_80": 0.8344594595,
+ "cumple_0.75_0.85": true,
+ "cobertura_50": 0.5506756757,
+ "rmse": 0.5315742968,
+ "sd_media": 0.5703226867,
+ "spec": "m2_structural_spec.md v1.3 (σ̂² = V_conj + V_rev)",
+ "lambda": {
+  "INDPRO": {
+   "est": 0.4745932892,
+   "verdad": 0.4481065452
+  },
+  "PAYEMS": {
+   "est": 0.4842551673,
+   "verdad": 0.4894233689
+  },
+  "W875RX1": {
+   "est": 0.4164716561,
+   "verdad": 0.3902216868
+  },
+  "CMRMTSPL": {
+   "est": 0.4198213577,
+   "verdad": 0.4120303821
+  },
+  "claims_4w_yoy": {
+   "est": -0.3096348547,
+   "verdad": -0.2990930135
+  },
+  "philly_neworders": {
+   "est": 0.4322833084,
+   "verdad": 0.4460029067
+  }
+ },
+ "phi": {
+  "est": [
+   1.112889958,
+   -0.3287970755
+  ],
+  "verdad": [
+   1.1,
+   -0.3
+  ]
+ },
+ "rho": {
+  "INDPRO": {
+   "est": 0.2904270942,
+   "verdad": 0.2
+  },
+  "PAYEMS": {
+   "est": 0.6376177804,
+   "verdad": 0.6
+  },
+  "W875RX1": {
+   "est": -0.1307806301,
+   "verdad": -0.3
+  },
+  "CMRMTSPL": {
+   "est": -0.2427385224,
+   "verdad": -0.2
+  },
+  "claims_4w_yoy": {
+   "est": 0.6767432049,
+   "verdad": 0.7
+  },
+  "philly_neworders": {
+   "est": 0.4907571399,
+   "verdad": 0.4
+  }
+ },
+ "convergio": true
+}
