@@ -202,3 +202,53 @@ Holm vintage: M1-general 0,24; M1 por épocas 0,30 (ninguno significativo).
 3. **¿Merece M1 la evaluación única?** En desarrollo no cumple los criterios 1 (≥ 0,05 nats con IC > 0), 3 (giros
    > 0) ni 5 (signos) del borrador de P-EVAL-BASE, y empeora las falsas alarmas. Gastar el bloqueado en esta versión
    probablemente produzca un "no" informativo pero caro.
+
+## Anexo A (2026-10-24). Por qué M1 v1 ya no reproduce su `results_sha256`
+
+**Síntoma** (Bitácora del 23-oct): al repetir `m1_logit_axis_v1` y `m1_logit_axis_v1_long` (`record=False`) el
+`results_sha256` no coincide con el registrado (`3f435b7b…`, `0e55b60b…`), ni en el HEAD de hoy ni en el anterior al
+23-oct. Las corridas de los baselines v2.1 y de M1 v2 sí se reproducen bit a bit.
+
+**Causa: un cambio de código del arnés, no de datos ni de dependencias.** Las dos corridas se registraron con el código
+de `1f9c52b` (16-oct 14:14; `src_models` = `5ad07fef…`, que es el hash de los `.py` de `src/models` en ese commit). Un
+minuto después llegó `2fd94e0` (harness v2.1: **detección de giros v2.1**, episodios truncados, límites reales de los
+periodos), que cambia el **informe**. El hash es de predicciones **+ informe** (`harness.results_hash`), así que cambia
+aunque las predicciones sean idénticas. Los baselines v2.1 se registraron ya con `2fd94e0` (`8d55f1f6…`), por eso esos sí
+se reproducen.
+
+**Comprobación** (una pasada, `record=False`, registros en el scratchpad con `FKB_TRIALS_DIR`/`FKB_TRIAL_LOG`;
+`research/trials/harness_runs.jsonl` intacto; worktrees temporales de git; mismos ficheros de datos, mismas versiones de
+Python/numpy/pandas/scipy/pyarrow que en el registro):
+
+| árbol | `src_models` | `results_sha256` (principal) | predicciones frente a las registradas | informe |
+|---|---|---|---|---|
+| `1f9c52b` (el del registro) | `5ad07fef…` | **`3f435b7b…` = registrado** | idénticas (dif. máx. 0) | idéntico |
+| `2fd94e0` (harness v2.1) | `8d55f1f6…` | `1371fc71…` | idénticas (dif. máx. 0) | 396 diferencias |
+| HEAD `d5b1e00` (24-oct) | `20500ac2…` | `1371fc71…` (= `2fd94e0`) | idénticas (dif. máx. 0) | las mismas 396 |
+
+Ventana larga en el HEAD: predicciones idénticas (dif. máx. 0), 330 diferencias de informe, todas del mismo tipo. Entre
+`2fd94e0` y el HEAD el hash de M1 v1 no cambia (el resto de commits no toca su resultado). No hace falta `git bisect`:
+el único commit entre el del registro y el que ya da el hash nuevo es `2fd94e0`.
+
+**Qué cambia en el informe** (todas las diferencias, clasificadas): solo `deteccion_giros_g` (número de giros,
+detectados, censurados, retraso medio), `por_episodio` (episodios truncados, recuentos, prueba del signo por episodios),
+`deteccion_frente_al_comparador` (nuevo), `retraso_medio_menos_comparador` (sustituido) y `desde_real`/`hasta_real` de los
+periodos. **Ninguna** diferencia en log-loss (total, ejes, giros/estables, por periodo, por década), Brier, IC, `p_h0`,
+Holm, calibración, cobertura ni falsas alarmas por año.
+
+**¿Afecta a las conclusiones?** **No.** "M1 v1 no bate a M0" se apoya en la log-loss (−0,019 nats en la principal; IC con
+0), que no cambia ni un bit, igual que las predicciones. Lo único que cambia es la tabla del §4 (definición v2 de la
+detección, que ya estaba marcada como provisional). Con la detección v2.1 sobre las **mismas** predicciones (vintage):
+
+| ventana | M0: giros, detectados, retraso, FA/año | M1 v1: detectados, retraso, FA/año | reglas: detectados, retraso, FA/año |
+|---|---|---|---|
+| principal 1989-10 → 2004 (5 giros, 0 censurados) | 5, 5, 4,4 m, 0,19 | 5, **2,4 m**, 0,56 | 5, 5,0 m, 1,22 |
+| larga 1975-06 → 2004 (11 giros, 1 censurado) | 11, 10, 4,6 m, 0,30 | 10, **3,0 m**, 0,55 | 11, 5,0 m, 1,44 |
+
+Lectura: con la v2.1 M1 v1 confirma los giros antes que M0 en las dos ventanas (en la v2 salía peor en la principal),
+pero sigue con ≈ 0,55 falsas alarmas al año (por encima del listón de 0,5): la conclusión del §8-§9 se mantiene. Son
+las cifras que ya usaba `m1_v2_results_dev.md` para M1 v1 (FA 0,56).
+
+**Consecuencia práctica:** el `results_sha256` registrado de M1 v1 sigue siendo válido **para el código de `1f9c52b`**, y
+se reproduce con él. Cualquier comparación futura con M1 v1 en el código actual debe usar las predicciones (idénticas) o
+el hash nuevo (`1371fc71…` principal, `50092aac…` larga), anotándolo. No se registra ninguna corrida nueva.
