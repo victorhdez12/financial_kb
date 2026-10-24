@@ -52,6 +52,36 @@ def m2_planted(seed: int = 7, start: str = "1980-01", end: str = "2004-08") -> d
             "convergio": bool(v.converged)}
 
 
+def m2_variance_decomposition(seed: int = 7, start: str = "1985-01", end: str = "2004-08", step: int = 2) -> dict:
+    """Diagnóstico SINTÉTICO de la cobertura de M2: error total Ĝ − G = (Ĝ − Ĝ_oráculo) [filtro] + (Ĝ_oráculo − G)
+    [tendencia truncada], con Ĝ_oráculo = composición con las tasas futuras verdaderas y la misma tendencia truncada.
+    Compara cada error cuadrático medio con V_filtro y V_tend y mide su correlación (la spec §4 los supone
+    independientes)."""
+    from tests.m2_synth import Synth
+    s = Synth(seed)
+    G = s.true_G()
+    m = MS.StructuralG(rev="none")
+    rows = []
+    for T in pd.date_range(start + "-01", end + "-01", freq=f"{step}MS"):
+        info = s.info(T, data_key=f"descomp{seed}")
+        m.fit_axis_continuous("G", None, None, None, None, info)
+        nc = m.nowcast(T, info)
+        known = s.pit_levels(s.decision[T])["levels"]
+        rh = {c: MS.rates(s.levels[c]).reindex(pd.date_range(lv.index.max() + pd.DateOffset(months=1),
+                                                              T + pd.DateOffset(months=4), freq="MS"))
+              for c, lv in known.items()}
+        rows.append({"Ghat": nc["G"], "Gor": MS.compose_G(known, rh, T), "G": G[T], "Vf": nc["V_filtro"],
+                     "Vt": nc["V_tend"]})
+    d = pd.DataFrame(rows)
+    ef, et = d["Ghat"] - d["Gor"], d["Gor"] - d["G"]
+    return {"semilla": seed, "cortes": len(d), "paso_meses": step,
+            "filtro": {"mse_real": float((ef ** 2).mean()), "V_filtro_medio": float(d["Vf"].mean())},
+            "tendencia": {"mse_real": float((et ** 2).mean()), "V_tend_medio": float(d["Vt"].mean())},
+            "total": {"mse_real": float(((d["Ghat"] - d["G"]) ** 2).mean()),
+                      "suma_V_media": float((d["Vf"] + d["Vt"]).mean())},
+            "corr_error_filtro_error_tendencia": float(np.corrcoef(ef, et)[0, 1])}
+
+
 def m3_controls() -> dict:
     from tests.test_models_tvtp import GTRUE, SynthTVTP, _info, _ll, simulate
     X, t, x, _ = simulate(n=600, seed=11)

@@ -1,0 +1,18 @@
+{
+ "semilla": 7,
+ "cortes_bimestrales_1985_2004": 118,
+ "filtro": {
+  "mse_real": 0.19641800993420627,
+  "V_filtro_medio": 0.23155317486537455
+ },
+ "tendencia": {
+  "mse_real": 0.08876109213790967,
+  "V_tend_medio": 0.07362766559776865
+ },
+ "total": {
+  "mse_real": 0.20400472940425682,
+  "suma_V_media": 0.30518084046314314
+ },
+ "corr_error_filtro_error_tendencia": -0.30887615827569415,
+ "nota": "diagnóstico SINTÉTICO de la sobrecobertura del 80 %: componentes por separado ≈ calibrados; correlación negativa entre los dos errores (la spec §4 los supone independientes)"
+}

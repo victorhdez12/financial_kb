@@ -1,0 +1,118 @@
+{
+ "m2": {
+  "semilla": 7,
+  "cortes": 296,
+  "cobertura_80": 0.8783783784,
+  "cumple_0.75_0.85": false,
+  "cobertura_50": 0.5777027027,
+  "rmse": 0.4586205056,
+  "sd_media": 0.5522380229,
+  "lambda": {
+   "INDPRO": {
+    "est": 0.4158379409,
+    "verdad": 0.4504240789
+   },
+   "PAYEMS": {
+    "est": 0.4327878808,
+    "verdad": 0.4527016896
+   },
+   "W875RX1": {
+    "est": 0.3608952117,
+    "verdad": 0.3658012407
+   },
+   "CMRMTSPL": {
+    "est": 0.3824293887,
+    "verdad": 0.3735995194
+   },
+   "claims_4w_yoy": {
+    "est": -0.2701192467,
+    "verdad": -0.27588838
+   },
+   "philly_neworders": {
+    "est": 0.3951374847,
+    "verdad": 0.4244905782
+   }
+  },
+  "phi": {
+   "est": [
+    1.1866967981,
+    -0.3473797976
+   ],
+   "verdad": [
+    1.1,
+    -0.3
+   ]
+  },
+  "rho": {
+   "INDPRO": {
+    "est": 0.1972416758,
+    "verdad": 0.2
+   },
+   "PAYEMS": {
+    "est": 0.6014198453,
+    "verdad": 0.6
+   },
+   "W875RX1": {
+    "est": -0.3120688948,
+    "verdad": -0.3
+   },
+   "CMRMTSPL": {
+    "est": -0.1569420378,
+    "verdad": -0.2
+   },
+   "claims_4w_yoy": {
+    "est": 0.6718386001,
+    "verdad": 0.7
+   },
+   "philly_neworders": {
+    "est": 0.3943952513,
+    "verdad": 0.4
+   }
+  },
+  "convergio": true
+ },
+ "m3": {
+  "senal_plantada": {
+   "verdad": [
+    1.0,
+    0.5,
+    0.5,
+    1.0
+   ],
+   "estimado": [
+    0.8316794646,
+    0.5666719529,
+    0.3568958362,
+    0.5785824067
+   ]
+  },
+  "ruido": {
+   "ll_tvtp_menos_ctp_media": 0.0014376043,
+   "cumple_<=0.005": true,
+   "gamma_media": [
+    0.0605412315,
+    0.0724878366,
+    0.088101281,
+    0.081648252
+   ]
+  }
+ },
+ "pool": {
+  "(i)_oraculo_w": [
+   0.0934527413,
+   0.8422851923,
+   0.0642620663
+  ],
+  "(ii)_sin_info_w": [
+   0.5,
+   0.25,
+   0.25
+  ],
+  "(iii)_infradispersado_a_b": [
+   2.3535145634,
+   2.4082814883
+  ],
+  "(iv)_(v)": "tests/test_harness_v24.py (PIT de los pesos; pool = M0 bit a bit antes de N_min)"
+ },
+ "segundos": 128.2
+}

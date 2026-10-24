@@ -5,6 +5,7 @@ pool_spec.md §5, §7). SOLO desarrollo ≤ 2004. Ninguno corre M2, M3 ni el poo
     .venv/bin/python -m src.models.pool_dev probe               # 4. sonda de elegibilidad: solo recuentos (W_G, pool)
     .venv/bin/python -m src.models.pool_dev placebo <cuál>      # 5. placebos (etiqueta ≤ 2004 BARAJADA): m2 | m3 | pool
     .venv/bin/python -m src.models.pool_dev controls            # señal plantada y controles SINTÉTICOS
+    .venv/bin/python -m src.models.pool_dev spit001 <m2_long> <s_pit_001>   # 6c (tras las corridas reales; NO hecho)
 
 Salidas en research/trials/m2/ (tabla, sonda, placebos, controles) y una fila en el trial log por paso.
 """
@@ -223,6 +224,31 @@ def placebo(which: str, dest: Path | None = None, seeds=SEEDS) -> dict:
     return out
 
 
+# ------------------------------------------------------------------ 6c. resolución de S-PIT-001 (NO se ha ejecutado)
+def spit001(run_long: str, run_spit: str, dest: Path = OUT / "s_pit_001_resolucion.json") -> dict:
+    """Regla operativa de S-PIT-001 (m2_structural_spec.md v1.2 §2): d = ll(M0) − ll(M2) por mes en `m2_long`
+    (vintage, matriz principal) y en `s_pit_001` (matriz prudente); h = (hi − lo)/2 del IC 95 % de mejora_logloss de
+    M2 frente a M0 en `m2_long`. Series finitas y con el mismo índice o error (N-2). Paso 6c: el resultado se escribe en
+    la §9 de M2 con los dos run_id y se commitea y empuja ANTES de cualquier corrida de M3 o del pool."""
+    from src.models import m1_run as M1R
+    from src.models.regime_components import s_pit_001_triggered
+
+    def d_of(run_id):
+        j, S = M1R._load_run(run_id)
+        v = S[S["mode"] == "vintage"]
+        a = v[v["model"] == "m0_calibrated_persistence"].set_index("month")["logloss"]
+        b = v[v["model"] == "m2_struct_g"].set_index("month")["logloss"]
+        return j, (a - b).sort_index()
+    jl, dpr = d_of(run_long)
+    _, dfp = d_of(run_spit)
+    ci = jl["report"]["frente_al_baseline"]["vintage/m2_struct_g"]["mejora_logloss"]
+    res = s_pit_001_triggered(dpr, dfp, ci["lo"], ci["hi"])
+    out = {"m2_long": run_long, "s_pit_001": run_spit, **res,
+           "philly_pre1990_nan": res["dispara"], "regla": spit001.__doc__}
+    _dump(dest, out)
+    return out
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description="M2/M3/pool: pasos previos (solo ≤ 2004; nunca la etiqueta real)")
     sp = ap.add_subparsers(dest="cmd", required=True)
@@ -231,6 +257,9 @@ def main() -> None:
     p = sp.add_parser("placebo")
     p.add_argument("which", choices=sorted(PLACEBO) + ["all"])
     sp.add_parser("controls")
+    q = sp.add_parser("spit001")
+    q.add_argument("run_long")
+    q.add_argument("run_spit")
     a = ap.parse_args()
     if a.cmd == "revtable":
         revtable()
@@ -240,6 +269,8 @@ def main() -> None:
         for w in (("m2", "m3", "pool") if a.which == "all" else (a.which,)):   # un proceso: cachés compartidas
             print(json.dumps({k: v for k, v in placebo(w).items() if k != "por_semilla"}, indent=1,
                              ensure_ascii=False), flush=True)
+    elif a.cmd == "spit001":
+        print(json.dumps(spit001(a.run_long, a.run_spit), indent=1, ensure_ascii=False, default=str))
     else:
         from src.models import pool_controls
         pool_controls.main()
