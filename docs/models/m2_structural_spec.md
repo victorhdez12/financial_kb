@@ -379,3 +379,14 @@ etiqueta real):
 |---|---|---|---|---|
 | 1 | §4 | σ̂² = V<sub>filtro</sub> + V<sub>rev</sub> + V<sub>tend</sub> (independientes, supuesto declarado) | σ̂² = **V<sub>conj</sub>** + V<sub>rev</sub>, V<sub>conj</sub> = varianza del error conjunto medida directamente en pseudo-tiempo-real con los niveles de T (regla exacta en §4); V<sub>filtro</sub> y V<sub>tend</sub> quedan como diagnóstico | control sintético de §6 no superado (0,878 / 0,855 / 0,909 / 0,922); componentes ≈ calibrados por separado, correlación −0,31 (`research/trials/m2/controles_m2_diagnostico.json`) |
 | 2 | §6 | cobertura del 80 % en [0,75; 0,85] sin semillas fijadas | semillas 3, 7, 11, 21 fijadas antes de correrlo; las cuatro dentro de [0,75; 0,85]; si no, parada y pregunta | decisión del usuario |
+
+### 9.x Orden real de las corridas y decisión del usuario (25-oct, horas UTC)
+
+- **07:49:46 → 08:03:05 UTC:** corrida de desarrollo `m2_long` (run `20261025-090304_m2_long_6314b5b0`, `results_sha256` `6314b5b0…`). Lanzada con el visto bueno del usuario para "hacer el 3", **antes** de que existieran las reservas del Validador y **sin** decisión del usuario sobre las opciones (a)/(b) de la §9.
+- **08:02:01 UTC:** commit `d9bfd8a` con la corrección del control ampliado y las reservas del Validador (sección 7 del resultado).
+- **08:06 UTC:** commit `7587fd0` con el protocolo del control completo. Su tabla dice "NO CUMPLE → no se corre `m2_long`"; esa regla **no pudo aplicarse**, porque `m2_long` ya se había corrido.
+- **08:12–08:45 UTC:** control completo C (protocolo `7587fd0`, script `5f6d7af`, hash `1e160349…dc76`). R0 OK; C: 40 semillas, media 0,7918, IC 95 % [0,7758; 0,8078], 26/40 en rango (65 %). **Principal cumple, secundario no cumple → CUMPLE CON RESERVA.**
+- **Decisión del usuario (25-oct):** opción **(a)**: aceptar M2 v1.3 con las reservas declaradas. Las reservas: verdad truncada en el brazo A (H-a); margen de una semilla en el secundario del ampliado; control de 4 semillas no superado; `m2_long` corrido antes del control C.
+- **Consecuencia:** `m2_long` es exploratorio (18 corridas en la misma ventana; ~4 recesiones en 1978-2004). No se cita como evidencia de M2 ni de M2 > M1 v2.
+- **Línea `if False else` en `per_seed`:** se conserva a propósito. Está en el original y el protocolo prohíbe cambiar `per_seed`.
+- **Pendiente:** revisión en la nube de los resultados de C (`research/validation/m2_control_completo/`); registrar P-EVAL-BASE v4 con el pool como único contraste principal; sin corridas de M3 ni del pool antes del push de 6c.
