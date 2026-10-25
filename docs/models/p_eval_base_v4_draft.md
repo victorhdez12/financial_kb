@@ -1,7 +1,7 @@
 ---
 documento: BORRADOR del preregistro de la evaluación única del modelo base (P-EVAL-BASE), versión 4
-version: 4.2-borrador (2026-10-24; contraste único pool − M0, Holm k = 1, criterio 1 con IC 95 %, criterio 8 de signos de M3; 4.1 = d1bde77, 4.0 = 1a5f1f9; 4.2: N-5/N-6 del Validador, componentes en v1.2)
-fecha: 2026-10-24
+version: 4.3-borrador (2026-10-25; contraste único pool − M0, Holm k = 1; criterio 1 = límite inferior del IC 95 % > 0 sin suelo; criterio 8 INFORMATIVO; componentes: M2 v1.3, M3 v1.2, pool v1.2. 4.2 = 68e66dd, 4.1 = d1bde77, 4.0 = 1a5f1f9)
+fecha: 2026-10-24 (v4.3: 2026-10-25)
 estado: BORRADOR. NO está en research/hypotheses.yaml y NO abre el periodo bloqueado. Sustituye a la v3
   (docs/models/p_eval_base_draft.md, que queda como historia). Antes de registrarlo, todo lo de §A9.
 autor: Constructor, sobre la v3, las decisiones del usuario del 23-24 oct y la revisión del Validador
@@ -34,13 +34,18 @@ decisiones de diseño.
 | 12 | — | componentes en sus specs **v1.1** (M2: peticiones de paro con f<sub>m</sub> − f<sub>m−12</sub>; V<sub>rev</sub> declarado no PIT + sensibilidad PIT) | Estratega (imprescindible 1); Validador M-2; usuario 24-oct (B) | Constructor / usuario |
 | 13 | — | **v4.2**: componentes en **v1.2**; marca `model_params.m2_struct_g.philly_pre1990_nan` en A8, heredada; denominador del criterio 8 = todos los meses de corte de `eval_window`, comprobado en el ensayo en seco | Validador N-5, N-6 (re-auditoría 24-oct); sin cambio de criterio ni de diseño | Constructor |
 | 14 | — | `m2_struct_g` en la spec **v1.3**: σ̂² = V<sub>conj</sub> + V<sub>rev</sub> (error conjunto medido sin etiqueta) | el control sintético preregistrado de M2 falló (decisión del usuario sobre Q0); cambio a priori, antes de cualquier corrida con la etiqueta real | usuario / Constructor |
+| 15 | criterio 1: media ≥ 0,05 nats **y** límite inferior del IC 95 % > 0 | **solo** límite inferior del IC 95 % > 0 (mismo bootstrap); 0,05 nats pasa a efecto mínimo de interés que se informa y no decide | estudio de potencia sintético (`research/validation/potencia_holdout/`, rama `claude/potencia-holdout`): con el ruido que da el pool real (desv. de d ≈ 0,13-0,25, ACF(1) ≈ 0,4-0,6), el suelo de 0,05 quita 0,17-0,26 de potencia con Δ = 0,05-0,07 y apenas cambia el error tipo I (0,5 % → 2,4 %; 1,1 % → 3,9 % en forma reducida; ≤ 8,4 % con dependencia φ = 0,85, igual que hoy) | **usuario, 25-oct (D1)**, a propuesta del Validador |
+| 16 | criterio 8 (signos de M3) **decide** (fila 3, decisión A del usuario del 24-oct) | criterio 8 **informativo**: se calcula y se publica (`criterio_fraccion_cumple`, `fraccion_umbral` por γ, y los signos por componente), pero **no decide** | **reabre la decisión A1-3 del 24-oct.** Con las probabilidades a priori del Estratega (P10) pasaba por sí solo con probabilidad ≈ 0,11-0,5 **sea cual sea la mejora del pool** (estudio de potencia, A7): limitaba la potencia sin proteger frente a falsos positivos del pool (no depende de que el pool mejore a M0). Decidido antes de cualquier corrida de M3 o del pool y sin ver el bloqueado | **usuario, 25-oct (D2)** |
+| 17 | sonda de configuración de la v3 (`p_eval_base_probe.yaml` con una sonda de M1, `test_start` 1975-06) | sonda = configuración de A8 (`test_start` 1956-10, familia `principal_k1`, `sign_fraction` informativo); declaraciones de A2 (contaminación residual), A3 (marca de giro del criterio 3), A6 (202 meses; prueba de signo por episodio informativa) y A8 (lectura `notna` del ensayo en seco); A7 con la potencia del pool real; versiones de los componentes en la cabecera | hallazgos 5-15 del Validador (revisión del 25-oct); sin cambio de criterio | Constructor/Validador |
+| — | — | **no** se adopta un contraste unilateral al 5 % (el bootstrap b12/b24 unilateral da un error tipo I del 6-13 %) | estudio de potencia | **usuario, 25-oct (D3)** |
 
-Los cambios 1-3 y 6-9 son decisiones del usuario **antes** de abrir el bloqueado; se anotan en `research/trial_log.md`
-como cambios de diseño posteriores a los resultados de desarrollo de M1 v1/v2 (no del bloqueado).
+Los cambios 1-3, 6-9, 15 y 16 son decisiones del usuario **antes** de abrir el bloqueado; se anotan en
+`research/trial_log.md` como cambios de diseño posteriores a los resultados de desarrollo de M1 v1/v2 y de `m2_long`
+(no del bloqueado). El 16 reabre una decisión anterior (la A del 24-oct) y se anota como tal.
 
 **Estado de los hallazgos de la v3** (Validador B-8, 24-oct): **M4-1** ejecutable por diseño (A8 + ensayo en seco
 A9-5), abierto hasta A9-5; **M4-2** corregido (filas 4, 5 y 10); **M4-3** corregido (sin alternativas condicionales:
-el criterio de signos ya está decidido, fila 3).
+el criterio de signos está decidido: fila 3, reabierta en la fila 16 → informativo).
 
 ## A2. Hipótesis (una) y contraste
 
@@ -55,28 +60,36 @@ el criterio de signos ya está decidido, fila 3).
   base. No hay desempate (una sola hipótesis): la pregunta A8.2 de la v3 desaparece (M4-3).
 - El pool y sus componentes están **contaminados** por el desarrollo (H-POOL-001, H-M2-001, H-M3-001): la evaluación
   única es su única prueba limpia.
+- **Contaminación residual (v4.3, declarada; no se puede corregir):** quienes diseñan conocen la historia pública de
+  2005-2021 (2008-09, 2020), que es la del bloqueado. Algunas elecciones (p. ej. las peticiones de paro y Filadelfia
+  como datos del mes t) pueden estar influidas por ese conocimiento general, aunque ningún dato ≥ 2005 de la etiqueta
+  ni de las variables se ha usado para elegir nada.
 
-## A3. Criterio de éxito (se exigen TODOS) y su clave en el informe
+## A3. Criterio de éxito (se exigen los criterios 1-7; el 8 es informativo) y su clave en el informe
 
 Clave base: `c = report["frente_al_baseline"]["vintage/pool_g"]`; detección: `d = report["deteccion_giros_g"]`.
 
 | # | criterio | clave |
 |---|---|---|
-| 1 | Mejora media frente a M0 **≥ 0,05 nats** y **límite inferior del IC 95 % > 0** | `c.mejora_logloss.mean ≥ 0,05` y `c.mejora_logloss.lo > 0` |
+| 1 | **Límite inferior del IC 95 % > 0** de la mejora media frente a M0. Se informa además si la media alcanza **0,05 nats** (efecto mínimo de interés), pero eso **no decide** (A1-15) | `c.mejora_logloss.lo > 0` |
 | 2 | **Eje G:** mejora de la log-loss binaria > 0 | `c.mejora_ll_g.mean > 0` |
-| 3 | **Giros no peor que M0:** mejora en los meses de giro ≥ 0 | `c.cortes.giro.mean ≥ 0` |
+| 3 | **Giros no peor que M0:** mejora en los meses de giro ≥ 0. Mes de giro = la etiqueta dura de **4 cuadrantes** en t distinta de la de t − 5 (`metrics.month_cuts`, lag 5): incluye los cambios del eje I, donde la d del eje G no tiene por qué ser positiva (declarado, v4.3) | `c.cortes.giro.mean ≥ 0` |
 | 4 | **Estables:** no empeora más de 0,05 nats | `c.cortes.estable.mean ≥ −0,05` |
 | 5 | **Falsas alarmas de G ≤ 0,5 al año** (definición v2.1, harness.md §6) | `d["vintage/pool_g"].falsas_alarmas_por_año ≤ 0,5` |
 | 6 | **Mismo signo** de la mejora en 2005-01 → 2014-12 y 2015-01 → 2021-10 | `c.subperiodos_mismo_signo == true` |
 | 7 | **Holm k = 1:** p < 0,05 | `report["holm_familias"]["principal_k1"].ajustado["pool_g"] < 0,05` |
-| 8 | **Signos de M3:** para **cada** j = 1…4 por separado, fracción de cortes de `m3_tvtp_g` (vintage) cuyo mes está en 2005-01 → 2021-10 con **γ<sub>j</sub> > 0,01** (estricto) **≥ 0,50**; un corte sin coeficientes cuenta como no cumplido; sin cláusula de vintage (`m3_tvtp_spec.md` §5) | `s = report["signos_coeficientes"]["vintage/m3_tvtp_g"]`: `s.fraccion_umbral["G:gamma<j>"].frac ≥ 0,50` para j = 1…4, es decir `s.criterio_fraccion_cumple == true` (clave nueva, arnés v2.4). **No** vale `s.criterio_signos_cumple` (con γ ≥ 0 impuesto se cumple trivialmente) |
+| 8 | **INFORMATIVO (v4.3, A1-16; no decide).** **Signos de M3:** para **cada** j = 1…4 por separado, fracción de cortes de `m3_tvtp_g` (vintage) cuyo mes está en 2005-01 → 2021-10 con **γ<sub>j</sub> > 0,01** (estricto) **≥ 0,50**; un corte sin coeficientes cuenta como no cumplido; sin cláusula de vintage (`m3_tvtp_spec.md` §5) | `s = report["signos_coeficientes"]["vintage/m3_tvtp_g"]`: `s.fraccion_umbral["G:gamma<j>"].frac ≥ 0,50` para j = 1…4, es decir `s.criterio_fraccion_cumple == true` (clave nueva, arnés v2.4). **No** vale `s.criterio_signos_cumple` (con γ ≥ 0 impuesto se cumple trivialmente) |
 
 - **Criterio 7 redundante con el 1** (Validador M-3): con k = 1, el límite inferior del IC 95 % > 0 ya equivale a
   p ≈ < 0,025, así que "p < 0,05" no añade protección. Se mantiene escrito por coherencia con la familia Holm.
-- **Criterio 8 sobre un componente:** el pool puede no pasar por M3 aunque mejore a M0 (Estratega P10: γ3 tiene
-  ≈ 50 % de probabilidad de quedar < 50 %). Es la decisión del usuario; se anotará así en el trial log.
+- **Tamaño real del criterio 1** (estudio de potencia, A7): el bootstrap por bloques de 12 es liberal; con efecto 0 el
+  límite inferior del IC 95 % queda > 0 en el 2-5 % de las evaluaciones con la dependencia vista en desarrollo y en el
+  ≈ 8-9 % con φ = 0,85. Se publica como sensibilidad el contraste HAC EWC unilateral (A6), que no decide.
+- **Criterio 8 informativo (v4.3, A1-16):** se calcula, se publica y el ensayo en seco comprueba que la clave existe
+  (A8), pero **no entra** en la decisión: el pool pasa o no por los criterios 1-7. Recae en un componente (M3) y no
+  depende de que el pool mejore a M0 (Estratega P10: γ3 tiene ≈ 50 % de probabilidad de quedar < 50 %).
 
-**Promoción a la Etapa 2** (además de 1-8): detección de giros de G **mejor** que M0 con la definición v2.1:
+**Promoción a la Etapa 2** (además de 1-7): detección de giros de G **mejor** que M0 con la definición v2.1:
 `c.deteccion_frente_al_comparador.retraso_pareado_medio < 0` y `censurados_modelo ≤ censurados_comparador`. Con pocos
 giros en 2005-2021 tiene poca potencia; se lee como indicio, no como prueba.
 
@@ -126,17 +139,31 @@ del 16-oct).
 
 ## A6. Muestra, inferencia y alarmas
 
-- Ventana fija **2005-01 → 2021-10** (`allow_shrink: false`; 202 meses; desde 2021-11 la etiqueta oficial es
-  provisional), subperiodos 2005-01 → 2014-12 / 2015-01 → 2021-10. Bootstrap por bloques de 12; **bloques de 24
+- Ventana fija **2005-01 → 2021-10** (`allow_shrink: false`; **202 meses**, no ≈ 250: desde 2021-11 la etiqueta
+  oficial es provisional y esos meses no puntúan), subperiodos 2005-01 → 2014-12 / 2015-01 → 2021-10. Bootstrap por bloques de 12; **bloques de 24
   como sensibilidad, publicada siempre**: clave `c.mejora_logloss_b24` (la calcula el arnés en toda comparación,
-  `harness._cmp`; no necesita configuración; el ensayo en seco comprueba que está, A8). Prueba de signo por episodio, sin los truncados en el borde.
-- **Alarma de fuga:** una mejora > 0,25 nats se audita antes de creerla.
+  `harness._cmp`; no necesita configuración; el ensayo en seco comprueba que está, A8). Prueba de signo por episodio, sin los truncados en el borde (**informativa; no decide**).
+- **Sensibilidad HAC (no decide):** p unilateral del contraste de la media de d con HAC EWC (Lazarus-Lewis-Stock-Watson
+  2018, ν = ⌊0,4·n^{2/3}⌋ = 13 con n = 202), calculada sobre la d de `scores.parquet` con
+  `tests/validation/potencia_holdout_comun.ewc` (sha256 fijado al registrar).
+- **Alarma de fuga:** una mejora > 0,25 nats se audita antes de creerla. La auditoría solo puede terminar en dos
+  resultados, escritos aquí: (a) sin fuga → el resultado se publica tal cual; (b) fuga demostrada → la evaluación se
+  declara **inválida** y el pool **no pasa**. En ningún caso se corrige el código y se vuelve a correr sobre el
+  bloqueado.
 
 ## A7. Potencia: qué se puede esperar (`power_holdout.md`)
 
 - **MDE con 80 % de potencia** (criterio 1 + p < 0,05; k = 1 ≈ k = 2 porque el IC 95 % > 0 ya exige p ≈ < 0,025):
   **≈ 0,12-0,15 nats** si d<sub>t</sub> es tan ruidosa como la de M1 (desv. mensual 0,30-0,36); **≈ 0,07** si el pool
   la reduce a la mitad (supuesto, no medido; el Estratega lo ve optimista si la beta extremiza: ×0,6-0,8); 0,15-0,22 con colas ×1,5 (2008-09, 2020).
+- **Estudio sintético con el pool real** (v4.3; MAP + beta de `pool_spec.md` §3, 2.000 réplicas por celda,
+  `research/validation/potencia_holdout/estructural.json`): con criterios 1-4, 6 y 7 (sin el 5 ni el 8), la potencia es
+  0,39 / 0,63 / 0,83 con Δ = 0,05 / 0,07 / 0,10 con el criterio 1 de la v4.2, y **0,65 / 0,79 / 0,90** con el de la
+  v4.3; el error tipo I (componentes sin información) es 0,5 % y 2,4 %. Con la misma calidad de M2, contrastar M2 solo
+  frente a M0 tiene potencia ≤ 0,40: el pool reduce la desviación de d a ≈ 0,55 veces la de M2.
+- **Criterio 8:** con las probabilidades a priori del Estratega (P10), pasa por sí solo con probabilidad ≈ 0,11 (γ
+  independientes) a 0,5 (perfectamente dependientes), **sea cual sea la mejora del pool**. La potencia total es la de
+  arriba multiplicada por ese factor.
 - **Umbral observado** para pasar el criterio 1: ≈ 0,10 nats (≈ 0,05-0,07 con ruido ×0,5).
 - **Expectativa realista:** lo mejor visto en desarrollo es +0,035 nats (eje G de M1 v2, ventana larga). Con un efecto
   verdadero de 0,04-0,06 la potencia es ≈ 0,23-0,42 con el ruido de M1 y ≈ 0,35-0,67 con ruido ×0,5 (tabla 3.2); con +0,035, ≈
@@ -195,7 +222,8 @@ expected_signs:                           # SOLO informativos (decide: false); M
     "G:gamma2": {signo: "+", decide: false}
     "G:gamma3": {signo: "+", decide: false}
     "G:gamma4": {signo: "+", decide: false}
-sign_fraction:                            # criterio 8 (A3). Clave nueva del arnés v2.4 → signos_coeficientes[...].fraccion_umbral
+sign_fraction:                            # criterio 8, INFORMATIVO (A3, v4.3): se calcula y se publica; no decide.
+                                          # Clave del arnés v2.4 → signos_coeficientes[...].fraccion_umbral
   m3_tvtp_g:
     coefs: ["G:gamma1", "G:gamma2", "G:gamma3", "G:gamma4"]
     threshold: 0.01                       # γ > 0,01 estricto
@@ -239,7 +267,11 @@ El ensayo en seco (harness.md §4e) comprueba en el **primer corte bloqueado** l
 de cada modelo (M2/M3: ventana del eje G desde 1968-05; pool: N<sub>min</sub> = 60 cumplido) y, en
 `dry_run_window` (≤ 2004), que el informe trae **todas** las claves de A3 para `pool_g`, incluida
 `holm_familias.principal_k1`, la detección pareada, `mejora_logloss.sd_mensual`, `mejora_logloss_b24` y la clave del
-criterio 8 (`signos_coeficientes["vintage/m3_tvtp_g"].fraccion_umbral` y `criterio_fraccion_cumple`), con `n_cortes` = número de meses de corte de `dry_run_window` para cada γ (v4.2, N-5).
+criterio 8 (`signos_coeficientes["vintage/m3_tvtp_g"].fraccion_umbral` y `criterio_fraccion_cumple`; informativo desde la v4.3, pero tiene que estar en el informe), con `n_cortes` = número de meses de corte de `dry_run_window` para cada γ (v4.2, N-5).
+
+**Lectura ≥ 2005 del ensayo en seco (declarada, v4.3):** para la elegibilidad analítica del primer corte bloqueado,
+el ensayo en seco lee la **disponibilidad** (solo `notna`, nunca valores) de las variables pedidas en la matriz congelada
+entre 2005-01 y ese corte (`harness.holdout_feature_availability`; queda en el registro de accesos). No lee la etiqueta.
 
 ## A9. Condiciones para registrar (todas; nada de esto está hecho)
 
@@ -247,8 +279,8 @@ criterio 8 (`signos_coeficientes["vintage/m3_tvtp_g"].fraccion_umbral` y `criter
 2. Placebos de M2, M3 y del pool **sin fuga ni aviso**; una corrida de desarrollo ≤ 2004 de cada uno, publicada tal
    cual (sea cual sea el resultado).
 3. Revisión del Validador y del Estratega de las specs, del desarrollo y de este borrador.
-4. Aprobación del usuario de este texto completo. El criterio de signos ya está decidido (A1-3, criterio 8: decisión
-   del usuario 24-oct); no queda ninguna alternativa condicional.
+4. Aprobación del usuario de este texto completo. El criterio de signos está decidido (A1-3, reabierto en A1-16:
+   criterio 8 informativo, decisión del usuario del 25-oct); no queda ninguna alternativa condicional.
 4b. S-PIT-001 resuelta en desarrollo con la regla de `m2_structural_spec.md` §2, commiteada y empujada antes de las
    corridas de M3 y del pool; la versión de M2 resultante queda anotada en su §9 y es la de A4.
 5. `config/harness/p_eval_base.yaml` = A8, commiteada; `--check-protection` ok (A3-1); **ensayo en seco registrado
@@ -265,3 +297,6 @@ posterior a esos resultados (B4-1).
 
 `FKB_HOLDOUT_UNLOCK="EVALUACION-UNICA P-EVAL-BASE"` + `evaluate_holdout("P-EVAL-BASE")`: comprueba otra vez la
 protección de rama, repite el ensayo en seco, consume y ancla en GitHub antes de leer. **Una vez.**
+Si la ejecución falla **después** de consumir el preregistro (la caja ya se abrió), la evaluación cuenta como gastada:
+se publica el error y lo que se haya escrito, el pool **no pasa** y no se repite sin un preregistro nuevo, que declare
+lo que se vio.

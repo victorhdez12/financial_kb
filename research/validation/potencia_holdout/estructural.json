@@ -1,0 +1,535 @@
+{
+ "semilla": 20261026,
+ "replicas_por_celda": 2000,
+ "qs": [
+  0.0,
+  0.15,
+  0.3,
+  0.45,
+  0.6,
+  0.8,
+  1.0
+ ],
+ "n_dev": 312,
+ "n_bloqueado": 202,
+ "simplificaciones": [
+  "pool reestimado cada 12 meses en el bloqueado (spec: cada mes)",
+  "pesos de madurez = 1 y objetivo de entrenamiento = etiqueta final",
+  "M0 calibrado una vez con la historia (el arnés lo reajusta cada mes)",
+  "eje I idéntico en todos: d de 4 cuadrantes = d binaria del eje G"
+ ],
+ "celdas": {
+  "0.00": {
+   "pool": {
+    "v4_tal_cual": 0.005,
+    "v4_solo_criterio1": 0.0085,
+    "v4_c1_unilateral": 0.005,
+    "unilateral_bb12": 0.059,
+    "unilateral_bb12_no_dano": 0.059,
+    "unilateral_bb24": 0.06,
+    "dm_newey_west_hln": 0.049,
+    "ewc_llsw": 0.0415,
+    "estimacion_ic95_lo_mayor_0": 0.0435,
+    "recomendado_sin_suelo": 0.024,
+    "marginales": {
+     "c1": 0.0085,
+     "c3": 0.312,
+     "c4": 0.9995,
+     "c6": 0.528,
+     "c7": 0.0535
+    },
+    "delta_verdadero_aprox": -0.00014167838692090285,
+    "sd_media_entre_replicas": 0.014256120620986364,
+    "sd_mensual_media": 0.08239111120569843,
+    "acf_1_6_media": [
+     0.41010168200535296,
+     0.2085207465856225,
+     0.10520561654090604,
+     0.044128911303919834,
+     0.00034540321804081775,
+     -0.0007350088693927981
+    ],
+    "ic95_cobertura_delta": 0.8665
+   },
+   "m2_solo": {
+    "v4_tal_cual": 0.0005,
+    "v4_solo_criterio1": 0.0015,
+    "v4_c1_unilateral": 0.0005,
+    "unilateral_bb12": 0.002,
+    "unilateral_bb12_no_dano": 0.002,
+    "unilateral_bb24": 0.0015,
+    "dm_newey_west_hln": 0.002,
+    "ewc_llsw": 0.001,
+    "estimacion_ic95_lo_mayor_0": 0.0015,
+    "recomendado_sin_suelo": 0.0005,
+    "marginales": {
+     "c1": 0.0015,
+     "c3": 0.024,
+     "c4": 0.457,
+     "c6": 0.87,
+     "c7": 0.002
+    },
+    "delta_verdadero_aprox": -0.0943307148721417,
+    "sd_media_entre_replicas": 0.05047759537480625,
+    "sd_mensual_media": 0.3928583463411043,
+    "acf_1_6_media": [
+     0.4750298309506442,
+     0.24372496066299681,
+     0.11705349543885339,
+     0.034251339627799283,
+     -0.02907285643331939,
+     -0.02415611778431267
+    ],
+    "ic95_cobertura_delta": 0.91
+   },
+   "corr_d_pool_d_m2": 0.5972625627242006,
+   "frac_giro_media": 0.23830445544554454,
+   "pesos_finales_medios": {
+    "w_m0": 0.6196258392338753,
+    "w_m2": 0.18413291913668586,
+    "w_m3": 0.19624124162943896,
+    "a": 0.7419120066416542,
+    "b": 0.8897846749766881
+   }
+  },
+  "0.15": {
+   "pool": {
+    "v4_tal_cual": 0.016,
+    "v4_solo_criterio1": 0.027,
+    "v4_c1_unilateral": 0.016,
+    "unilateral_bb12": 0.217,
+    "unilateral_bb12_no_dano": 0.217,
+    "unilateral_bb24": 0.217,
+    "dm_newey_west_hln": 0.1705,
+    "ewc_llsw": 0.1445,
+    "estimacion_ic95_lo_mayor_0": 0.1485,
+    "recomendado_sin_suelo": 0.0975,
+    "marginales": {
+     "c1": 0.027,
+     "c3": 0.507,
+     "c4": 1.0,
+     "c6": 0.5545,
+     "c7": 0.184
+    },
+    "delta_verdadero_aprox": 0.009837119104605685,
+    "sd_media_entre_replicas": 0.017815293741603216,
+    "sd_mensual_media": 0.09930285035914523,
+    "acf_1_6_media": [
+     0.39849526325561546,
+     0.19272202496627353,
+     0.09487349489305481,
+     0.04310095017381274,
+     0.010428116706022067,
+     0.006216355450967685
+    ],
+    "ic95_cobertura_delta": 0.832
+   },
+   "m2_solo": {
+    "v4_tal_cual": 0.0025,
+    "v4_solo_criterio1": 0.004,
+    "v4_c1_unilateral": 0.0025,
+    "unilateral_bb12": 0.007,
+    "unilateral_bb12_no_dano": 0.007,
+    "unilateral_bb24": 0.006,
+    "dm_newey_west_hln": 0.005,
+    "ewc_llsw": 0.0045,
+    "estimacion_ic95_lo_mayor_0": 0.004,
+    "recomendado_sin_suelo": 0.0025,
+    "marginales": {
+     "c1": 0.004,
+     "c3": 0.153,
+     "c4": 0.557,
+     "c6": 0.731,
+     "c7": 0.007
+    },
+    "delta_verdadero_aprox": -0.05606880892512214,
+    "sd_media_entre_replicas": 0.05046143702584894,
+    "sd_mensual_media": 0.3683489751539215,
+    "acf_1_6_media": [
+     0.4678916288327916,
+     0.2374570384783541,
+     0.12140860271543102,
+     0.0469077016028331,
+     -0.014296432818076387,
+     -0.01064772028286359
+    ],
+    "ic95_cobertura_delta": 0.8845
+   },
+   "corr_d_pool_d_m2": 0.7137731735583348,
+   "frac_giro_media": 0.23610643564356434,
+   "pesos_finales_medios": {
+    "w_m0": 0.5400116070732093,
+    "w_m2": 0.2524101730329659,
+    "w_m3": 0.20757821989382488,
+    "a": 0.7612165260841378,
+    "b": 0.925479737130491
+   }
+  },
+  "0.30": {
+   "pool": {
+    "v4_tal_cual": 0.0775,
+    "v4_solo_criterio1": 0.095,
+    "v4_c1_unilateral": 0.0785,
+    "unilateral_bb12": 0.556,
+    "unilateral_bb12_no_dano": 0.556,
+    "unilateral_bb24": 0.5545,
+    "dm_newey_west_hln": 0.4705,
+    "ewc_llsw": 0.4175,
+    "estimacion_ic95_lo_mayor_0": 0.4475,
+    "recomendado_sin_suelo": 0.353,
+    "marginales": {
+     "c1": 0.095,
+     "c3": 0.732,
+     "c4": 1.0,
+     "c6": 0.746,
+     "c7": 0.4985
+    },
+    "delta_verdadero_aprox": 0.026305891853188886,
+    "sd_media_entre_replicas": 0.02224055587517388,
+    "sd_mensual_media": 0.13123629474898205,
+    "acf_1_6_media": [
+     0.4316743112122221,
+     0.2198721202850379,
+     0.12148736114745876,
+     0.06269199894101676,
+     0.025488839315934535,
+     0.01811793479231769
+    ],
+    "ic95_cobertura_delta": 0.8225
+   },
+   "m2_solo": {
+    "v4_tal_cual": 0.02,
+    "v4_solo_criterio1": 0.0235,
+    "v4_c1_unilateral": 0.0285,
+    "unilateral_bb12": 0.044,
+    "unilateral_bb12_no_dano": 0.044,
+    "unilateral_bb24": 0.039,
+    "dm_newey_west_hln": 0.0325,
+    "ewc_llsw": 0.021,
+    "estimacion_ic95_lo_mayor_0": 0.024,
+    "recomendado_sin_suelo": 0.0205,
+    "marginales": {
+     "c1": 0.0235,
+     "c3": 0.492,
+     "c4": 0.6835,
+     "c6": 0.54,
+     "c7": 0.0395
+    },
+    "delta_verdadero_aprox": -0.01502344066015949,
+    "sd_media_entre_replicas": 0.05301921230114758,
+    "sd_mensual_media": 0.3641855625547338,
+    "acf_1_6_media": [
+     0.4766533980532964,
+     0.25441075889682285,
+     0.1427835801087067,
+     0.07034321922186533,
+     0.012762118772509446,
+     0.010582128122609486
+    ],
+    "ic95_cobertura_delta": 0.855
+   },
+   "corr_d_pool_d_m2": 0.8180674130078281,
+   "frac_giro_media": 0.2401039603960396,
+   "pesos_finales_medios": {
+    "w_m0": 0.45356231274375525,
+    "w_m2": 0.3435252288601907,
+    "w_m3": 0.20291245839605407,
+    "a": 0.8226462723052584,
+    "b": 0.99387854323175
+   }
+  },
+  "0.45": {
+   "pool": {
+    "v4_tal_cual": 0.36,
+    "v4_solo_criterio1": 0.3885,
+    "v4_c1_unilateral": 0.361,
+    "unilateral_bb12": 0.782,
+    "unilateral_bb12_no_dano": 0.782,
+    "unilateral_bb24": 0.7715,
+    "dm_newey_west_hln": 0.713,
+    "ewc_llsw": 0.6565,
+    "estimacion_ic95_lo_mayor_0": 0.6985,
+    "recomendado_sin_suelo": 0.6325,
+    "marginales": {
+     "c1": 0.3885,
+     "c3": 0.8925,
+     "c4": 1.0,
+     "c6": 0.8645,
+     "c7": 0.729
+    },
+    "delta_verdadero_aprox": 0.047584264847056815,
+    "sd_media_entre_replicas": 0.03187606698258335,
+    "sd_mensual_media": 0.16575670022420927,
+    "acf_1_6_media": [
+     0.47670375690630046,
+     0.2616620519792112,
+     0.15588041122601357,
+     0.09104079329363748,
+     0.0451957873248414,
+     0.03878609083824638
+    ],
+    "ic95_cobertura_delta": 0.779
+   },
+   "m2_solo": {
+    "v4_tal_cual": 0.0915,
+    "v4_solo_criterio1": 0.1035,
+    "v4_c1_unilateral": 0.1155,
+    "unilateral_bb12": 0.158,
+    "unilateral_bb12_no_dano": 0.1565,
+    "unilateral_bb24": 0.147,
+    "dm_newey_west_hln": 0.119,
+    "ewc_llsw": 0.092,
+    "estimacion_ic95_lo_mayor_0": 0.104,
+    "recomendado_sin_suelo": 0.092,
+    "marginales": {
+     "c1": 0.1035,
+     "c3": 0.7955,
+     "c4": 0.7625,
+     "c6": 0.539,
+     "c7": 0.1375
+    },
+    "delta_verdadero_aprox": 0.02089468400232981,
+    "sd_media_entre_replicas": 0.06279898609271305,
+    "sd_mensual_media": 0.3655420392077904,
+    "acf_1_6_media": [
+     0.502176399081575,
+     0.2864614005181792,
+     0.17522264317095904,
+     0.10283328283030517,
+     0.04613052424560269,
+     0.03995176042827243
+    ],
+    "ic95_cobertura_delta": 0.813
+   },
+   "corr_d_pool_d_m2": 0.8715172957730289,
+   "frac_giro_media": 0.23789851485148514,
+   "pesos_finales_medios": {
+    "w_m0": 0.39123561050653655,
+    "w_m2": 0.4205256916105534,
+    "w_m3": 0.18823869788291006,
+    "a": 0.9228298747298886,
+    "b": 1.0982371087463925
+   }
+  },
+  "0.60": {
+   "pool": {
+    "v4_tal_cual": 0.613,
+    "v4_solo_criterio1": 0.639,
+    "v4_c1_unilateral": 0.616,
+    "unilateral_bb12": 0.891,
+    "unilateral_bb12_no_dano": 0.891,
+    "unilateral_bb24": 0.8795,
+    "dm_newey_west_hln": 0.836,
+    "ewc_llsw": 0.7725,
+    "estimacion_ic95_lo_mayor_0": 0.834,
+    "recomendado_sin_suelo": 0.7855,
+    "marginales": {
+     "c1": 0.639,
+     "c3": 0.9605,
+     "c4": 1.0,
+     "c6": 0.913,
+     "c7": 0.8515
+    },
+    "delta_verdadero_aprox": 0.06812914957874995,
+    "sd_media_entre_replicas": 0.036832184495541924,
+    "sd_mensual_media": 0.20304616420934352,
+    "acf_1_6_media": [
+     0.5172734563323936,
+     0.3070034697140053,
+     0.18886624261977197,
+     0.11383779547626222,
+     0.06146924210441756,
+     0.052156604164456395
+    ],
+    "ic95_cobertura_delta": 0.785
+   },
+   "m2_solo": {
+    "v4_tal_cual": 0.1945,
+    "v4_solo_criterio1": 0.2095,
+    "v4_c1_unilateral": 0.2165,
+    "unilateral_bb12": 0.283,
+    "unilateral_bb12_no_dano": 0.2805,
+    "unilateral_bb24": 0.2565,
+    "dm_newey_west_hln": 0.2225,
+    "ewc_llsw": 0.193,
+    "estimacion_ic95_lo_mayor_0": 0.2105,
+    "recomendado_sin_suelo": 0.195,
+    "marginales": {
+     "c1": 0.2095,
+     "c3": 0.9255,
+     "c4": 0.7965,
+     "c6": 0.5645,
+     "c7": 0.2445
+    },
+    "delta_verdadero_aprox": 0.0474387900859512,
+    "sd_media_entre_replicas": 0.06417324768926068,
+    "sd_mensual_media": 0.37667422631833175,
+    "acf_1_6_media": [
+     0.527618583214635,
+     0.31962055845701054,
+     0.20056146357077398,
+     0.12529111335062385,
+     0.06905783219978114,
+     0.059685984520602975
+    ],
+    "ic95_cobertura_delta": 0.816
+   },
+   "corr_d_pool_d_m2": 0.9034626145633946,
+   "frac_giro_media": 0.236,
+   "pesos_finales_medios": {
+    "w_m0": 0.3522606600856283,
+    "w_m2": 0.47104634586100214,
+    "w_m3": 0.1766929940533696,
+    "a": 1.0444531043177872,
+    "b": 1.2130345058461462
+   }
+  },
+  "0.80": {
+   "pool": {
+    "v4_tal_cual": 0.8275,
+    "v4_solo_criterio1": 0.845,
+    "v4_c1_unilateral": 0.831,
+    "unilateral_bb12": 0.954,
+    "unilateral_bb12_no_dano": 0.954,
+    "unilateral_bb24": 0.9485,
+    "dm_newey_west_hln": 0.917,
+    "ewc_llsw": 0.872,
+    "estimacion_ic95_lo_mayor_0": 0.9185,
+    "recomendado_sin_suelo": 0.8955,
+    "marginales": {
+     "c1": 0.845,
+     "c3": 0.9915,
+     "c4": 1.0,
+     "c6": 0.9605,
+     "c7": 0.925
+    },
+    "delta_verdadero_aprox": 0.09982770006571448,
+    "sd_media_entre_replicas": 0.048442772188750115,
+    "sd_mensual_media": 0.2487240428056255,
+    "acf_1_6_media": [
+     0.5735924284376774,
+     0.3624981320395973,
+     0.23375320386984572,
+     0.1489979532903784,
+     0.08780248624755496,
+     0.07411369437009473
+    ],
+    "ic95_cobertura_delta": 0.792
+   },
+   "m2_solo": {
+    "v4_tal_cual": 0.3425,
+    "v4_solo_criterio1": 0.3795,
+    "v4_c1_unilateral": 0.38,
+    "unilateral_bb12": 0.483,
+    "unilateral_bb12_no_dano": 0.478,
+    "unilateral_bb24": 0.4445,
+    "dm_newey_west_hln": 0.3955,
+    "ewc_llsw": 0.3275,
+    "estimacion_ic95_lo_mayor_0": 0.3795,
+    "recomendado_sin_suelo": 0.3425,
+    "marginales": {
+     "c1": 0.3795,
+     "c3": 0.975,
+     "c4": 0.857,
+     "c6": 0.6525,
+     "c7": 0.425
+    },
+    "delta_verdadero_aprox": 0.08215117230972979,
+    "sd_media_entre_replicas": 0.07457037868376352,
+    "sd_mensual_media": 0.4013144228409158,
+    "acf_1_6_media": [
+     0.5682654486532362,
+     0.35906131142918774,
+     0.23469567920957674,
+     0.15235740395384256,
+     0.09561286820309517,
+     0.0809069501515859
+    ],
+    "ic95_cobertura_delta": 0.8165
+   },
+   "corr_d_pool_d_m2": 0.9218590725081922,
+   "frac_giro_media": 0.23721534653465345,
+   "pesos_finales_medios": {
+    "w_m0": 0.3326965998154661,
+    "w_m2": 0.4958808420348365,
+    "w_m3": 0.1714225581496973,
+    "a": 1.251413428634683,
+    "b": 1.388606965443174
+   }
+  },
+  "1.00": {
+   "pool": {
+    "v4_tal_cual": 0.8915,
+    "v4_solo_criterio1": 0.9195,
+    "v4_c1_unilateral": 0.892,
+    "unilateral_bb12": 0.982,
+    "unilateral_bb12_no_dano": 0.982,
+    "unilateral_bb24": 0.978,
+    "dm_newey_west_hln": 0.9615,
+    "ewc_llsw": 0.9295,
+    "estimacion_ic95_lo_mayor_0": 0.9675,
+    "recomendado_sin_suelo": 0.9355,
+    "marginales": {
+     "c1": 0.9195,
+     "c3": 0.9975,
+     "c4": 1.0,
+     "c6": 0.9715,
+     "c7": 0.9655
+    },
+    "delta_verdadero_aprox": 0.12341065383572303,
+    "sd_media_entre_replicas": 0.05613541851728306,
+    "sd_mensual_media": 0.27855212694735165,
+    "acf_1_6_media": [
+     0.6030243987733063,
+     0.3943441389492876,
+     0.2608656776903426,
+     0.16944399302941643,
+     0.10503571725629837,
+     0.08922944145545969
+    ],
+    "ic95_cobertura_delta": 0.7895
+   },
+   "m2_solo": {
+    "v4_tal_cual": 0.3975,
+    "v4_solo_criterio1": 0.44,
+    "v4_c1_unilateral": 0.4225,
+    "unilateral_bb12": 0.524,
+    "unilateral_bb12_no_dano": 0.5135,
+    "unilateral_bb24": 0.493,
+    "dm_newey_west_hln": 0.4495,
+    "ewc_llsw": 0.3845,
+    "estimacion_ic95_lo_mayor_0": 0.4405,
+    "recomendado_sin_suelo": 0.398,
+    "marginales": {
+     "c1": 0.44,
+     "c3": 0.988,
+     "c4": 0.851,
+     "c6": 0.687,
+     "c7": 0.47
+    },
+    "delta_verdadero_aprox": 0.09922592021699843,
+    "sd_media_entre_replicas": 0.08051899932765105,
+    "sd_mensual_media": 0.4203950149643465,
+    "acf_1_6_media": [
+     0.5854746684879303,
+     0.3782384285876458,
+     0.24996955354790792,
+     0.164759614334763,
+     0.10406874508525985,
+     0.08797064827126176
+    ],
+    "ic95_cobertura_delta": 0.8005
+   },
+   "corr_d_pool_d_m2": 0.920853677435476,
+   "frac_giro_media": 0.23893069306930692,
+   "pesos_finales_medios": {
+    "w_m0": 0.3365136428313469,
+    "w_m2": 0.48480694733219376,
+    "w_m3": 0.17867940983645933,
+    "a": 1.4688464070234992,
+    "b": 1.5629348992337355
+   }
+  }
+ },
+ "segundos": 997.7
+}
