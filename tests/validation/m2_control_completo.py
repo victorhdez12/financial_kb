@@ -41,6 +41,7 @@ OUT = REPO / "research" / "validation" / "m2_control_completo"
 Q80, Q50, Q95 = norm.ppf(0.9), norm.ppf(0.75), norm.ppf(0.975)
 SEEDS_OLD = (3, 7, 11, 21)
 SEEDS_NEW = tuple(range(2001, 2041))
+N_SEEDS = 40
 LO, HI = 0.75, 0.85
 N_CORTES = 296
 
@@ -123,7 +124,6 @@ def per_seed(r: dict) -> dict:
     out = {"cob80": c, "cob50": float((np.abs(z) < Q50).mean()), "cob95": float((np.abs(z) < Q95).mean()),
            "z2": float(np.mean(z ** 2)), "kurt_exc": float(pd.Series(z).kurt()), "sesgo_medio_z": float(z.mean()),
            "rmse": float(np.sqrt(np.mean((df["G"] - df["mu"]) ** 2))), "sd_media": float(df["sd"].mean()),
-           "sd_G": float(df["G"].std(ddof=1)),
            "sin_convergencia": int((~df.drop_duplicates("version")["conv"]).sum())}
     for b in (12, 24, 48):
         se = block_boot_se(hit, b)
@@ -133,7 +133,8 @@ def per_seed(r: dict) -> dict:
     out["acf_aciertos_1_3_6_12_24"] = ac
     for name, (a, b_) in {"1980_1989": ("1980-01", "1989-12"), "1990_1999": ("1990-01", "1999-12"),
                           "2000_2004": ("2000-01", "2004-08"), "hasta_1999": ("1980-01", "1999-12")}.items():
-        msk = (df["mes"] >= pd.Timestamp(a + "-01")) & (df["mes"] <= pd.Timestamp(b_ + "-01"))
+        msk = (df["mes"] >= a) & (df["mes"] <= b_ + "-01") if False else \
+            (df["mes"] >= pd.Timestamp(a + "-01")) & (df["mes"] <= pd.Timestamp(b_ + "-01"))
         out[f"cob80_{name}"] = float(hit[msk.to_numpy()].mean())
         out[f"z2_{name}"] = float(np.mean(z[msk.to_numpy()] ** 2))
     return out
@@ -168,6 +169,8 @@ def analyze() -> dict:
     rr = load("C", SEEDS_NEW)
     if rr:
         ps = {sd: per_seed(r) for sd, r in rr.items()}
+        for sd, r in rr.items():
+            ps[sd]["sd_G"] = float(pd.DataFrame(r["serie"])["G"].std(ddof=1))
         cov = [p["cob80"] for p in ps.values()]
         sm = summary(cov)
         frac = float(np.mean([(LO <= c <= HI) for c in cov]))
@@ -175,7 +178,7 @@ def analyze() -> dict:
         secundario = bool(frac >= 0.70)
         a = {"semillas": sorted(rr), "n_semillas": len(rr), "cob80": sm, "fraccion_en_rango": frac,
              "principal_cumple": principal, "secundario_cumple": secundario,
-             "veredicto": veredicto(principal, secundario)}
+             "veredicto": veredicto(principal, secundario) if len(rr) == N_SEEDS else "INCOMPLETO: no hay 40 semillas"}
         for k in ("cob50", "cob95", "z2", "kurt_exc", "sesgo_medio_z", "rmse", "sd_media", "sd_G", "cob80_1980_1989",
                   "cob80_1990_1999", "cob80_2000_2004", "cob80_hasta_1999", "z2_1980_1989", "z2_1990_1999",
                   "z2_2000_2004", "z2_hasta_1999", "se_bloque12", "se_bloque24", "se_bloque48", "n_ef_bloque12",
@@ -205,7 +208,7 @@ def main() -> None:
         print(json.dumps(run_seed(a.seed, a.arm)), flush=True)
     else:
         res = analyze()
-        print(json.dumps({k: v for k, v in res.items() if k != "R0_por_semilla"}, indent=1,
+        print(json.dumps({k: v for k, v in res.items() if k not in ("R0_por_semilla",)}, indent=1,
                          ensure_ascii=False, default=str)[:20000])
 
 
