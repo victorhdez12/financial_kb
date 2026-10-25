@@ -412,5 +412,6 @@ etiqueta real):
   `allow_shrink: true` en `config/harness/s_pit_001.yaml`; como mucho 3 meses iniciales sin cubrir; h recalculado
   sobre d<sup>pr</sup> restringida; ejecución automática con las comprobaciones de §2 (Validador). Lo que se había
   visto: `m2_long` completa (incluido h = 0,0538 con 315 meses); de la prudente, solo que falta 1 mes.
+- **6c. Resolución de S-PIT-001 (25-oct, 16:18 UTC):** `m2_long` = `20261025-090304_m2_long_6314b5b0`, `s_pit_001` = `20261025-171741_s_pit_001_8c2c38c8` (16:11:53→16:17:41 UTC, árbol limpio). Regla enmendada aplicada por `pool_dev.spit001` → `s_pit_001_enmienda`: mes excluido 1978-10 (el previsto); 314 meses; M0 idéntico; precondición del IC cumplida. Δ<sub>S</sub> = −0,00614; h = 0,05441 → **no se dispara**. Versión de M2 para todo lo que sigue: `philly_pre1990_nan: false` (la principal). No se corre `m2_long_phnan`. `research/trials/m2/s_pit_001_resolucion.json`.
 - **Línea `if False else` en `per_seed`:** se conserva a propósito. Está en el original y el protocolo prohíbe cambiar `per_seed`.
 - **Pendiente:** revisión en la nube de los resultados de C (`research/validation/m2_control_completo/`); registrar P-EVAL-BASE v4 con el pool como único contraste principal; sin corridas de M3 ni del pool antes del push de 6c.

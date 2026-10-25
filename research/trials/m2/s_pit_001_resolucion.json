@@ -1,0 +1,21 @@
+{
+ "m2_long": "20261025-090304_m2_long_6314b5b0",
+ "s_pit_001": "20261025-171741_s_pit_001_8c2c38c8",
+ "delta": -0.0061408561,
+ "semiamplitud": 0.0544063832,
+ "dispara": false,
+ "n_meses": 314,
+ "meses_excluidos": [
+  "1978-10"
+ ],
+ "ic95_d_pr_restringida": [
+  0.0217317743,
+  0.1305445408
+ ],
+ "ic95_registrado_m2_long": [
+  0.0202126622,
+  0.1277792092
+ ],
+ "philly_pre1990_nan": false,
+ "regla": "Regla operativa de S-PIT-001 (m2_structural_spec.md §2, con la enmienda del 25-oct): d = ll(M0) − ll(M2) por mes\n    en `m2_long` (vintage, matriz principal) y en `s_pit_001` (matriz prudente). Precondición: `metrics.boot_mean` sobre\n    la d completa de `m2_long` reproduce el IC registrado (diferencia ≤ 1e-12). Después, `s_pit_001_enmienda`: como mucho 3 meses\n    iniciales sin cubrir, M0 idéntico, h recalculado sobre d^pr restringida. Paso 6c: el resultado se escribe en la §9\n    de M2 con los dos run_id y se commitea y empuja ANTES de cualquier corrida de M3 o del pool."
+}
