@@ -151,31 +151,36 @@ del 16-oct).
   declara **inválida** y el pool **no pasa**. En ningún caso se corrige el código y se vuelve a correr sobre el
   bloqueado.
 
-## A7. Potencia: qué se puede esperar (`power_holdout.md`)
+## A7. Potencia: qué se puede esperar (`power_holdout.md` §6)
 
-- **MDE con 80 % de potencia** (criterio 1 + p < 0,05; k = 1 ≈ k = 2 porque el IC 95 % > 0 ya exige p ≈ < 0,025):
-  **≈ 0,12-0,15 nats** si d<sub>t</sub> es tan ruidosa como la de M1 (desv. mensual 0,30-0,36); **≈ 0,07** si el pool
-  la reduce a la mitad (supuesto, no medido; el Estratega lo ve optimista si la beta extremiza: ×0,6-0,8); 0,15-0,22 con colas ×1,5 (2008-09, 2020).
-- **Estudio sintético con el pool real** (v4.3; MAP + beta de `pool_spec.md` §3, 2.000 réplicas por celda,
-  `research/validation/potencia_holdout/estructural.json`): con criterios 1-4, 6 y 7 (sin el 5 ni el 8), la potencia es
-  0,39 / 0,63 / 0,83 con Δ = 0,05 / 0,07 / 0,10 con el criterio 1 de la v4.2, y **0,65 / 0,79 / 0,90** con el de la
-  v4.3; el error tipo I (componentes sin información) es 0,5 % y 2,4 %. Con la misma calidad de M2, contrastar M2 solo
-  frente a M0 tiene potencia ≤ 0,40: el pool reduce la desviación de d a ≈ 0,55 veces la de M2.
-- **Criterio 8:** con las probabilidades a priori del Estratega (P10), pasa por sí solo con probabilidad ≈ 0,11 (γ
-  independientes) a 0,5 (perfectamente dependientes), **sea cual sea la mejora del pool**. La potencia total es la de
-  arriba multiplicada por ese factor.
-- **Umbral observado** para pasar el criterio 1: ≈ 0,10 nats (≈ 0,05-0,07 con ruido ×0,5).
-- **Expectativa realista:** lo mejor visto en desarrollo es +0,035 nats (eje G de M1 v2, ventana larga). Con un efecto
-  verdadero de 0,04-0,06 la potencia es ≈ 0,23-0,42 con el ruido de M1 y ≈ 0,35-0,67 con ruido ×0,5 (tabla 3.2); con +0,035, ≈
-  0,15-0,30. **Lo más probable, aun con un pool que funcione, es "M0 sigue"**. La potencia conjunta con los criterios
-  2-8 es menor (el criterio 3 se cumple por azar ≈ 52 % si no hay mejora en giros).
-- El tamaño empírico del contraste con efecto 0 es **≥ 5-9 %** (nominal 2,5 %) con ruido ×1 **si la dependencia de d
-  no pasa de ≈ 12 meses**, y 0-1 % con ruido ×0,5: el umbral de 0,05 nats lo contiene en parte. Es una **cota
-  inferior**: el generador de `power.py` corta la dependencia en 12 meses; con memoria larga el tamaño real es mayor
-  (Validador, sintético AR(1): 9,3 % con φ = 0,85 y 19,8 % con φ = 0,95). No se cambia el contraste: la conjunción de
-  los criterios 1-8 y el umbral lo bajan (`power_holdout.md` §2).
-- **Puerta de gasto (lectura, no criterio):** si en la corrida de desarrollo del pool la mejora es < 0,05 nats o su IC
-  incluye claramente el 0, la potencia es < 30 % y se recomienda **no** registrar todavía (decide el usuario).
+- **Criterio de la v4.3 con el pool real** (estudio sintético; pool exactamente como `pool_spec.md` §3, MAP con previa
+  de Dirichlet + recalibración beta; 202 meses; 2.000 réplicas por celda, semillas fijas;
+  `research/validation/potencia_holdout/estructural_v43.json`). Decisión con los criterios 1-4, 6 y 7 (el 5 no se puede
+  simular con d; el 8 ya no decide):
+
+  | mejora verdadera Δ (nats) | 0 | 0,03 | 0,05 | 0,07 | 0,10 |
+  |---|---|---|---|---|---|
+  | **v4.3** (criterio 1 = IC 95 % lo > 0) | **0,024** (error tipo I) | 0,41 | 0,66 | 0,80 | 0,89 |
+  | v4.2 (con el suelo de 0,05 nats), referencia | 0,005 | 0,12 | 0,40 | 0,65 | 0,81 |
+
+  Δ realizadas: −0,0001 / 0,029 / 0,050 / 0,073 / 0,097. **MDE con 80 % de potencia ≈ 0,074 nats** (v4.2: ≈ 0,096).
+  Error de Monte Carlo ≤ 0,011. Desviación mensual de d del pool ≈ 0,08-0,25 según Δ (≈ 0,55 veces la de M2) y ACF(1)
+  ≈ 0,4-0,6. Con la misma calidad de M2, contrastar **M2 solo** frente a M0 daría 0,03 / 0,11 / 0,22 / 0,32 con Δ de
+  M2 = −0,01 / 0,025 / 0,054 / 0,078: el pool es el contraste con más potencia.
+- **Sensibilidad (forma reducida, `reducida.json`; potencia con Δ = 0,07 → v4.3):** base (σ 0,22, φ 0,3) 0,87;
+  φ = 0,6 0,68; σ = 0,29 0,69; σ = 0,365 (ruido de M2) 0,54; 2 recesiones 0,87; n = 250 0,93; adverso (2 recesiones,
+  φ 0,6, σ 0,29, τ 1) 0,47; φ = 0,85 0,48. El error tipo I va del 2,4 % (estructural) y 3,9 % (base) al 5,2 % (φ 0,6)
+  y al **8,4 % con φ = 0,85** (igual que la v4.2): con memoria larga, el bootstrap por bloques de 12 es liberal.
+- **Criterio 8 (informativo):** con las probabilidades a priori del Estratega (P10) habría pasado por sí solo con
+  probabilidad ≈ 0,11-0,5 sea cual sea la mejora del pool; por eso deja de decidir (A1-16). Ya no multiplica la
+  potencia.
+- **Expectativa realista:** P8 del Estratega espera pool − M0 de +0,01 a +0,06 nats en desarrollo; con Δ = 0,03-0,05 la
+  potencia es 0,41-0,66. El criterio 5 (falsas alarmas) no está simulado: la potencia real es algo menor.
+- **Cifras de la v4.2 con el ruido de M1** (`power_holdout.md` §3, historia): MDE ≈ 0,12-0,15 nats con desviación
+  mensual 0,30-0,36. Ese ruido es el de M1, no el del pool.
+- **Puerta de gasto (lectura, no criterio; umbral sin cambio desde la v4.2):** si en la corrida de desarrollo del pool la
+  mejora es < 0,05 nats o su IC incluye claramente el 0, se recomienda **no** registrar todavía (decide el usuario).
+  Con el criterio de la v4.3, una mejora verdadera de 0,05 da potencia ≈ 0,66 y una de 0,03, ≈ 0,41.
 
 ## A8. Ejecutabilidad (corrige M4-1)
 
