@@ -13,3 +13,14 @@ requests>=2.32
 beautifulsoup4>=4.12
 lxml>=5.0
 pytest
+# Cálculo científico (versiones del entorno que produjo las corridas publicadas; ver docs/models/m2_structural_spec.md §9.x)
+numpy==2.5.3
+scipy==1.18.1
+statsmodels==0.15.0
+pandas==3.0.6
+pyarrow==25.0.1
+matplotlib==3.11.2
+xlrd==2.0.2
+brotli==1.2.0
+pycountry==26.2.16
+anthropic==1.12.0
