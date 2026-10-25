@@ -17,7 +17,7 @@ min_train_g_changes: 8
 test_start: "1956-10"
 test_end: "2004-12"
 eval_window: ["1978-10", "2004-12"]
-allow_shrink: false
+allow_shrink: true      # enmienda 25-oct (spec §2): Filadelfia prudente empieza 1968-06
 epochs: [["1956-01", "1979-12"], ["1980-01", "2004-12"]]
 subperiods: [["1978-10", "1989-12"], ["1990-01", "2004-12"]]
 feature_policy: principal

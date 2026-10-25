@@ -98,6 +98,16 @@ posterior se anota en §9 con lo que se había visto.
     meses puntuados de `m2_long` (vintage), estar **alineadas por mes** y tener **el mismo índice** (los mismos meses,
     en el mismo orden). Si no, la regla lanza un error y **se para**: no se toma la intersección ni se elige nada
     (`regime_components.s_pit_001_triggered`, con test).
+  - **Enmienda 2026-10-25 (decisión del usuario tras el fallo de la 6b, fijada ANTES de ver ninguna pérdida de la
+    corrida prudente; pendiente de revisión del Validador antes de correr).** En la matriz `vintage_filadelfia_prudente`,
+    `philly_neworders` empieza en 1968-06 (1968-05 en la principal), y la ventana del eje G de M2 empieza un mes más
+    tarde: la 6b no cubre un mes de la ventana de `m2_long` (trial log, 25-oct). Regla: `s_pit_001` se corre con
+    `allow_shrink: true` y la misma `eval_window`. Si los meses puntuados de la corrida prudente son los de `m2_long`
+    menos **como mucho 3 meses iniciales consecutivos**, la regla se aplica en los meses de la corrida prudente:
+    d<sup>pr</sup> = d de `m2_long` (vintage) restringida a esos meses, y h = (hi − lo)/2 de `M.boot_mean(d^pr)` (el
+    mismo bootstrap que el arnés usa para `mejora_logloss`), recalculado en esos meses. Las exigencias N-2 siguen
+    valiendo dentro de esos meses (finitas, mismo índice). En cualquier otro caso (faltan meses no iniciales o más de
+    3) se para. El resultado de `m2_long` sigue siendo exploratorio (§9.x).
   - **Marca de configuración (v1.2, Validador N-6):** la versión se escribe como
     `model_params.m2_struct_g: {philly_pre1990_nan: false}` (no se dispara) o `{philly_pre1990_nan: true}` (se
     dispara). Los modelos que dependen de M2 (`m3_tvtp_g`, `m3_ctp_g`, `pool_g`, sus variantes y las sensibilidades de
