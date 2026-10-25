@@ -18,6 +18,7 @@ from src.models import base as B
 from src.models import harness as H
 from src.models import models_logit as L
 from src.models import vault as V
+from tests.real_data import requires_real_data
 
 
 def _frame(n=400, seed=0):
@@ -123,6 +124,7 @@ def test_candidate_pit_not_allowed_in_holdout(monkeypatch):
         H.HarnessConfig(name="x", pit_version="9.9").validate()
 
 
+@requires_real_data
 def test_dry_run_flags_candidate_pit_before_spending(tmp_path, monkeypatch):
     """Una configuración de evaluación con una base PIT candidata la rechaza el ensayo en seco (que `_preflight` repite
     ANTES de abrir la caja): nunca llega a `_run` con el preregistro ya consumido. La v0.4 congelada ya no se rechaza."""

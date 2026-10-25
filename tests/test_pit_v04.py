@@ -23,6 +23,7 @@ from src.features import pit as P
 from src.features import placebo as PL
 from src.features.calendar import CalEntry
 from src.labels import regime_us as R
+from tests.real_data import requires_real_data
 
 HOLDOUT = pd.Timestamp(R.PARAMS.holdout_start)
 NEW = {"curve_min12": ("rolling_min", ["curve_10y3m"], "+"), "baa_gap10y": ("gap_median_prev", ["baa_spread"], "-"),
@@ -40,6 +41,7 @@ def mats():
 
 
 # ------------------------------------------------------------------ (s) superconjunto de la v0.3
+@requires_real_data
 @pytest.mark.parametrize("name", MATS)
 def test_s_v03_columns_identical(name, mats):
     old, new = _read("0.3", name), mats[name]
@@ -51,6 +53,7 @@ def test_s_v03_columns_identical(name, mats):
     pd.testing.assert_frame_equal(ln, lo)
 
 
+@requires_real_data
 @pytest.mark.parametrize("mode", P.MODES)
 def test_s_baselines_bit_identical(mode):
     od = P.out_dir()
@@ -58,6 +61,7 @@ def test_s_baselines_bit_identical(mode):
         P.file_sha(od / f"baseline_persistence_v0.3_{mode}.parquet")
 
 
+@requires_real_data
 def test_s_meta_registers_candidate():
     """El meta se escribió con la v0.4 candidata (23-oct, 10:58) y no se regenera al congelar (B-5, paso 2 opcional,
     igual que la v0.3): registra los hashes de CANDIDATE, que son los mismos que los de FROZEN["0.4"]."""
@@ -70,6 +74,7 @@ def test_s_meta_registers_candidate():
 
 
 # ------------------------------------------------------------------ lista blanca
+@requires_real_data
 def test_whitelist_v04_entries():
     wl = P.load_whitelist()
     specs = {v["nombre"]: v for v in wl["variables"]}
@@ -103,6 +108,7 @@ def _hand(base: np.ndarray, fn: str) -> np.ndarray:
     return out
 
 
+@requires_real_data
 @pytest.mark.parametrize("name", MATS)
 def test_v_new_columns_by_hand(name, mats):
     X = mats[name]
@@ -114,6 +120,7 @@ def test_v_new_columns_by_hand(name, mats):
         np.testing.assert_allclose(got[ok], want[ok], rtol=1e-12, atol=1e-12, err_msg=col)
 
 
+@requires_real_data
 def test_v_first_dates(mats):
     X = mats["vintage"]
     first = {c: f"{X[c].first_valid_index():%Y-%m}" for c in NEW}
@@ -139,6 +146,7 @@ def test_p_derived_are_causal(col):
         pd.testing.assert_series_equal(alt.iloc[:t + 1], base.iloc[:t + 1], check_names=False)
 
 
+@requires_real_data
 @pytest.mark.parametrize("cut", ["1979-10-31", "2004-12-30"])
 def test_p_truncated_grid_same_row(mats, cut):
     """En la matriz oficial: recalcular las derivadas solo con las filas de la rejilla ≤ t da el mismo valor en t."""
@@ -167,6 +175,7 @@ def _leak(ys, rng):
     return np.eye(4)[ys][:, 1:] + rng.normal(0, 0.5, (len(ys), 3))
 
 
+@requires_real_data
 def test_c_placebo_v04(mats):
     X = mats["vintage"]
     X = X[X.index < HOLDOUT]

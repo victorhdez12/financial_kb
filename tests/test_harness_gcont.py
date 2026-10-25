@@ -26,6 +26,7 @@ from src.models import base as B
 from src.models import harness as H
 from src.models import metrics as M
 from src.models.metrics import P_COLS, QUADS
+from tests.real_data import requires_real_data
 
 S_G = R.PARAMS.s_G_fixed
 
@@ -158,6 +159,7 @@ def planted():
         yield data, r
 
 
+@pytest.mark.usefixtures("synthetic_label_meta")
 def test_continuous_probs_are_transformation_of_mu_sd(planted):
     data, r = planted
     p = r["preds"]
@@ -172,6 +174,7 @@ def test_continuous_probs_are_transformation_of_mu_sd(planted):
     assert np.allclose(t[P_COLS].to_numpy() @ M.I_HIGH, m0.loc[t.index, P_COLS].to_numpy() @ M.I_HIGH)
 
 
+@pytest.mark.usefixtures("synthetic_label_meta")
 def test_continuous_model_scored_like_m0_and_reports_crps(planted):
     data, r = planted
     rep = r["report"]
@@ -192,6 +195,7 @@ def test_continuous_model_scored_like_m0_and_reports_crps(planted):
     assert "synthetic/m0_calibrated_persistence" not in {k.split(":", 1)[1] for k in gc}
 
 
+@pytest.mark.usefixtures("synthetic_label_meta")
 def test_oracle_reaches_entropy_of_soft_target(planted):
     data, r = planted
     S = r["scores"]
@@ -202,6 +206,7 @@ def test_oracle_reaches_entropy_of_soft_target(planted):
     assert np.allclose(o["ll_g"][inner], M.binary_logloss(tg, tg)[inner], atol=1e-6)
 
 
+@pytest.mark.usefixtures("synthetic_label_meta")
 def test_continuous_target_respects_embargo_and_uses_training_label(planted):
     data, r = planted
     toy = ToyOLSG()
@@ -213,6 +218,7 @@ def test_continuous_target_respects_embargo_and_uses_training_label(planted):
         assert np.allclose(g, data.target.loc[months, "G"].to_numpy())   # G de la etiqueta de entrenamiento
 
 
+@pytest.mark.usefixtures("synthetic_label_meta")
 def test_no_signal_no_skill():
     data = _synthetic(signal=False, seed=11)
     r = H.run(_cfg(("m0_calibrated_persistence", "toy_ols_g")), registry=REG, datas={"synthetic": data},
@@ -221,6 +227,7 @@ def test_no_signal_no_skill():
     assert c["lo"] < 0 < c["hi"] or c["mean"] < 0.02
 
 
+@pytest.mark.usefixtures("synthetic_label_meta")
 @pytest.mark.parametrize("how,match", [("sd0", "≤ 0"), ("shape", "devolvió"), ("nan", "no finito")])
 def test_bad_continuous_predictions_rejected(how, match):
     reg = {**REG, "bad_g": lambda: Bad(how)}
@@ -228,11 +235,13 @@ def test_bad_continuous_predictions_rejected(how, match):
         H.run(_cfg(("m0_calibrated_persistence", "bad_g")), registry=reg, datas={"synthetic": _synthetic()}, record=False)
 
 
+@pytest.mark.usefixtures("synthetic_label_meta")
 def test_missing_continuous_target_rejected():
     with pytest.raises(ValueError, match="no trae 'G'"):
         H.run(_cfg(("m0_calibrated_persistence", "toy_ols_g")), registry=REG, datas={"synthetic": _synthetic(with_g=False)}, record=False)
 
 
+@pytest.mark.usefixtures("synthetic_label_meta")
 def test_without_continuous_models_nothing_changes():
     """Sin modelos continuos: ni columnas nuevas en las predicciones ni clave nueva en el informe; el hash es el de la
     misma corrida con los datos sin las columnas G/I de la etiqueta (que el arnés no lee si nadie las pide)."""
@@ -244,6 +253,7 @@ def test_without_continuous_models_nothing_changes():
     assert r1["results_sha256"] == r2["results_sha256"]
 
 
+@requires_real_data
 def test_pitdata_axis_scale_matches_label_params():
     """La escala que usa el arnés con datos reales es la de la etiqueta congelada (sin leer la etiqueta)."""
     from src.features import pit as P

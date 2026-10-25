@@ -29,6 +29,7 @@ from src.features import pit as P
 from src.features import placebo as PL
 from src.features.calendar import CAL_PATH, MEASURED_PATH, CalEntry, load_calendar
 from src.labels import regime_us as R
+from tests.real_data import requires_real_data
 
 HOLDOUT = pd.Timestamp(R.PARAMS.holdout_start)
 SNAP = P.snapshot_paths()
@@ -121,6 +122,7 @@ def test_h_write_snapshot_own_data_not_blocked(tmp_path, monkeypatch):
         P.write_snapshot(None, version="9.2", force=True)
 
 
+@requires_real_data
 def test_h_snapshot_matches_registered():
     ref = P.snapshot_ref(P.VERSION)
     assert P.file_sha(SNAP["data"]) == ref["data_sha256_file"]
@@ -133,6 +135,7 @@ def test_h_snapshot_matches_registered():
         assert P.file_sha(p.parent / "backup" / p.name) == P.file_sha(p)
 
 
+@requires_real_data
 @pytest.mark.parametrize("version", sorted(P.FROZEN))
 def test_h_frozen_versions_intact(version):
     """Las versiones congeladas (también la v0.2, sustituida) siguen intactas."""
@@ -155,6 +158,7 @@ def test_h_research_files_equal_snapshot():
     assert P.file_sha(CAL_PATH) == ref["calendar_sha256"]
 
 
+@requires_real_data
 def test_h_tampered_snapshot_rejected(tmp_path):
     paths = {k: tmp_path / v.name for k, v in SNAP.items()}
     for k, v in SNAP.items():
@@ -177,6 +181,7 @@ def official_rebuild(snap, full, forbidden):
             "vintage_filadelfia_prudente": phil[0]}, base
 
 
+@requires_real_data
 def test_h_official_outputs_reproducible(official_rebuild):
     mats, base = official_rebuild
     od = P.out_dir()
@@ -199,6 +204,7 @@ def test_h_snapshot_writers_refuse_frozen():
             P.write_candidate(version=v)
 
 
+@requires_real_data
 def test_h_label_params_pinned(tmp_path, monkeypatch):
     """M-1: s_G, s_I y el empalme salen de la etiqueta congelada; un meta.json alterado hace fallar."""
     lp = P.label_params()
@@ -223,6 +229,7 @@ def _ancestors(specs: dict, name: str) -> set:
     return seen
 
 
+@requires_real_data
 def test_i1_principal_desde_inherited_through_graph(snap):
     """Recorrido independiente del grafo: el principal_desde efectivo = el más tardío del nodo y de TODOS sus
     ancestros; coincide con el código y con el meta."""
@@ -239,11 +246,13 @@ def test_i1_principal_desde_inherited_through_graph(snap):
     assert {n for n in P.public_columns(snap["wl"]) if meta[n]["principal_desde_heredado"]} == {"infl_energy_pressure"}
 
 
+@requires_real_data
 def test_i2_vix_conditional_before_2003(snap):
     v = next(x for x in snap["wl"]["variables"] if x["nombre"] == "vix")
     assert str(v["principal_desde"]) == "2003-09-22"
 
 
+@requires_real_data
 def test_h1_tcu_gap_conditional_before_1984(snap):
     """H-1 (decisión del usuario, 2026-10-16): la utilización de la industria total existe desde 1983 (G.17 de la Fed)
     → tcu_gap condicional antes de 1984-01-01. Toda variable que dependa de _tcu/tcu_gap lo hereda (hoy, ninguna)."""
@@ -302,6 +311,7 @@ def _independent_publication(con, raw: dict, lin: pd.DataFrame) -> pd.Series:
     return out
 
 
+@requires_real_data
 @pytest.mark.parametrize("mode", P.MODES)
 def test_a_no_cell_uses_unpublished_data(snap, full, mode):
     con = snap["con"]
@@ -331,6 +341,7 @@ def test_a_no_cell_uses_unpublished_data(snap, full, mode):
     assert not ((pe >= t) & ~lin["series_id"].isin(intra)).any()
 
 
+@requires_real_data
 def test_a_ecb_week_published_after_t(snap, full):
     """BCE (Validador I-3): semana fechada en lunes, publicada el martes siguiente (lunes + 8)."""
     _, lin, _ = full["latest_truncated"]
@@ -352,6 +363,7 @@ def _value_at(con, sid: str, d: pd.Timestamp, mode: str, t: pd.Timestamp) -> flo
     return np.nan if r is None or r[0] is None else float(r[0])
 
 
+@requires_real_data
 @pytest.mark.parametrize("mode", P.MODES)
 def test_v_values_recomputed_by_hand(snap, full, mode):
     """Recalcula celdas al azar con SQL sobre la instantánea y la transformación escrita aquí (sin src.features)."""
@@ -396,6 +408,7 @@ def _real_first_release(con, sid: str) -> pd.Series:
     return r[(r > pd.Timestamp(s0)) & ((r - (r.index + pd.offsets.MonthEnd(0))).dt.days <= 200)]
 
 
+@requires_real_data
 @pytest.mark.parametrize("sid,proxy", PROXY_PAIRS)
 def test_v_proxy_release_verified_with_own_vintages(snap, sid, proxy):
     """'Mismo comunicado de prensa': las vintages propias de la serie nunca la fechan DESPUÉS que su proxy."""
@@ -405,6 +418,7 @@ def test_v_proxy_release_verified_with_own_vintages(snap, sid, proxy):
     assert ((a[common] - b[common]).dt.days <= 0).all()
 
 
+@requires_real_data
 @pytest.mark.parametrize("sid,lag,until,share", [
     ("GACDFSA066MSFRBPHI", -7, "2100-01-01", 0.95), ("PPCDFSA066MSFRBPHI", -7, "2100-01-01", 0.95),
     ("PERMIT", 23, "2013-01-01", 1.0),        # el retardo de reserva (< 1999) frente a la época medida más antigua
@@ -448,6 +462,7 @@ def test_calendar_fallback_lags_cover_measured():
 CUTOFFS = ["1962-03-30", "1979-10-31", "1996-12-31", "2004-12-30", "2014-06-30"]
 
 
+@requires_real_data
 @pytest.mark.parametrize("cut", CUTOFFS)
 def test_b_truncation_same_row(snap, full, forbidden, cut):
     t = pd.Timestamp(cut)
@@ -462,6 +477,7 @@ def test_b_truncation_same_row(snap, full, forbidden, cut):
     mem.close()
 
 
+@requires_real_data
 @pytest.mark.parametrize("cut", ["1979-10-31", "2004-12-30"])
 def test_b_truncation_persistence(snap, monkeypatch, cut):
     t = pd.Timestamp(cut)
@@ -481,6 +497,7 @@ def test_b_truncation_persistence(snap, monkeypatch, cut):
     mem.close()
 
 
+@requires_real_data
 def test_b_baselines_same_sample():
     od = P.out_dir()
     a = pd.read_parquet(od / f"baseline_persistence_v{P.VERSION}_vintage.parquet")
@@ -505,6 +522,7 @@ def _leak(ys, rng):
     return np.eye(4)[ys][:, 1:] + rng.normal(0, 0.5, (len(ys), 3))
 
 
+@requires_real_data
 def test_c_placebo_detects_leak(full):
     X = full["vintage"][0]
     X = X.set_index(X.index.to_period("M").to_timestamp())[PLACEBO_FEATURES]
@@ -602,6 +620,7 @@ def test_d_positive_control_leak_detected():
 
 
 # ------------------------------------------------------------------ (e) lista negra
+@requires_real_data
 @pytest.mark.parametrize("mode", P.MODES)
 def test_e_no_forbidden_columns(snap, full, forbidden, mode):
     X, lin, _ = full[mode]
@@ -613,6 +632,7 @@ def test_e_no_forbidden_columns(snap, full, forbidden, mode):
     assert set(X.columns) == set(P.public_columns(snap["wl"]))
 
 
+@requires_real_data
 def test_e_builder_rejects_forbidden(snap, forbidden):
     cal = dict(snap["cal"])
     cal["USREC"] = CalEntry("USREC", "M", "fin_periodo", ((pd.Timestamp("1900-01-01"), 400),), (), (), True, "", "")
@@ -629,6 +649,7 @@ def test_e_builder_rejects_forbidden(snap, forbidden):
 
 
 # ------------------------------------------------------------------ (f) forecast / lookahead
+@requires_real_data
 def test_f_only_observed_series(snap, full):
     sids = P.needed_series(snap["wl"], snap["cal"])
     roles = dict(snap["con"].execute("select series_id, pit_role from catalog").fetchall())
@@ -640,6 +661,7 @@ def test_f_only_observed_series(snap, full):
                        for s in spf)
 
 
+@requires_real_data
 def test_f_builder_rejects_forecast_series(snap, forbidden):
     cal = dict(snap["cal"])
     cal["GDPPOT"] = CalEntry("GDPPOT", "Q", "fin_periodo", ((pd.Timestamp("1900-01-01"), 30),), (), (), True, "", "")
@@ -651,6 +673,7 @@ def test_f_builder_rejects_forecast_series(snap, forbidden):
 
 
 # ------------------------------------------------------------------ lista blanca
+@requires_real_data
 def test_whitelist_documented(snap):
     estados = {"principal", "principal_epoca", "modulo_adicional", "condicional", "auxiliar"}
     for v in snap["wl"]["variables"]:
@@ -669,6 +692,7 @@ def test_whitelist_documented(snap):
     assert all(pd_[c] == "1978-01-01" for c in ("core_cpi_6m_ann", "core_cpi_yoy", "real_ff"))
 
 
+@requires_real_data
 def test_desde_columns_empty_before(full):
     X = full["vintage"][0]
     assert X.loc[:"1972-12-31", "copper_gold_6m"].isna().all()

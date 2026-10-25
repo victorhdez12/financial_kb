@@ -16,6 +16,7 @@ from src.models import models_logit as L
 from src.models import models_rules as RU
 from src.models.metrics import P_COLS, QUADS
 from src.regime.classify import inflation_state
+from tests.real_data import requires_real_data
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -156,6 +157,7 @@ def _synthetic(n_years=40, seed=7):
     return H.ArrayData(X, tgt, info, kind="synthetic")
 
 
+@pytest.mark.usefixtures("synthetic_label_meta")
 def test_m1_and_rules_run_in_harness_without_leaks():
     data = _synthetic()
     seen = []
@@ -184,6 +186,7 @@ def test_m1_and_rules_run_in_harness_without_leaks():
     assert np.allclose(p[P_COLS].sum(axis=1), 1)
 
 
+@requires_real_data
 def test_real_pit_columns_and_windows_spy_only():
     """Datos reales SIN puntuar (solo walk_forward): columnas, ventanas por eje y época del subyacente en las reglas."""
     pit = H.PITData("vintage")

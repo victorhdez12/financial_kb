@@ -23,6 +23,7 @@ from src.models import harness as H
 from src.models import metrics as M
 from src.models import vault as V
 from src.models.metrics import P_COLS
+from tests.real_data import requires_real_data
 
 HOLDOUT = pd.Timestamp(R.PARAMS.holdout_start)
 
@@ -362,6 +363,7 @@ def test_access_log_complete_fixed_path(evalrepo, monkeypatch, tmp_path):
 
 
 # ================================================================== M-1
+@requires_real_data
 def test_M1_pitlabeler_blocks_holdout(vint, trial_dirs):
     lb = vint.labeler
     for t in ("2005-01-31", "2010-06-30"):
@@ -372,6 +374,7 @@ def test_M1_pitlabeler_blocks_holdout(vint, trial_dirs):
     assert any(x.get("mode") == "pit_labeler" and not x["granted"] for x in log)
 
 
+@requires_real_data
 def test_M1_score_training_strict_and_unchanged():
     pred = pd.DataFrame({"month": pd.date_range("2000-01-01", "2005-01-01", freq="MS")})
     with pytest.raises(AssertionError):
@@ -384,6 +387,7 @@ def test_M1_score_training_strict_and_unchanged():
 
 
 # ================================================================== M-3: ventana fija
+@requires_real_data
 def test_M3_eval_window_fixed_or_warned(vint):
     cfg = H.HarnessConfig(name="t", models=("persistence_pit", "climatology"), modes=("vintage",),
                           test_start="1960-01", test_end="1972-12")      # la climatología empieza en ~1965
@@ -408,6 +412,7 @@ def test_M4_maturity_weight_function_fixed():
     assert all(w(a) <= w(b) for a, b in zip(ks, ks[1:]))          # monótona
 
 
+@requires_real_data
 def test_M4_sample_weight_reaches_fit(vint):
     calls = {}
     for how in H.WEIGHTING:
@@ -457,6 +462,7 @@ class _AxisSpy(B.AxisModel):
         return np.full(len(X), 0.5)
 
 
+@requires_real_data
 def test_M2_axis_windows_independent_and_minimums(vint):
     spy = _AxisSpy()
     cfg = H.HarnessConfig(name="t", models=("persistence_pit", "axis_spy"), modes=("vintage",),
@@ -480,6 +486,7 @@ def test_M2_axis_windows_independent_and_minimums(vint):
         assert e95[ax]["n_train"] >= 120 and e95[ax]["n_recesiones"] >= 2 and e95[ax]["n_cambios_g"] >= 8
 
 
+@pytest.mark.usefixtures("synthetic_label_meta")
 def test_M2_minimums_reject_short_or_quiet_windows():
     idx = pd.date_range("1960-01-01", "1990-12-01", freq="MS")
     tgt = pd.DataFrame({"p_expansion": 0.7, "p_late_cycle": 0.1, "p_stagflation": 0.1, "p_low_growth_disinfl": 0.1,
@@ -504,6 +511,7 @@ def test_count_recessions_pit():
 
 
 # ================================================================== M0
+@requires_real_data
 def test_M0_calibrated_persistence_walk_forward(vint):
     """M0 no usa ninguna variable macro: solo P(eje alto) de la persistencia PIT; entrena con datos ≤ corte − 6."""
     seen = []
@@ -575,6 +583,7 @@ def test_episodes_definition():
     assert cuts.loc["1991-01-01", "giro"] and not cuts.loc["1990-11-01", "giro"]
 
 
+@requires_real_data
 def test_report_has_axis_cuts_and_r10_hash(vint):
     cfg = H.HarnessConfig(name="t", models=("persistence_pit", "climatology"), modes=("vintage",),
                           test_start="1980-01", test_end="1989-12", refit_every=12,
@@ -596,6 +605,7 @@ def test_report_has_axis_cuts_and_r10_hash(vint):
     assert H.results_hash(p2.assign(p_expansion=p2["p_expansion"] + 1e-11), rep) != r["results_sha256"]
 
 
+@requires_real_data
 def test_unrecorded_run_leaves_a_line(vint):
     f = V.full_log_dir() / "harness_runs_unrecorded.jsonl"
     n0 = len(f.read_text().splitlines()) if f.exists() else 0
@@ -643,6 +653,7 @@ def test_M23_detection_confirmation_censoring_anticipation():
 
 
 # ================================================================== v2.1: M2-4 signos, sign_stability y Holm por familia
+@requires_real_data
 def test_M24_coefficient_signs_and_stability(vint):
     months = pd.date_range("1990-01-01", "2004-12-01", freq="MS")
     diags = {"vintage": [{"model": "m", "refit_month": m,
@@ -686,6 +697,7 @@ def test_M25_placebo_complementary_rule_on_power_table():
     assert not PL.leak_rules(tab["futura_t+1_sd2"]["pareado"])["fuga_detectada"]
 
 
+@requires_real_data
 def test_M25_model_placebo_uses_the_models_own_spec(vint):
     """Mecánica: el placebo de un aspirante usa SUS modelos (aquí M0 frente a la sonda, que no usa variables: el
     incremento pareado es exactamente 0 y no hay ni fuga ni aviso)."""
@@ -698,6 +710,7 @@ def test_M25_model_placebo_uses_the_models_own_spec(vint):
 
 
 # ================================================================== v2.1: N4 levels_at
+@requires_real_data
 def test_N4_levels_at_blocks_holdout(vint):
     with pytest.raises(V.HoldoutLocked, match="levels_at"):
         vint.labeler.levels_at(pd.Timestamp("2006-03-31"))
@@ -890,6 +903,7 @@ def _probe_cfg(tmp_path, **kw):
     return f
 
 
+@requires_real_data
 def test_dry_run_executes_the_whole_config_without_opening(vint, tmp_path):
     n0 = len(V.registry_path().read_text().splitlines())
     dr = H.dry_run_prereg(cfg_path=str(_probe_cfg(tmp_path)), record=False, _datas={("vintage", "", "principal"): vint})
@@ -901,6 +915,7 @@ def test_dry_run_executes_the_whole_config_without_opening(vint, tmp_path):
     assert len(V.registry_path().read_text().splitlines()) == n0           # nada consumido
 
 
+@requires_real_data
 def test_dry_run_catches_ineligible_models_and_bad_config(vint, tmp_path):
     f = _probe_cfg(tmp_path, allow_shrink=True, eval_window=["2004-06", "2021-12"])
     dr = H.dry_run_prereg(cfg_path=str(f), record=False, _datas={("vintage", "", "principal"): vint})

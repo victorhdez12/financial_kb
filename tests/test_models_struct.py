@@ -202,6 +202,7 @@ def test_revision_table_rules():
     assert np.isclose(t2["rho_bar"]["1"], np.mean([1.0 / 2.0, 0.25 / 1.0]))
 
 
+@pytest.mark.usefixtures("synthetic_label_meta")
 def test_m2_and_variants_run_in_harness(syn):
     """Integración con el arnés v2.4 (ArrayData sintético): g_mu/g_sd, P = Φ(μ/√(σ² + s_G²)), eje I = M0,
     coeficientes y diagnóstico de convergencia; las variantes corren."""

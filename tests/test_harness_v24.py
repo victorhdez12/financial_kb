@@ -87,6 +87,7 @@ SF = {"gamma_stub": {"coefs": list(C.TVTP.sign_coefs), "threshold": 0.01, "min_f
 EXP = {"gamma_stub": {k: {"signo": "+", "decide": False} for k in C.TVTP.sign_coefs}}
 
 
+@pytest.mark.usefixtures("synthetic_label_meta")
 def test_N5_all_gamma_zero_fails_criterion8_while_old_key_is_vacuous():
     tgt = _target()
     reg = {"m0_calibrated_persistence": B.CalibratedPersistence, "gamma_stub": lambda: GammaStub((0, 0, 0, 0))}
@@ -121,6 +122,7 @@ def test_N5_denominator_is_every_cut_of_the_window_not_the_fitted_ones():
         H.sign_fraction_report(dl, "gamma_stub", {**SF["gamma_stub"], "missing_counts_as_fail": False}, cfg)
 
 
+@pytest.mark.usefixtures("synthetic_label_meta")
 def test_N5_stale_coefficients_of_a_skipped_cut_do_not_count():
     """`coefficients()` devuelve los del corte anterior cuando se omite el eje: el arnés no debe contarlos."""
     tgt = _target()
@@ -165,6 +167,7 @@ class LevelsSpy(B.AxisModel):
         return self.m0.predict_axis(axis, X, info)
 
 
+@pytest.mark.usefixtures("synthetic_label_meta")
 def test_pit_levels_barrier_and_bounded_history():
     tgt = _target()
     calls = []
@@ -246,6 +249,7 @@ def _pool_reg(tgt, pool_cls=MP.PoolG, m2=None, m3=None):
             "pool_g": lambda **k: pool_cls(name="pool_g")}
 
 
+@pytest.mark.usefixtures("synthetic_label_meta")
 def test_stacked_gets_out_of_sample_preds_from_their_cut_and_is_m0_before_nmin():
     tgt = _target(n=480)
     PoolSpy.seen = []
@@ -365,6 +369,7 @@ def test_declared_8020_and_event_study():
     assert es["media_por_sentido"]["B→A"]["n_episodios"] == 1 and es["estables"]["n"] == 60
 
 
+@pytest.mark.usefixtures("synthetic_label_meta")
 def test_report_has_v24_keys_for_all_comparisons():
     tgt = _target()
     reg = {"m0_calibrated_persistence": B.CalibratedPersistence, "climatology": B.Climatology}

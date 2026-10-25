@@ -27,6 +27,9 @@ from src.models import base as B
 from src.models import harness as H
 from src.models import vault as V
 from src.models.metrics import P_COLS
+from tests.real_data import requires_real_data
+
+pytestmark = requires_real_data
 
 HOLDOUT = pd.Timestamp(R.PARAMS.holdout_start)
 LISTON = {"vintage": (0.6113989637305699, 1.299697368353707),

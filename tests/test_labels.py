@@ -6,6 +6,7 @@ import pandas as pd
 import pytest
 
 from src.labels import regime_us as R
+from tests.real_data import requires_real_data
 
 PCOLS = [f"p_{q}" for q in R.QUADRANTS]
 
@@ -16,6 +17,7 @@ def built():
     return df, info
 
 
+@requires_real_data
 def test_columns(built):
     df, _ = built
     expected = ["date", "G", "I", "p_g_high", "p_i_high", *PCOLS, "label_hard", "max_prob", "frontera",
@@ -26,6 +28,7 @@ def test_columns(built):
     assert (df["date"].diff().dropna().dt.days.between(28, 31)).all()  # mensual sin huecos
 
 
+@requires_real_data
 def test_probabilities_valid(built):
     df, _ = built
     p = df[PCOLS + ["p_g_high", "p_i_high"]]
@@ -34,6 +37,7 @@ def test_probabilities_valid(built):
     assert np.allclose(df[PCOLS].sum(axis=1), 1.0, atol=1e-12)
 
 
+@requires_real_data
 def test_no_future_dates(built):
     df, _ = built
     today = pd.Timestamp.today().normalize()
@@ -41,6 +45,7 @@ def test_no_future_dates(built):
     assert df[["G", "I"]].notna().all().all()
 
 
+@requires_real_data
 def test_hard_label_is_argmax(built):
     df, _ = built
     arg = df[PCOLS].to_numpy().argmax(axis=1)
@@ -49,6 +54,7 @@ def test_hard_label_is_argmax(built):
     assert (df["frontera"] == (df["max_prob"] < R.PARAMS.frontier)).all()
 
 
+@requires_real_data
 def test_provisional_last_n(built):
     df, _ = built
     n = R.PARAMS.provisional_months
@@ -56,12 +62,14 @@ def test_provisional_last_n(built):
     assert df["provisional"].iloc[-n:].all() and not df["provisional"].iloc[:-n].any()
 
 
+@requires_real_data
 def test_truncated_flags(built):
     df, _ = built
     t = df.set_index("date")["tendencia_truncada"]
     assert t.loc["1950":"1954"].all() and not t.loc["1955":"1990"].any() and t.iloc[-60:].all()
 
 
+@requires_real_data
 def test_coverage_and_sources(built):
     df, _ = built
     assert (df["cobertura_g"] >= R.PARAMS.min_growth_ind).all()
@@ -69,6 +77,7 @@ def test_coverage_and_sources(built):
     assert set(df["fuente_i"]) <= {"pce_core", "cpi_core_adj", "headline"}
 
 
+@requires_real_data
 def test_weights(built):
     df, _ = built
     w = df.set_index("date")["weight"]
@@ -76,6 +85,7 @@ def test_weights(built):
     assert (w.loc[:"1954-12"] == 0).all() and (w.loc["1955-01":] == 1).all()
 
 
+@requires_real_data
 def test_quadrant_names(built):
     df, _ = built
     assert "p_slowdown" not in df.columns and "p_low_growth_disinfl" in df.columns
@@ -97,6 +107,7 @@ def test_centered_windows():
     assert moved_i.min() == idx[20 - 3] and moved_i.max() == idx[20 + 2]
 
 
+@requires_real_data
 def test_scales(built):
     _, info = built
     m = info["meta"]
@@ -105,6 +116,7 @@ def test_scales(built):
     assert m["s_G"] == pytest.approx(0.40) and m["s_I"] == pytest.approx(0.31)
 
 
+@requires_real_data
 def test_usage_metadata(built):
     _, info = built
     m = info["meta"]
@@ -128,6 +140,7 @@ def test_provisional_covers_revision_study():
     assert R.PARAMS.provisional_months % 6 == 0
 
 
+@requires_real_data
 def test_reproducible(built):
     df1, _ = built
     df2, _ = R.build()
@@ -139,6 +152,7 @@ FROZEN = R.FROZEN.get(R.PARAMS.version)
 frozen_only = pytest.mark.skipif(FROZEN is None, reason="versión candidata: aún no está en FROZEN")
 
 
+@requires_real_data
 @frozen_only
 def test_snapshot_matches_frozen():
     """La instantánea de entradas es la congelada (SHA en git, no solo en el meta.json)."""
@@ -147,6 +161,7 @@ def test_snapshot_matches_frozen():
     assert info["sha256_content"] == FROZEN["snapshot_sha256_content"]
 
 
+@requires_real_data
 def test_read_snapshot_rejects_tampered(tmp_path, monkeypatch):
     """`read_snapshot` falla si la instantánea no es la congelada."""
     if FROZEN is None:
@@ -160,6 +175,7 @@ def test_read_snapshot_rejects_tampered(tmp_path, monkeypatch):
         R.read_snapshot()
 
 
+@requires_real_data
 @frozen_only
 def test_label_hash_is_frozen(built):
     """La etiqueta reconstruida desde la instantánea es bit a bit la congelada."""
@@ -167,6 +183,7 @@ def test_label_hash_is_frozen(built):
     assert R.content_hash(df) == FROZEN["label_sha256_content"]
 
 
+@requires_real_data
 @frozen_only
 def test_official_file_is_frozen():
     """El parquet oficial en disco no ha sido reescrito."""
@@ -174,6 +191,7 @@ def test_official_file_is_frozen():
     assert R.content_hash(df) == FROZEN["label_sha256_content"]
 
 
+@requires_real_data
 def test_mature_rows_vs_previous_version(built):
     """Frente a la versión anterior, las filas maduras solo cambian en la ventana declarada (§13).
     Vale también para una candidata, que debe declarar su ventana en `R.CANDIDATE_CHANGES`. Si una
@@ -201,6 +219,7 @@ def test_frozen_registry_not_emptied():
     assert {"1.1"} <= set(R.FROZEN)
 
 
+@requires_real_data
 @pytest.mark.parametrize("v", sorted(R.FROZEN))
 def test_every_frozen_version_on_disk(v):
     """Cada versión congelada sigue intacta en disco (etiqueta e instantánea), aunque ya no sea la actual."""

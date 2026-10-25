@@ -145,6 +145,7 @@ def test_emission_at_row_month_is_exactly_m2_ghat():
     assert m3._emission(eng, [T], info)[0] == g2
 
 
+@pytest.mark.usefixtures("synthetic_label_meta")
 def test_m3_variants_run_in_harness_with_criterion8():
     s = Synth(4)
     rng = np.random.default_rng(0)
