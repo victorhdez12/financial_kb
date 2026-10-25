@@ -1,0 +1,89 @@
+{
+ "m3": {
+  "senal_plantada": {
+   "verdad": [
+    1.0,
+    0.5,
+    0.5,
+    1.0
+   ],
+   "estimado": [
+    0.8316794646176544,
+    0.566671952941105,
+    0.35689583624552096,
+    0.5785824066715265
+   ]
+  },
+  "ruido": {
+   "ll_tvtp_menos_ctp_media": 0.0014376042663037047,
+   "gamma_media": [
+    0.06054123149551156,
+    0.07248783661765879,
+    0.08810128102035919,
+    0.08164825201165718
+   ],
+   "criterio_<=0.005": true
+  }
+ },
+ "pool": {
+  "(i)_oraculo_w": [
+   0.09345297425368453,
+   0.8422852911839743,
+   0.06426173456234101
+  ],
+  "(ii)_sin_info_w": [
+   0.5,
+   0.25,
+   0.25
+  ],
+  "(iii)_infradispersado_a_b": [
+   2.3535142193587038,
+   2.408281117845645
+  ],
+  "(iv)_(v)": "tests/test_harness_v24.py (PIT de los pesos; pool = M0 bit a bit antes de N_min)",
+  "(i)_cumple_oraculo_domina": true,
+  "(ii)_cumple_previa": true,
+  "(iii)_cumple_a_b_mayor_1": true
+ },
+ "pila": {
+  "cortes": 108,
+  "modelos": [
+   "m0_calibrated_persistence",
+   "m2_struct_g",
+   "m3_ctp_g",
+   "m3_tvtp_g",
+   "pool_g"
+  ],
+  "finitas_y_en_0_1": true,
+  "eje_I_igual_a_M0": true,
+  "meses_pool_igual_M0_antes_de_Nmin": 65,
+  "pool_bit_a_bit_M0_antes_de_Nmin": true,
+  "meses_pool_activo": 43,
+  "pesos_finales": {
+   "w_m0": 0.34177527289247495,
+   "w_m2": 0.42292177780965595,
+   "w_m3": 0.23530294929786907,
+   "a": 1.7367950987210512,
+   "b": 1.6113580334860402
+  },
+  "pesos_en_simplex": true,
+  "pool_distinto_de_M0_tras_activar": true,
+  "diag_pool": {
+   "cortes_estimados": 43,
+   "sin_convergencia": 0
+  },
+  "mejora_logloss_sintetica": {
+   "synthetic/m2_struct_g": 0.23301179013751538,
+   "synthetic/m3_ctp_g": 0.1631998695887096,
+   "synthetic/m3_tvtp_g": 0.160943292695688,
+   "synthetic/pool_g": 0.05595830189014975
+  },
+  "marca_heredada": {
+   "m2_struct_g": false,
+   "m3_tvtp_g": false,
+   "m3_ctp_g": false,
+   "pool_g": false
+  }
+ },
+ "segundos": 472.2
+}

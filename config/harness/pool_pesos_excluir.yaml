@@ -1,0 +1,29 @@
+# POOL (H-POOL-001; docs/models/pool_spec.md v1.2 §5), corrida `pool_pesos_excluir` de DESARROLLO (≤ 2004). NO EJECUTADA.
+# Escrita el 25-oct (Validador, rama claude/m3-prep) al pie de la letra de la spec; M2 en su versión PRINCIPAL
+# (S-PIT-001 no se disparó: m2_structural_spec.md §9, 6c, commit 5fa4fdf). Una sola pasada.
+# Ponderación de los provisionales recalculados = `excluir` (sensibilidad; no elige). Vintage. Misma ventana que pool_dev.
+name: pool_pesos_excluir
+pit_version: "0.4"
+models: [m0_calibrated_persistence, m2_struct_g, m3_tvtp_g, pool_g]
+model_params:
+  m0_calibrated_persistence: {eps: 0.001, l2: 1.0}
+  m2_struct_g: {philly_pre1990_nan: false}      # S-PIT-001 NO se disparó (M2 §9, 6c, 5fa4fdf): versión principal; heredada
+modes: [vintage]
+refit_every: 1
+embargo_months: 6
+min_train_months: 120
+min_train_recessions: 2
+min_train_g_changes: 8
+test_start: "1956-10"
+test_end: "2004-12"
+allow_shrink: false
+feature_policy: principal
+phase: development
+eval_window: ["1985-01", "2004-12"]
+epochs: []
+subperiods: [["1985-01", "1994-12"], ["1995-01", "2004-12"]]
+provisional_weighting: excluir
+baseline: m0_calibrated_persistence
+reference: null
+who: Constructor (POOL)
+nota: "POOL pool_pesos_excluir: ponderación `excluir` de los provisionales, vintage. Una sola pasada."

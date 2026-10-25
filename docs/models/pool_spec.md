@@ -122,7 +122,7 @@ desarrollo está prohibido):
 subperiodos, episodios, detección v2.1, falsas alarmas, calibración); **`sd_mensual` de d** del pool frente a la de
 cada componente (¿reduce el ruido?, `power_holdout.md` §4); trayectoria de w y (a, b) por corte; 3 m × 80/20
 (`m3_tvtp_spec.md` §6). Lectura de potencia (no criterio): si en desarrollo la mejora del pool es < 0,05 nats o su IC
-incluye claramente el 0, gastar el bloqueado tiene una potencia < 30 % (`power_holdout.md` §4).
+incluye claramente el 0, gastar el bloqueado tiene poca potencia (v4.3, `p_eval_base_v4_draft.md` A7 y `power_holdout.md` §6: ≈ 0,66 con Δ = 0,05 y ≈ 0,41 con Δ = 0,03; umbral de la lectura sin cambio).
 
 ### 5b. Estudio de eventos por episodio (v1.1; decisión del usuario 24-oct, C)
 

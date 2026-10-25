@@ -40,7 +40,7 @@ pasada de desarrollo**; no se itera. Cambios técnicos posteriores en §9.
   con la compresión del crédito y el rebote de la bolsa (salida de G bajo). La emisión coincidente confirma o no el
   cambio: la bolsa ya no puede producir sola un "falso amanecer".
 - **Signos impuestos** (no solo comprobados): γ1…γ4 ≥ 0 en la forma de §3. Como el signo no puede salir al revés, lo
-  que se contrasta es si cada γ **se separa de 0**: criterio 8 de P-EVAL-BASE v4 (§5; decisión del usuario 24-oct).
+  que se contrasta es si cada γ **se separa de 0**: criterio 8 de P-EVAL-BASE v4 (§5; decisión del usuario 24-oct; **informativo desde la v4.3**, A1-16, 25-oct).
 
 ## 2. Estados, datos y emisión
 
@@ -150,10 +150,10 @@ con transiciones constantes y la calibración lo lleva a ≈ M0.
   - Clave nueva del arnés v2.4: `report["signos_coeficientes"]["vintage/m3_tvtp_g"]["fraccion_umbral"]` con, por
     γ, `{umbral, n_cortes, n_sin_coef, frac}`, y `criterio_fraccion_cumple` (todos los frac ≥ 0,50); función de
     referencia `regime_components.gamma_fraction_criterion` (test sintético).
-  - **Ventana:** en la evaluación única, 2005-01 → 2021-10 (decide). En desarrollo se calcula igual sobre la ventana
+  - **Ventana:** en la evaluación única, 2005-01 → 2021-10 (se calcula y se publica; **no decide** desde P-EVAL-BASE v4.3, A1-16). En desarrollo se calcula igual sobre la ventana
     de la corrida (`m3_long`) y **solo se informa**.
-  - Se aplica a un componente: el pool puede fallar P-EVAL-BASE por M3 aunque mejore a M0 (se anota así en el trial
-    log). La referencia `m3_ctp_g` (γ ≡ 0) no tiene criterio de signos.
+  - *(Histórico, 24-oct; reabierto el 25-oct: con la v4.3 el criterio 8 no decide, así que el pool ya no puede fallar
+    P-EVAL-BASE por M3.)* La referencia `m3_ctp_g` (γ ≡ 0) no tiene criterio de signos.
 - **Controles antes de la etiqueta real:**
   - **señal plantada:** un TVTP sintético con γ conocidos (p. ej. γ = (1; 0,5; 0,5; 1)) y emisión gaussiana; el
     estimador recupera el signo y el orden de magnitud (tolerancias en el test) con 600 meses;
@@ -175,7 +175,7 @@ con transiciones constantes y la calibración lo lleva a ≈ M0.
   giros con una declaración del mismo sentido en [giro − 3, siguiente giro); giros sin declarar (censurados); **giros
   declarados falsos** = declaraciones sin un giro del mismo sentido en [declaración − 6, declaración + 3], por año.
 - Es información para leer la decisión dura ("giro declarado"). **No cambia** la definición de falsas alarmas del
-  criterio 4 de P-EVAL-BASE (cambiarla sería un cambio de criterio, decisión del usuario).
+  criterio 5 de P-EVAL-BASE v4 (cambiarla sería un cambio de criterio, decisión del usuario).
 
 ## 7. Sensibilidades preregistradas (se publican; NO eligen ni entran en el pool)
 

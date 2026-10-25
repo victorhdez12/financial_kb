@@ -1,0 +1,30 @@
+# M2 (H-M2-001; docs/models/m2_structural_spec.md v1.3 §6-§7, paso 6e), corrida `m2_sens` de DESARROLLO (≤ 2004). NO EJECUTADA.
+# Escrita el 25-oct (Validador, rama claude/m3-prep) al pie de la letra de la spec; M2 en su versión PRINCIPAL
+# (S-PIT-001 no se disparó: m2_structural_spec.md §9, 6c, commit 5fa4fdf). Una sola pasada.
+# Ventana larga W_G 1978-10 → 2004-12, solo vintage; M0 y las 5 sensibilidades de §7 (se publican; NO eligen).
+name: m2_sens
+pit_version: "0.4"
+models: [m0_calibrated_persistence, m2_struct_g_platt, m2_struct_g_norev, m2_struct_g_revpit, m2_struct_g_coinc, m2_struct_g_ar1]
+model_params:
+  m0_calibrated_persistence: {eps: 0.001, l2: 1.0}
+  m2_struct_g: {philly_pre1990_nan: false}      # S-PIT-001 NO se disparó (M2 §9, 6c, 5fa4fdf): versión principal; heredada
+  m2_struct_g_platt: {eps: 0.001, l2: 1.0}           # §7: capa Λ(c + b·logit P), L2 = 1, eps 1e-3 (como M0)
+modes: [vintage]
+refit_every: 1
+embargo_months: 6
+min_train_months: 120
+min_train_recessions: 2
+min_train_g_changes: 8
+test_start: "1956-10"
+test_end: "2004-12"
+allow_shrink: false
+feature_policy: principal
+phase: development
+eval_window: ["1978-10", "2004-12"]
+epochs: [["1956-01", "1979-12"], ["1980-01", "2004-12"]]
+subperiods: [["1978-10", "1989-12"], ["1990-01", "2004-12"]]
+provisional_weighting: madurez
+baseline: m0_calibrated_persistence
+reference: null
+who: Constructor (M2)
+nota: "M2 6e m2_sens: sensibilidades preregistradas de §7, ventana larga, vintage. No eligen. Una sola pasada."
