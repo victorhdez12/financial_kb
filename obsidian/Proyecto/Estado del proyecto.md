@@ -29,7 +29,15 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Agentes de la fase:** Constructor · Investigador de relaciones · **Validador independiente** · **Reportero** (ver [[Proyecto/Agentes]]). Informe: [[Reports/Fase 3/Informe de resultados]].
 
-## ▶ Retomar aquí (24-oct, noche, M2 v1.3)
+## ▶ Retomar aquí (25-oct, control ampliado M2 v1.3)
+
+**Hecho:** control sintético ampliado de M2 v1.3 (protocolo `da18753`, 40 semillas 1001–1040): **principal cumple** (media 0,810, IC 95 % [0,794; 0,826] dentro de [0,75; 0,85]); secundario 70 % (justo en el umbral). Resultado en `docs/validation/2026-10-25_m2_v13_control_ampliado_resultado.md`. El control de 4 semillas (3/7/11/21) queda declarado no superado.
+
+**Siguiente:** veredicto formal del Validador → corrida `m2_long` (6a, desarrollo ≤ 2004), autorizada por el usuario el 25-oct. Luego `s_pit_001` → M3 → pool. Periodo bloqueado sin tocar.
+
+### Retomar (24-oct, noche) — histórico
+
+**Estado 24-oct, noche (histórico):**
 
 **Hecho:** spec **M2 v1.3** empujada a priori (`d8eb113`, 15:55:57Z): σ̂² = V<sub>conj</sub> (error conjunto medido sin
 etiqueta) + V<sub>rev</sub>; implementada (`90f408f`). **Control de 4 semillas NO superado:** cobertura del 80 % 0,834 /
