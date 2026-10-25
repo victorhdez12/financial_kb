@@ -1,5 +1,5 @@
-# S-PIT-001 para M2 (m2_structural_spec.md v1.2 §2, §6), corrida 6b `s_pit_001` (matriz vintage_filadelfia_prudente). NO EJECUTADA.
-# espera la revisión del usuario (preguntas de implementación, Bitácora 24-oct). Ventana larga desde W_G = 1978-10
+# S-PIT-001 para M2 (m2_structural_spec.md v1.2 §2, §6), corrida 6b `s_pit_001` (matriz vintage_filadelfia_prudente). 
+# Q1 aprobadas por el usuario (2026-10-25). Ventana larga desde W_G = 1978-10
 # (sonda de elegibilidad, research/trials/m2/elegibilidad.json; regla de §6). Una sola pasada.
 name: s_pit_001
 pit_version: "0.4"

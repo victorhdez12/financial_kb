@@ -3,7 +3,7 @@ documento: elecciones de implementación del arnés v2.4 y de M2 (v1.3), M3 (v1.
 fecha: 2026-10-24
 para: Validador (revisión antes de `m2_long`) y usuario
 codigo: src/models/models_struct.py, struct_factor.py, models_tvtp.py, models_pool.py, harness.py, metrics.py (constantes `IMPLEMENTATION_CHOICES`)
-estado: PROVISIONALES. Ninguna se ha elegido mirando la etiqueta real: hasta hoy la etiqueta solo se ha leído en la sonda de elegibilidad (recuentos) y en placebos barajados ≤ 2004. Si el usuario cambia alguna, se cambia antes de `m2_long`.
+estado: APROBADAS por el usuario tal cual (2026-10-25, antes de 6b `s_pit_001`; `m2_long` ya había corrido con ellas). PROVISIONALES. Ninguna se ha elegido mirando la etiqueta real: hasta hoy la etiqueta solo se ha leído en la sonda de elegibilidad (recuentos) y en placebos barajados ≤ 2004. Si el usuario cambia alguna, se cambia antes de `m2_long`.
 ---
 
 # Elecciones de implementación (Q1)
