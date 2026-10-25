@@ -39,8 +39,8 @@ Principal: cumple. Secundario: **no cumple** (60 % < 70 %). Informativo, sin cri
 
 ## 4. Lectura
 
-- El resultado de A se parece más a "sin sesgo apreciable" que a "sobrecobertura": el IC queda a un 0,4 pp
-  del techo del rango, dentro de él.
+- El límite superior del IC de A queda a 2,4 pp del techo del rango (0,8256 frente a 0,85), dentro de él.
+  Eso no equivale a "sin sesgo apreciable": ver la sección 7.
 - Las cuatro semillas del control original (3/7/11/21) cayeron por encima de la media de A (0,845 frente a
   0,810). Con n = 4 eso no basta para decir nada: el control de 4 semillas tenía poca potencia para su criterio.
   Su fallo queda declarado tal cual, como pedía la spec.
@@ -58,3 +58,23 @@ declarado como no superado y su regla se considera demasiado estricta para 4 sem
 
 - Veredicto formal del Validador independiente sobre este documento.
 - Decisión del usuario para lanzar `m2_long` (usa la etiqueta de desarrollo ≤ 2004).
+
+## 7. Reservas del Validador (revisión en la nube, solo lectura, 25-oct)
+
+Informe de un agente remoto que actuó como Validador sobre el repo público (commit `73cca17`). Veredicto: **CUMPLE CON RESERVA**.
+Las cifras de las secciones 2 y 3 coinciden con las recalculadas desde los 40 `A_<semilla>.json`.
+
+- **Verdad truncada en A (alta).** En A la muestra acaba en 2004-12, así que para T ≥ 2000-01 la verdad (mediana centrada ±60 meses,
+  recortada al final) queda más cerca del nowcast. Cobertura 2000-04 en A = 0,853 frente a 0,800 en 1980-99; z² 2000-04 = 0,81.
+  Es la predicción H-a y no se discutía aquí. B (generador hasta 2009-12), que es lo que pide el texto de la spec §6, da 2000-04 = 0,808
+  y secundario 60 % (no cumple).
+- **Margen del secundario (media).** 28/40 cumple el 70 %; con 27/40 no. Margen de una semilla.
+- **Gobernanza (alta).** La spec §9 dice que `m2_long` sigue parado hasta decisión del usuario. El protocolo §5 dice que puede correr.
+- **Preregistro (media).** El script se commiteó junto con los resultados (`89a4e69`). No hay hash previo al primer resultado.
+- **H-b no confirmada en A (media).** La sobrecobertura no es mayor en 1980-89 que en 1990-99 (0,789 frente a 0,810).
+- **Contrafactual omitido (baja).** Con 10 semillas, 0,773 [0,733; 0,813] frente a 0,796 de la v1.3 (`resumen.json`, `D3_contrafactual`).
+- **Independencia (baja).** El mismo rol escribió el protocolo y valida el resultado.
+- **Control de 4 semillas.** Sigue declarado como no superado; la regla era demasiado estricta (con un M2 calibrado, ≈ 0,23 de probabilidad de pasarla).
+
+Opciones que quedan para el usuario: (a) aceptar A según el protocolo y anotar estas reservas en la spec §9; (b) antes de `m2_long`,
+un control nuevo preregistrado con la verdad construida con datos completos (generador hasta ≥ 2009-12), con hash del script fijado antes.
