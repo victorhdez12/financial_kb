@@ -108,6 +108,16 @@ posterior se anota en §9 con lo que se había visto.
     mismo bootstrap que el arnés usa para `mejora_logloss`), recalculado en esos meses. Las exigencias N-2 siguen
     valiendo dentro de esos meses (finitas, mismo índice). En cualquier otro caso (faltan meses no iniciales o más de
     3) se para. El resultado de `m2_long` sigue siendo exploratorio (§9.x).
+    **Ejecución (Validador, 25-oct; todo commiteado y empujado ANTES de lanzar la 6b):** (i) la regla la aplica
+    `regime_components.s_pit_001_enmienda` (con test) desde `pool_dev spit001`; ningún paso se hace a mano;
+    (ii) precondición: `M.boot_mean` sobre la d completa de `m2_long` reproduce el IC registrado ([0,020213;
+    0,127779]) con diferencia ≤ 1e-12; si no, se para; (iii) las pérdidas de M0 de las dos corridas son idénticas en los meses
+    comunes; si no, se para; (iv) h restringido se calcula y se anota en esta §2 antes de lanzar la 6b (solo usa
+    `m2_long`, ya vista). Declarado: en la prudente la primera versión de parámetros de M2 es la de 1978-11 (en
+    `m2_long`, 1978-10); desde la reestimación de 1979-01 el arranque fijo las iguala salvo meses sin convergencia,
+    así que d<sup>fp</sup> − d<sup>pr</sup> en 1978-11 y 1978-12 no mide solo el calendario de Filadelfia.
+    **Anotado antes de la 6b (25-oct):** (ii) se cumple (diferencia 0,0 en lo y hi). Si falta solo 1978-10 (lo que
+    predice el Validador): 314 meses, IC de d<sup>pr</sup> restringida [0,021732; 0,130545], **h = 0,054406**.
   - **Marca de configuración (v1.2, Validador N-6):** la versión se escribe como
     `model_params.m2_struct_g: {philly_pre1990_nan: false}` (no se dispara) o `{philly_pre1990_nan: true}` (se
     dispara). Los modelos que dependen de M2 (`m3_tvtp_g`, `m3_ctp_g`, `pool_g`, sus variantes y las sensibilidades de
@@ -398,5 +408,9 @@ etiqueta real):
 - **08:24–08:45 UTC:** control completo C (protocolo `7587fd0`, script `5f6d7af`, hash `1e160349…dc76`; `5f6d7af` empujado 08:23:51 UTC). Una primera tanda con el script `d5e3ca1` se paró a mitad (12 de 40 semillas); sus ficheros se apartaron sin usar y no entran en ningún resultado. R0 OK; C: 40 semillas, media 0,7918, IC 95 % [0,7758; 0,8078], 26/40 en rango (65 %). **Principal cumple, secundario no cumple → CUMPLE CON RESERVA.**
 - **Decisión del usuario (25-oct):** opción **(a)**: aceptar M2 v1.3 con las reservas declaradas. Las reservas: verdad truncada en el brazo A (H-a); margen de una semilla en el secundario del ampliado; control de 4 semillas no superado; `m2_long` corrido antes del control C.
 - **Consecuencia:** `m2_long` es exploratorio (18 corridas en la misma ventana; ~4 recesiones en 1978-2004). No se cita como evidencia de M2 ni de M2 > M1 v2.
+- **Enmienda de S-PIT-001 (§2, 25-oct, tras la 6b fallida y antes de ver ninguna pérdida de la prudente):**
+  `allow_shrink: true` en `config/harness/s_pit_001.yaml`; como mucho 3 meses iniciales sin cubrir; h recalculado
+  sobre d<sup>pr</sup> restringida; ejecución automática con las comprobaciones de §2 (Validador). Lo que se había
+  visto: `m2_long` completa (incluido h = 0,0538 con 315 meses); de la prudente, solo que falta 1 mes.
 - **Línea `if False else` en `per_seed`:** se conserva a propósito. Está en el original y el protocolo prohíbe cambiar `per_seed`.
 - **Pendiente:** revisión en la nube de los resultados de C (`research/validation/m2_control_completo/`); registrar P-EVAL-BASE v4 con el pool como único contraste principal; sin corridas de M3 ni del pool antes del push de 6c.

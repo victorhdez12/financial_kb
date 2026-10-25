@@ -175,3 +175,39 @@ def test_s_pit_001_requires_finite_aligned_series():
         C.s_pit_001_triggered(d, d, float("nan"), 0.06)
     r = C.s_pit_001_triggered(d, d - 1.0, -0.02, 0.06)
     assert r["dispara"] is True and r["n_meses"] == 50
+
+
+def _enm(n=315, start="1978-10", seed=0):
+    rng = np.random.default_rng(seed)
+    idx = pd.date_range(start + "-01", periods=n, freq="MS")
+    m0 = pd.Series(rng.uniform(0.5, 1.2, n), index=idx)
+    d = pd.Series(rng.standard_t(4, n) * 0.3 + 0.07, index=idx)
+    return idx, m0, d
+
+
+def test_s_pit_001_enmienda_one_initial_month_recomputes_h_on_restricted_d():
+    from src.models import metrics as M
+    idx, m0, d = _enm()
+    sub = idx[1:]
+    dfp = d.loc[sub] + 0.01
+    r = C.s_pit_001_enmienda(d, dfp, m0, m0.loc[sub])
+    b = M.boot_mean(d.loc[sub].to_numpy())
+    assert r["meses_excluidos"] == ["1978-10"] and r["n_meses"] == 314
+    assert r["semiamplitud"] == (b["hi"] - b["lo"]) / 2
+    assert np.isclose(r["delta"], 0.01)
+    r0 = C.s_pit_001_enmienda(d, d + 0.01, m0, m0)               # sin meses perdidos: regla original, h recalculado
+    b0 = M.boot_mean(d.to_numpy())
+    assert r0["meses_excluidos"] == [] and r0["semiamplitud"] == (b0["hi"] - b0["lo"]) / 2
+
+
+def test_s_pit_001_enmienda_stops_otherwise():
+    idx, m0, d = _enm()
+    for sub in (idx[4:], idx.delete(100), idx.delete([0, 2]), idx[:-1]):     # 4 iniciales, interior, no consecutivo, final
+        with pytest.raises(ValueError):
+            C.s_pit_001_enmienda(d, d.loc[sub], m0, m0.loc[sub])
+    sub = idx[1:]
+    with pytest.raises(ValueError, match="M0"):
+        C.s_pit_001_enmienda(d, d.loc[sub], m0, m0.loc[sub] + 1e-9)
+    extra = pd.date_range("1978-09-01", periods=316, freq="MS")
+    with pytest.raises(ValueError):
+        C.s_pit_001_enmienda(d, pd.Series(0.0, index=extra), m0, pd.Series(1.0, index=extra))

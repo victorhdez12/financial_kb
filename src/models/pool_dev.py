@@ -226,24 +226,29 @@ def placebo(which: str, dest: Path | None = None, seeds=SEEDS) -> dict:
 
 # ------------------------------------------------------------------ 6c. resolución de S-PIT-001 (NO se ha ejecutado)
 def spit001(run_long: str, run_spit: str, dest: Path = OUT / "s_pit_001_resolucion.json") -> dict:
-    """Regla operativa de S-PIT-001 (m2_structural_spec.md v1.2 §2): d = ll(M0) − ll(M2) por mes en `m2_long`
-    (vintage, matriz principal) y en `s_pit_001` (matriz prudente); h = (hi − lo)/2 del IC 95 % de mejora_logloss de
-    M2 frente a M0 en `m2_long`. Series finitas y con el mismo índice o error (N-2). Paso 6c: el resultado se escribe en
-    la §9 de M2 con los dos run_id y se commitea y empuja ANTES de cualquier corrida de M3 o del pool."""
+    """Regla operativa de S-PIT-001 (m2_structural_spec.md §2, con la enmienda del 25-oct): d = ll(M0) − ll(M2) por mes
+    en `m2_long` (vintage, matriz principal) y en `s_pit_001` (matriz prudente). Precondición: `metrics.boot_mean` sobre
+    la d completa de `m2_long` reproduce el IC registrado (diferencia ≤ 1e-12). Después, `s_pit_001_enmienda`: como mucho 3 meses
+    iniciales sin cubrir, M0 idéntico, h recalculado sobre d^pr restringida. Paso 6c: el resultado se escribe en la §9
+    de M2 con los dos run_id y se commitea y empuja ANTES de cualquier corrida de M3 o del pool."""
     from src.models import m1_run as M1R
-    from src.models.regime_components import s_pit_001_triggered
+    from src.models import metrics as M
+    from src.models.regime_components import s_pit_001_enmienda
 
-    def d_of(run_id):
+    def series(run_id):
         j, S = M1R._load_run(run_id)
         v = S[S["mode"] == "vintage"]
-        a = v[v["model"] == "m0_calibrated_persistence"].set_index("month")["logloss"]
-        b = v[v["model"] == "m2_struct_g"].set_index("month")["logloss"]
-        return j, (a - b).sort_index()
-    jl, dpr = d_of(run_long)
-    _, dfp = d_of(run_spit)
+        a = v[v["model"] == "m0_calibrated_persistence"].set_index("month")["logloss"].sort_index()
+        b = v[v["model"] == "m2_struct_g"].set_index("month")["logloss"].sort_index()
+        return j, a, (a - b)
+    jl, m0l, dpr = series(run_long)
+    _, m0s, dfp = series(run_spit)
     ci = jl["report"]["frente_al_baseline"]["vintage/m2_struct_g"]["mejora_logloss"]
-    res = s_pit_001_triggered(dpr, dfp, ci["lo"], ci["hi"])
-    out = {"m2_long": run_long, "s_pit_001": run_spit, **res,
+    rep = M.boot_mean(dpr.to_numpy(float))
+    if max(abs(rep["lo"] - ci["lo"]), abs(rep["hi"] - ci["hi"])) > 1e-12:
+        raise ValueError(f"S-PIT-001: boot_mean(d de m2_long) no reproduce el IC registrado: {rep} frente a {ci}")
+    res = s_pit_001_enmienda(dpr, dfp, m0l, m0s)
+    out = {"m2_long": run_long, "s_pit_001": run_spit, **res, "ic95_registrado_m2_long": [ci["lo"], ci["hi"]],
            "philly_pre1990_nan": res["dispara"], "regla": spit001.__doc__}
     _dump(dest, out)
     return out

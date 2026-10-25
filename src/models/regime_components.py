@@ -147,6 +147,37 @@ def s_pit_001_triggered(d_principal, d_prudente, ci_lo: float, ci_hi: float) -> 
     return {"delta": delta, "semiamplitud": h, "dispara": bool(abs(delta) > h), "n_meses": int(len(a))}
 
 
+def s_pit_001_enmienda(d_principal: pd.Series, d_prudente: pd.Series, m0_principal: pd.Series,
+                       m0_prudente: pd.Series, max_iniciales: int = 3) -> dict:
+    """Enmienda 2026-10-25 de S-PIT-001 (m2_structural_spec.md §2): la corrida prudente puede no cubrir como mucho
+    `max_iniciales` meses INICIALES consecutivos de `m2_long`. Entonces d^pr = d de `m2_long` restringida a los meses de
+    la prudente y h = (hi − lo)/2 de `metrics.boot_mean(d^pr)` (mismo bootstrap que `mejora_logloss` del arnés). Antes,
+    comprueba que el M0 de las dos corridas da las MISMAS pérdidas en los meses comunes (M0 no usa Filadelfia). En
+    cualquier otro caso: ValueError y se para. Dentro de esos meses siguen las exigencias N-2 (`s_pit_001_triggered`)."""
+    from src.models import metrics as M
+    ss = (d_principal, d_prudente, m0_principal, m0_prudente)
+    if not all(isinstance(s, pd.Series) for s in ss):
+        raise ValueError("S-PIT-001 (enmienda): las cuatro series deben ser pd.Series indexadas por mes")
+    if not all(s.index.is_monotonic_increasing and s.index.is_unique for s in ss):
+        raise ValueError("S-PIT-001 (enmienda): índices no ordenados o con meses repetidos")
+    if not (d_principal.index.equals(m0_principal.index) and d_prudente.index.equals(m0_prudente.index)):
+        raise ValueError("S-PIT-001 (enmienda): d y M0 de una misma corrida con índices distintos")
+    full, sub = d_principal.index, d_prudente.index
+    if len(sub.difference(full)):
+        raise ValueError("S-PIT-001 (enmienda): la corrida prudente puntúa meses que no están en m2_long")
+    falta = full.difference(sub)
+    k = len(falta)
+    if k > max_iniciales or not falta.equals(full[:k]):
+        raise ValueError(f"S-PIT-001 (enmienda): faltan {k} meses y no son los {max_iniciales} iniciales como mucho: "
+                         f"{[f'{m:%Y-%m}' for m in falta]}")
+    if not np.array_equal(m0_principal.loc[sub].to_numpy(float), m0_prudente.to_numpy(float)):
+        raise ValueError("S-PIT-001 (enmienda): las pérdidas de M0 difieren entre m2_long y s_pit_001")
+    dpr = d_principal.loc[sub]
+    b = M.boot_mean(dpr.to_numpy(float))
+    res = s_pit_001_triggered(dpr, d_prudente, b["lo"], b["hi"])
+    return {**res, "meses_excluidos": [f"{m:%Y-%m}" for m in falta], "ic95_d_pr_restringida": [b["lo"], b["hi"]]}
+
+
 def blp_transform(p, a: float, b: float, clip: float = POOL.clip) -> np.ndarray:
     """Recalibración beta del pool lineal (Ranjan-Gneiting 2010): P = B_{a,b}(p), función de distribución beta
     regularizada. a = b = 1 es la identidad. Recorte a [clip, 1 − clip] (pool_spec.md §3)."""
