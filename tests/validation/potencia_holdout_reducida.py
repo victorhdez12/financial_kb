@@ -148,6 +148,7 @@ def evalua(X, G, delta, C12, C24) -> dict:
         "dm_newey_west_hln": p_nw < 0.05,
         "ewc_llsw": p_ewc < 0.05,
         "estimacion_ic95_lo_mayor_0": b["lo"] > 0,
+        "recomendado_sin_suelo": (b["lo"] > 0) & sec & c7,
     }
     res = {k: float(v.mean()) for k, v in out.items()}
     res["marginales"] = {"c1": float(c1.mean()), "c2": float(s["c2"].mean()), "c3": float(s["c3"].mean()),

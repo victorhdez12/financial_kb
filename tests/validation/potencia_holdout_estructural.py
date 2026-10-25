@@ -138,7 +138,8 @@ def evalua(X, G, C12, C24):
     out = {"v4_tal_cual": c1 & sec & c7, "v4_solo_criterio1": c1, "v4_c1_unilateral": c1u & sec & c7,
            "unilateral_bb12": b["lo_uni"] > 0, "unilateral_bb12_no_dano": (b["lo_uni"] > 0) & s["c4"],
            "unilateral_bb24": b24["lo_uni"] > 0, "dm_newey_west_hln": K.dm_nw(X) < 0.05,
-           "ewc_llsw": K.ewc(X) < 0.05, "estimacion_ic95_lo_mayor_0": b["lo"] > 0}
+           "ewc_llsw": K.ewc(X) < 0.05, "estimacion_ic95_lo_mayor_0": b["lo"] > 0,
+           "recomendado_sin_suelo": (b["lo"] > 0) & sec & c7}
     res = {k: float(v.mean()) for k, v in out.items()}
     res["marginales"] = {"c1": float(c1.mean()), "c3": float(s["c3"].mean()), "c4": float(s["c4"].mean()),
                          "c6": float(s["c6"].mean()), "c7": float(c7.mean())}
