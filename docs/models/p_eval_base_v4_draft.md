@@ -64,6 +64,18 @@ el criterio de signos está decidido: fila 3, reabierta en la fila 16 → inform
   2005-2021 (2008-09, 2020), que es la del bloqueado. Algunas elecciones (p. ej. las peticiones de paro y Filadelfia
   como datos del mes t) pueden estar influidas por ese conocimiento general, aunque ningún dato ≥ 2005 de la etiqueta
   ni de las variables se ha usado para elegir nada.
+- **Exposición del bloqueado ya ocurrida (declarada, 25-oct; auditoría del Validador H1):** las figuras de la Fase 3
+  (`src/report/fase3/make_figures.py`, `obsidian/Reports/Fase 3/img/` 02, 03, 04 y 06, y `cifras.json`) y las fichas
+  de la etiqueta (`src/labels/checks.py`) muestran la etiqueta oficial con la muestra completa (1950 → 2026), incluido
+  2005-2021: probabilidades por cuadrante, valores G/I, repartos y duraciones de tramos. Se generaron por última vez el
+  16-oct (`fbc5166`), antes de diseñar M2, M3 y el pool, y no se han vuelto a generar. Quien diseña ha podido verlas.
+  `make_figures.py` no se ejecuta otra vez sin filtrar < 2005; `tests/test_barrier_v3.py` impide lectores nuevos de
+  la etiqueta. Comprobado en local (25-oct): el registro completo de accesos no tiene ninguna apertura del bloqueado,
+  y sus 104 denegaciones son todas de los tests de la barrera (fechas fijas 2005-01-31, 2006-03-31, 2010-06-30, y
+  la etiqueta pedida hasta 2005-01 / 2015-06).
+- **La etiqueta ≤ 2004 lleva información ≥ 2005 por construcción (H4):** σ<sub>i</sub> con toda la muestra, tendencia
+  centrada ±60 meses (2000-2004 usa 2005-2009), s<sub>G</sub> y s<sub>I</sub>. Todas las puntuaciones de desarrollo (y
+  sus decisiones) la heredan; no es una fuga del arnés.
 
 ## A3. Criterio de éxito (se exigen los criterios 1-7; el 8 es informativo) y su clave en el informe
 

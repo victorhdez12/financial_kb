@@ -293,7 +293,7 @@ class PITData:
     @property
     def data_key(self) -> str:
         """Identidad de los datos para las cachés de los modelos (v2.4): versión, matriz y modo."""
-        return f"pit|{self.pit_version}|{self.matrix_name}|{self.mode}"
+        return f"pit|{self.pit_version}|{self.matrix_name}|{self.mode}|{self.phase}"   # fase: sin cachés compartidas dev/eval
 
     def pit_levels(self, date) -> dict:
         """v2.4 (m2_structural_spec.md §8-1): niveles de INDPRO, PAYEMS, W875RX1 y CMRMTSPL conocidos en la fecha de
@@ -694,7 +694,7 @@ def _v24_info(model, data, feats, start, bound_month: pd.Timestamp, usage: dict 
     R.assert_no_forbidden(list(fh.columns))
     return {"pit_levels": pit_levels, "features_history": fh,
             "decision_calendar": data.decision[data.decision.index <= bound_month],
-            "data_key": data.data_key, "pit_mode": getattr(data, "pit_mode", data.mode)}
+            "data_key": data.data_key, "pit_mode": getattr(data, "pit_mode", data.mode), "pit_bound": bound_date}
 
 
 def _fit_predict_axes(model, data, cfg, tr, wts, m0, block, spy, extra: dict | None = None):

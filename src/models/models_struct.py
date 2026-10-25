@@ -30,6 +30,7 @@ from src.labels import regime_us as R
 from src.models import base as B
 from src.models import regime_components as C
 from src.models import struct_factor as F
+from src.models.vault import HoldoutLocked
 
 S = C.STRUCT
 COINC = S.coincident                                   # INDPRO, PAYEMS, W875RX1, CMRMTSPL
@@ -457,8 +458,20 @@ class FactorEngine:
         self.revpit: dict[tuple, dict] = {}
 
     # entradas ------------------------------------------------------------------
+    @staticmethod
+    def _check_bound(info: dict, date=None, month=None) -> None:
+        """Cota de la llamada ANTES de mirar las cachés (una entrada cacheada por otra corrida o por un corte posterior
+        no puede saltarse la barrera de fecha del arnés): fecha ≤ `pit_bound` y mes dentro de `decision_calendar`."""
+        b = info.get("pit_bound")
+        if date is not None and b is not None and pd.Timestamp(date) > pd.Timestamp(b):
+            raise HoldoutLocked(f"M2/M3: niveles PIT pedidos en {pd.Timestamp(date):%Y-%m-%d}, posterior a la cota "
+                                f"{pd.Timestamp(b):%Y-%m-%d}")
+        if month is not None and pd.Timestamp(month) not in info["decision_calendar"].index:
+            raise HoldoutLocked(f"M2/M3: mes {pd.Timestamp(month):%Y-%m} fuera del calendario de decisiones de la llamada")
+
     def levels_at(self, info: dict, date) -> dict:
         date = pd.Timestamp(date)
+        self._check_bound(info, date=date)
         if date not in self.levels:
             self.levels[date] = info["pit_levels"](date)
         return self.levels[date]
@@ -470,6 +483,7 @@ class FactorEngine:
 
     # versiones -----------------------------------------------------------------
     def version(self, T: pd.Timestamp, info: dict, prev: FactorVersion | None) -> FactorVersion:
+        self._check_bound(info, month=T)
         key = (T, None if prev is None else (prev.id, prev.from_T))
         if key in self.versions:
             return self.versions[key]
@@ -544,6 +558,8 @@ class FactorEngine:
         return {**b, "V_rev": vr}
 
     def nowcast_base(self, v: FactorVersion, mt: pd.Timestamp, info: dict) -> dict:
+        if mt >= DATA_START:
+            self._check_bound(info, month=mt)
         key = (v.id, v.from_T, mt)
         if key in self.nowcasts:
             return self.nowcasts[key]
