@@ -134,7 +134,8 @@ con transiciones constantes y la calibración lo lleva a ≈ M0.
 - Se informan los cortes del arnés (total, giros/estables, subperiodos, episodios, detección de giros v2.1, falsas
   alarmas, calibración) y el **estudio de eventos por episodio** de `pool_spec.md` §5b (k = −6 … +8 alrededor de los
   giros de G, con M0, M2, M3 y el pool).
-- **Criterio de signos (v1.1; decisión del usuario 24-oct; criterio 8 de P-EVAL-BASE v4 A3):** para **cada** j = 1…4
+- **Criterio de signos (v1.1; decisión del usuario 24-oct; criterio 8 de P-EVAL-BASE v4 A3; desde P-EVAL-BASE v4.3,
+  decisión del usuario del 25-oct, es INFORMATIVO: se calcula y se publica igual, pero no decide):** para **cada** j = 1…4
   **por separado**, la fracción de cortes de `m3_tvtp_g` (modo vintage) cuyo mes cae en la ventana con
   **γ<sub>j</sub> > 0,01** debe ser **≥ 0,50**.
   - Umbral 0,01 en unidades de z (efecto de odds ≈ 1 % por desviación típica; por debajo, "pegado a 0"; Estratega

@@ -1,9 +1,9 @@
 ---
 documento: cálculo de potencia de la evaluación única (P-EVAL-BASE v4)
-version: 1.1 (2026-10-24: solo texto; tamaño como cota inferior, Validador M-3; decisión del IC ya tomada, B-9. Cifras sin cambio)
+version: 1.2 (2026-10-25: §6 nuevo con la potencia del pool real y del criterio de P-EVAL-BASE v4.3; §1-§5 sin cambio, quedan como historia con el ruido de M1). 1.1: solo texto; tamaño como cota inferior, Validador M-3; decisión del IC ya tomada, B-9
 fecha: 2026-10-24
-codigo: src/models/power.py
-resultados: research/trials/power_holdout.json (una pasada, 1.000 evaluaciones ficticias por punto)
+codigo: src/models/power.py (§1-§5); tests/validation/potencia_holdout_{comun,reducida,estructural}.py (§6)
+resultados: research/trials/power_holdout.json (§1-§5; una pasada, 1.000 evaluaciones ficticias por punto); research/validation/potencia_holdout/*.json (§6; 2.000 réplicas por celda)
 datos: solo desarrollo ≤ 2004 (diferencias de log-loss de corridas ya registradas) + la LONGITUD pública del bloqueado (202 meses)
 depende_de: harness.md v2.3 (§6, bootstrap del arnés), p_eval_base_draft.md v3 §A3 (criterios), decisión del usuario 24-oct (pool, Holm k = 1)
 ---
@@ -147,3 +147,47 @@ las evaluaciones: con ≈ 46 meses de giro, ese criterio es casi una moneda al a
 Semillas fijas (simulación 7; bootstrap 20261015). No se ha iterado sobre los resultados: rejillas, escenarios y
 criterios estaban en el código antes de ejecutarlo; el único cambio previo a la ejecución fue adaptar el contraste
 principal a k = 1 (decisión del usuario) y añadir el escenario de ruido ×0,5.
+
+## 6. Potencia con el pool real y el criterio de P-EVAL-BASE v4.3 (25-oct; solo sintético)
+
+**Por qué.** §1-§5 usan el ruido de las d de M1 (desviación mensual 0,30-0,36). El pool no existía: el «ruido ×0,5» era
+un supuesto. Este estudio simula el pool tal como está especificado y aplica los criterios de A3 que se pueden calcular
+con d.
+
+**Método.** Dos capas, sin datos reales ni la etiqueta:
+- **Estructural** (`tests/validation/potencia_holdout_estructural.py`): G latente (régimen de Markov + AR(1)), objetivo
+  t = Φ(G/0,4); M0 = persistencia calibrada con t(s−5); M2 = Ĝ = q·G + (1−q)·G(s−5) + error AR(1) con σ̂ calibrada; M3 =
+  mezcla más ruidosa; **pool exactamente como `pool_spec.md` §3** (BLP, Dirichlet moda (½, ¼, ¼) κ 20, ln a, ln b ~
+  N(0; 0,5²), embargo 6, N_min 60), reestimado cada 12 meses (simplificación declarada). 312 meses de historia + 202 de
+  bloqueado. q fija la calidad de M2 y, con ella, la mejora verdadera Δ del pool.
+- **Forma reducida** (`potencia_holdout_reducida.py`): d con AR(1) e innovaciones t₄, desviación ×2 y efecto común por
+  episodio en los giros de G, calendario con k recesiones, para la sensibilidad.
+- Bootstrap = réplica exacta y vectorizada de `metrics.boot_mean` (bloques 12, 5.000 réplicas, semilla 20261015;
+  diferencia ≤ 4e-17). 2.000 réplicas por celda, semillas fijas.
+
+**Resultado (v4.3: criterios 1-4, 6 y 7; el 5 no se simula; el 8 no decide).** `estructural_v43.json`:
+
+| Δ verdadera (nats) | 0 | 0,03 | 0,05 | 0,07 | 0,10 |
+|---|---|---|---|---|---|
+| v4.3 | **0,024** | 0,41 | 0,66 | 0,80 | 0,89 |
+| v4.2 (suelo de 0,05) | 0,005 | 0,12 | 0,40 | 0,65 | 0,81 |
+| HAC EWC (sensibilidad de A6) | 0,042 | 0,44 | 0,68 | 0,80 | 0,88 |
+| unilateral 5 %, bootstrap b12 (no adoptado, D3) | 0,059 | 0,59 | 0,82 | 0,90 | 0,96 |
+
+(Δ realizadas −0,0001 / 0,029 / 0,050 / 0,073 / 0,097; error de Monte Carlo ≤ 0,011.) **MDE al 80 % ≈ 0,074 nats.** El
+pool deja la desviación de d en ≈ 0,55 veces la de M2; contrastar M2 solo tendría ≈ 1/3 de la potencia.
+
+**Sensibilidad** (forma reducida, `reducida.json`, potencia con Δ = 0,07 con el criterio v4.3): base 0,87; φ = 0,6
+0,68; φ = 0,85 0,48; σ = 0,29 0,69; σ = 0,365 0,54; 2 recesiones 0,87; n = 250 0,93; adverso 0,47. Error tipo I: 2,4 %
+(estructural), 3,9 % (base), 5,2 % (φ 0,6), 8,4 % (φ 0,85).
+
+**Límites.** El criterio 5 (falsas alarmas) no se simula (la potencia real es algo menor). El generador es el mejor caso
+por construcción: componentes bien especificados y σ̂ de M2 calibrada. Con memoria larga de d el bootstrap es liberal.
+
+**Reproducción** (`PYTHONPATH=.`):
+```
+python tests/validation/potencia_holdout_reducida.py research/validation/potencia_holdout/reducida.json        # ~3 min
+NPROC=3 python tests/validation/potencia_holdout_estructural.py research/validation/potencia_holdout/estructural.json
+QS=0.0,0.33,0.465,0.615,0.8 NPROC=4 python tests/validation/potencia_holdout_estructural.py \
+    research/validation/potencia_holdout/estructural_v43.json                                               # ~9 min
+```

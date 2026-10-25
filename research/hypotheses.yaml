@@ -418,7 +418,7 @@
     previa N(0; 0,5²); calibración Platt (L2 1,0). Eje I = M0.
   signos_esperados: {gamma1: "+ (impuesto)", gamma2: "+ (impuesto)", gamma3: "+ (impuesto)", gamma4: "+ (impuesto)"}
   criterio_signos: >
-    Decisión del usuario 24-oct (criterio 8 de P-EVAL-BASE v4 A3): cada γ_j por separado > 0,01 (estricto) en ≥ 50 % de
+    Decisión del usuario 24-oct (criterio 8 de P-EVAL-BASE v4 A3; INFORMATIVO desde la v4.3, decisión del usuario 25-oct): cada γ_j por separado > 0,01 (estricto) en ≥ 50 % de
     los cortes vintage de 2005-01 → 2021-10; corte sin coeficientes = no cumplido; sin cláusula de vintage. En
     desarrollo solo se informa.
   contraste: M3 − M0 y M3 − m3_ctp_g en log-loss del eje G, vintage; informativos, fuera de Holm.
@@ -439,10 +439,10 @@
     expansiva. Eje I = M0.
   contraste: pool − M0 en log-loss blanda de 4 cuadrantes, vintage (en desarrollo solo se informa).
   criterio_de_referencia: >
-    el de P-EVAL-BASE v4 §A3 (≥ 0,05 nats con IC 95 % > 0, eje G > 0, giros ≥ 0, estables ≥ −0,05, falsas alarmas ≤
-    0,5/año, subperiodos, Holm k = 1, y criterio 8 — cada γ_j de m3_tvtp_g > 0,01 en ≥ 50 % de los cortes de 2005-01
-    → 2021-10, clave signos_coeficientes["vintage/m3_tvtp_g"].criterio_fraccion_cumple; decisión del usuario
-    24-oct). El criterio 8 recae en un componente: el pool puede no pasar por M3 aunque mejore a M0.
+    el de P-EVAL-BASE v4.3 §A3 (límite inferior del IC 95 % > 0 de la mejora frente a M0, sin suelo; 0,05 nats como
+    efecto mínimo de interés que se informa; eje G > 0, giros ≥ 0, estables ≥ −0,05, falsas alarmas ≤ 0,5/año,
+    subperiodos, Holm k = 1). El criterio 8 (γ_j de m3_tvtp_g > 0,01 en ≥ 50 % de los cortes de 2005-01 → 2021-10) es
+    INFORMATIVO desde la v4.3 (decisión del usuario 25-oct, que reabre la del 24-oct): se publica y no decide.
   predicciones_a_priori: >
     docs/reviews/2026-10-24_estratega_macro_specs_pool.md §4.2 (P1-P11; commit 1b02ae7), leídas en el estudio de
     eventos de pool_spec.md §5b; no son criterio.

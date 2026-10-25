@@ -1,0 +1,397 @@
+{
+ "semilla": 20261026,
+ "replicas_por_celda": 2000,
+ "qs": [
+  0.0,
+  0.33,
+  0.465,
+  0.615,
+  0.8
+ ],
+ "n_dev": 312,
+ "n_bloqueado": 202,
+ "simplificaciones": [
+  "pool reestimado cada 12 meses en el bloqueado (spec: cada mes)",
+  "pesos de madurez = 1 y objetivo de entrenamiento = etiqueta final",
+  "M0 calibrado una vez con la historia (el arnés lo reajusta cada mes)",
+  "eje I idéntico en todos: d de 4 cuadrantes = d binaria del eje G"
+ ],
+ "celdas": {
+  "0.00": {
+   "pool": {
+    "v4_tal_cual": 0.005,
+    "v4_solo_criterio1": 0.0085,
+    "v4_c1_unilateral": 0.005,
+    "unilateral_bb12": 0.059,
+    "unilateral_bb12_no_dano": 0.059,
+    "unilateral_bb24": 0.06,
+    "dm_newey_west_hln": 0.049,
+    "ewc_llsw": 0.0415,
+    "estimacion_ic95_lo_mayor_0": 0.0435,
+    "recomendado_sin_suelo": 0.024,
+    "v43_final": 0.024,
+    "marginales": {
+     "c1": 0.0085,
+     "c3": 0.312,
+     "c4": 0.9995,
+     "c6": 0.528,
+     "c7": 0.0535
+    },
+    "delta_verdadero_aprox": -0.00014167838692090285,
+    "sd_media_entre_replicas": 0.014256120620986364,
+    "sd_mensual_media": 0.08239111120569843,
+    "acf_1_6_media": [
+     0.41010168200535296,
+     0.2085207465856225,
+     0.10520561654090604,
+     0.044128911303919834,
+     0.00034540321804081775,
+     -0.0007350088693927981
+    ],
+    "ic95_cobertura_delta": 0.8665
+   },
+   "m2_solo": {
+    "v4_tal_cual": 0.0005,
+    "v4_solo_criterio1": 0.0015,
+    "v4_c1_unilateral": 0.0005,
+    "unilateral_bb12": 0.002,
+    "unilateral_bb12_no_dano": 0.002,
+    "unilateral_bb24": 0.0015,
+    "dm_newey_west_hln": 0.002,
+    "ewc_llsw": 0.001,
+    "estimacion_ic95_lo_mayor_0": 0.0015,
+    "recomendado_sin_suelo": 0.0005,
+    "v43_final": 0.0005,
+    "marginales": {
+     "c1": 0.0015,
+     "c3": 0.024,
+     "c4": 0.457,
+     "c6": 0.87,
+     "c7": 0.002
+    },
+    "delta_verdadero_aprox": -0.0943307148721417,
+    "sd_media_entre_replicas": 0.05047759537480625,
+    "sd_mensual_media": 0.3928583463411043,
+    "acf_1_6_media": [
+     0.4750298309506442,
+     0.24372496066299681,
+     0.11705349543885339,
+     0.034251339627799283,
+     -0.02907285643331939,
+     -0.02415611778431267
+    ],
+    "ic95_cobertura_delta": 0.91
+   },
+   "corr_d_pool_d_m2": 0.5972625627242006,
+   "frac_giro_media": 0.23830445544554454,
+   "pesos_finales_medios": {
+    "w_m0": 0.6196258392338753,
+    "w_m2": 0.18413291913668586,
+    "w_m3": 0.19624124162943896,
+    "a": 0.7419120066416542,
+    "b": 0.8897846749766881
+   }
+  },
+  "0.33": {
+   "pool": {
+    "v4_tal_cual": 0.1165,
+    "v4_solo_criterio1": 0.1325,
+    "v4_c1_unilateral": 0.117,
+    "unilateral_bb12": 0.5875,
+    "unilateral_bb12_no_dano": 0.5875,
+    "unilateral_bb24": 0.5915,
+    "dm_newey_west_hln": 0.513,
+    "ewc_llsw": 0.443,
+    "estimacion_ic95_lo_mayor_0": 0.484,
+    "recomendado_sin_suelo": 0.4105,
+    "v43_final": 0.4105,
+    "marginales": {
+     "c1": 0.1325,
+     "c3": 0.781,
+     "c4": 1.0,
+     "c6": 0.785,
+     "c7": 0.5385
+    },
+    "delta_verdadero_aprox": 0.02909486102874194,
+    "sd_media_entre_replicas": 0.024081039228989423,
+    "sd_mensual_media": 0.13467669531934748,
+    "acf_1_6_media": [
+     0.44028312875006204,
+     0.22681950157786865,
+     0.1232132175305204,
+     0.06411462544719629,
+     0.0248204961573674,
+     0.020042472535298055
+    ],
+    "ic95_cobertura_delta": 0.7975
+   },
+   "m2_solo": {
+    "v4_tal_cual": 0.0335,
+    "v4_solo_criterio1": 0.0375,
+    "v4_c1_unilateral": 0.041,
+    "unilateral_bb12": 0.0585,
+    "unilateral_bb12_no_dano": 0.0585,
+    "unilateral_bb24": 0.0505,
+    "dm_newey_west_hln": 0.045,
+    "ewc_llsw": 0.0365,
+    "estimacion_ic95_lo_mayor_0": 0.0375,
+    "recomendado_sin_suelo": 0.0335,
+    "v43_final": 0.0335,
+    "marginales": {
+     "c1": 0.0375,
+     "c3": 0.563,
+     "c4": 0.6795,
+     "c6": 0.5385,
+     "c7": 0.052
+    },
+    "delta_verdadero_aprox": -0.009889168662267984,
+    "sd_media_entre_replicas": 0.05517673240083954,
+    "sd_mensual_media": 0.3606381807476804,
+    "acf_1_6_media": [
+     0.4829139874748091,
+     0.26133856642159115,
+     0.14833858863055668,
+     0.07499701281034846,
+     0.016205620873763777,
+     0.01618080870938749
+    ],
+    "ic95_cobertura_delta": 0.8375
+   },
+   "corr_d_pool_d_m2": 0.8277889908099513,
+   "frac_giro_media": 0.23610643564356434,
+   "pesos_finales_medios": {
+    "w_m0": 0.4426617724229947,
+    "w_m2": 0.356581633718857,
+    "w_m3": 0.20075659385814834,
+    "a": 0.8330056585873706,
+    "b": 1.0092707616365837
+   }
+  },
+  "0.47": {
+   "pool": {
+    "v4_tal_cual": 0.398,
+    "v4_solo_criterio1": 0.4305,
+    "v4_c1_unilateral": 0.401,
+    "unilateral_bb12": 0.818,
+    "unilateral_bb12_no_dano": 0.818,
+    "unilateral_bb24": 0.808,
+    "dm_newey_west_hln": 0.7465,
+    "ewc_llsw": 0.6785,
+    "estimacion_ic95_lo_mayor_0": 0.728,
+    "recomendado_sin_suelo": 0.6565,
+    "v43_final": 0.6565,
+    "marginales": {
+     "c1": 0.4305,
+     "c3": 0.9045,
+     "c4": 1.0,
+     "c6": 0.8755,
+     "c7": 0.77
+    },
+    "delta_verdadero_aprox": 0.049816222917997206,
+    "sd_media_entre_replicas": 0.03059073729620334,
+    "sd_mensual_media": 0.17268652822850475,
+    "acf_1_6_media": [
+     0.48112328509482627,
+     0.2676187467061578,
+     0.1605880735228256,
+     0.09230432194538586,
+     0.046586735848960545,
+     0.03755234790659757
+    ],
+    "ic95_cobertura_delta": 0.7965
+   },
+   "m2_solo": {
+    "v4_tal_cual": 0.1055,
+    "v4_solo_criterio1": 0.1185,
+    "v4_c1_unilateral": 0.1285,
+    "unilateral_bb12": 0.1675,
+    "unilateral_bb12_no_dano": 0.1675,
+    "unilateral_bb24": 0.1565,
+    "dm_newey_west_hln": 0.135,
+    "ewc_llsw": 0.109,
+    "estimacion_ic95_lo_mayor_0": 0.1195,
+    "recomendado_sin_suelo": 0.1065,
+    "v43_final": 0.1065,
+    "marginales": {
+     "c1": 0.1185,
+     "c3": 0.8205,
+     "c4": 0.769,
+     "c6": 0.5165,
+     "c7": 0.1485
+    },
+    "delta_verdadero_aprox": 0.024986371041902867,
+    "sd_media_entre_replicas": 0.06038790608375,
+    "sd_mensual_media": 0.36935858723517206,
+    "acf_1_6_media": [
+     0.5047575921104022,
+     0.28991731807379095,
+     0.17722121019866663,
+     0.10359216145281983,
+     0.047607181838064005,
+     0.04056738240420218
+    ],
+    "ic95_cobertura_delta": 0.8155
+   },
+   "corr_d_pool_d_m2": 0.8806536360150108,
+   "frac_giro_media": 0.2401039603960396,
+   "pesos_finales_medios": {
+    "w_m0": 0.3832099668208711,
+    "w_m2": 0.4295064992611437,
+    "w_m3": 0.18728353391798522,
+    "a": 0.9301526126626984,
+    "b": 1.1033513766558767
+   }
+  },
+  "0.61": {
+   "pool": {
+    "v4_tal_cual": 0.65,
+    "v4_solo_criterio1": 0.6795,
+    "v4_c1_unilateral": 0.653,
+    "unilateral_bb12": 0.9045,
+    "unilateral_bb12_no_dano": 0.9045,
+    "unilateral_bb24": 0.891,
+    "dm_newey_west_hln": 0.8515,
+    "ewc_llsw": 0.8015,
+    "estimacion_ic95_lo_mayor_0": 0.841,
+    "recomendado_sin_suelo": 0.798,
+    "v43_final": 0.798,
+    "marginales": {
+     "c1": 0.6795,
+     "c3": 0.9675,
+     "c4": 1.0,
+     "c6": 0.919,
+     "c7": 0.86
+    },
+    "delta_verdadero_aprox": 0.07340239675253653,
+    "sd_media_entre_replicas": 0.04172138368058776,
+    "sd_mensual_media": 0.20778205201310698,
+    "acf_1_6_media": [
+     0.5251291631412619,
+     0.31112511368909757,
+     0.19665572515562854,
+     0.12144665684538,
+     0.06718777629974457,
+     0.05758573511977572
+    ],
+    "ic95_cobertura_delta": 0.77
+   },
+   "m2_solo": {
+    "v4_tal_cual": 0.2205,
+    "v4_solo_criterio1": 0.243,
+    "v4_c1_unilateral": 0.2525,
+    "unilateral_bb12": 0.3245,
+    "unilateral_bb12_no_dano": 0.32,
+    "unilateral_bb24": 0.2975,
+    "dm_newey_west_hln": 0.2645,
+    "ewc_llsw": 0.222,
+    "estimacion_ic95_lo_mayor_0": 0.2435,
+    "recomendado_sin_suelo": 0.221,
+    "v43_final": 0.221,
+    "marginales": {
+     "c1": 0.243,
+     "c3": 0.9345,
+     "c4": 0.819,
+     "c6": 0.609,
+     "c7": 0.2845
+    },
+    "delta_verdadero_aprox": 0.05441750501780749,
+    "sd_media_entre_replicas": 0.07101921662784257,
+    "sd_mensual_media": 0.37979838279219247,
+    "acf_1_6_media": [
+     0.5336913467846229,
+     0.3227058156227322,
+     0.20732751307575978,
+     0.1319350615950422,
+     0.0752700810982731,
+     0.06394421156063107
+    ],
+    "ic95_cobertura_delta": 0.7975
+   },
+   "corr_d_pool_d_m2": 0.9042488754315378,
+   "frac_giro_media": 0.23789851485148514,
+   "pesos_finales_medios": {
+    "w_m0": 0.34885592675240823,
+    "w_m2": 0.47551331541255887,
+    "w_m3": 0.1756307578350329,
+    "a": 1.066597493764437,
+    "b": 1.2313574136033107
+   }
+  },
+  "0.80": {
+   "pool": {
+    "v4_tal_cual": 0.8055,
+    "v4_solo_criterio1": 0.831,
+    "v4_c1_unilateral": 0.8095,
+    "unilateral_bb12": 0.9555,
+    "unilateral_bb12_no_dano": 0.9555,
+    "unilateral_bb24": 0.9495,
+    "dm_newey_west_hln": 0.923,
+    "ewc_llsw": 0.878,
+    "estimacion_ic95_lo_mayor_0": 0.922,
+    "recomendado_sin_suelo": 0.887,
+    "v43_final": 0.887,
+    "marginales": {
+     "c1": 0.831,
+     "c3": 0.987,
+     "c4": 1.0,
+     "c6": 0.9495,
+     "c7": 0.9275
+    },
+    "delta_verdadero_aprox": 0.09727531858460502,
+    "sd_media_entre_replicas": 0.047214030870231016,
+    "sd_mensual_media": 0.2464518059702615,
+    "acf_1_6_media": [
+     0.5660432698613871,
+     0.3578151412556378,
+     0.2295374396259981,
+     0.14453585892141096,
+     0.08570971232859728,
+     0.07273749097421826
+    ],
+    "ic95_cobertura_delta": 0.79
+   },
+   "m2_solo": {
+    "v4_tal_cual": 0.315,
+    "v4_solo_criterio1": 0.3495,
+    "v4_c1_unilateral": 0.3465,
+    "unilateral_bb12": 0.4545,
+    "unilateral_bb12_no_dano": 0.4485,
+    "unilateral_bb24": 0.4055,
+    "dm_newey_west_hln": 0.3655,
+    "ewc_llsw": 0.3045,
+    "estimacion_ic95_lo_mayor_0": 0.35,
+    "recomendado_sin_suelo": 0.315,
+    "v43_final": 0.315,
+    "marginales": {
+     "c1": 0.3495,
+     "c3": 0.9705,
+     "c4": 0.837,
+     "c6": 0.6375,
+     "c7": 0.39
+    },
+    "delta_verdadero_aprox": 0.07777579143357713,
+    "sd_media_entre_replicas": 0.07231400293394129,
+    "sd_mensual_media": 0.3981361694947503,
+    "acf_1_6_media": [
+     0.5615234024316973,
+     0.35576205793032967,
+     0.23082781466828867,
+     0.1502041066099953,
+     0.09335739586065724,
+     0.0794142277658881
+    ],
+    "ic95_cobertura_delta": 0.809
+   },
+   "corr_d_pool_d_m2": 0.9194378582472008,
+   "frac_giro_media": 0.236,
+   "pesos_finales_medios": {
+    "w_m0": 0.3328255511355563,
+    "w_m2": 0.4953808521961596,
+    "w_m3": 0.17179359666828406,
+    "a": 1.2490190475343674,
+    "b": 1.387961109382866
+   }
+  }
+ },
+ "segundos": 530.4
+}
