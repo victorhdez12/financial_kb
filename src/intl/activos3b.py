@@ -117,13 +117,13 @@ def oro_panel(con, paises: list[str]) -> pd.DataFrame:
     return pd.concat(filas, ignore_index=True).dropna()
 
 
-def credito(con) -> pd.DataFrame:
+def credito(con, n_uk: int = N_BONO_UK) -> pd.DataFrame:
     pi = {c: inflacion_jst(con, c) for c in ("USA", "GBR")}
     baa = _anual(D.load_dev(con, "damodaran_baa_corp_tr"))
     tb = _anual(D.load_dev(con, "damodaran_tbond_10y_tr"))
     us = pd.DataFrame({"corp": baa, "gob": tb})
-    corp_uk = tr_desde_rendimiento(_anual(D.load_dev(con, "boe_uk_corp_bond_yield_a")))
-    gob_uk = tr_desde_rendimiento(_anual(D.load_dev(con, "boe_uk_consol_yield_a")))
+    corp_uk = tr_desde_rendimiento(_anual(D.load_dev(con, "boe_uk_corp_bond_yield_a")), n=n_uk)
+    gob_uk = tr_desde_rendimiento(_anual(D.load_dev(con, "boe_uk_consol_yield_a")), n=n_uk)
     uk = pd.DataFrame({"corp": corp_uk, "gob": gob_uk}).dropna()
     filas = []
     for c, f in (("USA", us), ("GBR", uk)):
@@ -158,3 +158,26 @@ def descomp(con, paises: list[str]) -> pd.DataFrame:
         f2["pais"] = c
         filas.append(f2.reset_index(names="año"))
     return pd.concat(filas, ignore_index=True)
+
+
+def credito_carry(con) -> pd.DataFrame:
+    """Parte "carry" del exceso del crédito: diferencial de rendimientos al cierre del año anterior (fracción).
+    GBR: corporativo − consol (BoE, anual). USA: Moody's Baa − Tesoro 10 años (FRED BAA y GS10, diciembre); GS10
+    empieza en 1953 → carry de USA desde 1954. El resto del exceso es la parte de precio (variación del diferencial)."""
+    uk = (_anual(D.load_dev(con, "boe_uk_corp_bond_yield_a")) - _anual(D.load_dev(con, "boe_uk_consol_yield_a"))) / 100
+    baa, gs = D.load_dev(con, "BAA"), D.load_dev(con, "GS10")
+    sp = (baa - gs).dropna()
+    sp = sp[sp.index.month == 12]
+    sp.index = sp.index.year
+    filas = [pd.DataFrame({"pais": "GBR", "año": uk.index + 1, "carry": uk.values}),
+             pd.DataFrame({"pais": "USA", "año": sp.index + 1, "carry": (sp / 100).values})]
+    return pd.concat(filas, ignore_index=True).dropna()
+
+
+def pib_nivel(con, paises: list[str]) -> pd.DataFrame:
+    """PIB real en nivel (PIB per cápita de Maddison × población, JST) para ponderar la cuota mundial."""
+    filas = []
+    for c in paises:
+        v = _jst(con, c, "rgdpmad") * _jst(con, c, "pop")
+        filas.append(pd.DataFrame({"pais": c, "año": v.index, "pib": v.values}))
+    return pd.concat(filas, ignore_index=True).dropna()
