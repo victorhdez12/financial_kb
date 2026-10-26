@@ -100,3 +100,54 @@ def placebo_fp(y, d, pais, anio, alfa: float = 0.05) -> dict:
             ps.append(contraste(y, dk, pais, anio)["p"])
     ps = np.array(ps)
     return {"desplazamientos": int(len(ps)), "tasa_fp": float((ps < alfa).mean()) if len(ps) else None}
+
+
+# --- sensibilidad DECLARADA A POSTERIORI (Validador, 27-oct): inferencia robusta a autocorrelación. No cambia el
+# --- prerregistro ni la corrida única; se publica aparte y no decide.
+def driscoll_kraay(y: pd.Series, d: pd.Series, pais: pd.Series, anio: pd.Series, lags: int | None = None) -> dict:
+    """Mismo modelo que `contraste` (efecto fijo de país + b·D), con errores Driscoll-Kraay: suma por año de los
+    productos x·e (robusta a cualquier correlación entre países en el mismo año) y núcleo de Bartlett sobre `lags` años
+    (robusta a autocorrelación). lags por defecto = floor(4·(T/100)^(2/9)); t con T − 1 gl."""
+    ok = y.notna() & d.notna()
+    y, d, pais, anio = y[ok].to_numpy(float), d[ok].to_numpy(float), pais[ok].to_numpy(), anio[ok].to_numpy()
+    X = np.column_stack([d, pd.get_dummies(pais).to_numpy(float)])
+    XtX_inv = np.linalg.pinv(X.T @ X)
+    b = XtX_inv @ X.T @ y
+    e = y - X @ b
+    años = np.arange(int(anio.min()), int(anio.max()) + 1)
+    h = np.zeros((len(años), X.shape[1]))                       # años sin datos: fila de ceros
+    np.add.at(h, anio.astype(int) - int(anio.min()), X * e[:, None])
+    T = int(len(np.unique(anio)))
+    L = int(np.floor(4 * (T / 100) ** (2 / 9))) if lags is None else int(lags)
+    S = h.T @ h
+    for l in range(1, L + 1):
+        G = h[l:].T @ h[:-l]
+        S += (1 - l / (L + 1)) * (G + G.T)
+    V = XtX_inv @ S @ XtX_inv * T / (T - 1)
+    se = float(np.sqrt(V[0, 0]))
+    t = float(b[0] / se) if se > 0 else np.nan
+    q = stats.t.ppf(0.975, T - 1)
+    return {"efecto": float(b[0]), "se": se, "t": t, "p": float(2 * stats.t.sf(abs(t), T - 1)),
+            "ic95": [float(b[0] - q * se), float(b[0] + q * se)], "lags": L, "años": T}
+
+
+def p_placebo(y, d, pais, anio) -> dict:
+    """p empírico: fracción de desplazamientos (k ≥ DESFASE_MIN) con |t| ≥ |t real| (CR2). Calibra el contraste con la
+    distribución nula observada en vez de con la t de Student."""
+    t0 = abs(contraste(y, d, pais, anio)["t"])
+    L = int(anio.max() - anio.min() + 1)
+    ts = []
+    for k in range(DESFASE_MIN, L - DESFASE_MIN + 1):
+        dk = desplazar(d, pais, anio, k)
+        if dk.sum() >= 10 and (dk == 0).sum() >= 10:
+            ts.append(abs(contraste(y, dk, pais, anio)["t"]))
+    ts = np.array(ts)
+    return {"p_empirico": float((1 + (ts >= t0).sum()) / (1 + len(ts))), "desplazamientos": int(len(ts))}
+
+
+def efectos_pais_sin_año(y: pd.Series, d: pd.Series, pais: pd.Series, anio: pd.Series) -> pd.DataFrame:
+    """Como `efectos_pais`, pero sobre y sin la media de cada año (quita el choque global común): las estimaciones por
+    país dejan de estar correladas por los años compartidos, que es lo que lleva τ² de DerSimonian-Laird a 0."""
+    ok = y.notna() & d.notna()
+    yd = y - y[ok].groupby(anio[ok]).transform("mean")
+    return efectos_pais(yd, d, pais)
