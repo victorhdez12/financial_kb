@@ -29,7 +29,11 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Agentes de la fase:** Constructor · Investigador de relaciones · **Validador independiente** · **Reportero** (ver [[Proyecto/Agentes]]). Informe: [[Reports/Fase 3/Informe de resultados]].
 
-## ▶ Retomar aquí (26-oct, Fase 3 cerrada para el pool: "M0 sigue")
+## ▶ Retomar aquí (26-oct, fase de factores: plan en borrador)
+
+**Plan:** [[Proyecto/Fase factores — plan]] (aprobado con ajustes). Hecho: corte técnico (`src/factors/data.py`), paso 0 (vintages del clasificador y contaminación de diseño) y potencia: solo efectos enormes en rentabilidad → objetivo = reducir caídas/volatilidad. **Pendiente del usuario:** elegir la cartera de referencia (A/B/C). Sin backtests de cartera todavía.
+
+### Retomar (26-oct, Fase 3 cerrada para el pool: "M0 sigue") — histórico
 
 **Decisión del usuario (26-oct):** P-EVAL-BASE v4.3 **no registrada**; periodo bloqueado **intacto**. Puerta de gasto: pool − M0 = +0,040 nats, IC 95 % [−0,008; +0,086]; potencia ≤ 0,53; pool_excluir +0,013 (depende de un componente). P1–P4 no evaluables (ventanas NBER ≠ giros de G de la etiqueta), sin arreglar. Detalle en la Bitácora del 26-oct y en `research/trial_log.md`.
 

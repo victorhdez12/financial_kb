@@ -1,0 +1,546 @@
+{
+ "generado": "2026-10-26 10:11:04.006988+00:00",
+ "muestra": "1963-07-31 → 2004-12-31",
+ "meses_totales": 498,
+ "estados": {
+  "G↓ (cualquier I)": {
+   "meses": 332,
+   "episodios": 31,
+   "meses_por_episodio": 10.7
+  },
+  "Deflación/recesión": {
+   "meses": 142,
+   "episodios": 32,
+   "meses_por_episodio": 4.4
+  },
+  "Estanflación": {
+   "meses": 190,
+   "episodios": 32,
+   "meses_por_episodio": 5.9
+  },
+  "Goldilocks": {
+   "meses": 85,
+   "episodios": 21,
+   "meses_por_episodio": 4.0
+  },
+  "Reflación": {
+   "meses": 81,
+   "episodios": 19,
+   "meses_por_episodio": 4.3
+  }
+ },
+ "factores_incondicional": {
+  "mercado": {
+   "desde": "1963-07-01",
+   "meses": 498,
+   "sigma_anual": 0.1551735257876783,
+   "curtosis": 4.987624004247012,
+   "ar1": 0.05554818882824416
+  },
+  "tamaño": {
+   "desde": "1963-07-01",
+   "meses": 498,
+   "sigma_anual": 0.11066074843453325,
+   "curtosis": 6.554136105711541,
+   "ar1": 0.08408837392695916
+  },
+  "value": {
+   "desde": "1963-07-01",
+   "meses": 498,
+   "sigma_anual": 0.09829820659698604,
+   "curtosis": 4.787488825773716,
+   "ar1": 0.1459621644694093
+  },
+  "rentabilidad": {
+   "desde": "1963-07-01",
+   "meses": 498,
+   "sigma_anual": 0.08227031417709367,
+   "curtosis": 15.448114930763,
+   "ar1": 0.1446492570797083
+  },
+  "inversión": {
+   "desde": "1963-07-01",
+   "meses": 498,
+   "sigma_anual": 0.07348154976703955,
+   "curtosis": 4.168586184908456,
+   "ar1": 0.13094547568668913
+  },
+  "momentum": {
+   "desde": "1963-07-01",
+   "meses": 498,
+   "sigma_anual": 0.14101550039267866,
+   "curtosis": 8.49522466772748,
+   "ar1": -0.015110455705102943
+  },
+  "calidad (AQR QMJ)": {
+   "desde": "1963-07-01",
+   "meses": 498,
+   "sigma_anual": 0.07378752860962644,
+   "curtosis": 6.204028267005759,
+   "ar1": 0.12932281727800082
+  },
+  "beta baja (AQR BAB)": {
+   "desde": "1963-07-01",
+   "meses": 498,
+   "sigma_anual": 0.11987985531918736,
+   "curtosis": 7.262190824974871,
+   "ar1": 0.140772006858376
+  }
+ },
+ "mde": {
+  "G↓ (cualquier I)": {
+   "mercado": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.151,
+     "tau=0.05": 0.153,
+     "tau=0.10": 0.159
+    },
+    "mde_sharpe_tau0": 0.97,
+    "mde_sharpe_tau0.05": 0.99,
+    "mde_ratio_vol": 1.32
+   },
+   "tamaño": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.111,
+     "tau=0.05": 0.114,
+     "tau=0.10": 0.122
+    },
+    "mde_sharpe_tau0": 1.0,
+    "mde_sharpe_tau0.05": 1.03,
+    "mde_ratio_vol": 1.41
+   },
+   "value": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.105,
+     "tau=0.05": 0.108,
+     "tau=0.10": 0.116
+    },
+    "mde_sharpe_tau0": 1.07,
+    "mde_sharpe_tau0.05": 1.1,
+    "mde_ratio_vol": 1.35
+   },
+   "rentabilidad": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.088,
+     "tau=0.05": 0.091,
+     "tau=0.10": 0.101
+    },
+    "mde_sharpe_tau0": 1.07,
+    "mde_sharpe_tau0.05": 1.11,
+    "mde_ratio_vol": 1.8
+   },
+   "inversión": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.077,
+     "tau=0.05": 0.081,
+     "tau=0.10": 0.092
+    },
+    "mde_sharpe_tau0": 1.05,
+    "mde_sharpe_tau0.05": 1.1,
+    "mde_ratio_vol": 1.31
+   },
+   "momentum": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.128,
+     "tau=0.05": 0.131,
+     "tau=0.10": 0.138
+    },
+    "mde_sharpe_tau0": 0.91,
+    "mde_sharpe_tau0.05": 0.93,
+    "mde_ratio_vol": 1.43
+   },
+   "calidad (AQR QMJ)": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.077,
+     "tau=0.05": 0.081,
+     "tau=0.10": 0.092
+    },
+    "mde_sharpe_tau0": 1.04,
+    "mde_sharpe_tau0.05": 1.1,
+    "mde_ratio_vol": 1.41
+   },
+   "beta baja (AQR BAB)": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.127,
+     "tau=0.05": 0.13,
+     "tau=0.10": 0.137
+    },
+    "mde_sharpe_tau0": 1.06,
+    "mde_sharpe_tau0.05": 1.08,
+    "mde_ratio_vol": 1.47
+   }
+  },
+  "Deflación/recesión": {
+   "mercado": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.158,
+     "tau=0.05": 0.16,
+     "tau=0.10": 0.166
+    },
+    "mde_sharpe_tau0": 1.02,
+    "mde_sharpe_tau0.05": 1.03,
+    "mde_ratio_vol": 1.34
+   },
+   "tamaño": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.116,
+     "tau=0.05": 0.119,
+     "tau=0.10": 0.126
+    },
+    "mde_sharpe_tau0": 1.05,
+    "mde_sharpe_tau0.05": 1.08,
+    "mde_ratio_vol": 1.43
+   },
+   "value": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.11,
+     "tau=0.05": 0.112,
+     "tau=0.10": 0.12
+    },
+    "mde_sharpe_tau0": 1.12,
+    "mde_sharpe_tau0.05": 1.14,
+    "mde_ratio_vol": 1.37
+   },
+   "rentabilidad": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.092,
+     "tau=0.05": 0.095,
+     "tau=0.10": 0.104
+    },
+    "mde_sharpe_tau0": 1.12,
+    "mde_sharpe_tau0.05": 1.15,
+    "mde_ratio_vol": 1.84
+   },
+   "inversión": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.081,
+     "tau=0.05": 0.084,
+     "tau=0.10": 0.095
+    },
+    "mde_sharpe_tau0": 1.1,
+    "mde_sharpe_tau0.05": 1.14,
+    "mde_ratio_vol": 1.33
+   },
+   "momentum": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.134,
+     "tau=0.05": 0.136,
+     "tau=0.10": 0.143
+    },
+    "mde_sharpe_tau0": 0.95,
+    "mde_sharpe_tau0.05": 0.96,
+    "mde_ratio_vol": 1.45
+   },
+   "calidad (AQR QMJ)": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.081,
+     "tau=0.05": 0.085,
+     "tau=0.10": 0.095
+    },
+    "mde_sharpe_tau0": 1.1,
+    "mde_sharpe_tau0.05": 1.15,
+    "mde_ratio_vol": 1.43
+   },
+   "beta baja (AQR BAB)": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.133,
+     "tau=0.05": 0.135,
+     "tau=0.10": 0.142
+    },
+    "mde_sharpe_tau0": 1.11,
+    "mde_sharpe_tau0.05": 1.13,
+    "mde_ratio_vol": 1.49
+   }
+  },
+  "Estanflación": {
+   "mercado": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.147,
+     "tau=0.05": 0.149,
+     "tau=0.10": 0.155
+    },
+    "mde_sharpe_tau0": 0.95,
+    "mde_sharpe_tau0.05": 0.96,
+    "mde_ratio_vol": 1.31
+   },
+   "tamaño": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.108,
+     "tau=0.05": 0.111,
+     "tau=0.10": 0.119
+    },
+    "mde_sharpe_tau0": 0.98,
+    "mde_sharpe_tau0.05": 1.0,
+    "mde_ratio_vol": 1.39
+   },
+   "value": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.102,
+     "tau=0.05": 0.105,
+     "tau=0.10": 0.113
+    },
+    "mde_sharpe_tau0": 1.04,
+    "mde_sharpe_tau0.05": 1.07,
+    "mde_ratio_vol": 1.34
+   },
+   "rentabilidad": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.085,
+     "tau=0.05": 0.089,
+     "tau=0.10": 0.098
+    },
+    "mde_sharpe_tau0": 1.03,
+    "mde_sharpe_tau0.05": 1.08,
+    "mde_ratio_vol": 1.76
+   },
+   "inversión": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.075,
+     "tau=0.05": 0.079,
+     "tau=0.10": 0.09
+    },
+    "mde_sharpe_tau0": 1.02,
+    "mde_sharpe_tau0.05": 1.08,
+    "mde_ratio_vol": 1.3
+   },
+   "momentum": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.124,
+     "tau=0.05": 0.127,
+     "tau=0.10": 0.134
+    },
+    "mde_sharpe_tau0": 0.88,
+    "mde_sharpe_tau0.05": 0.9,
+    "mde_ratio_vol": 1.42
+   },
+   "calidad (AQR QMJ)": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.075,
+     "tau=0.05": 0.079,
+     "tau=0.10": 0.09
+    },
+    "mde_sharpe_tau0": 1.02,
+    "mde_sharpe_tau0.05": 1.07,
+    "mde_ratio_vol": 1.4
+   },
+   "beta baja (AQR BAB)": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.124,
+     "tau=0.05": 0.126,
+     "tau=0.10": 0.133
+    },
+    "mde_sharpe_tau0": 1.03,
+    "mde_sharpe_tau0.05": 1.05,
+    "mde_ratio_vol": 1.45
+   }
+  },
+  "Goldilocks": {
+   "mercado": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.19,
+     "tau=0.05": 0.192,
+     "tau=0.10": 0.199
+    },
+    "mde_sharpe_tau0": 1.22,
+    "mde_sharpe_tau0.05": 1.24,
+    "mde_ratio_vol": 1.42
+   },
+   "tamaño": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.139,
+     "tau=0.05": 0.142,
+     "tau=0.10": 0.152
+    },
+    "mde_sharpe_tau0": 1.26,
+    "mde_sharpe_tau0.05": 1.28,
+    "mde_ratio_vol": 1.53
+   },
+   "value": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.132,
+     "tau=0.05": 0.135,
+     "tau=0.10": 0.145
+    },
+    "mde_sharpe_tau0": 1.34,
+    "mde_sharpe_tau0.05": 1.37,
+    "mde_ratio_vol": 1.46
+   },
+   "rentabilidad": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.11,
+     "tau=0.05": 0.114,
+     "tau=0.10": 0.126
+    },
+    "mde_sharpe_tau0": 1.34,
+    "mde_sharpe_tau0.05": 1.39,
+    "mde_ratio_vol": 2.08
+   },
+   "inversión": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.097,
+     "tau=0.05": 0.102,
+     "tau=0.10": 0.115
+    },
+    "mde_sharpe_tau0": 1.32,
+    "mde_sharpe_tau0.05": 1.39,
+    "mde_ratio_vol": 1.4
+   },
+   "momentum": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.16,
+     "tau=0.05": 0.163,
+     "tau=0.10": 0.172
+    },
+    "mde_sharpe_tau0": 1.13,
+    "mde_sharpe_tau0.05": 1.16,
+    "mde_ratio_vol": 1.57
+   },
+   "calidad (AQR QMJ)": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.097,
+     "tau=0.05": 0.102,
+     "tau=0.10": 0.115
+    },
+    "mde_sharpe_tau0": 1.31,
+    "mde_sharpe_tau0.05": 1.38,
+    "mde_ratio_vol": 1.54
+   },
+   "beta baja (AQR BAB)": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.16,
+     "tau=0.05": 0.162,
+     "tau=0.10": 0.171
+    },
+    "mde_sharpe_tau0": 1.33,
+    "mde_sharpe_tau0.05": 1.35,
+    "mde_ratio_vol": 1.62
+   }
+  },
+  "Reflación": {
+   "mercado": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.193,
+     "tau=0.05": 0.196,
+     "tau=0.10": 0.204
+    },
+    "mde_sharpe_tau0": 1.24,
+    "mde_sharpe_tau0.05": 1.26,
+    "mde_ratio_vol": 1.43
+   },
+   "tamaño": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.142,
+     "tau=0.05": 0.145,
+     "tau=0.10": 0.156
+    },
+    "mde_sharpe_tau0": 1.28,
+    "mde_sharpe_tau0.05": 1.31,
+    "mde_ratio_vol": 1.55
+   },
+   "value": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.134,
+     "tau=0.05": 0.138,
+     "tau=0.10": 0.149
+    },
+    "mde_sharpe_tau0": 1.36,
+    "mde_sharpe_tau0.05": 1.4,
+    "mde_ratio_vol": 1.47
+   },
+   "rentabilidad": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.112,
+     "tau=0.05": 0.117,
+     "tau=0.10": 0.129
+    },
+    "mde_sharpe_tau0": 1.36,
+    "mde_sharpe_tau0.05": 1.42,
+    "mde_ratio_vol": 2.11
+   },
+   "inversión": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.099,
+     "tau=0.05": 0.104,
+     "tau=0.10": 0.118
+    },
+    "mde_sharpe_tau0": 1.35,
+    "mde_sharpe_tau0.05": 1.42,
+    "mde_ratio_vol": 1.41
+   },
+   "momentum": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.164,
+     "tau=0.05": 0.167,
+     "tau=0.10": 0.176
+    },
+    "mde_sharpe_tau0": 1.16,
+    "mde_sharpe_tau0.05": 1.18,
+    "mde_ratio_vol": 1.58
+   },
+   "calidad (AQR QMJ)": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.099,
+     "tau=0.05": 0.104,
+     "tau=0.10": 0.118
+    },
+    "mde_sharpe_tau0": 1.34,
+    "mde_sharpe_tau0.05": 1.41,
+    "mde_ratio_vol": 1.56
+   },
+   "beta baja (AQR BAB)": {
+    "mde_rent_anual": {
+     "tau=0.00": 0.163,
+     "tau=0.05": 0.166,
+     "tau=0.10": 0.175
+    },
+    "mde_sharpe_tau0": 1.36,
+    "mde_sharpe_tau0.05": 1.38,
+    "mde_ratio_vol": 1.63
+   }
+  }
+ },
+ "nota": "MDE = efecto mínimo detectable con 80 % de potencia, bilateral 5 %; tau = dispersión anualizada de la media entre episodios (escenario, no estimada). Sin medias condicionadas.",
+ "mde_k6_recesiones_G_down": {
+  "mercado": {
+   "tau0.05": 0.162,
+   "tau0.1": 0.19,
+   "sharpe_tau0.10": 1.22
+  },
+  "tamaño": {
+   "tau0.05": 0.125,
+   "tau0.1": 0.159,
+   "sharpe_tau0.10": 1.44
+  },
+  "value": {
+   "tau0.05": 0.12,
+   "tau0.1": 0.155,
+   "sharpe_tau0.10": 1.58
+  },
+  "rentabilidad": {
+   "tau0.05": 0.105,
+   "tau0.1": 0.144,
+   "sharpe_tau0.10": 1.75
+  },
+  "inversión": {
+   "tau0.05": 0.096,
+   "tau0.1": 0.138,
+   "sharpe_tau0.10": 1.88
+  },
+  "momentum": {
+   "tau0.05": 0.14,
+   "tau0.1": 0.172,
+   "sharpe_tau0.10": 1.22
+  },
+  "calidad (AQR QMJ)": {
+   "tau0.05": 0.096,
+   "tau0.1": 0.138,
+   "sharpe_tau0.10": 1.87
+  },
+  "beta baja (AQR BAB)": {
+   "tau0.05": 0.14,
+   "tau0.1": 0.171,
+   "sharpe_tau0.10": 1.43
+  }
+ },
+ "nota_k6": "Mismo estado G↓ pero con K = 6 episodios independientes (recesiones 1963-2004: 1969-70, 1973-75, 1980, 1981-82, 1990-91, 2001), como pide el usuario."
+}
