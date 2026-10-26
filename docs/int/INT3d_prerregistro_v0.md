@@ -1,7 +1,7 @@
 ---
 documento: P-DEV-INT3d — prerregistro interno del estudio de eventos de giros (recesiones y cambios de régimen) en el panel internacional anual
 version: 0.1-borrador (2026-10-26)
-estado: BORRADOR para el usuario. Nada cruzado: ninguna rentabilidad calculada alrededor de ningún evento real. Solo diseño y potencia.
+estado: BORRADOR para el usuario. Nada cruzado: ninguna rentabilidad calculada alrededor de ningún evento real. Diseño y potencia (corrida, commit 3c588c1).
 plan: docs/PLAN_internacional_v0.md (pieza 2, ampliación INT-3d pedida por el usuario el 26-oct; Bitácora "Ampliación pedida por el usuario")
 depende_de: INT-1 (fechado anual de recesiones y etiqueta anual), INT-2 (método de potencia), INT-3 y su validación (docs/validation/2026-10-26_int3.md)
 fuente_potencia: scripts/int3d_potencia.py → research/int/int3d_potencia.json (procedencia en el JSON)
@@ -171,10 +171,50 @@ permutación de la etiqueta financiera / normal entre años ancla (en vez de fec
 - **Sin contrastes ni veredicto.** MDE ingenuo (6 eventos independientes, 16 meses) ≈ **16 pp** de exceso de la bolsa:
   solo se ve un efecto enorme. Se publica como ilustración con fechas precisas, no como evidencia.
 
-## 10. Potencia
-*(Se rellena con la salida de `scripts/int3d_potencia.py`, commiteado antes de correrlo. El script solo usa fechas,
-recuentos, solapes y estadísticos incondicionales de los activos; los estadísticos de evento se calculan sobre paneles
-simulados.)*
+## 10. Potencia (corrida con puerta: commit `3c588c1`, árbol limpio, 2026-10-26T18:49:17Z; `research/int/int3d_potencia.json`)
+Solo fechas de eventos, disponibilidad de datos (sí/no) y estadísticos incondicionales de los activos (log real, núcleo,
+≤ 2004): bolsa σ = 0,23, ρ entre países 0,32; bonos − letras σ = 0,08, ρ 0,35; vivienda σ = 0,10, ρ 0,09; bolsa −
+letras σ = 0,21, ρ 0,31; AR(1) del factor común 0,25-0,66 según el activo. 2.000 paneles simulados (factor común AR(1) +
+país AR(1)) sin efecto en las fechas reales → desviación típica (SD) del estadístico; 300 más con los 124 placebos →
+tamaño y potencia de la z calibrada. Colas gruesas (t con 4 gl): MDE prácticamente iguales.
+
+**Recuentos y solapes (muestra principal):** 233-245 eventos con ventana completa en los contrastes de bolsa y bonos
+(91-94 años ancla distintos, m* de Kish ≈ 3,9 eventos por año ancla), 168-174 en vivienda, 200 entradas en inflación
+alta (77 años; 154 sin frontera). Pares de eventos de países distintos con ventanas solapadas: 2-4 % en las ventanas
+cortas, ≈ 10 % en las de "fondo". 61 recesiones desde 1950. Sin guerras se pierde un 13-25 % de los eventos.
+
+| id | eventos (años ancla) | SD | MDE k = 1 | MDE k = 2 / 4 / 6 | efecto plausible | potencia (k = 1) | tamaño z-placebo | sin guerras MDE k = 1 | 1950-2004 MDE k = 1 |
+|---|---|---|---|---|---|---|---|---|---|
+| C1 espera salida | 234 (94) | 2,5 pp | 7,1 pp | 7,8 / 8,5 / 8,9 | +8 | 0,88 | 0,03 | 7,5 | 13,5 |
+| C2 financiera bolsa | 245 (93; 69 financ.) | 4,7 | 13,1 | 14,4 / 15,6 / 16,2 | −10 | 0,57 | 0,08 | 13,4 | 38 |
+| C3 bonos en recesión | 243 (92) | 0,6 | 1,8 | 1,9 / 2,1 / 2,2 | +3 /año | 1,00 | 0,07 | 2,0 | 3,7 |
+| C4 espera entrada | 233 (91) | 2,4 | 6,8 | 7,4 / 8,1 / 8,4 | −6 | 0,70 | 0,06 | 7,7 | 12,9 |
+| C5 espera inflación | 200 (77) | 0,9 | 2,4 | 2,6 / 2,9 / 3,0 | −5 | 1,00 | 0,05 | 2,6 | 3,8 |
+| C6 financiera vivienda | 174 (82; 41 financ.) | 5,1 | 14,4 | 15,8 / 17,1 / 17,9 | −8 | 0,34 | 0,08 | 15,4 | 35 |
+| C7 fondo bolsa | 239 (92) | 0,37 años | 1,03 años | 1,13 / 1,22 / 1,27 | −0,5 | 0,28 | 0,06 | 1,11 | 1,75 |
+| C8 fondo vivienda | 168 (75) | 0,33 años | 0,91 años | 1,01 / 1,09 / 1,14 | +1 | 0,87 | 0,09 | 0,98 | 1,52 |
+
+**Regla del §5 aplicada (muestra principal): k\* = 2 → familia = {C1, C3}.** Con k = 3 solo pasan C3 y C5 (C1 necesita
+8,2 pp > 8 y C8 1,06 > 1 año), así que no caben 3. Con k = 2 pasan C1 (7,8 pp), C3 y C5 (C8 se queda a 1,01 años),
+y entran los dos primeros por prioridad.
+**C5 queda fuera solo por el orden de prioridad**, no por falta de potencia (ver decisión 1). Todo lo demás es
+descriptivo: C2 y C6 (financiera frente a normal) y C7 (fondo de la bolsa) no tienen potencia para efectos plausibles;
+C4 está en el límite.
+
+**Lectura:**
+- **Sí hay potencia** para la pregunta del usuario más útil (C1: cuánto rebote se pierde por esperar a confirmar la
+  salida, si es ≥ 8 pp anómalos) y para el papel de los bonos en la recesión (C3, ≥ 2 pp/año).
+- **No hay potencia** para distinguir recesiones financieras de normales en rentabilidades por episodio (hace falta
+  ≥ 13 pp en bolsa, ≥ 14 pp en vivienda: solo 69 y 41 financieras, concentradas en pocos años). Se describen.
+- **Con datos anuales no se puede fechar el fondo** con precisión de meses: el MDE es ≈ 1 año. El "cuándo" fino solo lo da
+  el secundario mensual de EE. UU., sin potencia (MDE ingenuo ≈ 16 pp con 6 eventos).
+- **1950-2004** solo sirve para signos: los MDE se duplican (C1 13,5 pp; C3 3,7 pp).
+- **Calibración de la z placebo** (300 paneles sin efecto, 5 % nominal): 3-7 % en C1, C3, C4, C5 y C7; **8-9 % en C2, C6
+  y C8** (algo anticonservadora en las comparaciones financiera − normal y en el fondo de la vivienda: por eso el
+  criterio 3 del p por rangos). La SD de los placebos sale menor que la SD entre paneles en C1, C4, C7 y C8 porque la
+  media de los placebos se mueve con el mismo factor común; lo que importa es el tamaño de la z, que sale bien.
+- Supuestos de la simulación (declarados): Gaussiana o t₄, un solo ρ y un AR(1) común por activo, sin subida de la
+  correlación en las crisis; con correlaciones que suben en las recesiones, la potencia real será algo menor.
 
 ## 11. Contaminación declarada
 - Sabemos qué pasó en 1929-33, 1973-75, 1991-93 (crisis nórdicas) y 2001; la literatura de recesiones financieras con
@@ -194,7 +234,9 @@ simulados.)*
 5. Validador independiente del resultado.
 
 ## 13. Decisiones del usuario
-1. **Familia de contrastes:** aceptar la que da la regla de potencia (§10) o reducirla.
+1. **Familia de contrastes:** la regla da **{C1, C3}** (k = 2). Alternativa: {C1, C3, C5} con Holm-3 (C5 tiene potencia de
+   sobra; C1 baja a potencia ≈ 0,77 con su efecto plausible). Recomendado: mantener la regla tal cual ({C1, C3}) y C5
+   como descriptivo destacado, porque además depende de la etiqueta ex post (decisión 3).
 2. **Guerras:** principal con todos los eventos y sin guerras como criterio 4 (recomendado, como INT-3) o principal sin
    guerras (como INT-4; se pierde ≈ 15-20 % de los eventos).
 3. **E-I (inflación alta) con etiqueta ex post centrada:** mantener C5 con la confirmación optimista declarada
