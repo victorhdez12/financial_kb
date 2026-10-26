@@ -10,11 +10,12 @@ from src.paper import live as L
 
 
 def test_regla_b1():
-    assert L.rv_b1(0.10, 0.80) == (0.80, 0.80, False)                     # vol baja: sin recorte
-    bruta, rv, cambio = L.rv_b1(0.30, 0.80)                               # vol alta: al suelo
-    assert bruta == pytest.approx(0.65) and rv == pytest.approx(0.65) and cambio
-    bruta, rv, cambio = L.rv_b1(L.SIGMA_STAR / 0.99, 0.80)                # recorte < 2,5 pp: no se mueve
-    assert rv == 0.80 and not cambio
+    assert L.ESTRATEGICO == {"rv": 0.70, "rf": 0.15, "oro": 0.15} and L.SIGMA_STAR == 0.1702
+    assert L.rv_b1(0.10, 0.70) == (0.70, 0.70, False)                     # vol baja: sin recorte
+    bruta, rv, cambio = L.rv_b1(0.40, 0.70)                               # vol alta: al suelo
+    assert bruta == pytest.approx(0.55) and rv == pytest.approx(0.55) and cambio
+    bruta, rv, cambio = L.rv_b1(L.SIGMA_STAR / 0.99, 0.70)                # recorte < 2,5 pp: no se mueve
+    assert rv == 0.70 and not cambio
 
 
 def test_rv_eur():
@@ -34,6 +35,6 @@ def test_decidir_y_dato_viejo(monkeypatch, tmp_path):
     for d, v in zip(dias, sp):
         con.execute("insert into obs_latest values ('SP500', ?, ?), ('ecb_eurusd_d', ?, 1.1)", [d.date(), v, d.date()])
     dec = L.decidir(pd.Timestamp("2026-10-31"), con)                       # vol diaria 3 % → muy alta → suelo
-    assert dec.b1["rv"] == pytest.approx(0.65) and dec.cambio_b1 and abs(sum(dec.b1.values()) - 1) < 1e-9
+    assert dec.b1["rv"] == pytest.approx(0.55) and dec.cambio_b1 and abs(sum(dec.b1.values()) - 1) < 1e-9
     with pytest.raises(RuntimeError):
         L.decidir(pd.Timestamp("2026-12-31"), con)                         # sin dato reciente

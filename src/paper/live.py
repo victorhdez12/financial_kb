@@ -1,12 +1,15 @@
 """Paper trading de la opción 3 (docs/factors/paper_trading.md): cada cierre de mes fija los pesos objetivo de B0
-(estática 80/10/10) y B1 (ajuste por volatilidad) con datos EN VIVO. Separado de src/factors/ a propósito: el corte
+(estática 70/15/15) y B1 (ajuste por volatilidad) con datos EN VIVO. Separado de src/factors/ a propósito: el corte
 técnico de desarrollo (≤ 2004) sigue intacto allí; aquí solo se leen los últimos 13 cierres de mes.
 
-B1 en vivo (misma regla que P-DEV-FACT §4, con dos sustituciones declaradas):
+Cartera de referencia 70/15/15 (decisión del usuario del 26-oct, tomada DESPUÉS de ver la caída de −42 % de la 80/10/10
+en desarrollo; declarado). B1: RV = 70 % × min(1, σ*/σ̂_t), acotada en [55 %, 70 %] (− 15 pp), umbral 2,5 pp.
 - σ̂_t = volatilidad realizada de 12 rendimientos mensuales de la RV en EUR: S&P 500 (FRED `SP500`, precio) convertido
-  con el EUR/USD diario del BCE al cierre de mes (en desarrollo: EE. UU. con dividendos y divisa media del BIS);
-- σ* = 0,1548 CONGELADA (mediana expansiva de σ̂ 1963-07 → 2004-12, datos de desarrollo), en vez de la mediana
-  expansiva hasta t: así no se lee la historia 2005-2025.
+  con el EUR/USD del BCE, ambos a cierre de mes;
+- σ* = 0,1702 CONGELADA, en la MISMA medida (precio y divisa a cierre de mes): mediana de σ̂ 1963-07 → 2004-12 con el
+  mercado de EE. UU. de French (cierre de mes) y el fixing DEM/USD de Frankfurt (≤ 1998) / BCE (≥ 1999)
+  (`scripts/paper_sigma_star.py`, `research/paper/sigma_star.json`). Antes 0,1548 (divisa media del BIS). Alternativa
+  declarada, no usada: solo tipos flotantes 1973-2004 = 0,1872.
 """
 from __future__ import annotations
 
@@ -21,9 +24,9 @@ from src.warehouse import db
 
 REPO = Path(__file__).resolve().parents[2]
 LOG = REPO / "research" / "paper" / "decisiones.jsonl"
-SIGMA_STAR = 0.1548
-ESTRATEGICO = {"rv": 0.80, "rf": 0.10, "oro": 0.10}
-RV_MIN, UMBRAL = 0.65, 0.025
+SIGMA_STAR = 0.1702
+ESTRATEGICO = {"rv": 0.70, "rf": 0.15, "oro": 0.15}
+RV_MIN, UMBRAL = 0.55, 0.025
 MAX_DIAS_SIN_DATO = 5
 
 

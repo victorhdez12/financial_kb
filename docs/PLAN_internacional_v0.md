@@ -1,7 +1,7 @@
 ---
 documento: Plan de la fase internacional del modelo macro (línea B ampliada)
-version: 0.1-borrador (2026-10-26)
-estado: BORRADOR para el usuario. Nada construido ni corrido. Sustituye al enfoque "solo EE. UU." de la línea B.
+version: 0.1 APROBADA por el usuario (2026-10-26, "dale, vamos a ello"; decisiones 1-4 de §6 con las opciones recomendadas)
+estado: APROBADO. En curso: INT-0. Nada corrido. Sustituye al enfoque "solo EE. UU." de la línea B.
 depende_de: docs/PLAN.md § "Reconducción del proyecto (2026-10-26)"
 ---
 
