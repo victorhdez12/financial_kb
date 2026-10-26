@@ -95,24 +95,29 @@ descriptivas.
 5. **Materias primas:** el signo depende de la época; con 1 dato mundial por año la potencia es baja (lo detectable es
    ≈ 14-20 pp).
 6. **Etiqueta ex post:** todo el §1 usa el régimen con ventanas centradas (mira años futuros). Lo que se puede usar a
-   tiempo es la columna t − 1.
+   tiempo NO es la columna t − 1 (también usa la etiqueta centrada): ver §8.
 7. **Muestra:** 14 países ricos, 1870-1999/2004, datos revisados, sin costes ni impuestos. Nada de 2005-2020 (bloqueado).
 8. **T2 (salida) estaba inflado** en la corrida oficial (+0,30) por un sesgo del listón; la cifra honesta es ≈ +0,19.
 
-## 6. Lecciones (en llano)
-> ⚠️ Las lecciones 1-3 usan la columna optimista de t − 1; pendientes de revisar con el §8 (versión operable).
-1. **La inflación es el enemigo de los bonos y de las letras**, y eso sí se puede aprovechar: aun sabiendo solo el
-   régimen del año anterior, con inflación alta los bonos y las letras rinden ≈ 3,4 pp/año menos.
-2. **Cuando la economía se enfría y la inflación baja, los bonos ganan** (≈ +8 pp; +5 con el régimen conocido): es el
-   resultado más fiable del atlas, y su motivo está demostrado (bajan los tipos).
-3. **La bolsa sufre mucho en estanflación y algo en recesión, pero eso no se puede aprovechar** con lo que se sabe a tiempo:
-   cuando te enteras del régimen, la caída ya ha pasado (−8,7 pp se queda en −0,8).
+## 6. Lecciones (en llano; revisadas con la versión operable del §8)
+1. **Lo único que aguanta con lo que se sabe a tiempo y pasa Holm es la bolsa en estanflación observada:** si el año
+   anterior la inflación pasó del 3 % y la economía estaba por debajo de su tendencia pasada, la bolsa rindió ≈ −12 pp al
+   año siguiente (11/11 países). Pero con un año más de retraso (t − 2) se queda en −7 y no es significativo, y son solo
+   81 país-años, muy concentrados en los años 70: **indicio fuerte, no regla.**
+2. **Inflación alta observada (> 3 %) el año anterior:** bonos ≈ −6, letras ≈ −5 y bolsa ≈ −6 pp al año siguiente; los
+   tres con el signo esperado y en casi todos los países, pero **ninguno pasa Holm con el p calibrado** y en 1950-1999 los
+   bonos y las letras casi desaparecen (−1,4 y −0,8). Probables, frágiles.
+3. **El efecto de los bonos en desinflación NO se mantiene con lo que se sabe a tiempo:** con la brecha de un solo lado y la
+   inflación bajando, −0,8 pp (n. s.; 6/12 países). El +7,9 del §1 es real como descripción de lo que pasó, pero no se pudo
+   aprovechar con esta definición.
 4. **La caída de la bolsa en estanflación viene de que la inflación se come los dividendos, no de que la bolsa se abarate.**
-5. **La vivienda aguanta mejor que la bolsa con inflación alta** (≈ +6 pp), porque su precio sigue a la inflación.
+5. **La vivienda aguanta mejor que la bolsa con inflación alta** (≈ +6 pp, descriptivo del §1), porque su precio sigue a
+   la inflación. No se recalculó en versión operable.
 6. **El oro y las materias primas no han demostrado proteger contra la inflación** en esta historia; no sabemos si lo hacen.
 7. **Las recesiones se ven venir moderadamente bien** (curva y lo que pasa en otros países), y **la salida la anuncia sobre
    todo la bolsa**: esperar a la confirmación oficial cuesta ≈ 3 pp de rebote.
-8. **La inflación no se ve venir** con dinero, salarios, brecha ni tipo real.
+8. **La inflación no se ve venir** con dinero, salarios, brecha ni tipo real; y lo que vale es reaccionar rápido a la
+   inflación observada: con un año de más retraso casi todo se pierde.
 
 ## 7. Lo que NO sabemos
 
@@ -127,3 +132,23 @@ descriptivas.
 | ¿Se anticipan los giros de inflación? | T3/T4 no establecidos |
 | ¿Sigue valiendo todo esto en 2005-2020? | periodo bloqueado, sin mirar |
 | ¿Merece la pena actuar **después de costes**? | no se han medido costes ni impuestos; el paper trading (B0/B1) lo irá viendo |
+
+## 8. Versión OPERABLE de t − 1 (descriptivo declarado a posteriori; `scripts/atlas_operable.py`, `research/int/atlas_operable.json`)
+Estado de t − 1 definido **solo con datos observados hasta t − 1** (conocidos el 30 de abril de t; la rentabilidad del año t
+empieza en enero: ≈ 4 meses de solape, declarado; por eso se añade t − 2 como versión estricta). Inflación alta = inflación
+observada > 3 %; brecha = log PIB pc − media de t − 11 … t − 2 (P3 de INT-4); desinflación = brecha < 0 e inflación bajando.
+Misma muestra que INT-3 (14 países, 1876-1999). Driscoll-Kraay (efectos de país, sin efectos de año) y p calibrado con
+el placebo desplazado (φ = dispersión de las t placebo); Holm sobre los 5.
+
+| activo | estado observado en t − 1 | efecto (pp) | IC 95 % DK | p calibrado | p rangos | Holm | países | 1950-1999 | t − 2 (estricto) |
+|---|---|---|---|---|---|---|---|---|---|
+| Bonos | inflación > 3 % | −6,2 | [−10,0; −2,4] | 0,029 | 0,018 | no | 14/14 | −1,4 | −3,5 (p_cal 0,18) |
+| Letras | inflación > 3 % | −5,1 | [−8,0; −2,3] | 0,017 | 0,009 | no | 14/14 | −0,8 | −3,3 (p_cal 0,048) |
+| Bolsa | inflación > 3 % | −5,8 | [−10,4; −1,2] | 0,027 | 0,046 | no | 13/14 | −10,1 | −1,8 (n. s.) |
+| **Bolsa** | **estanflación observada** (inflación > 3 % y brecha < 0; 81 país-años) | **−11,9** | [−17,9; −5,8] | **0,0007** | 0,009 | **sí** | 11/11 | −17,6 | −7,2 (p_cal 0,15) |
+| Bonos | desinflación (brecha < 0 e inflación bajando; 75) | −0,8 | [−7,1; +5,5] | 0,86 | 0,88 | no | 6/12 | −0,5 | −3,8 (n. s.) |
+
+Lectura: lo que se puede saber a tiempo conserva **la dirección** de los efectos de la inflación (bonos, letras, bolsa),
+pero más pequeños y frágiles; la **bolsa en estanflación observada** es lo único que pasa Holm (con muestra pequeña y
+dominada por los años 70); el **efecto de los bonos en desinflación desaparece**. Casi todo se pierde con un año más de
+retraso (t − 2). Sin efectos de año: parte puede ser la época (1970s), no el país.
