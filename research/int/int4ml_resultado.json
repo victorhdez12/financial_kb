@@ -1,0 +1,404 @@
+{
+ "procedencia": {
+  "commit": "34858ee2737f96e2545482e970229f47e8034d75",
+  "arbol_limpio": true,
+  "hora_utc": "2026-10-26T20:31:59+00:00"
+ },
+ "prerregistro": "docs/int/INT4ML_prerregistro_v0.md (v1.0, e1f67a6)",
+ "versiones": {
+  "scikit-learn": "1.5.2",
+  "numpy": "2.5.3"
+ },
+ "contrastes": {
+  "M-L2|T1": {
+   "filas": 1090,
+   "eventos": 166,
+   "indicadores": [
+    "C1",
+    "C2",
+    "C4",
+    "C5",
+    "C6"
+   ],
+   "estratificada": {
+    "auc_modelo": 0.7294,
+    "auc_liston": 0.7319,
+    "d_auc": -0.0025,
+    "ic95": [
+     -0.019,
+     0.0159
+    ],
+    "p_bloques": 0.8036
+   },
+   "agrupada": {
+    "auc_modelo": 0.7242,
+    "auc_liston": 0.7249,
+    "d_auc": -0.0008,
+    "ic95": [
+     -0.0161,
+     0.016
+    ],
+    "p_bloques": 0.9925
+   },
+   "logloss": {
+    "d_logloss": 0.0163,
+    "ic95": [
+     -0.0021,
+     0.0403
+    ],
+    "d_brier": 0.0013
+   },
+   "calibracion": {
+    "intercepto": -0.5594,
+    "pendiente": 0.6493
+   },
+   "calibracion_logit": {
+    "intercepto": -0.1917,
+    "pendiente": 0.8771
+   },
+   "temporal_1950_2004": {
+    "filas": 657,
+    "d_auc_estratificada": -0.0155,
+    "d_auc_agrupada": -0.0186
+   },
+   "placebo": {
+    "desplazamientos": 124,
+    "media": 0.0027,
+    "dt": 0.0244,
+    "z": -0.213,
+    "p_z": 0.5843,
+    "p_rangos": 0.528
+   }
+  },
+  "M-GB|T1": {
+   "filas": 1090,
+   "eventos": 166,
+   "indicadores": [
+    "C1",
+    "C2",
+    "C4",
+    "C5",
+    "C6"
+   ],
+   "estratificada": {
+    "auc_modelo": 0.7503,
+    "auc_liston": 0.7319,
+    "d_auc": 0.0184,
+    "ic95": [
+     -0.0111,
+     0.0486
+    ],
+    "p_bloques": 0.2359
+   },
+   "agrupada": {
+    "auc_modelo": 0.738,
+    "auc_liston": 0.7249,
+    "d_auc": 0.013,
+    "ic95": [
+     -0.0141,
+     0.0417
+    ],
+    "p_bloques": 0.3558
+   },
+   "logloss": {
+    "d_logloss": -0.0025,
+    "ic95": [
+     -0.0164,
+     0.0102
+    ],
+    "d_brier": -0.001
+   },
+   "calibracion": {
+    "intercepto": -0.3871,
+    "pendiente": 0.7443
+   },
+   "calibracion_logit": {
+    "intercepto": -0.1917,
+    "pendiente": 0.8771
+   },
+   "temporal_1950_2004": {
+    "filas": 657,
+    "d_auc_estratificada": -0.0147,
+    "d_auc_agrupada": -0.0261
+   },
+   "placebo": {
+    "desplazamientos": 124,
+    "media": -0.0062,
+    "dt": 0.0385,
+    "z": 0.6385,
+    "p_z": 0.2616,
+    "p_rangos": 0.288
+   }
+  },
+  "M-L2|T2": {
+   "filas": 235,
+   "eventos": 163,
+   "indicadores": [
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ],
+   "estratificada": {
+    "auc_modelo": 0.7235,
+    "auc_liston": 0.7703,
+    "d_auc": -0.0468,
+    "ic95": [
+     -0.087,
+     -0.0138
+    ],
+    "p_bloques": 0.007
+   },
+   "agrupada": {
+    "auc_modelo": 0.71,
+    "auc_liston": 0.7435,
+    "d_auc": -0.0336,
+    "ic95": [
+     -0.0588,
+     -0.0109
+    ],
+    "p_bloques": 0.003
+   },
+   "logloss": {
+    "d_logloss": 0.0435,
+    "ic95": [
+     0.0177,
+     0.0733
+    ],
+    "d_brier": 0.0113
+   },
+   "calibracion": {
+    "intercepto": 0.2468,
+    "pendiente": 0.6019
+   },
+   "calibracion_logit": {
+    "intercepto": 0.0942,
+    "pendiente": 0.8149
+   },
+   "temporal_1950_2004": {
+    "filas": 80,
+    "d_auc_estratificada": -0.2308,
+    "d_auc_agrupada": -0.2994
+   },
+   "placebo": {
+    "desplazamientos": 124,
+    "media": -0.0129,
+    "dt": 0.0358,
+    "z": -0.9461,
+    "p_z": 0.828,
+    "p_rangos": 0.832
+   }
+  },
+  "M-GB|T2": {
+   "filas": 235,
+   "eventos": 163,
+   "indicadores": [
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ],
+   "estratificada": {
+    "auc_modelo": 0.7475,
+    "auc_liston": 0.7703,
+    "d_auc": -0.0229,
+    "ic95": [
+     -0.0908,
+     0.0396
+    ],
+    "p_bloques": 0.4958
+   },
+   "agrupada": {
+    "auc_modelo": 0.7153,
+    "auc_liston": 0.7435,
+    "d_auc": -0.0282,
+    "ic95": [
+     -0.0744,
+     0.0129
+    ],
+    "p_bloques": 0.1849
+   },
+   "logloss": {
+    "d_logloss": 0.0419,
+    "ic95": [
+     -0.0022,
+     0.0879
+    ],
+    "d_brier": 0.0085
+   },
+   "calibracion": {
+    "intercepto": 0.2593,
+    "pendiente": 0.554
+   },
+   "calibracion_logit": {
+    "intercepto": 0.0942,
+    "pendiente": 0.8149
+   },
+   "temporal_1950_2004": {
+    "filas": 80,
+    "d_auc_estratificada": 0.0879,
+    "d_auc_agrupada": 0.0643
+   },
+   "placebo": {
+    "desplazamientos": 124,
+    "media": -0.0134,
+    "dt": 0.0507,
+    "z": -0.1862,
+    "p_z": 0.5738,
+    "p_rangos": 0.552
+   }
+  }
+ },
+ "paises_prueba": {
+  "T1": {
+   "M-L2": {
+    "filas": 147,
+    "eventos": 36,
+    "estratificada": {
+     "auc_modelo": 0.8129,
+     "auc_liston": 0.7985,
+     "d_auc": 0.0144,
+     "ic95": [
+      -0.0143,
+      0.0416
+     ],
+     "p_bloques": 0.2989
+    },
+    "agrupada": {
+     "auc_modelo": 0.8058,
+     "auc_liston": 0.7878,
+     "d_auc": 0.018,
+     "ic95": [
+      -0.0134,
+      0.0471
+     ],
+     "p_bloques": 0.2439
+    },
+    "d_logloss": -0.0107
+   },
+   "M-GB": {
+    "filas": 147,
+    "eventos": 36,
+    "estratificada": {
+     "auc_modelo": 0.7658,
+     "auc_liston": 0.7985,
+     "d_auc": -0.0327,
+     "ic95": [
+      -0.1044,
+      0.0362
+     ],
+     "p_bloques": 0.3688
+    },
+    "agrupada": {
+     "auc_modelo": 0.7578,
+     "auc_liston": 0.7878,
+     "d_auc": -0.03,
+     "ic95": [
+      -0.0956,
+      0.033
+     ],
+     "p_bloques": 0.3608
+    },
+    "d_logloss": 0.0276
+   }
+  },
+  "T2": {
+   "M-L2": {
+    "filas": 53,
+    "eventos": 35,
+    "estratificada": {
+     "auc_modelo": 0.781,
+     "auc_liston": 0.7714,
+     "d_auc": 0.0095,
+     "ic95": [
+      -0.0502,
+      0.084
+     ],
+     "p_bloques": 0.8246
+    },
+    "agrupada": {
+     "auc_modelo": 0.7794,
+     "auc_liston": 0.7746,
+     "d_auc": 0.0048,
+     "ic95": [
+      -0.0486,
+      0.057
+     ],
+     "p_bloques": 0.8756
+    },
+    "d_logloss": -0.0096
+   },
+   "M-GB": {
+    "filas": 53,
+    "eventos": 35,
+    "estratificada": {
+     "auc_modelo": 0.7349,
+     "auc_liston": 0.7714,
+     "d_auc": -0.0365,
+     "ic95": [
+      -0.1398,
+      0.0529
+     ],
+     "p_bloques": 0.4318
+    },
+    "agrupada": {
+     "auc_modelo": 0.7548,
+     "auc_liston": 0.7746,
+     "d_auc": -0.0198,
+     "ic95": [
+      -0.1055,
+      0.0539
+     ],
+     "p_bloques": 0.6157
+    },
+    "d_logloss": -0.0115
+   }
+  }
+ },
+ "veredicto": {
+  "M-L2|T1": {
+   "criterios": {
+    "i_ic_estratificada_holm": false,
+    "ii_z_placebo_holm": false,
+    "iii_dlogloss_neg": false,
+    "iv_temporal_pos": false,
+    "v_pendiente_0.5_1.5": true
+   },
+   "establecido": false
+  },
+  "M-GB|T1": {
+   "criterios": {
+    "i_ic_estratificada_holm": false,
+    "ii_z_placebo_holm": false,
+    "iii_dlogloss_neg": true,
+    "iv_temporal_pos": false,
+    "v_pendiente_0.5_1.5": true
+   },
+   "establecido": false
+  },
+  "M-L2|T2": {
+   "criterios": {
+    "i_ic_estratificada_holm": false,
+    "ii_z_placebo_holm": false,
+    "iii_dlogloss_neg": false,
+    "iv_temporal_pos": false,
+    "v_pendiente_0.5_1.5": true
+   },
+   "establecido": false
+  },
+  "M-GB|T2": {
+   "criterios": {
+    "i_ic_estratificada_holm": false,
+    "ii_z_placebo_holm": false,
+    "iii_dlogloss_neg": false,
+    "iv_temporal_pos": true,
+    "v_pendiente_0.5_1.5": true
+   },
+   "establecido": false
+  }
+ },
+ "regla_cierre": "si ninguno queda establecido, la línea de ML queda cerrada con estos datos (§7): no se prueban otros modelos ni hiperparámetros sobre ≤ 2004",
+ "hora_fin_utc": "2026-10-26T20:32:42+00:00"
+}
