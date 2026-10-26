@@ -24,6 +24,13 @@ FAMILIAS: dict[str, str] = {
     r"imf_ifs_[a-z]{3}_\w+": "FMI IFS mensual",
     r"aqr_mkt_[a-z]{3}_m": "AQR mercado por país, mensual, USD (sin redistribución)",
     r"USREC": "NBER: recesiones de EE. UU. (solo como contraste externo del fechado, nunca como variable)",
+    # INT-3b/INT-3c (docs/int/INT3b_prerregistro_v0.md): activos y componentes de precio mundial o de EE. UU./R. U.
+    r"aqr_clr_\w+_m": "AQR Commodities for the Long Run, mensual 1877- (sin redistribución; curado, ver load_dev_curado)",
+    r"aqr_cfp_commodities_market_m": "AQR Century of Factor Premia, materias primas largo, mensual 1926- (sin redistribución)",
+    r"damodaran_(baa_corp_tr|tbond_10y_tr|tbill_3m|gold_ret|inflation)": "Damodaran histretSP, anual 1928-",
+    r"gold_mw_newyork_usd_a|gold_wb_usd_m": "Oro en USD: MeasuringWorth (media anual) y Banco Mundial (media mensual)",
+    r"boe_uk_(corp_bond_yield_a|consol_yield_a|oil_price_usd_a|cpi_a)": "BoE A Millennium of Macroeconomic Data (UK), anual",
+    r"BAA|AAA|GS10": "FRED: Moody's Baa/Aaa y Tesoro 10 años, mensual",
 }
 _RX = [re.compile(f"^(?:{p})$") for p in FAMILIAS]
 
@@ -42,6 +49,24 @@ def load_dev(con, sid: str) -> pd.Series:
     s = pd.Series(df["value"].astype(float).values, index=pd.to_datetime(df["date"]), name=sid)
     if s.index.duplicated().any():
         raise FactorCutoffError(f"{sid}: fechas repetidas en obs_latest (no se elige una en silencio)")
+    check(s)
+    return s
+
+
+def load_dev_curado(sid: str) -> pd.Series:
+    """Como `load_dev`, pero desde la capa curada ($FIN_DATA_ROOT/curated/<fuente>/<sid>.parquet) para series ya
+    descargadas que todavía no están en el warehouse (se cargarán en la próxima reconstrucción). Mismo corte y mismas
+    familias permitidas."""
+    if not permitida(sid):
+        raise FactorCutoffError(f"{sid}: no está en las familias del panel internacional (src/intl/data.py)")
+    fuente = "aqr_clr" if sid.startswith("aqr_clr_") else None
+    if fuente is None:
+        raise FactorCutoffError(f"{sid}: sin carpeta curada conocida; usa load_dev")
+    df = pd.read_parquet(db.DATA_ROOT / "curated" / fuente / f"{sid}.parquet")
+    df = df[pd.to_datetime(df["date"]) <= DEV_END]
+    s = pd.Series(df["value"].astype(float).values, index=pd.to_datetime(df["date"]), name=sid).sort_index()
+    if s.index.duplicated().any():
+        raise FactorCutoffError(f"{sid}: fechas repetidas en la capa curada")
     check(s)
     return s
 
