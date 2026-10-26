@@ -1,0 +1,57 @@
+{
+ "procedencia": {
+  "commit": "5edf0076120737839cb09fed4c7ef3e9c8c318ab",
+  "arbol_limpio": true,
+  "hora_utc": "2026-10-26T20:20:40+00:00"
+ },
+ "z_1": 2.802,
+ "z_holm4": 3.339,
+ "giros": {
+  "T1": {
+   "auc_logit": 0.732,
+   "pos_ef": 72,
+   "neg_ef": 336.0,
+   "mde": {
+    "r=0.5": {
+     "1_contraste": 0.094,
+     "holm_4": 0.111
+    },
+    "r=0.7": {
+     "1_contraste": 0.074,
+     "holm_4": 0.088
+    },
+    "r=0.8": {
+     "1_contraste": 0.061,
+     "holm_4": 0.073
+    },
+    "r=0.9": {
+     "1_contraste": 0.044,
+     "holm_4": 0.052
+    }
+   }
+  },
+  "T2": {
+   "auc_logit": 0.77,
+   "pos_ef": 129.4,
+   "neg_ef": 67.1,
+   "mde": {
+    "r=0.5": {
+     "1_contraste": 0.085,
+     "holm_4": 0.1
+    },
+    "r=0.7": {
+     "1_contraste": 0.067,
+     "holm_4": 0.08
+    },
+    "r=0.8": {
+     "1_contraste": 0.056,
+     "holm_4": 0.067
+    },
+    "r=0.9": {
+     "1_contraste": 0.04,
+     "holm_4": 0.048
+    }
+   }
+  }
+ }
+}
