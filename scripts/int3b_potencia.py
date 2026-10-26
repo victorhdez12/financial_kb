@@ -39,7 +39,7 @@ DESFASE_MIN = 6
 HIPER = 0.5
 SEED = 20261026
 NSIM = 400
-FAMILIAS = {"INT3b": 4, "INT3c": 6, "conjunta": 10}
+FAMILIAS = {"INT3b": 4, "INT3c": 4, "conjunta": 8}   # v2: C2 y C6 pasan a descriptivas (MDE ≈ 8 pp, ver v1)
 
 
 def z_mde(m: int) -> float:
@@ -271,10 +271,10 @@ def main() -> None:
         ("B4_credito_exceso_recesion", cre, "exceso_credito", "recesion", "INT3b"),
         ("B4b_credito_real_recesion (descr.)", cre, "corp_real", "recesion", "INT3b"),
         ("C1_valoracion_estanflacion", dc, "eq_valoracion", "estanflacion", "INT3c"),
-        ("C2_dividendo_real_estanflacion", dc, "eq_div_real", "estanflacion", "INT3c"),
+        ("C2_dividendo_real_estanflacion (descr.)", dc, "eq_div_real", "estanflacion", "INT3c"),
         ("C3_bono_capital_infl_alta", dc, "bono_capital", "infl_alta", "INT3c"),
         ("C4_bono_capital_crec_bajo", dc, "bono_capital", "crec_bajo", "INT3c"),
-        ("C6_viv_menos_bolsa_capital_infl_alta", dc, "viv_menos_bolsa_capital", "infl_alta", "INT3c"),
+        ("C6_viv_menos_bolsa_capital_infl_alta (descr.)", dc, "viv_menos_bolsa_capital", "infl_alta", "INT3c"),
         ("ref_bolsa_total_estanflacion (Q1)", dc, "eq_total", "estanflacion", "INT3c"),
         ("ref_bono_total_infl_alta (Q2)", dc, "bono_total", "infl_alta", "INT3c"),
     ]

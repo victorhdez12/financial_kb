@@ -1,0 +1,1334 @@
+{
+ "procedencia": {
+  "commit": "d07c000d390c9ffe600f7244b6603284475b80f5",
+  "arbol_limpio": true,
+  "hora_utc": "2026-10-26T18:51:46+00:00"
+ },
+ "nota": "potencia sin cruzar activos con regímenes; rentabilidades sintéticas",
+ "z_mde": {
+  "INT3b": 3.339,
+  "INT3c": 3.48,
+  "conjunta": 3.649
+ },
+ "regimen": {
+  "años_con_etiqueta": [
+   1876,
+   1999
+  ],
+  "cuota_mundial": {
+   "infl_alta": {
+    "media": 0.344,
+    "dt": 0.271,
+    "ar1": 0.56,
+    "años_mayoria_1877": 41,
+    "años_mayoria_1928": 28,
+    "años_mayoria_1950": 21
+   },
+   "estanflacion": {
+    "media": 0.157,
+    "dt": 0.163,
+    "ar1": 0.48,
+    "años_mayoria_1877": 6,
+    "años_mayoria_1928": 4,
+    "años_mayoria_1950": 3
+   },
+   "crec_bajo": {
+    "media": 0.326,
+    "dt": 0.213,
+    "ar1": 0.59,
+    "años_mayoria_1877": 32,
+    "años_mayoria_1928": 17,
+    "años_mayoria_1950": 13
+   },
+   "recesion": {
+    "media": 0.234,
+    "dt": 0.215,
+    "ar1": 0.45,
+    "años_mayoria_1877": 21,
+    "años_mayoria_1928": 11,
+    "años_mayoria_1950": 3
+   }
+  },
+  "usa_gbr": {
+   "USA": {
+    "infl_alta": 26,
+    "estanflacion": 14,
+    "crec_bajo": 25,
+    "recesion": 18,
+    "años": 72,
+    "desde": 1928
+   },
+   "GBR": {
+    "infl_alta": 34,
+    "estanflacion": 16,
+    "crec_bajo": 51,
+    "recesion": 34,
+    "años": 123,
+    "desde": 1877
+   }
+  }
+ },
+ "serie_temporal": {
+  "B1_mp_infl_alta": {
+   "activo": "mp_real",
+   "estado_mundial": "infl_alta",
+   "estadisticos": {
+    "n": 122,
+    "desde": 1878,
+    "hasta": 1999,
+    "sd": 0.223,
+    "ar1": -0.067
+   },
+   "cuota": {
+    "analitico": {
+     "INT3b": {
+      "media_cuota": 0.346,
+      "dt_cuota": 0.272,
+      "ar1_cuota": 0.56,
+      "mde_pp_0a100": 23.9,
+      "mde_pp_por_dt_cuota": 6.5
+     },
+     "INT3c": {
+      "media_cuota": 0.346,
+      "dt_cuota": 0.272,
+      "ar1_cuota": 0.56,
+      "mde_pp_0a100": 24.9,
+      "mde_pp_por_dt_cuota": 6.8
+     },
+     "conjunta": {
+      "media_cuota": 0.346,
+      "dt_cuota": 0.272,
+      "ar1_cuota": 0.56,
+      "mde_pp_0a100": 26.1,
+      "mde_pp_por_dt_cuota": 7.1
+     }
+    },
+    "simulado_m_familia": {
+     "normal": {
+      "mde_calibrado_pp": 25.8,
+      "mde_completo_pp": 25.8,
+      "potencia_completo": {
+       "0.0": 0.012,
+       "0.02": 0.02,
+       "0.04": 0.045,
+       "0.06": 0.065,
+       "0.08": 0.105,
+       "0.1": 0.148,
+       "0.12": 0.205,
+       "0.14": 0.288,
+       "0.16": 0.372,
+       "0.18": 0.468,
+       "0.2": 0.57,
+       "0.22": 0.658,
+       "0.24": 0.722,
+       "0.26": 0.808,
+       "0.28": 0.872,
+       "0.3": 0.918,
+       "0.32": 0.958,
+       "0.34": 0.978,
+       "0.36": 0.985,
+       "0.38": 0.992,
+       "0.4": 0.998
+      }
+     },
+     "t4": {
+      "mde_calibrado_pp": 26.4,
+      "mde_completo_pp": 26.4,
+      "potencia_completo": {
+       "0.0": 0.012,
+       "0.02": 0.02,
+       "0.04": 0.035,
+       "0.06": 0.05,
+       "0.08": 0.088,
+       "0.1": 0.142,
+       "0.12": 0.215,
+       "0.14": 0.292,
+       "0.16": 0.418,
+       "0.18": 0.492,
+       "0.2": 0.572,
+       "0.22": 0.67,
+       "0.24": 0.745,
+       "0.26": 0.788,
+       "0.28": 0.845,
+       "0.3": 0.888,
+       "0.32": 0.928,
+       "0.34": 0.96,
+       "0.36": 0.97,
+       "0.38": 0.98,
+       "0.4": 0.982
+      }
+     }
+    },
+    "unidad": "pp por pasar de 0 % a 100 % de países en el estado"
+   },
+   "mayoria": {
+    "analitico": {
+     "INT3b": {
+      "años_estado": 41,
+      "años_resto": 81,
+      "ar1_estado": 0.37,
+      "mde_pp": 13.9
+     },
+     "INT3c": {
+      "años_estado": 41,
+      "años_resto": 81,
+      "ar1_estado": 0.37,
+      "mde_pp": 14.5
+     },
+     "conjunta": {
+      "años_estado": 41,
+      "años_resto": 81,
+      "ar1_estado": 0.37,
+      "mde_pp": 15.2
+     }
+    },
+    "simulado_m_familia": {
+     "normal": {
+      "mde_calibrado_pp": 15.4,
+      "mde_completo_pp": 15.4,
+      "potencia_completo": {
+       "0.0": 0.008,
+       "0.02": 0.018,
+       "0.04": 0.06,
+       "0.06": 0.14,
+       "0.08": 0.235,
+       "0.1": 0.355,
+       "0.12": 0.538,
+       "0.14": 0.718,
+       "0.16": 0.838,
+       "0.18": 0.94,
+       "0.2": 0.975,
+       "0.22": 0.992,
+       "0.24": 0.998,
+       "0.26": 1.0,
+       "0.28": 1.0,
+       "0.3": 1.0,
+       "0.32": 1.0,
+       "0.34": 1.0,
+       "0.36": 1.0,
+       "0.38": 1.0,
+       "0.4": 1.0
+      }
+     },
+     "t4": {
+      "mde_calibrado_pp": 14.8,
+      "mde_completo_pp": 14.8,
+      "potencia_completo": {
+       "0.0": 0.005,
+       "0.02": 0.018,
+       "0.04": 0.048,
+       "0.06": 0.118,
+       "0.08": 0.255,
+       "0.1": 0.435,
+       "0.12": 0.625,
+       "0.14": 0.76,
+       "0.16": 0.86,
+       "0.18": 0.912,
+       "0.2": 0.965,
+       "0.22": 0.988,
+       "0.24": 0.992,
+       "0.26": 0.998,
+       "0.28": 0.998,
+       "0.3": 0.998,
+       "0.32": 1.0,
+       "0.34": 1.0,
+       "0.36": 1.0,
+       "0.38": 1.0,
+       "0.4": 1.0
+      }
+     }
+    },
+    "unidad": "pp: años con ≥ 50 % de países en el estado frente al resto"
+   }
+  },
+  "B2_mp_recesion": {
+   "activo": "mp_real",
+   "estado_mundial": "recesion",
+   "estadisticos": {
+    "n": 122,
+    "desde": 1878,
+    "hasta": 1999,
+    "sd": 0.223,
+    "ar1": -0.067
+   },
+   "cuota": {
+    "analitico": {
+     "INT3b": {
+      "media_cuota": 0.23,
+      "dt_cuota": 0.213,
+      "ar1_cuota": 0.44,
+      "mde_pp_0a100": 30.7,
+      "mde_pp_por_dt_cuota": 6.6
+     },
+     "INT3c": {
+      "media_cuota": 0.23,
+      "dt_cuota": 0.213,
+      "ar1_cuota": 0.44,
+      "mde_pp_0a100": 32.0,
+      "mde_pp_por_dt_cuota": 6.8
+     },
+     "conjunta": {
+      "media_cuota": 0.23,
+      "dt_cuota": 0.213,
+      "ar1_cuota": 0.44,
+      "mde_pp_0a100": 33.6,
+      "mde_pp_por_dt_cuota": 7.2
+     }
+    },
+    "simulado_m_familia": {
+     "normal": {
+      "mde_calibrado_pp": 33.7,
+      "mde_completo_pp": 33.9,
+      "potencia_completo": {
+       "0.0": 0.005,
+       "0.02": 0.01,
+       "0.04": 0.012,
+       "0.06": 0.018,
+       "0.08": 0.03,
+       "0.1": 0.042,
+       "0.12": 0.075,
+       "0.14": 0.12,
+       "0.16": 0.185,
+       "0.18": 0.228,
+       "0.2": 0.278,
+       "0.22": 0.34,
+       "0.24": 0.41,
+       "0.26": 0.515,
+       "0.28": 0.595,
+       "0.3": 0.65,
+       "0.32": 0.74,
+       "0.34": 0.802,
+       "0.36": 0.835,
+       "0.38": 0.865,
+       "0.4": 0.892
+      }
+     },
+     "t4": {
+      "mde_calibrado_pp": 33.8,
+      "mde_completo_pp": 34.1,
+      "potencia_completo": {
+       "0.0": 0.01,
+       "0.02": 0.018,
+       "0.04": 0.02,
+       "0.06": 0.035,
+       "0.08": 0.045,
+       "0.1": 0.078,
+       "0.12": 0.118,
+       "0.14": 0.152,
+       "0.16": 0.208,
+       "0.18": 0.28,
+       "0.2": 0.338,
+       "0.22": 0.392,
+       "0.24": 0.462,
+       "0.26": 0.528,
+       "0.28": 0.612,
+       "0.3": 0.708,
+       "0.32": 0.74,
+       "0.34": 0.798,
+       "0.36": 0.85,
+       "0.38": 0.882,
+       "0.4": 0.918
+      }
+     }
+    },
+    "unidad": "pp por pasar de 0 % a 100 % de países en el estado"
+   },
+   "mayoria": {
+    "analitico": {
+     "INT3b": {
+      "años_estado": 21,
+      "años_resto": 101,
+      "ar1_estado": 0.21,
+      "mde_pp": 17.6
+     },
+     "INT3c": {
+      "años_estado": 21,
+      "años_resto": 101,
+      "ar1_estado": 0.21,
+      "mde_pp": 18.4
+     },
+     "conjunta": {
+      "años_estado": 21,
+      "años_resto": 101,
+      "ar1_estado": 0.21,
+      "mde_pp": 19.3
+     }
+    },
+    "simulado_m_familia": {
+     "normal": {
+      "mde_calibrado_pp": 19.6,
+      "mde_completo_pp": 20.6,
+      "potencia_completo": {
+       "0.0": 0.015,
+       "0.02": 0.018,
+       "0.04": 0.06,
+       "0.06": 0.088,
+       "0.08": 0.148,
+       "0.1": 0.21,
+       "0.12": 0.325,
+       "0.14": 0.432,
+       "0.16": 0.552,
+       "0.18": 0.705,
+       "0.2": 0.778,
+       "0.22": 0.85,
+       "0.24": 0.898,
+       "0.26": 0.928,
+       "0.28": 0.962,
+       "0.3": 0.975,
+       "0.32": 0.985,
+       "0.34": 0.988,
+       "0.36": 0.995,
+       "0.38": 0.998,
+       "0.4": 1.0
+      }
+     },
+     "t4": {
+      "mde_calibrado_pp": 18.6,
+      "mde_completo_pp": 19.6,
+      "potencia_completo": {
+       "0.0": 0.005,
+       "0.02": 0.032,
+       "0.04": 0.065,
+       "0.06": 0.108,
+       "0.08": 0.208,
+       "0.1": 0.32,
+       "0.12": 0.43,
+       "0.14": 0.542,
+       "0.16": 0.652,
+       "0.18": 0.745,
+       "0.2": 0.812,
+       "0.22": 0.86,
+       "0.24": 0.918,
+       "0.26": 0.932,
+       "0.28": 0.955,
+       "0.3": 0.978,
+       "0.32": 0.985,
+       "0.34": 0.995,
+       "0.36": 1.0,
+       "0.38": 1.0,
+       "0.4": 1.0
+      }
+     }
+    },
+    "unidad": "pp: años con ≥ 50 % de países en el estado frente al resto"
+   }
+  },
+  "B1_cfp_infl_alta (1927-)": {
+   "activo": "cfp_real",
+   "estado_mundial": "infl_alta",
+   "estadisticos": {
+    "n": 73,
+    "desde": 1927,
+    "hasta": 1999,
+    "sd": 0.221,
+    "ar1": -0.063
+   },
+   "cuota": {
+    "analitico": {
+     "INT3b": {
+      "media_cuota": 0.381,
+      "dt_cuota": 0.276,
+      "ar1_cuota": 0.59,
+      "mde_pp_0a100": 30.3,
+      "mde_pp_por_dt_cuota": 8.3
+     },
+     "INT3c": {
+      "media_cuota": 0.381,
+      "dt_cuota": 0.276,
+      "ar1_cuota": 0.59,
+      "mde_pp_0a100": 31.6,
+      "mde_pp_por_dt_cuota": 8.7
+     },
+     "conjunta": {
+      "media_cuota": 0.381,
+      "dt_cuota": 0.276,
+      "ar1_cuota": 0.59,
+      "mde_pp_0a100": 33.1,
+      "mde_pp_por_dt_cuota": 9.1
+     }
+    },
+    "simulado_m_familia": {
+     "normal": {
+      "mde_calibrado_pp": 34.2,
+      "mde_completo_pp": 34.2,
+      "potencia_completo": {
+       "0.0": 0.005,
+       "0.02": 0.02,
+       "0.04": 0.025,
+       "0.06": 0.038,
+       "0.08": 0.048,
+       "0.1": 0.082,
+       "0.12": 0.102,
+       "0.14": 0.15,
+       "0.16": 0.19,
+       "0.18": 0.26,
+       "0.2": 0.312,
+       "0.22": 0.39,
+       "0.24": 0.458,
+       "0.26": 0.522,
+       "0.28": 0.602,
+       "0.3": 0.668,
+       "0.32": 0.738,
+       "0.34": 0.795,
+       "0.36": 0.845,
+       "0.38": 0.878,
+       "0.4": 0.905
+      }
+     },
+     "t4": {
+      "mde_calibrado_pp": 35.1,
+      "mde_completo_pp": 35.1,
+      "potencia_completo": {
+       "0.0": 0.015,
+       "0.02": 0.025,
+       "0.04": 0.035,
+       "0.06": 0.045,
+       "0.08": 0.068,
+       "0.1": 0.082,
+       "0.12": 0.128,
+       "0.14": 0.165,
+       "0.16": 0.208,
+       "0.18": 0.272,
+       "0.2": 0.338,
+       "0.22": 0.395,
+       "0.24": 0.465,
+       "0.26": 0.54,
+       "0.28": 0.612,
+       "0.3": 0.68,
+       "0.32": 0.752,
+       "0.34": 0.775,
+       "0.36": 0.82,
+       "0.38": 0.858,
+       "0.4": 0.885
+      }
+     }
+    },
+    "unidad": "pp por pasar de 0 % a 100 % de países en el estado"
+   },
+   "mayoria": {
+    "analitico": {
+     "INT3b": {
+      "años_estado": 28,
+      "años_resto": 45,
+      "ar1_estado": 0.42,
+      "mde_pp": 17.3
+     },
+     "INT3c": {
+      "años_estado": 28,
+      "años_resto": 45,
+      "ar1_estado": 0.42,
+      "mde_pp": 18.1
+     },
+     "conjunta": {
+      "años_estado": 28,
+      "años_resto": 45,
+      "ar1_estado": 0.42,
+      "mde_pp": 18.9
+     }
+    },
+    "simulado_m_familia": {
+     "normal": {
+      "mde_calibrado_pp": 19.3,
+      "mde_completo_pp": 19.3,
+      "potencia_completo": {
+       "0.0": 0.01,
+       "0.02": 0.035,
+       "0.04": 0.052,
+       "0.06": 0.092,
+       "0.08": 0.148,
+       "0.1": 0.24,
+       "0.12": 0.332,
+       "0.14": 0.425,
+       "0.16": 0.572,
+       "0.18": 0.715,
+       "0.2": 0.848,
+       "0.22": 0.912,
+       "0.24": 0.958,
+       "0.26": 0.97,
+       "0.28": 0.988,
+       "0.3": 0.998,
+       "0.32": 0.998,
+       "0.34": 0.998,
+       "0.36": 0.998,
+       "0.38": 1.0,
+       "0.4": 1.0
+      }
+     },
+     "t4": {
+      "mde_calibrado_pp": 19.4,
+      "mde_completo_pp": 19.4,
+      "potencia_completo": {
+       "0.0": 0.005,
+       "0.02": 0.015,
+       "0.04": 0.03,
+       "0.06": 0.08,
+       "0.08": 0.148,
+       "0.1": 0.255,
+       "0.12": 0.388,
+       "0.14": 0.525,
+       "0.16": 0.63,
+       "0.18": 0.732,
+       "0.2": 0.83,
+       "0.22": 0.878,
+       "0.24": 0.932,
+       "0.26": 0.965,
+       "0.28": 0.982,
+       "0.3": 0.992,
+       "0.32": 0.995,
+       "0.34": 0.998,
+       "0.36": 0.998,
+       "0.38": 1.0,
+       "0.4": 1.0
+      }
+     }
+    },
+    "unidad": "pp: años con ≥ 50 % de países en el estado frente al resto"
+   }
+  },
+  "B5_petroleo_infl_alta (descriptiva)": {
+   "activo": "petroleo_real",
+   "estado_mundial": "infl_alta",
+   "estadisticos": {
+    "n": 123,
+    "desde": 1877,
+    "hasta": 1999,
+    "sd": 0.294,
+    "ar1": -0.01
+   },
+   "cuota": {
+    "analitico": {
+     "INT3b": {
+      "media_cuota": 0.345,
+      "dt_cuota": 0.271,
+      "ar1_cuota": 0.56,
+      "mde_pp_0a100": 32.5,
+      "mde_pp_por_dt_cuota": 8.8
+     },
+     "INT3c": {
+      "media_cuota": 0.345,
+      "dt_cuota": 0.271,
+      "ar1_cuota": 0.56,
+      "mde_pp_0a100": 33.9,
+      "mde_pp_por_dt_cuota": 9.2
+     },
+     "conjunta": {
+      "media_cuota": 0.345,
+      "dt_cuota": 0.271,
+      "ar1_cuota": 0.56,
+      "mde_pp_0a100": 35.5,
+      "mde_pp_por_dt_cuota": 9.6
+     }
+    },
+    "simulado_m_familia": {
+     "normal": {
+      "mde_calibrado_pp": 33.6,
+      "mde_completo_pp": 33.7,
+      "potencia_completo": {
+       "0.0": 0.01,
+       "0.02": 0.012,
+       "0.04": 0.018,
+       "0.06": 0.028,
+       "0.08": 0.05,
+       "0.1": 0.068,
+       "0.12": 0.098,
+       "0.14": 0.132,
+       "0.16": 0.188,
+       "0.18": 0.278,
+       "0.2": 0.33,
+       "0.22": 0.425,
+       "0.24": 0.482,
+       "0.26": 0.56,
+       "0.28": 0.64,
+       "0.3": 0.695,
+       "0.32": 0.752,
+       "0.34": 0.808,
+       "0.36": 0.848,
+       "0.38": 0.868,
+       "0.4": 0.898
+      }
+     },
+     "t4": {
+      "mde_calibrado_pp": 34.6,
+      "mde_completo_pp": 34.7,
+      "potencia_completo": {
+       "0.0": 0.005,
+       "0.02": 0.015,
+       "0.04": 0.022,
+       "0.06": 0.028,
+       "0.08": 0.048,
+       "0.1": 0.075,
+       "0.12": 0.098,
+       "0.14": 0.14,
+       "0.16": 0.202,
+       "0.18": 0.252,
+       "0.2": 0.31,
+       "0.22": 0.385,
+       "0.24": 0.45,
+       "0.26": 0.53,
+       "0.28": 0.618,
+       "0.3": 0.682,
+       "0.32": 0.742,
+       "0.34": 0.782,
+       "0.36": 0.832,
+       "0.38": 0.875,
+       "0.4": 0.902
+      }
+     }
+    },
+    "unidad": "pp por pasar de 0 % a 100 % de países en el estado"
+   },
+   "mayoria": {
+    "analitico": {
+     "INT3b": {
+      "años_estado": 41,
+      "años_resto": 82,
+      "ar1_estado": 0.38,
+      "mde_pp": 18.7
+     },
+     "INT3c": {
+      "años_estado": 41,
+      "años_resto": 82,
+      "ar1_estado": 0.38,
+      "mde_pp": 19.5
+     },
+     "conjunta": {
+      "años_estado": 41,
+      "años_resto": 82,
+      "ar1_estado": 0.38,
+      "mde_pp": 20.4
+     }
+    },
+    "simulado_m_familia": {
+     "normal": {
+      "mde_calibrado_pp": 19.9,
+      "mde_completo_pp": 19.9,
+      "potencia_completo": {
+       "0.0": 0.002,
+       "0.02": 0.01,
+       "0.04": 0.038,
+       "0.06": 0.072,
+       "0.08": 0.132,
+       "0.1": 0.218,
+       "0.12": 0.328,
+       "0.14": 0.468,
+       "0.16": 0.595,
+       "0.18": 0.698,
+       "0.2": 0.805,
+       "0.22": 0.882,
+       "0.24": 0.93,
+       "0.26": 0.962,
+       "0.28": 0.988,
+       "0.3": 1.0,
+       "0.32": 1.0,
+       "0.34": 1.0,
+       "0.36": 1.0,
+       "0.38": 1.0,
+       "0.4": 1.0
+      }
+     },
+     "t4": {
+      "mde_calibrado_pp": 19.7,
+      "mde_completo_pp": 19.8,
+      "potencia_completo": {
+       "0.0": 0.002,
+       "0.02": 0.015,
+       "0.04": 0.03,
+       "0.06": 0.068,
+       "0.08": 0.132,
+       "0.1": 0.252,
+       "0.12": 0.382,
+       "0.14": 0.495,
+       "0.16": 0.625,
+       "0.18": 0.735,
+       "0.2": 0.808,
+       "0.22": 0.878,
+       "0.24": 0.922,
+       "0.26": 0.945,
+       "0.28": 0.968,
+       "0.3": 0.985,
+       "0.32": 0.992,
+       "0.34": 0.995,
+       "0.36": 0.995,
+       "0.38": 0.998,
+       "0.4": 0.998
+      }
+     }
+    },
+    "unidad": "pp: años con ≥ 50 % de países en el estado frente al resto"
+   }
+  },
+  "C5_mp_spot_infl_alta": {
+   "activo": "mp_spot_exceso_suma",
+   "estado_mundial": "infl_alta",
+   "estadisticos": {
+    "n": 122,
+    "desde": 1878,
+    "hasta": 1999,
+    "sd": 0.215,
+    "ar1": -0.03
+   },
+   "cuota": {
+    "analitico": {
+     "INT3b": {
+      "media_cuota": 0.346,
+      "dt_cuota": 0.272,
+      "ar1_cuota": 0.56,
+      "mde_pp_0a100": 23.5,
+      "mde_pp_por_dt_cuota": 6.4
+     },
+     "INT3c": {
+      "media_cuota": 0.346,
+      "dt_cuota": 0.272,
+      "ar1_cuota": 0.56,
+      "mde_pp_0a100": 24.5,
+      "mde_pp_por_dt_cuota": 6.7
+     },
+     "conjunta": {
+      "media_cuota": 0.346,
+      "dt_cuota": 0.272,
+      "ar1_cuota": 0.56,
+      "mde_pp_0a100": 25.7,
+      "mde_pp_por_dt_cuota": 7.0
+     }
+    },
+    "simulado_m_familia": {
+     "normal": {
+      "mde_calibrado_pp": 26.4,
+      "mde_completo_pp": 26.4,
+      "potencia_completo": {
+       "0.0": 0.008,
+       "0.02": 0.008,
+       "0.04": 0.022,
+       "0.06": 0.032,
+       "0.08": 0.065,
+       "0.1": 0.1,
+       "0.12": 0.152,
+       "0.14": 0.222,
+       "0.16": 0.31,
+       "0.18": 0.398,
+       "0.2": 0.492,
+       "0.22": 0.602,
+       "0.24": 0.69,
+       "0.26": 0.788,
+       "0.28": 0.855,
+       "0.3": 0.925,
+       "0.32": 0.945,
+       "0.34": 0.965,
+       "0.36": 0.98,
+       "0.38": 0.992,
+       "0.4": 1.0
+      }
+     },
+     "t4": {
+      "mde_calibrado_pp": 26.3,
+      "mde_completo_pp": 26.3,
+      "potencia_completo": {
+       "0.0": 0.0,
+       "0.02": 0.005,
+       "0.04": 0.012,
+       "0.06": 0.032,
+       "0.08": 0.075,
+       "0.1": 0.12,
+       "0.12": 0.182,
+       "0.14": 0.272,
+       "0.16": 0.325,
+       "0.18": 0.405,
+       "0.2": 0.52,
+       "0.22": 0.622,
+       "0.24": 0.708,
+       "0.26": 0.79,
+       "0.28": 0.848,
+       "0.3": 0.892,
+       "0.32": 0.932,
+       "0.34": 0.95,
+       "0.36": 0.968,
+       "0.38": 0.978,
+       "0.4": 0.982
+      }
+     }
+    },
+    "unidad": "pp por pasar de 0 % a 100 % de países en el estado"
+   },
+   "mayoria": {
+    "analitico": {
+     "INT3b": {
+      "años_estado": 41,
+      "años_resto": 81,
+      "ar1_estado": 0.37,
+      "mde_pp": 13.6
+     },
+     "INT3c": {
+      "años_estado": 41,
+      "años_resto": 81,
+      "ar1_estado": 0.37,
+      "mde_pp": 14.2
+     },
+     "conjunta": {
+      "años_estado": 41,
+      "años_resto": 81,
+      "ar1_estado": 0.37,
+      "mde_pp": 14.9
+     }
+    },
+    "simulado_m_familia": {
+     "normal": {
+      "mde_calibrado_pp": 14.7,
+      "mde_completo_pp": 14.7,
+      "potencia_completo": {
+       "0.0": 0.015,
+       "0.02": 0.022,
+       "0.04": 0.062,
+       "0.06": 0.132,
+       "0.08": 0.22,
+       "0.1": 0.382,
+       "0.12": 0.558,
+       "0.14": 0.758,
+       "0.16": 0.88,
+       "0.18": 0.952,
+       "0.2": 0.982,
+       "0.22": 0.998,
+       "0.24": 1.0,
+       "0.26": 1.0,
+       "0.28": 1.0,
+       "0.3": 1.0,
+       "0.32": 1.0,
+       "0.34": 1.0,
+       "0.36": 1.0,
+       "0.38": 1.0,
+       "0.4": 1.0
+      }
+     },
+     "t4": {
+      "mde_calibrado_pp": 14.9,
+      "mde_completo_pp": 14.9,
+      "potencia_completo": {
+       "0.0": 0.0,
+       "0.02": 0.012,
+       "0.04": 0.04,
+       "0.06": 0.132,
+       "0.08": 0.262,
+       "0.1": 0.405,
+       "0.12": 0.578,
+       "0.14": 0.74,
+       "0.16": 0.875,
+       "0.18": 0.94,
+       "0.2": 0.975,
+       "0.22": 0.985,
+       "0.24": 0.988,
+       "0.26": 0.995,
+       "0.28": 0.998,
+       "0.3": 0.998,
+       "0.32": 0.998,
+       "0.34": 1.0,
+       "0.36": 1.0,
+       "0.38": 1.0,
+       "0.4": 1.0
+      }
+     }
+    },
+    "unidad": "pp: años con ≥ 50 % de países en el estado frente al resto"
+   }
+  }
+ },
+ "serie_temporal_usa": {
+  "B1_mp_infl_alta_USA": {
+   "INT3b": {
+    "años_estado": 36,
+    "años_resto": 86,
+    "ar1_estado": 0.29,
+    "mde_pp": 14.5
+   },
+   "INT3c": {
+    "años_estado": 36,
+    "años_resto": 86,
+    "ar1_estado": 0.29,
+    "mde_pp": 15.1
+   },
+   "conjunta": {
+    "años_estado": 36,
+    "años_resto": 86,
+    "ar1_estado": 0.29,
+    "mde_pp": 15.9
+   }
+  },
+  "B2_mp_recesion_USA": {
+   "INT3b": {
+    "años_estado": 35,
+    "años_resto": 87,
+    "ar1_estado": 0.04,
+    "mde_pp": 14.9
+   },
+   "INT3c": {
+    "años_estado": 35,
+    "años_resto": 87,
+    "ar1_estado": 0.04,
+    "mde_pp": 15.5
+   },
+   "conjunta": {
+    "años_estado": 35,
+    "años_resto": 87,
+    "ar1_estado": 0.04,
+    "mde_pp": 16.3
+   }
+  }
+ },
+ "panel": {
+  "B3_oro_infl_alta": {
+   "activo": "oro_log",
+   "estado": "infl_alta",
+   "familia": "INT3b",
+   "estadisticos": {
+    "n": 1709,
+    "paises": 14,
+    "sd": 0.171,
+    "rho_paises": 0.595,
+    "ar1": 0.198
+   },
+   "mde": {
+    "INT3b": {
+     "pais_años_estado": 575,
+     "n_ef_estado": 78.7,
+     "mde_pp": 8.4
+    },
+    "INT3c": {
+     "pais_años_estado": 575,
+     "n_ef_estado": 78.7,
+     "mde_pp": 8.7
+    },
+    "conjunta": {
+     "pais_años_estado": 575,
+     "n_ef_estado": 78.7,
+     "mde_pp": 9.2
+    }
+   },
+   "mde_x1.3_validador": {
+    "pais_años_estado": 575,
+    "n_ef_estado": 78.7,
+    "mde_pp": 10.9
+   }
+  },
+  "B4_credito_exceso_recesion": {
+   "activo": "exceso_credito",
+   "estado": "recesion",
+   "familia": "INT3b",
+   "estadisticos": {
+    "n": 195,
+    "paises": 2,
+    "sd": 0.037,
+    "rho_paises": 0.162,
+    "ar1": 0.054
+   },
+   "mde": {
+    "INT3b": {
+     "pais_años_estado": 52,
+     "n_ef_estado": 43.9,
+     "mde_pp": 2.2
+    },
+    "INT3c": {
+     "pais_años_estado": 52,
+     "n_ef_estado": 43.9,
+     "mde_pp": 2.3
+    },
+    "conjunta": {
+     "pais_años_estado": 52,
+     "n_ef_estado": 43.9,
+     "mde_pp": 2.4
+    }
+   },
+   "mde_x1.3_validador": {
+    "pais_años_estado": 52,
+    "n_ef_estado": 43.9,
+    "mde_pp": 2.9
+   }
+  },
+  "B4b_credito_real_recesion (descr.)": {
+   "activo": "corp_real",
+   "estado": "recesion",
+   "familia": "INT3b",
+   "estadisticos": {
+    "n": 195,
+    "paises": 2,
+    "sd": 0.088,
+    "rho_paises": 0.613,
+    "ar1": 0.432
+   },
+   "mde": {
+    "INT3b": {
+     "pais_años_estado": 52,
+     "n_ef_estado": 16.7,
+     "mde_pp": 8.6
+    },
+    "INT3c": {
+     "pais_años_estado": 52,
+     "n_ef_estado": 16.7,
+     "mde_pp": 8.9
+    },
+    "conjunta": {
+     "pais_años_estado": 52,
+     "n_ef_estado": 16.7,
+     "mde_pp": 9.4
+    }
+   },
+   "mde_x1.3_validador": {
+    "pais_años_estado": 52,
+    "n_ef_estado": 16.7,
+    "mde_pp": 11.2
+   }
+  },
+  "C1_valoracion_estanflacion": {
+   "activo": "eq_valoracion",
+   "estado": "estanflacion",
+   "familia": "INT3c",
+   "estadisticos": {
+    "n": 1553,
+    "paises": 14,
+    "sd": 0.291,
+    "rho_paises": 0.106,
+    "ar1": -0.054
+   },
+   "mde": {
+    "INT3b": {
+     "pais_años_estado": 229,
+     "n_ef_estado": 195.1,
+     "mde_pp": 7.9
+    },
+    "INT3c": {
+     "pais_años_estado": 229,
+     "n_ef_estado": 195.1,
+     "mde_pp": 8.2
+    },
+    "conjunta": {
+     "pais_años_estado": 229,
+     "n_ef_estado": 195.1,
+     "mde_pp": 8.6
+    }
+   },
+   "mde_x1.3_validador": {
+    "pais_años_estado": 229,
+    "n_ef_estado": 195.1,
+    "mde_pp": 10.6
+   }
+  },
+  "C2_dividendo_real_estanflacion": {
+   "activo": "eq_div_real",
+   "estado": "estanflacion",
+   "familia": "INT3c",
+   "estadisticos": {
+    "n": 1553,
+    "paises": 14,
+    "sd": 0.268,
+    "rho_paises": 0.093,
+    "ar1": 0.012
+   },
+   "mde": {
+    "INT3b": {
+     "pais_años_estado": 229,
+     "n_ef_estado": 176.0,
+     "mde_pp": 7.6
+    },
+    "INT3c": {
+     "pais_años_estado": 229,
+     "n_ef_estado": 176.0,
+     "mde_pp": 7.9
+    },
+    "conjunta": {
+     "pais_años_estado": 229,
+     "n_ef_estado": 176.0,
+     "mde_pp": 8.3
+    }
+   },
+   "mde_x1.3_validador": {
+    "pais_años_estado": 229,
+    "n_ef_estado": 176.0,
+    "mde_pp": 10.3
+   }
+  },
+  "C3_bono_capital_infl_alta": {
+   "activo": "bono_capital",
+   "estado": "infl_alta",
+   "familia": "INT3c",
+   "estadisticos": {
+    "n": 1657,
+    "paises": 14,
+    "sd": 0.072,
+    "rho_paises": 0.342,
+    "ar1": -0.05
+   },
+   "mde": {
+    "INT3b": {
+     "pais_años_estado": 549,
+     "n_ef_estado": 190.1,
+     "mde_pp": 2.2
+    },
+    "INT3c": {
+     "pais_años_estado": 549,
+     "n_ef_estado": 190.1,
+     "mde_pp": 2.3
+    },
+    "conjunta": {
+     "pais_años_estado": 549,
+     "n_ef_estado": 190.1,
+     "mde_pp": 2.4
+    }
+   },
+   "mde_x1.3_validador": {
+    "pais_años_estado": 549,
+    "n_ef_estado": 190.1,
+    "mde_pp": 3.0
+   }
+  },
+  "C4_bono_capital_crec_bajo": {
+   "activo": "bono_capital",
+   "estado": "crec_bajo",
+   "familia": "INT3c",
+   "estadisticos": {
+    "n": 1657,
+    "paises": 14,
+    "sd": 0.072,
+    "rho_paises": 0.342,
+    "ar1": -0.05
+   },
+   "mde": {
+    "INT3b": {
+     "pais_años_estado": 552,
+     "n_ef_estado": 214.0,
+     "mde_pp": 2.1
+    },
+    "INT3c": {
+     "pais_años_estado": 552,
+     "n_ef_estado": 214.0,
+     "mde_pp": 2.2
+    },
+    "conjunta": {
+     "pais_años_estado": 552,
+     "n_ef_estado": 214.0,
+     "mde_pp": 2.3
+    }
+   },
+   "mde_x1.3_validador": {
+    "pais_años_estado": 552,
+    "n_ef_estado": 214.0,
+    "mde_pp": 2.9
+   }
+  },
+  "C6_viv_menos_bolsa_capital_infl_alta": {
+   "activo": "viv_menos_bolsa_capital",
+   "estado": "infl_alta",
+   "familia": "INT3c",
+   "estadisticos": {
+    "n": 1353,
+    "paises": 14,
+    "sd": 0.209,
+    "rho_paises": 0.274,
+    "ar1": 0.122
+   },
+   "mde": {
+    "INT3b": {
+     "pais_años_estado": 463,
+     "n_ef_estado": 137.9,
+     "mde_pp": 7.6
+    },
+    "INT3c": {
+     "pais_años_estado": 463,
+     "n_ef_estado": 137.9,
+     "mde_pp": 7.9
+    },
+    "conjunta": {
+     "pais_años_estado": 463,
+     "n_ef_estado": 137.9,
+     "mde_pp": 8.3
+    }
+   },
+   "mde_x1.3_validador": {
+    "pais_años_estado": 463,
+    "n_ef_estado": 137.9,
+    "mde_pp": 10.2
+   }
+  },
+  "ref_bolsa_total_estanflacion (Q1)": {
+   "activo": "eq_total",
+   "estado": "estanflacion",
+   "familia": "INT3c",
+   "estadisticos": {
+    "n": 1627,
+    "paises": 14,
+    "sd": 0.209,
+    "rho_paises": 0.298,
+    "ar1": 0.135
+   },
+   "mde": {
+    "INT3b": {
+     "pais_años_estado": 247,
+     "n_ef_estado": 97.0,
+     "mde_pp": 8.4
+    },
+    "INT3c": {
+     "pais_años_estado": 247,
+     "n_ef_estado": 97.0,
+     "mde_pp": 8.7
+    },
+    "conjunta": {
+     "pais_años_estado": 247,
+     "n_ef_estado": 97.0,
+     "mde_pp": 9.1
+    }
+   },
+   "mde_x1.3_validador": {
+    "pais_años_estado": 247,
+    "n_ef_estado": 97.0,
+    "mde_pp": 11.3
+   }
+  },
+  "ref_bono_total_infl_alta (Q2)": {
+   "activo": "bono_total",
+   "estado": "infl_alta",
+   "familia": "INT3c",
+   "estadisticos": {
+    "n": 1667,
+    "paises": 14,
+    "sd": 0.108,
+    "rho_paises": 0.461,
+    "ar1": 0.312
+   },
+   "mde": {
+    "INT3b": {
+     "pais_años_estado": 556,
+     "n_ef_estado": 73.2,
+     "mde_pp": 5.4
+    },
+    "INT3c": {
+     "pais_años_estado": 556,
+     "n_ef_estado": 73.2,
+     "mde_pp": 5.7
+    },
+    "conjunta": {
+     "pais_años_estado": 556,
+     "n_ef_estado": 73.2,
+     "mde_pp": 5.9
+    }
+   },
+   "mde_x1.3_validador": {
+    "pais_años_estado": 556,
+    "n_ef_estado": 73.2,
+    "mde_pp": 7.4
+   }
+  }
+ },
+ "suelo_p_placebo": {
+  "T=72": {
+   "desplazamientos": 61,
+   "p_minimo": 0.0161,
+   "holm_m_max_con_p_rangos": 3
+  },
+  "T=123": {
+   "desplazamientos": 112,
+   "p_minimo": 0.0088,
+   "holm_m_max_con_p_rangos": 5
+  },
+  "T=124": {
+   "desplazamientos": 113,
+   "p_minimo": 0.0088,
+   "holm_m_max_con_p_rangos": 5
+  }
+ }
+}
