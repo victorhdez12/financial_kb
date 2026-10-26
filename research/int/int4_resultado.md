@@ -65,3 +65,18 @@ Criterios: T1: {'i_dauc_ic_holm': True, 'ii_placebo_holm': True, 'iii_dlogloss_n
 | T3 | CAN_IRL_sin_bolsa | 71 / 18 | -0.060 | [-0.196; +0.063] | CAN -0.077 (9 ev.); IRL -0.060 (9 ev.) |
 | T4 | AUS_CHE | 72 / 30 | +0.145 | [-0.024; +0.302] | AUS +0.207 (16 ev.); CHE +0.096 (14 ev.) |
 | T4 | CAN_IRL_sin_bolsa | 49 / 18 | +0.145 | [-0.032; +0.335] | CAN +0.326 (9 ev.); IRL -0.014 (9 ev.) |
+
+## Sensibilidad del listón (declarada a posteriori, `scripts/int4_sensibilidad_liston.py`; no cambia la clasificación)
+Causa del AUC < 0,5 del listón: sesgo de dejar un país fuera con un predictor débil (el intercepto se mueve contra la tasa
+base del país dejado fuera; correlación tasa del país frente a predicción media del listón: T2 −0,97, T3 −0,67, T4 −0,53,
+T1 +0,26). Corrección: AUC estratificada por país (solo pares del mismo país) y listón dentro de muestra (conservador).
+
+| giro | corrida (agrupada) | estratificada | listón dentro de muestra |
+|---|---|---|---|
+| T1 entrada | +0,178 [+0,101; +0,255] | +0,198 [+0,121; +0,273] | +0,149 [+0,069; +0,227] |
+| T2 salida | +0,298 [+0,199; +0,379] | **+0,188 [+0,081; +0,280]** | +0,209 [+0,111; +0,291] |
+| T3 repunte | +0,028 [−0,009; +0,069] | +0,003 [−0,037; +0,045] | −0,004 |
+| T4 vuelta | +0,103 [+0,028; +0,170] | +0,078 [+0,005; +0,148] | +0,067 [−0,003; +0,134] |
+
+Lectura: T1 y T2 siguen claros (todas las IC lejos de 0); el efecto de T2 estaba inflado ≈ 0,1 por el listón: el real es
+≈ +0,19-0,21. T3 no aporta nada. T4 se debilita (ya fallaba por el placebo).
