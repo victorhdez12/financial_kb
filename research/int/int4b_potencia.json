@@ -1,0 +1,1726 @@
+{
+ "procedencia": {
+  "commit": "bca4e7d56e7a9aa0c0e8f5087013366c35295a00",
+  "arbol_limpio": true,
+  "hora_utc": "2026-10-26T18:41:48+00:00"
+ },
+ "nucleo": [
+  "BEL",
+  "DEU",
+  "DNK",
+  "ESP",
+  "FIN",
+  "FRA",
+  "GBR",
+  "ITA",
+  "JPN",
+  "NLD",
+  "NOR",
+  "PRT",
+  "SWE",
+  "USA"
+ ],
+ "supuestos": {
+  "A0_listón_supuestas": [
+   0.5,
+   0.6,
+   0.7,
+   0.75
+  ],
+  "r_entre_auc": 0.5,
+  "z_1": 2.802,
+  "z_holm6": 3.48,
+  "umbral_p_inflacion_alta": 0.5
+ },
+ "objetivos": {
+  "1871_2004_sin_guerras": {
+   "salida_recesion_h1": {
+    "filas_en_riesgo": 334,
+    "filas_positivas": 220,
+    "eventos": 220,
+    "años_distintos_con_evento": 84,
+    "tasa_base_filas": 0.659,
+    "icc_por_año": 0.161,
+    "paises_por_año_medio": 3.63,
+    "m_kish": 5.35,
+    "efecto_diseño": 1.7,
+    "pos_ef_central": 129.2,
+    "neg_ef_central": 66.9,
+    "pos_ef_prudente": 84,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.119,
+      "holm_6": 0.146
+     },
+     "A0=0.60": {
+      "1_contraste": 0.111,
+      "holm_6": 0.135
+     },
+     "A0=0.70": {
+      "1_contraste": 0.097,
+      "holm_6": 0.119
+     },
+     "A0=0.75": {
+      "1_contraste": 0.089,
+      "holm_6": 0.108
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.13,
+      "holm_6": 0.159
+     },
+     "A0=0.60": {
+      "1_contraste": 0.122,
+      "holm_6": 0.149
+     },
+     "A0=0.70": {
+      "1_contraste": 0.109,
+      "holm_6": 0.133
+     },
+     "A0=0.75": {
+      "1_contraste": 0.1,
+      "holm_6": 0.122
+     }
+    },
+    "eventos_por_tipo": {
+     "normal": 150,
+     "financiera": 70
+    },
+    "mde_financieras_central": {
+     "A0=0.50": {
+      "1_contraste": 0.158,
+      "holm_6": 0.194
+     },
+     "A0=0.60": {
+      "1_contraste": 0.151,
+      "holm_6": 0.184
+     },
+     "A0=0.70": {
+      "1_contraste": 0.137,
+      "holm_6": 0.167
+     },
+     "A0=0.75": {
+      "1_contraste": 0.127,
+      "holm_6": 0.155
+     }
+    },
+    "mde_financieras_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.153,
+      "holm_6": 0.187
+     },
+     "A0=0.60": {
+      "1_contraste": 0.146,
+      "holm_6": 0.178
+     },
+     "A0=0.70": {
+      "1_contraste": 0.132,
+      "holm_6": 0.16
+     },
+     "A0=0.75": {
+      "1_contraste": 0.122,
+      "holm_6": 0.149
+     }
+    },
+    "años_distintos_financieras": 46
+   },
+   "inflacion_repunte_principal_h1": {
+    "filas_en_riesgo": 1103,
+    "filas_positivas": 247,
+    "eventos": 247,
+    "años_distintos_con_evento": 91,
+    "tasa_base_filas": 0.224,
+    "icc_por_año": 0.175,
+    "paises_por_año_medio": 9.43,
+    "m_kish": 10.64,
+    "efecto_diseño": 2.69,
+    "pos_ef_central": 91.8,
+    "neg_ef_central": 318.1,
+    "pos_ef_prudente": 91,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.096,
+      "holm_6": 0.12
+     },
+     "A0=0.60": {
+      "1_contraste": 0.095,
+      "holm_6": 0.117
+     },
+     "A0=0.70": {
+      "1_contraste": 0.089,
+      "holm_6": 0.109
+     },
+     "A0=0.75": {
+      "1_contraste": 0.083,
+      "holm_6": 0.102
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.097,
+      "holm_6": 0.12
+     },
+     "A0=0.60": {
+      "1_contraste": 0.095,
+      "holm_6": 0.118
+     },
+     "A0=0.70": {
+      "1_contraste": 0.089,
+      "holm_6": 0.109
+     },
+     "A0=0.75": {
+      "1_contraste": 0.084,
+      "holm_6": 0.102
+     }
+    }
+   },
+   "inflacion_repunte_principal_h1_sin_truncadas": {
+    "filas_en_riesgo": 1036,
+    "filas_positivas": 228,
+    "eventos": 228,
+    "años_distintos_con_evento": 83,
+    "tasa_base_filas": 0.22,
+    "icc_por_año": 0.184,
+    "paises_por_año_medio": 9.59,
+    "m_kish": 10.79,
+    "efecto_diseño": 2.8,
+    "pos_ef_central": 81.3,
+    "neg_ef_central": 288.1,
+    "pos_ef_prudente": 83,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.102,
+      "holm_6": 0.127
+     },
+     "A0=0.60": {
+      "1_contraste": 0.101,
+      "holm_6": 0.124
+     },
+     "A0=0.70": {
+      "1_contraste": 0.094,
+      "holm_6": 0.115
+     },
+     "A0=0.75": {
+      "1_contraste": 0.088,
+      "holm_6": 0.107
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.101,
+      "holm_6": 0.126
+     },
+     "A0=0.60": {
+      "1_contraste": 0.1,
+      "holm_6": 0.123
+     },
+     "A0=0.70": {
+      "1_contraste": 0.093,
+      "holm_6": 0.114
+     },
+     "A0=0.75": {
+      "1_contraste": 0.087,
+      "holm_6": 0.107
+     }
+    }
+   },
+   "inflacion_repunte_principal_h1_con_P1_P2_P3_P5": {
+    "filas_en_riesgo": 938,
+    "filas_positivas": 207,
+    "eventos": 207,
+    "años_distintos_con_evento": 83,
+    "tasa_base_filas": 0.221,
+    "icc_por_año": 0.174,
+    "paises_por_año_medio": 8.69,
+    "m_kish": 9.86,
+    "efecto_diseño": 2.54,
+    "pos_ef_central": 81.6,
+    "neg_ef_central": 288.0,
+    "pos_ef_prudente": 83,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.102,
+      "holm_6": 0.127
+     },
+     "A0=0.60": {
+      "1_contraste": 0.101,
+      "holm_6": 0.124
+     },
+     "A0=0.70": {
+      "1_contraste": 0.094,
+      "holm_6": 0.115
+     },
+     "A0=0.75": {
+      "1_contraste": 0.088,
+      "holm_6": 0.107
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.101,
+      "holm_6": 0.126
+     },
+     "A0=0.60": {
+      "1_contraste": 0.1,
+      "holm_6": 0.123
+     },
+     "A0=0.70": {
+      "1_contraste": 0.093,
+      "holm_6": 0.114
+     },
+     "A0=0.75": {
+      "1_contraste": 0.087,
+      "holm_6": 0.107
+     }
+    }
+   },
+   "inflacion_vuelta_principal_h1": {
+    "filas_en_riesgo": 563,
+    "filas_positivas": 263,
+    "eventos": 263,
+    "años_distintos_con_evento": 89,
+    "tasa_base_filas": 0.467,
+    "icc_por_año": 0.257,
+    "paises_por_año_medio": 5.17,
+    "m_kish": 7.42,
+    "efecto_diseño": 2.65,
+    "pos_ef_central": 99.3,
+    "neg_ef_central": 113.2,
+    "pos_ef_prudente": 89,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.11,
+      "holm_6": 0.136
+     },
+     "A0=0.60": {
+      "1_contraste": 0.105,
+      "holm_6": 0.129
+     },
+     "A0=0.70": {
+      "1_contraste": 0.095,
+      "holm_6": 0.116
+     },
+     "A0=0.75": {
+      "1_contraste": 0.088,
+      "holm_6": 0.107
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.114,
+      "holm_6": 0.14
+     },
+     "A0=0.60": {
+      "1_contraste": 0.109,
+      "holm_6": 0.133
+     },
+     "A0=0.70": {
+      "1_contraste": 0.099,
+      "holm_6": 0.121
+     },
+     "A0=0.75": {
+      "1_contraste": 0.091,
+      "holm_6": 0.112
+     }
+    }
+   },
+   "inflacion_vuelta_principal_h1_sin_truncadas": {
+    "filas_en_riesgo": 504,
+    "filas_positivas": 239,
+    "eventos": 239,
+    "años_distintos_con_evento": 82,
+    "tasa_base_filas": 0.474,
+    "icc_por_año": 0.257,
+    "paises_por_año_medio": 5.04,
+    "m_kish": 7.4,
+    "efecto_diseño": 2.65,
+    "pos_ef_central": 90.2,
+    "neg_ef_central": 100.1,
+    "pos_ef_prudente": 82,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.116,
+      "holm_6": 0.143
+     },
+     "A0=0.60": {
+      "1_contraste": 0.111,
+      "holm_6": 0.136
+     },
+     "A0=0.70": {
+      "1_contraste": 0.1,
+      "holm_6": 0.122
+     },
+     "A0=0.75": {
+      "1_contraste": 0.092,
+      "holm_6": 0.113
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.119,
+      "holm_6": 0.147
+     },
+     "A0=0.60": {
+      "1_contraste": 0.114,
+      "holm_6": 0.14
+     },
+     "A0=0.70": {
+      "1_contraste": 0.103,
+      "holm_6": 0.126
+     },
+     "A0=0.75": {
+      "1_contraste": 0.095,
+      "holm_6": 0.116
+     }
+    }
+   },
+   "inflacion_vuelta_principal_h1_con_P1_P2_P3_P5": {
+    "filas_en_riesgo": 483,
+    "filas_positivas": 224,
+    "eventos": 224,
+    "años_distintos_con_evento": 81,
+    "tasa_base_filas": 0.464,
+    "icc_por_año": 0.248,
+    "paises_por_año_medio": 4.83,
+    "m_kish": 6.98,
+    "efecto_diseño": 2.48,
+    "pos_ef_central": 90.2,
+    "neg_ef_central": 104.3,
+    "pos_ef_prudente": 81,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.115,
+      "holm_6": 0.142
+     },
+     "A0=0.60": {
+      "1_contraste": 0.11,
+      "holm_6": 0.135
+     },
+     "A0=0.70": {
+      "1_contraste": 0.099,
+      "holm_6": 0.121
+     },
+     "A0=0.75": {
+      "1_contraste": 0.092,
+      "holm_6": 0.112
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.119,
+      "holm_6": 0.146
+     },
+     "A0=0.60": {
+      "1_contraste": 0.114,
+      "holm_6": 0.139
+     },
+     "A0=0.70": {
+      "1_contraste": 0.103,
+      "holm_6": 0.126
+     },
+     "A0=0.75": {
+      "1_contraste": 0.095,
+      "holm_6": 0.116
+     }
+    }
+   },
+   "inflacion_repunte_abs3_h1": {
+    "filas_en_riesgo": 979,
+    "filas_positivas": 183,
+    "eventos": 183,
+    "años_distintos_con_evento": 70,
+    "tasa_base_filas": 0.187,
+    "icc_por_año": 0.213,
+    "paises_por_año_medio": 8.98,
+    "m_kish": 10.77,
+    "efecto_diseño": 3.08,
+    "pos_ef_central": 59.4,
+    "neg_ef_central": 258.3,
+    "pos_ef_prudente": 70,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.117,
+      "holm_6": 0.145
+     },
+     "A0=0.60": {
+      "1_contraste": 0.116,
+      "holm_6": 0.142
+     },
+     "A0=0.70": {
+      "1_contraste": 0.107,
+      "holm_6": 0.131
+     },
+     "A0=0.75": {
+      "1_contraste": 0.101,
+      "holm_6": 0.123
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.11,
+      "holm_6": 0.136
+     },
+     "A0=0.60": {
+      "1_contraste": 0.108,
+      "holm_6": 0.133
+     },
+     "A0=0.70": {
+      "1_contraste": 0.1,
+      "holm_6": 0.123
+     },
+     "A0=0.75": {
+      "1_contraste": 0.094,
+      "holm_6": 0.115
+     }
+    }
+   },
+   "inflacion_vuelta_abs3_h1": {
+    "filas_en_riesgo": 687,
+    "filas_positivas": 199,
+    "eventos": 199,
+    "años_distintos_con_evento": 74,
+    "tasa_base_filas": 0.29,
+    "icc_por_año": 0.401,
+    "paises_por_año_medio": 6.42,
+    "m_kish": 9.39,
+    "efecto_diseño": 4.36,
+    "pos_ef_central": 45.6,
+    "neg_ef_central": 111.8,
+    "pos_ef_prudente": 74,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.142,
+      "holm_6": 0.174
+     },
+     "A0=0.60": {
+      "1_contraste": 0.137,
+      "holm_6": 0.168
+     },
+     "A0=0.70": {
+      "1_contraste": 0.126,
+      "holm_6": 0.153
+     },
+     "A0=0.75": {
+      "1_contraste": 0.117,
+      "holm_6": 0.143
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.12,
+      "holm_6": 0.148
+     },
+     "A0=0.60": {
+      "1_contraste": 0.116,
+      "holm_6": 0.142
+     },
+     "A0=0.70": {
+      "1_contraste": 0.105,
+      "holm_6": 0.129
+     },
+     "A0=0.75": {
+      "1_contraste": 0.098,
+      "holm_6": 0.119
+     }
+    }
+   },
+   "salida_recesion_h2": {
+    "filas_en_riesgo": 327,
+    "filas_positivas": 294,
+    "eventos": 216,
+    "años_distintos_con_evento": 83,
+    "tasa_base_filas": 0.899,
+    "icc_por_año": 0.09,
+    "paises_por_año_medio": 3.67,
+    "m_kish": 5.4,
+    "efecto_diseño": 1.4,
+    "pos_ef_central": 154.7,
+    "neg_ef_central": 23.6,
+    "pos_ef_prudente": 83,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.167,
+      "holm_6": 0.204
+     },
+     "A0=0.60": {
+      "1_contraste": 0.151,
+      "holm_6": 0.184
+     },
+     "A0=0.70": {
+      "1_contraste": 0.128,
+      "holm_6": 0.156
+     },
+     "A0=0.75": {
+      "1_contraste": 0.114,
+      "holm_6": 0.14
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.177,
+      "holm_6": 0.216
+     },
+     "A0=0.60": {
+      "1_contraste": 0.162,
+      "holm_6": 0.197
+     },
+     "A0=0.70": {
+      "1_contraste": 0.139,
+      "holm_6": 0.17
+     },
+     "A0=0.75": {
+      "1_contraste": 0.126,
+      "holm_6": 0.154
+     }
+    },
+    "eventos_por_tipo": {
+     "normal": 147,
+     "financiera": 69
+    },
+    "mde_financieras_central": {
+     "A0=0.50": {
+      "1_contraste": 0.191,
+      "holm_6": 0.233
+     },
+     "A0=0.60": {
+      "1_contraste": 0.177,
+      "holm_6": 0.215
+     },
+     "A0=0.70": {
+      "1_contraste": 0.155,
+      "holm_6": 0.189
+     },
+     "A0=0.75": {
+      "1_contraste": 0.141,
+      "holm_6": 0.173
+     }
+    },
+    "mde_financieras_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.195,
+      "holm_6": 0.237
+     },
+     "A0=0.60": {
+      "1_contraste": 0.18,
+      "holm_6": 0.219
+     },
+     "A0=0.70": {
+      "1_contraste": 0.158,
+      "holm_6": 0.193
+     },
+     "A0=0.75": {
+      "1_contraste": 0.144,
+      "holm_6": 0.177
+     }
+    },
+    "años_distintos_financieras": 45
+   },
+   "inflacion_repunte_principal_h2": {
+    "filas_en_riesgo": 1076,
+    "filas_positivas": 441,
+    "eventos": 247,
+    "años_distintos_con_evento": 91,
+    "tasa_base_filas": 0.41,
+    "icc_por_año": 0.185,
+    "paises_por_año_medio": 9.44,
+    "m_kish": 10.66,
+    "efecto_diseño": 2.79,
+    "pos_ef_central": 88.5,
+    "neg_ef_central": 227.5,
+    "pos_ef_prudente": 91,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.102,
+      "holm_6": 0.126
+     },
+     "A0=0.60": {
+      "1_contraste": 0.099,
+      "holm_6": 0.122
+     },
+     "A0=0.70": {
+      "1_contraste": 0.092,
+      "holm_6": 0.113
+     },
+     "A0=0.75": {
+      "1_contraste": 0.086,
+      "holm_6": 0.105
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.101,
+      "holm_6": 0.125
+     },
+     "A0=0.60": {
+      "1_contraste": 0.098,
+      "holm_6": 0.121
+     },
+     "A0=0.70": {
+      "1_contraste": 0.091,
+      "holm_6": 0.111
+     },
+     "A0=0.75": {
+      "1_contraste": 0.085,
+      "holm_6": 0.104
+     }
+    }
+   },
+   "inflacion_vuelta_principal_h2": {
+    "filas_en_riesgo": 548,
+    "filas_positivas": 407,
+    "eventos": 258,
+    "años_distintos_con_evento": 89,
+    "tasa_base_filas": 0.743,
+    "icc_por_año": 0.277,
+    "paises_por_año_medio": 5.17,
+    "m_kish": 7.45,
+    "efecto_diseño": 2.79,
+    "pos_ef_central": 92.6,
+    "neg_ef_central": 50.6,
+    "pos_ef_prudente": 89,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.137,
+      "holm_6": 0.168
+     },
+     "A0=0.60": {
+      "1_contraste": 0.128,
+      "holm_6": 0.156
+     },
+     "A0=0.70": {
+      "1_contraste": 0.112,
+      "holm_6": 0.137
+     },
+     "A0=0.75": {
+      "1_contraste": 0.102,
+      "holm_6": 0.125
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.138,
+      "holm_6": 0.169
+     },
+     "A0=0.60": {
+      "1_contraste": 0.129,
+      "holm_6": 0.157
+     },
+     "A0=0.70": {
+      "1_contraste": 0.113,
+      "holm_6": 0.138
+     },
+     "A0=0.75": {
+      "1_contraste": 0.103,
+      "holm_6": 0.126
+     }
+    }
+   },
+   "inflacion_repunte_abs3_h2": {
+    "filas_en_riesgo": 956,
+    "filas_positivas": 311,
+    "eventos": 182,
+    "años_distintos_con_evento": 70,
+    "tasa_base_filas": 0.325,
+    "icc_por_año": 0.27,
+    "paises_por_año_medio": 9.02,
+    "m_kish": 10.76,
+    "efecto_diseño": 3.64,
+    "pos_ef_central": 50.0,
+    "neg_ef_central": 177.2,
+    "pos_ef_prudente": 70,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.13,
+      "holm_6": 0.161
+     },
+     "A0=0.60": {
+      "1_contraste": 0.127,
+      "holm_6": 0.156
+     },
+     "A0=0.70": {
+      "1_contraste": 0.118,
+      "holm_6": 0.143
+     },
+     "A0=0.75": {
+      "1_contraste": 0.11,
+      "holm_6": 0.134
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.114,
+      "holm_6": 0.141
+     },
+     "A0=0.60": {
+      "1_contraste": 0.112,
+      "holm_6": 0.137
+     },
+     "A0=0.70": {
+      "1_contraste": 0.103,
+      "holm_6": 0.126
+     },
+     "A0=0.75": {
+      "1_contraste": 0.096,
+      "holm_6": 0.117
+     }
+    }
+   },
+   "inflacion_vuelta_abs3_h2": {
+    "filas_en_riesgo": 668,
+    "filas_positivas": 288,
+    "eventos": 191,
+    "años_distintos_con_evento": 73,
+    "tasa_base_filas": 0.431,
+    "icc_por_año": 0.477,
+    "paises_por_año_medio": 6.42,
+    "m_kish": 9.37,
+    "efecto_diseño": 4.99,
+    "pos_ef_central": 38.3,
+    "neg_ef_central": 76.1,
+    "pos_ef_prudente": 73,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.159,
+      "holm_6": 0.195
+     },
+     "A0=0.60": {
+      "1_contraste": 0.152,
+      "holm_6": 0.186
+     },
+     "A0=0.70": {
+      "1_contraste": 0.139,
+      "holm_6": 0.169
+     },
+     "A0=0.75": {
+      "1_contraste": 0.129,
+      "holm_6": 0.157
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.13,
+      "holm_6": 0.16
+     },
+     "A0=0.60": {
+      "1_contraste": 0.124,
+      "holm_6": 0.151
+     },
+     "A0=0.70": {
+      "1_contraste": 0.111,
+      "holm_6": 0.136
+     },
+     "A0=0.75": {
+      "1_contraste": 0.103,
+      "holm_6": 0.125
+     }
+    }
+   }
+  },
+  "1950_2004": {
+   "salida_recesion_h1": {
+    "filas_en_riesgo": 81,
+    "filas_positivas": 62,
+    "eventos": 62,
+    "años_distintos_con_evento": 25,
+    "tasa_base_filas": 0.765,
+    "icc_por_año": 0.514,
+    "paises_por_año_medio": 2.79,
+    "m_kish": 4.93,
+    "efecto_diseño": 3.02,
+    "pos_ef_central": 20.6,
+    "neg_ef_central": 6.3,
+    "pos_ef_prudente": 25,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.328,
+      "holm_6": 0.404
+     },
+     "A0=0.60": {
+      "1_contraste": 0.306,
+      "holm_6": null
+     },
+     "A0=0.70": {
+      "1_contraste": null,
+      "holm_6": null
+     },
+     "A0=0.75": {
+      "1_contraste": null,
+      "holm_6": null
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.32,
+      "holm_6": 0.395
+     },
+     "A0=0.60": {
+      "1_contraste": 0.297,
+      "holm_6": null
+     },
+     "A0=0.70": {
+      "1_contraste": 0.272,
+      "holm_6": null
+     },
+     "A0=0.75": {
+      "1_contraste": null,
+      "holm_6": null
+     }
+    },
+    "eventos_por_tipo": {
+     "normal": 55,
+     "financiera": 7
+    },
+    "mde_financieras_central": {
+     "A0=0.50": {
+      "1_contraste": null,
+      "holm_6": null
+     },
+     "A0=0.60": {
+      "1_contraste": null,
+      "holm_6": null
+     },
+     "A0=0.70": {
+      "1_contraste": null,
+      "holm_6": null
+     },
+     "A0=0.75": {
+      "1_contraste": null,
+      "holm_6": null
+     }
+    },
+    "mde_financieras_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.438,
+      "holm_6": null
+     },
+     "A0=0.60": {
+      "1_contraste": null,
+      "holm_6": null
+     },
+     "A0=0.70": {
+      "1_contraste": null,
+      "holm_6": null
+     },
+     "A0=0.75": {
+      "1_contraste": null,
+      "holm_6": null
+     }
+    },
+    "años_distintos_financieras": 5
+   },
+   "inflacion_repunte_principal_h1": {
+    "filas_en_riesgo": 440,
+    "filas_positivas": 115,
+    "eventos": 115,
+    "años_distintos_con_evento": 42,
+    "tasa_base_filas": 0.261,
+    "icc_por_año": 0.229,
+    "paises_por_año_medio": 8.46,
+    "m_kish": 10.0,
+    "efecto_diseño": 3.06,
+    "pos_ef_central": 37.6,
+    "neg_ef_central": 106.2,
+    "pos_ef_prudente": 42,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.153,
+      "holm_6": 0.188
+     },
+     "A0=0.60": {
+      "1_contraste": 0.148,
+      "holm_6": 0.181
+     },
+     "A0=0.70": {
+      "1_contraste": 0.136,
+      "holm_6": 0.165
+     },
+     "A0=0.75": {
+      "1_contraste": 0.127,
+      "holm_6": 0.154
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.147,
+      "holm_6": 0.181
+     },
+     "A0=0.60": {
+      "1_contraste": 0.142,
+      "holm_6": 0.174
+     },
+     "A0=0.70": {
+      "1_contraste": 0.13,
+      "holm_6": 0.159
+     },
+     "A0=0.75": {
+      "1_contraste": 0.122,
+      "holm_6": 0.148
+     }
+    }
+   },
+   "inflacion_repunte_principal_h1_sin_truncadas": {
+    "filas_en_riesgo": 398,
+    "filas_positivas": 104,
+    "eventos": 104,
+    "años_distintos_con_evento": 37,
+    "tasa_base_filas": 0.261,
+    "icc_por_año": 0.262,
+    "paises_por_año_medio": 8.47,
+    "m_kish": 10.11,
+    "efecto_diseño": 3.38,
+    "pos_ef_central": 30.7,
+    "neg_ef_central": 86.9,
+    "pos_ef_prudente": 37,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.169,
+      "holm_6": 0.207
+     },
+     "A0=0.60": {
+      "1_contraste": 0.163,
+      "holm_6": 0.198
+     },
+     "A0=0.70": {
+      "1_contraste": 0.149,
+      "holm_6": 0.181
+     },
+     "A0=0.75": {
+      "1_contraste": 0.139,
+      "holm_6": 0.169
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.158,
+      "holm_6": 0.194
+     },
+     "A0=0.60": {
+      "1_contraste": 0.152,
+      "holm_6": 0.185
+     },
+     "A0=0.70": {
+      "1_contraste": 0.139,
+      "holm_6": 0.169
+     },
+     "A0=0.75": {
+      "1_contraste": 0.129,
+      "holm_6": 0.157
+     }
+    }
+   },
+   "inflacion_repunte_principal_h1_con_P1_P2_P3_P5": {
+    "filas_en_riesgo": 413,
+    "filas_positivas": 110,
+    "eventos": 110,
+    "años_distintos_con_evento": 42,
+    "tasa_base_filas": 0.266,
+    "icc_por_año": 0.239,
+    "paises_por_año_medio": 7.94,
+    "m_kish": 9.44,
+    "efecto_diseño": 3.02,
+    "pos_ef_central": 36.5,
+    "neg_ef_central": 100.4,
+    "pos_ef_prudente": 42,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.156,
+      "holm_6": 0.191
+     },
+     "A0=0.60": {
+      "1_contraste": 0.151,
+      "holm_6": 0.184
+     },
+     "A0=0.70": {
+      "1_contraste": 0.138,
+      "holm_6": 0.168
+     },
+     "A0=0.75": {
+      "1_contraste": 0.129,
+      "holm_6": 0.157
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.148,
+      "holm_6": 0.182
+     },
+     "A0=0.60": {
+      "1_contraste": 0.143,
+      "holm_6": 0.175
+     },
+     "A0=0.70": {
+      "1_contraste": 0.131,
+      "holm_6": 0.159
+     },
+     "A0=0.75": {
+      "1_contraste": 0.122,
+      "holm_6": 0.148
+     }
+    }
+   },
+   "inflacion_vuelta_principal_h1": {
+    "filas_en_riesgo": 316,
+    "filas_positivas": 117,
+    "eventos": 117,
+    "años_distintos_con_evento": 38,
+    "tasa_base_filas": 0.37,
+    "icc_por_año": 0.226,
+    "paises_por_año_medio": 6.08,
+    "m_kish": 8.44,
+    "efecto_diseño": 2.68,
+    "pos_ef_central": 43.7,
+    "neg_ef_central": 74.3,
+    "pos_ef_prudente": 38,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.152,
+      "holm_6": 0.187
+     },
+     "A0=0.60": {
+      "1_contraste": 0.146,
+      "holm_6": 0.178
+     },
+     "A0=0.70": {
+      "1_contraste": 0.133,
+      "holm_6": 0.161
+     },
+     "A0=0.75": {
+      "1_contraste": 0.123,
+      "holm_6": 0.15
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.16,
+      "holm_6": 0.196
+     },
+     "A0=0.60": {
+      "1_contraste": 0.153,
+      "holm_6": 0.187
+     },
+     "A0=0.70": {
+      "1_contraste": 0.14,
+      "holm_6": 0.17
+     },
+     "A0=0.75": {
+      "1_contraste": 0.13,
+      "holm_6": 0.158
+     }
+    }
+   },
+   "inflacion_vuelta_principal_h1_sin_truncadas": {
+    "filas_en_riesgo": 288,
+    "filas_positivas": 106,
+    "eventos": 106,
+    "años_distintos_con_evento": 35,
+    "tasa_base_filas": 0.368,
+    "icc_por_año": 0.231,
+    "paises_por_año_medio": 6.13,
+    "m_kish": 8.62,
+    "efecto_diseño": 2.76,
+    "pos_ef_central": 38.4,
+    "neg_ef_central": 66.0,
+    "pos_ef_prudente": 35,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.162,
+      "holm_6": 0.198
+     },
+     "A0=0.60": {
+      "1_contraste": 0.155,
+      "holm_6": 0.189
+     },
+     "A0=0.70": {
+      "1_contraste": 0.141,
+      "holm_6": 0.171
+     },
+     "A0=0.75": {
+      "1_contraste": 0.13,
+      "holm_6": 0.159
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.167,
+      "holm_6": 0.204
+     },
+     "A0=0.60": {
+      "1_contraste": 0.16,
+      "holm_6": 0.195
+     },
+     "A0=0.70": {
+      "1_contraste": 0.145,
+      "holm_6": 0.177
+     },
+     "A0=0.75": {
+      "1_contraste": 0.135,
+      "holm_6": 0.164
+     }
+    }
+   },
+   "inflacion_vuelta_principal_h1_con_P1_P2_P3_P5": {
+    "filas_en_riesgo": 305,
+    "filas_positivas": 112,
+    "eventos": 112,
+    "años_distintos_con_evento": 38,
+    "tasa_base_filas": 0.367,
+    "icc_por_año": 0.216,
+    "paises_por_año_medio": 5.87,
+    "m_kish": 8.1,
+    "efecto_diseño": 2.53,
+    "pos_ef_central": 44.2,
+    "neg_ef_central": 76.2,
+    "pos_ef_prudente": 38,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.151,
+      "holm_6": 0.186
+     },
+     "A0=0.60": {
+      "1_contraste": 0.145,
+      "holm_6": 0.177
+     },
+     "A0=0.70": {
+      "1_contraste": 0.132,
+      "holm_6": 0.16
+     },
+     "A0=0.75": {
+      "1_contraste": 0.122,
+      "holm_6": 0.149
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.159,
+      "holm_6": 0.195
+     },
+     "A0=0.60": {
+      "1_contraste": 0.153,
+      "holm_6": 0.186
+     },
+     "A0=0.70": {
+      "1_contraste": 0.139,
+      "holm_6": 0.169
+     },
+     "A0=0.75": {
+      "1_contraste": 0.129,
+      "holm_6": 0.157
+     }
+    }
+   },
+   "inflacion_repunte_abs3_h1": {
+    "filas_en_riesgo": 307,
+    "filas_positivas": 67,
+    "eventos": 67,
+    "años_distintos_con_evento": 26,
+    "tasa_base_filas": 0.218,
+    "icc_por_año": 0.289,
+    "paises_por_año_medio": 6.98,
+    "m_kish": 9.48,
+    "efecto_diseño": 3.45,
+    "pos_ef_central": 19.4,
+    "neg_ef_central": 69.5,
+    "pos_ef_prudente": 26,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.205,
+      "holm_6": 0.25
+     },
+     "A0=0.60": {
+      "1_contraste": 0.197,
+      "holm_6": 0.239
+     },
+     "A0=0.70": {
+      "1_contraste": 0.181,
+      "holm_6": 0.219
+     },
+     "A0=0.75": {
+      "1_contraste": 0.169,
+      "holm_6": 0.207
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.184,
+      "holm_6": 0.225
+     },
+     "A0=0.60": {
+      "1_contraste": 0.177,
+      "holm_6": 0.215
+     },
+     "A0=0.70": {
+      "1_contraste": 0.162,
+      "holm_6": 0.196
+     },
+     "A0=0.75": {
+      "1_contraste": 0.151,
+      "holm_6": 0.183
+     }
+    }
+   },
+   "inflacion_vuelta_abs3_h1": {
+    "filas_en_riesgo": 449,
+    "filas_positivas": 74,
+    "eventos": 74,
+    "años_distintos_con_evento": 29,
+    "tasa_base_filas": 0.165,
+    "icc_por_año": 0.332,
+    "paises_por_año_medio": 8.8,
+    "m_kish": 10.91,
+    "efecto_diseño": 4.29,
+    "pos_ef_central": 17.3,
+    "neg_ef_central": 87.4,
+    "pos_ef_prudente": 29,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.211,
+      "holm_6": 0.257
+     },
+     "A0=0.60": {
+      "1_contraste": 0.204,
+      "holm_6": 0.246
+     },
+     "A0=0.70": {
+      "1_contraste": 0.187,
+      "holm_6": 0.227
+     },
+     "A0=0.75": {
+      "1_contraste": 0.176,
+      "holm_6": 0.217
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.172,
+      "holm_6": 0.211
+     },
+     "A0=0.60": {
+      "1_contraste": 0.166,
+      "holm_6": 0.203
+     },
+     "A0=0.70": {
+      "1_contraste": 0.153,
+      "holm_6": 0.185
+     },
+     "A0=0.75": {
+      "1_contraste": 0.142,
+      "holm_6": 0.173
+     }
+    }
+   },
+   "salida_recesion_h2": {
+    "filas_en_riesgo": 77,
+    "filas_positivas": 74,
+    "eventos": 60,
+    "años_distintos_con_evento": 25,
+    "tasa_base_filas": 0.961,
+    "icc_por_año": 0.202,
+    "paises_por_año_medio": 2.75,
+    "m_kish": 4.97,
+    "efecto_diseño": 1.8,
+    "pos_ef_central": 33.3,
+    "neg_ef_central": 1.7,
+    "pos_ef_prudente": 25,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": null,
+      "holm_6": null
+     },
+     "A0=0.60": {
+      "1_contraste": null,
+      "holm_6": null
+     },
+     "A0=0.70": {
+      "1_contraste": null,
+      "holm_6": null
+     },
+     "A0=0.75": {
+      "1_contraste": null,
+      "holm_6": null
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": null,
+      "holm_6": null
+     },
+     "A0=0.60": {
+      "1_contraste": null,
+      "holm_6": null
+     },
+     "A0=0.70": {
+      "1_contraste": null,
+      "holm_6": null
+     },
+     "A0=0.75": {
+      "1_contraste": null,
+      "holm_6": null
+     }
+    },
+    "eventos_por_tipo": {
+     "normal": 53,
+     "financiera": 7
+    },
+    "mde_financieras_central": {
+     "A0=0.50": {
+      "1_contraste": null,
+      "holm_6": null
+     },
+     "A0=0.60": {
+      "1_contraste": null,
+      "holm_6": null
+     },
+     "A0=0.70": {
+      "1_contraste": null,
+      "holm_6": null
+     },
+     "A0=0.75": {
+      "1_contraste": null,
+      "holm_6": null
+     }
+    },
+    "mde_financieras_prudente": {
+     "A0=0.50": {
+      "1_contraste": null,
+      "holm_6": null
+     },
+     "A0=0.60": {
+      "1_contraste": null,
+      "holm_6": null
+     },
+     "A0=0.70": {
+      "1_contraste": null,
+      "holm_6": null
+     },
+     "A0=0.75": {
+      "1_contraste": null,
+      "holm_6": null
+     }
+    },
+    "años_distintos_financieras": 5
+   },
+   "inflacion_repunte_principal_h2": {
+    "filas_en_riesgo": 431,
+    "filas_positivas": 205,
+    "eventos": 115,
+    "años_distintos_con_evento": 42,
+    "tasa_base_filas": 0.476,
+    "icc_por_año": 0.263,
+    "paises_por_año_medio": 8.45,
+    "m_kish": 10.03,
+    "efecto_diseño": 3.37,
+    "pos_ef_central": 34.1,
+    "neg_ef_central": 67.0,
+    "pos_ef_prudente": 42,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.168,
+      "holm_6": 0.206
+     },
+     "A0=0.60": {
+      "1_contraste": 0.161,
+      "holm_6": 0.196
+     },
+     "A0=0.70": {
+      "1_contraste": 0.147,
+      "holm_6": 0.178
+     },
+     "A0=0.75": {
+      "1_contraste": 0.136,
+      "holm_6": 0.166
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.157,
+      "holm_6": 0.193
+     },
+     "A0=0.60": {
+      "1_contraste": 0.15,
+      "holm_6": 0.183
+     },
+     "A0=0.70": {
+      "1_contraste": 0.136,
+      "holm_6": 0.165
+     },
+     "A0=0.75": {
+      "1_contraste": 0.126,
+      "holm_6": 0.153
+     }
+    }
+   },
+   "inflacion_vuelta_principal_h2": {
+    "filas_en_riesgo": 311,
+    "filas_positivas": 203,
+    "eventos": 116,
+    "años_distintos_con_evento": 38,
+    "tasa_base_filas": 0.653,
+    "icc_por_año": 0.259,
+    "paises_por_año_medio": 6.1,
+    "m_kish": 8.49,
+    "efecto_diseño": 2.94,
+    "pos_ef_central": 39.4,
+    "neg_ef_central": 36.7,
+    "pos_ef_prudente": 38,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.179,
+      "holm_6": 0.219
+     },
+     "A0=0.60": {
+      "1_contraste": 0.169,
+      "holm_6": 0.205
+     },
+     "A0=0.70": {
+      "1_contraste": 0.15,
+      "holm_6": 0.183
+     },
+     "A0=0.75": {
+      "1_contraste": 0.138,
+      "holm_6": 0.169
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.181,
+      "holm_6": 0.221
+     },
+     "A0=0.60": {
+      "1_contraste": 0.17,
+      "holm_6": 0.207
+     },
+     "A0=0.70": {
+      "1_contraste": 0.152,
+      "holm_6": 0.185
+     },
+     "A0=0.75": {
+      "1_contraste": 0.14,
+      "holm_6": 0.171
+     }
+    }
+   },
+   "inflacion_repunte_abs3_h2": {
+    "filas_en_riesgo": 294,
+    "filas_positivas": 106,
+    "eventos": 67,
+    "años_distintos_con_evento": 26,
+    "tasa_base_filas": 0.361,
+    "icc_por_año": 0.375,
+    "paises_por_año_medio": 6.84,
+    "m_kish": 9.32,
+    "efecto_diseño": 4.12,
+    "pos_ef_central": 16.3,
+    "neg_ef_central": 45.7,
+    "pos_ef_prudente": 26,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.228,
+      "holm_6": 0.276
+     },
+     "A0=0.60": {
+      "1_contraste": 0.218,
+      "holm_6": 0.263
+     },
+     "A0=0.70": {
+      "1_contraste": 0.199,
+      "holm_6": 0.243
+     },
+     "A0=0.75": {
+      "1_contraste": 0.186,
+      "holm_6": null
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.194,
+      "holm_6": 0.237
+     },
+     "A0=0.60": {
+      "1_contraste": 0.185,
+      "holm_6": 0.224
+     },
+     "A0=0.70": {
+      "1_contraste": 0.168,
+      "holm_6": 0.203
+     },
+     "A0=0.75": {
+      "1_contraste": 0.156,
+      "holm_6": 0.19
+     }
+    }
+   },
+   "inflacion_vuelta_abs3_h2": {
+    "filas_en_riesgo": 448,
+    "filas_positivas": 124,
+    "eventos": 74,
+    "años_distintos_con_evento": 29,
+    "tasa_base_filas": 0.277,
+    "icc_por_año": 0.397,
+    "paises_por_año_medio": 8.96,
+    "m_kish": 10.93,
+    "efecto_diseño": 4.94,
+    "pos_ef_central": 15.0,
+    "neg_ef_central": 65.6,
+    "pos_ef_prudente": 29,
+    "mde_central": {
+     "A0=0.50": {
+      "1_contraste": 0.228,
+      "holm_6": 0.276
+     },
+     "A0=0.60": {
+      "1_contraste": 0.219,
+      "holm_6": 0.264
+     },
+     "A0=0.70": {
+      "1_contraste": 0.201,
+      "holm_6": 0.245
+     },
+     "A0=0.75": {
+      "1_contraste": 0.189,
+      "holm_6": null
+     }
+    },
+    "mde_prudente": {
+     "A0=0.50": {
+      "1_contraste": 0.178,
+      "holm_6": 0.218
+     },
+     "A0=0.60": {
+      "1_contraste": 0.171,
+      "holm_6": 0.208
+     },
+     "A0=0.70": {
+      "1_contraste": 0.156,
+      "holm_6": 0.189
+     },
+     "A0=0.75": {
+      "1_contraste": 0.145,
+      "holm_6": 0.176
+     }
+    }
+   }
+  }
+ },
+ "cobertura_candidatos_nuevos": {
+  "P1_dinero_g": {
+   "pais_años_nucleo_1870_2004": 1732,
+   "pais_años_nucleo_1950_2004": 740,
+   "primer_año": {
+    "BEL": 1980,
+    "DEU": 1871,
+    "DNK": 1871,
+    "ESP": 1875,
+    "FIN": 1871,
+    "FRA": 1871,
+    "GBR": 1871,
+    "ITA": 1871,
+    "JPN": 1871,
+    "NLD": 1871,
+    "NOR": 1871,
+    "PRT": 1871,
+    "SWE": 1872,
+    "USA": 1871
+   }
+  },
+  "P2_salario_g": {
+   "pais_años_nucleo_1870_2004": 1857,
+   "pais_años_nucleo_1950_2004": 770,
+   "primer_año": {
+    "BEL": 1871,
+    "DEU": 1871,
+    "DNK": 1871,
+    "ESP": 1871,
+    "FIN": 1871,
+    "FRA": 1871,
+    "GBR": 1871,
+    "ITA": 1872,
+    "JPN": 1871,
+    "NLD": 1871,
+    "NOR": 1871,
+    "PRT": 1871,
+    "SWE": 1871,
+    "USA": 1871
+   }
+  },
+  "P3_brecha_unilateral": {
+   "pais_años_nucleo_1870_2004": 1750,
+   "pais_años_nucleo_1950_2004": 770,
+   "primer_año": {
+    "BEL": 1880,
+    "DEU": 1880,
+    "DNK": 1880,
+    "ESP": 1880,
+    "FIN": 1880,
+    "FRA": 1880,
+    "GBR": 1880,
+    "ITA": 1880,
+    "JPN": 1880,
+    "NLD": 1880,
+    "NOR": 1880,
+    "PRT": 1880,
+    "SWE": 1880,
+    "USA": 1880
+   }
+  },
+  "P5_tipo_real_corto": {
+   "pais_años_nucleo_1870_2004": 1798,
+   "pais_años_nucleo_1950_2004": 762,
+   "primer_año": {
+    "BEL": 1871,
+    "DEU": 1871,
+    "DNK": 1875,
+    "ESP": 1871,
+    "FIN": 1871,
+    "FRA": 1871,
+    "GBR": 1871,
+    "ITA": 1871,
+    "JPN": 1879,
+    "NLD": 1871,
+    "NOR": 1871,
+    "PRT": 1880,
+    "SWE": 1871,
+    "USA": 1871
+   }
+  },
+  "X_depreciacion_usd": {
+   "pais_años_nucleo_1870_2004": 1737,
+   "pais_años_nucleo_1950_2004": 715,
+   "primer_año": {
+    "BEL": 1871,
+    "DEU": 1871,
+    "DNK": 1871,
+    "ESP": 1871,
+    "FIN": 1871,
+    "FRA": 1871,
+    "GBR": 1871,
+    "ITA": 1871,
+    "JPN": 1874,
+    "NLD": 1871,
+    "NOR": 1871,
+    "PRT": 1871,
+    "SWE": 1871
+   }
+  },
+  "S4_difusion_caidas_pib": {
+   "pais_años_nucleo_1870_2004": 1876,
+   "pais_años_nucleo_1950_2004": 770,
+   "primer_año": {
+    "BEL": 1871,
+    "DEU": 1871,
+    "DNK": 1871,
+    "ESP": 1871,
+    "FIN": 1871,
+    "FRA": 1871,
+    "GBR": 1871,
+    "ITA": 1871,
+    "JPN": 1871,
+    "NLD": 1871,
+    "NOR": 1871,
+    "PRT": 1871,
+    "SWE": 1871,
+    "USA": 1871
+   }
+  }
+ }
+}
