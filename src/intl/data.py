@@ -23,6 +23,7 @@ FAMILIAS: dict[str, str] = {
     r"bis_cbpol_[a-z]{2}": "BIS tipo oficial mensual",
     r"imf_ifs_[a-z]{3}_\w+": "FMI IFS mensual",
     r"aqr_mkt_[a-z]{3}_m": "AQR mercado por país, mensual, USD (sin redistribución)",
+    r"USREC": "NBER: recesiones de EE. UU. (solo como contraste externo del fechado, nunca como variable)",
 }
 _RX = [re.compile(f"^(?:{p})$") for p in FAMILIAS]
 
