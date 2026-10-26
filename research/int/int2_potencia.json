@@ -1,4 +1,9 @@
 {
+ "procedencia": {
+  "commit": "eeb61cc165a64e13abf39876d51a3768e8e21cd7",
+  "arbol_limpio": true,
+  "hora_utc": "2026-10-26T13:02:10+00:00"
+ },
  "nucleo": [
   "BEL",
   "DEU",
@@ -43,115 +48,163 @@
    }
   },
   "pais_años": {
-   "expansion": 661,
-   "sobrecalentamiento": 283,
-   "estanflacion": 314,
-   "crecimiento_bajo": 478,
+   "expansion": 573,
+   "sobrecalentamiento": 324,
+   "estanflacion": 273,
+   "crecimiento_bajo": 566,
    "recesion": 406
   },
   "mde": {
    "expansion": {
     "bolsa": {
-     "pais_años": 633,
-     "n_efectivo": 210.9,
-     "mde_pp": 6.1,
-     "mde_en_sd": 0.26
+     "pais_años": 542,
+     "n_efectivo": 198.7,
+     "mde_pp": 6.2,
+     "mde_en_sd": 0.27,
+     "mde_pp_cv": 6.7,
+     "mde_pp_placebo": 4.9,
+     "placebos": 124
     },
     "bonos": {
-     "pais_años": 649,
-     "n_efectivo": 109.0,
-     "mde_pp": 4.6,
-     "mde_en_sd": 0.37
+     "pais_años": 559,
+     "n_efectivo": 104.1,
+     "mde_pp": 4.7,
+     "mde_en_sd": 0.37,
+     "mde_pp_cv": 5.1,
+     "mde_pp_placebo": 2.7,
+     "placebos": 124
     },
     "letras": {
-     "pais_años": 659,
-     "n_efectivo": 51.2,
+     "pais_años": 569,
+     "n_efectivo": 49.0,
      "mde_pp": 4.8,
-     "mde_en_sd": 0.54
+     "mde_en_sd": 0.54,
+     "mde_pp_cv": 5.2,
+     "mde_pp_placebo": 1.9,
+     "placebos": 124
     },
     "vivienda": {
-     "pais_años": 538,
-     "n_efectivo": 259.4,
+     "pais_años": 448,
+     "n_efectivo": 226.9,
      "mde_pp": 2.5,
-     "mde_en_sd": 0.23
+     "mde_en_sd": 0.24,
+     "mde_pp_cv": 2.6,
+     "mde_pp_placebo": 2.1,
+     "placebos": 124
     }
    },
    "sobrecalentamiento": {
     "bolsa": {
-     "pais_años": 269,
-     "n_efectivo": 133.5,
-     "mde_pp": 6.9,
-     "mde_en_sd": 0.3
+     "pais_años": 313,
+     "n_efectivo": 139.5,
+     "mde_pp": 6.8,
+     "mde_en_sd": 0.29,
+     "mde_pp_cv": 7.7,
+     "mde_pp_placebo": 5.9,
+     "placebos": 124
     },
     "bonos": {
-     "pais_años": 271,
-     "n_efectivo": 73.1,
-     "mde_pp": 5.2,
-     "mde_en_sd": 0.41
+     "pais_años": 316,
+     "n_efectivo": 74.9,
+     "mde_pp": 5.1,
+     "mde_en_sd": 0.41,
+     "mde_pp_cv": 5.8,
+     "mde_pp_placebo": 3.6,
+     "placebos": 124
     },
     "letras": {
-     "pais_años": 269,
-     "n_efectivo": 35.1,
-     "mde_pp": 5.3,
-     "mde_en_sd": 0.59
+     "pais_años": 317,
+     "n_efectivo": 36.1,
+     "mde_pp": 5.2,
+     "mde_en_sd": 0.59,
+     "mde_pp_cv": 5.9,
+     "mde_pp_placebo": 2.4,
+     "placebos": 124
     },
     "vivienda": {
-     "pais_años": 214,
-     "n_efectivo": 121.3,
-     "mde_pp": 3.1,
-     "mde_en_sd": 0.29
+     "pais_años": 263,
+     "n_efectivo": 142.4,
+     "mde_pp": 2.9,
+     "mde_en_sd": 0.27,
+     "mde_pp_cv": 3.1,
+     "mde_pp_placebo": 3.0,
+     "placebos": 124
     }
    },
    "estanflacion": {
     "bolsa": {
-     "pais_años": 306,
-     "n_efectivo": 139.2,
-     "mde_pp": 6.8,
-     "mde_en_sd": 0.29
+     "pais_años": 262,
+     "n_efectivo": 128.8,
+     "mde_pp": 7.0,
+     "mde_en_sd": 0.3,
+     "mde_pp_cv": 7.7,
+     "mde_pp_placebo": 6.0,
+     "placebos": 124
     },
     "bonos": {
-     "pais_años": 305,
-     "n_efectivo": 74.7,
-     "mde_pp": 5.1,
-     "mde_en_sd": 0.41
+     "pais_años": 260,
+     "n_efectivo": 70.0,
+     "mde_pp": 5.2,
+     "mde_en_sd": 0.42,
+     "mde_pp_cv": 5.8,
+     "mde_pp_placebo": 3.3,
+     "placebos": 124
     },
     "letras": {
-     "pais_años": 302,
-     "n_efectivo": 35.1,
-     "mde_pp": 5.3,
-     "mde_en_sd": 0.59
+     "pais_años": 254,
+     "n_efectivo": 32.7,
+     "mde_pp": 5.4,
+     "mde_en_sd": 0.61,
+     "mde_pp_cv": 6.0,
+     "mde_pp_placebo": 2.4,
+     "placebos": 124
     },
     "vivienda": {
-     "pais_años": 260,
-     "n_efectivo": 139.3,
-     "mde_pp": 2.9,
-     "mde_en_sd": 0.27
+     "pais_años": 211,
+     "n_efectivo": 117.2,
+     "mde_pp": 3.1,
+     "mde_en_sd": 0.29,
+     "mde_pp_cv": 3.3,
+     "mde_pp_placebo": 2.6,
+     "placebos": 124
     }
    },
    "crecimiento_bajo": {
     "bolsa": {
-     "pais_años": 443,
-     "n_efectivo": 183.3,
-     "mde_pp": 6.3,
-     "mde_en_sd": 0.27
+     "pais_años": 534,
+     "n_efectivo": 197.7,
+     "mde_pp": 6.2,
+     "mde_en_sd": 0.27,
+     "mde_pp_cv": 6.7,
+     "mde_pp_placebo": 5.4,
+     "placebos": 124
     },
     "bonos": {
-     "pais_años": 466,
-     "n_efectivo": 98.3,
+     "pais_años": 556,
+     "n_efectivo": 104.0,
      "mde_pp": 4.7,
-     "mde_en_sd": 0.38
+     "mde_en_sd": 0.37,
+     "mde_pp_cv": 5.1,
+     "mde_pp_placebo": 3.7,
+     "placebos": 124
     },
     "letras": {
-     "pais_años": 466,
-     "n_efectivo": 45.9,
-     "mde_pp": 4.9,
-     "mde_en_sd": 0.55
+     "pais_años": 556,
+     "n_efectivo": 48.8,
+     "mde_pp": 4.8,
+     "mde_en_sd": 0.54,
+     "mde_pp_cv": 5.2,
+     "mde_pp_placebo": 2.6,
+     "placebos": 124
     },
     "vivienda": {
-     "pais_años": 344,
-     "n_efectivo": 182.7,
-     "mde_pp": 2.7,
-     "mde_en_sd": 0.25
+     "pais_años": 434,
+     "n_efectivo": 221.2,
+     "mde_pp": 2.5,
+     "mde_en_sd": 0.24,
+     "mde_pp_cv": 2.7,
+     "mde_pp_placebo": 2.4,
+     "placebos": 124
     }
    },
    "recesion": {
@@ -159,25 +212,37 @@
      "pais_años": 374,
      "n_efectivo": 157.4,
      "mde_pp": 6.6,
-     "mde_en_sd": 0.28
+     "mde_en_sd": 0.28,
+     "mde_pp_cv": 7.3,
+     "mde_pp_placebo": 5.1,
+     "placebos": 124
     },
     "bonos": {
      "pais_años": 385,
      "n_efectivo": 84.2,
      "mde_pp": 4.9,
-     "mde_en_sd": 0.39
+     "mde_en_sd": 0.39,
+     "mde_pp_cv": 5.5,
+     "mde_pp_placebo": 4.3,
+     "placebos": 124
     },
     "letras": {
      "pais_años": 385,
      "n_efectivo": 39.6,
      "mde_pp": 5.1,
-     "mde_en_sd": 0.57
+     "mde_en_sd": 0.57,
+     "mde_pp_cv": 5.6,
+     "mde_pp_placebo": 3.3,
+     "placebos": 124
     },
     "vivienda": {
      "pais_años": 279,
      "n_efectivo": 151.4,
      "mde_pp": 2.8,
-     "mde_en_sd": 0.27
+     "mde_en_sd": 0.27,
+     "mde_pp_cv": 3.0,
+     "mde_pp_placebo": 2.3,
+     "placebos": 124
     }
    }
   }
@@ -210,115 +275,163 @@
    }
   },
   "pais_años": {
-   "expansion": 269,
-   "sobrecalentamiento": 112,
-   "estanflacion": 178,
-   "crecimiento_bajo": 141,
+   "expansion": 203,
+   "sobrecalentamiento": 172,
+   "estanflacion": 118,
+   "crecimiento_bajo": 207,
    "recesion": 75
   },
   "mde": {
    "expansion": {
     "bolsa": {
-     "pais_años": 269,
-     "n_efectivo": 69.2,
-     "mde_pp": 11.5,
-     "mde_en_sd": 0.45
+     "pais_años": 203,
+     "n_efectivo": 64.8,
+     "mde_pp": 11.7,
+     "mde_en_sd": 0.46,
+     "mde_pp_cv": 12.8,
+     "mde_pp_placebo": 9.1,
+     "placebos": 44
     },
     "bonos": {
-     "pais_años": 269,
-     "n_efectivo": 53.8,
-     "mde_pp": 5.1,
-     "mde_en_sd": 0.52
+     "pais_años": 203,
+     "n_efectivo": 51.5,
+     "mde_pp": 5.2,
+     "mde_en_sd": 0.52,
+     "mde_pp_cv": 5.7,
+     "mde_pp_placebo": 2.5,
+     "placebos": 44
     },
     "letras": {
-     "pais_años": 269,
-     "n_efectivo": 16.9,
-     "mde_pp": 3.4,
-     "mde_en_sd": 0.92
+     "pais_años": 203,
+     "n_efectivo": 16.2,
+     "mde_pp": 3.5,
+     "mde_en_sd": 0.93,
+     "mde_pp_cv": 3.9,
+     "mde_pp_placebo": 1.2,
+     "placebos": 44
     },
     "vivienda": {
-     "pais_años": 258,
-     "n_efectivo": 70.2,
-     "mde_pp": 3.9,
-     "mde_en_sd": 0.44
+     "pais_años": 188,
+     "n_efectivo": 58.1,
+     "mde_pp": 4.0,
+     "mde_en_sd": 0.46,
+     "mde_pp_cv": 4.3,
+     "mde_pp_placebo": 2.4,
+     "placebos": 44
     }
    },
    "sobrecalentamiento": {
     "bolsa": {
-     "pais_años": 112,
-     "n_efectivo": 51.1,
-     "mde_pp": 12.5,
-     "mde_en_sd": 0.49
+     "pais_años": 172,
+     "n_efectivo": 59.8,
+     "mde_pp": 11.9,
+     "mde_en_sd": 0.47,
+     "mde_pp_cv": 13.5,
+     "mde_pp_placebo": 10.4,
+     "placebos": 44
     },
     "bonos": {
-     "pais_años": 112,
-     "n_efectivo": 42.9,
-     "mde_pp": 5.4,
-     "mde_en_sd": 0.55
+     "pais_años": 172,
+     "n_efectivo": 48.1,
+     "mde_pp": 5.3,
+     "mde_en_sd": 0.53,
+     "mde_pp_cv": 6.0,
+     "mde_pp_placebo": 4.1,
+     "placebos": 44
     },
     "letras": {
-     "pais_años": 112,
-     "n_efectivo": 13.7,
-     "mde_pp": 3.6,
-     "mde_en_sd": 0.98
+     "pais_años": 172,
+     "n_efectivo": 15.2,
+     "mde_pp": 3.5,
+     "mde_en_sd": 0.95,
+     "mde_pp_cv": 4.1,
+     "mde_pp_placebo": 1.8,
+     "placebos": 44
     },
     "vivienda": {
-     "pais_años": 109,
-     "n_efectivo": 39.0,
-     "mde_pp": 4.6,
-     "mde_en_sd": 0.52
+     "pais_años": 163,
+     "n_efectivo": 52.1,
+     "mde_pp": 4.2,
+     "mde_en_sd": 0.47,
+     "mde_pp_cv": 4.5,
+     "mde_pp_placebo": 3.0,
+     "placebos": 44
     }
    },
    "estanflacion": {
     "bolsa": {
-     "pais_años": 178,
-     "n_efectivo": 61.4,
-     "mde_pp": 11.8,
-     "mde_en_sd": 0.47
+     "pais_años": 118,
+     "n_efectivo": 50.4,
+     "mde_pp": 12.5,
+     "mde_en_sd": 0.49,
+     "mde_pp_cv": 13.8,
+     "mde_pp_placebo": 9.8,
+     "placebos": 44
     },
     "bonos": {
-     "pais_años": 178,
-     "n_efectivo": 49.4,
-     "mde_pp": 5.2,
-     "mde_en_sd": 0.53
+     "pais_años": 118,
+     "n_efectivo": 41.9,
+     "mde_pp": 5.5,
+     "mde_en_sd": 0.55,
+     "mde_pp_cv": 6.1,
+     "mde_pp_placebo": 4.2,
+     "placebos": 44
     },
     "letras": {
-     "pais_años": 178,
-     "n_efectivo": 15.6,
-     "mde_pp": 3.5,
-     "mde_en_sd": 0.94
+     "pais_años": 118,
+     "n_efectivo": 13.3,
+     "mde_pp": 3.7,
+     "mde_en_sd": 0.98,
+     "mde_pp_cv": 4.1,
+     "mde_pp_placebo": 1.8,
+     "placebos": 44
     },
     "vivienda": {
-     "pais_años": 170,
-     "n_efectivo": 54.0,
-     "mde_pp": 4.1,
-     "mde_en_sd": 0.47
+     "pais_años": 116,
+     "n_efectivo": 40.3,
+     "mde_pp": 4.5,
+     "mde_en_sd": 0.52,
+     "mde_pp_cv": 4.8,
+     "mde_pp_placebo": 2.5,
+     "placebos": 44
     }
    },
    "crecimiento_bajo": {
     "bolsa": {
-     "pais_años": 141,
-     "n_efectivo": 58.1,
-     "mde_pp": 12.0,
-     "mde_en_sd": 0.47
+     "pais_años": 207,
+     "n_efectivo": 68.4,
+     "mde_pp": 11.5,
+     "mde_en_sd": 0.45,
+     "mde_pp_cv": 12.6,
+     "mde_pp_placebo": 8.7,
+     "placebos": 44
     },
     "bonos": {
-     "pais_años": 141,
-     "n_efectivo": 48.0,
-     "mde_pp": 5.3,
-     "mde_en_sd": 0.53
+     "pais_años": 207,
+     "n_efectivo": 54.7,
+     "mde_pp": 5.1,
+     "mde_en_sd": 0.51,
+     "mde_pp_cv": 5.6,
+     "mde_pp_placebo": 3.0,
+     "placebos": 44
     },
     "letras": {
-     "pais_años": 141,
-     "n_efectivo": 15.2,
-     "mde_pp": 3.5,
-     "mde_en_sd": 0.95
+     "pais_años": 207,
+     "n_efectivo": 17.2,
+     "mde_pp": 3.4,
+     "mde_en_sd": 0.92,
+     "mde_pp_cv": 3.8,
+     "mde_pp_placebo": 1.9,
+     "placebos": 44
     },
     "vivienda": {
-     "pais_años": 129,
-     "n_efectivo": 45.0,
-     "mde_pp": 4.4,
-     "mde_en_sd": 0.5
+     "pais_años": 199,
+     "n_efectivo": 61.7,
+     "mde_pp": 4.0,
+     "mde_en_sd": 0.45,
+     "mde_pp_cv": 4.2,
+     "mde_pp_placebo": 2.0,
+     "placebos": 44
     }
    },
    "recesion": {
@@ -326,25 +439,37 @@
      "pais_años": 75,
      "n_efectivo": 34.4,
      "mde_pp": 14.3,
-     "mde_en_sd": 0.56
+     "mde_en_sd": 0.56,
+     "mde_pp_cv": 16.7,
+     "mde_pp_placebo": 12.8,
+     "placebos": 44
     },
     "bonos": {
      "pais_años": 75,
      "n_efectivo": 28.9,
      "mde_pp": 6.2,
-     "mde_en_sd": 0.62
+     "mde_en_sd": 0.62,
+     "mde_pp_cv": 7.4,
+     "mde_pp_placebo": 5.9,
+     "placebos": 44
     },
     "letras": {
      "pais_años": 75,
      "n_efectivo": 9.2,
      "mde_pp": 4.1,
-     "mde_en_sd": 1.11
+     "mde_en_sd": 1.11,
+     "mde_pp_cv": 5.0,
+     "mde_pp_placebo": 2.1,
+     "placebos": 44
     },
     "vivienda": {
      "pais_años": 74,
      "n_efectivo": 26.5,
      "mde_pp": 5.3,
-     "mde_en_sd": 0.6
+     "mde_en_sd": 0.6,
+     "mde_pp_cv": 5.7,
+     "mde_pp_placebo": 3.2,
+     "placebos": 44
     }
    }
   }
