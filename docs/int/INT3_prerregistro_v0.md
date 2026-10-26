@@ -1,7 +1,7 @@
 ---
 documento: P-DEV-INT3 — prerregistro interno del mapa régimen → activos (panel internacional anual)
-version: 0.1-borrador (2026-10-27)
-estado: BORRADOR para el usuario. Nada corrido. Ninguna rentabilidad mirada por régimen.
+version: 0.1 APROBADA por el usuario (2026-10-27, "vale")
+estado: APROBADA y congelada antes de calcular nada. PyMC no está instalado: el modelo jerárquico se hace con el encogimiento empírico de Bayes previsto en §3 (DerSimonian-Laird).
 depende_de: INT-1 (etiquetas anuales, G = nivel frente a tendencia) e INT-2 v0.2 (potencia)
 ---
 
