@@ -1,5 +1,5 @@
 ---
-documento: revisión independiente de la puerta de gasto y la preparación del registro de P-EVAL-BASE
+documento: revisión (NO independiente: ver nota) de la puerta de gasto y la preparación del registro de P-EVAL-BASE
 fecha: 2026-10-26
 autor: Validador (rama claude/puerta-gasto-review)
 objeto: origin/claude/puerta-gasto, commits f95c6aa (puerta de gasto) y be8bc74 (preparación del registro)
@@ -9,6 +9,11 @@ restricciones: sin datos ni etiqueta reales; arnés no ejecutado (ni con --offic
 ---
 
 # Revisión de la puerta de gasto (claude/puerta-gasto)
+
+> **Nota sobre la independencia.** Esta revisión la hizo la misma sesión que escribió la puerta de gasto
+> (f95c6aa) y la preparación del registro (be8bc74). Por tanto **no es una revisión independiente**: comparte con
+> el código revisado los supuestos y las lecturas de la spec. La verificación complementaria la hizo el usuario en
+> local: el diff propuesto aplicado y 12/12 tests en verde con datos reales.
 
 ## Veredicto: ⚠️ usable tras corregir
 
