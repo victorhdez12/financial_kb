@@ -1,0 +1,352 @@
+{
+ "nucleo": [
+  "BEL",
+  "DEU",
+  "DNK",
+  "ESP",
+  "FIN",
+  "FRA",
+  "GBR",
+  "ITA",
+  "JPN",
+  "NLD",
+  "NOR",
+  "PRT",
+  "SWE",
+  "USA"
+ ],
+ "1870_2004": {
+  "estadisticos_incondicionales": {
+   "bolsa": {
+    "sd": 0.232,
+    "rho_paises": 0.308,
+    "ar1": 0.12,
+    "n": 1763
+   },
+   "bonos": {
+    "sd": 0.126,
+    "rho_paises": 0.411,
+    "ar1": 0.35,
+    "n": 1821
+   },
+   "letras": {
+    "sd": 0.089,
+    "rho_paises": 0.42,
+    "ar1": 0.627,
+    "n": 1818
+   },
+   "vivienda": {
+    "sd": 0.107,
+    "rho_paises": 0.083,
+    "ar1": 0.224,
+    "n": 1446
+   }
+  },
+  "pais_años": {
+   "expansion": 661,
+   "sobrecalentamiento": 283,
+   "estanflacion": 314,
+   "crecimiento_bajo": 478,
+   "recesion": 406
+  },
+  "mde": {
+   "expansion": {
+    "bolsa": {
+     "pais_años": 633,
+     "n_efectivo": 210.9,
+     "mde_pp": 6.1,
+     "mde_en_sd": 0.26
+    },
+    "bonos": {
+     "pais_años": 649,
+     "n_efectivo": 109.0,
+     "mde_pp": 4.6,
+     "mde_en_sd": 0.37
+    },
+    "letras": {
+     "pais_años": 659,
+     "n_efectivo": 51.2,
+     "mde_pp": 4.8,
+     "mde_en_sd": 0.54
+    },
+    "vivienda": {
+     "pais_años": 538,
+     "n_efectivo": 259.4,
+     "mde_pp": 2.5,
+     "mde_en_sd": 0.23
+    }
+   },
+   "sobrecalentamiento": {
+    "bolsa": {
+     "pais_años": 269,
+     "n_efectivo": 133.5,
+     "mde_pp": 6.9,
+     "mde_en_sd": 0.3
+    },
+    "bonos": {
+     "pais_años": 271,
+     "n_efectivo": 73.1,
+     "mde_pp": 5.2,
+     "mde_en_sd": 0.41
+    },
+    "letras": {
+     "pais_años": 269,
+     "n_efectivo": 35.1,
+     "mde_pp": 5.3,
+     "mde_en_sd": 0.59
+    },
+    "vivienda": {
+     "pais_años": 214,
+     "n_efectivo": 121.3,
+     "mde_pp": 3.1,
+     "mde_en_sd": 0.29
+    }
+   },
+   "estanflacion": {
+    "bolsa": {
+     "pais_años": 306,
+     "n_efectivo": 139.2,
+     "mde_pp": 6.8,
+     "mde_en_sd": 0.29
+    },
+    "bonos": {
+     "pais_años": 305,
+     "n_efectivo": 74.7,
+     "mde_pp": 5.1,
+     "mde_en_sd": 0.41
+    },
+    "letras": {
+     "pais_años": 302,
+     "n_efectivo": 35.1,
+     "mde_pp": 5.3,
+     "mde_en_sd": 0.59
+    },
+    "vivienda": {
+     "pais_años": 260,
+     "n_efectivo": 139.3,
+     "mde_pp": 2.9,
+     "mde_en_sd": 0.27
+    }
+   },
+   "crecimiento_bajo": {
+    "bolsa": {
+     "pais_años": 443,
+     "n_efectivo": 183.3,
+     "mde_pp": 6.3,
+     "mde_en_sd": 0.27
+    },
+    "bonos": {
+     "pais_años": 466,
+     "n_efectivo": 98.3,
+     "mde_pp": 4.7,
+     "mde_en_sd": 0.38
+    },
+    "letras": {
+     "pais_años": 466,
+     "n_efectivo": 45.9,
+     "mde_pp": 4.9,
+     "mde_en_sd": 0.55
+    },
+    "vivienda": {
+     "pais_años": 344,
+     "n_efectivo": 182.7,
+     "mde_pp": 2.7,
+     "mde_en_sd": 0.25
+    }
+   },
+   "recesion": {
+    "bolsa": {
+     "pais_años": 374,
+     "n_efectivo": 157.4,
+     "mde_pp": 6.6,
+     "mde_en_sd": 0.28
+    },
+    "bonos": {
+     "pais_años": 385,
+     "n_efectivo": 84.2,
+     "mde_pp": 4.9,
+     "mde_en_sd": 0.39
+    },
+    "letras": {
+     "pais_años": 385,
+     "n_efectivo": 39.6,
+     "mde_pp": 5.1,
+     "mde_en_sd": 0.57
+    },
+    "vivienda": {
+     "pais_años": 279,
+     "n_efectivo": 151.4,
+     "mde_pp": 2.8,
+     "mde_en_sd": 0.27
+    }
+   }
+  }
+ },
+ "1950_2004": {
+  "estadisticos_incondicionales": {
+   "bolsa": {
+    "sd": 0.254,
+    "rho_paises": 0.375,
+    "ar1": 0.134,
+    "n": 770
+   },
+   "bonos": {
+    "sd": 0.099,
+    "rho_paises": 0.509,
+    "ar1": 0.153,
+    "n": 770
+   },
+   "letras": {
+    "sd": 0.037,
+    "rho_paises": 0.542,
+    "ar1": 0.612,
+    "n": 770
+   },
+   "vivienda": {
+    "sd": 0.088,
+    "rho_paises": 0.116,
+    "ar1": 0.399,
+    "n": 736
+   }
+  },
+  "pais_años": {
+   "expansion": 269,
+   "sobrecalentamiento": 112,
+   "estanflacion": 178,
+   "crecimiento_bajo": 141,
+   "recesion": 75
+  },
+  "mde": {
+   "expansion": {
+    "bolsa": {
+     "pais_años": 269,
+     "n_efectivo": 69.2,
+     "mde_pp": 11.5,
+     "mde_en_sd": 0.45
+    },
+    "bonos": {
+     "pais_años": 269,
+     "n_efectivo": 53.8,
+     "mde_pp": 5.1,
+     "mde_en_sd": 0.52
+    },
+    "letras": {
+     "pais_años": 269,
+     "n_efectivo": 16.9,
+     "mde_pp": 3.4,
+     "mde_en_sd": 0.92
+    },
+    "vivienda": {
+     "pais_años": 258,
+     "n_efectivo": 70.2,
+     "mde_pp": 3.9,
+     "mde_en_sd": 0.44
+    }
+   },
+   "sobrecalentamiento": {
+    "bolsa": {
+     "pais_años": 112,
+     "n_efectivo": 51.1,
+     "mde_pp": 12.5,
+     "mde_en_sd": 0.49
+    },
+    "bonos": {
+     "pais_años": 112,
+     "n_efectivo": 42.9,
+     "mde_pp": 5.4,
+     "mde_en_sd": 0.55
+    },
+    "letras": {
+     "pais_años": 112,
+     "n_efectivo": 13.7,
+     "mde_pp": 3.6,
+     "mde_en_sd": 0.98
+    },
+    "vivienda": {
+     "pais_años": 109,
+     "n_efectivo": 39.0,
+     "mde_pp": 4.6,
+     "mde_en_sd": 0.52
+    }
+   },
+   "estanflacion": {
+    "bolsa": {
+     "pais_años": 178,
+     "n_efectivo": 61.4,
+     "mde_pp": 11.8,
+     "mde_en_sd": 0.47
+    },
+    "bonos": {
+     "pais_años": 178,
+     "n_efectivo": 49.4,
+     "mde_pp": 5.2,
+     "mde_en_sd": 0.53
+    },
+    "letras": {
+     "pais_años": 178,
+     "n_efectivo": 15.6,
+     "mde_pp": 3.5,
+     "mde_en_sd": 0.94
+    },
+    "vivienda": {
+     "pais_años": 170,
+     "n_efectivo": 54.0,
+     "mde_pp": 4.1,
+     "mde_en_sd": 0.47
+    }
+   },
+   "crecimiento_bajo": {
+    "bolsa": {
+     "pais_años": 141,
+     "n_efectivo": 58.1,
+     "mde_pp": 12.0,
+     "mde_en_sd": 0.47
+    },
+    "bonos": {
+     "pais_años": 141,
+     "n_efectivo": 48.0,
+     "mde_pp": 5.3,
+     "mde_en_sd": 0.53
+    },
+    "letras": {
+     "pais_años": 141,
+     "n_efectivo": 15.2,
+     "mde_pp": 3.5,
+     "mde_en_sd": 0.95
+    },
+    "vivienda": {
+     "pais_años": 129,
+     "n_efectivo": 45.0,
+     "mde_pp": 4.4,
+     "mde_en_sd": 0.5
+    }
+   },
+   "recesion": {
+    "bolsa": {
+     "pais_años": 75,
+     "n_efectivo": 34.4,
+     "mde_pp": 14.3,
+     "mde_en_sd": 0.56
+    },
+    "bonos": {
+     "pais_años": 75,
+     "n_efectivo": 28.9,
+     "mde_pp": 6.2,
+     "mde_en_sd": 0.62
+    },
+    "letras": {
+     "pais_años": 75,
+     "n_efectivo": 9.2,
+     "mde_pp": 4.1,
+     "mde_en_sd": 1.11
+    },
+    "vivienda": {
+     "pais_años": 74,
+     "n_efectivo": 26.5,
+     "mde_pp": 5.3,
+     "mde_en_sd": 0.6
+    }
+   }
+  }
+ }
+}

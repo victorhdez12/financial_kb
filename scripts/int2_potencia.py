@@ -42,7 +42,7 @@ def main() -> None:
     res = {"nucleo": NUCLEO}
     for nom, desde in (("1870_2004", 1870), ("1950_2004", 1950)):
         e = et[et.año >= desde]
-        estados = {q: set(zip(e.pais, e.año))
+        estados = {q: set(zip(e[e.cuadrante == q].pais, e[e.cuadrante == q].año))
                    for q in ("expansion", "sobrecalentamiento", "estanflacion", "crecimiento_bajo")}
         todos = set(zip(e.pais, e.año))
         estados["recesion"] = {k for k in en_rec if k in todos}
