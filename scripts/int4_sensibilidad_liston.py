@@ -9,7 +9,9 @@ intercepto) que al modelo, e infla ΔAUC. Dos comprobaciones:
   (b) listón B1 ajustado DENTRO de muestra (sin dejar fuera; 1-2 parámetros), frente al modelo dejando un país fuera:
       favorece al listón (conservador).
 Inferencia: bootstrap por bloques de año (2.000 réplicas, semilla 0), como la corrida.
-Uso: .venv/bin/python -m scripts.int4_sensibilidad_liston [--prueba]
+Ampliación del Validador (--validador, también a posteriori; escribe int4_sensibilidad_liston_validador.json): placebo
+con AUC estratificada y z calibrada, y Δlog-loss / ΔBrier frente al listón dentro de muestra.
+Uso: .venv/bin/python -m scripts.int4_sensibilidad_liston [--prueba] [--validador]
 """
 from __future__ import annotations
 
@@ -27,6 +29,8 @@ from src.intl import panel as P
 from src.intl.procedencia import procedencia
 from src.warehouse import db
 
+VALIDADOR = "--validador" in sys.argv     # ampliación del Validador (a posteriori): placebo estratificado, z y log-loss
+
 
 def auc_estrat(y, p, g) -> float:
     num = den = 0.0
@@ -40,6 +44,29 @@ def auc_estrat(y, p, g) -> float:
         num += r[yy].sum() - n1 * (n1 + 1) / 2
         den += n1 * n0
     return num / den if den else np.nan
+
+
+def placebo_estrat(f, B1, pan, cols, d_obs_agr: float, d_obs_est: float) -> dict:
+    """Validador (a posteriori): el mismo placebo de la corrida (candidatos desplazados k = 6 … 129, misma k en todos
+    los países, dejar un país fuera) midiendo ΔAUC agrupada Y estratificada por país. Da p por rangos y z = (obs − media)
+    / dt de los placebos (sin el suelo de 1/125)."""
+    y_all = f.y.to_numpy(float)
+    da, de = [], []
+    for k in M.KS:
+        Xk = M.matriz(f, pan, cols, k)
+        ok = np.isfinite(B1).all(axis=1) & np.isfinite(Xk).all(axis=1)
+        y, g = y_all[ok], f.pais.to_numpy()[ok]
+        if y.sum() < 10 or (1 - y).sum() < 10:
+            continue
+        p1, p0 = M.loco(np.column_stack([B1[ok], Xk[ok]]), y, g), M.loco(B1[ok], y, g)
+        da.append(M.auc(y, p1) - M.auc(y, p0))
+        de.append(auc_estrat(y, p1, g) - auc_estrat(y, p0, g))
+    out = {}
+    for nom, d, obs in (("agrupada", np.array(da), d_obs_agr), ("estratificada", np.array(de), d_obs_est)):
+        mu, sd = float(d.mean()), float(d.std(ddof=1))
+        out[nom] = {"desplazamientos": int(len(d)), "media": mu, "dt": sd, "z": (obs - mu) / sd if sd > 0 else None,
+                    "p_rangos": float((1 + (d >= obs).sum()) / (1 + len(d)))}
+    return out
 
 
 def boot(y, p1, p0, t, g, f_auc, B=2000, semilla=0) -> dict:
@@ -101,11 +128,18 @@ def main() -> None:
             "corr_tasa_pais_vs_pred_media_liston_loco": float(np.corrcoef(
                 tasa.to_numpy(), pd.Series(p0).groupby(g).mean().reindex(tasa.index).to_numpy())[0, 1])}
         r = res["giros"][giro]
+        if VALIDADOR:
+            # criterio (iii) frente al listón dentro de muestra (el sesgo del intercepto también castiga su log-loss)
+            r["validador_dlogloss_vs_liston_dentro"] = M.logloss(y, p1) - M.logloss(y, p0_in)
+            r["validador_dbrier_vs_liston_dentro"] = M.brier(y, p1) - M.brier(y, p0_in)
+            r["validador_placebo"] = placebo_estrat(f, B1, pan, cols, r["agrupada_loco_reproduce_corrida"]["d_auc"],
+                                                    r["a_estratificada_loco"]["d_auc"])
         print(giro, {k: (round(v["auc_liston"], 3), round(v["auc_modelo"], 3), round(v["d_auc"], 3),
                          [round(x, 3) for x in v["ic95"]], round(v["p_bloques"], 3))
                      for k, v in r.items() if isinstance(v, dict)}, "corr", round(r["corr_tasa_pais_vs_pred_media_liston_loco"], 2))
     if "--prueba" not in sys.argv:
-        (REPO / "research" / "int" / "int4_sensibilidad_liston.json").write_text(json.dumps(res, indent=1, ensure_ascii=False))
+        nombre = "int4_sensibilidad_liston_validador.json" if VALIDADOR else "int4_sensibilidad_liston.json"
+        (REPO / "research" / "int" / nombre).write_text(json.dumps(res, indent=1, ensure_ascii=False))
 
 
 if __name__ == "__main__":
