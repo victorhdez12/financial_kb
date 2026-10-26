@@ -15,7 +15,8 @@ REPO = Path(__file__).resolve().parents[1]
 # una serie por familia (las que necesita la fase)
 MUESTRA = ["ff_mkt_rf_m", "ff_mom_m", "ff5_rmw_m", "aqr_qmj_usa_m", "aqr_bab_usa_m", "gsw_sveny10", "GS10",
            "TB3MS", "bis_xru_de_eur_m", "DEXUSEU", "ecb_eurusd_d",
-           "gold_wb_usd_m", "bundesbank_bund_zero_5y_m", "oecd_ir3m_deu"]
+           "gold_wb_usd_m", "bundesbank_bund_zero_5y_m", "oecd_ir3m_deu",
+           "bundesbank_usd_dem_d"]
 
 
 @pytest.fixture
@@ -62,7 +63,8 @@ def test_series_reales_terminan_antes_de_2005():
             assert len(s), sid
             assert s.index.max() <= F.DEV_END, sid
             # y la serie completa sí tiene datos posteriores: el corte está actuando
-            assert db.series(con, sid).index.max() > F.DEV_END, sid
+            if sid != "bundesbank_usd_dem_d":                    # termina en 1998 (llega el euro)
+                assert db.series(con, sid).index.max() > F.DEV_END, sid
     finally:
         con.close()
 

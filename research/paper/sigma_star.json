@@ -1,0 +1,27 @@
+{
+ "sigma_star_antiguo": 0.1548,
+ "sigma_star_nuevo": 0.1702,
+ "medida": "RV EE. UU. (French, cierre de mes) en EUR con DEM/USD Frankfurt ≤ 1998 y BCE ≥ 1999, cierre de mes",
+ "recortes": {
+  "antiguo_1963-07": {
+   "pct_meses_recortado": 0.624,
+   "rv_media_recortado": 0.586,
+   "cambios_al_año": 1.76
+  },
+  "antiguo_1975-01": {
+   "pct_meses_recortado": 0.711,
+   "rv_media_recortado": 0.579,
+   "cambios_al_año": 2.0
+  },
+  "nuevo_1963-07": {
+   "pct_meses_recortado": 0.57,
+   "rv_media_recortado": 0.603,
+   "cambios_al_año": 1.83
+  },
+  "nuevo_1975-01": {
+   "pct_meses_recortado": 0.714,
+   "rv_media_recortado": 0.604,
+   "cambios_al_año": 2.2
+  }
+ }
+}

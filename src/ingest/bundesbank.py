@@ -58,6 +58,9 @@ for m in ["01", "02", "05", "10", "30"]:
                   "Bundesbank daily term-structure estimate from listed Federal securities (benchmark DE sovereign, daily since 1972)."))
 DAILY.append(("bundesbank_umlaufsrendite_d", "BBSIS", "D.I.UMR.RD.EUR.A.B.A.A.R.A.A._Z._Z.A", "Yield on debt securities outstanding (Umlaufsrendite), total, daily",
               "rates", "% p.a.", False, "Daily, all domestic bearer bonds."))
+DAILY.append(("bundesbank_usd_dem_d", "BBEX3", "D.USD.DEM.AA.AC.000", "Frankfurt exchange fixing, DEM per USD, daily",
+              "fx", "DEM per USD", True, "Daily official fixing 1948-1998 (ends with the euro). Month-end FX for the "
+              "paper-trading sigma* (docs/factors/paper_trading.md)."))
 
 
 def fetch(flow: str, key: str) -> tuple[pd.Series, str]:

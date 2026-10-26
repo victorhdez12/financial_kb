@@ -31,6 +31,7 @@ FAMILIAS: dict[str, str] = {
     r"GS(1|2|5|10|30)|TB3MS": "Rendimientos del Tesoro de FRED, mensual",
     r"bis_xru_(de|xm)_eur_m": "BIS: marco alemán (EUR equivalente) y euro por USD, mensual",
     r"DEXUSEU|ecb_eurusd_d": "EUR/USD diario (1999-01 →)",
+    r"bundesbank_usd_dem_d": "Fixing de Frankfurt, DEM por USD, diario (1948-1998): divisa a cierre de mes antes del euro",
     # oro: media mensual del precio de Londres (LBMA) según el Pink Sheet del Banco Mundial, CC BY 4.0, 1960-01 →.
     # Es MEDIA del mes, no cierre: suaviza la volatilidad y mete autocorrelación (declarado en el plan).
     # En EUR se convierte con bis_xru_(de|xm)_eur_m (también media mensual); precio libre solo desde 1971 → usar ≥ 1975.
