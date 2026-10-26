@@ -31,6 +31,9 @@ FAMILIAS: dict[str, str] = {
     r"gold_mw_newyork_usd_a|gold_wb_usd_m": "Oro en USD: MeasuringWorth (media anual) y Banco Mundial (media mensual)",
     r"boe_uk_(corp_bond_yield_a|consol_yield_a|oil_price_usd_a|cpi_a)": "BoE A Millennium of Macroeconomic Data (UK), anual",
     r"BAA|AAA|GS10": "FRED: Moody's Baa/Aaa y Tesoro 10 años, mensual",
+    # Termómetro de recesión informativo (docs/int/TERMOMETRO_diseno_v1.md)
+    r"oecd_gdpq_[a-z]{3}": "OCDE Quarterly National Accounts, PIB real en volumen, trimestral (CC BY 4.0; curado, ver load_dev_curado)",
+    r"bis_creditgap_[a-z]{2}_ratio": "BIS crédito total al sector privado no financiero / PIB, trimestral",
 }
 _RX = [re.compile(f"^(?:{p})$") for p in FAMILIAS]
 
@@ -59,7 +62,8 @@ def load_dev_curado(sid: str) -> pd.Series:
     familias permitidas."""
     if not permitida(sid):
         raise FactorCutoffError(f"{sid}: no está en las familias del panel internacional (src/intl/data.py)")
-    fuente = "aqr_clr" if sid.startswith("aqr_clr_") else None
+    fuente = {"aqr_clr_": "aqr_clr", "oecd_gdpq_": "oecd_qna"}.get(next((k for k in ("aqr_clr_", "oecd_gdpq_")
+                                                                       if sid.startswith(k)), ""))
     if fuente is None:
         raise FactorCutoffError(f"{sid}: sin carpeta curada conocida; usa load_dev")
     df = pd.read_parquet(db.DATA_ROOT / "curated" / fuente / f"{sid}.parquet")

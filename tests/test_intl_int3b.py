@@ -10,9 +10,10 @@ from src.intl import data as D
 
 
 def test_familias_nuevas_y_ajenas():
-    for sid in ("aqr_clr_ew_xret_m", "damodaran_baa_corp_tr", "boe_uk_corp_bond_yield_a", "gold_wb_usd_m", "BAA"):
+    for sid in ("aqr_clr_ew_xret_m", "damodaran_baa_corp_tr", "boe_uk_corp_bond_yield_a", "gold_wb_usd_m", "BAA",
+                "oecd_gdpq_deu", "bis_creditgap_de_ratio"):
         assert D.permitida(sid), sid
-    for sid in ("CPIAUCSL", "aqr_clr_x", "damodaran_sp500_tr", "VIXCLS"):
+    for sid in ("CPIAUCSL", "aqr_clr_x", "damodaran_sp500_tr", "VIXCLS", "bis_creditgap_de_gap", "oecd_gdpq_ea20x"):
         assert not D.permitida(sid), sid
 
 

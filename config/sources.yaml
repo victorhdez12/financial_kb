@@ -1,6 +1,18 @@
 # Source registry. Add a new source here before ingesting it.
 # Keep provenance and license/usage notes explicit.
 sources:
+  - id: oecd_qna
+    name: OECD Quarterly National Accounts (DF_QNA 1.1), real GDP chain-linked volume, SA
+    type: macro_quarterly
+    url: https://sdmx.oecd.org/public/rest/data/OECD.SDD.NAD,DSD_NAMAIN1@DF_QNA,1.1/
+    coverage: "18 JST countries; 1947-Q1 (USA), 1955 (GBR), 1960-61 others to latest; latest release, no vintages; CC BY 4.0"
+    format: sdmx_csv
+  - id: aqr_clr
+    name: AQR Commodities for the Long Run, Index Level Data, Monthly (Levine-Ooi-Richardson-Sasseville 2018)
+    type: commodity_returns
+    url: https://www.aqr.com/Insights/Datasets/Commodities-for-the-Long-Run-Index-Level-Data-Monthly
+    coverage: "Equal-weight and long/short commodity futures, 1877-02 to latest; excess = spot + carry; no redistribution"
+    format: xlsx
   - id: boe_millennium_uk
     name: A millennium of macroeconomic data for the UK
     type: historical_macro
