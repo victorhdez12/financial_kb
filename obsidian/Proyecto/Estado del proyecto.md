@@ -6,6 +6,13 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 # Estado del proyecto
 
+## Estado honesto (26-oct-2026)
+1. **El nowcast no mejora a la persistencia:** en EE. UU. (Fase 3) ningún modelo bate a M0, y el fechado mensual de recesiones no pasó su puerta.
+2. **El forecast de recesiones a un año sí funciona, moderado** (INT-4): la entrada es sólida (AUC ≈ 0,73, curva + difusión + bolsa) y la salida es más justa (≈ +0,19 de AUC, sobre todo por la bolsa).
+3. **La inflación no se anticipa** (T3/T4 no establecidos).
+4. **Lo útil ahora:** el atlas ([[Proyecto/Atlas regímenes]], `docs/int/ATLAS_regimenes.md`: qué activos y cuándo) y el termómetro de recesión como herramienta informativa.
+
+
 > [!info] Para retomar en una sesión nueva
 > Lee esta nota, después [[Proyecto/Agentes]] (roles e instrucciones completas) y [[Proyecto/Bitácora]] (qué se hizo y cuándo).
 > Código: `~/Proyectos/financial_kb` (movido del Escritorio el 13-oct) · Datos: `~/financial_archive` (enlace `data/archive`) · Plan original: `docs/PLAN.md`.

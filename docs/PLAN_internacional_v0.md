@@ -7,6 +7,12 @@ depende_de: docs/PLAN.md § "Reconducción del proyecto (2026-10-26)"
 
 # Modelo macro internacional — plan v0.1 (borrador)
 
+## Estado honesto
+1. **El nowcast no mejora a la persistencia:** en EE. UU. (Fase 3) ningún modelo bate a M0, y el fechado mensual de recesiones no pasó su puerta.
+2. **El forecast de recesiones a un año sí funciona, moderado** (INT-4): la entrada es sólida (AUC ≈ 0,73, curva + difusión + bolsa) y la salida es más justa (≈ +0,19 de AUC, sobre todo por la bolsa).
+3. **La inflación no se anticipa** (T3/T4 no establecidos).
+4. **Lo útil ahora:** el atlas (`docs/int/ATLAS_regimenes.md`: qué activos y cuándo) y el termómetro de recesión como herramienta informativa.
+
 ## 0. Objetivo (palabras del usuario, 26-oct)
 1. Con los datos macro, **saber en qué régimen estamos** y **qué activos son más ventajosos en él**.
 2. Más adelante, **forecast**: qué macro viene y qué hacer.
