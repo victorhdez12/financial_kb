@@ -1,0 +1,916 @@
+{
+ "paises": {
+  "AUS": {
+   "anual_principal": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.396,
+     "crecimiento_bajo": 0.239,
+     "estanflacion": 0.201,
+     "sobrecalentamiento": 0.164
+    },
+    "frontera_pct": 0.216,
+    "rachas_media": 1.58
+   },
+   "anual_abs3": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.366,
+     "crecimiento_bajo": 0.231,
+     "estanflacion": 0.209,
+     "sobrecalentamiento": 0.194
+    },
+    "frontera_pct": 0.231,
+    "rachas_media": 1.61
+   },
+   "recesiones_anuales": {
+    "total": 24,
+    "financieras": 3,
+    "desde_1950": 6
+   }
+  },
+  "BEL": {
+   "anual_principal": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.366,
+     "crecimiento_bajo": 0.276,
+     "estanflacion": 0.201,
+     "sobrecalentamiento": 0.157
+    },
+    "frontera_pct": 0.201,
+    "rachas_media": 1.56
+   },
+   "anual_abs3": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.313,
+     "crecimiento_bajo": 0.284,
+     "sobrecalentamiento": 0.209,
+     "estanflacion": 0.194
+    },
+    "frontera_pct": 0.216,
+    "rachas_media": 1.61
+   },
+   "recesiones_anuales": {
+    "total": 18,
+    "financieras": 7,
+    "desde_1950": 6
+   },
+   "mensual": {
+    "meses": 588,
+    "desde": "1956-01-01",
+    "pct": {
+     "crecimiento_bajo": 0.277,
+     "expansion": 0.265,
+     "sobrecalentamiento": 0.236,
+     "estanflacion": 0.221
+    },
+    "frontera_pct": 0.196,
+    "rachas_media_meses": 9.8
+   },
+   "bry_boschan": {
+    "picos": 10,
+    "valles": 10
+   },
+   "vs_cepr": {
+    "externos": 3,
+    "detectados": 3,
+    "pct": 1.0,
+    "desfase_medio_meses": -0.7
+   }
+  },
+  "CAN": {
+   "anual_principal": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.381,
+     "crecimiento_bajo": 0.276,
+     "estanflacion": 0.187,
+     "sobrecalentamiento": 0.157
+    },
+    "frontera_pct": 0.224,
+    "rachas_media": 1.72
+   },
+   "anual_abs3": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.343,
+     "crecimiento_bajo": 0.291,
+     "sobrecalentamiento": 0.194,
+     "estanflacion": 0.172
+    },
+    "frontera_pct": 0.254,
+    "rachas_media": 1.97
+   },
+   "recesiones_anuales": {
+    "total": 19,
+    "financieras": 1,
+    "desde_1950": 4
+   },
+   "mensual": {
+    "meses": 528,
+    "desde": "1961-01-01",
+    "pct": {
+     "crecimiento_bajo": 0.314,
+     "sobrecalentamiento": 0.294,
+     "expansion": 0.269,
+     "estanflacion": 0.123
+    },
+    "frontera_pct": 0.288,
+    "rachas_media_meses": 10.0
+   },
+   "bry_boschan": {
+    "picos": 8,
+    "valles": 8
+   }
+  },
+  "CHE": {
+   "anual_principal": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.358,
+     "crecimiento_bajo": 0.299,
+     "estanflacion": 0.201,
+     "sobrecalentamiento": 0.142
+    },
+    "frontera_pct": 0.201,
+    "rachas_media": 1.61
+   },
+   "anual_abs3": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.336,
+     "crecimiento_bajo": 0.321,
+     "estanflacion": 0.179,
+     "sobrecalentamiento": 0.164
+    },
+    "frontera_pct": 0.216,
+    "rachas_media": 1.61
+   },
+   "recesiones_anuales": {
+    "total": 26,
+    "financieras": 4,
+    "desde_1950": 7
+   }
+  },
+  "DEU": {
+   "anual_principal": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.433,
+     "crecimiento_bajo": 0.224,
+     "sobrecalentamiento": 0.179,
+     "estanflacion": 0.164
+    },
+    "frontera_pct": 0.224,
+    "rachas_media": 1.74
+   },
+   "anual_abs3": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.41,
+     "crecimiento_bajo": 0.261,
+     "sobrecalentamiento": 0.201,
+     "estanflacion": 0.127
+    },
+    "frontera_pct": 0.194,
+    "rachas_media": 1.79
+   },
+   "recesiones_anuales": {
+    "total": 16,
+    "financieras": 3,
+    "desde_1950": 5
+   },
+   "mensual": {
+    "meses": 564,
+    "desde": "1958-01-01",
+    "pct": {
+     "crecimiento_bajo": 0.301,
+     "sobrecalentamiento": 0.28,
+     "expansion": 0.254,
+     "estanflacion": 0.165
+    },
+    "frontera_pct": 0.191,
+    "rachas_media_meses": 8.7
+   },
+   "bry_boschan": {
+    "picos": 10,
+    "valles": 9
+   },
+   "vs_cepr": {
+    "externos": 3,
+    "detectados": 1,
+    "pct": 0.333,
+    "desfase_medio_meses": -1.0
+   }
+  },
+  "DNK": {
+   "anual_principal": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.366,
+     "crecimiento_bajo": 0.246,
+     "estanflacion": 0.216,
+     "sobrecalentamiento": 0.172
+    },
+    "frontera_pct": 0.254,
+    "rachas_media": 1.41
+   },
+   "anual_abs3": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.313,
+     "crecimiento_bajo": 0.239,
+     "estanflacion": 0.224,
+     "sobrecalentamiento": 0.224
+    },
+    "frontera_pct": 0.239,
+    "rachas_media": 1.54
+   },
+   "recesiones_anuales": {
+    "total": 17,
+    "financieras": 5,
+    "desde_1950": 5
+   },
+   "mensual": {
+    "meses": 372,
+    "desde": "1974-01-01",
+    "pct": {
+     "expansion": 0.272,
+     "crecimiento_bajo": 0.253,
+     "estanflacion": 0.245,
+     "sobrecalentamiento": 0.231
+    },
+    "frontera_pct": 0.253,
+    "rachas_media_meses": 6.6
+   },
+   "bry_boschan": {
+    "picos": 6,
+    "valles": 6
+   }
+  },
+  "ESP": {
+   "anual_principal": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.306,
+     "crecimiento_bajo": 0.284,
+     "estanflacion": 0.209,
+     "sobrecalentamiento": 0.201
+    },
+    "frontera_pct": 0.254,
+    "rachas_media": 1.4
+   },
+   "anual_abs3": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "estanflacion": 0.291,
+     "expansion": 0.261,
+     "sobrecalentamiento": 0.246,
+     "crecimiento_bajo": 0.201
+    },
+    "frontera_pct": 0.201,
+    "rachas_media": 1.63
+   },
+   "recesiones_anuales": {
+    "total": 22,
+    "financieras": 8,
+    "desde_1950": 4
+   },
+   "mensual": {
+    "meses": 480,
+    "desde": "1965-01-01",
+    "pct": {
+     "sobrecalentamiento": 0.298,
+     "expansion": 0.271,
+     "crecimiento_bajo": 0.238,
+     "estanflacion": 0.194
+    },
+    "frontera_pct": 0.219,
+    "rachas_media_meses": 7.3
+   },
+   "bry_boschan": {
+    "picos": 5,
+    "valles": 4
+   },
+   "vs_cepr": {
+    "externos": 3,
+    "detectados": 2,
+    "pct": 0.667,
+    "desfase_medio_meses": -1.5
+   }
+  },
+  "FIN": {
+   "anual_principal": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.381,
+     "crecimiento_bajo": 0.246,
+     "estanflacion": 0.216,
+     "sobrecalentamiento": 0.157
+    },
+    "frontera_pct": 0.224,
+    "rachas_media": 1.72
+   },
+   "anual_abs3": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.351,
+     "estanflacion": 0.284,
+     "sobrecalentamiento": 0.187,
+     "crecimiento_bajo": 0.179
+    },
+    "frontera_pct": 0.172,
+    "rachas_media": 1.72
+   },
+   "recesiones_anuales": {
+    "total": 15,
+    "financieras": 5,
+    "desde_1950": 4
+   },
+   "mensual": {
+    "meses": 564,
+    "desde": "1958-01-01",
+    "pct": {
+     "expansion": 0.34,
+     "crecimiento_bajo": 0.271,
+     "sobrecalentamiento": 0.243,
+     "estanflacion": 0.145
+    },
+    "frontera_pct": 0.186,
+    "rachas_media_meses": 12.3
+   },
+   "bry_boschan": {
+    "picos": 7,
+    "valles": 7
+   }
+  },
+  "FRA": {
+   "anual_principal": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.381,
+     "crecimiento_bajo": 0.336,
+     "sobrecalentamiento": 0.157,
+     "estanflacion": 0.127
+    },
+    "frontera_pct": 0.201,
+    "rachas_media": 1.76
+   },
+   "anual_abs3": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.284,
+     "crecimiento_bajo": 0.254,
+     "sobrecalentamiento": 0.254,
+     "estanflacion": 0.209
+    },
+    "frontera_pct": 0.224,
+    "rachas_media": 1.84
+   },
+   "recesiones_anuales": {
+    "total": 20,
+    "financieras": 2,
+    "desde_1950": 2
+   },
+   "mensual": {
+    "meses": 588,
+    "desde": "1956-01-01",
+    "pct": {
+     "crecimiento_bajo": 0.323,
+     "expansion": 0.316,
+     "sobrecalentamiento": 0.235,
+     "estanflacion": 0.126
+    },
+    "frontera_pct": 0.194,
+    "rachas_media_meses": 10.0
+   },
+   "bry_boschan": {
+    "picos": 8,
+    "valles": 8
+   },
+   "vs_cepr": {
+    "externos": 3,
+    "detectados": 3,
+    "pct": 1.0,
+    "desfase_medio_meses": -3.0
+   }
+  },
+  "GBR": {
+   "anual_principal": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.425,
+     "crecimiento_bajo": 0.306,
+     "estanflacion": 0.149,
+     "sobrecalentamiento": 0.119
+    },
+    "frontera_pct": 0.157,
+    "rachas_media": 1.86
+   },
+   "anual_abs3": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.328,
+     "crecimiento_bajo": 0.269,
+     "sobrecalentamiento": 0.216,
+     "estanflacion": 0.187
+    },
+    "frontera_pct": 0.201,
+    "rachas_media": 1.89
+   },
+   "recesiones_anuales": {
+    "total": 18,
+    "financieras": 3,
+    "desde_1950": 5
+   },
+   "mensual": {
+    "meses": 588,
+    "desde": "1956-01-01",
+    "pct": {
+     "expansion": 0.355,
+     "crecimiento_bajo": 0.257,
+     "estanflacion": 0.196,
+     "sobrecalentamiento": 0.192
+    },
+    "frontera_pct": 0.196,
+    "rachas_media_meses": 9.3
+   },
+   "bry_boschan": {
+    "picos": 11,
+    "valles": 10
+   }
+  },
+  "IRL": {
+   "anual_principal": {
+    "años": 82,
+    "desde": 1923,
+    "pct": {
+     "expansion": 0.366,
+     "estanflacion": 0.256,
+     "crecimiento_bajo": 0.244,
+     "sobrecalentamiento": 0.134
+    },
+    "frontera_pct": 0.244,
+    "rachas_media": 1.71
+   },
+   "anual_abs3": {
+    "años": 82,
+    "desde": 1923,
+    "pct": {
+     "estanflacion": 0.317,
+     "expansion": 0.256,
+     "sobrecalentamiento": 0.244,
+     "crecimiento_bajo": 0.183
+    },
+    "frontera_pct": 0.22,
+    "rachas_media": 1.86
+   },
+   "recesiones_anuales": {
+    "total": 7,
+    "financieras": 0,
+    "desde_1950": 3
+   },
+   "mensual": {
+    "meses": 343,
+    "desde": "1975-08-01",
+    "pct": {
+     "crecimiento_bajo": 0.335,
+     "expansion": 0.236,
+     "sobrecalentamiento": 0.222,
+     "estanflacion": 0.207
+    },
+    "frontera_pct": 0.163,
+    "rachas_media_meses": 11.8
+   },
+   "bry_boschan": {
+    "picos": 3,
+    "valles": 2
+   }
+  },
+  "ITA": {
+   "anual_principal": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.373,
+     "crecimiento_bajo": 0.254,
+     "estanflacion": 0.239,
+     "sobrecalentamiento": 0.134
+    },
+    "frontera_pct": 0.261,
+    "rachas_media": 1.56
+   },
+   "anual_abs3": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.276,
+     "estanflacion": 0.254,
+     "crecimiento_bajo": 0.239,
+     "sobrecalentamiento": 0.231
+    },
+    "frontera_pct": 0.261,
+    "rachas_media": 1.76
+   },
+   "recesiones_anuales": {
+    "total": 15,
+    "financieras": 7,
+    "desde_1950": 3
+   },
+   "mensual": {
+    "meses": 588,
+    "desde": "1956-01-01",
+    "pct": {
+     "crecimiento_bajo": 0.287,
+     "sobrecalentamiento": 0.269,
+     "expansion": 0.257,
+     "estanflacion": 0.187
+    },
+    "frontera_pct": 0.241,
+    "rachas_media_meses": 11.5
+   },
+   "bry_boschan": {
+    "picos": 9,
+    "valles": 8
+   },
+   "vs_cepr": {
+    "externos": 3,
+    "detectados": 2,
+    "pct": 0.667,
+    "desfase_medio_meses": -3.5
+   }
+  },
+  "JPN": {
+   "anual_principal": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "crecimiento_bajo": 0.328,
+     "expansion": 0.321,
+     "sobrecalentamiento": 0.187,
+     "estanflacion": 0.164
+    },
+    "frontera_pct": 0.216,
+    "rachas_media": 1.68
+   },
+   "anual_abs3": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "sobrecalentamiento": 0.306,
+     "crecimiento_bajo": 0.291,
+     "estanflacion": 0.201,
+     "expansion": 0.201
+    },
+    "frontera_pct": 0.224,
+    "rachas_media": 1.63
+   },
+   "recesiones_anuales": {
+    "total": 23,
+    "financieras": 10,
+    "desde_1950": 3
+   },
+   "mensual": {
+    "meses": 588,
+    "desde": "1956-01-01",
+    "pct": {
+     "crecimiento_bajo": 0.361,
+     "expansion": 0.321,
+     "sobrecalentamiento": 0.223,
+     "estanflacion": 0.095
+    },
+    "frontera_pct": 0.201,
+    "rachas_media_meses": 6.7
+   },
+   "bry_boschan": {
+    "picos": 9,
+    "valles": 9
+   }
+  },
+  "NLD": {
+   "anual_principal": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.351,
+     "crecimiento_bajo": 0.276,
+     "estanflacion": 0.224,
+     "sobrecalentamiento": 0.149
+    },
+    "frontera_pct": 0.231,
+    "rachas_media": 1.58
+   },
+   "anual_abs3": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.321,
+     "crecimiento_bajo": 0.291,
+     "estanflacion": 0.209,
+     "sobrecalentamiento": 0.179
+    },
+    "frontera_pct": 0.216,
+    "rachas_media": 1.68
+   },
+   "recesiones_anuales": {
+    "total": 18,
+    "financieras": 0,
+    "desde_1950": 5
+   },
+   "mensual": {
+    "meses": 525,
+    "desde": "1961-04-01",
+    "pct": {
+     "sobrecalentamiento": 0.314,
+     "expansion": 0.28,
+     "crecimiento_bajo": 0.236,
+     "estanflacion": 0.17
+    },
+    "frontera_pct": 0.215,
+    "rachas_media_meses": 8.8
+   },
+   "bry_boschan": {
+    "picos": 8,
+    "valles": 8
+   },
+   "vs_cepr": {
+    "externos": 3,
+    "detectados": 2,
+    "pct": 0.667,
+    "desfase_medio_meses": -1.5
+   }
+  },
+  "NOR": {
+   "anual_principal": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.403,
+     "crecimiento_bajo": 0.254,
+     "estanflacion": 0.187,
+     "sobrecalentamiento": 0.157
+    },
+    "frontera_pct": 0.254,
+    "rachas_media": 1.47
+   },
+   "anual_abs3": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.299,
+     "crecimiento_bajo": 0.269,
+     "sobrecalentamiento": 0.261,
+     "estanflacion": 0.172
+    },
+    "frontera_pct": 0.201,
+    "rachas_media": 1.68
+   },
+   "recesiones_anuales": {
+    "total": 15,
+    "financieras": 5,
+    "desde_1950": 3
+   },
+   "mensual": {
+    "meses": 588,
+    "desde": "1956-01-01",
+    "pct": {
+     "expansion": 0.381,
+     "estanflacion": 0.231,
+     "sobrecalentamiento": 0.202,
+     "crecimiento_bajo": 0.185
+    },
+    "frontera_pct": 0.189,
+    "rachas_media_meses": 6.3
+   },
+   "bry_boschan": {
+    "picos": 6,
+    "valles": 5
+   }
+  },
+  "PRT": {
+   "anual_principal": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.351,
+     "crecimiento_bajo": 0.276,
+     "sobrecalentamiento": 0.224,
+     "estanflacion": 0.149
+    },
+    "frontera_pct": 0.254,
+    "rachas_media": 1.51
+   },
+   "anual_abs3": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "sobrecalentamiento": 0.321,
+     "crecimiento_bajo": 0.254,
+     "expansion": 0.254,
+     "estanflacion": 0.172
+    },
+    "frontera_pct": 0.306,
+    "rachas_media": 1.74
+   },
+   "recesiones_anuales": {
+    "total": 26,
+    "financieras": 5,
+    "desde_1950": 5
+   },
+   "mensual": {
+    "meses": 588,
+    "desde": "1956-01-01",
+    "pct": {
+     "crecimiento_bajo": 0.304,
+     "expansion": 0.255,
+     "sobrecalentamiento": 0.238,
+     "estanflacion": 0.202
+    },
+    "frontera_pct": 0.179,
+    "rachas_media_meses": 6.7
+   },
+   "bry_boschan": {
+    "picos": 7,
+    "valles": 6
+   }
+  },
+  "SWE": {
+   "anual_principal": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.381,
+     "crecimiento_bajo": 0.246,
+     "sobrecalentamiento": 0.194,
+     "estanflacion": 0.179
+    },
+    "frontera_pct": 0.239,
+    "rachas_media": 1.72
+   },
+   "anual_abs3": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.343,
+     "crecimiento_bajo": 0.246,
+     "sobrecalentamiento": 0.231,
+     "estanflacion": 0.179
+    },
+    "frontera_pct": 0.231,
+    "rachas_media": 1.79
+   },
+   "recesiones_anuales": {
+    "total": 18,
+    "financieras": 6,
+    "desde_1950": 4
+   },
+   "mensual": {
+    "meses": 552,
+    "desde": "1959-01-01",
+    "pct": {
+     "expansion": 0.397,
+     "sobrecalentamiento": 0.234,
+     "estanflacion": 0.194,
+     "crecimiento_bajo": 0.176
+    },
+    "frontera_pct": 0.15,
+    "rachas_media_meses": 7.6
+   },
+   "bry_boschan": {
+    "picos": 4,
+    "valles": 4
+   }
+  },
+  "USA": {
+   "anual_principal": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.388,
+     "crecimiento_bajo": 0.321,
+     "estanflacion": 0.149,
+     "sobrecalentamiento": 0.142
+    },
+    "frontera_pct": 0.194,
+    "rachas_media": 1.51
+   },
+   "anual_abs3": {
+    "años": 134,
+    "desde": 1871,
+    "pct": {
+     "expansion": 0.366,
+     "crecimiento_bajo": 0.328,
+     "sobrecalentamiento": 0.164,
+     "estanflacion": 0.142
+    },
+    "frontera_pct": 0.224,
+    "rachas_media": 1.61
+   },
+   "recesiones_anuales": {
+    "total": 26,
+    "financieras": 7,
+    "desde_1950": 7
+   },
+   "mensual": {
+    "meses": 588,
+    "desde": "1956-01-01",
+    "pct": {
+     "crecimiento_bajo": 0.333,
+     "sobrecalentamiento": 0.296,
+     "expansion": 0.255,
+     "estanflacion": 0.116
+    },
+    "frontera_pct": 0.236,
+    "rachas_media_meses": 12.0
+   },
+   "bry_boschan": {
+    "picos": 9,
+    "valles": 9
+   }
+  }
+ },
+ "nucleo": [
+  "BEL",
+  "DEU",
+  "DNK",
+  "ESP",
+  "FIN",
+  "FRA",
+  "GBR",
+  "ITA",
+  "JPN",
+  "NLD",
+  "NOR",
+  "PRT",
+  "SWE",
+  "USA"
+ ],
+ "prueba": [
+  "AUS",
+  "CAN",
+  "CHE",
+  "IRL"
+ ],
+ "puerta_usa_nber": {
+  "externos": 8,
+  "detectados": 6,
+  "pct": 0.75,
+  "desfase_medio_meses": -1.5,
+  "falsos_picos": 3,
+  "cumple_80": false
+ },
+ "euro_vs_cepr_media": 0.722,
+ "usa_anual_vs_nber_años": {
+  "nber": [
+   1957,
+   1960,
+   1969,
+   1973,
+   1980,
+   1981,
+   1990,
+   2001
+  ],
+  "jst_picos_desde_1955": [
+   1957,
+   1969,
+   1973,
+   1979,
+   1981,
+   1990
+  ]
+ },
+ "episodios_nucleo_anual": {
+  "rachas_por_cuadrante": {
+   "crecimiento_bajo": 348,
+   "expansion": 379,
+   "sobrecalentamiento": 227,
+   "estanflacion": 224
+  },
+  "recesiones": 267,
+  "recesiones_financieras": 73,
+  "años_distintos_con_pico": 95
+ }
+}
