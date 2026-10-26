@@ -1,7 +1,7 @@
 ---
 documento: P-DEV-INT4 — termómetro de riesgo ampliado (entradas y salidas de recesión; repunte y vuelta de la inflación): prerregistro
-version: 0.1-borrador (2026-10-26)
-estado: BORRADOR para el usuario. Nada corrido. Ningún indicador cruzado con ningún objetivo.
+version: 1.0 CONGELADA (2026-10-26T19:08Z)
+estado: APROBADO por el usuario el 2026-10-26 ("confío, dale": todas las recomendaciones). Congelado antes de escribir el código de la corrida; nada cruzado.
 diseño: docs/int/INT4_diseno_v0.md (las 7 recomendaciones de su §8, aceptadas por defecto por el usuario el 26-oct)
 potencia: research/int/int4_potencia.json (commit 6b75e45) y research/int/int4b_potencia.json (script bca4e7d, salida 813b6d8, árbol limpio)
 ---
@@ -155,3 +155,6 @@ Holm sobre 4 en la familia principal: z ≈ 3,30 (entre las columnas "un contras
 4. **Criterio (iv)** (signo positivo en 1950-2004): mantenerlo como obligatorio (recomendado, protege frente a un
    resultado solo del siglo XIX) o informativo.
 5. Aprobar → se congela como v1.0 con hora antes de escribir el código de la corrida.
+
+## Decisiones del usuario (2026-10-26, congelado v1.0)
+Todas las recomendadas: (1) familia principal de 4 (T1-T4) con Holm; (2) etiqueta de inflación principal (relativa + 2 %, la de INT-3), abs3 como sensibilidad; (3) T3/T4 con P1, P2, P3, P5; P4 materias primas solo informativo; (4) criterio (iv), signo positivo en 1950-2004, obligatorio.

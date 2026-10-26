@@ -1,7 +1,7 @@
 ---
 documento: P-DEV-INT3d — prerregistro interno del estudio de eventos de giros (recesiones y cambios de régimen) en el panel internacional anual
-version: 0.1-borrador (2026-10-26)
-estado: BORRADOR para el usuario. Nada cruzado: ninguna rentabilidad calculada alrededor de ningún evento real. Diseño y potencia (corrida, commit 3c588c1).
+version: 1.0 CONGELADA (2026-10-26T19:08Z)
+estado: APROBADO por el usuario el 2026-10-26 ("confío, dale": todas las recomendaciones). Congelado antes de escribir el código de la corrida; nada cruzado.
 plan: docs/PLAN_internacional_v0.md (pieza 2, ampliación INT-3d pedida por el usuario el 26-oct; Bitácora "Ampliación pedida por el usuario")
 depende_de: INT-1 (fechado anual de recesiones y etiqueta anual), INT-2 (método de potencia), INT-3 y su validación (docs/validation/2026-10-26_int3.md)
 fuente_potencia: scripts/int3d_potencia.py → research/int/int3d_potencia.json (procedencia en el JSON)
@@ -243,3 +243,6 @@ C4 está en el límite.
    (recomendado si la familia lo admite) o dejar E-I solo descriptivo hasta tener una etiqueta "as of" de un solo lado.
 4. **1950-2004:** solo informativo (recomendado: poca potencia) o criterio de signo como en INT-3.
 5. **Secundario de EE. UU.:** con los anuncios del NBER y la regla de 9 meses (recomendado) o solo una de las dos.
+
+## Decisiones del usuario (2026-10-26, congelado v1.0)
+(1) familia {C1, C3}; (2) todos los eventos en el principal, sin guerras como sensibilidad; (3) C5 descriptivo hasta tener una etiqueta de inflación "as of"; (4) 1950-2004 solo informativo; (5) EE. UU.: el usuario delegó → **anuncios del NBER como principal y regla de ≈ 9 meses como sensibilidad** (las dos se publican; secundario sin potencia).

@@ -1,7 +1,7 @@
 ---
 documento: P-DEV-INT3b — prerregistro interno de INT-3b (materias primas, oro, energía y crédito por régimen) e INT-3c (por qué: descomposición de la rentabilidad)
-version: 0.1 BORRADOR (2026-10-26), rama int3b-diseno
-estado: BORRADOR. Pendiente de aprobación del usuario. NO se ha calculado ninguna rentabilidad de activo condicionada a un régimen (ni real ni desplazada). Solo hay datos descargados, constructores de variables y potencia.
+version: 1.0 CONGELADA (2026-10-26T19:08Z)
+estado: APROBADO por el usuario el 2026-10-26 ("confío, dale": todas las recomendaciones). Congelado antes de escribir el código de la corrida; nada cruzado.
 depende_de: INT-1 (etiquetas anuales), INT-2 v0.2 (potencia), INT-3 (P-DEV-INT3 v0.1 y su resultado), Validador de INT-3 (docs/validation/2026-10-26_int3.md)
 potencia: scripts/int3b_potencia.py → research/int/int3b_potencia.json (commit 3fd7ed8, árbol limpio, 2026-10-26T18:52:37Z)
 ---
@@ -259,3 +259,6 @@ contraste completo (Newey-West + φ del placebo + percentil 95 + signo en 1950-1
    datos. Después se hace **una sola corrida** de INT-3b + INT-3c. Todo va al registro de pruebas.
 3. Validador independiente del resultado.
 4. El periodo bloqueado (2005-2020/2025) queda para la evaluación única (P-EVAL), si el usuario la decide.
+
+## Decisiones del usuario (2026-10-26, congelado v1.0)
+Todas las recomendadas: (1) régimen mundial = proporción de países en el estado; (2) oro en moneda local 1877-1999; (3) energía solo descriptiva; (4) Holm en dos familias de 4 (INT-3b: B1-B4; INT-3c: C1, C3, C4, C5); (5) ventana de recesión de INT-3; (6) B2 se mantiene pese a la poca potencia; (7) se excluyen los país-años con inflación > 50 % (26) y se acepta el uso no comercial de AQR, Damodaran y MeasuringWorth.
