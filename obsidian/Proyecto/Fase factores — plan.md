@@ -145,7 +145,11 @@ Sin rentabilidades; `research/factors/paso1_coincidencia.json`. Regla fijada ant
 - **Oro, efecto Working cuantificado (1975-2004):** AR(1) 0,205 en USD y 0,161 en EUR (teórico 0,25); volatilidad del oro 16,1 % → ≈ 18,5-19,7 % corregida. Métricas con y sin corrección; el oro se opera con un mes de retraso.
 - **Fuente de cierre de mes para el oro:** no hay ninguna en el warehouse. Candidata por verificar: la Bundesbank publica el fixing de Londres (tarde) diario en su base de series (reutilización libre citando la fuente); LBMA tiene licencia restrictiva; FRED retiró su serie.
 
-## 12. Siguiente (pendiente de aprobación)
+## 12. Resultado del desarrollo (26-oct)
+
+**P-DEV-FACT v0.1, corrida única `20261026-102647_pdevfact_v01` (git `68fc6d6`): NINGUNA variante cumple → opción 3.** 1975-01 → 2004-12, netas de costes, oro sin corregir / corregido (mismo veredicto). Volatilidad y caída máx.: **B0 14,4 % / −42,0 %; B1 12,7-12,8 % / −33,0 %**; V1 13,2 % / −35,0 %; V2 13,5 % / −35,0 %; V3 13,3 % / −37,1 %. Las tres variantes tienen **más** volatilidad que B1 (IC 95 % de la diferencia por encima de 0: V1 [+0,04; +0,92] pp, V2 [+0,37; +1,18], V3 [+0,10; +1,02]), peores caídas totales, mejor que B1 en 0-3 de 4 episodios, y no superan a sus placebos (p 0,20-0,58). DSR ≈ 0,99 en todas (sin diferencia útil). Sensibilidades (USD, 1963-2004 sin oro, costes ×2, bloques 24, B1 con 6/24 m): mismo orden, B1 la mejor o empatada. **Ojo:** B0 (estática) cae −42 % en desarrollo (2001-03, en EUR), por encima de la caída máxima tolerable (−35/−40 %); B1 −33 %, dentro. Resultado: `research/factors/runs/20261026-102647_pdevfact_v01/resultado.json`.
+
+## 13. Siguiente (pendiente de aprobación)
 
 Revisión del borrador `docs/factors/prerreg_desarrollo_v0.md` por el usuario → commit con hora → verificación de cierre/media de BIS y Bundesbank → una sola corrida.
 

@@ -29,7 +29,11 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Agentes de la fase:** Constructor · Investigador de relaciones · **Validador independiente** · **Reportero** (ver [[Proyecto/Agentes]]). Informe: [[Reports/Fase 3/Informe de resultados]].
 
-## ▶ Retomar aquí (26-oct, fase de factores: plan en borrador)
+## ▶ Retomar aquí (26-oct, fase de factores: desarrollo hecho → opción 3)
+
+P-DEV-FACT v0.1 corrida una vez (`20261026-102647_pdevfact_v01`): ninguna regla de régimen (V1-V3) mejora a la cartera con ajuste por volatilidad (B1); B1 recorta volatilidad (14,4 → 12,7 %) y caída (−42 → −33 %) frente a la estática. Por defecto: **IPS 80/10/10 + B1 + paper trading**. Pendiente del usuario: confirmarlo y decidir sobre la caída de −42 % de la estática (fuera de la tolerancia). Detalle: [[Proyecto/Fase factores — plan]] §12.
+
+### Retomar (26-oct, fase de factores: plan en borrador) — histórico
 
 **Plan:** [[Proyecto/Fase factores — plan]] (aprobado con ajustes). Hecho: corte técnico (`src/factors/data.py`), paso 0 (vintages del clasificador y contaminación de diseño) y potencia: solo efectos enormes en rentabilidad → objetivo = reducir caídas/volatilidad. **Pendiente del usuario:** elegir la cartera de referencia (A/B/C). Sin backtests de cartera todavía.
 
