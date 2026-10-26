@@ -109,9 +109,9 @@ def main() -> None:
     dc["viv_menos_bolsa_capital"] = dc.viv_precio_real - (dc.eq_div_real + dc.eq_valoracion)
     bloques = {"oro": oro, "credito": cre, "descomp": dc}
 
-    def panel(bloque: str, col: str, est: str, paises=NUCLEO, estados=pa, filtro=None, **kw) -> dict:
+    def panel(bloque: str, col: str, est: str, muestra=NUCLEO, estados=pa, filtro=None, **kw) -> dict:
         f = bloques[bloque] if not isinstance(bloque, pd.DataFrame) else bloque
-        f = con_estado(f[f.pais.isin(paises)], estados)
+        f = con_estado(f[f.pais.isin(muestra)], estados)
         if filtro is not None:
             f = f[filtro(f)]
         return B.panel_contraste(f, col, est, **kw)
