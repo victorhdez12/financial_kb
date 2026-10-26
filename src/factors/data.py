@@ -35,6 +35,8 @@ FAMILIAS: dict[str, str] = {
     # Es MEDIA del mes, no cierre: suaviza la volatilidad y mete autocorrelación (declarado en el plan).
     # En EUR se convierte con bis_xru_(de|xm)_eur_m (también media mensual); precio libre solo desde 1971 → usar ≥ 1975.
     r"gold_wb_usd_m": "Oro, Banco Mundial Pink Sheet, media mensual en USD/oz (Londres)",
+    r"bundesbank_bund_zero_(1|2|5|10)y_m": "Bund cupón cero (Svensson, Bundesbank), mensual (1972-09 →): renta fija en EUR",
+    r"oecd_ir3m_deu": "Tipo a 3 meses de Alemania (OCDE), mensual (1960 →): efectivo en EUR",
 }
 _RX = [re.compile(f"^(?:{p})$") for p in FAMILIAS]
 

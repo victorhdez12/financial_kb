@@ -15,7 +15,7 @@ REPO = Path(__file__).resolve().parents[1]
 # una serie por familia (las que necesita la fase)
 MUESTRA = ["ff_mkt_rf_m", "ff_mom_m", "ff5_rmw_m", "aqr_qmj_usa_m", "aqr_bab_usa_m", "gsw_sveny10", "GS10",
            "TB3MS", "bis_xru_de_eur_m", "DEXUSEU", "ecb_eurusd_d",
-           "gold_wb_usd_m"]
+           "gold_wb_usd_m", "bundesbank_bund_zero_5y_m", "oecd_ir3m_deu"]
 
 
 @pytest.fixture

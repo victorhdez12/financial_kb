@@ -1,0 +1,323 @@
+{
+ "regla": "Selección de las (máx.) 3 variantes de la regla de cartera SOLO con propiedades de la señal (sin rentabilidades).\nRegla fijada y commiteada ANTES de calcular nada (decisión del usuario, 26-oct):\n\nSeñal: G numérico del clasificador de reglas (regime_monthly.G, congelado). Estado DEFENSIVO cuando G < θ durante\nk meses seguidos; vuelve a NORMAL cuando G ≥ θ durante k meses seguidos (exigencia de duración = histéresis en la regla,\nel clasificador no se toca). Malla: θ ∈ {−0,5, −0,25, 0, 0,25}, k ∈ {1, 2, 3, 6}.\nPropiedades (1963-07 → 2004-12, y 1975-01 → 2004-12 informativo): cambios de estado al año, duración media de cada\nestado, % del tiempo en DEFENSIVO, κ de Cohen frente a la etiqueta (DEFENSIVO ↔ etiqueta G↓, p_g_high ≤ 0,5).\nElegibles: ≤ 1,0 cambios al año y DEFENSIVO entre el 10 % y el 50 % del tiempo.\n- V1 = elegible con mayor κ.\n- V2 = elegible con mayor κ entre las de θ distinto de V1 (robustez al umbral).\n- V3 = ancla a priori θ = 0, k = 3; si no es elegible o coincide con V1/V2, la elegible siguiente por κ.\nEmpates por κ: menos cambios al año; después θ más cercano a 0.\nUso: .venv/bin/python -m scripts.factors_variantes\n",
+ "malla": [
+  {
+   "theta": -0.5,
+   "k": 1,
+   "1963": {
+    "cambios_año": 0.48,
+    "pct_defensivo": 0.251,
+    "dur_def": 12.5,
+    "dur_normal": 33.9,
+    "kappa": 0.306
+   },
+   "1975": {
+    "cambios_año": 0.5,
+    "pct_defensivo": 0.253,
+    "dur_def": 11.4,
+    "dur_normal": 33.6,
+    "kappa": 0.32
+   },
+   "elegible": true
+  },
+  {
+   "theta": -0.5,
+   "k": 2,
+   "1963": {
+    "cambios_año": 0.34,
+    "pct_defensivo": 0.249,
+    "dur_def": 17.7,
+    "dur_normal": 46.8,
+    "kappa": 0.284
+   },
+   "1975": {
+    "cambios_año": 0.37,
+    "pct_defensivo": 0.25,
+    "dur_def": 15.0,
+    "dur_normal": 45.0,
+    "kappa": 0.314
+   },
+   "elegible": true
+  },
+  {
+   "theta": -0.5,
+   "k": 3,
+   "1963": {
+    "cambios_año": 0.29,
+    "pct_defensivo": 0.253,
+    "dur_def": 21.0,
+    "dur_normal": 53.1,
+    "kappa": 0.26
+   },
+   "1975": {
+    "cambios_año": 0.3,
+    "pct_defensivo": 0.258,
+    "dur_def": 18.6,
+    "dur_normal": 53.4,
+    "kappa": 0.298
+   },
+   "elegible": true
+  },
+  {
+   "theta": -0.5,
+   "k": 6,
+   "1963": {
+    "cambios_año": 0.29,
+    "pct_defensivo": 0.253,
+    "dur_def": 21.0,
+    "dur_normal": 53.1,
+    "kappa": 0.176
+   },
+   "1975": {
+    "cambios_año": 0.3,
+    "pct_defensivo": 0.267,
+    "dur_def": 19.2,
+    "dur_normal": 52.8,
+    "kappa": 0.235
+   },
+   "elegible": true
+  },
+  {
+   "theta": -0.25,
+   "k": 1,
+   "1963": {
+    "cambios_año": 0.43,
+    "pct_defensivo": 0.315,
+    "dur_def": 17.4,
+    "dur_normal": 34.1,
+    "kappa": 0.371
+   },
+   "1975": {
+    "cambios_año": 0.43,
+    "pct_defensivo": 0.314,
+    "dur_def": 16.1,
+    "dur_normal": 35.3,
+    "kappa": 0.42
+   },
+   "elegible": true
+  },
+  {
+   "theta": -0.25,
+   "k": 2,
+   "1963": {
+    "cambios_año": 0.43,
+    "pct_defensivo": 0.315,
+    "dur_def": 17.4,
+    "dur_normal": 34.1,
+    "kappa": 0.321
+   },
+   "1975": {
+    "cambios_año": 0.43,
+    "pct_defensivo": 0.317,
+    "dur_def": 16.3,
+    "dur_normal": 35.1,
+    "kappa": 0.38
+   },
+   "elegible": true
+  },
+  {
+   "theta": -0.25,
+   "k": 3,
+   "1963": {
+    "cambios_año": 0.39,
+    "pct_defensivo": 0.319,
+    "dur_def": 19.9,
+    "dur_normal": 37.7,
+    "kappa": 0.289
+   },
+   "1975": {
+    "cambios_año": 0.37,
+    "pct_defensivo": 0.325,
+    "dur_def": 19.5,
+    "dur_normal": 40.5,
+    "kappa": 0.352
+   },
+   "elegible": true
+  },
+  {
+   "theta": -0.25,
+   "k": 6,
+   "1963": {
+    "cambios_año": 0.29,
+    "pct_defensivo": 0.301,
+    "dur_def": 25.0,
+    "dur_normal": 49.7,
+    "kappa": 0.216
+   },
+   "1975": {
+    "cambios_año": 0.3,
+    "pct_defensivo": 0.322,
+    "dur_def": 23.2,
+    "dur_normal": 48.8,
+    "kappa": 0.277
+   },
+   "elegible": true
+  },
+  {
+   "theta": 0.0,
+   "k": 1,
+   "1963": {
+    "cambios_año": 0.87,
+    "pct_defensivo": 0.424,
+    "dur_def": 11.7,
+    "dur_normal": 15.1,
+    "kappa": 0.415
+   },
+   "1975": {
+    "cambios_año": 0.9,
+    "pct_defensivo": 0.422,
+    "dur_def": 10.9,
+    "dur_normal": 14.9,
+    "kappa": 0.448
+   },
+   "elegible": true
+  },
+  {
+   "theta": 0.0,
+   "k": 2,
+   "1963": {
+    "cambios_año": 0.58,
+    "pct_defensivo": 0.42,
+    "dur_def": 17.4,
+    "dur_normal": 22.2,
+    "kappa": 0.365
+   },
+   "1975": {
+    "cambios_año": 0.57,
+    "pct_defensivo": 0.422,
+    "dur_def": 16.9,
+    "dur_normal": 23.1,
+    "kappa": 0.392
+   },
+   "elegible": true
+  },
+  {
+   "theta": 0.0,
+   "k": 3,
+   "1963": {
+    "cambios_año": 0.43,
+    "pct_defensivo": 0.44,
+    "dur_def": 24.3,
+    "dur_normal": 27.9,
+    "kappa": 0.335
+   },
+   "1975": {
+    "cambios_año": 0.37,
+    "pct_defensivo": 0.453,
+    "dur_def": 27.2,
+    "dur_normal": 32.8,
+    "kappa": 0.378
+   },
+   "elegible": true
+  },
+  {
+   "theta": 0.0,
+   "k": 6,
+   "1963": {
+    "cambios_año": 0.39,
+    "pct_defensivo": 0.408,
+    "dur_def": 25.4,
+    "dur_normal": 32.8,
+    "kappa": 0.152
+   },
+   "1975": {
+    "cambios_año": 0.37,
+    "pct_defensivo": 0.428,
+    "dur_def": 25.7,
+    "dur_normal": 34.3,
+    "kappa": 0.201
+   },
+   "elegible": true
+  },
+  {
+   "theta": 0.25,
+   "k": 1,
+   "1963": {
+    "cambios_año": 0.82,
+    "pct_defensivo": 0.572,
+    "dur_def": 16.8,
+    "dur_normal": 11.8,
+    "kappa": 0.42
+   },
+   "1975": {
+    "cambios_año": 0.9,
+    "pct_defensivo": 0.586,
+    "dur_def": 15.1,
+    "dur_normal": 10.6,
+    "kappa": 0.436
+   },
+   "elegible": false
+  },
+  {
+   "theta": 0.25,
+   "k": 2,
+   "1963": {
+    "cambios_año": 0.55,
+    "pct_defensivo": 0.57,
+    "dur_def": 23.7,
+    "dur_normal": 17.8,
+    "kappa": 0.392
+   },
+   "1975": {
+    "cambios_año": 0.57,
+    "pct_defensivo": 0.586,
+    "dur_def": 23.4,
+    "dur_normal": 16.6,
+    "kappa": 0.393
+   },
+   "elegible": false
+  },
+  {
+   "theta": 0.25,
+   "k": 3,
+   "1963": {
+    "cambios_año": 0.51,
+    "pct_defensivo": 0.576,
+    "dur_def": 26.1,
+    "dur_normal": 19.2,
+    "kappa": 0.333
+   },
+   "1975": {
+    "cambios_año": 0.5,
+    "pct_defensivo": 0.594,
+    "dur_def": 26.8,
+    "dur_normal": 18.2,
+    "kappa": 0.322
+   },
+   "elegible": false
+  },
+  {
+   "theta": 0.25,
+   "k": 6,
+   "1963": {
+    "cambios_año": 0.36,
+    "pct_defensivo": 0.582,
+    "dur_def": 36.2,
+    "dur_normal": 26.0,
+    "kappa": 0.195
+   },
+   "1975": {
+    "cambios_año": 0.37,
+    "pct_defensivo": 0.589,
+    "dur_def": 35.3,
+    "dur_normal": 24.7,
+    "kappa": 0.202
+   },
+   "elegible": false
+  }
+ ],
+ "variantes": {
+  "V1": {
+   "theta": 0.0,
+   "k": 1
+  },
+  "V2": {
+   "theta": -0.25,
+   "k": 1
+  },
+  "V3": {
+   "theta": 0.0,
+   "k": 3
+  }
+ }
+}

@@ -137,6 +137,16 @@ Sin rentabilidades; `research/factors/paso1_coincidencia.json`. Regla fijada ant
 - **Limitación declarada:** es **media mensual, no cierre** (el PM fix de LBMA al cierre de mes no está en el warehouse: FRED retiró GOLDAMGBD228NLBM, y los precios de LBMA tienen licencia restrictiva). Las medias suavizan la volatilidad (≈ ⅔ de la varianza para un paseo aleatorio) y meten autocorrelación → la comparación de volatilidad **subestima** la del oro. Hay que tratar igual a todos los activos de la comparación o declararlo.
 - **Comparación con y sin oro (informativa, desde 1975, solo volatilidad y caídas por episodio):** pendiente de que se fijen la cartera de referencia y el peso del oro. El peso no se ajusta con lo que salga.
 
-## 11. Siguiente (pendiente de aprobación)
+## 11. Decisiones del usuario (26-oct, tarde)
+
+- **Cartera de referencia: opción C + 10 % de oro → 80 % RV / 10 % RF / 10 % oro**, caída máxima tolerable −35 a −40 %. Parámetros completos en `docs/factors/prerreg_desarrollo_v0.md` §1 (rebalanceo anual o bandas ± 5 pp; RV y oro sin cubrir, RF en EUR; RV entre 65 % y 80 %; 10/20 pb por lado; TER).
+- **Paso 1:** la variable G **no pasó la regla fijada** (68,9 %, κ 0,394); **se sigue por decisión del usuario** con la opción 1 (G del clasificador con umbral propio y exigencia de duración en la regla de cartera, máx. 3 variantes elegidas solo con propiedades de la señal) y la opción 3 como resultado por defecto.
+- **Variantes** (regla commiteada antes de calcular): V1 θ = 0, k = 1; V2 θ = −0,25, k = 1; V3 θ = 0, k = 3.
+- **Oro, efecto Working cuantificado (1975-2004):** AR(1) 0,205 en USD y 0,161 en EUR (teórico 0,25); volatilidad del oro 16,1 % → ≈ 18,5-19,7 % corregida. Métricas con y sin corrección; el oro se opera con un mes de retraso.
+- **Fuente de cierre de mes para el oro:** no hay ninguna en el warehouse. Candidata por verificar: la Bundesbank publica el fixing de Londres (tarde) diario en su base de series (reutilización libre citando la fuente); LBMA tiene licencia restrictiva; FRED retiró su serie.
+
+## 12. Siguiente (pendiente de aprobación)
+
+Revisión del borrador `docs/factors/prerreg_desarrollo_v0.md` por el usuario → commit con hora → verificación de cierre/media de BIS y Bundesbank → una sola corrida.
 
 Elegir IPS → criterio de éxito sobre volatilidad/caídas con su potencia → descripción de factores por régimen con la etiqueta ≤ 2004 (shrinkage) → reglas de cartera prerregistradas → backtest de desarrollo con el clasificador.
