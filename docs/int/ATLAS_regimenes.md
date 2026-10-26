@@ -95,7 +95,7 @@ descriptivas.
 5. **Materias primas:** el signo depende de la época; con 1 dato mundial por año la potencia es baja (lo detectable es
    ≈ 14-20 pp).
 6. **Etiqueta ex post:** todo el §1 usa el régimen con ventanas centradas (mira años futuros). Lo que se puede usar a
-   tiempo es la columna t − 1.
+   tiempo NO es la columna t − 1 (también usa la etiqueta centrada): ver §8.
 7. **Muestra:** 14 países ricos, 1870-1999/2004, datos revisados, sin costes ni impuestos. Nada de 2005-2020 (bloqueado).
 8. **T2 (salida) estaba inflado** en la corrida oficial (+0,30) por un sesgo del listón; la cifra honesta es ≈ +0,19.
 
