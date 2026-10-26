@@ -1,0 +1,125 @@
+{
+ "paises": {
+  "BEL": {
+   "picos": 9,
+   "con_paro_desde": "1998-01-01",
+   "vs_cepr": {
+    "externos": 3,
+    "detectados": 3,
+    "pct": 1.0,
+    "desfase_medio_meses": -0.7
+   }
+  },
+  "CAN": {
+   "picos": 10,
+   "con_paro_desde": "1955-01-01"
+  },
+  "DEU": {
+   "picos": 8,
+   "con_paro_desde": "1991-01-01",
+   "vs_cepr": {
+    "externos": 3,
+    "detectados": 0,
+    "pct": 0.0,
+    "desfase_medio_meses": null
+   }
+  },
+  "DNK": {
+   "picos": 8,
+   "con_paro_desde": "1998-01-01"
+  },
+  "ESP": {
+   "picos": 3,
+   "con_paro_desde": "1986-04-01",
+   "vs_cepr": {
+    "externos": 3,
+    "detectados": 1,
+    "pct": 0.333,
+    "desfase_medio_meses": 0.0
+   }
+  },
+  "FIN": {
+   "picos": 6,
+   "con_paro_desde": "1988-01-01"
+  },
+  "FRA": {
+   "picos": 10,
+   "con_paro_desde": "1998-01-01",
+   "vs_cepr": {
+    "externos": 3,
+    "detectados": 3,
+    "pct": 1.0,
+    "desfase_medio_meses": -3.0
+   }
+  },
+  "GBR": {
+   "picos": 11,
+   "con_paro_desde": "1998-01-01"
+  },
+  "IRL": {
+   "picos": 4,
+   "con_paro_desde": "1998-01-01"
+  },
+  "ITA": {
+   "picos": 8,
+   "con_paro_desde": "1998-01-01",
+   "vs_cepr": {
+    "externos": 3,
+    "detectados": 2,
+    "pct": 0.667,
+    "desfase_medio_meses": -3.5
+   }
+  },
+  "JPN": {
+   "picos": 12,
+   "con_paro_desde": "1955-01-01"
+  },
+  "NLD": {
+   "picos": 9,
+   "con_paro_desde": "1998-01-01",
+   "vs_cepr": {
+    "externos": 3,
+    "detectados": 2,
+    "pct": 0.667,
+    "desfase_medio_meses": -1.5
+   }
+  },
+  "NOR": {
+   "picos": 7,
+   "con_paro_desde": "1989-01-01"
+  },
+  "PRT": {
+   "picos": 7,
+   "con_paro_desde": "1998-01-01"
+  },
+  "SWE": {
+   "picos": 5,
+   "con_paro_desde": "1998-01-01"
+  },
+  "USA": {
+   "picos": 10,
+   "con_paro_desde": "1955-01-01"
+  }
+ },
+ "puerta_usa_nber": {
+  "externos": 8,
+  "detectados": 6,
+  "pct": 0.75,
+  "desfase_medio_meses": -3.0,
+  "falsos_picos": 4,
+  "picos_propios": [
+   "1957-03-01",
+   "1960-01-01",
+   "1966-10-01",
+   "1969-04-01",
+   "1973-10-01",
+   "1979-06-01",
+   "1981-07-01",
+   "1990-03-01",
+   "2000-10-01",
+   "2002-09-01"
+  ],
+  "cumple_80": false
+ },
+ "euro_vs_cepr_media": 0.611
+}
