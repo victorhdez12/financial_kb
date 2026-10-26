@@ -15,8 +15,9 @@ muestra: 14 países JST (núcleo), 1870/1877-1999/2004, rentabilidades REALES an
   en el mismo país (efectos de país y de año común quitados según cada prerregistro).
 - **IC robusto:** el de Driscoll-Kraay (sensibilidad robusta de INT-3, declarada a posteriori) donde existe; si no, el de
   la corrida única.
-- **"Con el régimen conocido (t − 1)":** el mismo efecto si solo se sabe el régimen del año anterior (lo que se puede saber
-  a tiempo). Es la columna que dice si **merece la pena actuar**.
+- **"Régimen de t − 1" — ⚠️ OPTIMISTA: etiqueta con ventana centrada, NO conocida a tiempo.** Es el mismo efecto usando
+  la etiqueta del año anterior, pero esa etiqueta usa una ventana centrada (t − 5 … t + 5): la de t − 1 mira datos hasta
+  t + 4. No mide lo que se podía saber a tiempo (corrección del usuario, 26-oct). La versión operable se recalcula en el §8.
 - **Clasificación (fijada por escrito antes de clasificar):**
   - **Establecido:** cumple todos los criterios de su prerregistro en la corrida única.
   - **Probable:** el signo es el esperado, pasa la sensibilidad robusta (Driscoll-Kraay con Holm o IC robusto sin el 0, y
@@ -29,7 +30,7 @@ muestra: 14 países JST (núcleo), 1870/1877-1999/2004, rentabilidades REALES an
 
 ## 1. La tabla
 
-| activo | régimen | efecto (pp/año) | IC 95 % robusto | con el régimen conocido (t − 1) | clasificación | motivo (una frase) |
+| activo | régimen | efecto (pp/año) | IC 95 % robusto | régimen de t − 1 (⚠️ optimista) | clasificación | motivo (una frase) |
 |---|---|---|---|---|---|---|
 | **Bolsa** | estanflación (Q1) | **−8,7** | [−15,0; −2,4] | −0,8 [−5,4; +3,9] | **establecido** | grande y en 14/14 países, pero desaparece si solo se conoce el régimen del año anterior |
 | Bolsa | recesión (Q5) | −5,5 | [−10,2; −0,8] | −1,2 [−4,9; +2,5] | **establecido (frágil)** | sin guerras p = 0,095 y en 1950-2004 solo −1,9: el más débil de los establecidos |
@@ -99,6 +100,7 @@ descriptivas.
 8. **T2 (salida) estaba inflado** en la corrida oficial (+0,30) por un sesgo del listón; la cifra honesta es ≈ +0,19.
 
 ## 6. Lecciones (en llano)
+> ⚠️ Las lecciones 1-3 usan la columna optimista de t − 1; pendientes de revisar con el §8 (versión operable).
 1. **La inflación es el enemigo de los bonos y de las letras**, y eso sí se puede aprovechar: aun sabiendo solo el
    régimen del año anterior, con inflación alta los bonos y las letras rinden ≈ 3,4 pp/año menos.
 2. **Cuando la economía se enfría y la inflación baja, los bonos ganan** (≈ +8 pp; +5 con el régimen conocido): es el
