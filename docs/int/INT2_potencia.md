@@ -1,6 +1,6 @@
 ---
 documento: INT-2 — cálculo de potencia del mapa régimen → activos (panel anual)
-version: 0.1 (2026-10-27)
+version: 0.2 (2026-10-27) — rehecho tras el Validador (G anual alineada con la v1.1; MDE con corrección de Kish y placebo)
 fuente: scripts/int2_potencia.py → research/int/int2_potencia.json
 ---
 
@@ -41,3 +41,26 @@ a ≈ 6-7 pp con toda la historia.
 3. Inferencia agrupada por año; resultados en real y por activo; los países de prueba (AUS, CHE, CAN, IRL) para comprobar
    fuera de muestra.
 4. El periodo bloqueado (2005-2020 en JST) queda para la evaluación única.
+
+## v0.2 (27-oct, tras el Validador `docs/validation/2026-10-27_int1_int2.md`)
+Rehecho con la G anual corregida (nivel frente a tendencia) y con dos MDE más (commit de la ejecución en
+`research/int/int2_potencia.json` → `procedencia`). Bolsa real, 1870-2004 (analítico / con corrección de Kish por la
+variación de países por año / placebo con regímenes desplazados ≥ 6 años):
+
+| estado | país-años | MDE bolsa | Kish | placebo | bonos (Kish) | letras (Kish) | vivienda (Kish) |
+|---|---|---|---|---|---|---|---|
+| expansión | 573 | 6,2 | 6,7 | 4,9 | 5,1 | 5,2 | 2,6 |
+| sobrecalentamiento | 324 | 6,8 | 7,7 | 5,9 | 5,8 | 5,9 | 3,1 |
+| estanflación | 273 | 7,0 | 7,7 | 6,0 | 5,8 | 6,0 | 3,3 |
+| crecimiento bajo | 566 | 6,2 | 6,7 | 5,4 | 5,1 | 5,2 | 2,7 |
+| recesión | 406 | 6,6 | 7,3 | 5,1 | 5,5 | 5,6 | 3,0 |
+
+**Lectura corregida (más prudente que la v0.1):**
+- Referencia para INT-3: el **MDE de Kish** (el mayor de los tres). Con varios contrastes hay que multiplicarlo:
+  × 1,24 con 6 contrastes, × 1,38 con 20 → bolsa ≈ **8-10 pp**, bonos y letras ≈ 6-8 pp, vivienda ≈ 3,5-4,5 pp.
+- **"Hay potencia" solo para efectos grandes:** con un MDE de ≈ 7 pp, un efecto verdadero de 5 pp se detecta con
+  probabilidad ≈ 0,5. Los efectos de la literatura en episodios de inflación alta (−5 a −10 pp reales) están en el límite.
+- Además (Validador): las correlaciones entre países suben en las crisis (que caen en recesión y estanflación) y hay años
+  extremos (guerras, hiperinflaciones) con mucho peso → el MDE real puede ser algo mayor. INT-3 tendrá que usar inferencia
+  robusta (agrupada por año) y una sensibilidad sin los años de guerra.
+- Consecuencia: el prerregistro de INT-3 debe tener **pocos contrastes** (≤ 6), elegidos por mecanismo, no 20.
