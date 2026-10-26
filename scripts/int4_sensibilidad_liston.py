@@ -136,7 +136,7 @@ def main() -> None:
                                                     r["a_estratificada_loco"]["d_auc"])
         print(giro, {k: (round(v["auc_liston"], 3), round(v["auc_modelo"], 3), round(v["d_auc"], 3),
                          [round(x, 3) for x in v["ic95"]], round(v["p_bloques"], 3))
-                     for k, v in r.items() if isinstance(v, dict)}, "corr", round(r["corr_tasa_pais_vs_pred_media_liston_loco"], 2))
+                     for k, v in r.items() if isinstance(v, dict) and "auc_liston" in v}, "corr", round(r["corr_tasa_pais_vs_pred_media_liston_loco"], 2))
     if "--prueba" not in sys.argv:
         nombre = "int4_sensibilidad_liston_validador.json" if VALIDADOR else "int4_sensibilidad_liston.json"
         (REPO / "research" / "int" / nombre).write_text(json.dumps(res, indent=1, ensure_ascii=False))
