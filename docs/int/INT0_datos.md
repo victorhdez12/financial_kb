@@ -31,11 +31,22 @@ Matriz de cobertura completa: `research/int/cobertura.md` (`scripts/int0_cobertu
   evaluación final (≥ 2005) y para operar en vivo. Declarado.
 - **Licencias:** JST CC BY-NC-SA (no comercial); OCDE CC BY 4.0; AQR y French sin redistribución.
 
+## Hecho (26-oct, tarde): tareas 1-3
+- **Retrasos de publicación** (`src/intl/lags.py`): un número conservador por medida, igual para todos los países (IP,
+  ventas y paro 60 días; IPC 30; CLI 45; encuestas 10; mercado 1; JST anual 120). Muestreo "as of" con las reglas de
+  `src/regime/asof.py`.
+- **Bonos y letras mensuales** (`src/intl/returns.py`): bono a la par a 10 años (duración + convexidad) desde el tipo largo;
+  letras desde el tipo a 3 m. Los tipos OCDE son medias mensuales (suavizado declarado).
+- **Panel armonizado** (`src/intl/panel.py`, corte técnico `src/intl/data.py` = mismo DEV_END 2004-12 y fallo cerrado):
+  anual 2.380 país-año (JST) y mensual 11.880 país-mes (1950-2004), en `$FIN_DATA_ROOT/intl/` (fuera de git);
+  `scripts/int0_panel.py`, resumen `research/int/panel.json`. Tests `tests/test_intl_panel.py` (5 ✅).
+- **Coherencia con JST (anual 1960-2004):** bonos con correlación 0,90-0,99 en 15 países y diferencia media ≤ 1,4 pp,
+  salvo **ESP** (0,83; +2,6 pp); bolsa (precio OCDE + dividendo JST) 0,95-0,999 salvo **FRA** (+3,2 pp), **DNK** (0,65) y
+  **JPN** (0,70). Para el Validador.
+- **Países con huecos** (AUS, CHE, CAN, IRL…): se reservan como **países de prueba** fuera de muestra (decisión del
+  usuario, 26-oct): se verá cómo se comporta el modelo en ellos con lo que tengan.
+
 ## Pendiente en INT-0
-1. **Retrasos de publicación por país y serie** (tabla conservadora, como `PUB_LAG` de EE. UU.).
-2. **Rentabilidad total mensual de bonos por país** a partir del tipo largo (método de duración, declarado) y de letras a
-   partir del tipo a 3 m; comprobación contra JST en anual.
-3. **Constructor del panel armonizado** (anual y mensual; misma moneda: local y EUR; real y nominal), con corte técnico
-   en 2004-12 igual que `src/factors/data.py`, para todos los países.
+1. (hecho) · 2. (hecho) · 3. (hecho; la conversión a EUR se hace al usarlo)
 4. **Descarga de la base de revisiones** de la OCDE (para ≥ 2005 y en vivo; no se usa en desarrollo).
 5. **Validador independiente** sobre los datos (coherencia JST frente a OCDE en los años comunes, saltos, unidades).

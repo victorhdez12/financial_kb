@@ -1,0 +1,594 @@
+{
+ "filas_anual": 2380,
+ "filas_mensual": 11880,
+ "corte": "2004-12-31",
+ "coherencia_con_jst": {
+  "AUS": {
+   "bono": {
+    "años": 35,
+    "correlacion": 0.993,
+    "dif_media_pp": 0.62
+   },
+   "bolsa": {
+    "años": 45,
+    "correlacion": 0.995,
+    "dif_media_pp": -0.2
+   }
+  },
+  "BEL": {
+   "bono": {
+    "años": 45,
+    "correlacion": 0.955,
+    "dif_media_pp": 0.43
+   },
+   "bolsa": {
+    "años": 19,
+    "correlacion": 0.989,
+    "dif_media_pp": -1.06
+   }
+  },
+  "CAN": {},
+  "CHE": {
+   "bono": {
+    "años": 45,
+    "correlacion": 0.96,
+    "dif_media_pp": -0.32
+   },
+   "bolsa": {
+    "años": 45,
+    "correlacion": 0.999,
+    "dif_media_pp": -0.09
+   }
+  },
+  "DEU": {
+   "bono": {
+    "años": 45,
+    "correlacion": 0.928,
+    "dif_media_pp": 0.81
+   },
+   "bolsa": {
+    "años": 44,
+    "correlacion": 0.99,
+    "dif_media_pp": -0.66
+   }
+  },
+  "DNK": {
+   "bono": {
+    "años": 17,
+    "correlacion": 0.966,
+    "dif_media_pp": 0.41
+   },
+   "bolsa": {
+    "años": 21,
+    "correlacion": 0.646,
+    "dif_media_pp": 0.48
+   }
+  },
+  "ESP": {
+   "bono": {
+    "años": 24,
+    "correlacion": 0.828,
+    "dif_media_pp": 2.57
+   },
+   "bolsa": {
+    "años": 19,
+    "correlacion": 0.945,
+    "dif_media_pp": -2.28
+   }
+  },
+  "FIN": {
+   "bono": {
+    "años": 15,
+    "correlacion": 0.982,
+    "dif_media_pp": 0.88
+   },
+   "bolsa": {
+    "años": 45,
+    "correlacion": 0.983,
+    "dif_media_pp": 0.36
+   }
+  },
+  "FRA": {
+   "bono": {
+    "años": 44,
+    "correlacion": 0.901,
+    "dif_media_pp": 1.12
+   },
+   "bolsa": {
+    "años": 45,
+    "correlacion": 0.962,
+    "dif_media_pp": 3.2
+   }
+  },
+  "GBR": {
+   "bono": {
+    "años": 44,
+    "correlacion": 0.943,
+    "dif_media_pp": 0.2
+   },
+   "bolsa": {
+    "años": 45,
+    "correlacion": 0.992,
+    "dif_media_pp": -0.24
+   }
+  },
+  "IRL": {},
+  "ITA": {
+   "bono": {
+    "años": 13,
+    "correlacion": 0.989,
+    "dif_media_pp": 1.37
+   },
+   "bolsa": {
+    "años": 45,
+    "correlacion": 0.957,
+    "dif_media_pp": 0.73
+   }
+  },
+  "JPN": {
+   "bono": {
+    "años": 15,
+    "correlacion": 0.939,
+    "dif_media_pp": -0.19
+   },
+   "bolsa": {
+    "años": 45,
+    "correlacion": 0.7,
+    "dif_media_pp": 0.6
+   }
+  },
+  "NLD": {
+   "bono": {
+    "años": 45,
+    "correlacion": 0.947,
+    "dif_media_pp": 0.85
+   },
+   "bolsa": {
+    "años": 45,
+    "correlacion": 0.949,
+    "dif_media_pp": -0.71
+   }
+  },
+  "NOR": {
+   "bono": {
+    "años": 19,
+    "correlacion": 0.984,
+    "dif_media_pp": 0.66
+   },
+   "bolsa": {
+    "años": 18,
+    "correlacion": 0.981,
+    "dif_media_pp": 1.32
+   }
+  },
+  "PRT": {
+   "bono": {
+    "años": 11,
+    "correlacion": 0.985,
+    "dif_media_pp": 0.49
+   }
+  },
+  "SWE": {
+   "bono": {
+    "años": 18,
+    "correlacion": 0.991,
+    "dif_media_pp": -0.16
+   },
+   "bolsa": {
+    "años": 45,
+    "correlacion": 0.991,
+    "dif_media_pp": -0.45
+   }
+  },
+  "USA": {
+   "bono": {
+    "años": 45,
+    "correlacion": 0.959,
+    "dif_media_pp": 0.24
+   },
+   "bolsa": {
+    "años": 45,
+    "correlacion": 0.98,
+    "dif_media_pp": -0.45
+   }
+  }
+ },
+ "meses_con_dato": {
+  "AUS": {
+   "ip_yoy": 0,
+   "ventas_yoy": 0,
+   "paro": 321,
+   "paro_d12": 309,
+   "ipc_yoy": 0,
+   "ipc_6m_anual": 0,
+   "sub_yoy": 0,
+   "tipo_10a": 425,
+   "tipo_3m": 443,
+   "tipo_oficial": 344,
+   "bolsa_12m": 551,
+   "cli": 465,
+   "cli_d6": 459,
+   "confianza_emp": 466,
+   "curva": 425,
+   "r_bolsa_precio": 563,
+   "r_bono": 425,
+   "r_letra": 443,
+   "r_aqr_mkt_usd": 230,
+   "inflacion_mes": 0
+  },
+  "BEL": {
+   "ip_yoy": 586,
+   "ventas_yoy": 417,
+   "paro": 261,
+   "paro_d12": 250,
+   "ipc_yoy": 586,
+   "ipc_6m_anual": 593,
+   "sub_yoy": 330,
+   "tipo_10a": 599,
+   "tipo_3m": 565,
+   "tipo_oficial": 592,
+   "bolsa_12m": 224,
+   "cli": 0,
+   "cli_d6": 0,
+   "confianza_emp": 239,
+   "curva": 565,
+   "r_bolsa_precio": 236,
+   "r_bono": 599,
+   "r_letra": 565,
+   "r_aqr_mkt_usd": 228,
+   "inflacion_mes": 599
+  },
+  "CAN": {
+   "ip_yoy": 513,
+   "ventas_yoy": 154,
+   "paro": 597,
+   "paro_d12": 586,
+   "ipc_yoy": 660,
+   "ipc_6m_anual": 660,
+   "sub_yoy": 514,
+   "tipo_10a": 599,
+   "tipo_3m": 587,
+   "tipo_oficial": 533,
+   "bolsa_12m": 575,
+   "cli": 586,
+   "cli_d6": 580,
+   "confianza_emp": 77,
+   "curva": 587,
+   "r_bolsa_precio": 587,
+   "r_bono": 599,
+   "r_letra": 587,
+   "r_aqr_mkt_usd": 252,
+   "inflacion_mes": 660
+  },
+  "CHE": {
+   "ip_yoy": 0,
+   "ventas_yoy": 586,
+   "paro": 0,
+   "paro_d12": 0,
+   "ipc_yoy": 586,
+   "ipc_6m_anual": 593,
+   "sub_yoy": 586,
+   "tipo_10a": 599,
+   "tipo_3m": 65,
+   "tipo_oficial": 660,
+   "bolsa_12m": 587,
+   "cli": 0,
+   "cli_d6": 0,
+   "confianza_emp": 467,
+   "curva": 65,
+   "r_bolsa_precio": 599,
+   "r_bono": 599,
+   "r_letra": 65,
+   "r_aqr_mkt_usd": 228,
+   "inflacion_mes": 599
+  },
+  "DEU": {
+   "ip_yoy": 549,
+   "ventas_yoy": 586,
+   "paro": 165,
+   "paro_d12": 154,
+   "ipc_yoy": 586,
+   "ipc_6m_anual": 593,
+   "sub_yoy": 502,
+   "tipo_10a": 583,
+   "tipo_3m": 539,
+   "tipo_oficial": 592,
+   "bolsa_12m": 527,
+   "cli": 526,
+   "cli_d6": 520,
+   "confianza_emp": 504,
+   "curva": 539,
+   "r_bolsa_precio": 539,
+   "r_bono": 583,
+   "r_letra": 539,
+   "r_aqr_mkt_usd": 228,
+   "inflacion_mes": 599
+  },
+  "DNK": {
+   "ip_yoy": 357,
+   "ventas_yoy": 429,
+   "paro": 261,
+   "paro_d12": 250,
+   "ipc_yoy": 442,
+   "ipc_6m_anual": 449,
+   "sub_yoy": 406,
+   "tipo_10a": 215,
+   "tipo_3m": 215,
+   "tipo_oficial": 660,
+   "bolsa_12m": 251,
+   "cli": 0,
+   "cli_d6": 0,
+   "confianza_emp": 239,
+   "curva": 215,
+   "r_bolsa_precio": 263,
+   "r_bono": 215,
+   "r_letra": 215,
+   "r_aqr_mkt_usd": 228,
+   "inflacion_mes": 455
+  },
+  "ESP": {
+   "ip_yoy": 465,
+   "ventas_yoy": 106,
+   "paro": 223,
+   "paro_d12": 211,
+   "ipc_yoy": 597,
+   "ipc_6m_anual": 603,
+   "sub_yoy": 334,
+   "tipo_10a": 299,
+   "tipo_3m": 335,
+   "tipo_oficial": 592,
+   "bolsa_12m": 227,
+   "cli": 238,
+   "cli_d6": 232,
+   "confianza_emp": 494,
+   "curva": 299,
+   "r_bolsa_precio": 239,
+   "r_bono": 299,
+   "r_letra": 335,
+   "r_aqr_mkt_usd": 228,
+   "inflacion_mes": 609
+  },
+  "FIN": {
+   "ip_yoy": 549,
+   "ventas_yoy": 561,
+   "paro": 202,
+   "paro_d12": 189,
+   "ipc_yoy": 586,
+   "ipc_6m_anual": 593,
+   "sub_yoy": 586,
+   "tipo_10a": 203,
+   "tipo_3m": 215,
+   "tipo_oficial": 0,
+   "bolsa_12m": 563,
+   "cli": 0,
+   "cli_d6": 0,
+   "confianza_emp": 143,
+   "curva": 203,
+   "r_bolsa_precio": 575,
+   "r_bono": 202,
+   "r_letra": 215,
+   "r_aqr_mkt_usd": 228,
+   "inflacion_mes": 599
+  },
+  "FRA": {
+   "ip_yoy": 573,
+   "ventas_yoy": 346,
+   "paro": 261,
+   "paro_d12": 250,
+   "ipc_yoy": 586,
+   "ipc_6m_anual": 593,
+   "sub_yoy": 406,
+   "tipo_10a": 539,
+   "tipo_3m": 419,
+   "tipo_oficial": 592,
+   "bolsa_12m": 587,
+   "cli": 510,
+   "cli_d6": 504,
+   "confianza_emp": 348,
+   "curva": 419,
+   "r_bolsa_precio": 599,
+   "r_bono": 539,
+   "r_letra": 419,
+   "r_aqr_mkt_usd": 228,
+   "inflacion_mes": 599
+  },
+  "GBR": {
+   "ip_yoy": 660,
+   "ventas_yoy": 561,
+   "paro": 261,
+   "paro_d12": 250,
+   "ipc_yoy": 586,
+   "ipc_6m_anual": 593,
+   "sub_yoy": 406,
+   "tipo_10a": 539,
+   "tipo_3m": 227,
+   "tipo_oficial": 660,
+   "bolsa_12m": 552,
+   "cli": 563,
+   "cli_d6": 557,
+   "confianza_emp": 333,
+   "curva": 227,
+   "r_bolsa_precio": 564,
+   "r_bono": 539,
+   "r_letra": 227,
+   "r_aqr_mkt_usd": 228,
+   "inflacion_mes": 599
+  },
+  "IRL": {
+   "ip_yoy": 340,
+   "ventas_yoy": 45,
+   "paro": 261,
+   "paro_d12": 250,
+   "ipc_yoy": 562,
+   "ipc_6m_anual": 580,
+   "sub_yoy": 337,
+   "tipo_10a": 408,
+   "tipo_3m": 251,
+   "tipo_oficial": 0,
+   "bolsa_12m": 587,
+   "cli": 0,
+   "cli_d6": 0,
+   "confianza_emp": 239,
+   "curva": 251,
+   "r_bolsa_precio": 599,
+   "r_bono": 408,
+   "r_letra": 251,
+   "r_aqr_mkt_usd": 228,
+   "inflacion_mes": 432
+  },
+  "ITA": {
+   "ip_yoy": 586,
+   "ventas_yoy": 165,
+   "paro": 261,
+   "paro_d12": 250,
+   "ipc_yoy": 586,
+   "ipc_6m_anual": 593,
+   "sub_yoy": 526,
+   "tipo_10a": 165,
+   "tipo_3m": 314,
+   "tipo_oficial": 592,
+   "bolsa_12m": 563,
+   "cli": 515,
+   "cli_d6": 509,
+   "confianza_emp": 514,
+   "curva": 165,
+   "r_bolsa_precio": 575,
+   "r_bono": 165,
+   "r_letra": 314,
+   "r_aqr_mkt_usd": 228,
+   "inflacion_mes": 599
+  },
+  "JPN": {
+   "ip_yoy": 586,
+   "ventas_yoy": 586,
+   "paro": 597,
+   "paro_d12": 586,
+   "ipc_yoy": 586,
+   "ipc_6m_anual": 593,
+   "sub_yoy": 586,
+   "tipo_10a": 191,
+   "tipo_3m": 32,
+   "tipo_oficial": 603,
+   "bolsa_12m": 539,
+   "cli": 550,
+   "cli_d6": 544,
+   "confianza_emp": 366,
+   "curva": 32,
+   "r_bolsa_precio": 551,
+   "r_bono": 191,
+   "r_letra": 32,
+   "r_aqr_mkt_usd": 228,
+   "inflacion_mes": 599
+  },
+  "NLD": {
+   "ip_yoy": 573,
+   "ventas_yoy": 117,
+   "paro": 261,
+   "paro_d12": 250,
+   "ipc_yoy": 524,
+   "ipc_6m_anual": 530,
+   "sub_yoy": 524,
+   "tipo_10a": 551,
+   "tipo_3m": 275,
+   "tipo_oficial": 592,
+   "bolsa_12m": 563,
+   "cli": 0,
+   "cli_d6": 0,
+   "confianza_emp": 498,
+   "curva": 275,
+   "r_bolsa_precio": 575,
+   "r_bono": 551,
+   "r_letra": 275,
+   "r_aqr_mkt_usd": 228,
+   "inflacion_mes": 536
+  },
+  "NOR": {
+   "ip_yoy": 586,
+   "ventas_yoy": 45,
+   "paro": 189,
+   "paro_d12": 177,
+   "ipc_yoy": 586,
+   "ipc_6m_anual": 593,
+   "sub_yoy": 298,
+   "tipo_10a": 239,
+   "tipo_3m": 311,
+   "tipo_oficial": 225,
+   "bolsa_12m": 215,
+   "cli": 0,
+   "cli_d6": 0,
+   "confianza_emp": 213,
+   "curva": 239,
+   "r_bolsa_precio": 227,
+   "r_bono": 239,
+   "r_letra": 311,
+   "r_aqr_mkt_usd": 228,
+   "inflacion_mes": 599
+  },
+  "PRT": {
+   "ip_yoy": 586,
+   "ventas_yoy": 165,
+   "paro": 261,
+   "paro_d12": 250,
+   "ipc_yoy": 586,
+   "ipc_6m_anual": 593,
+   "sub_yoy": 406,
+   "tipo_10a": 137,
+   "tipo_3m": 232,
+   "tipo_oficial": 592,
+   "bolsa_12m": 191,
+   "cli": 0,
+   "cli_d6": 0,
+   "confianza_emp": 215,
+   "curva": 137,
+   "r_bolsa_precio": 203,
+   "r_bono": 137,
+   "r_letra": 229,
+   "r_aqr_mkt_usd": 209,
+   "inflacion_mes": 599
+  },
+  "SWE": {
+   "ip_yoy": 538,
+   "ventas_yoy": 237,
+   "paro": 261,
+   "paro_d12": 250,
+   "ipc_yoy": 586,
+   "ipc_6m_anual": 593,
+   "sub_yoy": 406,
+   "tipo_10a": 216,
+   "tipo_3m": 275,
+   "tipo_oficial": 660,
+   "bolsa_12m": 647,
+   "cli": 0,
+   "cli_d6": 0,
+   "confianza_emp": 107,
+   "curva": 216,
+   "r_bolsa_precio": 659,
+   "r_bono": 216,
+   "r_letra": 275,
+   "r_aqr_mkt_usd": 228,
+   "inflacion_mes": 599
+  },
+  "USA": {
+   "ip_yoy": 660,
+   "ventas_yoy": 586,
+   "paro": 597,
+   "paro_d12": 586,
+   "ipc_yoy": 586,
+   "ipc_6m_anual": 593,
+   "sub_yoy": 562,
+   "tipo_10a": 620,
+   "tipo_3m": 486,
+   "tipo_oficial": 605,
+   "bolsa_12m": 563,
+   "cli": 598,
+   "cli_d6": 592,
+   "confianza_emp": 659,
+   "curva": 486,
+   "r_bolsa_precio": 575,
+   "r_bono": 620,
+   "r_letra": 486,
+   "r_aqr_mkt_usd": 660,
+   "inflacion_mes": 599
+  }
+ }
+}
