@@ -1,7 +1,7 @@
 ---
 documento: P-DEV-INT4-ML — ¿un modelo de machine learning ordena mejor la entrada (T1) y la salida (T2) de recesión que el logit de INT-4?
-version: 0.1-borrador (2026-10-26)
-estado: BORRADOR para el usuario. Solo diseño y potencia. NO se ha ajustado ningún modelo de ML. No correr sin aprobación.
+version: 1.0 CONGELADA (2026-10-26T20:28Z)
+estado: APROBADO por el usuario (26-oct): los dos candidatos, Holm-4, correr una vez. Congelado antes de escribir el código. NO se ha ajustado ningún modelo de ML.
 potencia: scripts/int4ml_potencia.py (commit previo a la salida) → research/int/int4ml_potencia.json
 ---
 
@@ -60,3 +60,8 @@ probable es "no establecido".** Con r = 0,5 el umbral pasa de 0,10: entonces sol
 ## 6. Decisiones del usuario
 1. Aprobar los 2 candidatos tal cual o quedarse con uno (con uno solo: Holm-2, umbral ≈ 0,01 menor).
 2. Correrlo sabiendo que lo más probable es "no establecido" (recomendado: es barato y cierra la pregunta), o no correrlo.
+
+## 7. Decisiones del usuario y regla de cierre (congelado v1.0)
+- Los dos candidatos (M-L2 y M-GB), Holm-4, una sola corrida con puerta (árbol limpio), después Validador.
+- **Si el resultado es "no establecido", la línea de ML queda cerrada con estos datos: no se prueban otros modelos ni otros
+  hiperparámetros sobre ≤ 2004.**
