@@ -45,7 +45,7 @@ def estados(anual: pd.DataFrame, rezago: int) -> pd.DataFrame:
     ok = out.infl.notna() & out.brecha.notna()
     out["infl_alta"] = (out.infl > UMBRAL).where(ok)
     out["estanfl"] = ((out.infl > UMBRAL) & (out.brecha < 0)).where(ok)
-    out["desinfl"] = ((out.brecha < 0) & out.infl_baja_vs_prev.astype(bool)).where(ok & base.groupby("pais")["inflacion"].shift(rezago + 1).notna())
+    out["desinfl"] = ((out.brecha < 0) & out.infl_baja_vs_prev.astype(bool)).where(ok & a.groupby("pais")["inflacion"].shift(rezago + 1).notna())
     return out
 
 
