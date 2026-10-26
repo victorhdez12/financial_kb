@@ -45,6 +45,11 @@ EPISODIOS = {"1980": {"A→B": ("1979-06", "1980-06"), "B→A": ("1980-03", "198
              "1981-82": {"A→B": ("1981-01", "1982-03"), "B→A": ("1982-06", "1983-06")},
              "1990-91": {"A→B": ("1989-06", "1991-03"), "B→A": ("1991-01", "1992-06")},
              "2001": {"A→B": ("2000-06", "2001-12"), "B→A": ("2001-09", "2003-06")}}
+# claves de la configuración que tienen que coincidir con el YAML commiteado (lo que cambia la corrida)
+CLAVES_CONFIG = ("models", "model_params", "modes", "matrix_variant", "refit_every", "embargo_months",
+                 "min_train_months", "min_train_recessions", "min_train_g_changes", "test_start", "test_end",
+                 "eval_window", "allow_shrink", "feature_policy", "pit_version", "provisional_weighting", "baseline",
+                 "phase")
 # potencia de P-EVAL-BASE v4.3 (A7, estructural): Δ verdadera → potencia
 POT_V43 = ([0.0, 0.03, 0.05, 0.07, 0.10], [0.024, 0.41, 0.66, 0.80, 0.89])
 
@@ -63,12 +68,29 @@ def _registro(harness_runs: Path) -> dict:
     return out
 
 
+def _norm(x):
+    return json.loads(json.dumps(x, default=str))
+
+
 def cargar(run_id: str, clave: str, runs_dir: Path, reg: dict) -> dict:
+    from dataclasses import asdict
+    from src.models import harness as H
     if run_id not in reg:
         raise Integridad(f"{run_id} no está en harness_runs.jsonl")
     e = reg[run_id]
     if e["config"]["name"] != NAMES[clave]:
         raise Integridad(f"{run_id}: configuración {e['config']['name']!r}, se esperaba {NAMES[clave]!r}")
+    if e.get("phase") != "development" or e["config"].get("phase") != "development":
+        raise Integridad(f"{run_id}: fase {e.get('phase')!r} (solo corridas de desarrollo)")
+    if e.get("code", {}).get("git_dirty") is not False:
+        raise Integridad(f"{run_id}: git_dirty = {e.get('code', {}).get('git_dirty')!r} (no es una corrida oficial)")
+    otras = sorted(k for k, v in reg.items() if v["config"]["name"] == NAMES[clave] and k != run_id)
+    if otras:
+        raise Integridad(f"{run_id}: hay más corridas registradas de {NAMES[clave]} ({otras}): una sola pasada")
+    yml = asdict(H.HarnessConfig.from_yaml(H.REPO / "config" / "harness" / f"{NAMES[clave]}.yaml"))
+    dif = [k for k in CLAVES_CONFIG if _norm(e["config"].get(k)) != _norm(yml.get(k))]
+    if dif:
+        raise Integridad(f"{run_id}: la configuración registrada no es la commiteada en {NAMES[clave]}.yaml: {dif}")
     d = runs_dir / run_id
     rj = json.loads((d / "report.json").read_text())
     S = pd.read_parquet(d / "scores.parquet")
@@ -83,6 +105,9 @@ def cargar(run_id: str, clave: str, runs_dir: Path, reg: dict) -> dict:
     b = M.boot_mean(serie_d(S, p).to_numpy())
     if max(abs(b["lo"] - reg_ci["lo"]), abs(b["hi"] - reg_ci["hi"]), abs(b["mean"] - reg_ci["mean"])) > 1e-12:
         raise Integridad(f"{run_id}: boot_mean(d de {p}) no reproduce el IC registrado")
+    rj_ci = rj["report"]["frente_al_baseline"][f"{MODE}/{p}"]["mejora_logloss"]
+    if any(rj_ci[k] != reg_ci[k] for k in ("mean", "lo", "hi")):
+        raise Integridad(f"{run_id}: report.json no corresponde a la corrida registrada (IC de {p} distinto)")
     return {"run_id": run_id, "rep": rj["report"], "diag": rj.get("diag", {}), "S": S, "entrada": e}
 
 
@@ -112,6 +137,10 @@ def resumen_corrida(r: dict, model: str = POOL) -> dict:
     det = r["rep"].get("deteccion_giros_g", {}).get(f"{MODE}/{model}")
     if det:
         out["falsas_alarmas_por_año"] = det["falsas_alarmas_por_año"]
+    out["deteccion_v21_frente_a_M0"] = c.get("deteccion_frente_al_comparador")          # pool_spec §5 (detección v2.1)
+    out["episodios_prueba_signo"] = c.get("por_episodio", {}).get("resumen")             # episodios
+    out["deteccion_8020"] = r["rep"].get("deteccion_declarada_8020", {}).get(f"{MODE}/{model}")   # 3 m × 80/20
+    out["calibracion_G"] = r["rep"].get("calibracion", {}).get(f"{MODE}/{model}", {}).get("G")    # calibración
     return out
 
 
@@ -235,7 +264,7 @@ def predicciones(runs: dict) -> dict:
     if f"{MODE}/{M3}" in fb and f"{MODE}/{CTP}" in fb:
         dif = fb[f"{MODE}/{M3}"]["mejora_logloss"]["mean"] - fb[f"{MODE}/{CTP}"]["mejora_logloss"]["mean"]
         out["P9"] = {"m3_menos_ctp": dif, "corrida": NAMES["m3_long" if m3l else "pool_dev"],
-                     "estado": _estado(dif <= 0.02, dif > 0.02)}
+                     "estado": "se cumple" if dif <= 0.02 else "no se cumple (sin regla 'falsa si')"}
     else:
         out["P9"] = {"estado": "no evaluable"}
     # P10: fracción de cortes con γ > 0,01 (γ1 ≥ 50 % con alta probabilidad; γ3 < 50 % con prob. ≈ 0,5)
@@ -253,10 +282,12 @@ def predicciones(runs: dict) -> dict:
                   {"corte": last["corte"], "w_m0": last["w_m0"], "a": last["a"], "b": last["b"],
                    "estado": _estado(0.35 <= last["w_m0"] <= 0.7 and last["a"] >= 1 and last["b"] >= 1, None)})
     # prueba del mecanismo: si ni 1980 ni 2001 muestran ganancia en la entrada (P1 y P4 falsas), no tiene sentido gastar
-    f1 = any(v["estado"] == "es falsa" for v in p1.values())
-    f4 = any(v["estado"] == "es falsa" for v in p4.values())
-    out["prueba_del_mecanismo"] = {"P1_falsa": f1, "P4_falsa": f4,
-                                   "mecanismo_falla": bool(f1 and f4) if p1[M2]["estado"] != "no evaluable" else None}
+    en80 = [v["entrada"] for v in p1.values() if v["entrada"] is not None]        # SOLO la entrada (pool_spec §5b)
+    en01 = [v["entrada"] for v in p4.values() if v["entrada"] is not None]
+    sin80, sin01 = (bool(en80) and all(x <= 0 for x in en80)), (bool(en01) and all(x <= 0 for x in en01))
+    out["prueba_del_mecanismo"] = {"sin_ganancia_entrada_1980": sin80 if en80 else None,
+                                   "sin_ganancia_entrada_2001": sin01 if en01 else None,
+                                   "mecanismo_falla": (sin80 and sin01) if en80 and en01 else None}
     return out
 
 
@@ -274,13 +305,19 @@ def puerta(rs: dict) -> dict:
 def lectura(ids: dict, runs_dir: Path, harness_runs: Path) -> dict:
     reg = _registro(harness_runs)
     runs = {k: cargar(v, k, runs_dir, reg) for k, v in ids.items() if v}
+    codigos = {runs[k]["entrada"]["code"]["src_models"] for k in runs if k.startswith("pool")}
     res = {"run_ids": {k: v["run_id"] for k, v in runs.items()},
            "pool_frente_a_M0": {k: resumen_corrida(runs[k]) for k in ("pool_dev", "pool_m1cmp", "pool_uno",
                                                                         "pool_excluir")},
            "sd_mensual_d": {k: sd_frente_componentes(runs[k]) for k in ("pool_dev", "pool_m1cmp")},
            "componentes_frente_a_M0_pool_dev": {m: resumen_corrida(runs["pool_dev"], m) for m in (M2, M3, CTP)},
            "trayectoria_pesos": {k: trayectoria_pesos(runs[k]) for k in ("pool_dev", "pool_uno", "pool_excluir")},
-           "predicciones_estratega": predicciones(runs)}
+           "predicciones_estratega": predicciones(runs),
+           "avisos": (["las corridas del pool usan versiones distintas de src/models: "
+                       + ", ".join(sorted(c[:12] for c in codigos))] if len(codigos) > 1 else []),
+           "operacionalizacion": {"ic_incluye_0": "límite inferior del IC 95 % ≤ 0 (la spec dice 'incluye claramente')",
+                                  "episodios": EPISODIOS, "P6": "pg de M3 < 0,5 en 1987-09 … 1988-03 sin giro A→B en "
+                                  "1987-06 … 1988-06"}}
     res["puerta_de_gasto"] = puerta(res["pool_frente_a_M0"]["pool_dev"])
     return res
 

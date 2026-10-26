@@ -97,6 +97,9 @@ def artefactos(tmp_path_factory):
     mp.setenv("FKB_RUNS_DIR", str(d / "runs"))
     mp.setenv("FKB_TRIALS_DIR", str(d / "trials"))
     mp.setenv("FKB_TRIAL_LOG", str(d / "trial_log.md"))
+    from src.models import trials
+    mp.setattr(trials, "code_sha", lambda: {"src_models": "s" * 64, "pit_labels_deps": "p" * 64,
+                                            "git_head": "h" * 40, "git_dirty": False})   # corrida "oficial"
     ids = {k: _registrar(PG.NAMES[k], mp, d, seed=i) for i, k in enumerate(PG.NAMES)}
     yield ids, d
     mp.undo()
@@ -131,8 +134,56 @@ def test_puerta_without_m2_m3_long_marks_1980_as_not_evaluable(artefactos):
     assert res["predicciones_estratega"]["P2"]["estado"] == "no evaluable"
 
 
-def test_puerta_stops_on_tampered_or_unregistered_artifacts(artefactos, tmp_path):
+def _copia(d, tmp_path):
+    import shutil
+    shutil.copytree(d, tmp_path / "c")
+    return tmp_path / "c"
+
+
+def _reescribe_registro(hr, run_id, cambio):
+    rows = [json.loads(x) for x in hr.read_text().splitlines() if x.strip()]
+    for r in rows:
+        if r["run_id"] == run_id:
+            cambio(r)
+    hr.write_text("".join(json.dumps(r, ensure_ascii=False, default=str) + "\n" for r in rows))
+
+
+@pytest.mark.parametrize("caso", ["sucia", "desarrollo_no", "repetida", "otra_config", "report_cambiado"])
+def test_puerta_rejects_unofficial_repeated_or_other_version_runs(artefactos, tmp_path, caso):
+    ids, d0 = artefactos
+    d = _copia(d0, tmp_path)
+    hr = d / "trials" / "harness_runs.jsonl"
+    rid = ids["pool_dev"]
+    if caso == "sucia":
+        _reescribe_registro(hr, rid, lambda r: r["code"].update(git_dirty=True))
+    elif caso == "desarrollo_no":
+        _reescribe_registro(hr, rid, lambda r: r.update(phase="holdout_evaluation"))
+    elif caso == "repetida":
+        rows = [json.loads(x) for x in hr.read_text().splitlines() if x.strip()]
+        dup = {**[r for r in rows if r["run_id"] == rid][0], "run_id": rid + "_bis"}
+        hr.write_text(hr.read_text() + json.dumps(dup, ensure_ascii=False, default=str) + "\n")
+    elif caso == "otra_config":
+        _reescribe_registro(hr, rid, lambda r: r["config"]["model_params"]["m2_struct_g"].update(philly_pre1990_nan=True))
+    else:
+        rp = d / "runs" / rid / "report.json"
+        j = json.loads(rp.read_text())
+        j["report"]["frente_al_baseline"]["vintage/pool_g"]["mejora_logloss"]["hi"] += 0.01
+        rp.write_text(json.dumps(j))
+    with pytest.raises(PG.Integridad):
+        PG.lectura(ids, d / "runs", hr)
+
+
+def test_mechanism_uses_entries_only_and_p9_has_no_falsity_rule(artefactos):
     ids, d = artefactos
+    p = PG.lectura(ids, d / "runs", d / "trials" / "harness_runs.jsonl")["predicciones_estratega"]
+    assert set(p["prueba_del_mecanismo"]) == {"sin_ganancia_entrada_1980", "sin_ganancia_entrada_2001",
+                                              "mecanismo_falla"}
+    assert p["P9"]["estado"] != "es falsa"
+
+
+def test_puerta_stops_on_tampered_or_unregistered_artifacts(artefactos, tmp_path):
+    ids, d0 = artefactos
+    d = _copia(d0, tmp_path)                 # no modificar los artefactos compartidos del módulo
     hr = d / "trials" / "harness_runs.jsonl"
     with pytest.raises(PG.Integridad):
         PG.lectura({**ids, "pool_dev": "20990101-000000_pool_dev_deadbeef"}, d / "runs", hr)
