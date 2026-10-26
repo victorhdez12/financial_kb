@@ -27,9 +27,11 @@ BASE = "https://sdmx.oecd.org/public/rest/data/"
 LIC = "OECD data, CC BY 4.0 (OECD terms and conditions)"
 PAGE = "https://data-explorer.oecd.org/"
 AREAS = ["USA", "EA20", "DEU", "FRA", "ITA", "ESP", "NLD", "GBR", "JPN", "CHN", "CAN", "CHE", "AUS",
-         "KOR", "IND", "BRA", "MEX", "ZAF", "TUR", "IDN", "SWE", "OECD", "G7"]
+         "KOR", "IND", "BRA", "MEX", "ZAF", "TUR", "IDN", "SWE", "OECD", "G7",
+         # INT-0 (2026-10-26): resto de países JST para el panel internacional
+         "BEL", "DNK", "FIN", "IRL", "NOR", "PRT"]
 A = "+".join(AREAS)
-AREAS2 = AREAS + ["EA", "PRT", "GRC", "BEL", "AUT", "IRL", "FIN", "EU27_2020"]
+AREAS2 = AREAS + [a for a in ["EA", "GRC", "AUT", "EU27_2020"] if a not in AREAS]
 A2 = "+".join(AREAS2)
 
 QUERIES = {
@@ -45,6 +47,8 @@ QUERIES = {
     # countries (ESP, FRA, ITA, NLD...), the euro area (now 'EA', changing composition) and others
     # here; the legacy DF_PRICES_ALL froze at 2025-12 for them (diagnosed 2026-10-13).
     "cpi2": f"OECD.SDD.TPS,DSD_PRICES_COICOP2018@DF_PRICES_C2018_ALL,1.0/{A2}.M.N.CPI.IX+PA._T+_TXCP01_NRG.N.",
+    # INT-0: producción industrial (industria sin construcción) y ventas minoristas en volumen, desestacionalizadas
+    "ip": f"OECD.SDD.STES,DSD_STES@DF_INDSERV,4.3/{A}.M.PRVM+TOVM.IX.BTE+G47.Y...",
 }
 
 META = {  # measure code -> (slug, name, category, units)
@@ -56,6 +60,8 @@ META = {  # measure code -> (slug, name, category, units)
     "IRLT": ("irlt", "OECD long-term interest rate (10-year government bond)", "rates", "% per annum, monthly average"),
     "IRSTCI": ("ircall", "OECD immediate interest rate (call money / interbank overnight)", "rates", "% per annum, monthly average"),
     "SHARE": ("share", "OECD share price index", "markets", "index 2015=100"),
+    "PRVM": ("ip", "OECD industrial production volume (industry excl. construction, SA)", "growth", "index 2015=100"),
+    "TOVM": ("retail", "OECD retail trade volume (SA)", "growth", "index 2015=100"),
 }
 
 
@@ -88,7 +94,7 @@ def _series(g: pd.DataFrame, zero_is_missing: bool = False) -> pd.Series:
 def main(refresh: bool = False) -> None:
     cw = CatalogWriter(SRC, url=PAGE, license=LIC)
     n = {}
-    for name in ("cli", "unemp", "finmark"):  # cpi/cpi2 handled below
+    for name in ("cli", "unemp", "finmark", "ip"):  # cpi/cpi2 handled below
         d = fetch(name, QUERIES[name], refresh)
         keys = ["REF_AREA", "MEASURE"] + (["UNIT_MEASURE"] if name == "finmark" else [])
         for k, g in d.groupby(keys):
