@@ -1,0 +1,20 @@
+{
+ "bis_xru_xm_eur_m": {
+  "meses": 72,
+  "error_frente_cierre": 0.01509,
+  "error_frente_media": 0.0,
+  "veredicto": "media"
+ },
+ "bundesbank_bund_zero_5y_m": {
+  "meses": 72,
+  "error_frente_cierre": 0.0,
+  "error_frente_media": 0.0882,
+  "veredicto": "cierre"
+ },
+ "bundesbank_bund_zero_1y_m": {
+  "meses": 72,
+  "error_frente_cierre": 0.0,
+  "error_frente_media": 0.07368,
+  "veredicto": "cierre"
+ }
+}
