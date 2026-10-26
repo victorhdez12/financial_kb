@@ -11,6 +11,8 @@ def test_cuadrante_y_frontera():
     out = G.cuadrante(pd.Series([0.9, 0.5]), pd.Series([0.1, 0.5]))
     assert out["cuadrante"].iloc[0] == "expansion" and not out["frontera"].iloc[0]
     assert out["frontera"].iloc[1]
+    con_hueco = G.cuadrante(pd.Series([np.nan, 0.9]), pd.Series([0.2, 0.2]))
+    assert pd.isna(con_hueco["cuadrante"].iloc[0]) and con_hueco["cuadrante"].iloc[1] == "expansion"
 
 
 def test_etiqueta_relativa_y_truncada():

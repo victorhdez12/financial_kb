@@ -42,7 +42,8 @@ def cuadrante(p_g: pd.Series, p_i: pd.Series) -> pd.DataFrame:
     probs = pd.DataFrame({"expansion": p_g * (1 - p_i), "sobrecalentamiento": p_g * p_i,
                           "estanflacion": (1 - p_g) * p_i, "crecimiento_bajo": (1 - p_g) * (1 - p_i)})
     out = probs.copy()
-    out["cuadrante"] = probs.idxmax(axis=1).where(p_g.notna() & p_i.notna())
+    ok = p_g.notna() & p_i.notna()
+    out["cuadrante"] = probs.fillna(-1.0).idxmax(axis=1).where(ok)
     out["p_max"] = probs.max(axis=1)
     out["frontera"] = out["p_max"] < FRONTERA
     return out
