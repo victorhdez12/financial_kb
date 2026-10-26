@@ -1,0 +1,732 @@
+{
+ "muestra": "1963-07 → 2004-12",
+ "meses": 498,
+ "regla_poco": "concordancia < 0.7 o kappa < 0.4 en algún eje",
+ "G": {
+  "todos": {
+   "concordancia": 0.689,
+   "kappa": 0.394,
+   "matriz (filas etiqueta, columnas clasificador)": {
+    "down": {
+     "down": 203,
+     "up": 26
+    },
+    "up": {
+     "down": 129,
+     "up": 140
+    }
+   }
+  },
+  "sin_frontera": {
+   "concordancia": 0.692,
+   "kappa": 0.395,
+   "matriz (filas etiqueta, columnas clasificador)": {
+    "down": {
+     "down": 193,
+     "up": 26
+    },
+    "up": {
+     "down": 117,
+     "up": 128
+    }
+   }
+  },
+  "duracion_etiqueta": {
+   "down": {
+    "rachas": 18,
+    "media_meses": 12.7,
+    "mediana_meses": 8.0
+   },
+   "up": {
+    "rachas": 18,
+    "media_meses": 14.9,
+    "mediana_meses": 9.5
+   }
+  },
+  "duracion_clasificador": {
+   "down": {
+    "rachas": 31,
+    "media_meses": 10.7,
+    "mediana_meses": 6.0
+   },
+   "up": {
+    "rachas": 31,
+    "media_meses": 5.4,
+    "mediana_meses": 4.0
+   }
+  },
+  "retraso": {
+   "giros": 35,
+   "detectados": 35,
+   "mediana": -1.0,
+   "media": 0.8,
+   "detalle": [
+    {
+     "giro": "1963-11",
+     "a": "up",
+     "retraso": -4
+    },
+    {
+     "giro": "1966-09",
+     "a": "down",
+     "retraso": -2
+    },
+    {
+     "giro": "1967-08",
+     "a": "up",
+     "retraso": 8
+    },
+    {
+     "giro": "1968-04",
+     "a": "down",
+     "retraso": -6
+    },
+    {
+     "giro": "1968-05",
+     "a": "up",
+     "retraso": -1
+    },
+    {
+     "giro": "1969-01",
+     "a": "down",
+     "retraso": -3
+    },
+    {
+     "giro": "1971-01",
+     "a": "up",
+     "retraso": 15
+    },
+    {
+     "giro": "1971-04",
+     "a": "down",
+     "retraso": -6
+    },
+    {
+     "giro": "1971-08",
+     "a": "up",
+     "retraso": 8
+    },
+    {
+     "giro": "1973-03",
+     "a": "down",
+     "retraso": 4
+    },
+    {
+     "giro": "1973-08",
+     "a": "up",
+     "retraso": -6
+    },
+    {
+     "giro": "1973-09",
+     "a": "down",
+     "retraso": -2
+    },
+    {
+     "giro": "1975-07",
+     "a": "up",
+     "retraso": 8
+    },
+    {
+     "giro": "1976-06",
+     "a": "down",
+     "retraso": -6
+    },
+    {
+     "giro": "1976-08",
+     "a": "up",
+     "retraso": -5
+    },
+    {
+     "giro": "1979-02",
+     "a": "down",
+     "retraso": -1
+    },
+    {
+     "giro": "1980-08",
+     "a": "up",
+     "retraso": 10
+    },
+    {
+     "giro": "1981-01",
+     "a": "down",
+     "retraso": -6
+    },
+    {
+     "giro": "1983-01",
+     "a": "up",
+     "retraso": 7
+    },
+    {
+     "giro": "1985-02",
+     "a": "down",
+     "retraso": -6
+    },
+    {
+     "giro": "1985-09",
+     "a": "up",
+     "retraso": 5
+    },
+    {
+     "giro": "1986-03",
+     "a": "down",
+     "retraso": -6
+    },
+    {
+     "giro": "1986-05",
+     "a": "up",
+     "retraso": -3
+    },
+    {
+     "giro": "1989-01",
+     "a": "down",
+     "retraso": -5
+    },
+    {
+     "giro": "1992-03",
+     "a": "up",
+     "retraso": 19
+    },
+    {
+     "giro": "1992-04",
+     "a": "down",
+     "retraso": -6
+    },
+    {
+     "giro": "1992-10",
+     "a": "up",
+     "retraso": 12
+    },
+    {
+     "giro": "1992-11",
+     "a": "down",
+     "retraso": -6
+    },
+    {
+     "giro": "1993-08",
+     "a": "up",
+     "retraso": 2
+    },
+    {
+     "giro": "1995-01",
+     "a": "down",
+     "retraso": 3
+    },
+    {
+     "giro": "1996-02",
+     "a": "up",
+     "retraso": 5
+    },
+    {
+     "giro": "2000-04",
+     "a": "down",
+     "retraso": 3
+    },
+    {
+     "giro": "2003-06",
+     "a": "up",
+     "retraso": 5
+    },
+    {
+     "giro": "2003-10",
+     "a": "down",
+     "retraso": -6
+    },
+    {
+     "giro": "2003-11",
+     "a": "up",
+     "retraso": 0
+    }
+   ]
+  },
+  "retraso_mantiene_3m": {
+   "giros": 35,
+   "detectados": 34,
+   "mediana": -1.0,
+   "media": 1.7,
+   "detalle": [
+    {
+     "giro": "1963-11",
+     "a": "up",
+     "retraso": -4
+    },
+    {
+     "giro": "1966-09",
+     "a": "down",
+     "retraso": -2
+    },
+    {
+     "giro": "1967-08",
+     "a": "up",
+     "retraso": 8
+    },
+    {
+     "giro": "1968-04",
+     "a": "down",
+     "retraso": -6
+    },
+    {
+     "giro": "1968-05",
+     "a": "up",
+     "retraso": -1
+    },
+    {
+     "giro": "1969-01",
+     "a": "down",
+     "retraso": -3
+    },
+    {
+     "giro": "1971-01",
+     "a": "up",
+     "retraso": 15
+    },
+    {
+     "giro": "1971-04",
+     "a": "down",
+     "retraso": -6
+    },
+    {
+     "giro": "1971-08",
+     "a": "up",
+     "retraso": 8
+    },
+    {
+     "giro": "1973-03",
+     "a": "down",
+     "retraso": 4
+    },
+    {
+     "giro": "1973-08",
+     "a": "up",
+     "retraso": -6
+    },
+    {
+     "giro": "1973-09",
+     "a": "down",
+     "retraso": -2
+    },
+    {
+     "giro": "1975-07",
+     "a": "up",
+     "retraso": 8
+    },
+    {
+     "giro": "1976-06",
+     "a": "down",
+     "retraso": -6
+    },
+    {
+     "giro": "1976-08",
+     "a": "up",
+     "retraso": -5
+    },
+    {
+     "giro": "1979-02",
+     "a": "down",
+     "retraso": -1
+    },
+    {
+     "giro": "1980-08",
+     "a": "up",
+     "retraso": null
+    },
+    {
+     "giro": "1981-01",
+     "a": "down",
+     "retraso": -6
+    },
+    {
+     "giro": "1983-01",
+     "a": "up",
+     "retraso": 7
+    },
+    {
+     "giro": "1985-02",
+     "a": "down",
+     "retraso": -6
+    },
+    {
+     "giro": "1985-09",
+     "a": "up",
+     "retraso": 18
+    },
+    {
+     "giro": "1986-03",
+     "a": "down",
+     "retraso": -6
+    },
+    {
+     "giro": "1986-05",
+     "a": "up",
+     "retraso": 10
+    },
+    {
+     "giro": "1989-01",
+     "a": "down",
+     "retraso": -2
+    },
+    {
+     "giro": "1992-03",
+     "a": "up",
+     "retraso": 19
+    },
+    {
+     "giro": "1992-04",
+     "a": "down",
+     "retraso": -6
+    },
+    {
+     "giro": "1992-10",
+     "a": "up",
+     "retraso": 12
+    },
+    {
+     "giro": "1992-11",
+     "a": "down",
+     "retraso": -6
+    },
+    {
+     "giro": "1993-08",
+     "a": "up",
+     "retraso": 2
+    },
+    {
+     "giro": "1995-01",
+     "a": "down",
+     "retraso": 3
+    },
+    {
+     "giro": "1996-02",
+     "a": "up",
+     "retraso": 5
+    },
+    {
+     "giro": "2000-04",
+     "a": "down",
+     "retraso": 3
+    },
+    {
+     "giro": "2003-06",
+     "a": "up",
+     "retraso": 10
+    },
+    {
+     "giro": "2003-10",
+     "a": "down",
+     "retraso": -6
+    },
+    {
+     "giro": "2003-11",
+     "a": "up",
+     "retraso": 5
+    }
+   ]
+  }
+ },
+ "I": {
+  "todos": {
+   "concordancia": 0.717,
+   "kappa": 0.417,
+   "matriz (filas etiqueta, columnas clasificador)": {
+    "down": {
+     "down": 127,
+     "up": 41
+    },
+    "up": {
+     "down": 100,
+     "up": 230
+    }
+   }
+  },
+  "sin_frontera": {
+   "concordancia": 0.718,
+   "kappa": 0.423,
+   "matriz (filas etiqueta, columnas clasificador)": {
+    "down": {
+     "down": 121,
+     "up": 35
+    },
+    "up": {
+     "down": 96,
+     "up": 212
+    }
+   }
+  },
+  "duracion_etiqueta": {
+   "down": {
+    "rachas": 7,
+    "media_meses": 24.0,
+    "mediana_meses": 9.0
+   },
+   "up": {
+    "rachas": 7,
+    "media_meses": 47.1,
+    "mediana_meses": 11.0
+   }
+  },
+  "duracion_clasificador": {
+   "down": {
+    "rachas": 23,
+    "media_meses": 9.9,
+    "mediana_meses": 5.0
+   },
+   "up": {
+    "rachas": 22,
+    "media_meses": 12.3,
+    "mediana_meses": 6.5
+   }
+  },
+  "retraso": {
+   "giros": 13,
+   "detectados": 10,
+   "mediana": -5.5,
+   "media": -0.9,
+   "detalle": [
+    {
+     "giro": "1966-01",
+     "a": "up",
+     "retraso": 4
+    },
+    {
+     "giro": "1967-02",
+     "a": "down",
+     "retraso": 1
+    },
+    {
+     "giro": "1967-04",
+     "a": "up",
+     "retraso": -6
+    },
+    {
+     "giro": "1972-10",
+     "a": "down",
+     "retraso": -2
+    },
+    {
+     "giro": "1972-11",
+     "a": "up",
+     "retraso": -6
+    },
+    {
+     "giro": "1992-06",
+     "a": "down",
+     "retraso": null
+    },
+    {
+     "giro": "1992-08",
+     "a": "up",
+     "retraso": -6
+    },
+    {
+     "giro": "1993-07",
+     "a": "down",
+     "retraso": null
+    },
+    {
+     "giro": "1994-04",
+     "a": "up",
+     "retraso": -6
+    },
+    {
+     "giro": "1994-06",
+     "a": "down",
+     "retraso": 23
+    },
+    {
+     "giro": "2001-12",
+     "a": "up",
+     "retraso": -6
+    },
+    {
+     "giro": "2002-01",
+     "a": "down",
+     "retraso": -5
+    },
+    {
+     "giro": "2004-11",
+     "a": "up",
+     "retraso": null
+    }
+   ]
+  },
+  "retraso_mantiene_3m": {
+   "giros": 13,
+   "detectados": 9,
+   "mediana": -5.0,
+   "media": -0.3,
+   "detalle": [
+    {
+     "giro": "1966-01",
+     "a": "up",
+     "retraso": 4
+    },
+    {
+     "giro": "1967-02",
+     "a": "down",
+     "retraso": 1
+    },
+    {
+     "giro": "1967-04",
+     "a": "up",
+     "retraso": -6
+    },
+    {
+     "giro": "1972-10",
+     "a": "down",
+     "retraso": -2
+    },
+    {
+     "giro": "1972-11",
+     "a": "up",
+     "retraso": -6
+    },
+    {
+     "giro": "1992-06",
+     "a": "down",
+     "retraso": null
+    },
+    {
+     "giro": "1992-08",
+     "a": "up",
+     "retraso": -6
+    },
+    {
+     "giro": "1993-07",
+     "a": "down",
+     "retraso": null
+    },
+    {
+     "giro": "1994-04",
+     "a": "up",
+     "retraso": -6
+    },
+    {
+     "giro": "1994-06",
+     "a": "down",
+     "retraso": 23
+    },
+    {
+     "giro": "2001-12",
+     "a": "up",
+     "retraso": null
+    },
+    {
+     "giro": "2002-01",
+     "a": "down",
+     "retraso": -5
+    },
+    {
+     "giro": "2004-11",
+     "a": "up",
+     "retraso": null
+    }
+   ]
+  }
+ },
+ "Q": {
+  "todos": {
+   "concordancia": 0.502,
+   "kappa": 0.333,
+   "matriz (filas etiqueta, columnas clasificador)": {
+    "Deflación/recesión": {
+     "Deflación/recesión": 30,
+     "Estanflación": 20,
+     "Goldilocks": 7,
+     "Reflación": 3
+    },
+    "Estanflación": {
+     "Deflación/recesión": 43,
+     "Estanflación": 110,
+     "Goldilocks": 5,
+     "Reflación": 11
+    },
+    "Goldilocks": {
+     "Deflación/recesión": 34,
+     "Estanflación": 5,
+     "Goldilocks": 56,
+     "Reflación": 13
+    },
+    "Reflación": {
+     "Deflación/recesión": 35,
+     "Estanflación": 55,
+     "Goldilocks": 17,
+     "Reflación": 54
+    }
+   }
+  },
+  "sin_frontera": {
+   "concordancia": 0.506,
+   "kappa": 0.339,
+   "matriz (filas etiqueta, columnas clasificador)": {
+    "Deflación/recesión": {
+     "Deflación/recesión": 29,
+     "Estanflación": 18,
+     "Goldilocks": 7,
+     "Reflación": 3
+    },
+    "Estanflación": {
+     "Deflación/recesión": 42,
+     "Estanflación": 104,
+     "Goldilocks": 5,
+     "Reflación": 11
+    },
+    "Goldilocks": {
+     "Deflación/recesión": 33,
+     "Estanflación": 3,
+     "Goldilocks": 52,
+     "Reflación": 11
+    },
+    "Reflación": {
+     "Deflación/recesión": 34,
+     "Estanflación": 47,
+     "Goldilocks": 15,
+     "Reflación": 50
+    }
+   }
+  },
+  "duracion_etiqueta": {
+   "Deflación/recesión": {
+    "rachas": 8,
+    "media_meses": 7.5,
+    "mediana_meses": 3.0
+   },
+   "Estanflación": {
+    "rachas": 17,
+    "media_meses": 9.9,
+    "mediana_meses": 5.0
+   },
+   "Goldilocks": {
+    "rachas": 7,
+    "media_meses": 15.4,
+    "mediana_meses": 8.0
+   },
+   "Reflación": {
+    "rachas": 17,
+    "media_meses": 9.5,
+    "mediana_meses": 6.0
+   }
+  },
+  "duracion_clasificador": {
+   "Deflación/recesión": {
+    "rachas": 32,
+    "media_meses": 4.4,
+    "mediana_meses": 3.0
+   },
+   "Estanflación": {
+    "rachas": 32,
+    "media_meses": 5.9,
+    "mediana_meses": 4.5
+   },
+   "Goldilocks": {
+    "rachas": 21,
+    "media_meses": 4.0,
+    "mediana_meses": 3.0
+   },
+   "Reflación": {
+    "rachas": 19,
+    "media_meses": 4.3,
+    "mediana_meses": 3.0
+   }
+  }
+ },
+ "coinciden_poco": true
+}
