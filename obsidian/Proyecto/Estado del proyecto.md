@@ -1,6 +1,6 @@
 ---
 tipo: estado_proyecto
-actualizado: 2026-10-24
+actualizado: 2026-10-26
 fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 ---
 
@@ -29,7 +29,13 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Agentes de la fase:** Constructor · Investigador de relaciones · **Validador independiente** · **Reportero** (ver [[Proyecto/Agentes]]). Informe: [[Reports/Fase 3/Informe de resultados]].
 
-## ▶ Retomar aquí (25-oct, control ampliado M2 v1.3)
+## ▶ Retomar aquí (26-oct, cadena de desarrollo completa)
+
+**Hecho:** cadena de desarrollo ≤ 2004 completa (M2, M3, placebo del pool ✅ sin fuga, pool_dev y sensibilidades), todo en `main` (`5cec04f`). Resultados **sin leer**.
+
+**Siguiente:** revisión de `claude/puerta-gasto` (Validador, nube) → fusionar → correr la puerta de gasto → **PARAR: decide el usuario** (registrar P-EVAL-BASE v4.3 y gastar el bloqueado, o no). Si la puerta sale mal, no iterar en desarrollo.
+
+### Retomar (25-oct, control ampliado M2 v1.3) — histórico
 
 **Hecho:** control sintético ampliado de M2 v1.3 (protocolo `da18753`, 40 semillas 1001–1040): **principal cumple** (media 0,810, IC 95 % [0,794; 0,826] dentro de [0,75; 0,85]); secundario 70 % (justo en el umbral). Resultado en `docs/validation/2026-10-25_m2_v13_control_ampliado_resultado.md`. El control de 4 semillas (3/7/11/21) queda declarado no superado.
 
