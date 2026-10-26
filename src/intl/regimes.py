@@ -149,3 +149,16 @@ def concordancia(picos: list[pd.Timestamp], externos: list[pd.Timestamp], tolera
     return {"externos": len(externos), "detectados": len(desf),
             "pct": round(len(desf) / len(externos), 3) if externos else None,
             "desfase_medio_meses": round(float(np.mean(desf)), 1) if desf else None}
+
+
+# --- segundo intento del fechado mensual (declarado, 27-oct): indicador coincidente compuesto ---
+def indice_coincidente(log_ip: pd.Series, paro: pd.Series | None) -> pd.Series:
+    """Estilo Conference Board: variaciones mensuales de log IP y de −paro (puntos), cada una dividida por su desviación
+    típica (en la muestra ≤ 2004 del país), media con pesos iguales de las disponibles cada mes, acumulada. Sin paro (o
+    en los meses sin él), solo IP. Se aplica después el mismo Bry-Boschan."""
+    comps = [log_ip.diff()]
+    if paro is not None and paro.notna().sum() > 24:
+        comps.append(-paro.diff())
+    z = pd.concat([c / c.std() for c in comps], axis=1)
+    m = z.mean(axis=1, skipna=True).where(z.notna().any(axis=1))
+    return m.fillna(0.0).cumsum().where(log_ip.notna())
