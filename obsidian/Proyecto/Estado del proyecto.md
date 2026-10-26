@@ -29,7 +29,15 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Agentes de la fase:** Constructor · Investigador de relaciones · **Validador independiente** · **Reportero** (ver [[Proyecto/Agentes]]). Informe: [[Reports/Fase 3/Informe de resultados]].
 
-## ▶ Retomar aquí (26-oct, cadena de desarrollo completa)
+## ▶ Retomar aquí (26-oct, Fase 3 cerrada para el pool: "M0 sigue")
+
+**Decisión del usuario (26-oct):** P-EVAL-BASE v4.3 **no registrada**; periodo bloqueado **intacto**. Puerta de gasto: pool − M0 = +0,040 nats, IC 95 % [−0,008; +0,086]; potencia ≤ 0,53; pool_excluir +0,013 (depende de un componente). P1–P4 no evaluables (ventanas NBER ≠ giros de G de la etiqueta), sin arreglar. Detalle en la Bitácora del 26-oct y en `research/trial_log.md`.
+
+**Regla:** no se sigue afinando este pool con datos ≤ 2004. Un enfoque nuevo (información nueva, o modelo centrado en las entradas en recesión) empieza con un **cálculo de potencia antes de construir nada** (mejora necesaria claramente > +0,05 nats).
+
+**Siguiente:** decidir el enfoque nuevo (o pasar a la fase de factores/cartera con el clasificador de reglas + M0).
+
+### Retomar (26-oct, cadena de desarrollo completa) — histórico
 
 **Hecho:** cadena de desarrollo ≤ 2004 completa (M2, M3, placebo del pool ✅ sin fuga, pool_dev y sensibilidades), todo en `main` (`5cec04f`). Resultados **sin leer**.
 

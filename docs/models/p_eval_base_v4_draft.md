@@ -2,7 +2,8 @@
 documento: BORRADOR del preregistro de la evaluación única del modelo base (P-EVAL-BASE), versión 4
 version: 4.3-borrador (2026-10-25; contraste único pool − M0, Holm k = 1; criterio 1 = límite inferior del IC 95 % > 0 sin suelo; criterio 8 INFORMATIVO; componentes: M2 v1.3, M3 v1.2, pool v1.2. 4.2 = 68e66dd, 4.1 = d1bde77, 4.0 = 1a5f1f9)
 fecha: 2026-10-24 (v4.3: 2026-10-25)
-estado: BORRADOR. NO está en research/hypotheses.yaml y NO abre el periodo bloqueado. Sustituye a la v3
+estado: NO REGISTRADA (decisión del usuario, 2026-10-26): la puerta de gasto desaconsejó registrar
+  (research/validation/puerta_gasto/, commit d3e0a38). Se conserva como historia. BORRADOR. NO está en research/hypotheses.yaml y NO abre el periodo bloqueado. Sustituye a la v3
   (docs/models/p_eval_base_draft.md, que queda como historia). Antes de registrarlo, todo lo de §A9.
 autor: Constructor, sobre la v3, las decisiones del usuario del 23-24 oct y la revisión del Validador
   (docs/validation/2026-10-23_pit_v0.4_m1v2.md §4); 4.1: revisiones docs/validation/2026-10-24_specs_pool_v4.md
