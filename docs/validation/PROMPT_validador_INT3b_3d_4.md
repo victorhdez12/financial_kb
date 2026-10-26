@@ -1,4 +1,4 @@
-Eres el Validador independiente de financial_kb (no escribiste este código). Repo: rama main (commit c432d71). Revisa, contra sus prerregistros congelados v1.0 (`fa6d4c9`), las tres corridas únicas del 26-oct:
+Eres el Validador independiente de financial_kb (no escribiste este código). Repo: rama main (último commit). Revisa también la sensibilidad del listón `scripts/int4_sensibilidad_liston.py` (declarada a posteriori). Revisa, contra sus prerregistros congelados v1.0 (`fa6d4c9`), las tres corridas únicas del 26-oct:
 1. INT-3b/3c: `docs/int/INT3b_prerregistro_v0.md`, `research/int/int3b_resultado.md`, código en commit 63b2f3a + arreglo 3281129.
 2. INT-3d: `docs/int/INT3d_prerregistro_v0.md`, `research/int/int3d_resultado.md`, `src/intl/int3d.py`.
 3. INT-4: `docs/int/INT4_prerregistro_v0.md`, `research/int/int4_resultado.md`, `src/intl/int4.py`, `scripts/int4_corrida.py`.
