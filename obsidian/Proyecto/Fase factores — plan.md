@@ -115,6 +115,28 @@ Pendiente del usuario: elegir (o ajustar) una. Con un objetivo de reducir caída
 2. **≥ 2005, una sola vez:** P-EVAL-FACT, prerregistrado antes de mirar nada, con la señal del clasificador (sin etiqueta: no abre la caja fuerte). Gasta el ≥ 2005 **para la fase de factores**; se declara.
 3. **Paper trading** desde que se apruebe la regla (la única muestra limpia de verdad).
 
-## 9. Siguiente (pendiente de aprobación)
+## 9. Paso 1: coincidencia clasificador–etiqueta ≤ 2004 (hecho, 26-oct) → COINCIDEN POCO, parada
+
+Sin rentabilidades; `research/factors/paso1_coincidencia.json`. Regla fijada antes: poco si concordancia < 70 % o κ < 0,40 en G o I.
+
+| eje | concordancia | κ | duración media etiqueta | duración media clasificador |
+|---|---|---|---|---|
+| G | **68,9 %** | **0,394** | ↑ 14,9 m · ↓ 12,7 m | ↑ 5,4 m · ↓ 10,7 m |
+| I | 71,7 % | 0,417 | ↑ 47 m · ↓ 24 m | ↑ 12,3 m · ↓ 9,9 m |
+| cuadrante | 50,2 % | 0,333 | 7,5-15 m | 4-6 m |
+
+- Causa principal en G: el clasificador mide **dirección** (G > 0 **y** subiendo en 6 m); la etiqueta, **nivel** frente a tendencia. Con la etiqueta en G↑, el clasificador dice G↓ el 48 % de los meses (crecimiento por encima de tendencia pero desacelerando).
+- Retraso en giros: G mediana −1 mes (35/35; poco informativo por el parpadeo); I mediana −5,5 meses (10/13 detectados).
+
+## 10. Oro (añadido por el usuario, 26-oct)
+
+- **Papel:** parte estratégica de la cartera de referencia, peso fijo **[pendiente: 5 % o 10 %]**, sacado de la renta fija. Diversificación (inflación y crisis), no rentabilidad esperada. **Sin reglas tácticas** (no hay potencia): solo peso fijo en la referencia y en su versión con ajuste por volatilidad.
+- **Contaminación declarada:** la decisión está influida por conocimiento posterior a 2004 (subidas del oro en 2005-2011 y 2019-2025).
+- **Historia limitada:** precio libre solo desde 1971 (fin de Bretton Woods) y compra privada en EE. UU. solo desde 1975 → el desarrollo de cualquier variante con oro empieza en **1975**, con unas **4 recesiones** (1980, 1981-82, 1990-91, 2001).
+- **Datos:** `gold_wb_usd_m`, Banco Mundial Pink Sheet (precio de Londres, media de los precios diarios), USD/oz, **desde 1960-01**, licencia **CC BY 4.0**. En EUR: × EUR por USD del BIS (`bis_xru_xm_eur_m` desde 1974; marco alemán antes), `gold_eur_dev` en `src/factors/data.py`, mismo corte y test.
+- **Limitación declarada:** es **media mensual, no cierre** (el PM fix de LBMA al cierre de mes no está en el warehouse: FRED retiró GOLDAMGBD228NLBM, y los precios de LBMA tienen licencia restrictiva). Las medias suavizan la volatilidad (≈ ⅔ de la varianza para un paseo aleatorio) y meten autocorrelación → la comparación de volatilidad **subestima** la del oro. Hay que tratar igual a todos los activos de la comparación o declararlo.
+- **Comparación con y sin oro (informativa, desde 1975, solo volatilidad y caídas por episodio):** pendiente de que se fijen la cartera de referencia y el peso del oro. El peso no se ajusta con lo que salga.
+
+## 11. Siguiente (pendiente de aprobación)
 
 Elegir IPS → criterio de éxito sobre volatilidad/caídas con su potencia → descripción de factores por régimen con la etiqueta ≤ 2004 (shrinkage) → reglas de cartera prerregistradas → backtest de desarrollo con el clasificador.

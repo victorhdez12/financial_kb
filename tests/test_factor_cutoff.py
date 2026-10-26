@@ -14,7 +14,8 @@ from src.warehouse import db
 REPO = Path(__file__).resolve().parents[1]
 # una serie por familia (las que necesita la fase)
 MUESTRA = ["ff_mkt_rf_m", "ff_mom_m", "ff5_rmw_m", "aqr_qmj_usa_m", "aqr_bab_usa_m", "gsw_sveny10", "GS10",
-           "TB3MS", "bis_xru_de_eur_m", "DEXUSEU", "ecb_eurusd_d"]
+           "TB3MS", "bis_xru_de_eur_m", "DEXUSEU", "ecb_eurusd_d",
+           "gold_wb_usd_m"]
 
 
 @pytest.fixture
@@ -64,3 +65,14 @@ def test_series_reales_terminan_antes_de_2005():
             assert db.series(con, sid).index.max() > F.DEV_END, sid
     finally:
         con.close()
+
+
+@pytest.mark.skipif(not db.WAREHOUSE.exists(), reason="sin warehouse real")
+def test_oro_en_eur_antes_de_2005():
+    con = db.connect(read_only=True)
+    try:
+        g = F.gold_eur_dev(con)
+    finally:
+        con.close()
+    assert g.index.max() <= F.DEV_END and g.index.min() <= pd.Timestamp("1975-01-01")
+    assert 300 < g.loc["2004-12-01"] < 400    # ~ 440 USD/oz × ~0,75 EUR/USD (comprobación de orden de magnitud)

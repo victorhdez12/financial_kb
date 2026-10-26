@@ -31,6 +31,10 @@ FAMILIAS: dict[str, str] = {
     r"GS(1|2|5|10|30)|TB3MS": "Rendimientos del Tesoro de FRED, mensual",
     r"bis_xru_(de|xm)_eur_m": "BIS: marco alemán (EUR equivalente) y euro por USD, mensual",
     r"DEXUSEU|ecb_eurusd_d": "EUR/USD diario (1999-01 →)",
+    # oro: media mensual del precio de Londres (LBMA) según el Pink Sheet del Banco Mundial, CC BY 4.0, 1960-01 →.
+    # Es MEDIA del mes, no cierre: suaviza la volatilidad y mete autocorrelación (declarado en el plan).
+    # En EUR se convierte con bis_xru_(de|xm)_eur_m (también media mensual); precio libre solo desde 1971 → usar ≥ 1975.
+    r"gold_wb_usd_m": "Oro, Banco Mundial Pink Sheet, media mensual en USD/oz (Londres)",
 }
 _RX = [re.compile(f"^(?:{p})$") for p in FAMILIAS]
 
@@ -64,3 +68,13 @@ def check(x: pd.Series | pd.DataFrame) -> None:
 
 def connect():
     return db.connect(read_only=True)
+
+
+def gold_eur_dev(con) -> pd.Series:
+    """Oro en EUR/oz (≤ DEV_END) = USD/oz × EUR por USD del BIS (euro sintético `xm` desde 1974; antes, marco alemán
+    en EUR equivalentes). Ambas son medias mensuales, así que el cociente es coherente."""
+    usd = load_dev(con, "gold_wb_usd_m")
+    fx = load_dev(con, "bis_xru_xm_eur_m").combine_first(load_dev(con, "bis_xru_de_eur_m"))
+    out = (usd * fx.reindex(usd.index)).dropna().rename("gold_eur_m")
+    check(out)
+    return out
