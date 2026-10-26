@@ -1,7 +1,7 @@
 ---
 documento: Termómetro de recesión INFORMATIVO (probabilidad mensual de entrar y de salir de recesión por país) — diseño corregido
-version: 1.0-borrador (2026-10-26)
-estado: BORRADOR para el usuario. Nada construido. Sustituye a la parte "cartera" de docs/int/INT5_diseno_v0.md (INT-5 aparcado).
+version: 1.1 APROBADO (2026-10-26; las 4 decisiones + ajustes a/b del usuario fijados aquí antes de escribir código)
+estado: APROBADO. Nada construido. Sustituye a la parte "cartera" de docs/int/INT5_diseno_v0.md (INT-5 aparcado).
 depende_de: INT-4 (P-DEV-INT4 v1.0; T1 y T2 establecidos; Validador ⚠️), sensibilidad del listón (int4_sensibilidad_liston*.json)
 ---
 
@@ -76,3 +76,15 @@ Cada mes m, con los datos publicados hasta m (retrasos de `src/intl/lags.py`):
 2. Regla de dos trimestres seguidos para entrar y salir (recomendado) o uno solo.
 3. Bandas p50 / p80 / p95 (recomendado).
 4. Puerta: correlación ≥ 0,8 y pendiente en [0,8; 1,25] (recomendado).
+
+## 7. Ajustes del usuario (fijados antes de calcular nada)
+a) **Puerta fuera de muestra.** Elegido: **rectas de escala ajustadas con los años PARES ≤ 2004 y puerta medida con los
+   IMPARES** (equilibra épocas; con ≤ 1984 / 1985-2004 casi ningún país tendría 15 años en cada lado). Como los años
+   contiguos están autocorrelacionados, se publica además, solo informativa, la partición temporal (ajuste ≤ 1984, puerta
+   1985-2004).
+b) **Mínimo de 15 años** con los dos datos (anual JST y mensual traducido) **en cada mitad** (pares para la recta, impares
+   para la puerta) para que un país tenga recta y puerta propias; si no, solo se muestran sus indicadores. Se publican los
+   años usados por país e indicador.
+- La puerta agregada (§2) se mide con los impares de los países que tienen recta propia.
+- Decisiones aprobadas (26-oct): PIB trimestral OCDE como fuente nueva; dos trimestres seguidos para entrar y salir;
+  bandas p50 / p80 / p95; puerta correlación ≥ 0,8 y pendiente en [0,8; 1,25].
