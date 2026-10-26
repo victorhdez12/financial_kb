@@ -29,7 +29,23 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Agentes de la fase:** Constructor · Investigador de relaciones · **Validador independiente** · **Reportero** (ver [[Proyecto/Agentes]]). Informe: [[Reports/Fase 3/Informe de resultados]].
 
-## ▶ Retomar aquí (26-oct, fase de factores: desarrollo hecho → opción 3)
+## ▶ Retomar aquí (26-oct, RECONDUCCIÓN: líneas A y B)
+
+> [!important] Reconducción del proyecto (decisión del usuario, 26-oct). Detalle en `docs/PLAN.md` § "Reconducción".
+
+**Diagnóstico:**
+- El proyecto empezó para usar el régimen macro (nowcast de crecimiento e inflación) para mover la cartera.
+- La Fase 3 concluyó "M0 sigue": el pool no mejora a la persistencia de forma demostrable.
+- En la fase de factores, con unas 6 recesiones entre 1963 y 2004, no hay potencia para demostrar diferencias de rentabilidad por régimen, y el clasificador coincide poco con la etiqueta en crecimiento (68,9 %, kappa 0,394).
+- Las reglas de régimen no superaron al ajuste por volatilidad, así que la cartera operativa (B0/B1) hoy NO usa el nowcast.
+
+**Alcance:** todo lo hecho es **nowcast** (régimen del mes t, etiqueta conocida con ~5 meses de retraso; confirmado en el arnés: objetivo = etiqueta de t, M0 = etiqueta de t − 5). El **forecast** (3, 6, 12 meses) **no se ha hecho**; entra solo como forecast de **riesgo** en la línea B. No hay forecast del cuadrante.
+
+**Línea A — cartera operativa:** B0 = estática **70/15/15** y B1 = su ajuste por volatilidad, paper trading desde el cierre de octubre. 70/15/15 decidido **después** de ver el −42 % de la 80/10/10 (declarado). Pendiente antes de la primera decisión: σ\* en la medida en vivo (calculado: 17,02 % con 1963-2004; sin congelar), declaración S&P 500 / French Developed, nota de potencia de 36 meses, launchd con aviso, y pasar código/spec/tests/ensayo a 70/15/15. El nowcast no interviene.
+
+**Línea B — el nowcast como herramienta:** informativo (el reporte lo dice). Investigación con una pregunta: ¿la macro adelanta el riesgo lo bastante para mejorar el momento de los recortes de B1? Diseño: `docs/lineaB/diseno_v0.md` (potencia: con ≤ 2004 no se demuestra nada realista salvo efectos grandes en subidas de volatilidad; recesiones a ≥ 3 meses sin potencia → paper trading, años).
+
+### Retomar (26-oct, fase de factores: desarrollo hecho → opción 3) — histórico
 
 P-DEV-FACT v0.1 corrida una vez (`20261026-102647_pdevfact_v01`): ninguna regla de régimen (V1-V3) mejora a la cartera con ajuste por volatilidad (B1); B1 recorta volatilidad (14,4 → 12,7 %) y caída (−42 → −33 %) frente a la estática. Por defecto: **IPS 80/10/10 + B1 + paper trading**. Pendiente del usuario: confirmarlo y decidir sobre la caída de −42 % de la estática (fuera de la tolerancia). Detalle: [[Proyecto/Fase factores — plan]] §12.
 

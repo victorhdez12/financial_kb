@@ -3,6 +3,34 @@
 Fuente: revisión en paralelo por 5 agentes (Scout de datos, Estratega macro, Analista cuantitativo,
 Analista de empresas, Asesor/Arquitecto). Este documento es la referencia para las siguientes fases.
 
+## Reconducción del proyecto (2026-10-26, decisión del usuario)
+
+> Esta sección manda sobre el resto del documento donde lo contradiga.
+
+### Diagnóstico
+- El proyecto empezó para usar el régimen macro (nowcast de crecimiento e inflación) para mover la cartera.
+- La Fase 3 concluyó "M0 sigue": el pool no mejora a la persistencia de forma demostrable.
+- En la fase de factores, con unas 6 recesiones entre 1963 y 2004, no hay potencia para demostrar diferencias de rentabilidad por régimen, y el clasificador coincide poco con la etiqueta en crecimiento (68,9 %, kappa 0,394).
+- Las reglas de régimen no superaron al ajuste por volatilidad, así que la cartera operativa (B0/B1) hoy NO usa el nowcast.
+
+### Alcance: nowcast, no forecast
+- Hasta ahora todo ha sido **nowcast**: estimar el régimen del mes t con la información disponible en t, con la etiqueta conocida con unos 5 meses de retraso (arnés: el objetivo es la etiqueta de t; la persistencia M0 es la etiqueta de t − 5, `label_lag = 5` en `src/models/harness.py`).
+- El **forecast** (régimen o riesgo a 3, 6 o 12 meses) **no se ha hecho**.
+- El forecast entra solo como **forecast de riesgo** en la línea B (¿la información macro anticipa, con 1 a 6 meses, subidas de volatilidad o entradas en recesión mejor que la volatilidad reciente sola?). **No se abre un forecast del cuadrante** como fase aparte.
+
+### Línea A — cartera operativa (sin cambios en lo decidido)
+- **B0** = estática **70/15/15** (RV / RF / oro) y **B1** = su versión con ajuste por volatilidad, en paper trading desde el cierre de octubre de 2026. La bajada de 80/10/10 a 70/15/15 (oro del 10 al 15 %) se decidió **después** de ver la caída de −42 % de la 80/10/10 en desarrollo: decisión de tolerancia al riesgo, declarada a posteriori.
+- Pendiente antes de la primera decisión real: σ\* en la misma medida que la señal en vivo; declaración S&P 500 (señal) frente a French Developed (valoración); nota de potencia de 36 meses; launchd mensual con aviso y reintento.
+- El nowcast **no interviene** en la cartera.
+
+### Línea B — el nowcast como herramienta
+- **Papel actual: informativo.** Reporte del cuadrante, contexto y seguimiento; el reporte dice explícitamente que no es una señal de cartera.
+- **Investigación, una sola pregunta:** ¿la información macro adelanta el riesgo lo bastante como para mejorar el momento de los recortes de B1, frente a usar solo la volatilidad? No se le pide ganar rentabilidad.
+- Primero potencia (con datos ≤ 2004, contando episodios), después 2-3 candidatas fijadas solo con propiedades de la señal. Listón: B1 tal cual. Una variante macro (B2) solo entra en el paper trading como cartera en sombra, tras un prerregistro interno aprobado por el usuario; **B2 nunca sustituye a B1 sin una decisión registrada del usuario**. Diseño: `docs/lineaB/diseno_v0.md`.
+
+### Reglas que se mantienen
+Periodo bloqueado intacto (≥ 2005-01); corte técnico en `src/factors/data.py`; la etiqueta solo hasta 2004; registro de todas las pruebas.
+
 ## Principios
 
 1. **Python calcula, el LLM interpreta.** Ninguna cifra la genera un LLM; la narrativa copia números del JSON de señal y un validador lo comprueba.

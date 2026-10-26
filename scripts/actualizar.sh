@@ -78,7 +78,7 @@ fi
 LINEA="- **$(date '+%Y-%m-%d %H:%M')** · $MODO${RECUPERADA:-} · $ESTADO · ${DUR} min"
 [ -n "$FALLOS" ] && LINEA="$LINEA · fuentes con fallo: $FALLOS"
 [ -n "$CRITICAS" ] && LINEA="$LINEA · críticas en auditoría: $CRITICAS"
-[ -n "$REGIMEN" ] && LINEA="$LINEA · régimen: $REGIMEN"
+[ -n "$REGIMEN" ] && LINEA="$LINEA · régimen (informativo, no es señal de cartera): $REGIMEN"
 LINEA="$LINEA · log \`$(basename "$LOG")\`"
 /usr/bin/python3 - "$NOTA" "$LINEA" <<'PY'
 import sys

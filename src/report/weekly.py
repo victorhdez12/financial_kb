@@ -219,6 +219,9 @@ vintage_mode: {s['vintage_mode']}
 
 ## 1. Régimen actual
 
+> [!note] No es una señal de cartera
+> El cuadrante es informativo (contexto y seguimiento). La cartera operativa (B0/B1, paper trading) no usa el nowcast: las reglas de régimen no superaron al ajuste por volatilidad (P-DEV-FACT, 26-oct-2026).
+
 **{r_['quadrant']}** — crecimiento **{r_['G_state']}** (G = {r_['G']}, ΔG 6m = {r_['G_d6']}, Sahm = {r_['sahm']} pp,
 disparada: {'sí' if r_['sahm_trigger'] else 'no'}), inflación **{r_['I_state']}** (subyacente 6m anualizada
 {r_['core_6m']} %, aceleración 3m {r_['core_accel_3m']} pp; compuesto I = {r_['I_composite_z']} z).
