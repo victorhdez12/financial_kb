@@ -43,6 +43,8 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Línea A — cartera operativa:** B0 = estática **70/15/15** y B1 = su ajuste por volatilidad, paper trading desde el cierre de octubre. 70/15/15 decidido **después** de ver el −42 % de la 80/10/10 (declarado). Pendiente antes de la primera decisión: σ\* en la medida en vivo (calculado: 17,02 % con 1963-2004; sin congelar), declaración S&P 500 / French Developed, nota de potencia de 36 meses, launchd con aviso, y pasar código/spec/tests/ensayo a 70/15/15. El nowcast no interviene.
 
+**▶ Retomar (26-oct, noche):** INT-0, INT-1, INT-2 e INT-3 hechos (INT-3: establecidos bolsa −8,7 pp en estanflación, bonos −10,1 pp con inflación alta, bolsa −5,5 pp en recesión, vivienda +6,2 pp frente a bolsa con inflación alta). Diseño de INT-4 hecho. Pendiente: "ok" del usuario al plan ampliado (INT-3b materias primas/oro/crédito, INT-3c por qué, INT-3d giros, INT-4 entradas y salidas) y validación de INT-3 en la nube. Detalle: Bitácora del 26-oct.
+
 **Fase internacional (borrador 26-oct):** `docs/PLAN_internacional_v0.md`: régimen por país + mapa régimen → activos (jerárquico, 18 países JST 1870-2020 + OCDE mensual) + forecast de riesgo en panel; bloqueado ≥ 2005 para todos los países. Pendiente de aprobación.
 
 **Línea B — el nowcast como herramienta:** informativo (el reporte lo dice). Investigación con una pregunta: ¿la macro adelanta el riesgo lo bastante para mejorar el momento de los recortes de B1? Diseño: `docs/lineaB/diseno_v0.md` (potencia: con ≤ 2004 no se demuestra nada realista salvo efectos grandes en subidas de volatilidad; recesiones a ≥ 3 meses sin potencia → paper trading, años).
