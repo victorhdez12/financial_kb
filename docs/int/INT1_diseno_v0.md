@@ -19,8 +19,10 @@ momento (as of). El corte técnico (≤ 2004) se mantiene.
 
 ## 2. Ejes y cuadrantes (misma lógica que la v1.1 de EE. UU.)
 - **Crecimiento (G):** por encima o por debajo de su tendencia.
-  - Anual: crecimiento del PIB real per cápita frente a su media móvil **centrada** de 11 años (t − 5 … t + 5) del propio
-    país. Centrada a propósito: es ex post.
+  - Anual: **nivel** del PIB real per cápita (logaritmo) frente a su tendencia **centrada** de 11 años (t − 5 … t + 5) del
+    propio país, como la v1.1 (nivel frente a tendencia). Centrada a propósito: es ex post. *(27-oct: la primera
+    implementación comparaba el crecimiento con su media; el Validador lo señaló como contrario a "misma lógica que la
+    v1.1" y se corrigió antes de INT-3.)*
   - Mensual: producción industrial (y paro invertido cuando exista), z-score frente a la tendencia centrada de 10 años, como
     la v1.1 (ventana t − 3 … t + 3 para el nivel).
 - **Inflación (I):** alta o baja.

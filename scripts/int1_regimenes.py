@@ -1,6 +1,7 @@
 """INT-1: régimen ex post por país y fechado de recesiones (≤ 2004). Sin rentabilidades de activos, sin etiqueta de EE. UU.
 Parámetros en src/intl/regimes.py. Reglas fijadas ANTES de correr (commit previo a la ejecución):
-- Anual (JST, 1870-2004): G = crecimiento del PIB real per cápita (rgdpmad) frente a su media centrada de 11 años;
+- Anual (JST, 1870-2004): G = NIVEL del PIB real per cápita (log rgdpmad) frente a su tendencia centrada de 11 años
+  (como la v1.1: nivel frente a tendencia; corregido el 27-oct tras el Validador, antes era crecimiento frente a su media);
   I = inflación del IPC; principal relativa + 2 %, sensibilidad absoluta 3 %. Recesiones JST (normales / financieras).
 - Mensual (OCDE, 1955-2004): G = log de la producción industrial frente a su tendencia centrada de 121 meses (brecha
   suavizada 7 meses). El paro NO entra en la etiqueta principal (interpolado o ausente en 10 de 18 países). I = IPC
@@ -23,6 +24,7 @@ import pandas as pd
 from src.intl import data as D
 from src.intl import panel as P
 from src.intl import regimes as G
+from src.intl.procedencia import procedencia
 from src.warehouse import db
 
 REPO = Path(__file__).resolve().parents[1]
@@ -40,6 +42,7 @@ def rachas(s: pd.Series) -> pd.DataFrame:
 
 
 def main() -> None:
+    proc = procedencia()
     con = D.connect()
     anual_p = P.anual(con)
     usrec = P._mensual_completa(D.load_dev(con, "USREC"))
@@ -49,14 +52,14 @@ def main() -> None:
         cpi[c] = P._mensual_completa(D.load_dev(con, f"oecd_cpi_{c.lower()}_idx"))
     con.close()
 
-    res = {"paises": {}, "nucleo": NUCLEO, "prueba": sorted(PRUEBA)}
+    res = {"procedencia": proc, "paises": {}, "nucleo": NUCLEO, "prueba": sorted(PRUEBA)}
     et_a, et_m, rec_a, rec_m = [], [], [], []
     for c in D.PAISES:
         r = {}
         # anual
         if c in anual_p.index.get_level_values(0):
             a = anual_p.loc[c]
-            crec, infl = a["pib_real_g"], a["inflacion"]
+            crec, infl = np.log(a["rgdpmad"]), a["inflacion"]
             for nom, kw in (("principal", {}), ("abs3", {"umbral_i": G.UMBRAL_I_ABSOLUTO, "relativa": False})):
                 e = G.etiqueta(crec, infl, G.VENTANA_ANUAL, **kw)
                 ok = e["cuadrante"].notna()
@@ -94,6 +97,8 @@ def main() -> None:
     bbu = rec_m[D.PAISES.index("USA")] if False else pd.concat(rec_m).query("pais == 'USA'")
     puerta = G.concordancia(list(bbu[bbu.tipo == "pico"].fecha), nber, 6)
     puerta["falsos_picos"] = int((bbu.tipo == "pico").sum()) - puerta["detectados"]
+    puerta["picos_propios"] = [str(d.date()) for d in bbu[bbu.tipo == "pico"].fecha]
+    puerta["picos_nber"] = [str(d.date()) for d in nber]
     res["puerta_usa_nber"] = {**puerta, "cumple_80": bool(puerta["pct"] is not None and puerta["pct"] >= 0.80)}
     ea = [res["paises"][c]["vs_cepr"]["pct"] for c in EURO if "vs_cepr" in res["paises"][c]]
     res["euro_vs_cepr_media"] = round(float(np.mean(ea)), 3) if ea else None

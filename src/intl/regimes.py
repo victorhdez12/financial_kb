@@ -3,7 +3,8 @@ inflación relativa + 2 % principal y 3 % absoluto como sensibilidad; Bry-Boscha
 países y 4 de prueba). Funciones puras; los datos llegan del panel (≤ 2004). Parámetros FIJADOS aquí antes de correr.
 
 Etiqueta ex post (describe "dónde estábamos", con datos revisados y ventanas CENTRADAS; no es una señal):
-- G alto si el crecimiento está por encima de su tendencia centrada; I alta si la inflación está por encima de su media
+- G alto si el NIVEL (log PIB real per cápita en anual, log IP en mensual) está por encima de su tendencia centrada
+  (como la v1.1; la versión anual inicial comparaba el crecimiento con su media: corregido el 27-oct, Validador); I alta si la inflación está por encima de su media
   centrada Y del 2 % (principal) o del 3 % (sensibilidad). Probabilística: P = Φ(distancia / s), con s = ESCALA × la
   dispersión robusta (1,4826 · MAD) de la distancia en cada país; "frontera" si la probabilidad del cuadrante más probable
   < 0,55 (como la v1.1). Bordes: si la ventana centrada no está completa (últimos años/meses antes del corte de 2004 o
@@ -120,21 +121,35 @@ def bry_boschan(log_ip: pd.Series) -> pd.DataFrame:
     # más extremo que todo lo posterior (un valle no puede estar por encima del inicio de la serie, etc.)
     def _extremo_ok(t: int, k: str, tramo: np.ndarray) -> bool:
         return (y[t] >= tramo.max()) if k == "pico" else (y[t] <= tramo.min())
-    while alt and not _extremo_ok(alt[0][0], alt[0][1], y[:alt[0][0] + 1]):
-        alt.pop(0)
-    while alt and not _extremo_ok(alt[-1][0], alt[-1][1], y[alt[-1][0]:]):
-        alt.pop()
-    # fase y ciclo mínimos: quitar el par más corto y repetir
-    cambiado = True
-    while cambiado and len(alt) >= 2:
-        cambiado = False
-        for i in range(len(alt) - 1):
-            fase_corta = alt[i + 1][0] - alt[i][0] < BB_FASE_MIN
-            ciclo_corto = i + 2 < len(alt) and alt[i + 2][0] - alt[i][0] < BB_CICLO_MIN
-            if fase_corta or ciclo_corto:
-                del alt[i:i + 2]
-                cambiado = True
-                break
+
+    def _extremos(alt):
+        while alt and not _extremo_ok(alt[0][0], alt[0][1], y[:alt[0][0] + 1]):
+            alt.pop(0)
+        while alt and not _extremo_ok(alt[-1][0], alt[-1][1], y[alt[-1][0]:]):
+            alt.pop()
+        return alt
+
+    def _mas_extremo(a: tuple[int, str], b: tuple[int, str]) -> bool:
+        return y[a[0]] >= y[b[0]] if a[1] == "pico" else y[a[0]] <= y[b[0]]
+
+    # fase y ciclo mínimos: tratar primero la violación más corta; en un ciclo corto se conserva el giro MÁS extremo de
+    # los dos del mismo tipo (se quitan el otro y el giro intermedio), como en Bry-Boschan; tras cada borrado, otra vez la
+    # regla de los extremos
+    while True:
+        alt = _extremos(alt)
+        if len(alt) < 2:
+            break
+        malos = [(alt[i + 2][0] - alt[i][0], i, "ciclo") for i in range(len(alt) - 2)
+                 if alt[i + 2][0] - alt[i][0] < BB_CICLO_MIN]
+        malos += [(alt[i + 1][0] - alt[i][0], i, "fase") for i in range(len(alt) - 1)
+                  if alt[i + 1][0] - alt[i][0] < BB_FASE_MIN]
+        if not malos:
+            break
+        _, i, tipo = min(malos)
+        if tipo == "ciclo" and _mas_extremo(alt[i], alt[i + 2]):
+            del alt[i + 1:i + 3]
+        else:
+            del alt[i:i + 2]
     return pd.DataFrame({"fecha": [s.index[t] for t, _ in alt], "tipo": [k for _, k in alt]})
 
 

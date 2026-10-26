@@ -18,6 +18,7 @@ import pandas as pd
 
 from src.intl import data as D
 from src.intl import panel as P
+from src.intl.procedencia import procedencia
 from src.warehouse import db
 
 REPO = Path(__file__).resolve().parents[1]
@@ -25,9 +26,33 @@ PRUEBA = {"AUS", "CHE", "CAN", "IRL"}
 NUCLEO = [c for c in D.PAISES if c not in PRUEBA]
 ACTIVOS = {"bolsa": "eq_tr_real", "bonos": "bond_tr_real", "letras": "bill_rate_real", "vivienda": "housing_tr_real"}
 Z = 2.80
+DESFASE_MIN = 6       # placebo: desplazamientos de al menos 6 años (lejos de la asignación real y de su autocorrelación)
+
+
+def n_ef_cv(g, rho: float, ar1: float) -> float:
+    """Como n_ef, pero con el tamaño de grupo corregido por su dispersión: m* = m̄·(1 + CV²) (Kish)."""
+    m = pd.Series([y for _, y in g]).value_counts()
+    m_est = m.mean() * (1 + (m.std(ddof=0) / m.mean()) ** 2)
+    return len(g) / (1 + (m_est - 1) * rho) * (1 - ar1) / (1 + ar1)
+
+
+def sd_placebo(x: pd.Series, s1: set, desde: int, hasta: int = 2004) -> tuple[float, int]:
+    """Desviación típica de la diferencia de medias (estado − resto) con la asignación de estados DESPLAZADA k años en
+    círculo (la misma k para todos los países: conserva la agrupación por año y la duración de las rachas). Nunca usa la
+    asignación real (k = 0) ni desplazamientos cortos; solo devuelve la dispersión, no ninguna diferencia."""
+    L = hasta - desde + 1
+    claves = list(x.index)
+    difs = []
+    for k in range(DESFASE_MIN, L - DESFASE_MIN + 1):
+        en = np.array([(p, desde + (y - desde - k) % L) in s1 for p, y in claves])
+        if en.sum() >= 10 and (~en).sum() >= 10:
+            v = x.to_numpy()
+            difs.append(v[en].mean() - v[~en].mean())
+    return (float(np.std(difs, ddof=1)) if len(difs) > 2 else float("nan")), len(difs)
 
 
 def main() -> None:
+    proc = procedencia()
     con = D.connect()
     a = P.anual(con)
     con.close()
@@ -39,7 +64,7 @@ def main() -> None:
     for _, r in rec[rec.pais.isin(NUCLEO)].iterrows():
         for y in range(int(r.pico) + 1, int(r.valle) + 1):
             en_rec.add((r.pais, y))
-    res = {"nucleo": NUCLEO}
+    res = {"procedencia": proc, "nucleo": NUCLEO}
     for nom, desde in (("1870_2004", 1870), ("1950_2004", 1950)):
         e = et[et.año >= desde]
         estados = {q: set(zip(e[e.cuadrante == q].pais, e[e.cuadrante == q].año))
@@ -71,8 +96,14 @@ def main() -> None:
                     return len(g) / de * (1 - st["ar1"]) / (1 + st["ar1"])
                 n1, n0 = n_ef(g1), n_ef(g0)
                 d = Z * st["sd"] * np.sqrt(1 / n1 + 1 / n0)
+                d_cv = Z * st["sd"] * np.sqrt(1 / n_ef_cv(g1, st["rho_paises"], st["ar1"]) +
+                                              1 / n_ef_cv(g0, st["rho_paises"], st["ar1"]))
+                xs = a[col].dropna()
+                xs = xs[xs.index.get_level_values(1) >= desde]
+                sdp, npl = sd_placebo(xs, s1, desde)
                 fila[act] = {"pais_años": len(g1), "n_efectivo": round(n1, 1), "mde_pp": round(100 * d, 1),
-                             "mde_en_sd": round(d / st["sd"], 2)}
+                             "mde_en_sd": round(d / st["sd"], 2), "mde_pp_cv": round(100 * d_cv, 1),
+                             "mde_pp_placebo": round(100 * Z * sdp, 1), "placebos": npl}
             mde[q] = fila
         res[nom] = {"estadisticos_incondicionales": {k: {kk: round(v, 3) if isinstance(v, float) else v for kk, v in s.items()}
                                                       for k, s in stats.items()},

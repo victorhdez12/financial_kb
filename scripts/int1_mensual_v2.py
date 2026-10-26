@@ -18,6 +18,7 @@ import pandas as pd
 from src.intl import data as D
 from src.intl import panel as P
 from src.intl import regimes as G
+from src.intl.procedencia import procedencia
 from src.warehouse import db
 
 REPO = Path(__file__).resolve().parents[1]
@@ -26,9 +27,10 @@ CEPR_PICOS = [pd.Timestamp(x) for x in ("1974-08-01", "1980-02-01", "1992-02-01"
 
 
 def main() -> None:
+    proc = procedencia()
     con = D.connect()
     usrec = P._mensual_completa(D.load_dev(con, "USREC"))
-    res, giros = {"paises": {}}, []
+    res, giros = {"procedencia": proc, "paises": {}}, []
     for c in D.PAISES:
         ip = P._mensual_completa(D.load_dev(con, f"oecd_ip_{c.lower()}"))
         if len(ip.dropna()) < 240:
