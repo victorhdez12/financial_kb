@@ -1,7 +1,7 @@
 ---
 documento: Prerregistro INTERNO de desarrollo de la fase de factores y cartera (P-DEV-FACT)
-version: 0.1-borrador (2026-10-26)
-estado: BORRADOR para revisión del usuario. NO se ha corrido nada. Ninguna rentabilidad de cartera calculada.
+version: 0.1 APROBADA por el usuario (2026-10-26)
+estado: APROBADA, commiteada y subida ANTES de calcular ninguna rentabilidad de cartera. Sin cambios de diseño a partir de aquí.
 alcance: desarrollo ≤ 2004 (corte técnico src/factors/data.py). No abre el periodo bloqueado ni la caja fuerte.
 ---
 
