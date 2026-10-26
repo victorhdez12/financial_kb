@@ -1,0 +1,77 @@
+name: p_eval_base
+prereg_id: P-EVAL-BASE
+phase: holdout_evaluation
+principal: pool_g
+pit_version: "0.4"
+models: [pool_g, m0_calibrated_persistence, m2_struct_g, m3_tvtp_g, m3_ctp_g,   # m2_struct_g = versión resuelta por S-PIT-001
+         pool_g_eq, pool_g_lin, pool_g_kull, pool_g_unif,
+         m1_logit_axis, m1v2_logit_axis, persistence_pit, climatology]
+model_params:                              # los de cada spec, sin cambios (m1: L2 6,0; M0: eps 1e-3, L2 1,0; …)
+  m0_calibrated_persistence: {eps: 0.001, l2: 1.0}
+  m2_struct_g: {philly_pre1990_nan: false}   # S-PIT-001 (M2 §2, 6c): false si no se dispara, true si se dispara.
+                                             # Heredado por m3_tvtp_g, m3_ctp_g, pool_g, sus variantes y las
+                                             # sensibilidades de M2/M3 (el arnés lo copia; error si otro declara
+                                             # un valor distinto). Entra en el hash de configuración (v4.2, N-6)
+  climatology: {alpha: 1.0}
+modes: [vintage, latest_truncated]
+refit_every: 1
+embargo_months: 6
+min_train_months: 120
+min_train_recessions: 2
+min_train_g_changes: 8
+test_start: "1956-10"
+test_end: "2021-10"
+eval_window: ["2005-01", "2021-10"]
+allow_shrink: false
+epochs: []
+subperiods: [["2005-01", "2014-12"], ["2015-01", "2021-10"]]
+feature_policy: principal
+provisional_weighting: madurez
+baseline: m0_calibrated_persistence
+reference: persistence_pit
+dry_run_window: ["1993-01", "2004-12"]    # cubre la activación del pool también con `excluir` (≈ 1988-10)
+expected_signs:                           # SOLO informativos (decide: false); M1 v1/v2: los de sus specs
+  m3_tvtp_g:                              # impuestos (γ ≥ 0): criterio_signos_cumple NO es el criterio 8
+    "G:gamma1": {signo: "+", decide: false}
+    "G:gamma2": {signo: "+", decide: false}
+    "G:gamma3": {signo: "+", decide: false}
+    "G:gamma4": {signo: "+", decide: false}
+sign_fraction:                            # criterio 8, INFORMATIVO (A3, v4.3): se calcula y se publica; no decide.
+                                          # Clave del arnés v2.4 → signos_coeficientes[...].fraccion_umbral
+  m3_tvtp_g:
+    coefs: ["G:gamma1", "G:gamma2", "G:gamma3", "G:gamma4"]
+    threshold: 0.01                       # γ > 0,01 estricto
+    min_frac: 0.5                         # cada γ por separado; ventana = eval_window
+    missing_counts_as_fail: true          # denominador = TODOS los meses de corte de eval_window (202), nunca el
+                                          # índice de los cortes con coeficientes (v4.2, Validador N-5)
+# bloques de 24 (A6): mejora_logloss_b24, siempre en el informe (sin clave de configuración)
+holm_families:
+  - nombre: principal_k1
+    modo: vintage
+    p: p_h0
+    miembros:
+      - {id: pool_g, modelo: pool_g, metrica: logloss, comparador: m0_calibrated_persistence}
+  - nombre: secundarias_componentes
+    modo: vintage
+    p: p_h0
+    miembros:
+      - {id: m2, modelo: m2_struct_g, metrica: logloss, comparador: m0_calibrated_persistence}
+      - {id: m3, modelo: m3_tvtp_g, metrica: logloss, comparador: m0_calibrated_persistence}
+      - {id: m3_ctp, modelo: m3_ctp_g, metrica: logloss, comparador: m0_calibrated_persistence}
+  - nombre: m3_tvtp_frente_a_ctp
+    modo: vintage
+    p: p_h0
+    miembros:
+      - {id: tvtp_vs_ctp, modelo: m3_tvtp_g, metrica: ll_g, comparador: m3_ctp_g}
+sensitivities:
+  - {name: s_pit_001_filadelfia, modes: [vintage], matrix_variant: filadelfia_prudente,
+     models: [pool_g, m0_calibrated_persistence, m2_struct_g, m3_tvtp_g], reference: null}
+  - {name: pesos_uno, modes: [vintage], provisional_weighting: uno,
+     models: [pool_g, m0_calibrated_persistence, m2_struct_g, m3_tvtp_g], reference: null}
+  - {name: pesos_excluir, modes: [vintage], provisional_weighting: excluir,
+     models: [pool_g, m0_calibrated_persistence, m2_struct_g, m3_tvtp_g], reference: null}
+  - {name: componentes_sens, modes: [vintage],
+     models: [m0_calibrated_persistence, m2_struct_g_platt, m2_struct_g_norev, m2_struct_g_revpit, m2_struct_g_coinc,
+              m2_struct_g_ar1,
+              m3_tvtp_g_l16, m3_tvtp_g_l12, m3_tvtp_g_fac, m3_tvtp_g_nocal], reference: null}
+who: Constructor
