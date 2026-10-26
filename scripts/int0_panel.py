@@ -33,11 +33,11 @@ def main() -> None:
         mm = m.loc[c]
         anio = mm.index.year
         bono = (1 + mm["r_bono"]).groupby(anio).prod(min_count=12) - 1
-        bolsa_p = np.exp(mm["r_bolsa_precio"].groupby(anio).sum(min_count=12)) - 1
+        bolsa_tr = np.exp(mm["r_bolsa_tr"].groupby(anio).sum(min_count=12)) - 1
         if c not in a.index.get_level_values(0):
             continue
         j = a.loc[c]
-        x = pd.DataFrame({"bono": bono, "jst_bono": j["bond_tr"], "bolsa": bolsa_p + j["eq_dp"], "jst_bolsa": j["eq_tr"]})
+        x = pd.DataFrame({"bono": bono, "jst_bono": j["bond_tr"], "bolsa": bolsa_tr, "jst_bolsa": j["eq_tr"]})
         x = x[(x.index >= 1960) & (x.index <= 2004)]
         r = {}
         for k in ("bono", "bolsa"):

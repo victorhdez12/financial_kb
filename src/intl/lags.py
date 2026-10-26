@@ -13,16 +13,18 @@ from __future__ import annotations
 
 import pandas as pd
 
+# v0.2 (27-oct, Validador INT-0 M1): subidos para cubrir los calendarios HISTÓRICOS (1955-1990), más lentos que los
+# actuales: IP/ventas/paro 60 → 75, IPC 30 → 45, CLI 45 → 60. Solo en la dirección prudente.
 RETRASO_DIAS: dict[str, int] = {
     # actividad
-    "ip": 60,          # producción industrial: 35-45 días en Europa/Japón, 17 en EE. UU.
-    "retail": 60,      # ventas minoristas: 30-45 días
-    "unemp": 60,       # paro armonizado OCDE: 30-60 días (algunos países trimestrales interpolados)
+    "ip": 75,          # producción industrial: hoy 35-45 días en Europa/Japón (17 en EE. UU.); antes, más
+    "retail": 75,      # ventas minoristas: hoy 30-45 días
+    "unemp": 75,       # paro armonizado OCDE (el interpolado de 9 países se excluye antes de 1998: src/intl/panel.py)
     # precios
-    "cpi": 30,         # IPC: 10-20 días (avance de la zona euro, 0)
-    "cpicore": 30,
+    "cpi": 45,         # IPC: hoy 10-20 días (avance de la zona euro, 0)
+    "cpicore": 45,
     # ciclo y encuestas
-    "cli": 45,         # CLI de la OCDE: ≈ 40 días (y muy revisado: declarado)
+    "cli": 60,         # CLI de la OCDE: ≈ 40 días, filtro de dos lados y muy revisado: NO es tiempo real (panel.py)
     "bci": 10, "cci": 10,
     # mercado (medias mensuales: se conocen al cierre del mes)
     "irlt": 1, "ir3m": 1, "ircall": 1, "share": 1, "cbpol": 1,

@@ -12,7 +12,7 @@
    "bolsa": {
     "años": 45,
     "correlacion": 0.995,
-    "dif_media_pp": -0.2
+    "dif_media_pp": 0.27
    }
   },
   "BEL": {
@@ -24,7 +24,7 @@
    "bolsa": {
     "años": 19,
     "correlacion": 0.989,
-    "dif_media_pp": -1.06
+    "dif_media_pp": -0.74
    }
   },
   "CAN": {},
@@ -37,7 +37,7 @@
    "bolsa": {
     "años": 45,
     "correlacion": 0.999,
-    "dif_media_pp": -0.09
+    "dif_media_pp": 0.08
    }
   },
   "DEU": {
@@ -49,7 +49,7 @@
    "bolsa": {
     "años": 44,
     "correlacion": 0.99,
-    "dif_media_pp": -0.66
+    "dif_media_pp": -0.53
    }
   },
   "DNK": {
@@ -57,23 +57,18 @@
     "años": 17,
     "correlacion": 0.966,
     "dif_media_pp": 0.41
-   },
-   "bolsa": {
-    "años": 21,
-    "correlacion": 0.646,
-    "dif_media_pp": 0.48
    }
   },
   "ESP": {
    "bono": {
-    "años": 24,
-    "correlacion": 0.828,
-    "dif_media_pp": 2.57
+    "años": 13,
+    "correlacion": 0.99,
+    "dif_media_pp": 0.41
    },
    "bolsa": {
     "años": 19,
     "correlacion": 0.945,
-    "dif_media_pp": -2.28
+    "dif_media_pp": -1.69
    }
   },
   "FIN": {
@@ -84,8 +79,8 @@
    },
    "bolsa": {
     "años": 45,
-    "correlacion": 0.983,
-    "dif_media_pp": 0.36
+    "correlacion": 0.982,
+    "dif_media_pp": 0.87
    }
   },
   "FRA": {
@@ -96,8 +91,8 @@
    },
    "bolsa": {
     "años": 45,
-    "correlacion": 0.962,
-    "dif_media_pp": 3.2
+    "correlacion": 0.96,
+    "dif_media_pp": -0.52
    }
   },
   "GBR": {
@@ -109,7 +104,7 @@
    "bolsa": {
     "años": 45,
     "correlacion": 0.992,
-    "dif_media_pp": -0.24
+    "dif_media_pp": 0.24
    }
   },
   "IRL": {},
@@ -121,8 +116,8 @@
    },
    "bolsa": {
     "años": 45,
-    "correlacion": 0.957,
-    "dif_media_pp": 0.73
+    "correlacion": 0.958,
+    "dif_media_pp": 0.99
    }
   },
   "JPN": {
@@ -130,11 +125,6 @@
     "años": 15,
     "correlacion": 0.939,
     "dif_media_pp": -0.19
-   },
-   "bolsa": {
-    "años": 45,
-    "correlacion": 0.7,
-    "dif_media_pp": 0.6
    }
   },
   "NLD": {
@@ -146,7 +136,7 @@
    "bolsa": {
     "años": 45,
     "correlacion": 0.949,
-    "dif_media_pp": -0.71
+    "dif_media_pp": -0.45
    }
   },
   "NOR": {
@@ -157,8 +147,8 @@
    },
    "bolsa": {
     "años": 18,
-    "correlacion": 0.981,
-    "dif_media_pp": 1.32
+    "correlacion": 0.98,
+    "dif_media_pp": 1.76
    }
   },
   "PRT": {
@@ -177,7 +167,7 @@
    "bolsa": {
     "años": 45,
     "correlacion": 0.991,
-    "dif_media_pp": -0.45
+    "dif_media_pp": -0.1
    }
   },
   "USA": {
@@ -188,8 +178,8 @@
    },
    "bolsa": {
     "años": 45,
-    "correlacion": 0.98,
-    "dif_media_pp": -0.45
+    "correlacion": 0.979,
+    "dif_media_pp": -0.17
    }
   }
  },
@@ -197,8 +187,8 @@
   "AUS": {
    "ip_yoy": 0,
    "ventas_yoy": 0,
-   "paro": 321,
-   "paro_d12": 309,
+   "paro": 320,
+   "paro_d12": 308,
    "ipc_yoy": 0,
    "ipc_6m_anual": 0,
    "sub_yoy": 0,
@@ -211,19 +201,20 @@
    "confianza_emp": 466,
    "curva": 425,
    "r_bolsa_precio": 563,
+   "r_bolsa_tr": 563,
    "r_bono": 425,
    "r_letra": 443,
    "r_aqr_mkt_usd": 230,
    "inflacion_mes": 0
   },
   "BEL": {
-   "ip_yoy": 586,
+   "ip_yoy": 585,
    "ventas_yoy": 417,
-   "paro": 261,
-   "paro_d12": 250,
+   "paro": 81,
+   "paro_d12": 69,
    "ipc_yoy": 586,
-   "ipc_6m_anual": 593,
-   "sub_yoy": 330,
+   "ipc_6m_anual": 592,
+   "sub_yoy": 329,
    "tipo_10a": 599,
    "tipo_3m": 565,
    "tipo_oficial": 592,
@@ -233,6 +224,7 @@
    "confianza_emp": 239,
    "curva": 565,
    "r_bolsa_precio": 236,
+   "r_bolsa_tr": 236,
    "r_bono": 599,
    "r_letra": 565,
    "r_aqr_mkt_usd": 228,
@@ -240,9 +232,9 @@
   },
   "CAN": {
    "ip_yoy": 513,
-   "ventas_yoy": 154,
+   "ventas_yoy": 153,
    "paro": 597,
-   "paro_d12": 586,
+   "paro_d12": 585,
    "ipc_yoy": 660,
    "ipc_6m_anual": 660,
    "sub_yoy": 514,
@@ -255,6 +247,7 @@
    "confianza_emp": 77,
    "curva": 587,
    "r_bolsa_precio": 587,
+   "r_bolsa_tr": 0,
    "r_bono": 599,
    "r_letra": 587,
    "r_aqr_mkt_usd": 252,
@@ -262,11 +255,11 @@
   },
   "CHE": {
    "ip_yoy": 0,
-   "ventas_yoy": 586,
+   "ventas_yoy": 585,
    "paro": 0,
    "paro_d12": 0,
    "ipc_yoy": 586,
-   "ipc_6m_anual": 593,
+   "ipc_6m_anual": 592,
    "sub_yoy": 586,
    "tipo_10a": 599,
    "tipo_3m": 65,
@@ -277,6 +270,7 @@
    "confianza_emp": 467,
    "curva": 65,
    "r_bolsa_precio": 599,
+   "r_bolsa_tr": 540,
    "r_bono": 599,
    "r_letra": 65,
    "r_aqr_mkt_usd": 228,
@@ -284,21 +278,22 @@
   },
   "DEU": {
    "ip_yoy": 549,
-   "ventas_yoy": 586,
+   "ventas_yoy": 585,
    "paro": 165,
-   "paro_d12": 154,
+   "paro_d12": 153,
    "ipc_yoy": 586,
-   "ipc_6m_anual": 593,
+   "ipc_6m_anual": 592,
    "sub_yoy": 502,
    "tipo_10a": 583,
    "tipo_3m": 539,
    "tipo_oficial": 592,
    "bolsa_12m": 527,
-   "cli": 526,
+   "cli": 525,
    "cli_d6": 520,
    "confianza_emp": 504,
    "curva": 539,
    "r_bolsa_precio": 539,
+   "r_bolsa_tr": 539,
    "r_bono": 583,
    "r_letra": 539,
    "r_aqr_mkt_usd": 228,
@@ -307,10 +302,10 @@
   "DNK": {
    "ip_yoy": 357,
    "ventas_yoy": 429,
-   "paro": 261,
-   "paro_d12": 250,
+   "paro": 81,
+   "paro_d12": 69,
    "ipc_yoy": 442,
-   "ipc_6m_anual": 449,
+   "ipc_6m_anual": 448,
    "sub_yoy": 406,
    "tipo_10a": 215,
    "tipo_3m": 215,
@@ -321,6 +316,7 @@
    "confianza_emp": 239,
    "curva": 215,
    "r_bolsa_precio": 263,
+   "r_bolsa_tr": 0,
    "r_bono": 215,
    "r_letra": 215,
    "r_aqr_mkt_usd": 228,
@@ -328,22 +324,23 @@
   },
   "ESP": {
    "ip_yoy": 465,
-   "ventas_yoy": 106,
-   "paro": 223,
-   "paro_d12": 211,
-   "ipc_yoy": 597,
-   "ipc_6m_anual": 603,
+   "ventas_yoy": 105,
+   "paro": 222,
+   "paro_d12": 210,
+   "ipc_yoy": 596,
+   "ipc_6m_anual": 602,
    "sub_yoy": 334,
    "tipo_10a": 299,
    "tipo_3m": 335,
    "tipo_oficial": 592,
    "bolsa_12m": 227,
-   "cli": 238,
+   "cli": 237,
    "cli_d6": 232,
    "confianza_emp": 494,
    "curva": 299,
    "r_bolsa_precio": 239,
-   "r_bono": 299,
+   "r_bolsa_tr": 239,
+   "r_bono": 156,
    "r_letra": 335,
    "r_aqr_mkt_usd": 228,
    "inflacion_mes": 609
@@ -351,10 +348,10 @@
   "FIN": {
    "ip_yoy": 549,
    "ventas_yoy": 561,
-   "paro": 202,
+   "paro": 201,
    "paro_d12": 189,
    "ipc_yoy": 586,
-   "ipc_6m_anual": 593,
+   "ipc_6m_anual": 592,
    "sub_yoy": 586,
    "tipo_10a": 203,
    "tipo_3m": 215,
@@ -365,18 +362,19 @@
    "confianza_emp": 143,
    "curva": 203,
    "r_bolsa_precio": 575,
-   "r_bono": 202,
+   "r_bolsa_tr": 575,
+   "r_bono": 201,
    "r_letra": 215,
    "r_aqr_mkt_usd": 228,
    "inflacion_mes": 599
   },
   "FRA": {
    "ip_yoy": 573,
-   "ventas_yoy": 346,
-   "paro": 261,
-   "paro_d12": 250,
+   "ventas_yoy": 345,
+   "paro": 81,
+   "paro_d12": 69,
    "ipc_yoy": 586,
-   "ipc_6m_anual": 593,
+   "ipc_6m_anual": 592,
    "sub_yoy": 406,
    "tipo_10a": 539,
    "tipo_3m": 419,
@@ -387,6 +385,7 @@
    "confianza_emp": 348,
    "curva": 419,
    "r_bolsa_precio": 599,
+   "r_bolsa_tr": 599,
    "r_bono": 539,
    "r_letra": 419,
    "r_aqr_mkt_usd": 228,
@@ -395,33 +394,34 @@
   "GBR": {
    "ip_yoy": 660,
    "ventas_yoy": 561,
-   "paro": 261,
-   "paro_d12": 250,
+   "paro": 81,
+   "paro_d12": 69,
    "ipc_yoy": 586,
-   "ipc_6m_anual": 593,
+   "ipc_6m_anual": 592,
    "sub_yoy": 406,
    "tipo_10a": 539,
    "tipo_3m": 227,
    "tipo_oficial": 660,
    "bolsa_12m": 552,
-   "cli": 563,
+   "cli": 562,
    "cli_d6": 557,
    "confianza_emp": 333,
    "curva": 227,
    "r_bolsa_precio": 564,
+   "r_bolsa_tr": 564,
    "r_bono": 539,
    "r_letra": 227,
    "r_aqr_mkt_usd": 228,
    "inflacion_mes": 599
   },
   "IRL": {
-   "ip_yoy": 340,
+   "ip_yoy": 339,
    "ventas_yoy": 45,
-   "paro": 261,
-   "paro_d12": 250,
-   "ipc_yoy": 562,
-   "ipc_6m_anual": 580,
-   "sub_yoy": 337,
+   "paro": 81,
+   "paro_d12": 69,
+   "ipc_yoy": 585,
+   "ipc_6m_anual": 591,
+   "sub_yoy": 336,
    "tipo_10a": 408,
    "tipo_3m": 251,
    "tipo_oficial": 0,
@@ -431,50 +431,53 @@
    "confianza_emp": 239,
    "curva": 251,
    "r_bolsa_precio": 599,
+   "r_bolsa_tr": 0,
    "r_bono": 408,
    "r_letra": 251,
    "r_aqr_mkt_usd": 228,
-   "inflacion_mes": 432
+   "inflacion_mes": 349
   },
   "ITA": {
-   "ip_yoy": 586,
+   "ip_yoy": 585,
    "ventas_yoy": 165,
-   "paro": 261,
-   "paro_d12": 250,
+   "paro": 81,
+   "paro_d12": 69,
    "ipc_yoy": 586,
-   "ipc_6m_anual": 593,
+   "ipc_6m_anual": 592,
    "sub_yoy": 526,
    "tipo_10a": 165,
    "tipo_3m": 314,
    "tipo_oficial": 592,
    "bolsa_12m": 563,
-   "cli": 515,
+   "cli": 514,
    "cli_d6": 509,
    "confianza_emp": 514,
    "curva": 165,
    "r_bolsa_precio": 575,
+   "r_bolsa_tr": 575,
    "r_bono": 165,
    "r_letra": 314,
    "r_aqr_mkt_usd": 228,
    "inflacion_mes": 599
   },
   "JPN": {
-   "ip_yoy": 586,
-   "ventas_yoy": 586,
+   "ip_yoy": 585,
+   "ventas_yoy": 585,
    "paro": 597,
-   "paro_d12": 586,
+   "paro_d12": 585,
    "ipc_yoy": 586,
-   "ipc_6m_anual": 593,
+   "ipc_6m_anual": 592,
    "sub_yoy": 586,
    "tipo_10a": 191,
    "tipo_3m": 32,
    "tipo_oficial": 603,
    "bolsa_12m": 539,
-   "cli": 550,
+   "cli": 549,
    "cli_d6": 544,
    "confianza_emp": 366,
    "curva": 32,
    "r_bolsa_precio": 551,
+   "r_bolsa_tr": 0,
    "r_bono": 191,
    "r_letra": 32,
    "r_aqr_mkt_usd": 228,
@@ -483,11 +486,11 @@
   "NLD": {
    "ip_yoy": 573,
    "ventas_yoy": 117,
-   "paro": 261,
-   "paro_d12": 250,
-   "ipc_yoy": 524,
-   "ipc_6m_anual": 530,
-   "sub_yoy": 524,
+   "paro": 81,
+   "paro_d12": 69,
+   "ipc_yoy": 523,
+   "ipc_6m_anual": 529,
+   "sub_yoy": 523,
    "tipo_10a": 551,
    "tipo_3m": 275,
    "tipo_oficial": 592,
@@ -497,18 +500,19 @@
    "confianza_emp": 498,
    "curva": 275,
    "r_bolsa_precio": 575,
+   "r_bolsa_tr": 575,
    "r_bono": 551,
    "r_letra": 275,
    "r_aqr_mkt_usd": 228,
    "inflacion_mes": 536
   },
   "NOR": {
-   "ip_yoy": 586,
+   "ip_yoy": 585,
    "ventas_yoy": 45,
    "paro": 189,
    "paro_d12": 177,
    "ipc_yoy": 586,
-   "ipc_6m_anual": 593,
+   "ipc_6m_anual": 592,
    "sub_yoy": 298,
    "tipo_10a": 239,
    "tipo_3m": 311,
@@ -519,18 +523,19 @@
    "confianza_emp": 213,
    "curva": 239,
    "r_bolsa_precio": 227,
+   "r_bolsa_tr": 227,
    "r_bono": 239,
    "r_letra": 311,
    "r_aqr_mkt_usd": 228,
    "inflacion_mes": 599
   },
   "PRT": {
-   "ip_yoy": 586,
+   "ip_yoy": 585,
    "ventas_yoy": 165,
-   "paro": 261,
-   "paro_d12": 250,
+   "paro": 81,
+   "paro_d12": 69,
    "ipc_yoy": 586,
-   "ipc_6m_anual": 593,
+   "ipc_6m_anual": 592,
    "sub_yoy": 406,
    "tipo_10a": 137,
    "tipo_3m": 232,
@@ -541,18 +546,19 @@
    "confianza_emp": 215,
    "curva": 137,
    "r_bolsa_precio": 203,
+   "r_bolsa_tr": 0,
    "r_bono": 137,
    "r_letra": 229,
    "r_aqr_mkt_usd": 209,
    "inflacion_mes": 599
   },
   "SWE": {
-   "ip_yoy": 538,
+   "ip_yoy": 537,
    "ventas_yoy": 237,
-   "paro": 261,
-   "paro_d12": 250,
+   "paro": 81,
+   "paro_d12": 69,
    "ipc_yoy": 586,
-   "ipc_6m_anual": 593,
+   "ipc_6m_anual": 592,
    "sub_yoy": 406,
    "tipo_10a": 216,
    "tipo_3m": 275,
@@ -563,6 +569,7 @@
    "confianza_emp": 107,
    "curva": 216,
    "r_bolsa_precio": 659,
+   "r_bolsa_tr": 659,
    "r_bono": 216,
    "r_letra": 275,
    "r_aqr_mkt_usd": 228,
@@ -570,21 +577,22 @@
   },
   "USA": {
    "ip_yoy": 660,
-   "ventas_yoy": 586,
+   "ventas_yoy": 585,
    "paro": 597,
-   "paro_d12": 586,
+   "paro_d12": 585,
    "ipc_yoy": 586,
-   "ipc_6m_anual": 593,
+   "ipc_6m_anual": 592,
    "sub_yoy": 562,
    "tipo_10a": 620,
    "tipo_3m": 486,
    "tipo_oficial": 605,
    "bolsa_12m": 563,
-   "cli": 598,
+   "cli": 597,
    "cli_d6": 592,
    "confianza_emp": 659,
    "curva": 486,
    "r_bolsa_precio": 575,
+   "r_bolsa_tr": 575,
    "r_bono": 620,
    "r_letra": 486,
    "r_aqr_mkt_usd": 660,

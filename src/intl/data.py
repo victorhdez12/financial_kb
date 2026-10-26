@@ -39,7 +39,8 @@ def load_dev(con, sid: str) -> pd.Series:
     df = con.execute("select date, value from obs_latest where series_id = ? and value is not null and date <= ? "
                      "order by date", [sid, DEV_END.date()]).df()
     s = pd.Series(df["value"].astype(float).values, index=pd.to_datetime(df["date"]), name=sid)
-    s = s[~s.index.duplicated(keep="last")]
+    if s.index.duplicated().any():
+        raise FactorCutoffError(f"{sid}: fechas repetidas en obs_latest (no se elige una en silencio)")
     check(s)
     return s
 

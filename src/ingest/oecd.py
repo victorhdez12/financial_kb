@@ -102,6 +102,8 @@ def main(refresh: bool = False) -> None:
             if name == "finmark" and meas == "SHARE" and k[2] != "IX":
                 continue
             slug, nm, cat, units = META[meas]
+            if g["TIME_PERIOD"].duplicated().any():   # p. ej. TOVM con ACTIVITY BTE y G47 a la vez
+                raise ValueError(f"oecd {name} {k}: varias series por fecha; añadir la dimensión que las separa")
             n[name] = n.get(name, 0) + (cw.add(
                 f"oecd_{slug}_{area.lower()}", _series(g, zero_is_missing=units.startswith("index")), name=f"{nm}, {g['Reference area'].iloc[0]}",
                 category=cat, frequency="M", units=units, country=area,

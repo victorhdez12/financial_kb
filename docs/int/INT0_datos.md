@@ -46,7 +46,26 @@ Matriz de cobertura completa: `research/int/cobertura.md` (`scripts/int0_cobertu
 - **Países con huecos** (AUS, CHE, CAN, IRL…): se reservan como **países de prueba** fuera de muestra (decisión del
   usuario, 26-oct): se verá cómo se comporta el modelo en ellos con lo que tengan.
 
+## Validador (27-oct): ⚠️ usable tras corregir → corregido
+Informe `docs/validation/2026-10-27_int0_datos.md` (rama `claude/int0-validacion`, `41fd273`; la sesión no escribió el
+código). Corte técnico ✅, fórmula del bono ✅. Diff del Validador aplicado y verificado en local:
+- **A1 (ALTO, confirmado):** las diferencias contaban observaciones, no meses (IPC trimestral de IRL hasta ~1975, meses
+  sueltos en FIN/PRT) → rejilla mensual completa antes de transformar; `load_dev` y la ingesta OCDE fallan con fechas
+  repetidas (comprobado: con los datos de hoy no hay ninguna, la ingesta diaria no se rompe); control de años en el anual.
+- **A2 (ALTO, probable):** el paro mensual de 9 países (BEL, DNK, FRA, GBR, IRL, ITA, NLD, PRT, SWE) empieza en 1983,
+  interpolado de encuestas → **excluido antes de 1998-01** (decisión del Constructor, prudente).
+- **M1:** retrasos subidos para los calendarios históricos: IP/ventas/paro 75 días, IPC 45, CLI 60.
+- **CLI y `crisisjst`:** filtros de dos lados / clasificación ex post → **no se usan como variables "as of"**.
+- **Casos JST, confirmados en local** (`scripts/int0_diagnostico.py`, `research/int/diagnostico.json`): ESP bono
+  +5,1 pp ≤ 1991 frente a +0,4 pp ≥ 1992 → bono mensual de ESP desde 1992 (corr. 0,99); FRA: el índice OCDE ya es de
+  rentabilidad total (−0,5 pp sin sumar dividendo) → corregido; DNK y JPN: rupturas del índice (residuos concentrados en
+  1985/1988/1993 y 1972-73) → sin bolsa mensual OCDE, se usa AQR desde 1986.
+- **Saltos (29 series):** casi todos hechos reales (mayo del 68 en FRA, huelga general de SWE 1980, cierre patronal de
+  NOR 1986, semana de tres días de GBR 1974, IVA de GBR 1979, impuesto al consumo de JPN 1997); sin errores de unidades.
+  Declarados; la IP de BEL antes de 1962 es ruidosa.
+- Tests del panel: 9 ✅ (2 nuevos del Validador).
+
 ## Pendiente en INT-0
 1. (hecho) · 2. (hecho) · 3. (hecho; la conversión a EUR se hace al usarlo)
 4. **Descarga de la base de revisiones** de la OCDE (para ≥ 2005 y en vivo; no se usa en desarrollo).
-5. **Validador independiente** sobre los datos (coherencia JST frente a OCDE en los años comunes, saltos, unidades).
+5. (hecho: Validador ⚠️ → corregido; ver arriba)

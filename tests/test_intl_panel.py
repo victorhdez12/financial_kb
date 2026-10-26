@@ -37,8 +37,8 @@ def test_retrasos_y_asof():
         assert Lg.medida(sid) in Lg.RETRASO_DIAS, sid
     s = pd.Series([1.0, 2.0], index=pd.to_datetime(["2004-01-01", "2004-02-01"]))
     rej = pd.date_range("2004-01-31", "2004-05-31", freq="ME")
-    a = Lg.asof(s, "oecd_ip_deu", rej)          # enero disponible 31-ene + 60 d = 31-mar
-    assert np.isnan(a.iloc[0]) and np.isnan(a.iloc[1]) and a.iloc[2] == 1.0 and a.iloc[3] == 2.0
+    a = Lg.asof(s, "oecd_ip_deu", rej)          # enero: 31-ene + 75 d = 15-abr → usable al cierre de abril
+    assert a.iloc[:3].isna().all() and a.iloc[3] == 1.0 and a.iloc[4] == 2.0
 
 
 def test_bono_tr():
@@ -62,3 +62,25 @@ def test_panel_real_antes_de_2005():
     assert m.index.get_level_values("fecha").max() <= D.DEV_END
     assert a.index.get_level_values("año").max() <= 2004
     assert set(m.index.get_level_values("pais")) == set(D.PAISES)
+
+
+def test_diferencias_por_meses_no_por_observaciones():
+    from src.intl import panel as P
+    # IPC trimestral (feb, may, ago, nov) como el de IRL antes de ~1975, y después mensual
+    fechas = list(pd.date_range("1970-02-01", "1974-11-01", freq="3MS")) + list(pd.date_range("1975-01-01", "1976-12-01", freq="MS"))
+    s = pd.Series(np.exp(np.arange(len(fechas)) * 0.01), index=pd.DatetimeIndex(fechas), name="oecd_cpi_irl_idx")
+    m = P._mensual_completa(s)
+    assert m.index.freqstr in ("MS", None) and (m.index.day == 1).all()
+    d1, d12 = np.log(m).diff(), np.log(m).diff(12)
+    assert np.isnan(d1[pd.Timestamp("1970-05-01")])                       # no hay abril: no es "inflación del mes"
+    assert d12[pd.Timestamp("1971-02-01")] == pytest.approx(4 * 0.01)      # 4 trimestres, no 12 observaciones
+    with pytest.raises(ValueError):
+        P._mensual_completa(pd.Series([1.0, 2.0], index=pd.to_datetime(["2000-01-01", "2000-01-31"]), name="x"))
+
+
+def test_load_dev_falla_con_fechas_repetidas():
+    con = duckdb.connect(":memory:")
+    con.execute("create table obs_latest (series_id varchar, date date, value double)")
+    con.execute("insert into obs_latest values ('oecd_ip_deu','2004-11-01',1),('oecd_ip_deu','2004-11-01',2)")
+    with pytest.raises(D.FactorCutoffError):
+        D.load_dev(con, "oecd_ip_deu")
