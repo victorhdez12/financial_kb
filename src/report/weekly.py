@@ -13,6 +13,7 @@ import pandas as pd
 
 from src.regime.credit import THRESHOLDS
 from src.report.analogs import find_analogs
+from src.report import termometro_vivo as TV
 from src.report.narrative import reading
 from src.warehouse import db
 
@@ -197,6 +198,15 @@ def md_analogs(s: dict) -> str:
 ARROW = {"up": "↑", "down": "↓"}
 
 
+def md_termometro(s: dict) -> str:
+    tv = s.get("termometro")
+    if tv is None:
+        return "## 5b. Termómetro de recesión (informativo)\n\n_No disponible esta semana._"
+    if "error" in tv:
+        return f"## 5b. Termómetro de recesión (informativo)\n\n_No disponible esta semana: {tv['error']}._"
+    return "## 5b. Termómetro de recesión (informativo)\n\n" + TV.markdown(tv).split("\n", 1)[-1].lstrip()
+
+
 def markdown(s: dict, lectura: str, origin: str) -> str:
     r_ = dict(s["regime"])
     r_["G_state"] = "G" + ARROW.get(r_["G_state"], "?")
@@ -256,6 +266,8 @@ M2 a/a − PIB nominal a/a: {lq['m2_minus_gdp']} pp · Liquidez neta Fed: {lq['n
 
 {md_analogs(s)}
 
+{md_termometro(s)}
+
 ## 6. Lectura
 
 _Origen: {origin}._
@@ -274,6 +286,15 @@ def main(today: date | None = None) -> None:
     con.close()
     signal = build_signal(rm, meta, analogs, analog_meta)
     lectura, origin = reading(signal)
+    # Termómetro informativo (docs/int/TERMOMETRO_diseno_v1.md): después de la lectura, para que no la condicione; si
+    # falla, el reporte sale igual y lo dice.
+    con = db.connect(read_only=True)
+    try:
+        signal["termometro"] = TV.termometro(con, today or date.today())
+    except Exception as e:  # noqa: BLE001
+        signal["termometro"] = {"error": f"{type(e).__name__}: {e}"}
+    finally:
+        con.close()
     stamp = (today or date.today()).isoformat()
     REPORTS.mkdir(parents=True, exist_ok=True)
     (REPORTS / f"{stamp}_signal.json").write_text(json.dumps(signal, ensure_ascii=False, indent=2, default=str))
