@@ -139,3 +139,58 @@ filas del modelo, en abril de t + 1 (1962-2003):
   escribir el código. El 2.º intento se diseñó, además, conociendo el resultado del 1.º (declarado). La compensación
   declarada (mismos umbrales, sin 3.er intento) es razonable. El riesgo que queda es haber elegido el remedio
   (recalibración + cruzada) sabiendo que T2 subiría con más filas.
+
+## 6. T2 con 31 filas y la lista de países — ⚠️ (T2 se puede mostrar, como banda y con avisos) / ❌ (lista de países)
+
+**¿Bastan 31 filas?** Pasa, pero con poco respaldo:
+- 31 filas = **22 episodios** (país, pico) en **12 años** (1970, 1974-75, 1980, 1982, 1988, 1990-93, 2002-03). Ningún
+  país llega a 8 filas (DEU y USA 6, FIN 4, SWE 3; BEL, ESP, FRA y NOR, 1), así que **todos** dependen solo del agregado.
+- Bootstrap por años (2.000 réplicas, 12 bloques): r IC 95 % [0,65; 0,96], pendiente [0,78; 1,16]; **pasa en el 85 %**
+  de las réplicas. Por episodio (22 bloques): r [0,70; 0,94], pendiente [0,76; 1,11], pasa en el 89 %.
+- Con S4 como dice §8 d, el r baja a 0,818 (§3). Y en vivo se añade un error que la puerta no mide: el estado "en
+  recesión" del fechado trimestral coincide con JST en solo el 70 % de las filas de T2 (§3).
+- **Opinión del Validador:** la regla fijada se cumple y el veredicto "T2 pasa" se mantiene. Pero la evidencia es de ≈ 20
+  episodios agrupados en 4-5 ciclos mundiales. Basta para enseñar la **banda** (bajo/medio/alto/muy alto frente a los
+  percentiles, como ya prevé §4), no para leer el número. Propuesta: (i) la probabilidad entre paréntesis, con la nota
+  "puerta con 31 filas / 22 episodios; IC 95 % del r 0,65-0,96"; (ii) T2 solo cuando el fechado en vivo lleve ≥ 2
+  trimestres en recesión (cuando hay fecha de entrada); (iii) nada por país "con puerta propia", porque no la tiene ninguno.
+
+**DNK y JPN en la lista: confirmado (❌, error de código; no cambia el agregado).**
+`paises_con_probabilidad` usa `pasa[g] and v["pasa"] is not False`. "Sin puerta propia" deja `pasa = None`, así que entran
+los países con 0 filas. DNK y JPN tienen C6 = NaN (`SIN_BOLSA`, §8: "sin T1 ni T2, solo indicadores"), así que tienen 0 filas
+en T1 y T2. Aun así salen en la lista de T2 del veredicto de `termometro_puerta_v2.{json,md}`. El mismo fallo está en
+`termometro_puerta.py`, pero allí no se notó porque no pasó nada. En vivo su probabilidad sería NaN, pero la lista oficial
+promete algo que el diseño prohíbe. Con la regla corregida, T2 se muestra en **12 países**: BEL, DEU, ESP, FIN, FRA, GBR,
+ITA, NLD, NOR, PRT, SWE, USA. Diff en §9. Se propone corregir el JSON/MD con una nota de errata (sin cambiar r ni pendiente).
+
+## 7. ¿Algún error que, corregido, cambie el veredicto? — ✅ No se ha encontrado
+
+Revisados como candidatos:
+- S4 fuera de §8 d → T2 sigue pasando (0,818 / 0,906).
+- La fuga de S5 por paridad → en la dirección que favorece a la puerta y de tamaño pequeño. No puede hacer pasar a T1, que
+  no usa S5. Para que T2 no pasara, el r tendría que bajar más de 0,078 (0,018 con S4 de §8 d). No lo he cuantificado
+  rehaciendo los pliegues (§9, diff 3).
+- "As of", unidades, regla propia/agrupada, pliegues → correctos.
+- Lista de países → error real, pero no toca el r ni la pendiente.
+
+**Ningún error encontrado invierte T1 (no pasa) ni T2 (pasa).** Lo más cercano a un cambio no es un error. Al quitar FIN,
+T1 pasaría (0,814 / 0,863, §8). Y la combinación de S4 según §8 d con la fuga de S5 podría acercar T2 al umbral de r. Si se
+aplica el diff 2, conviene volver a medir T2 (sería un informativo, no un 3.er intento).
+
+## 8. Sensibilidades a posteriori (no cambian el veredicto)
+
+Script `scripts/val_termometro_sens.py` (commit `ada66e7`, antes de correrlo); salida `research/int/val_termometro_sens.json`.
+
+| sensibilidad | resultado |
+|---|---|
+| Reproducción de la puerta cruzada | T1 0,788 / 0,794 (190 filas); T2 0,878 / 0,943 (31): idéntica a la oficial |
+| T2, bootstrap por años (12 bloques, B = 2.000) | r [0,65; 0,88; 0,96], pendiente [0,78; 0,93; 1,16]; pasa el 85 % |
+| T2, bootstrap por episodio (22) | r [0,70; 0,88; 0,94], pendiente [0,76; 0,94; 1,11]; pasa el 89 % |
+| T1, bootstrap por años (22) | r [0,64; 0,79; 0,92], pendiente [0,53; 0,80; 1,15]; pasa el 37 % |
+| T1, dejando fuera un país | no pasa con 11 de 12 (r 0,768-0,797; pendiente 0,747-0,810); **sin FIN pasa** (0,814 / 0,863). Sin NOR, el peor (0,768 / 0,747). DNK y JPN no aportan filas |
+| Sin el B1 común (parte Xβ) | T1 0,870 / 0,885; T2 0,858 / 0,844 |
+| S4 según §8 d | T2 0,818 / 0,906 (sin recalibrar 0,890 / 0,869); corr con la S4 del código 0,59 |
+| B1 en vivo frente a JST | ver §3 |
+
+Lectura: T1 está en el borde (un país, FIN, decide; el 37 % de las réplicas pasa), y el "no pasa" fijado es legítimo.
+T2 pasa en la mayoría de las réplicas, pero con una base estrecha.
