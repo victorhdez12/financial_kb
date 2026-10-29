@@ -97,3 +97,45 @@ filas del modelo, en abril de t + 1 (1962-2003):
 - La puerta **no mide** este error. Es el mayor error que no se ha medido en la cadena de T2 en vivo.
 - Recomendación (sin rehacer la puerta): publicar junto a T2 la concordancia del estado (70 %). Y, como informativo, la
   correlación de p anual con la p mensual que usa B1 en vivo, en las filas donde coinciden los estados.
+
+## 4. Recalibración y validación cruzada (2.º intento) — ✅ (la puerta mide lo que dice §9), con matices ⚠️
+
+- **Solo usa las probabilidades.** `calibrar(pa, pm)` hace la MCO de logit(p anual) sobre logit(p mensual). Ni `f.y` ni
+  ninguna rentabilidad entran en `calibrar`, `rectas`, `traducir` ni `puerta`. El objetivo solo entra en `congelar` (el logit
+  de INT-4 con todas las filas ≤ 2004, que es el modelo congelado por diseño y es común a las dos probabilidades). ✅
+- **Sin fugas entre pliegues:** en cada pliegue, las rectas y (α, β) se ajustan con las filas de la mitad de ajuste
+  (`mf`), y la puerta se llena solo con las de la otra mitad (`mg`). Cada fila se predice una vez, con el pliegue que no
+  la usó. La única excepción es la de S5 (§2), menor. ✅
+- **Reproducido exactamente** con `scripts/val_termometro_sens.py`: T1 190 filas, r 0,7882 / pendiente 0,7943 (no pasa);
+  T2 31 filas, r 0,8781 / pendiente 0,9428 (pasa).
+- **¿Mide lo que dice §9?** Sí: los mismos umbrales, filas de los dos pliegues juntas, regla de rectas igual y puerta
+  propia por país con ≥ 8 filas en total. ✅
+- ⚠️ **La recalibración apenas arregla lo que pretendía.** Se ajusta en escala logit, pero la puerta mide la pendiente en
+  probabilidad. En T1, β ≈ 1,01 (pares) y 0,84 (impares): la pendiente pasa de 0,68 (sin recalibrar, cruzada) a 0,79, a
+  0,006 del umbral. En T2 la recalibración **empeora** el r (0,910 → 0,878), porque (α, β) se ajusta con 13 y 18 filas. T2
+  pasaba también sin recalibrar (0,910 / 0,873). No es un error: así estaba fijado.
+- ⚠️ **El B1 común infla el r.** Las dos probabilidades llevan el mismo B1 de JST (§8 e). Mirando solo la parte de
+  indicadores del logit (Xβ anual frente a Xβ mensual traducida, sin recalibrar), T1 da r 0,870 / pendiente 0,885 y T2,
+  0,858 / 0,844. La traducción de los indicadores de T1 es razonable en escala logit; el fallo de T1 en probabilidad viene
+  sobre todo de la no linealidad. Es informativo y a posteriori: **no cambia el veredicto** (la puerta fijada es en
+  probabilidad).
+
+## 5. Orden de commits y procedencia — ✅ (con la salvedad de siempre ⚠️)
+
+| commit | hora (CET) | contenido |
+|---|---|---|
+| `e9ec71d` | 12:17:25 | diseño v1.2 (§8) |
+| `24979da` | 12:20:33 | código + tests + script del 1.er intento |
+| `188cc30` | 12:20:56 | salidas del 1.er intento (procedencia: `24979da`, árbol limpio, 11:20:34 UTC) |
+| `a94ac09` | 12:28:56 | diseño v1.3 (§9), con contaminación declarada |
+| `eb3c73d` | 12:29:38 | código del 2.º intento (+17 líneas en termometro.py: solo `_lg`, `calibrar`, `aplicar_cal`; el resto, sin tocar) |
+| `d9f1291` | 12:30:12 | salidas del 2.º (procedencia: `eb3c73d`, árbol limpio, 11:29:39 UTC) |
+
+- El orden diseño → código → ejecución se cumple en los dos intentos. `procedencia()` aborta con el árbol sucio. Las
+  salidas son de commits que solo tocan resultados, bitácora y estado. `trial_log.md` tiene las dos líneas (108-109). Los
+  módulos de base (int4, panel, lags, data) no cambian después de 6a2c633 (26-oct).
+- ⚠️ Entre el diseño v1.3 y el código pasan 42 segundos, y entre el código y la ejecución, 1 segundo. El código estaba
+  escrito antes de commitear el diseño. Las horas prueban el orden de los commits, no que el diseño se fijara antes de
+  escribir el código. El 2.º intento se diseñó, además, conociendo el resultado del 1.º (declarado). La compensación
+  declarada (mismos umbrales, sin 3.er intento) es razonable. El riesgo que queda es haber elegido el remedio
+  (recalibración + cruzada) sabiendo que T2 subiría con más filas.
