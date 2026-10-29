@@ -143,6 +143,15 @@ def test_nunca_jst():
         V._serie(con, "CPIAUCSL", pd.Timestamp("2026-01-31"))
 
 
+def test_percentil_empates():
+    """Rango medio: S4 = 0 con el 60 % de los meses en 0 y ninguno por debajo → p30 (con «≤» salía p60)."""
+    h = np.r_[np.zeros(60), np.linspace(0.1, 1, 40)]
+    assert V._pct(h, 0.0) == (30, 100)
+    assert V._pct(h, 1.0) == (100, 100) and V._pct(h, -1.0) == (0, 100)
+    assert V._pct(np.arange(100.0), 49.0) == (50, 100)          # sin empates: casi igual que antes (49,5 → 50)
+    assert V._pct(h[:59], 0.0) == (None, 59)                    # historia corta
+
+
 def test_bandas_y_fin_de_mes():
     pct = {"p50": 0.8, "p80": 0.9, "p95": 0.95}
     assert [V.banda(x, pct) for x in (0.5, 0.8, 0.9, 0.95, 0.99)] == ["bajo", "medio", "alto", "muy alto", "muy alto"]

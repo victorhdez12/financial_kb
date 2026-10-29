@@ -265,7 +265,9 @@ def _pct(hist: np.ndarray, v: float) -> tuple[int | None, int]:
     h = hist[np.isfinite(hist)]
     if not np.isfinite(v) or len(h) < MIN_MESES_PCT:
         return None, int(len(h))
-    return int(round(float((h <= v).mean() * 100))), int(len(h))
+    # rango medio: con empates (C4 y S4 son difusiones discretas; S4 = 0 en ≈ 60 % de los meses) el valor queda en el
+    # centro de su bloque y no en lo alto (Validador, diff 3)
+    return int(round(float(((h < v).mean() + (h <= v).mean()) / 2 * 100))), int(len(h))
 
 
 def _q_conocido(pib: pd.Series, corte: pd.Timestamp):
@@ -362,7 +364,8 @@ def calcular(pm: pd.DataFrame, bis: dict, pib: dict, corte: pd.Timestamp, par: d
             "procedencia_puerta": par.get("procedencia_puerta"),
             "metodo": {"contribucion": "b_k · (x_k − media ≤ 2004 de los meses en recesión del núcleo), en unidades "
                                        "del logit antes de recalibrar",
-                       "percentil_indicador": f"frente a los meses 1960-2004 del propio país (≥ {MIN_MESES_PCT} meses)",
+                       "percentil_indicador": f"frente a los meses 1960-2004 del propio país (≥ {MIN_MESES_PCT} meses), "
+                                              "rango medio con empates",
                        "datos": "obs_latest (sin vintages: niveles revisados), retrasos as of de src/intl/lags.py "
                                 "y src/intl/termometro.py"}}
 
@@ -428,6 +431,6 @@ def markdown(res: dict) -> str:
         out += ["> [!warning] Datos que faltan (serie cortada o vieja: el indicador sale «—»)", *faltan, ""]
     out.append("Método: «en recesión» = la suma de 4 trimestres del PIB real (OCDE) cae dos trimestres seguidos (sale "
                "con dos subidas seguidas), dato conocido 75 días tras el trimestre. Entre paréntesis tras cada "
-               "indicador, su percentil frente a los meses 1960-2004 del propio país. Modelo y escalas congelados "
+               "indicador, su percentil frente a los meses 1960-2004 del propio país (rango medio si hay empates). Modelo y escalas congelados "
                "(≤ 2004); datos revisados, no de primera publicación.")
     return "\n".join(out) + "\n"
