@@ -1,0 +1,943 @@
+{
+ "procedencia": {
+  "commit": "5e19c602c46b38ed38d408a1eb6c596bbe82db26",
+  "arbol_limpio": true,
+  "hora_utc": "2026-10-29T14:43:50+00:00"
+ },
+ "nucleo": [
+  "BEL",
+  "DEU",
+  "DNK",
+  "ESP",
+  "FIN",
+  "FRA",
+  "GBR",
+  "ITA",
+  "JPN",
+  "NLD",
+  "NOR",
+  "PRT",
+  "SWE",
+  "USA"
+ ],
+ "z": {
+  "1": 2.802,
+  "holm6": 3.48
+ },
+ "auc_logit_T1_publicada": 0.732,
+ "r_anidado": [
+  0.8,
+  0.9,
+  0.95
+ ],
+ "Q1_oro_refugio": {
+  "1972_2004": {
+   "oro_stats": {
+    "n": 462.0,
+    "sd": 0.248,
+    "rho_paises": 0.929,
+    "ar1": 0.243
+   },
+   "recesion": {
+    "pais_años_estado": 61,
+    "pais_años_resto": 401,
+    "n_ef_estado": 7.3,
+    "mde_pp_z1": 29.9,
+    "mde_pp_zholm6": 37.1
+   },
+   "recesion_financiera": {
+    "pais_años_estado": 15,
+    "pais_años_resto": 447,
+    "n_ef_estado": 4.3,
+    "mde_pp_z1": 36.6,
+    "mde_pp_zholm6": 45.5
+   },
+   "crisis_inicio_y_siguiente": {
+    "pais_años_estado": 20,
+    "pais_años_resto": 442,
+    "n_ef_estado": 6.3,
+    "mde_pp_z1": 31.4,
+    "mde_pp_zholm6": 39.0
+   }
+  },
+  "1877_2004": {
+   "oro_stats": {
+    "n": 1765.0,
+    "sd": 0.308,
+    "rho_paises": 0.563,
+    "ar1": 0.173
+   },
+   "recesion": {
+    "pais_años_estado": 393,
+    "pais_años_resto": 1372,
+    "n_ef_estado": 75.8,
+    "mde_pp_z1": 12.3,
+    "mde_pp_zholm6": 15.3
+   },
+   "recesion_financiera": {
+    "pais_años_estado": 113,
+    "pais_años_resto": 1652,
+    "n_ef_estado": 36.4,
+    "mde_pp_z1": 16.0,
+    "mde_pp_zholm6": 19.8
+   },
+   "crisis_inicio_y_siguiente": {
+    "pais_años_estado": 122,
+    "pais_años_resto": 1643,
+    "n_ef_estado": 33.9,
+    "mde_pp_z1": 16.4,
+    "mde_pp_zholm6": 20.4
+   }
+  },
+  "1877_1971": {
+   "oro_stats": {
+    "n": 1303.0,
+    "sd": 0.327,
+    "rho_paises": 0.314,
+    "ar1": 0.149
+   },
+   "recesion": {
+    "pais_años_estado": 332,
+    "pais_años_resto": 971,
+    "n_ef_estado": 98.5,
+    "mde_pp_z1": 11.6,
+    "mde_pp_zholm6": 14.4
+   },
+   "recesion_financiera": {
+    "pais_años_estado": 98,
+    "pais_años_resto": 1205,
+    "n_ef_estado": 42.6,
+    "mde_pp_z1": 15.5,
+    "mde_pp_zholm6": 19.3
+   },
+   "crisis_inicio_y_siguiente": {
+    "pais_años_estado": 102,
+    "pais_años_resto": 1201,
+    "n_ef_estado": 38.5,
+    "mde_pp_z1": 16.2,
+    "mde_pp_zholm6": 20.1
+   }
+  },
+  "mundial_usd_1972_2004": {
+   "oro_sd": 0.271,
+   "oro_ar1": 0.32,
+   "cuota_recesion": {
+    "años": 33,
+    "media_x": 0.132,
+    "dt_x": 0.186,
+    "ar1_x": 0.24,
+    "mde_pp_0a100_z1": 76.8,
+    "mde_pp_por_dt_z1": 14.3,
+    "mde_pp_0a100_zholm6": 95.4,
+    "mde_pp_por_dt_zholm6": 17.7
+   },
+   "mayoria_recesion": {
+    "años": 33,
+    "media_x": 0.061,
+    "dt_x": 0.242,
+    "ar1_x": -0.07,
+    "mde_pp_0a100_z1": 53.3,
+    "mde_pp_por_dt_z1": 12.9,
+    "mde_pp_0a100_zholm6": 66.3,
+    "mde_pp_por_dt_zholm6": 16.1
+   }
+  },
+  "mundial_usd_1877_2004": {
+   "oro_sd": 0.151,
+   "oro_ar1": 0.36,
+   "cuota_recesion": {
+    "años": 128,
+    "media_x": 0.226,
+    "dt_x": 0.213,
+    "ar1_x": 0.45,
+    "mde_pp_0a100_z1": 20.7,
+    "mde_pp_por_dt_z1": 4.4,
+    "mde_pp_0a100_zholm6": 25.7,
+    "mde_pp_por_dt_zholm6": 5.5
+   },
+   "mayoria_recesion": {
+    "años": 128,
+    "media_x": 0.164,
+    "dt_x": 0.372,
+    "ar1_x": 0.2,
+    "mde_pp_0a100_z1": 10.8,
+    "mde_pp_por_dt_z1": 4.0,
+    "mde_pp_0a100_zholm6": 13.5,
+    "mde_pp_por_dt_zholm6": 5.0
+   }
+  },
+  "mensual_caida_bolsa_usa_5pc_1973_2004": {
+   "meses_estado": 24,
+   "meses_resto": 360,
+   "ar1_estado": 0.2,
+   "dt_oro_mensual": 0.053,
+   "mde_pp_mes_z1": 3.3,
+   "mde_pp_mes_zholm6": 4.1
+  },
+  "mensual_caida_bolsa_usa_8pc_1973_2004": {
+   "meses_estado": 14,
+   "meses_resto": 370,
+   "ar1_estado": 0.26,
+   "dt_oro_mensual": 0.053,
+   "mde_pp_mes_z1": 4.33,
+   "mde_pp_mes_zholm6": 5.38
+  }
+ },
+ "Q2_oro_tipo_real": {
+  "mensual_1973_2004": {
+   "dt_oro_mensual": 0.053,
+   "dt_dreal_mensual_pp": 0.732,
+   "n": 384,
+   "ar1_x": 0.28,
+   "ar1_y": 0.28,
+   "n_ef": 327.6,
+   "mde_r_z1": 0.155,
+   "mde_r_zholm6": 0.192
+  },
+  "mensual_1980_2004": {
+   "dt_oro_mensual": 0.047,
+   "dt_dreal_mensual_pp": 0.742,
+   "n": 300,
+   "ar1_x": 0.29,
+   "ar1_y": 0.11,
+   "n_ef": 282.5,
+   "mde_r_z1": 0.167,
+   "mde_r_zholm6": 0.207
+  },
+  "anual_dreal_1973_2004": {
+   "x": "Δ tipo real dic-dic",
+   "dt_oro_anual": 0.233,
+   "n": 32,
+   "ar1_x": -0.29,
+   "ar1_y": 0.29,
+   "n_ef": 37.8,
+   "mde_r_z1": 0.456,
+   "mde_r_zholm6": 0.566
+  },
+  "anual_nivel_t_menos_1_1973_2004": {
+   "x": "nivel del tipo real en dic de t−1",
+   "dt_oro_anual": 0.233,
+   "n": 32,
+   "ar1_x": 0.65,
+   "ar1_y": 0.29,
+   "n_ef": 22.0,
+   "mde_r_z1": 0.597,
+   "mde_r_zholm6": 0.742
+  }
+ },
+ "Q3_dinero_activos": {
+  "dinero_real_stats": {
+   "n": 1724.0,
+   "sd": 0.561,
+   "rho_paises": 0.099,
+   "ar1": 0.165
+  },
+  "eq_tr_real": {
+   "1871_2004": {
+    "resultado_stats": {
+     "n": 1741.0,
+     "sd": 0.224,
+     "rho_paises": 0.302,
+     "ar1": 0.107
+    },
+    "filas": 1610,
+    "m_kish": 12.37,
+    "central": {
+     "n_ef": 1159.6,
+     "mde_pp_por_dt_z1": 1.84,
+     "mde_pp_por_dt_zholm6": 2.29
+    },
+    "prudente": {
+     "n_ef": 350.2,
+     "mde_pp_por_dt_z1": 3.35,
+     "mde_pp_por_dt_zholm6": 4.16
+    }
+   },
+   "1950_2004": {
+    "resultado_stats": {
+     "n": 756.0,
+     "sd": 0.255,
+     "rho_paises": 0.379,
+     "ar1": 0.14
+    },
+    "filas": 726,
+    "m_kish": 13.46,
+    "central": {
+     "n_ef": 472.3,
+     "mde_pp_por_dt_z1": 3.28,
+     "mde_pp_por_dt_zholm6": 4.08
+    },
+    "prudente": {
+     "n_ef": 121.0,
+     "mde_pp_por_dt_z1": 6.49,
+     "mde_pp_por_dt_zholm6": 8.06
+    }
+   }
+  },
+  "bond_tr_real": {
+   "1871_2004": {
+    "resultado_stats": {
+     "n": 1793.0,
+     "sd": 0.11,
+     "rho_paises": 0.453,
+     "ar1": 0.295
+    },
+    "filas": 1676,
+    "m_kish": 12.69,
+    "central": {
+     "n_ef": 998.0,
+     "mde_pp_por_dt_z1": 0.97,
+     "mde_pp_por_dt_zholm6": 1.21
+    },
+    "prudente": {
+     "n_ef": 241.6,
+     "mde_pp_por_dt_z1": 1.98,
+     "mde_pp_por_dt_zholm6": 2.46
+    }
+   },
+   "1950_2004": {
+    "resultado_stats": {
+     "n": 756.0,
+     "sd": 0.099,
+     "rho_paises": 0.518,
+     "ar1": 0.151
+    },
+    "filas": 726,
+    "m_kish": 13.46,
+    "central": {
+     "n_ef": 421.6,
+     "mde_pp_por_dt_z1": 1.36,
+     "mde_pp_por_dt_zholm6": 1.68
+    },
+    "prudente": {
+     "n_ef": 92.7,
+     "mde_pp_por_dt_z1": 2.89,
+     "mde_pp_por_dt_zholm6": 3.59
+    }
+   }
+  },
+  "bill_rate_real": {
+   "1871_2004": {
+    "resultado_stats": {
+     "n": 1792.0,
+     "sd": 0.069,
+     "rho_paises": 0.451,
+     "ar1": 0.572
+    },
+    "filas": 1672,
+    "m_kish": 12.71,
+    "central": {
+     "n_ef": 908.5,
+     "mde_pp_por_dt_z1": 0.64,
+     "mde_pp_por_dt_zholm6": 0.8
+    },
+    "prudente": {
+     "n_ef": 220.1,
+     "mde_pp_por_dt_z1": 1.3,
+     "mde_pp_por_dt_zholm6": 1.62
+    }
+   },
+   "1950_2004": {
+    "resultado_stats": {
+     "n": 756.0,
+     "sd": 0.037,
+     "rho_paises": 0.584,
+     "ar1": 0.675
+    },
+    "filas": 726,
+    "m_kish": 13.46,
+    "central": {
+     "n_ef": 337.6,
+     "mde_pp_por_dt_z1": 0.56,
+     "mde_pp_por_dt_zholm6": 0.7
+    },
+    "prudente": {
+     "n_ef": 70.2,
+     "mde_pp_por_dt_z1": 1.23,
+     "mde_pp_por_dt_zholm6": 1.53
+    }
+   }
+  }
+ },
+ "T1_referencia": {
+  "todas": {
+   "filas": 1332,
+   "eventos": 222,
+   "años_distintos": 84,
+   "tasa_base": 0.167,
+   "icc_año": 0.153,
+   "efecto_diseño": 2.66,
+   "pos_ef_prudente": 84,
+   "neg_ef": 417.0,
+   "mde_frente_a_liston": {
+    "A0=0.55": {
+     "1": 0.098,
+     "holm6": 0.121
+    },
+    "A0=0.6": {
+     "1": 0.097,
+     "holm6": 0.119
+    }
+   }
+  },
+  "con_5_de_INT4": {
+   "filas": 1090,
+   "eventos": 166,
+   "años_distintos": 72,
+   "tasa_base": 0.152,
+   "icc_año": 0.174,
+   "efecto_diseño": 2.75,
+   "pos_ef_prudente": 72,
+   "neg_ef": 336.3,
+   "mde_frente_a_liston": {
+    "A0=0.55": {
+     "1": 0.106,
+     "holm6": 0.131
+    },
+    "A0=0.6": {
+     "1": 0.105,
+     "holm6": 0.129
+    }
+   },
+   "mde_sobre_logit_INT4": {
+    "r=0.8": {
+     "1": 0.061,
+     "holm6": 0.076
+    },
+    "r=0.9": {
+     "1": 0.044,
+     "holm6": 0.054
+    },
+    "r=0.95": {
+     "1": 0.031,
+     "holm6": 0.039
+    }
+   }
+  }
+ },
+ "Q4_dinero_recesion": {
+  "frente_a_B1": {
+   "filas": 1238,
+   "eventos": 208,
+   "años_distintos": 83,
+   "tasa_base": 0.168,
+   "icc_año": 0.156,
+   "efecto_diseño": 2.57,
+   "pos_ef_prudente": 83,
+   "neg_ef": 400.8,
+   "mde_frente_a_liston": {
+    "A0=0.55": {
+     "1": 0.099,
+     "holm6": 0.122
+    },
+    "A0=0.6": {
+     "1": 0.098,
+     "holm6": 0.12
+    }
+   }
+  },
+  "sobre_logit_INT4": {
+   "filas": 1037,
+   "eventos": 159,
+   "años_distintos": 72,
+   "tasa_base": 0.153,
+   "icc_año": 0.17,
+   "efecto_diseño": 2.62,
+   "pos_ef_prudente": 72,
+   "neg_ef": 335.3,
+   "mde_frente_a_liston": {
+    "A0=0.55": {
+     "1": 0.106,
+     "holm6": 0.131
+    },
+    "A0=0.6": {
+     "1": 0.105,
+     "holm6": 0.129
+    }
+   },
+   "mde_sobre_logit_INT4": {
+    "r=0.8": {
+     "1": 0.061,
+     "holm6": 0.076
+    },
+    "r=0.9": {
+     "1": 0.044,
+     "holm6": 0.054
+    },
+    "r=0.95": {
+     "1": 0.031,
+     "holm6": 0.039
+    }
+   }
+  },
+  "1950_2004_frente_a_B1": {
+   "filas": 648,
+   "eventos": 58,
+   "años_distintos": 24,
+   "tasa_base": 0.09,
+   "icc_año": 0.209,
+   "efecto_diseño": 3.38,
+   "pos_ef_prudente": 24,
+   "neg_ef": 174.6,
+   "mde_frente_a_liston": {
+    "A0=0.55": {
+     "1": 0.176,
+     "holm6": 0.215
+    },
+    "A0=0.6": {
+     "1": 0.173,
+     "holm6": 0.21
+    }
+   }
+  }
+ },
+ "Q5_credito_crisis": {
+  "h1_1871_2004_sin_guerras": {
+   "filas": 1146,
+   "eventos": 49,
+   "años_distintos": 27,
+   "tasa_base": 0.043,
+   "icc_año": 0.186,
+   "efecto_diseño": 2.89,
+   "pos_ef_prudente": 27,
+   "neg_ef": 379.4,
+   "mde_frente_a_liston": {
+    "A0=0.5": {
+     "1": 0.163,
+     "holm6": 0.201
+    },
+    "A0=0.55": {
+     "1": 0.163,
+     "holm6": 0.199
+    },
+    "A0=0.6": {
+     "1": 0.16,
+     "holm6": 0.196
+    }
+   }
+  },
+  "h1_1950_2004": {
+   "filas": 696,
+   "eventos": 10,
+   "años_distintos": 8,
+   "tasa_base": 0.014,
+   "icc_año": 0.051,
+   "efecto_diseño": 1.62,
+   "pos_ef_prudente": 8,
+   "neg_ef": 424.3,
+   "mde_frente_a_liston": {
+    "A0=0.5": {
+     "1": 0.281,
+     "holm6": 0.336
+    },
+    "A0=0.55": {
+     "1": 0.277,
+     "holm6": 0.331
+    },
+    "A0=0.6": {
+     "1": 0.271,
+     "holm6": 0.325
+    }
+   }
+  },
+  "h1_todas_las_filas_sin_credito": {
+   "filas": 1345,
+   "eventos": 61,
+   "años_distintos": 33,
+   "tasa_base": 0.045,
+   "icc_año": 0.156,
+   "efecto_diseño": 2.71,
+   "pos_ef_prudente": 33,
+   "neg_ef": 473.8,
+   "mde_frente_a_liston": {
+    "A0=0.5": {
+     "1": 0.148,
+     "holm6": 0.182
+    }
+   }
+  },
+  "h2_1871_2004_sin_guerras": {
+   "filas": 1109,
+   "eventos": 49,
+   "años_distintos": 27,
+   "tasa_base": 0.083,
+   "icc_año": 0.244,
+   "efecto_diseño": 3.47,
+   "pos_ef_prudente": 27,
+   "neg_ef": 293.4,
+   "mde_frente_a_liston": {
+    "A0=0.5": {
+     "1": 0.164,
+     "holm6": 0.202
+    },
+    "A0=0.55": {
+     "1": 0.164,
+     "holm6": 0.201
+    },
+    "A0=0.6": {
+     "1": 0.161,
+     "holm6": 0.197
+    }
+   }
+  },
+  "h2_1950_2004": {
+   "filas": 682,
+   "eventos": 10,
+   "años_distintos": 8,
+   "tasa_base": 0.029,
+   "icc_año": 0.071,
+   "efecto_diseño": 1.85,
+   "pos_ef_prudente": 8,
+   "neg_ef": 358.0,
+   "mde_frente_a_liston": {
+    "A0=0.5": {
+     "1": 0.281,
+     "holm6": 0.337
+    },
+    "A0=0.55": {
+     "1": 0.278,
+     "holm6": 0.331
+    },
+    "A0=0.6": {
+     "1": 0.271,
+     "holm6": 0.325
+    }
+   }
+  },
+  "h2_todas_las_filas_sin_credito": {
+   "filas": 1306,
+   "eventos": 61,
+   "años_distintos": 33,
+   "tasa_base": 0.087,
+   "icc_año": 0.205,
+   "efecto_diseño": 3.25,
+   "pos_ef_prudente": 33,
+   "neg_ef": 366.8,
+   "mde_frente_a_liston": {
+    "A0=0.5": {
+     "1": 0.149,
+     "holm6": 0.184
+    }
+   }
+  },
+  "credito_d5_stats": {
+   "n": 1565.0,
+   "sd": 0.111,
+   "rho_paises": 0.252,
+   "ar1": 0.826
+  }
+ },
+ "Q6_diferenciales_recesion": {
+  "baa_aaa_disponibilidad": {
+   "desde": 1919,
+   "hasta": 2004,
+   "dt_pp_dic": 0.79,
+   "ar1_anual_dic": 0.8
+  },
+  "uk_spread_disponibilidad": {
+   "serie": "boe_uk_corp_bond_spread_m",
+   "desde": "1854-01-01",
+   "hasta": "2004-12-01",
+   "meses": 1812
+  },
+  "us_comun_frente_a_B1": {
+   "filas": 906,
+   "eventos": 114,
+   "años_distintos": 45,
+   "tasa_base": 0.126,
+   "icc_año": 0.199,
+   "efecto_diseño": 3.27,
+   "pos_ef_prudente": 45,
+   "neg_ef": 242.6,
+   "mde_frente_a_liston": {
+    "A0=0.55": {
+     "1": 0.132,
+     "holm6": 0.163
+    },
+    "A0=0.6": {
+     "1": 0.13,
+     "holm6": 0.16
+    }
+   }
+  },
+  "us_comun_sobre_logit_INT4": {
+   "filas": 832,
+   "eventos": 107,
+   "años_distintos": 44,
+   "tasa_base": 0.129,
+   "icc_año": 0.211,
+   "efecto_diseño": 3.28,
+   "pos_ef_prudente": 44,
+   "neg_ef": 220.7,
+   "mde_frente_a_liston": {
+    "A0=0.55": {
+     "1": 0.134,
+     "holm6": 0.165
+    },
+    "A0=0.6": {
+     "1": 0.132,
+     "holm6": 0.162
+    }
+   },
+   "mde_sobre_logit_INT4": {
+    "r=0.8": {
+     "1": 0.078,
+     "holm6": 0.096
+    },
+    "r=0.9": {
+     "1": 0.056,
+     "holm6": 0.069
+    },
+    "r=0.95": {
+     "1": 0.04,
+     "holm6": 0.05
+    }
+   }
+  },
+  "us_comun_otros_13_frente_a_B1": {
+   "filas": 848,
+   "eventos": 102,
+   "años_distintos": 42,
+   "tasa_base": 0.12,
+   "icc_año": 0.205,
+   "efecto_diseño": 3.17,
+   "pos_ef_prudente": 42,
+   "neg_ef": 235.5,
+   "mde_frente_a_liston": {
+    "A0=0.55": {
+     "1": 0.136,
+     "holm6": 0.168
+    },
+    "A0=0.6": {
+     "1": 0.134,
+     "holm6": 0.165
+    }
+   }
+  },
+  "us_propio_frente_a_B1": {
+   "filas": 58,
+   "eventos": 12,
+   "años_distintos": 12,
+   "tasa_base": 0.207,
+   "icc_año": 0.0,
+   "efecto_diseño": 1.0,
+   "pos_ef_prudente": 12,
+   "neg_ef": 46.0,
+   "mde_frente_a_liston": {
+    "A0=0.55": {
+     "1": 0.25,
+     "holm6": 0.301
+    },
+    "A0=0.6": {
+     "1": 0.244,
+     "holm6": 0.293
+    }
+   }
+  },
+  "uk_comun_frente_a_B1": {
+   "filas": 1332,
+   "eventos": 222,
+   "años_distintos": 84,
+   "tasa_base": 0.167,
+   "icc_año": 0.153,
+   "efecto_diseño": 2.66,
+   "pos_ef_prudente": 84,
+   "neg_ef": 417.0,
+   "mde_frente_a_liston": {
+    "A0=0.55": {
+     "1": 0.098,
+     "holm6": 0.121
+    },
+    "A0=0.6": {
+     "1": 0.097,
+     "holm6": 0.119
+    }
+   }
+  },
+  "uk_comun_sobre_logit_INT4": {
+   "filas": 1090,
+   "eventos": 166,
+   "años_distintos": 72,
+   "tasa_base": 0.152,
+   "icc_año": 0.174,
+   "efecto_diseño": 2.75,
+   "pos_ef_prudente": 72,
+   "neg_ef": 336.3,
+   "mde_frente_a_liston": {
+    "A0=0.55": {
+     "1": 0.106,
+     "holm6": 0.131
+    },
+    "A0=0.6": {
+     "1": 0.105,
+     "holm6": 0.129
+    }
+   },
+   "mde_sobre_logit_INT4": {
+    "r=0.8": {
+     "1": 0.061,
+     "holm6": 0.076
+    },
+    "r=0.9": {
+     "1": 0.044,
+     "holm6": 0.054
+    },
+    "r=0.95": {
+     "1": 0.031,
+     "holm6": 0.039
+    }
+   }
+  },
+  "us_propio_desde_1973_EBP": {
+   "filas": 26,
+   "eventos": 4,
+   "años_distintos": 4,
+   "tasa_base": 0.154,
+   "icc_año": 0.0,
+   "efecto_diseño": 1.0,
+   "pos_ef_prudente": 4,
+   "neg_ef": 22.0,
+   "mde_frente_a_liston": {
+    "A0=0.55": {
+     "1": 0.394,
+     "holm6": null
+    },
+    "A0=0.6": {
+     "1": null,
+     "holm6": null
+    }
+   }
+  }
+ },
+ "Q7_contagio": {
+  "usa_cae_otros_13_frente_a_B1": {
+   "filas": 1246,
+   "eventos": 199,
+   "años_distintos": 81,
+   "tasa_base": 0.16,
+   "icc_año": 0.153,
+   "efecto_diseño": 2.54,
+   "pos_ef_prudente": 81,
+   "neg_ef": 412.3,
+   "mde_frente_a_liston": {
+    "A0=0.55": {
+     "1": 0.1,
+     "holm6": 0.123
+    },
+    "A0=0.6": {
+     "1": 0.098,
+     "holm6": 0.121
+    }
+   }
+  },
+  "usa_cae_otros_13_sobre_logit_INT4": {
+   "filas": 1015,
+   "eventos": 146,
+   "años_distintos": 69,
+   "tasa_base": 0.144,
+   "icc_año": 0.177,
+   "efecto_diseño": 2.64,
+   "pos_ef_prudente": 69,
+   "neg_ef": 328.7,
+   "mde_frente_a_liston": {
+    "A0=0.55": {
+     "1": 0.108,
+     "holm6": 0.134
+    },
+    "A0=0.6": {
+     "1": 0.107,
+     "holm6": 0.131
+    }
+   },
+   "mde_sobre_logit_INT4": {
+    "r=0.8": {
+     "1": 0.063,
+     "holm6": 0.077
+    },
+    "r=0.9": {
+     "1": 0.045,
+     "holm6": 0.056
+    },
+    "r=0.95": {
+     "1": 0.032,
+     "holm6": 0.04
+    }
+   }
+  },
+  "difusion_caidas_frente_a_B1": {
+   "filas": 1332,
+   "eventos": 222,
+   "años_distintos": 84,
+   "tasa_base": 0.167,
+   "icc_año": 0.153,
+   "efecto_diseño": 2.66,
+   "pos_ef_prudente": 84,
+   "neg_ef": 417.0,
+   "mde_frente_a_liston": {
+    "A0=0.55": {
+     "1": 0.098,
+     "holm6": 0.121
+    },
+    "A0=0.6": {
+     "1": 0.097,
+     "holm6": 0.119
+    }
+   }
+  },
+  "difusion_caidas_sobre_logit_INT4": {
+   "filas": 1090,
+   "eventos": 166,
+   "años_distintos": 72,
+   "tasa_base": 0.152,
+   "icc_año": 0.174,
+   "efecto_diseño": 2.75,
+   "pos_ef_prudente": 72,
+   "neg_ef": 336.3,
+   "mde_frente_a_liston": {
+    "A0=0.55": {
+     "1": 0.106,
+     "holm6": 0.131
+    },
+    "A0=0.6": {
+     "1": 0.105,
+     "holm6": 0.129
+    }
+   },
+   "mde_sobre_logit_INT4": {
+    "r=0.8": {
+     "1": 0.061,
+     "holm6": 0.076
+    },
+    "r=0.9": {
+     "1": 0.044,
+     "holm6": 0.054
+    },
+    "r=0.95": {
+     "1": 0.031,
+     "holm6": 0.039
+    }
+   }
+  },
+  "difusion_caidas_1950_2004_frente_a_B1": {
+   "filas": 675,
+   "eventos": 61,
+   "años_distintos": 24,
+   "tasa_base": 0.09,
+   "icc_año": 0.224,
+   "efecto_diseño": 3.67,
+   "pos_ef_prudente": 24,
+   "neg_ef": 167.5,
+   "mde_frente_a_liston": {
+    "A0=0.55": {
+     "1": 0.176,
+     "holm6": 0.215
+    },
+    "A0=0.6": {
+     "1": 0.173,
+     "holm6": 0.21
+    }
+   }
+  },
+  "usa_años_con_caida_1871_2004": 37
+ }
+}
