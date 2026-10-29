@@ -43,7 +43,7 @@ INGEST := fred_extended alfred_vintages fred_us fed_yieldcurve us_treasury nyfed
           cboe_vx eia_futures atl_mpt clev_inflexp mpls_mpd \
           cycle_nyfed cycle_rtdsm cycle_spf umich \
           ecb eurostat bde ine bundesbank ifo zew \
-          cycle_bis bis_ext oecd oecd_qna aqr_clr imf_weo imf_ifs imf_gdd imf_hpdd wb_wdi jst_macrohistory boe_millennium_uk cycle_worldorder \
+          cycle_bis bis_ext oecd oecd_qna aqr_clr imf_weo imf_ifs imf_gdd imf_hpdd wb_wdi jst_macrohistory boe_millennium_uk boe_rates cycle_worldorder \
           events_nber events_wars events_financial_crises events_gpr events_curated
 .PHONY: ingest audit data ingest-daily daily semanal
 
