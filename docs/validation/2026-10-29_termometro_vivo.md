@@ -61,3 +61,63 @@ método: lectura del código; reproducción con el warehouse real (fechas ≤ 20
   publicarse se repite hasta 120 días en la curva "as of", y C1 (media de 12 meses con ≥ 9) puede salir calculada con
   3-4 meses repetidos. Con la GBR real: el tipo a 3 meses acaba en 2026-02; en julio-agosto la C1 de GBR aún salía,
   con marzo-mayo iguales a febrero; en septiembre ya sale vacía. Es la regla de desarrollo; solo falta decirlo (§6).
+
+## 3. Misma traducción, recalibración y bandas que el desarrollo — ✅ (reproducido mes a mes)
+
+- **Código compartido.** `calcular` usa `T.mensuales`, `T.traducir` con las rectas del JSON, `T.fechado_trimestral`,
+  `T.estado_mensual`, `T.b1_vivo(·, "T2")`, `M.logit_pred` y `T.aplicar_cal`. `prob_salida` construye S5 igual que
+  `referencia_cal` de `scripts/termometro_puerta_v2.py` (C2 traducida en el primer mes conocido en recesión, arrastrada
+  mientras dura). Las bandas usan p50/p80/p95 de `final.percentiles_referencia.T2` con los cortes de §4
+  (< p50 bajo; [p50, p80) medio; [p80, p95) alto; ≥ p95 muy alto). ✅
+- **Reproducción del Validador** (warehouse real): probabilidad de desarrollo con el código de la puerta **sin redondear**
+  (rectas y recalibración con todos los años ≤ 2004, `load_dev`) frente a `V.termometro(con, fecha)` con el JSON:
+
+| fecha | país | en vivo (JSON) | desarrollo, JSON | desarrollo, sin redondear | banda vivo / desarrollo |
+|---|---|---|---|---|---|
+| 1975-06-30 | DEU | 0,785 | 0,7849 | 0,7849 | bajo / bajo |
+| 1975-06-30 | USA | 0,625 | 0,6249 | 0,6248 | bajo / bajo |
+| 1981-01-31 | USA | 0,824 | 0,8244 | 0,8244 | medio / medio |
+| 1991-04-30 | FIN | 0,265 | 0,2653 | 0,2654 | bajo / bajo |
+| 1992-10-31 | FIN | 0,200 | 0,1995 | 0,1996 | bajo / bajo |
+| 1992-10-31 | GBR | 0,634 | 0,6338 | 0,6343 | bajo / bajo |
+| 1992-10-31 | SWE | 0,237 | 0,2366 | 0,2367 | bajo / bajo |
+| 1993-04-30 | FIN | 0,873 | 0,8732 | 0,8733 | medio / medio |
+| 1993-04-30 | SWE | 0,662 | 0,6620 | 0,6622 | bajo / bajo |
+| 2003-06-30 | PRT | 0,412 | 0,4118 | 0,4116 | bajo / bajo |
+
+  Diferencia máxima JSON frente a sin redondear en todos los meses en recesión 1960-2004 del núcleo: 5,3e-4. Percentiles
+  sin redondear: 0,81599 / 0,90683 / 0,95521 (JSON: 0,816 / 0,9068 / 0,9552). Ninguna banda cambia. ✅
+- En esas mismas fechas, DNK y JPN salen "sin bolsa mensual", los de prueba "sin puerta propia" y GBR/ITA/PRT de los
+  setenta "falta algún indicador" (sin tipo a 3 meses OCDE): coherente con desarrollo.
+
+## 4. T1 nunca, T2 solo en los 12 países y solo en recesión — ✅
+
+- **T1:** el módulo no calcula ninguna probabilidad de entrar (no lee `modelo.T1` ni `cal.T1`; no hay ninguna clave de
+  entrada en la salida). `parametros()` exige que T1 conste como NO aprobado. ✅
+- **Lista de T2:** `paises_T2 = [c in NUCLEO si c en veredicto.paises_con_probabilidad.T2 y c ∉ SIN_BOLSA]` → BEL, DEU,
+  ESP, FIN, FRA, GBR, ITA, NLD, NOR, PRT, SWE, USA (test). Doble filtro: aunque el JSON volviera a traer DNK/JPN, no
+  entrarían. ✅
+- **Solo en recesión:** `salida_12m` solo se rellena si `en_rec` del último mes es 1 según el fechado trimestral en vivo
+  (`estado_mensual`); `prob_salida` pone NaN fuera. DNK/JPN en recesión → motivo "sin bolsa mensual"; AUS/CHE/CAN/IRL →
+  "país de prueba: sin puerta propia de T2". Visto en el test sintético y hoy con IRL real. ✅
+- "En recesión" exige ya dos caídas seguidas de la suma de 4 trimestres (la recomendación (ii) del Validador anterior
+  queda cubierta por la propia regla de entrada).
+
+## 5. Contribuciones al logit y percentiles de los indicadores — ✅ cálculo / ⚠️ empates
+
+- **Contribuciones:** `b_k · (x_k − centro_k)` con k = B1, S1-S5 (`b_T2[1:]`, 6 coeficientes, en el orden de la matriz
+  Z). Comprobado en FIN 1992-10: b0 + b·centro + Σ contribuciones = logit sin recalibrar (−1,4977, igual a 1e-15), y
+  σ(α + β·logit(σ(·))) = la probabilidad publicada (0,1995). Como β = 0,948 > 0, el signo de la contribución es el signo
+  del efecto sobre la probabilidad recalibrada; y = 1 es "sale" en `int4.obj_salida`, así que "a favor de salir" es
+  correcto. Centro: meses 1960-2004 en recesión, con probabilidad finita, de los 12 países de T2. ✅ (referencia ≤ 2004;
+  ver el matiz de §1 sobre que no está congelada).
+- **Percentiles:** `(h ≤ v).mean()` frente a los meses 1960-2004 del propio país, sin traducir, con ≥ 60 meses (si no,
+  "—"). Comprobado a mano: USA C1 = 0,50 pp → 43,9 % → p44. ✅
+- ⚠️ **Empates en C4 y S4 (difusiones discretas).** Con "≤", un valor muy repetido queda en lo alto de su bloque de
+  empates. S4 = 0 % (ningún otro país con PIB cayendo) aparece como **p60** en los 18 países, porque el 59,7 % de los
+  meses 1960-2004 tienen S4 = 0 y ninguno < 0: el lector entiende "por encima de la mediana" cuando es el valor mínimo
+  posible. C4 = 8,33 % sale p36 (29,6 % < y 36,3 % ≤). Propuesta (diff 3): rango medio, `((h < v).mean() + (h <= v).mean())/2`
+  → S4 = 0 daría p30, o decir "mínimo (como en el 60 % de los meses)".
+- Menor: B1 (duración) entra como una "variable" más en "lo que más pesa"; es correcto, pero en los primeros 12 meses de
+  recesión B1 = 0 y siempre restará frente a un centro de 0,15 (el modelo cree que las recesiones recién empezadas salen
+  menos): conviene que el texto lo diga como "duración aún corta" en vez de una variable de indicador.
