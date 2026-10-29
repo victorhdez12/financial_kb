@@ -1,0 +1,191 @@
+{
+ "commit_validador": "b4054a5c3bccbabe3850b5ba79d3ae448526b025",
+ "chequeo_corte": {
+  "max_fecha_mensual": {
+   "oro": "2004-12-01",
+   "ir3m": "2004-12-01",
+   "cpi": "2004-12-01"
+  },
+  "max_año_jst": {
+   "rgdpmad": 2004,
+   "cpi": 2004
+  }
+ },
+ "G2": {
+  "propio": {
+   "b": -1.3512451163447656,
+   "se": 0.3662051261960939,
+   "t": -3.6898585510821245,
+   "p": 0.00025687811500857205,
+   "ic95": [
+    -2.0712692827524837,
+    -0.6312209499370477
+   ],
+   "T": 384,
+   "r": -0.1873058929197904,
+   "placebo": {
+    "n": 361,
+    "phi": 1.1148580103969543,
+    "p_cal": 0.0010224812737500725,
+    "p95_abs_t": 2.185417542365133
+   },
+   "mitades": {
+    "1973_1988": {
+     "b": -1.5084939492780212,
+     "se": 0.42056010107899894,
+     "t": -3.586868905081089,
+     "p": 0.0004251083703040583,
+     "ic95": [
+      -2.3380327630690028,
+      -0.6789551354870395
+     ],
+     "T": 192
+    },
+    "1989_2004": {
+     "b": -0.009662145287295995,
+     "se": 0.7065983368430312,
+     "t": -0.01367416930312194,
+     "p": 0.9891042039970176,
+     "ic95": [
+      -1.4034005067429034,
+      1.3840762161683113
+     ],
+     "T": 192
+    }
+   },
+   "anual": {
+    "n": 32,
+    "b": -1.1999240389141093
+   }
+  },
+  "oficial": {
+   "b": -1.3512,
+   "t": -3.6802,
+   "p_cal": 0.001,
+   "1973_1988": -1.5085,
+   "1989_2004": -0.0097,
+   "anual": -1.1999,
+   "r": -0.1873
+  }
+ },
+ "X1_sin_propio_pais": true,
+ "X1": {
+  "propio": {
+   "filas": 1314,
+   "eventos": 220,
+   "auc_b1": 0.5425506555423123,
+   "auc_mod": 0.6656138259833134,
+   "d_auc": 0.12306317044100112,
+   "d_logloss": -0.01391523910474346,
+   "pendiente_calibracion": 0.8940085343462856,
+   "ic95": [
+    0.060903090590590646,
+    0.1859464079060053
+   ],
+   "p_bloques_bilateral": 0.0009995002498750624,
+   "temporal_1950_2004": 0.17327487609607317,
+   "placebo": {
+    "n": 124,
+    "media": 0.011373712709655958,
+    "dt": 0.017403115374443542,
+    "z": 6.417785283166084,
+    "p_z": 6.91355426155956e-11,
+    "p_rangos": 0.008
+   }
+  },
+  "oficial": {
+   "filas": 1314,
+   "eventos": 220,
+   "auc_b1": 0.5426,
+   "auc_mod": 0.6656,
+   "d_auc": 0.1231,
+   "ic95": [
+    0.0636,
+    0.1874
+   ],
+   "p_bloques": 0.001,
+   "z": 6.4178,
+   "temporal": 0.1733,
+   "d_logloss": -0.0139,
+   "pendiente": 0.894
+  }
+ },
+ "criterio_i_lecturas": {
+  "A_oficial_holm6_mixto_p_cal_y_p_bloques": {
+   "K1": false,
+   "K2": false,
+   "X1": true
+  },
+  "B_ic_al_nivel_del_escalon_holm6_principal": {
+   "K1": {
+    "alfa_ic": 0.0125,
+    "excluye_0_si_p_bloques_<=": false
+   },
+   "K2": {
+    "alfa_ic": 0.008333333333333333,
+    "excluye_0_si_p_bloques_<=": false
+   },
+   "X1": {
+    "alfa_ic": 0.01,
+    "excluye_0_si_p_bloques_<=": true
+   }
+  },
+  "C_bonferroni6": {
+   "K1": false,
+   "K2": false,
+   "X1": true
+  },
+  "D_holm3_solo_auc_NO_literal": {
+   "X1": true,
+   "K2": true,
+   "K1": false
+  },
+  "E_ic95_sin_ajuste_NO_literal": {
+   "K1": false,
+   "K2": true,
+   "X1": true
+  },
+  "F_holm6_mixto_p_bloques_unilateral": {
+   "K1": false,
+   "K2": true,
+   "X1": true
+  },
+  "resto_de_criterios_ii_v_cumplidos": {
+   "K1": true,
+   "K2": true,
+   "X1": true
+  },
+  "veredicto_por_lectura": {
+   "A_oficial_holm6_mixto_p_cal_y_p_bloques": {
+    "K1": false,
+    "K2": false,
+    "X1": true
+   },
+   "B_ic_al_nivel_del_escalon_holm6_principal": {
+    "K1": false,
+    "K2": false,
+    "X1": true
+   },
+   "C_bonferroni6": {
+    "K1": false,
+    "K2": false,
+    "X1": true
+   },
+   "D_holm3_solo_auc_NO_literal": {
+    "K1": false,
+    "K2": true,
+    "X1": true
+   },
+   "E_ic95_sin_ajuste_NO_literal": {
+    "K1": false,
+    "K2": true,
+    "X1": true
+   },
+   "F_holm6_mixto_p_bloques_unilateral": {
+    "K1": false,
+    "K2": true,
+    "X1": true
+   }
+  }
+ }
+}
