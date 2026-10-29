@@ -54,9 +54,11 @@ AVISO = ("Informativo, no es una señal de cartera. Modelo histórico 1871-2004;
          "su puerta y se muestran solo sus indicadores; la probabilidad de SALIR sí (con pocas filas: prudencia). "
          "La inflación no se anticipa.")
 AVISO_NIVEL = "nivel no calibrado en vivo"
+# IC y % de réplicas: bootstrap por años de la puerta corregida (Validador, docs/validation/2026-10-29_termometro_vivo.md
+# §7; scripts/val_termometro_sens.boot, 2.000 réplicas, semilla 0)
 AVISO_T2 = ("Léase la banda, no el porcentaje: la puerta de T2 se pasó con solo 31 filas / 22 episodios (r 0,82, IC 95 % "
-            "≈ [0,65; 0,96]), y el «en recesión» del fechado trimestral coincide con el anual de JST solo ≈ 70 % de las "
-            "veces.")
+            "≈ [0,49; 0,94]; pasa solo en el 58 % de las réplicas bootstrap), y el «en recesión» del fechado trimestral "
+            "coincide con el anual de JST solo ≈ 70 % de las veces.")
 
 # indicadores que se enseñan (clave del panel mensual sin traducir, etiqueta, unidad, factor para enseñarlo)
 INDICADORES = [("C1", "Curva 10a−3m (media 12 m)", "pp", 1.0),
@@ -204,7 +206,8 @@ def cargar(con, fecha) -> tuple[pd.DataFrame, dict, dict, pd.Timestamp]:
         filas.append(df.reset_index(names="fecha"))
         if not (s := _serie(con, f"bis_creditgap_{D.ISO2[c]}_ratio", corte)).empty:
             bis[c] = s
-        pib[c] = _serie(con, f"oecd_gdpq_{lc}", corte)
+        if not (q := _serie(con, f"oecd_gdpq_{lc}", corte)).empty:
+            pib[c] = q          # sin PIB: el país sale sin estado (aviso en calcular); el resto sigue
     pm = pd.concat(filas, ignore_index=True).set_index(["pais", "fecha"]).sort_index()
     return pm, bis, pib, corte
 
