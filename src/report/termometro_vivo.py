@@ -188,11 +188,8 @@ def _q_conocido(pib: pd.Series, corte: pd.Timestamp):
     return q.max() if len(q) else None
 
 
-def calcular(pm: pd.DataFrame, bis: dict, pib: dict, corte: pd.Timestamp, par: dict) -> dict:
-    mens = T.mensuales(pm, bis, pib, NUCLEO, TODOS)
-    tr = T.traducir(mens, par["rectas"], TODOS)
-    rej = mens["C1"].index
-    ref = (rej >= REF_DESDE) & (rej <= REF_HASTA)
+def _estados(tr: dict, pib: dict, rej: pd.DatetimeIndex, par: dict) -> tuple[dict, dict, dict]:
+    """Estado mensual (fechado trimestral), probabilidad de salir y variables de T2 por país con PIB."""
     est, p2, Z2 = {}, {}, {}
     for c in TODOS:
         if pib.get(c) is None or pib[c].dropna().empty:
@@ -200,10 +197,37 @@ def calcular(pm: pd.DataFrame, bis: dict, pib: dict, corte: pd.Timestamp, par: d
         fq = T.fechado_trimestral(pib[c].dropna())
         est[c] = T.estado_mensual(fq, rej, pib[c].dropna().index.min())
         p2[c], Z2[c] = prob_salida(tr, est[c], c, par["b_T2"], par["cal_T2"])
-    # media ≤ 2004 de las variables de T2 en los meses en recesión con probabilidad (núcleo con T2): centro de las
-    # contribuciones al logit
+    return est, p2, Z2
+
+
+def referencias(mens: dict, tr: dict, pib: dict, par: dict) -> dict:
+    """Referencias ≤ 2004 (meses 1960-2004): distribución de cada indicador sin traducir por país (valores finitos,
+    ordenados; para su percentil histórico) y media de las variables de T2 en los meses en recesión con probabilidad
+    del núcleo con T2 (centro de las contribuciones al logit). Solo describen la historia de desarrollo; se congelan con
+    scripts/termometro_referencias.py (datos de load_dev) y se leen con `referencias_congeladas`."""
+    rej = mens["C1"].index
+    ref = (rej >= REF_DESDE) & (rej <= REF_HASTA)
+    ind = {}
+    for k, *_ in INDICADORES:
+        ind[k] = {}
+        for c in TODOS:
+            h = mens[k][c].to_numpy()[ref] if c in mens[k] else np.array([])
+            ind[k][c] = sorted(float(x) for x in h[np.isfinite(h)])
+    _, p2, Z2 = _estados(tr, pib, rej, par)
     zs = [Z2[c][ref & np.isfinite(p2[c])] for c in par["paises_T2"] if c in Z2]
-    centro = np.concatenate(zs).mean(axis=0) if zs and sum(len(z) for z in zs) else np.full(6, np.nan)
+    n = sum(len(z) for z in zs)
+    centro = np.concatenate(zs).mean(axis=0) if n else np.full(6, np.nan)
+    return {"desde": str(REF_DESDE.date()), "hasta": str(REF_HASTA.date()), "indicadores": ind,
+            "centro_T2": [float(x) for x in centro], "meses_centro": int(n), "variables_T2": VARS_T2}
+
+
+def calcular(pm: pd.DataFrame, bis: dict, pib: dict, corte: pd.Timestamp, par: dict) -> dict:
+    mens = T.mensuales(pm, bis, pib, NUCLEO, TODOS)
+    tr = T.traducir(mens, par["rectas"], TODOS)
+    rej = mens["C1"].index
+    est, p2, Z2 = _estados(tr, pib, rej, par)
+    refs = referencias(mens, tr, pib, par)
+    centro = np.array(refs["centro_T2"], float)
     i = len(rej) - 1
     paises = {}
     for c in TODOS:
@@ -211,7 +235,7 @@ def calcular(pm: pd.DataFrame, bis: dict, pib: dict, corte: pd.Timestamp, par: d
         for k, lab, uni, fac in INDICADORES:
             serie = mens[k][c] if c in mens[k] else pd.Series(np.nan, index=rej)
             v = float(serie.iloc[i])
-            pc, n = _pct(serie.to_numpy()[ref], v)
+            pc, n = _pct(np.asarray(refs["indicadores"][k][c], float), v)
             filas_ind[k] = {"indicador": lab, "unidad": uni, "valor": None if not np.isfinite(v) else round(v * fac, 2),
                             "percentil_hasta_2004": pc, "meses_hist": n}
         e = est.get(c)
