@@ -19,6 +19,12 @@ sources:
     url: https://www.bankofengland.co.uk/-/media/boe/files/statistics/research-datasets/a-millennium-of-macroeconomic-data-for-the-uk.xlsx
     coverage: "UK; selected series reach back to the 13th century; benchmark estimates include 1086"
     format: xlsx
+  - id: boe_rates
+    name: Bank of England short-term sterling rates at 3 months (OIS/SONIA yield curve, IADB T-bill and SONIA)
+    type: rates_monthly
+    url: https://www.bankofengland.co.uk/statistics/yield-curves
+    coverage: "UK; boe_ois3m_m = monthly average of daily 3-month OIS (SONIA) spot, 2016-01 to latest complete month; IADB IUMAJNB 3-month T-bill discount rate 1975-01 to 2017-06 (discontinued); IADB IUMASOIA SONIA 1997-; substitute for oecd_ir3m_gbr after 2026-02 (docs/int/GBR_3m_sustituto.md); BoE terms, re-use with attribution"
+    format: xlsx_in_zip_and_iadb_csv
   - id: nber_macrohistory
     name: NBER Macrohistory Database
     type: historical_macro_finance

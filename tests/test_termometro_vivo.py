@@ -121,7 +121,8 @@ def test_no_mira_el_futuro():
 
 
 def test_aviso_serie_cortada(vivo):
-    """Series cortadas o viejas (como GBR real, tipo a 3 meses hasta 2026-02): el indicador sale «—» con aviso por país;
+    """Series cortadas o viejas (como GBR real, tipo a 3 meses hasta 2026-02, aquí sin la serie del BoE para empalmar):
+    el indicador sale «—» con aviso por país;
     un país sin PIB trimestral sale "sin dato" y el resto del termómetro sigue (Validador, diff 2)."""
     con = _warehouse(cortes={"oecd_ir3m_gbr": "2026-02-01", "bis_creditgap_de_ratio": "2025-01-01",
                              "oecd_gdpq_fra": "2025-07-01", "oecd_gdpq_bel": "1900-01-01",
@@ -292,3 +293,91 @@ def test_referencias_congeladas_igual_a_recalculadas(fecha):
         for c in V.TODOS:
             a, b = rec["indicadores"][k][c], cong["indicadores"][k][c]
             assert len(a) == len(b) and np.allclose(a, b, rtol=0, atol=1e-12), (k, c)
+
+
+# ---------------------------------------------------------------- empalme del tipo a 3 meses (GBR: OCDE → BoE)
+def _m(desde, hasta, valores):
+    idx = pd.date_range(desde, hasta, freq="MS")
+    return pd.Series(np.broadcast_to(np.asarray(valores, float), len(idx)).copy(), index=idx)
+
+
+def test_empalmar_sin_ajuste_si_la_diferencia_es_pequena():
+    base, sust = _m("2023-01-01", "2026-02-01", 4.0), _m("2016-01-01", "2026-09-01", 3.98)
+    s, e = V.empalmar(base, sust)
+    assert e["desde"] == "2026-03-01" and e["solape_meses"] == 24 and e["solape"] == "2024-03/2026-02"
+    assert e["dif_media_pp"] == pytest.approx(0.02) and e["ajuste_pp"] == 0.0
+    assert s.index.max() == pd.Timestamp("2026-09-01") and (s.loc["2026-03-01":] == 3.98).all()
+    assert (s.loc[:"2026-02-01"] == base).all()                                     # la parte OCDE no se toca
+
+
+def test_empalmar_ajusta_con_la_media_de_los_ultimos_24_meses():
+    base = _m("2020-01-01", "2026-02-01", 4.0)
+    sust = _m("2016-01-01", "2026-09-01", 3.5)
+    sust.loc[:"2024-02-01"] = 0.0                    # solape viejo muy distinto: no cuenta (solo los últimos 24)
+    s, e = V.empalmar(base, sust)
+    assert e["ajuste_pp"] == pytest.approx(0.5) and e["solape_meses"] == 24
+    assert np.allclose(s.loc["2026-03-01":], 4.0)
+    assert "nivel ajustado +0.50 pp" in V._texto_empalme("BoE OIS (SONIA) 3 m", e)
+
+
+def test_empalmar_no_empalma_sin_cola_o_con_poco_solape():
+    base = _m("2020-01-01", "2026-02-01", 4.0)
+    assert V.empalmar(base, _m("2016-01-01", "2026-02-01", 3.9))[1] is None        # sin meses nuevos
+    s, e = V.empalmar(base, _m("2025-06-01", "2026-09-01", 3.9))                   # 9 meses de solape < 12
+    assert e is None and s.index.max() == pd.Timestamp("2026-02-01")
+    assert V.empalmar(pd.Series(dtype=float), _m("2016-01-01", "2026-09-01", 3.9))[1] is None
+
+
+def _con_boe(con, desplaza=0.0, choque_desde=None):
+    """Añade boe_ois3m_m (= tipo a 3 meses sintético de GBR − 0,02 pp; `desplaza` lo mueve todo y `choque_desde` solo
+    lo posterior a esa fecha)."""
+    s = con.execute("select date, value from obs_latest where series_id = 'oecd_ir3m_gbr' order by date").df()
+    fm = pd.date_range("2016-01-01", "2026-09-01", freq="MS")
+    i = 3 + 2 * np.cos(np.arange(len(pd.date_range("1985-01-01", "2026-09-01", freq="MS"))) / 30 + V.TODOS.index("GBR"))
+    v = i[-len(fm):] - 0.02 + desplaza
+    if choque_desde:
+        v = v + 5.0 * (fm > pd.Timestamp(choque_desde))
+    df = _obs("boe_ois3m_m", fm, v)
+    con.execute("insert into obs_latest select series_id, date, value from df")
+    assert len(s)
+    return con
+
+
+def test_empalme_gbr_en_vivo():
+    con = _con_boe(_warehouse(cortes={"oecd_ir3m_gbr": "2026-02-01"}))
+    res = _termometro(con, "2026-10-29")
+    g = res["paises"]["GBR"]
+    assert g["indicadores"]["C1"]["valor"] is not None and "sin_dato" not in g["indicadores"]["C1"]
+    assert g["avisos_datos"] == []                                       # desaparece "sin tipo a 3 meses"
+    assert g["empalmes"] == ["tipo a 3 m: BoE OIS (SONIA) 3 m desde 2026-03 (empalme; sin ajuste de nivel: diferencia "
+                             "media OCDE − BoE +0.02 pp en 24 meses de solape 2024-03/2026-02, < 0.05 pp)"]
+    assert all(res["paises"][c]["empalmes"] == [] for c in V.TODOS if c != "GBR")
+    # sin corte, la curva empalmada casi coincide con la de la serie OCDE completa (0,02 pp de diferencia)
+    completo = _termometro(_warehouse(), "2026-10-29")["paises"]["GBR"]["indicadores"]["C1"]["valor"]
+    assert g["indicadores"]["C1"]["valor"] == pytest.approx(completo, abs=0.03)
+    md = V.markdown(res)
+    assert "> - GBR: tipo a 3 m: BoE OIS (SONIA) 3 m desde 2026-03 (empalme;" in md and "Datos que faltan" not in md
+
+
+def test_empalme_gbr_con_ajuste_y_sin_mirar_el_futuro():
+    con = _con_boe(_warehouse(cortes={"oecd_ir3m_gbr": "2026-02-01"}), desplaza=-0.48)     # BoE 0,50 pp por debajo
+    g = _termometro(con, "2026-10-29")["paises"]["GBR"]
+    assert "nivel ajustado +0.50 pp (diferencia media OCDE − BoE de 24 meses de solape 2024-03/2026-02)" in g["empalmes"][0]
+    completo = _termometro(_warehouse(), "2026-10-29")["paises"]["GBR"]["indicadores"]["C1"]["valor"]
+    assert g["indicadores"]["C1"]["valor"] == pytest.approx(completo, abs=0.01)
+    # con corte 2026-05-31: lo del BoE posterior al corte no cambia nada
+    a = _termometro(_con_boe(_warehouse(cortes={"oecd_ir3m_gbr": "2026-02-01"})), "2026-05-31")
+    b = _termometro(_con_boe(_warehouse(cortes={"oecd_ir3m_gbr": "2026-02-01"}), choque_desde="2026-05-01"), "2026-05-31")
+    assert json.dumps(a, sort_keys=True) == json.dumps(b, sort_keys=True)
+    assert a["paises"]["GBR"]["empalmes"][0].startswith("tipo a 3 m: BoE OIS (SONIA) 3 m desde 2026-03")
+
+
+def test_empalme_no_actua_si_la_ocde_sigue_ni_en_desarrollo():
+    con = _con_boe(_warehouse())                                 # OCDE hasta 2026-09 como el BoE: sin cola
+    res = _termometro(con, "2026-10-29")
+    assert res["paises"]["GBR"]["empalmes"] == []
+    con = _con_boe(_warehouse(cortes={"oecd_ir3m_gbr": "2026-02-01"}))
+    assert _termometro(con, "2026-01-31")["paises"]["GBR"]["empalmes"] == []    # as of: la OCDE aún tenía el dato
+    assert not D.permitida("boe_ois3m_m")                        # desarrollo (load_dev) no puede leerla
+    with pytest.raises(D.FactorCutoffError):
+        D.load_dev(con, "boe_ois3m_m")
