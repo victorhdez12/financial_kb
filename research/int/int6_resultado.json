@@ -1,0 +1,1626 @@
+{
+ "procedencia": {
+  "commit": "12f630788eabe9f590ad52e8cf2b39d56eef18b5",
+  "arbol_limpio": true,
+  "hora_utc": "2026-10-29T18:25:27+00:00"
+ },
+ "prerregistro": "docs/int/INT6_prerregistro_v1.md (v1.0, congelado 2026-10-29T18:01:03Z, 1bdecf8)",
+ "notas": "docs/int/INT6_notas_implementacion.md",
+ "omitidas_declaradas": {
+  "G2_oro_en_EUR": "no hay EUR/USD (ni ECU) antes de 1999 en las familias permitidas de src/intl/data.py y el prerregistro solo autoriza añadir boe_uk_corp_bond_spread_m (notas §B.6)",
+  "K2_EBP": "fed_ebp_* no está en las familias permitidas (la decisión 4 no lo añade); solo descriptivo, 4 entradas, no es 'as of' (notas §E.4)"
+ },
+ "recuentos": {
+  "T1_filas_eventos": [
+   1314,
+   220
+  ],
+  "K1_filas_eventos": [
+   1329,
+   60
+  ],
+  "K1_años_con_inicio": 33,
+  "dsp_años": [
+   1855,
+   2004,
+   149
+  ],
+  "M_filas_x": 1732,
+  "hiper_fuera": 41
+ },
+ "confirmatorias": {
+  "G2": {
+   "efecto": -1.3512,
+   "se": 0.3672,
+   "t": -3.6802,
+   "p": 0.0003,
+   "ic95": [
+    -2.0732,
+    -0.6293
+   ],
+   "lags": 6,
+   "T": 384,
+   "r_estandarizada": -0.1873,
+   "ic95_estandarizada": [
+    -0.2874,
+    -0.0872
+   ],
+   "placebo": {
+    "phi": 1.112,
+    "p_cal": 0.001,
+    "placebos": 361,
+    "p95_abs_t_placebo": 2.1797,
+    "supera_p95": true,
+    "p_rangos": 0.0028
+   },
+   "meses": [
+    "1973-01-01",
+    "2004-12-01"
+   ],
+   "pct_oro_por_pp": -1.3512,
+   "pendiente_1973_1988": -1.5085,
+   "pendiente_1989_2004": -0.0097,
+   "anual_dic_dic": {
+    "años": 32,
+    "pendiente": -1.1999
+   },
+   "sensibilidades": {
+    "tipo_real_largo_GS10": {
+     "efecto": -1.8019,
+     "se": 0.5678,
+     "t": -3.1738,
+     "p": 0.0016,
+     "ic95": [
+      -2.9182,
+      -0.6856
+     ],
+     "lags": 6,
+     "T": 384,
+     "r_estandarizada": -0.154,
+     "ic95_estandarizada": [
+      -0.2494,
+      -0.0586
+     ]
+    },
+    "sin_1979_1980": {
+     "efecto": -1.186,
+     "se": 0.3935,
+     "t": -3.0141,
+     "p": 0.0028,
+     "ic95": [
+      -1.9598,
+      -0.4122
+     ],
+     "lags": 6,
+     "T": 360,
+     "r_estandarizada": -0.1505,
+     "ic95_estandarizada": [
+      -0.2488,
+      -0.0523
+     ]
+    },
+    "oro_en_EUR": {
+     "omitida": "no hay EUR/USD (ni ECU) antes de 1999 en las familias permitidas de src/intl/data.py y el prerregistro solo autoriza añadir boe_uk_corp_bond_spread_m (notas §B.6)"
+    }
+   }
+  },
+  "M1": {
+   "efecto": 0.0091,
+   "se": 0.0081,
+   "t": 1.129,
+   "p": 0.2609,
+   "ic95": [
+    -0.0068,
+    0.025
+   ],
+   "lags": 4,
+   "años": 133,
+   "n": 1585,
+   "paises": 14,
+   "años_rango": [
+    1871,
+    2003
+   ],
+   "dt_x": 0.0622,
+   "media_x": 0.0427,
+   "efecto_1950_2004": 0.0253,
+   "efecto_efectos_de_año": 0.0117,
+   "por_pais_sin_encoger": {
+    "BEL": -0.0335,
+    "DEU": 0.041,
+    "DNK": 0.0074,
+    "ESP": 0.0429,
+    "FIN": -0.0148,
+    "FRA": 0.0108,
+    "GBR": -0.0139,
+    "ITA": -0.0037,
+    "JPN": 0.0322,
+    "NLD": -0.0011,
+    "NOR": 0.0034,
+    "PRT": 0.0278,
+    "SWE": -0.0096,
+    "USA": -0.0403
+   },
+   "por_pais_dl_sin_año": {
+    "BEL": -0.0147,
+    "DEU": 0.0206,
+    "DNK": 0.0054,
+    "ESP": 0.031,
+    "FIN": -0.0043,
+    "FRA": 0.0115,
+    "GBR": -0.0235,
+    "ITA": 0.0037,
+    "JPN": 0.0226,
+    "NLD": 0.0007,
+    "NOR": 0.0106,
+    "PRT": 0.0202,
+    "SWE": -0.0067,
+    "USA": -0.0263
+   },
+   "dl_sin_año_media": 0.0036,
+   "tau2_sin_año": 0.0005,
+   "placebo": {
+    "phi": 1.0407,
+    "p_cal": 0.28,
+    "placebos": 122,
+    "p95_abs_t_placebo": 2.2191,
+    "supera_p95": false,
+    "p_rangos": 0.252
+   },
+   "winsor_p1_p99": [
+    -0.1337,
+    0.2412
+   ],
+   "sensibilidades": {
+    "sin_guerras": {
+     "efecto": 0.0101,
+     "se": 0.0092,
+     "t": 1.0964,
+     "p": 0.2751,
+     "ic95": [
+      -0.0082,
+      0.0284
+     ],
+     "lags": 4,
+     "años": 119,
+     "n": 1438,
+     "paises": 14,
+     "años_rango": [
+      1871,
+      2003
+     ],
+     "dt_x": 0.0591,
+     "media_x": 0.0415
+    },
+    "exceso_de_dinero": {
+     "efecto": -0.0193,
+     "se": 0.0098,
+     "t": -1.9736,
+     "p": 0.0505,
+     "ic95": [
+      -0.0386,
+      0.0
+     ],
+     "lags": 4,
+     "años": 133,
+     "n": 1585,
+     "paises": 14,
+     "años_rango": [
+      1871,
+      2003
+     ],
+     "dt_x": 0.0748,
+     "media_x": 0.0472
+    },
+    "dinero_estrecho_real": {
+     "efecto": 0.0098,
+     "se": 0.0065,
+     "t": 1.5094,
+     "p": 0.1336,
+     "ic95": [
+      -0.003,
+      0.0226
+     ],
+     "lags": 4,
+     "años": 133,
+     "n": 1665,
+     "paises": 14,
+     "años_rango": [
+      1871,
+      2003
+     ],
+     "dt_x": 0.0752,
+     "media_x": 0.0368
+    },
+    "t_mas_2": {
+     "efecto": -0.0235,
+     "se": 0.0079,
+     "t": -2.9837,
+     "p": 0.0034,
+     "ic95": [
+      -0.0391,
+      -0.0079
+     ],
+     "lags": 4,
+     "años": 132,
+     "n": 1577,
+     "paises": 14,
+     "años_rango": [
+      1871,
+      2002
+     ],
+     "dt_x": 0.0626,
+     "media_x": 0.043
+    },
+    "letras_reales_informativa": {
+     "efecto": -0.0023,
+     "se": 0.0024,
+     "t": -0.9772,
+     "p": 0.3303,
+     "ic95": [
+      -0.007,
+      0.0024
+     ],
+     "lags": 4,
+     "años": 133,
+     "n": 1649,
+     "paises": 14,
+     "años_rango": [
+      1871,
+      2003
+     ],
+     "dt_x": 0.062,
+     "media_x": 0.0426
+    }
+   },
+   "paises_prueba_pendiente_con_z_del_nucleo": {
+    "AUS": {
+     "pendiente": -0.0048,
+     "filas": 133
+    },
+    "CHE": {
+     "pendiente": 0.0145,
+     "filas": 105
+    }
+   }
+  },
+  "M2": {
+   "efecto": -0.0068,
+   "se": 0.0034,
+   "t": -1.9858,
+   "p": 0.0491,
+   "ic95": [
+    -0.0136,
+    -0.0
+   ],
+   "lags": 4,
+   "años": 133,
+   "n": 1651,
+   "paises": 14,
+   "años_rango": [
+    1871,
+    2003
+   ],
+   "dt_x": 0.0624,
+   "media_x": 0.0427,
+   "efecto_1950_2004": -0.011,
+   "efecto_efectos_de_año": -0.0033,
+   "por_pais_sin_encoger": {
+    "BEL": -0.0476,
+    "DEU": -0.0109,
+    "DNK": -0.0032,
+    "ESP": 0.0015,
+    "FIN": -0.0086,
+    "FRA": -0.0025,
+    "GBR": -0.0031,
+    "ITA": -0.0067,
+    "JPN": -0.026,
+    "NLD": -0.0113,
+    "NOR": -0.0086,
+    "PRT": 0.0044,
+    "SWE": 0.0096,
+    "USA": -0.0017
+   },
+   "por_pais_dl_sin_año": {
+    "BEL": -0.0026,
+    "DEU": -0.0019,
+    "DNK": -0.0025,
+    "ESP": -0.0025,
+    "FIN": -0.0027,
+    "FRA": -0.0023,
+    "GBR": -0.0025,
+    "ITA": -0.0011,
+    "JPN": -0.0033,
+    "NLD": -0.0024,
+    "NOR": -0.0017,
+    "PRT": -0.0019,
+    "SWE": -0.0023,
+    "USA": -0.0021
+   },
+   "dl_sin_año_media": -0.0023,
+   "tau2_sin_año": 0.0,
+   "placebo": {
+    "phi": 1.0334,
+    "p_cal": 0.0568,
+    "placebos": 122,
+    "p95_abs_t_placebo": 2.0802,
+    "supera_p95": false,
+    "p_rangos": 0.0813
+   },
+   "winsor_p1_p99": [
+    -0.1337,
+    0.2412
+   ],
+   "sensibilidades": {
+    "sin_guerras": {
+     "efecto": -0.0074,
+     "se": 0.0039,
+     "t": -1.9235,
+     "p": 0.0568,
+     "ic95": [
+      -0.0151,
+      0.0002
+     ],
+     "lags": 4,
+     "años": 119,
+     "n": 1505,
+     "paises": 14,
+     "años_rango": [
+      1871,
+      2003
+     ],
+     "dt_x": 0.0595,
+     "media_x": 0.0416
+    },
+    "exceso_de_dinero": {
+     "efecto": -0.031,
+     "se": 0.0063,
+     "t": -4.942,
+     "p": 0.0,
+     "ic95": [
+      -0.0435,
+      -0.0186
+     ],
+     "lags": 4,
+     "años": 133,
+     "n": 1651,
+     "paises": 14,
+     "años_rango": [
+      1871,
+      2003
+     ],
+     "dt_x": 0.0746,
+     "media_x": 0.0461
+    },
+    "dinero_estrecho_real": {
+     "efecto": -0.0124,
+     "se": 0.0036,
+     "t": -3.4866,
+     "p": 0.0007,
+     "ic95": [
+      -0.0194,
+      -0.0054
+     ],
+     "lags": 4,
+     "años": 133,
+     "n": 1730,
+     "paises": 14,
+     "años_rango": [
+      1871,
+      2003
+     ],
+     "dt_x": 0.075,
+     "media_x": 0.0362
+    },
+    "t_mas_2": {
+     "efecto": -0.0167,
+     "se": 0.0044,
+     "t": -3.7764,
+     "p": 0.0002,
+     "ic95": [
+      -0.0254,
+      -0.008
+     ],
+     "lags": 4,
+     "años": 132,
+     "n": 1638,
+     "paises": 14,
+     "años_rango": [
+      1871,
+      2002
+     ],
+     "dt_x": 0.0629,
+     "media_x": 0.0428
+    },
+    "letras_reales_informativa": {
+     "efecto": -0.0023,
+     "se": 0.0024,
+     "t": -0.9772,
+     "p": 0.3303,
+     "ic95": [
+      -0.007,
+      0.0024
+     ],
+     "lags": 4,
+     "años": 133,
+     "n": 1649,
+     "paises": 14,
+     "años_rango": [
+      1871,
+      2003
+     ],
+     "dt_x": 0.062,
+     "media_x": 0.0426
+    }
+   },
+   "paises_prueba_pendiente_con_z_del_nucleo": {
+    "AUS": {
+     "pendiente": 0.001,
+     "filas": 105
+    },
+    "CHE": {
+     "pendiente": 0.0263,
+     "filas": 104
+    }
+   }
+  },
+  "K1": {
+   "filas": 1137,
+   "eventos": 49,
+   "paises": 14,
+   "años_eventos": 27,
+   "auc_modelo": 0.6693,
+   "auc_liston": 0.5565,
+   "d_auc": 0.1128,
+   "d_auc_ic95": [
+    -0.0067,
+    0.2305
+   ],
+   "p_bloques": 0.063,
+   "d_logloss": -0.005,
+   "d_logloss_ic95": [
+    -0.0151,
+    0.0056
+   ],
+   "d_auc_agrupada": 0.0772,
+   "d_auc_agrupada_ic95": [
+    -0.0325,
+    0.1921
+   ],
+   "años": 115,
+   "calibracion": {
+    "intercepto": -0.4546,
+    "pendiente": 0.8473
+   },
+   "periodo_1871_1913": {
+    "filas": 286,
+    "eventos": 21,
+    "d_auc": 0.1524
+   },
+   "periodo_1919_2004": {
+    "filas": 851,
+    "eventos": 28,
+    "d_auc": 0.1651
+   },
+   "periodo_1950_2004": {
+    "filas": 696,
+    "eventos": 10,
+    "d_auc": 0.5269
+   },
+   "temporal_1950_2004": {
+    "filas": 696,
+    "eventos": 10,
+    "d_auc": 0.3441,
+    "d_auc_agrupada": 0.2635
+   },
+   "placebo": {
+    "desplazamientos": 124,
+    "media": 0.0147,
+    "dt": 0.0312,
+    "z": 3.1455,
+    "p_z": 0.0008,
+    "p_rangos": 0.024
+   },
+   "sensibilidades": {
+    "h2": {
+     "filas": 1100,
+     "eventos": 92,
+     "paises": 14,
+     "años_eventos": 42,
+     "auc_modelo": 0.6685,
+     "auc_liston": 0.567,
+     "d_auc": 0.1015,
+     "d_auc_ic95": [
+      0.0038,
+      0.2032
+     ],
+     "p_bloques": 0.043,
+     "d_logloss": -0.009,
+     "d_logloss_ic95": [
+      -0.0236,
+      0.0063
+     ],
+     "d_auc_agrupada": 0.0705,
+     "d_auc_agrupada_ic95": [
+      -0.0159,
+      0.1628
+     ],
+     "años": 112,
+     "calibracion": {
+      "intercepto": -0.3027,
+      "pendiente": 0.8674
+     },
+     "temporal_1950_2004": {
+      "filas": 682,
+      "eventos": 20,
+      "d_auc": 0.3059,
+      "d_auc_agrupada": 0.2128
+     }
+    },
+    "crisisjst_old": {
+     "filas": 1127,
+     "eventos": 51,
+     "paises": 14,
+     "años_eventos": 28,
+     "auc_modelo": 0.6855,
+     "auc_liston": 0.5632,
+     "d_auc": 0.1223,
+     "d_auc_ic95": [
+      0.0023,
+      0.2443
+     ],
+     "p_bloques": 0.046,
+     "d_logloss": -0.0067,
+     "d_logloss_ic95": [
+      -0.018,
+      0.0055
+     ],
+     "d_auc_agrupada": 0.0883,
+     "d_auc_agrupada_ic95": [
+      -0.0211,
+      0.2031
+     ],
+     "años": 115,
+     "calibracion": {
+      "intercepto": -0.3803,
+      "pendiente": 0.8685
+     },
+     "temporal_1950_2004": {
+      "filas": 696,
+      "eventos": 10,
+      "d_auc": 0.3849,
+      "d_auc_agrupada": 0.3172
+     }
+    },
+    "credito_en_log": {
+     "filas": 1150,
+     "eventos": 50,
+     "paises": 14,
+     "años_eventos": 27,
+     "auc_modelo": 0.5628,
+     "auc_liston": 0.5521,
+     "d_auc": 0.0107,
+     "d_auc_ic95": [
+      -0.0077,
+      0.0275
+     ],
+     "p_bloques": 0.2329,
+     "d_logloss": 0.0119,
+     "d_logloss_ic95": [
+      -0.0022,
+      0.0399
+     ],
+     "d_auc_agrupada": 0.0175,
+     "d_auc_agrupada_ic95": [
+      0.0001,
+      0.0346
+     ],
+     "años": 115,
+     "calibracion": {
+      "intercepto": -2.6367,
+      "pendiente": 0.146
+     },
+     "temporal_1950_2004": {
+      "filas": 698,
+      "eventos": 10,
+      "d_auc": 0.0086,
+      "d_auc_agrupada": 0.0108
+     }
+    },
+    "exclusion_3_años": {
+     "filas": 1241,
+     "eventos": 51,
+     "paises": 14,
+     "años_eventos": 29,
+     "auc_modelo": 0.6556,
+     "auc_liston": 0.512,
+     "d_auc": 0.1436,
+     "d_auc_ic95": [
+      0.0216,
+      0.269
+     ],
+     "p_bloques": 0.026,
+     "d_logloss": -0.0045,
+     "d_logloss_ic95": [
+      -0.0135,
+      0.005
+     ],
+     "d_auc_agrupada": 0.1015,
+     "d_auc_agrupada_ic95": [
+      -0.0178,
+      0.2281
+     ],
+     "años": 115,
+     "calibracion": {
+      "intercepto": -0.6111,
+      "pendiente": 0.8006
+     },
+     "temporal_1950_2004": {
+      "filas": 716,
+      "eventos": 10,
+      "d_auc": 0.4642,
+      "d_auc_agrupada": 0.3403
+     }
+    }
+   },
+   "paises_prueba": {
+    "filas": 372,
+    "eventos": 6,
+    "auc_modelo": 0.6424,
+    "auc_liston": 0.3171,
+    "d_auc": 0.3253,
+    "d_auc_ic95": [
+     0.1844,
+     0.4912
+    ],
+    "p_bloques": 0.001,
+    "d_logloss": -0.0058,
+    "d_logloss_ic95": [
+     -0.0145,
+     0.001
+    ],
+    "d_auc_agrupada": 0.2655,
+    "d_auc_agrupada_ic95": [
+     0.1363,
+     0.4112
+    ],
+    "años": 115,
+    "por_pais": {
+     "AUS": {
+      "filas": 101,
+      "eventos": 2,
+      "d_auc": 0.3232
+     },
+     "CAN": {
+      "filas": 110,
+      "eventos": 1,
+      "d_auc": 0.1101
+     },
+     "CHE": {
+      "filas": 102,
+      "eventos": 3,
+      "d_auc": 0.4057
+     },
+     "IRL": {
+      "filas": 59,
+      "eventos": 0,
+      "d_auc": null
+     }
+    }
+   }
+  },
+  "K2": {
+   "filas": 1304,
+   "eventos": 218,
+   "paises": 14,
+   "años_eventos": 82,
+   "auc_modelo": 0.6191,
+   "auc_liston": 0.5485,
+   "d_auc": 0.0706,
+   "d_auc_ic95": [
+    0.0124,
+    0.1316
+   ],
+   "p_bloques": 0.018,
+   "d_logloss": -0.0091,
+   "d_logloss_ic95": [
+    -0.0201,
+    0.0012
+   ],
+   "d_auc_agrupada": 0.0606,
+   "d_auc_agrupada_ic95": [
+    0.0064,
+    0.1135
+   ],
+   "años": 118,
+   "calibracion": {
+    "intercepto": -0.2621,
+    "pendiente": 0.8321
+   },
+   "periodo_1950_2004": {
+    "filas": 675,
+    "eventos": 61,
+    "d_auc": 0.2375
+   },
+   "temporal_1950_2004": {
+    "filas": 675,
+    "eventos": 61,
+    "d_auc": 0.1719,
+    "d_auc_agrupada": 0.1343
+   },
+   "placebo": {
+    "desplazamientos": 124,
+    "media": 0.0056,
+    "dt": 0.0132,
+    "z": 4.9145,
+    "p_z": 0.0,
+    "p_rangos": 0.008
+   },
+   "sensibilidades": {
+    "solo_EEUU_1919_2004": {
+     "filas": 878,
+     "eventos": 110,
+     "paises": 14,
+     "años_eventos": 43,
+     "auc_modelo": 0.6365,
+     "auc_liston": 0.4821,
+     "d_auc": 0.1543,
+     "d_auc_ic95": [
+      0.0377,
+      0.2688
+     ],
+     "p_bloques": 0.013,
+     "d_logloss": -0.013,
+     "d_logloss_ic95": [
+      -0.0316,
+      0.0052
+     ],
+     "d_auc_agrupada": 0.1321,
+     "d_auc_agrupada_ic95": [
+      0.0268,
+      0.2371
+     ],
+     "años": 76,
+     "calibracion": {
+      "intercepto": -0.402,
+      "pendiente": 0.7878
+     },
+     "temporal_1950_2004": {
+      "filas": 675,
+      "eventos": 61,
+      "d_auc": 0.1266,
+      "d_auc_agrupada": 0.1016
+     }
+    },
+    "RU_todos_los_años": {
+     "filas": 1314,
+     "eventos": 220,
+     "paises": 14,
+     "años_eventos": 83,
+     "auc_modelo": 0.5669,
+     "auc_liston": 0.5426,
+     "d_auc": 0.0243,
+     "d_auc_ic95": [
+      -0.0206,
+      0.0726
+     ],
+     "p_bloques": 0.3078,
+     "d_logloss": -0.0017,
+     "d_logloss_ic95": [
+      -0.0088,
+      0.0044
+     ],
+     "d_auc_agrupada": 0.0198,
+     "d_auc_agrupada_ic95": [
+      -0.0221,
+      0.0651
+     ],
+     "años": 119,
+     "calibracion": {
+      "intercepto": -0.429,
+      "pendiente": 0.7291
+     },
+     "temporal_1950_2004": {
+      "filas": 675,
+      "eventos": 61,
+      "d_auc": 0.0667,
+      "d_auc_agrupada": 0.037
+     }
+    },
+    "nivel_menos_mediana_10_años": {
+     "filas": 1227,
+     "eventos": 200,
+     "paises": 14,
+     "años_eventos": 75,
+     "auc_modelo": 0.5829,
+     "auc_liston": 0.537,
+     "d_auc": 0.0459,
+     "d_auc_ic95": [
+      0.0012,
+      0.0965
+     ],
+     "p_bloques": 0.048,
+     "d_logloss": -0.0031,
+     "d_logloss_ic95": [
+      -0.0086,
+      0.0026
+     ],
+     "d_auc_agrupada": 0.0429,
+     "d_auc_agrupada_ic95": [
+      0.0017,
+      0.0862
+     ],
+     "años": 110,
+     "calibracion": {
+      "intercepto": -0.3972,
+      "pendiente": 0.7554
+     },
+     "temporal_1950_2004": {
+      "filas": 675,
+      "eventos": 61,
+      "d_auc": 0.1071,
+      "d_auc_agrupada": 0.0659
+     }
+    },
+    "sobre_logit_INT4_informativo": {
+     "filas": 1080,
+     "eventos": 164,
+     "paises": 14,
+     "años_eventos": 71,
+     "auc_modelo": 0.7464,
+     "auc_liston": 0.7321,
+     "d_auc": 0.0143,
+     "d_auc_ic95": [
+      -0.0052,
+      0.0358
+     ],
+     "p_bloques": 0.1399,
+     "d_logloss": -0.0051,
+     "d_logloss_ic95": [
+      -0.0148,
+      0.004
+     ],
+     "d_auc_agrupada": 0.0106,
+     "d_auc_agrupada_ic95": [
+      -0.009,
+      0.0314
+     ],
+     "años": 112,
+     "calibracion": {
+      "intercepto": -0.1989,
+      "pendiente": 0.87
+     },
+     "temporal_1950_2004": {
+      "filas": 657,
+      "eventos": 60,
+      "d_auc": 0.0178,
+      "d_auc_agrupada": 0.0164
+     }
+    },
+    "EEUU_propio_diferencial_descriptivo_dentro_de_muestra": {
+     "filas": 57,
+     "eventos": 11,
+     "auc_liston": 0.5741,
+     "auc_modelo": 0.8271,
+     "d_auc": 0.253
+    },
+    "EBP": {
+     "omitida": "fed_ebp_* no está en las familias permitidas (la decisión 4 no lo añade); solo descriptivo, 4 entradas, no es 'as of' (notas §E.4)"
+    }
+   },
+   "paises_prueba": {
+    "filas": 329,
+    "eventos": 66,
+    "auc_modelo": 0.6261,
+    "auc_liston": 0.5655,
+    "d_auc": 0.0607,
+    "d_auc_ic95": [
+     -0.0142,
+     0.1428
+    ],
+    "p_bloques": 0.1179,
+    "d_logloss": -0.0152,
+    "d_logloss_ic95": [
+     -0.0358,
+     0.0013
+    ],
+    "d_auc_agrupada": 0.0595,
+    "d_auc_agrupada_ic95": [
+     -0.014,
+     0.1414
+    ],
+    "años": 117,
+    "por_pais": {
+     "AUS": {
+      "filas": 87,
+      "eventos": 21,
+      "d_auc": 0.0029
+     },
+     "CAN": {
+      "filas": 88,
+      "eventos": 16,
+      "d_auc": 0.0013
+     },
+     "CHE": {
+      "filas": 87,
+      "eventos": 23,
+      "d_auc": 0.1298
+     },
+     "IRL": {
+      "filas": 67,
+      "eventos": 6,
+      "d_auc": 0.1885
+     }
+    }
+   }
+  },
+  "X1": {
+   "filas": 1314,
+   "eventos": 220,
+   "paises": 14,
+   "años_eventos": 83,
+   "auc_modelo": 0.6656,
+   "auc_liston": 0.5426,
+   "d_auc": 0.1231,
+   "d_auc_ic95": [
+    0.0636,
+    0.1874
+   ],
+   "p_bloques": 0.001,
+   "d_logloss": -0.0139,
+   "d_logloss_ic95": [
+    -0.0266,
+    -0.0018
+   ],
+   "d_auc_agrupada": 0.109,
+   "d_auc_agrupada_ic95": [
+    0.051,
+    0.172
+   ],
+   "años": 119,
+   "calibracion": {
+    "intercepto": -0.1647,
+    "pendiente": 0.894
+   },
+   "periodo_1950_2004": {
+    "filas": 675,
+    "eventos": 61,
+    "d_auc": 0.2602
+   },
+   "temporal_1950_2004": {
+    "filas": 675,
+    "eventos": 61,
+    "d_auc": 0.1733,
+    "d_auc_agrupada": 0.1393
+   },
+   "placebo": {
+    "desplazamientos": 124,
+    "media": 0.0114,
+    "dt": 0.0174,
+    "z": 6.4178,
+    "p_z": 0.0,
+    "p_rangos": 0.008
+   },
+   "sensibilidades": {
+    "EEUU_con_PIB_cayendo_otros_13": {
+     "filas": 1228,
+     "eventos": 197,
+     "paises": 13,
+     "años_eventos": 80,
+     "auc_modelo": 0.5865,
+     "auc_liston": 0.5377,
+     "d_auc": 0.0488,
+     "d_auc_ic95": [
+      -0.0056,
+      0.1046
+     ],
+     "p_bloques": 0.07,
+     "d_logloss": -0.0054,
+     "d_logloss_ic95": [
+      -0.0142,
+      0.0031
+     ],
+     "d_auc_agrupada": 0.0423,
+     "d_auc_agrupada_ic95": [
+      -0.0081,
+      0.0924
+     ],
+     "años": 119,
+     "calibracion": {
+      "intercepto": -0.2998,
+      "pendiente": 0.8154
+     },
+     "temporal_1950_2004": {
+      "filas": 629,
+      "eventos": 54,
+      "d_auc": 0.0374,
+      "d_auc_agrupada": 0.0261
+     }
+    },
+    "cuota_ponderada_PIB": {
+     "filas": 1314,
+     "eventos": 220,
+     "paises": 14,
+     "años_eventos": 83,
+     "auc_modelo": 0.6389,
+     "auc_liston": 0.5426,
+     "d_auc": 0.0963,
+     "d_auc_ic95": [
+      0.039,
+      0.1569
+     ],
+     "p_bloques": 0.002,
+     "d_logloss": -0.0117,
+     "d_logloss_ic95": [
+      -0.0239,
+      0.0001
+     ],
+     "d_auc_agrupada": 0.0846,
+     "d_auc_agrupada_ic95": [
+      0.0291,
+      0.1408
+     ],
+     "años": 119,
+     "calibracion": {
+      "intercepto": -0.1636,
+      "pendiente": 0.8943
+     },
+     "temporal_1950_2004": {
+      "filas": 675,
+      "eventos": 61,
+      "d_auc": 0.0997,
+      "d_auc_agrupada": 0.0708
+     }
+    },
+    "sobre_logit_INT4_informativo": {
+     "filas": 1087,
+     "eventos": 166,
+     "paises": 14,
+     "años_eventos": 72,
+     "auc_modelo": 0.7527,
+     "auc_liston": 0.731,
+     "d_auc": 0.0216,
+     "d_auc_ic95": [
+      0.0002,
+      0.0445
+     ],
+     "p_bloques": 0.05,
+     "d_logloss": -0.0053,
+     "d_logloss_ic95": [
+      -0.0133,
+      0.0031
+     ],
+     "d_auc_agrupada": 0.016,
+     "d_auc_agrupada_ic95": [
+      -0.0004,
+      0.035
+     ],
+     "años": 113,
+     "calibracion": {
+      "intercepto": -0.2234,
+      "pendiente": 0.8554
+     },
+     "temporal_1950_2004": {
+      "filas": 657,
+      "eventos": 60,
+      "d_auc": 0.0151,
+      "d_auc_agrupada": 0.024
+     }
+    },
+    "1950_2004": {
+     "filas": 675,
+     "eventos": 61,
+     "paises": 14,
+     "años_eventos": 24,
+     "auc_modelo": 0.7028,
+     "auc_liston": 0.6466,
+     "d_auc": 0.0562,
+     "d_auc_ic95": [
+      -0.0417,
+      0.1599
+     ],
+     "p_bloques": 0.2799,
+     "d_logloss": -0.0107,
+     "d_logloss_ic95": [
+      -0.0279,
+      0.0056
+     ],
+     "d_auc_agrupada": 0.0893,
+     "d_auc_agrupada_ic95": [
+      -0.0054,
+      0.1822
+     ],
+     "años": 54,
+     "calibracion": {
+      "intercepto": -0.3206,
+      "pendiente": 0.856
+     },
+     "temporal_1950_2004": {
+      "filas": 551,
+      "eventos": 46,
+      "d_auc": 0.1472,
+      "d_auc_agrupada": 0.1482
+     }
+    }
+   },
+   "paises_prueba": {
+    "filas": 330,
+    "eventos": 66,
+    "auc_modelo": 0.6879,
+    "auc_liston": 0.5638,
+    "d_auc": 0.1241,
+    "d_auc_ic95": [
+     0.0306,
+     0.2188
+    ],
+    "p_bloques": 0.01,
+    "d_logloss": -0.0207,
+    "d_logloss_ic95": [
+     -0.0428,
+     0.0018
+    ],
+    "d_auc_agrupada": 0.1143,
+    "d_auc_agrupada_ic95": [
+     0.0286,
+     0.2007
+    ],
+    "años": 118,
+    "por_pais": {
+     "AUS": {
+      "filas": 88,
+      "eventos": 21,
+      "d_auc": 0.0498
+     },
+     "CAN": {
+      "filas": 88,
+      "eventos": 16,
+      "d_auc": 0.1272
+     },
+     "CHE": {
+      "filas": 87,
+      "eventos": 23,
+      "d_auc": 0.1335
+     },
+     "IRL": {
+      "filas": 67,
+      "eventos": 6,
+      "d_auc": 0.362
+     }
+    }
+   }
+  }
+ },
+ "holm6": {
+  "alfa": 0.05,
+  "p": {
+   "G2": 0.001,
+   "M1": 0.28,
+   "M2": 0.0568,
+   "K1": 0.0008,
+   "K2": 0.0,
+   "X1": 0.0
+  },
+  "pasa": {
+   "X1": true,
+   "K2": true,
+   "K1": true,
+   "G2": true,
+   "M2": false,
+   "M1": false
+  },
+  "umbral_por_rango": {
+   "X1": 0.0083,
+   "K2": 0.01,
+   "K1": 0.0125,
+   "G2": 0.0167,
+   "M2": 0.025,
+   "M1": 0.05
+  },
+  "criterio_i_auc": {
+   "p": {
+    "G2": 0.001,
+    "M1": 0.28,
+    "M2": 0.0568,
+    "K1": 0.063,
+    "K2": 0.018,
+    "X1": 0.001
+   },
+   "pasa": {
+    "X1": true,
+    "G2": true,
+    "K2": false,
+    "M2": false,
+    "K1": false,
+    "M1": false
+   }
+  }
+ },
+ "veredicto": {
+  "G2": {
+   "1_b_negativo": true,
+   "2_holm6_p_cal": true,
+   "3_supera_p95_placebo": true,
+   "4_signo_1973_1988_y_1989_2004": true,
+   "5_signo_anual_dic_dic": true,
+   "ESTABLECIDO": true
+  },
+  "M1": {
+   "1_signo": true,
+   "2_holm6_p_cal": false,
+   "3_supera_p95_placebo": false,
+   "4_signo_1950_2004": true,
+   "5a_paises_sin_encoger_2_3": false,
+   "5b_paises_dl_sin_año_2_3": false,
+   "6_signo_efectos_de_año": true,
+   "ESTABLECIDO": false
+  },
+  "M2": {
+   "1_signo": false,
+   "2_holm6_p_cal": false,
+   "3_supera_p95_placebo": false,
+   "4_signo_1950_2004": false,
+   "5a_paises_sin_encoger_2_3": false,
+   "5b_paises_dl_sin_año_2_3": false,
+   "6_signo_efectos_de_año": false,
+   "ESTABLECIDO": false
+  },
+  "K1": {
+   "i_dauc_estrat_ic_holm6": false,
+   "ii_z_placebo_holm6": true,
+   "iii_dlogloss_neg": true,
+   "iv_dauc_1871_1913_y_1919_2004_pos": true,
+   "v_pendiente_0.5_1.5": true,
+   "ESTABLECIDO": false
+  },
+  "K2": {
+   "i_dauc_estrat_ic_holm6": false,
+   "ii_z_placebo_holm6": true,
+   "iii_dlogloss_neg": true,
+   "iv_temporal_1950_2004_pos": true,
+   "v_pendiente_0.5_1.5": true,
+   "ESTABLECIDO": false
+  },
+  "X1": {
+   "i_dauc_estrat_ic_holm6": true,
+   "ii_z_placebo_holm6": true,
+   "iii_dlogloss_neg": true,
+   "iv_temporal_1950_2004_pos": true,
+   "v_pendiente_0.5_1.5": true,
+   "ESTABLECIDO": true
+  }
+ },
+ "descriptivas": {
+  "G1_oro_refugio": {
+   "frase_obligatoria": "con datos ≤ 2004 esto no puede distinguir un refugio de +10-20 pp de cero",
+   "panel_moneda_local": {
+    "1972_2004|recesion": {
+     "efecto": -0.0327,
+     "ic95_dk": [
+      -0.1826,
+      0.1173
+     ],
+     "p_dk": 0.6602,
+     "n": 462,
+     "n_estado": 61,
+     "mde_pp_1_contraste": 29.9,
+     "mde_pp_holm6": 37.1
+    },
+    "1972_2004|recesion_financiera": {
+     "efecto": -0.0038,
+     "ic95_dk": [
+      -0.1528,
+      0.1453
+     ],
+     "p_dk": 0.9593,
+     "n": 462,
+     "n_estado": 15,
+     "mde_pp_1_contraste": 36.6,
+     "mde_pp_holm6": 45.5
+    },
+    "1972_2004|crisis_inicio_y_siguiente": {
+     "efecto": -0.076,
+     "ic95_dk": [
+      -0.1587,
+      0.0068
+     ],
+     "p_dk": 0.0706,
+     "n": 462,
+     "n_estado": 20,
+     "mde_pp_1_contraste": 31.4,
+     "mde_pp_holm6": 39.0
+    },
+    "1877_1971|recesion": {
+     "efecto": 0.0174,
+     "ic95_dk": [
+      -0.0263,
+      0.0611
+     ],
+     "p_dk": 0.4305,
+     "n": 1288,
+     "n_estado": 325,
+     "mde_pp_1_contraste": 11.6,
+     "mde_pp_holm6": 14.4
+    },
+    "1877_1971|recesion_financiera": {
+     "efecto": 0.0354,
+     "ic95_dk": [
+      -0.0131,
+      0.0838
+     ],
+     "p_dk": 0.1505,
+     "n": 1288,
+     "n_estado": 97,
+     "mde_pp_1_contraste": 15.5,
+     "mde_pp_holm6": 19.3
+    },
+    "1877_1971|crisis_inicio_y_siguiente": {
+     "efecto": 0.0636,
+     "ic95_dk": [
+      0.0134,
+      0.1138
+     ],
+     "p_dk": 0.0136,
+     "n": 1288,
+     "n_estado": 101,
+     "mde_pp_1_contraste": 16.2,
+     "mde_pp_holm6": 20.1
+    },
+    "1877_2004|recesion": {
+     "efecto": 0.0032,
+     "ic95_dk": [
+      -0.0485,
+      0.0549
+     ],
+     "p_dk": 0.9036,
+     "n": 1750,
+     "n_estado": 386,
+     "mde_pp_1_contraste": 12.3,
+     "mde_pp_holm6": 15.3
+    },
+    "1877_2004|recesion_financiera": {
+     "efecto": 0.0252,
+     "ic95_dk": [
+      -0.0243,
+      0.0747
+     ],
+     "p_dk": 0.3154,
+     "n": 1750,
+     "n_estado": 112,
+     "mde_pp_1_contraste": 16.0,
+     "mde_pp_holm6": 19.8
+    },
+    "1877_2004|crisis_inicio_y_siguiente": {
+     "efecto": 0.0373,
+     "ic95_dk": [
+      -0.0128,
+      0.0875
+     ],
+     "p_dk": 0.1434,
+     "n": 1750,
+     "n_estado": 121,
+     "mde_pp_1_contraste": 16.4,
+     "mde_pp_holm6": 20.4
+    }
+   },
+   "oro_usd_real_cuota_recesion_1972_2004": {
+    "efecto_0_a_100": -0.2628,
+    "ic95": [
+     -0.7738,
+     0.2481
+    ],
+    "p_nw": 0.3025,
+    "n_años": 33,
+    "efecto_por_dt_cuota": -0.0488,
+    "mde_pp_0a100_1_contraste": 76.8,
+    "mde_pp_0a100_holm6": 95.4
+   },
+   "oro_usd_real_cuota_recesion_1877_2004": {
+    "efecto_0_a_100": -0.0661,
+    "ic95": [
+     -0.2289,
+     0.0966
+    ],
+    "p_nw": 0.4227,
+    "n_años": 128,
+    "efecto_por_dt_cuota": -0.0141,
+    "mde_pp_0a100_1_contraste": 20.7,
+    "mde_pp_0a100_holm6": 25.7
+   },
+   "oro_meses_caida_bolsa_usa_5pc_1973_2004": {
+    "meses_estado": 24,
+    "meses": 384,
+    "diferencia_pp_mes": -0.8648,
+    "ic95_pp": [
+     -3.4313,
+     1.7018
+    ],
+    "p_nw": 0.5081,
+    "mde_pp_mes_1_contraste": 3.3,
+    "mde_pp_mes_holm6": 4.1
+   },
+   "oro_meses_caida_bolsa_usa_8pc_1973_2004": {
+    "meses_estado": 14,
+    "meses": 384,
+    "diferencia_pp_mes": -0.3416,
+    "ic95_pp": [
+     -4.0047,
+     3.3214
+    ],
+    "p_nw": 0.8546,
+    "mde_pp_mes_1_contraste": 4.33,
+    "mde_pp_mes_holm6": 5.38
+   }
+  },
+  "M3_dinero_recesion": {
+   "frente_a_B1": {
+    "filas": 1224,
+    "eventos": 206,
+    "paises": 14,
+    "años_eventos": 83,
+    "auc_modelo": 0.6225,
+    "auc_liston": 0.5488,
+    "d_auc": 0.0737,
+    "d_auc_ic95": [
+     0.0241,
+     0.1213
+    ],
+    "p_bloques": 0.004,
+    "d_logloss": -0.0123,
+    "d_logloss_ic95": [
+     -0.0215,
+     -0.0031
+    ],
+    "d_auc_agrupada": 0.0684,
+    "d_auc_agrupada_ic95": [
+     0.0231,
+     0.1134
+    ],
+    "años": 119,
+    "calibracion": {
+     "intercepto": -0.1511,
+     "pendiente": 0.9021
+    },
+    "periodo_1950_2004": {
+     "filas": 648,
+     "eventos": 58,
+     "d_auc": 0.2398
+    },
+    "temporal_1950_2004": {
+     "filas": 648,
+     "eventos": 58,
+     "d_auc": 0.1584,
+     "d_auc_agrupada": 0.1281
+    },
+    "placebo": {
+     "desplazamientos": 124,
+     "media": 0.0018,
+     "dt": 0.0101,
+     "z": 7.1085,
+     "p_z": 0.0,
+     "p_rangos": 0.008
+    }
+   },
+   "sobre_logit_INT4": {
+    "filas": 1034,
+    "eventos": 159,
+    "paises": 14,
+    "años_eventos": 72,
+    "auc_modelo": 0.7312,
+    "auc_liston": 0.726,
+    "d_auc": 0.0052,
+    "d_auc_ic95": [
+     -0.0109,
+     0.0205
+    ],
+    "p_bloques": 0.4988,
+    "d_logloss": -0.0027,
+    "d_logloss_ic95": [
+     -0.008,
+     0.0025
+    ],
+    "d_auc_agrupada": 0.0117,
+    "d_auc_agrupada_ic95": [
+     -0.0006,
+     0.0244
+    ],
+    "años": 113,
+    "calibracion": {
+     "intercepto": -0.2196,
+     "pendiente": 0.8594
+    },
+    "periodo_1950_2004": {
+     "filas": 634,
+     "eventos": 58,
+     "d_auc": 0.0151
+    },
+    "temporal_1950_2004": {
+     "filas": 634,
+     "eventos": 58,
+     "d_auc": 0.0097,
+     "d_auc_agrupada": 0.0125
+    },
+    "placebo": {
+     "desplazamientos": 124,
+     "media": -0.0008,
+     "dt": 0.0026,
+     "z": 2.337,
+     "p_z": 0.0097,
+     "p_rangos": 0.032
+    }
+   }
+  },
+  "ICC_por_decadas": {
+   "1870s": {
+    "filas": 126,
+    "icc_crecimiento": 0.0411,
+    "icc_recesion": 0.194
+   },
+   "1880s": {
+    "filas": 140,
+    "icc_crecimiento": 0.0605,
+    "icc_recesion": 0.05
+   },
+   "1890s": {
+    "filas": 140,
+    "icc_crecimiento": 0.0074,
+    "icc_recesion": 0.0087
+   },
+   "1900s": {
+    "filas": 140,
+    "icc_crecimiento": 0.1492,
+    "icc_recesion": 0.0484
+   },
+   "1910s": {
+    "filas": 140,
+    "icc_crecimiento": 0.3202,
+    "icc_recesion": 0.3025
+   },
+   "1920s": {
+    "filas": 140,
+    "icc_crecimiento": 0.0607,
+    "icc_recesion": 0.0108
+   },
+   "1930s": {
+    "filas": 140,
+    "icc_crecimiento": 0.2025,
+    "icc_recesion": 0.2537
+   },
+   "1940s": {
+    "filas": 140,
+    "icc_crecimiento": 0.0725,
+    "icc_recesion": 0.1313
+   },
+   "1950s": {
+    "filas": 140,
+    "icc_crecimiento": 0.0939,
+    "icc_recesion": 0.1613
+   },
+   "1960s": {
+    "filas": 140,
+    "icc_crecimiento": 0.01,
+    "icc_recesion": 0.0
+   },
+   "1970s": {
+    "filas": 140,
+    "icc_crecimiento": 0.3523,
+    "icc_recesion": 0.34
+   },
+   "1980s": {
+    "filas": 140,
+    "icc_crecimiento": 0.2624,
+    "icc_recesion": 0.1368
+   },
+   "1990s": {
+    "filas": 140,
+    "icc_crecimiento": 0.2908,
+    "icc_recesion": 0.3237
+   },
+   "2000s": {
+    "filas": 70,
+    "icc_crecimiento": 0.5685,
+    "icc_recesion": 0.1385
+   }
+  }
+ },
+ "hora_fin_utc": "2026-10-29T18:27:16+00:00"
+}

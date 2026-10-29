@@ -31,6 +31,8 @@ FAMILIAS: dict[str, str] = {
     r"gold_mw_newyork_usd_a|gold_wb_usd_m": "Oro en USD: MeasuringWorth (media anual) y Banco Mundial (media mensual)",
     r"boe_uk_(corp_bond_yield_a|consol_yield_a|oil_price_usd_a|cpi_a)": "BoE A Millennium of Macroeconomic Data (UK), anual",
     r"BAA|AAA|GS10": "FRED: Moody's Baa/Aaa y Tesoro 10 años, mensual",
+    # INT-6 (docs/int/INT6_prerregistro_v1.md §10, decisión 4): diferencial corporativo del R. U., mensual 1854- (K2)
+    r"boe_uk_corp_bond_spread_m": "BoE A Millennium of Macroeconomic Data (UK), diferencial corporativo mensual, pp",
     # Termómetro de recesión informativo (docs/int/TERMOMETRO_diseno_v1.md)
     r"oecd_gdpq_[a-z]{3}": "OCDE Quarterly National Accounts, PIB real en volumen, trimestral (CC BY 4.0; curado, ver load_dev_curado)",
     r"bis_creditgap_[a-z]{2}_ratio": "BIS crédito total al sector privado no financiero / PIB, trimestral",

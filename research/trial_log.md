@@ -108,3 +108,4 @@ mira salvo en la evaluación única preregistrada.
 | 2026-10-29T11:20:34+00:00 | termometro_puerta | 24979da | puerta traducción T1 False T2 False | ejecución única con puerta (diseño v1.2) |
 | 2026-10-29T11:29:39+00:00 | termometro_puerta_v2 (2.º y último intento) | eb3c73d | puerta T1 False T2 True | recalibración logit + validación cruzada 2 mitades |
 | 2026-10-29T12:35:54+00:00 | termometro_puerta_v2_corr (2.º y último intento — corrección de error del Validador) | d21901f | puerta T1 False T2 True | recalibración logit + validación cruzada 2 mitades |
+| 2026-10-29 | Constructor (P-DEV-INT6 v1.0, corrida única) | commit 12f6307; G2, M1, M2, K1, K2, X1, Holm-6 sobre p calibrados con placebo; establecidos {"G2": true, "M1": false, "M2": false, "K1": false, "K2": false, "X1": true}; G1 y M3 descriptivas; research/int/int6_resultado.json |
