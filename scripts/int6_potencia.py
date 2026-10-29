@@ -231,6 +231,24 @@ def main() -> None:
                    "cuota_recesion": mde_serie(cuota.reindex(g.index), float(g.std()), float(g.autocorr(1))),
                    "mayoria_recesion": mde_serie((cuota.reindex(g.index) >= 0.5).astype(float), float(g.std()),
                                                  float(g.autocorr(1)))}
+    # v2 (añadido antes de redactar el prerregistro): refugio a corto plazo — meses con caída fuerte de la bolsa de EE. UU.
+    # (Δlog del índice de precios OCDE ≤ −5 %, media mensual) frente al resto; solo se cuentan los meses (el oro no se
+    # mira en esos meses: su dt y AR(1) son incondicionales).
+    sh = D.load_dev(con, "oecd_share_usa")
+    dl = np.log(sh).diff()
+    gm_ = np.log(D.load_dev(con, "gold_wb_usd_m")).diff()
+    for umbral in (-0.05, -0.08):
+        ventana = dl[(dl.index >= "1973-01-01")].dropna()
+        com = ventana.index.intersection(gm_.dropna().index)
+        estado = (ventana.reindex(com) <= umbral).astype(float)
+        g = gm_.reindex(com)
+        sdg, a1g = float(g.std()), float(g.autocorr(1))
+        rx = float(estado.autocorr(1))
+        vif = (1 + rx * a1g) / (1 - rx * a1g)
+        n1, n0 = float(estado.sum()), float((1 - estado).sum())
+        q1[f"mensual_caida_bolsa_usa_{int(-umbral * 100)}pc_1973_2004"] = {
+            "meses_estado": int(n1), "meses_resto": int(n0), "ar1_estado": _r(rx, 2), "dt_oro_mensual": _r(sdg),
+            **{f"mde_pp_mes_z{k}": _r(100 * z * sdg * np.sqrt(1 / n1 + 1 / n0) * np.sqrt(vif), 2) for k, z in Z.items()}}
     res["Q1_oro_refugio"] = q1
 
     # ---------- Q2: oro y tipo real (EE. UU.; cada serie por separado)
