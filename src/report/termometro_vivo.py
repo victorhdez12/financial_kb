@@ -25,6 +25,10 @@ Vive en src/report/ y no en src/intl/ porque lee datos ≥ 2005: el único acces
 - Fecha de cálculo: el último fin de mes ≤ la fecha pedida (la rejilla de la traducción es mensual).
 - Series cortadas o viejas: si un indicador propio del país (o su estado de recesión) falta en la fecha de cálculo, se
   avisa por país con la serie que falta y desde cuándo ("sin tipo a 3 meses desde 2026-03"; `avisos_datos`).
+- Empalme declarado (solo aquí, en vivo; el desarrollo ≤ 2004 no cambia): la OCDE dejó de publicar el tipo a 3 meses de
+  GBR tras 2026-02; desde el mes siguiente a su último dato (≤ corte) se usa el OIS (SONIA) a 3 meses del Banco de
+  Inglaterra (`boe_ois3m_m`, src/ingest/boe_rates.py), con la diferencia media de los últimos 24 meses de solape sumada
+  solo si es apreciable (≥ 0,05 pp). Se dice por país en `empalmes` (docs/int/GBR_3m_sustituto.md).
 """
 from __future__ import annotations
 
@@ -49,6 +53,13 @@ PRUEBA = ["AUS", "CHE", "CAN", "IRL"]
 TODOS = NUCLEO + PRUEBA
 REF_DESDE, REF_HASTA = pd.Timestamp("1960-01-31"), pd.Timestamp("2004-12-31")
 MIN_MESES_PCT = 60          # menos meses ≤ 2004 → sin percentil histórico ("historia corta")
+# sustitutos del tipo a 3 meses de la OCDE, solo en vivo y solo tras su último dato (docs/int/GBR_3m_sustituto.md): las
+# letras del Tesoro a 3 meses del BoE (IADB IUMAJNB) se dejaron de publicar en 2017-06; el OIS (SONIA) a 3 meses es la
+# alternativa más parecida (diferencia media con la OCDE −0,02 pp, correlación 0,9999 en 2024-03/2026-02)
+SUSTITUTOS_3M = {"GBR": ("boe_ois3m_m", "BoE OIS (SONIA) 3 m")}
+EMPALME_SOLAPE = 24         # meses de solape (los últimos) para medir la diferencia de nivel
+EMPALME_MIN_SOLAPE = 12     # con menos no se empalma (sigue el aviso de serie cortada)
+EMPALME_UMBRAL = 0.05       # pp: diferencia media menor → sin ajuste de nivel
 
 AVISO = ("Informativo, no es una señal de cartera. Modelo histórico 1871-2004; el riesgo de ENTRAR en recesión no superó "
          "su puerta y se muestran solo sus indicadores; la probabilidad de SALIR sí (con pocas filas: prudencia). "
@@ -171,7 +182,7 @@ def referencias_congeladas(path: Path = REFERENCIAS) -> dict:
 
 # ---------------------------------------------------------------- datos en vivo (sin corte 2004, nunca JST)
 def _serie(con, sid: str, corte: pd.Timestamp) -> pd.Series:
-    if sid.startswith("jst_") or not D.permitida(sid):
+    if sid.startswith("jst_") or not (D.permitida(sid) or sid in {s for s, _ in SUSTITUTOS_3M.values()}):
         raise D.FactorCutoffError(f"{sid}: el termómetro en vivo solo lee OCDE/BIS (nunca JST)")
     df = con.execute("select date, value from obs_latest where series_id = ? and value is not null and date <= ? "
                      "order by date", [sid, corte.date()]).df()
@@ -187,16 +198,58 @@ def fin_de_mes(fecha) -> pd.Timestamp:
     return f if f == f + pd.offsets.MonthEnd(0) else f - pd.offsets.MonthEnd(1)
 
 
+def empalmar(base: pd.Series, sust: pd.Series, solape: int = EMPALME_SOLAPE, minimo: int = EMPALME_MIN_SOLAPE,
+             umbral: float = EMPALME_UMBRAL) -> tuple[pd.Series, dict | None]:
+    """`base` (OCDE) seguida de `sust` desde el mes siguiente al último dato de `base`. La diferencia de nivel es la media
+    de base − sust en los últimos `solape` meses comunes (≤ último dato de base); se suma a la cola solo si |media| ≥
+    `umbral`. Sin cola, sin datos o con menos de `minimo` meses de solape: `base` tal cual y None (no se empalma)."""
+    base, sust = base.dropna(), sust.dropna()
+    if base.empty or sust.empty:
+        return base, None
+    ult = base.index.max()
+    cola = sust[sust.index > ult]
+    comun = base.index.intersection(sust.index)
+    comun = comun[comun <= ult][-solape:]
+    if cola.empty or len(comun) < minimo:
+        return base, None
+    dif = base[comun] - sust[comun]
+    media = float(dif.mean())
+    ajuste = media if abs(media) >= umbral else 0.0
+    info = {"desde": str(cola.index.min().date()), "solape_meses": int(len(comun)),
+            "solape": f"{comun.min():%Y-%m}/{comun.max():%Y-%m}", "dif_media_pp": round(media, 3),
+            "dif_sd_pp": round(float(dif.std()), 3),
+            "corr": (round(float(np.corrcoef(base[comun], sust[comun])[0, 1]), 4)
+                     if base[comun].std() > 0 and sust[comun].std() > 0 else None),
+            "ajuste_pp": round(ajuste, 3)}
+    return pd.concat([base, cola + ajuste]).rename(base.name), info
+
+
+def _texto_empalme(etiqueta: str, e: dict) -> str:
+    aj = (f"nivel ajustado {e['ajuste_pp']:+.2f} pp (diferencia media OCDE − BoE de {e['solape_meses']} meses de "
+          f"solape {e['solape']})" if e["ajuste_pp"] else
+          f"sin ajuste de nivel: diferencia media OCDE − BoE {e['dif_media_pp']:+.2f} pp en {e['solape_meses']} meses "
+          f"de solape {e['solape']}, < {EMPALME_UMBRAL} pp")
+    return f"tipo a 3 m: {etiqueta} desde {pd.Timestamp(e['desde']):%Y-%m} (empalme; {aj})"
+
+
 def cargar(con, fecha) -> tuple[pd.DataFrame, dict, dict, pd.Timestamp]:
     """Bloque mensual "as of" (curva, tipo a 3 meses, IPC interanual, bolsa 12 m; mismas transformaciones que
-    src/intl/panel.mensual), crédito/PIB del BIS y PIB trimestral, hasta el fin de mes `corte` ≤ `fecha`."""
+    src/intl/panel.mensual), crédito/PIB del BIS y PIB trimestral, hasta el fin de mes `corte` ≤ `fecha`. Los empalmes
+    del tipo a 3 meses (SUSTITUTOS_3M) van en `pm.attrs["empalmes"]` ({país: texto}); el sustituto usa el retraso
+    "as of" de la serie OCDE a la que sustituye (medias mensuales de mercado, igual que ella)."""
     corte = fin_de_mes(fecha)
     rej = pd.date_range("1950-01-31", corte, freq="ME")
-    filas, bis, pib = [], {}, {}
+    filas, bis, pib, empalmes = [], {}, {}, {}
     for c in TODOS:
         lc = c.lower()
-        m = {k: P._mensual_completa(_serie(con, f"oecd_{k}_{lc}" if k != "cpi" else f"oecd_cpi_{lc}_idx", corte))
-             for k in ("irlt", "ir3m", "cpi", "share")}
+        raw = {k: _serie(con, f"oecd_{k}_{lc}" if k != "cpi" else f"oecd_cpi_{lc}_idx", corte)
+               for k in ("irlt", "ir3m", "cpi", "share")}
+        if c in SUSTITUTOS_3M:
+            sid_s, etiqueta = SUSTITUTOS_3M[c]
+            raw["ir3m"], e = empalmar(raw["ir3m"], _serie(con, sid_s, corte))
+            if e is not None:
+                empalmes[c] = _texto_empalme(etiqueta, e)
+        m = {k: P._mensual_completa(s) for k, s in raw.items()}
         v = {"tipo_10a": (m["irlt"], f"oecd_irlt_{lc}"), "tipo_3m": (m["ir3m"], f"oecd_ir3m_{lc}"),
              "ipc_yoy": (np.log(m["cpi"]).diff(12), f"oecd_cpi_{lc}_idx"),
              "bolsa_12m": (np.log(m["share"]).diff(12), f"oecd_share_{lc}")}
@@ -209,6 +262,7 @@ def cargar(con, fecha) -> tuple[pd.DataFrame, dict, dict, pd.Timestamp]:
         if not (q := _serie(con, f"oecd_gdpq_{lc}", corte)).empty:
             pib[c] = q          # sin PIB: el país sale sin estado (aviso en calcular); el resto sigue
     pm = pd.concat(filas, ignore_index=True).set_index(["pais", "fecha"]).sort_index()
+    pm.attrs["empalmes"] = empalmes
     return pm, bis, pib, corte
 
 
@@ -312,6 +366,7 @@ def referencias(mens: dict, tr: dict, pib: dict, par: dict) -> dict:
 def calcular(pm: pd.DataFrame, bis: dict, pib: dict, corte: pd.Timestamp, par: dict, refs: dict,
              ultimos: dict | None = None) -> dict:
     ultimos = ultimos or {}
+    empalmes = dict(pm.attrs.get("empalmes", {}))
     mens = T.mensuales(pm, bis, pib, NUCLEO, TODOS)
     tr = T.traducir(mens, par["rectas"], TODOS)
     rej = mens["C1"].index
@@ -356,7 +411,8 @@ def calcular(pm: pd.DataFrame, bis: dict, pib: dict, corte: pd.Timestamp, par: d
                                             "sentido": "a favor de salir" if contrib[j] > 0 else "en contra de salir"}
                     salida["contribuciones_logit"] = {VARS_T2[k]: round(float(v), 3) for k, v in enumerate(contrib)}
         paises[c] = {"grupo": "usa" if c == "USA" else ("nucleo" if c in NUCLEO else "prueba"), "estado": estado,
-                     "indicadores": filas_ind, "salida_12m": salida, "avisos_datos": avisos}
+                     "indicadores": filas_ind, "salida_12m": salida, "avisos_datos": avisos,
+                     "empalmes": [empalmes[c]] if c in empalmes else []}
     return {"fecha_calculo": str(corte.date()), "aviso": AVISO, "paises": paises,
             "en_recesion": [c for c, v in paises.items() if v["estado"]["en_recesion"]],
             "percentiles_T2": par["pct_T2"], "aviso_T2": AVISO_T2, "parametros": par["fuente"],
@@ -429,6 +485,9 @@ def markdown(res: dict) -> str:
     faltan = [f"> - {c}: " + "; ".join(P_[c]["avisos_datos"]) + "." for c in TODOS if P_[c].get("avisos_datos")]
     if faltan:
         out += ["> [!warning] Datos que faltan (serie cortada o vieja: el indicador sale «—»)", *faltan, ""]
+    emp = [f"> - {c}: " + "; ".join(P_[c]["empalmes"]) + "." for c in TODOS if P_[c].get("empalmes")]
+    if emp:
+        out += ["> [!note] Empalmes declarados (solo en vivo; el modelo y sus referencias ≤ 2004 no cambian)", *emp, ""]
     out.append("Método: «en recesión» = la suma de 4 trimestres del PIB real (OCDE) cae dos trimestres seguidos (sale "
                "con dos subidas seguidas), dato conocido 75 días tras el trimestre. Entre paréntesis tras cada "
                "indicador, su percentil frente a los meses 1960-2004 del propio país (rango medio si hay empates). Modelo y escalas congelados "
