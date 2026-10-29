@@ -1,9 +1,9 @@
 {
  "fecha_pedida": "2026-10-29",
  "procedencia": {
-  "commit": "82860884c9c2a510dda2d3feebdebf94431ea87a",
-  "arbol_limpio": true,
-  "hora_utc": "2026-10-29T14:14:10+00:00"
+  "commit": "4675045043b4d2aec4c79cc8efe7c10a3189d600",
+  "arbol_limpio": false,
+  "hora_utc": "2026-10-29T14:45:50+00:00"
  },
  "fecha_calculo": "2026-09-30",
  "aviso": "Informativo, no es una señal de cartera. Modelo histórico 1871-2004; el riesgo de ENTRAR en recesión no superó su puerta y se muestran solo sus indicadores; la probabilidad de SALIR sí (con pocas filas: prudencia). La inflación no se anticipa.",
@@ -26,8 +26,8 @@
     "C4": {
      "indicador": "Difusión de curvas invertidas",
      "unidad": "% países",
-     "valor": 8.33,
-     "percentil_hasta_2004": 33,
+     "valor": 7.69,
+     "percentil_hasta_2004": 28,
      "meses_hist": 267
     },
     "C6": {
@@ -53,7 +53,8 @@
     }
    },
    "salida_12m": null,
-   "avisos_datos": []
+   "avisos_datos": [],
+   "empalmes": []
   },
   "DEU": {
    "grupo": "nucleo",
@@ -73,8 +74,8 @@
     "C4": {
      "indicador": "Difusión de curvas invertidas",
      "unidad": "% países",
-     "valor": 8.33,
-     "percentil_hasta_2004": 33,
+     "valor": 7.69,
+     "percentil_hasta_2004": 28,
      "meses_hist": 267
     },
     "C6": {
@@ -100,7 +101,8 @@
     }
    },
    "salida_12m": null,
-   "avisos_datos": []
+   "avisos_datos": [],
+   "empalmes": []
   },
   "DNK": {
    "grupo": "nucleo",
@@ -120,8 +122,8 @@
     "C4": {
      "indicador": "Difusión de curvas invertidas",
      "unidad": "% países",
-     "valor": 8.33,
-     "percentil_hasta_2004": 30,
+     "valor": 7.69,
+     "percentil_hasta_2004": 26,
      "meses_hist": 291
     },
     "C6": {
@@ -147,7 +149,8 @@
     }
    },
    "salida_12m": null,
-   "avisos_datos": []
+   "avisos_datos": [],
+   "empalmes": []
   },
   "ESP": {
    "grupo": "nucleo",
@@ -167,8 +170,8 @@
     "C4": {
      "indicador": "Difusión de curvas invertidas",
      "unidad": "% países",
-     "valor": 8.33,
-     "percentil_hasta_2004": 39,
+     "valor": 7.69,
+     "percentil_hasta_2004": 34,
      "meses_hist": 267
     },
     "C6": {
@@ -194,7 +197,8 @@
     }
    },
    "salida_12m": null,
-   "avisos_datos": []
+   "avisos_datos": [],
+   "empalmes": []
   },
   "FIN": {
    "grupo": "nucleo",
@@ -214,8 +218,8 @@
     "C4": {
      "indicador": "Difusión de curvas invertidas",
      "unidad": "% países",
-     "valor": 8.33,
-     "percentil_hasta_2004": 30,
+     "valor": 7.69,
+     "percentil_hasta_2004": 26,
      "meses_hist": 291
     },
     "C6": {
@@ -241,7 +245,8 @@
     }
    },
    "salida_12m": null,
-   "avisos_datos": []
+   "avisos_datos": [],
+   "empalmes": []
   },
   "FRA": {
    "grupo": "nucleo",
@@ -261,8 +266,8 @@
     "C4": {
      "indicador": "Difusión de curvas invertidas",
      "unidad": "% países",
-     "valor": 8.33,
-     "percentil_hasta_2004": 33,
+     "valor": 7.69,
+     "percentil_hasta_2004": 28,
      "meses_hist": 267
     },
     "C6": {
@@ -288,7 +293,8 @@
     }
    },
    "salida_12m": null,
-   "avisos_datos": []
+   "avisos_datos": [],
+   "empalmes": []
   },
   "GBR": {
    "grupo": "nucleo",
@@ -301,12 +307,9 @@
     "C1": {
      "indicador": "Curva 10a−3m (media 12 m)",
      "unidad": "pp",
-     "valor": null,
-     "percentil_hasta_2004": null,
-     "meses_hist": 219,
-     "sin_dato": [
-      "sin tipo a 3 meses desde 2026-02 (último dato)"
-     ]
+     "valor": 0.9,
+     "percentil_hasta_2004": 77,
+     "meses_hist": 219
     },
     "C4": {
      "indicador": "Difusión de curvas invertidas",
@@ -338,8 +341,9 @@
     }
    },
    "salida_12m": null,
-   "avisos_datos": [
-    "Curva 10a−3m (media 12 m): sin tipo a 3 meses desde 2026-02 (último dato)"
+   "avisos_datos": [],
+   "empalmes": [
+    "tipo a 3 m: BoE OIS (SONIA) 3 m desde 2026-03 (empalme; sin ajuste de nivel: diferencia media OCDE − BoE +0.02 pp en 24 meses de solape 2024-03/2026-02, < 0.05 pp)"
    ]
   },
   "ITA": {
@@ -360,8 +364,8 @@
     "C4": {
      "indicador": "Difusión de curvas invertidas",
      "unidad": "% países",
-     "valor": 8.33,
-     "percentil_hasta_2004": 32,
+     "valor": 7.69,
+     "percentil_hasta_2004": 26,
      "meses_hist": 291
     },
     "C6": {
@@ -387,7 +391,8 @@
     }
    },
    "salida_12m": null,
-   "avisos_datos": []
+   "avisos_datos": [],
+   "empalmes": []
   },
   "JPN": {
    "grupo": "nucleo",
@@ -407,8 +412,8 @@
     "C4": {
      "indicador": "Difusión de curvas invertidas",
      "unidad": "% países",
-     "valor": 8.33,
-     "percentil_hasta_2004": 33,
+     "valor": 7.69,
+     "percentil_hasta_2004": 29,
      "meses_hist": 291
     },
     "C6": {
@@ -434,7 +439,8 @@
     }
    },
    "salida_12m": null,
-   "avisos_datos": []
+   "avisos_datos": [],
+   "empalmes": []
   },
   "NLD": {
    "grupo": "nucleo",
@@ -454,8 +460,8 @@
     "C4": {
      "indicador": "Difusión de curvas invertidas",
      "unidad": "% países",
-     "valor": 8.33,
-     "percentil_hasta_2004": 30,
+     "valor": 7.69,
+     "percentil_hasta_2004": 26,
      "meses_hist": 291
     },
     "C6": {
@@ -481,7 +487,8 @@
     }
    },
    "salida_12m": null,
-   "avisos_datos": []
+   "avisos_datos": [],
+   "empalmes": []
   },
   "NOR": {
    "grupo": "nucleo",
@@ -528,7 +535,8 @@
     }
    },
    "salida_12m": null,
-   "avisos_datos": []
+   "avisos_datos": [],
+   "empalmes": []
   },
   "PRT": {
    "grupo": "nucleo",
@@ -548,8 +556,8 @@
     "C4": {
      "indicador": "Difusión de curvas invertidas",
      "unidad": "% países",
-     "valor": 8.33,
-     "percentil_hasta_2004": 31,
+     "valor": 7.69,
+     "percentil_hasta_2004": 28,
      "meses_hist": 291
     },
     "C6": {
@@ -575,7 +583,8 @@
     }
    },
    "salida_12m": null,
-   "avisos_datos": []
+   "avisos_datos": [],
+   "empalmes": []
   },
   "SWE": {
    "grupo": "nucleo",
@@ -595,8 +604,8 @@
     "C4": {
      "indicador": "Difusión de curvas invertidas",
      "unidad": "% países",
-     "valor": 8.33,
-     "percentil_hasta_2004": 30,
+     "valor": 7.69,
+     "percentil_hasta_2004": 26,
      "meses_hist": 291
     },
     "C6": {
@@ -622,7 +631,8 @@
     }
    },
    "salida_12m": null,
-   "avisos_datos": []
+   "avisos_datos": [],
+   "empalmes": []
   },
   "USA": {
    "grupo": "usa",
@@ -642,8 +652,8 @@
     "C4": {
      "indicador": "Difusión de curvas invertidas",
      "unidad": "% países",
-     "valor": 8.33,
-     "percentil_hasta_2004": 33,
+     "valor": 7.69,
+     "percentil_hasta_2004": 28,
      "meses_hist": 267
     },
     "C6": {
@@ -669,7 +679,8 @@
     }
    },
    "salida_12m": null,
-   "avisos_datos": []
+   "avisos_datos": [],
+   "empalmes": []
   },
   "AUS": {
    "grupo": "prueba",
@@ -689,8 +700,8 @@
     "C4": {
      "indicador": "Difusión de curvas invertidas",
      "unidad": "% países",
-     "valor": 7.69,
-     "percentil_hasta_2004": 30,
+     "valor": 7.14,
+     "percentil_hasta_2004": 26,
      "meses_hist": 291
     },
     "C6": {
@@ -716,7 +727,8 @@
     }
    },
    "salida_12m": null,
-   "avisos_datos": []
+   "avisos_datos": [],
+   "empalmes": []
   },
   "CHE": {
    "grupo": "prueba",
@@ -736,8 +748,8 @@
     "C4": {
      "indicador": "Difusión de curvas invertidas",
      "unidad": "% países",
-     "valor": 7.69,
-     "percentil_hasta_2004": 30,
+     "valor": 7.14,
+     "percentil_hasta_2004": 26,
      "meses_hist": 291
     },
     "C6": {
@@ -763,7 +775,8 @@
     }
    },
    "salida_12m": null,
-   "avisos_datos": []
+   "avisos_datos": [],
+   "empalmes": []
   },
   "CAN": {
    "grupo": "prueba",
@@ -783,8 +796,8 @@
     "C4": {
      "indicador": "Difusión de curvas invertidas",
      "unidad": "% países",
-     "valor": 7.69,
-     "percentil_hasta_2004": 30,
+     "valor": 7.14,
+     "percentil_hasta_2004": 26,
      "meses_hist": 291
     },
     "C6": {
@@ -810,7 +823,8 @@
     }
    },
    "salida_12m": null,
-   "avisos_datos": []
+   "avisos_datos": [],
+   "empalmes": []
   },
   "IRL": {
    "grupo": "prueba",
@@ -830,8 +844,8 @@
     "C4": {
      "indicador": "Difusión de curvas invertidas",
      "unidad": "% países",
-     "valor": 7.69,
-     "percentil_hasta_2004": 30,
+     "valor": 7.14,
+     "percentil_hasta_2004": 26,
      "meses_hist": 291
     },
     "C6": {
@@ -859,7 +873,8 @@
    "salida_12m": {
     "motivo": "país de prueba: sin puerta propia de T2 (solo indicadores)"
    },
-   "avisos_datos": []
+   "avisos_datos": [],
+   "empalmes": []
   }
  },
  "en_recesion": [
