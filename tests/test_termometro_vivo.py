@@ -88,9 +88,23 @@ def test_estado_y_probabilidad_solo_en_recesion(vivo):
 
 
 def test_contribuciones_suman_al_logit(vivo):
+    """b0 + b·centro + Σ contribuciones = logit sin recalibrar del mes (recalculado aparte), y su recalibración da la
+    probabilidad publicada; «lo que más pesa» es la contribución mayor en valor absoluto (Validador, diff 4 a)."""
+    from src.intl import termometro as T
     s = vivo["paises"]["ESP"]["salida_12m"]
     c = s["contribuciones_logit"]
     assert max(c.values(), key=abs) == pytest.approx(s["empuja_mas"]["contribucion_logit"])
+    con = _warehouse()
+    par, refs = V.parametros(), _refs(con)
+    pm, bis, pib, _ = V.cargar(con, "2026-10-29")
+    mens = T.mensuales(pm, bis, pib, V.NUCLEO, V.TODOS)
+    _, _, Z2 = V._estados(T.traducir(mens, par["rectas"], V.TODOS), pib, mens["C1"].index, par)
+    b, z, centro = par["b_T2"], Z2["ESP"][-1], np.array(refs["centro_T2"])
+    lg = b[0] + b[1:] @ z
+    assert b[0] + b[1:] @ centro + sum(c.values()) == pytest.approx(lg, abs=6 * 5e-4)    # contribuciones a 3 decimales
+    assert [c[v] for v in V.VARS_T2] == pytest.approx(list(b[1:] * (z - centro)), abs=5e-4)
+    assert T.aplicar_cal(np.array([1 / (1 + np.exp(-lg))]), par["cal_T2"])[0] == pytest.approx(s["probabilidad"],
+                                                                                                abs=5e-4)
 
 
 def test_markdown(vivo):
@@ -133,6 +147,25 @@ def test_aviso_serie_cortada(vivo):
     assert "> - GBR: Curva 10a−3m (media 12 m): sin tipo a 3 meses desde 2026-02 (último dato)." in md
     assert "> - BEL: estado de recesión: sin PIB trimestral (sin serie)." in md
     assert "Datos que faltan" not in V.markdown(vivo)
+
+
+def test_no_mira_el_futuro_estricto():
+    """Con fecha 2026-03-31, datos con fecha ≤ corte que aún no se conocían ese día (retrasos as of) no cambian nada:
+    tipos y bolsa de marzo, IPC de febrero y marzo, PIB 2026T1, BIS 2025T4. Un dato ya conocido (tipo a 10 años de
+    febrero) sí cambia el resultado (Validador, diff 4 b)."""
+    def alterado(sql):
+        con = _warehouse()
+        con.execute(sql)
+        return _termometro(con, "2026-03-31")
+    a = _termometro(_warehouse(), "2026-03-31")
+    b = alterado("update obs_latest set value = value * case when series_id like 'oecd_gdpq_%' then 0.5 else 3 end "
+                 "where (date = '2026-03-01' and regexp_matches(series_id, '^oecd_(irlt|ir3m|share)_')) "
+                 "or (date in ('2026-02-01', '2026-03-01') and regexp_matches(series_id, '^oecd_cpi_.*_idx$')) "
+                 "or (date = '2026-01-01' and series_id like 'oecd_gdpq_%') "
+                 "or (date = '2025-10-01' and series_id like 'bis_creditgap_%')")
+    assert json.dumps(a, sort_keys=True) == json.dumps(b, sort_keys=True)
+    c = alterado("update obs_latest set value = value * 3 where date = '2026-02-01' and series_id = 'oecd_irlt_usa'")
+    assert c["paises"]["USA"]["indicadores"]["C1"]["valor"] != a["paises"]["USA"]["indicadores"]["C1"]["valor"]
 
 
 def test_nunca_jst():
