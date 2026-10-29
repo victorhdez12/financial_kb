@@ -121,7 +121,7 @@ def main() -> None:
     pasa = {g: bool(res["puerta"][g]["agregado"]["pasa"]) for g in GIROS}
     res["veredicto"] = {"pasa_agregado": pasa,
                         "paises_con_probabilidad": {g: [c for c, v in res["puerta"][g]["por_pais"].items()
-                                                        if pasa[g] and v["pasa"] is not False] for g in GIROS}}
+                                                        if pasa[g] and v["pasa"] is not False and v["filas"] > 0 and c not in T.SIN_BOLSA] for g in GIROS}}
 
     out = REPO / "research" / "int"
     (out / "termometro_puerta.json").write_text(json.dumps(_r(res), indent=1, ensure_ascii=False))
