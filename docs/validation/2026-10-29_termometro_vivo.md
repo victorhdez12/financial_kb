@@ -14,9 +14,23 @@ método: lectura del código; reproducción con el warehouse real (fechas ≤ 20
 
 # Validación del termómetro en vivo
 
-## Veredicto global
+## Veredicto global: ⚠️ correcto en lo esencial; dos arreglos antes de conectarlo al reporte semanal
 
-(se completa al final)
+- ✅ **Disciplina:** nunca lee JST; no reajusta nada; parámetros solo del `final` corregido; "as of" igual que en
+  desarrollo y sin mirar el futuro (prueba estricta del Validador: idéntico byte a byte). Reproduce el desarrollo mes a
+  mes (≤ 5,3e-4, ninguna banda cambia). T1 nunca muestra probabilidad; T2 solo en los 12 países y solo en recesión.
+  Contribuciones bien calculadas (suma exacta al logit).
+- **Bloquean la conexión al reporte semanal:**
+  1. ❌ `AVISO_T2` cita el IC 95 % del r de la versión ANTERIOR ([0,65; 0,96], con r 0,88). Con la puerta corregida
+     (r 0,82) el bootstrap da **[0,49; 0,94]** y pasa solo en el **58 %** de las réplicas. Arreglo de texto (diff 1).
+  2. ❌ Un país sin PIB trimestral **tumba el termómetro entero** con un `ValueError` críptico; y las series que se cortan
+     (caso real: **GBR sin tipo a 3 meses desde 2026-02**) dejan huecos sin decir por qué; GBR, uno de los 12 de T2, no
+     podrá mostrar probabilidad hasta que se arregle el dato (diff 2).
+- ⚠️ No bloquean: percentiles con empates (S4 = 0 sale como "p60", diff 3); referencias ≤ 2004 recalculadas en cada
+  ejecución (diff 5); hasta un mes de retraso por la rejilla de fin de mes; un test cuyo nombre promete más de lo que
+  comprueba y otro de "no mirar el futuro" débil (diff 4).
+- Resultado de hoy (cálculo al 2026-09-30): ningún país del núcleo en recesión → ninguna probabilidad; IRL "en recesión"
+  por el PIB de las multinacionales (país de prueba, solo indicadores). Tiene sentido.
 
 ## 1. Nada de JST, nada reajustado con datos ≥ 2005, parámetros solo del JSON congelado — ✅ (con un matiz ⚠️)
 
