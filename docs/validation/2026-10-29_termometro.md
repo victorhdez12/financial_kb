@@ -12,9 +12,20 @@ restricciones: solo datos ≤ 2004 (load_dev / load_dev_curado); no se miran ren
 
 # Validación del termómetro informativo
 
-## Veredicto global
+## Veredicto global: ⚠️ veredicto oficial confirmado (T1 no pasa → solo indicadores; T2 pasa), con un error de lista que hay que corregir
 
-(se rellena al final)
+- **No hay ningún error que, corregido, cambie el veredicto.** "As of" (BIS 183 días, PIB 75, IPC 45, mercado 1), corte
+  ≤ 2004, rectas, pliegues y procedencia: correctos. La puerta se reproduce al decimal.
+- ❌ **La lista de países de T2 incluye DNK y JPN** (sin bolsa mensual, 0 filas). Error de filtro: `pasa is not False`
+  deja entrar "sin puerta propia" con 0 filas. Lista correcta: 12 países (diff 1).
+- ⚠️ **S4 no es la de §8 d** (interanual de un trimestre en lugar de la suma de 4 trimestres; correlación 0,59). Con la del
+  diseño, T2 sigue pasando, pero con r 0,818 (margen 0,018).
+- ⚠️ **T2 descansa en 31 filas = 22 episodios en 12 años.** Bootstrap por años: r IC [0,65; 0,96], pasa en el 85 %. Y el
+  estado "en recesión" en vivo coincide con JST solo en el 70 % de las filas de T2; la puerta no lo mide. Mostrar T2 como
+  banda, con avisos (diff 4).
+- ⚠️ **T1 está en el borde:** sin FIN pasaría (0,814 / 0,863); con el resto, no. El 37 % de las réplicas pasa. El "no pasa"
+  fijado es legítimo y definitivo (§9: no hay 3.er intento).
+- Menores: fuga de paridad en S5 (§2), recalibración en logit frente a puerta en probabilidad (§4), horas de commit (§5).
 
 ## 1. "As of" y corte ≤ 2004 — ✅
 
@@ -194,3 +205,36 @@ Script `scripts/val_termometro_sens.py` (commit `ada66e7`, antes de correrlo); s
 
 Lectura: T1 está en el borde (un país, FIN, decide; el 37 % de las réplicas pasa), y el "no pasa" fijado es legítimo.
 T2 pasa en la mayoría de las réplicas, pero con una base estrecha.
+
+## 9. Diffs propuestos (no aplicados)
+
+**Diff 1 — lista de países (❌, aplicar antes de construir la parte en vivo).** En `scripts/termometro_puerta_v2.py` (y lo
+mismo en `scripts/termometro_puerta.py`):
+```diff
+-    res["veredicto"] = {"pasa_agregado": pasa, "paises_con_probabilidad": {
+-        g: [c for c, v in res["puerta"][g]["por_pais"].items() if pasa[g] and v["pasa"] is not False] for g in GIROS}}
++    res["veredicto"] = {"pasa_agregado": pasa, "paises_con_probabilidad": {
++        g: [c for c, v in res["puerta"][g]["por_pais"].items()
++            if pasa[g] and v["pasa"] is not False and v["filas"] > 0 and c not in T.SIN_BOLSA] for g in GIROS}}
+```
+Y una errata en `research/int/termometro_puerta_v2.md` (sin tocar r ni pendiente): *"La lista de T2 incluía DNK y JPN por
+error (sin bolsa mensual, 0 filas; §8). Lista correcta: BEL, DEU, ESP, FIN, FRA, GBR, ITA, NLD, NOR, PRT, SWE, USA
+(Validador 2026-10-29)."*. Test propuesto: un país con 0 filas y `pasa = None` no entra en la lista.
+
+**Diff 2 — S4 como dice §8 d (⚠️; para la parte en vivo y como informativo, no como 3.er intento).** En `src/intl/termometro.py`, `mensuales`:
+```diff
+-    g4 = pd.DataFrame({c: asof_q(np.log(_rejilla_q(pib[c])).diff(4), RETRASO_PIB, rej) if c in pib else np.nan
+-                       for c in paises}, index=rej)
++    # §8 d: suma de 4 trimestres frente a la de 4 trimestres antes (no la interanual de un trimestre)
++    g4 = pd.DataFrame({c: asof_q(np.log(_rejilla_q(pib[c]).rolling(4, min_periods=4).sum()).diff(4), RETRASO_PIB, rej)
++                       if c in pib else np.nan for c in paises}, index=rej)
+```
+Con ella, la puerta cruzada de T2 da 0,818 / 0,906 (sigue pasando). Si no se aplica, hay que corregir §8 d en el diseño
+para que describa lo que hace el código, y declararlo.
+
+**Diff 3 — S5 sin fuga de paridad (⚠️, menor).** En la puerta cruzada, excluir del ajuste de la recta de C2 los años que
+son pico de una fila de puerta del mismo país, o asignar las filas de T2 al pliegue según la paridad del pico, no de t.
+Solo hace falta si se vuelve a medir T2 como informativo.
+
+**Diff 4 — aviso de T2 en vivo.** En el reporte, junto a la banda de T2: "puerta con 31 filas / 22 episodios (IC 95 % del
+r 0,65-0,96); el estado 'en recesión' en vivo coincide con el anual en el 70 % de los casos históricos".
