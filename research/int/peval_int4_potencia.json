@@ -1,0 +1,4635 @@
+{
+ "procedencia": {
+  "commit": "f8e5fe30a86b71c20a84888ebd14a80c673f9de4",
+  "arbol_limpio": true,
+  "hora_utc": "2026-10-29T14:34:26+00:00"
+ },
+ "doc": "docs/int/PEVAL_INT4_potencia.md",
+ "leido_del_bloqueado": "solo jst_{iso}_rgdpmad (objetivo), 18 países; ningún indicador",
+ "supuestos": {
+  "indicadores_completos_2005_2020": true,
+  "r_modelo_liston": 0.5,
+  "rhos": [
+   0.0,
+   0.3,
+   0.6
+  ],
+  "z_1": 2.802,
+  "z_holm2": 3.083,
+  "nsim": 1000,
+  "B": 1000,
+  "desarrollo": {
+   "T1": {
+    "a0": 0.55,
+    "a1": 0.73,
+    "a1_estrat": 0.75,
+    "pi_dev": 0.15229357798165138
+   },
+   "T2": {
+    "a0": 0.58,
+    "a1": 0.77,
+    "a1_estrat": 0.77,
+    "pi_dev": 0.6936170212765957
+   }
+  }
+ },
+ "ultimo_año_rgdpmad": {
+  "BEL": 2020,
+  "DEU": 2020,
+  "DNK": 2020,
+  "ESP": 2020,
+  "FIN": 2020,
+  "FRA": 2020,
+  "GBR": 2020,
+  "ITA": 2020,
+  "JPN": 2020,
+  "NLD": 2020,
+  "NOR": 2020,
+  "PRT": 2020,
+  "SWE": 2020,
+  "USA": 2020,
+  "AUS": 2020,
+  "CAN": 2020,
+  "CHE": 2020,
+  "IRL": 2020
+ },
+ "coherencia_fechado_dev": {
+  "episodios_valle_le_2003_iguales": 343,
+  "solo_completa": [],
+  "solo_dev": [],
+  "dev_valle_2004_truncado": [],
+  "completa_mismos_episodios": []
+ },
+ "recesiones_bloqueado": {
+  "BEL": [
+   [
+    2008,
+    2009
+   ],
+   [
+    2012,
+    2013
+   ],
+   [
+    2019,
+    2020
+   ]
+  ],
+  "DEU": [
+   [
+    2008,
+    2009
+   ],
+   [
+    2019,
+    2020
+   ]
+  ],
+  "DNK": [
+   [
+    2007,
+    2009
+   ],
+   [
+    2011,
+    2012
+   ],
+   [
+    2019,
+    2020
+   ]
+  ],
+  "ESP": [
+   [
+    2007,
+    2013
+   ],
+   [
+    2019,
+    2020
+   ]
+  ],
+  "FIN": [
+   [
+    2008,
+    2009
+   ],
+   [
+    2011,
+    2014
+   ],
+   [
+    2019,
+    2020
+   ]
+  ],
+  "FRA": [
+   [
+    2007,
+    2009
+   ],
+   [
+    2011,
+    2012
+   ],
+   [
+    2019,
+    2020
+   ]
+  ],
+  "GBR": [
+   [
+    2007,
+    2009
+   ],
+   [
+    2019,
+    2020
+   ]
+  ],
+  "ITA": [
+   [
+    2007,
+    2009
+   ],
+   [
+    2011,
+    2014
+   ],
+   [
+    2019,
+    2020
+   ]
+  ],
+  "JPN": [
+   [
+    2007,
+    2009
+   ],
+   [
+    2010,
+    2011
+   ],
+   [
+    2019,
+    2020
+   ]
+  ],
+  "NLD": [
+   [
+    2008,
+    2009
+   ],
+   [
+    2011,
+    2013
+   ],
+   [
+    2019,
+    2020
+   ]
+  ],
+  "NOR": [
+   [
+    2007,
+    2009
+   ],
+   [
+    2010,
+    2011
+   ],
+   [
+    2012,
+    2013
+   ],
+   [
+    2019,
+    2020
+   ]
+  ],
+  "PRT": [
+   [
+    2007,
+    2009
+   ],
+   [
+    2010,
+    2013
+   ],
+   [
+    2019,
+    2020
+   ]
+  ],
+  "SWE": [
+   [
+    2007,
+    2009
+   ],
+   [
+    2011,
+    2012
+   ],
+   [
+    2019,
+    2020
+   ]
+  ],
+  "USA": [
+   [
+    2007,
+    2009
+   ],
+   [
+    2019,
+    2020
+   ]
+  ],
+  "AUS": [
+   [
+    2019,
+    2020
+   ]
+  ],
+  "CAN": [
+   [
+    2007,
+    2009
+   ],
+   [
+    2014,
+    2016
+   ],
+   [
+    2019,
+    2020
+   ]
+  ],
+  "CHE": [
+   [
+    2008,
+    2009
+   ],
+   [
+    2019,
+    2020
+   ]
+  ],
+  "IRL": [
+   [
+    2007,
+    2009
+   ],
+   [
+    2010,
+    2012
+   ]
+  ]
+ },
+ "recuentos": {
+  "nucleo|T1|con_2020": {
+   "filas": 178,
+   "eventos": 39,
+   "no_eventos": 139,
+   "tasa_base": 0.219,
+   "años_distintos_con_evento": 6,
+   "eventos_por_año_objetivo": {
+    "2008": 10,
+    "2009": 4,
+    "2011": 3,
+    "2012": 6,
+    "2013": 2,
+    "2020": 14
+   },
+   "filas_por_año_objetivo": {
+    "2005": 14,
+    "2006": 14,
+    "2007": 14,
+    "2008": 14,
+    "2009": 4,
+    "2011": 13,
+    "2012": 10,
+    "2013": 6,
+    "2014": 7,
+    "2015": 12,
+    "2016": 14,
+    "2017": 14,
+    "2018": 14,
+    "2019": 14,
+    "2020": 14
+   },
+   "eventos_por_pais": {
+    "BEL": [
+     2009,
+     2013,
+     2020
+    ],
+    "DEU": [
+     2009,
+     2020
+    ],
+    "DNK": [
+     2008,
+     2012,
+     2020
+    ],
+    "ESP": [
+     2008,
+     2020
+    ],
+    "FIN": [
+     2009,
+     2012,
+     2020
+    ],
+    "FRA": [
+     2008,
+     2012,
+     2020
+    ],
+    "GBR": [
+     2008,
+     2020
+    ],
+    "ITA": [
+     2008,
+     2012,
+     2020
+    ],
+    "JPN": [
+     2008,
+     2011,
+     2020
+    ],
+    "NLD": [
+     2009,
+     2012,
+     2020
+    ],
+    "NOR": [
+     2008,
+     2011,
+     2013,
+     2020
+    ],
+    "PRT": [
+     2008,
+     2011,
+     2020
+    ],
+    "SWE": [
+     2008,
+     2012,
+     2020
+    ],
+    "USA": [
+     2008,
+     2020
+    ]
+   },
+   "paises_con_evento": 14,
+   "icc_por_año": 0.697,
+   "m_kish": 12.8,
+   "efecto_diseño": 9.23,
+   "pos_ef_central": 4.2,
+   "neg_ef_central": 15.1,
+   "pos_ef_prudente": 6,
+   "mde_hanley_mcneil": {
+    "A0=0.50": {
+     "central": {
+      "1_contraste": 0.401,
+      "holm_2": 0.435
+     },
+     "prudente": {
+      "1_contraste": 0.358,
+      "holm_2": 0.388
+     }
+    },
+    "A0=0.55": {
+     "central": {
+      "1_contraste": 0.4,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": 0.352,
+      "holm_2": 0.384
+     }
+    },
+    "A0=0.58": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": 0.349,
+      "holm_2": 0.388
+     }
+    },
+    "A0=0.60": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": 0.347,
+      "holm_2": null
+     }
+    },
+    "A0=0.70": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": null,
+      "holm_2": null
+     }
+    }
+   }
+  },
+  "nucleo|T1|sin_2020": {
+   "filas": 164,
+   "eventos": 25,
+   "no_eventos": 139,
+   "tasa_base": 0.152,
+   "años_distintos_con_evento": 5,
+   "eventos_por_año_objetivo": {
+    "2008": 10,
+    "2009": 4,
+    "2011": 3,
+    "2012": 6,
+    "2013": 2
+   },
+   "filas_por_año_objetivo": {
+    "2005": 14,
+    "2006": 14,
+    "2007": 14,
+    "2008": 14,
+    "2009": 4,
+    "2011": 13,
+    "2012": 10,
+    "2013": 6,
+    "2014": 7,
+    "2015": 12,
+    "2016": 14,
+    "2017": 14,
+    "2018": 14,
+    "2019": 14
+   },
+   "eventos_por_pais": {
+    "BEL": [
+     2009,
+     2013
+    ],
+    "DEU": [
+     2009
+    ],
+    "DNK": [
+     2008,
+     2012
+    ],
+    "ESP": [
+     2008
+    ],
+    "FIN": [
+     2009,
+     2012
+    ],
+    "FRA": [
+     2008,
+     2012
+    ],
+    "GBR": [
+     2008
+    ],
+    "ITA": [
+     2008,
+     2012
+    ],
+    "JPN": [
+     2008,
+     2011
+    ],
+    "NLD": [
+     2009,
+     2012
+    ],
+    "NOR": [
+     2008,
+     2011,
+     2013
+    ],
+    "PRT": [
+     2008,
+     2011
+    ],
+    "SWE": [
+     2008,
+     2012
+    ],
+    "USA": [
+     2008
+    ]
+   },
+   "paises_con_evento": 14,
+   "icc_por_año": 0.562,
+   "m_kish": 12.7,
+   "efecto_diseño": 7.57,
+   "pos_ef_central": 3.3,
+   "neg_ef_central": 18.4,
+   "pos_ef_prudente": 5,
+   "mde_hanley_mcneil": {
+    "A0=0.50": {
+     "central": {
+      "1_contraste": 0.43,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": 0.373,
+      "holm_2": 0.403
+     }
+    },
+    "A0=0.55": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": 0.367,
+      "holm_2": 0.402
+     }
+    },
+    "A0=0.58": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": 0.366,
+      "holm_2": null
+     }
+    },
+    "A0=0.60": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": 0.369,
+      "holm_2": null
+     }
+    },
+    "A0=0.70": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": null,
+      "holm_2": null
+     }
+    }
+   }
+  },
+  "nucleo|T2|con_2020": {
+   "filas": 46,
+   "eventos": 25,
+   "no_eventos": 21,
+   "tasa_base": 0.543,
+   "años_distintos_con_evento": 5,
+   "eventos_por_año_objetivo": {
+    "2010": 13,
+    "2012": 2,
+    "2013": 3,
+    "2014": 5,
+    "2015": 2
+   },
+   "filas_por_año_objetivo": {
+    "2009": 10,
+    "2010": 14,
+    "2011": 1,
+    "2012": 4,
+    "2013": 8,
+    "2014": 7,
+    "2015": 2
+   },
+   "eventos_por_pais": {
+    "BEL": [
+     2010,
+     2014
+    ],
+    "DEU": [
+     2010
+    ],
+    "DNK": [
+     2010,
+     2013
+    ],
+    "ESP": [
+     2014
+    ],
+    "FIN": [
+     2010,
+     2015
+    ],
+    "FRA": [
+     2010,
+     2013
+    ],
+    "GBR": [
+     2010
+    ],
+    "ITA": [
+     2010,
+     2015
+    ],
+    "JPN": [
+     2010,
+     2012
+    ],
+    "NLD": [
+     2010,
+     2014
+    ],
+    "NOR": [
+     2010,
+     2012,
+     2014
+    ],
+    "PRT": [
+     2010,
+     2014
+    ],
+    "SWE": [
+     2010,
+     2013
+    ],
+    "USA": [
+     2010
+    ]
+   },
+   "paises_con_evento": 14,
+   "icc_por_año": 0.522,
+   "m_kish": 9.35,
+   "efecto_diseño": 5.36,
+   "pos_ef_central": 4.7,
+   "neg_ef_central": 3.9,
+   "pos_ef_prudente": 5,
+   "mde_hanley_mcneil": {
+    "A0=0.50": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": null,
+      "holm_2": null
+     }
+    },
+    "A0=0.55": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": null,
+      "holm_2": null
+     }
+    },
+    "A0=0.58": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": null,
+      "holm_2": null
+     }
+    },
+    "A0=0.60": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": null,
+      "holm_2": null
+     }
+    },
+    "A0=0.70": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": null,
+      "holm_2": null
+     }
+    }
+   }
+  },
+  "nucleo|T2|sin_2020": {
+   "filas": 46,
+   "eventos": 25,
+   "no_eventos": 21,
+   "tasa_base": 0.543,
+   "años_distintos_con_evento": 5,
+   "eventos_por_año_objetivo": {
+    "2010": 13,
+    "2012": 2,
+    "2013": 3,
+    "2014": 5,
+    "2015": 2
+   },
+   "filas_por_año_objetivo": {
+    "2009": 10,
+    "2010": 14,
+    "2011": 1,
+    "2012": 4,
+    "2013": 8,
+    "2014": 7,
+    "2015": 2
+   },
+   "eventos_por_pais": {
+    "BEL": [
+     2010,
+     2014
+    ],
+    "DEU": [
+     2010
+    ],
+    "DNK": [
+     2010,
+     2013
+    ],
+    "ESP": [
+     2014
+    ],
+    "FIN": [
+     2010,
+     2015
+    ],
+    "FRA": [
+     2010,
+     2013
+    ],
+    "GBR": [
+     2010
+    ],
+    "ITA": [
+     2010,
+     2015
+    ],
+    "JPN": [
+     2010,
+     2012
+    ],
+    "NLD": [
+     2010,
+     2014
+    ],
+    "NOR": [
+     2010,
+     2012,
+     2014
+    ],
+    "PRT": [
+     2010,
+     2014
+    ],
+    "SWE": [
+     2010,
+     2013
+    ],
+    "USA": [
+     2010
+    ]
+   },
+   "paises_con_evento": 14,
+   "icc_por_año": 0.522,
+   "m_kish": 9.35,
+   "efecto_diseño": 5.36,
+   "pos_ef_central": 4.7,
+   "neg_ef_central": 3.9,
+   "pos_ef_prudente": 5,
+   "mde_hanley_mcneil": {
+    "A0=0.50": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": null,
+      "holm_2": null
+     }
+    },
+    "A0=0.55": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": null,
+      "holm_2": null
+     }
+    },
+    "A0=0.58": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": null,
+      "holm_2": null
+     }
+    },
+    "A0=0.60": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": null,
+      "holm_2": null
+     }
+    },
+    "A0=0.70": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": null,
+      "holm_2": null
+     }
+    }
+   }
+  },
+  "nucleo_AUS_CHE|T1|con_2020": {
+   "filas": 209,
+   "eventos": 42,
+   "no_eventos": 167,
+   "tasa_base": 0.201,
+   "años_distintos_con_evento": 6,
+   "eventos_por_año_objetivo": {
+    "2008": 10,
+    "2009": 5,
+    "2011": 3,
+    "2012": 6,
+    "2013": 2,
+    "2020": 16
+   },
+   "filas_por_año_objetivo": {
+    "2005": 16,
+    "2006": 16,
+    "2007": 16,
+    "2008": 16,
+    "2009": 6,
+    "2010": 1,
+    "2011": 15,
+    "2012": 12,
+    "2013": 8,
+    "2014": 9,
+    "2015": 14,
+    "2016": 16,
+    "2017": 16,
+    "2018": 16,
+    "2019": 16,
+    "2020": 16
+   },
+   "eventos_por_pais": {
+    "AUS": [
+     2020
+    ],
+    "BEL": [
+     2009,
+     2013,
+     2020
+    ],
+    "CHE": [
+     2009,
+     2020
+    ],
+    "DEU": [
+     2009,
+     2020
+    ],
+    "DNK": [
+     2008,
+     2012,
+     2020
+    ],
+    "ESP": [
+     2008,
+     2020
+    ],
+    "FIN": [
+     2009,
+     2012,
+     2020
+    ],
+    "FRA": [
+     2008,
+     2012,
+     2020
+    ],
+    "GBR": [
+     2008,
+     2020
+    ],
+    "ITA": [
+     2008,
+     2012,
+     2020
+    ],
+    "JPN": [
+     2008,
+     2011,
+     2020
+    ],
+    "NLD": [
+     2009,
+     2012,
+     2020
+    ],
+    "NOR": [
+     2008,
+     2011,
+     2013,
+     2020
+    ],
+    "PRT": [
+     2008,
+     2011,
+     2020
+    ],
+    "SWE": [
+     2008,
+     2012,
+     2020
+    ],
+    "USA": [
+     2008,
+     2020
+    ]
+   },
+   "paises_con_evento": 16,
+   "icc_por_año": 0.647,
+   "m_kish": 14.6,
+   "efecto_diseño": 9.8,
+   "pos_ef_central": 4.3,
+   "neg_ef_central": 17.0,
+   "pos_ef_prudente": 6,
+   "mde_hanley_mcneil": {
+    "A0=0.50": {
+     "central": {
+      "1_contraste": 0.395,
+      "holm_2": 0.427
+     },
+     "prudente": {
+      "1_contraste": 0.354,
+      "holm_2": 0.382
+     }
+    },
+    "A0=0.55": {
+     "central": {
+      "1_contraste": 0.392,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": 0.347,
+      "holm_2": 0.378
+     }
+    },
+    "A0=0.58": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": 0.343,
+      "holm_2": 0.379
+     }
+    },
+    "A0=0.60": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": 0.342,
+      "holm_2": null
+     }
+    },
+    "A0=0.70": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": null,
+      "holm_2": null
+     }
+    }
+   }
+  },
+  "nucleo_AUS_CHE|T1|sin_2020": {
+   "filas": 193,
+   "eventos": 26,
+   "no_eventos": 167,
+   "tasa_base": 0.135,
+   "años_distintos_con_evento": 5,
+   "eventos_por_año_objetivo": {
+    "2008": 10,
+    "2009": 5,
+    "2011": 3,
+    "2012": 6,
+    "2013": 2
+   },
+   "filas_por_año_objetivo": {
+    "2005": 16,
+    "2006": 16,
+    "2007": 16,
+    "2008": 16,
+    "2009": 6,
+    "2010": 1,
+    "2011": 15,
+    "2012": 12,
+    "2013": 8,
+    "2014": 9,
+    "2015": 14,
+    "2016": 16,
+    "2017": 16,
+    "2018": 16,
+    "2019": 16
+   },
+   "eventos_por_pais": {
+    "BEL": [
+     2009,
+     2013
+    ],
+    "CHE": [
+     2009
+    ],
+    "DEU": [
+     2009
+    ],
+    "DNK": [
+     2008,
+     2012
+    ],
+    "ESP": [
+     2008
+    ],
+    "FIN": [
+     2009,
+     2012
+    ],
+    "FRA": [
+     2008,
+     2012
+    ],
+    "GBR": [
+     2008
+    ],
+    "ITA": [
+     2008,
+     2012
+    ],
+    "JPN": [
+     2008,
+     2011
+    ],
+    "NLD": [
+     2009,
+     2012
+    ],
+    "NOR": [
+     2008,
+     2011,
+     2013
+    ],
+    "PRT": [
+     2008,
+     2011
+    ],
+    "SWE": [
+     2008,
+     2012
+    ],
+    "USA": [
+     2008
+    ]
+   },
+   "paises_con_evento": 15,
+   "icc_por_año": 0.467,
+   "m_kish": 14.48,
+   "efecto_diseño": 7.3,
+   "pos_ef_central": 3.6,
+   "neg_ef_central": 22.9,
+   "pos_ef_prudente": 5,
+   "mde_hanley_mcneil": {
+    "A0=0.50": {
+     "central": {
+      "1_contraste": 0.412,
+      "holm_2": 0.447
+     },
+     "prudente": {
+      "1_contraste": 0.366,
+      "holm_2": 0.395
+     }
+    },
+    "A0=0.55": {
+     "central": {
+      "1_contraste": 0.416,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": 0.361,
+      "holm_2": 0.393
+     }
+    },
+    "A0=0.58": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": 0.358,
+      "holm_2": null
+     }
+    },
+    "A0=0.60": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": 0.358,
+      "holm_2": null
+     }
+    },
+    "A0=0.70": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": null,
+      "holm_2": null
+     }
+    }
+   }
+  },
+  "nucleo_AUS_CHE|T2|con_2020": {
+   "filas": 47,
+   "eventos": 26,
+   "no_eventos": 21,
+   "tasa_base": 0.553,
+   "años_distintos_con_evento": 5,
+   "eventos_por_año_objetivo": {
+    "2010": 14,
+    "2012": 2,
+    "2013": 3,
+    "2014": 5,
+    "2015": 2
+   },
+   "filas_por_año_objetivo": {
+    "2009": 10,
+    "2010": 15,
+    "2011": 1,
+    "2012": 4,
+    "2013": 8,
+    "2014": 7,
+    "2015": 2
+   },
+   "eventos_por_pais": {
+    "BEL": [
+     2010,
+     2014
+    ],
+    "CHE": [
+     2010
+    ],
+    "DEU": [
+     2010
+    ],
+    "DNK": [
+     2010,
+     2013
+    ],
+    "ESP": [
+     2014
+    ],
+    "FIN": [
+     2010,
+     2015
+    ],
+    "FRA": [
+     2010,
+     2013
+    ],
+    "GBR": [
+     2010
+    ],
+    "ITA": [
+     2010,
+     2015
+    ],
+    "JPN": [
+     2010,
+     2012
+    ],
+    "NLD": [
+     2010,
+     2014
+    ],
+    "NOR": [
+     2010,
+     2012,
+     2014
+    ],
+    "PRT": [
+     2010,
+     2014
+    ],
+    "SWE": [
+     2010,
+     2013
+    ],
+    "USA": [
+     2010
+    ]
+   },
+   "paises_con_evento": 15,
+   "icc_por_año": 0.534,
+   "m_kish": 9.77,
+   "efecto_diseño": 5.68,
+   "pos_ef_central": 4.6,
+   "neg_ef_central": 3.7,
+   "pos_ef_prudente": 5,
+   "mde_hanley_mcneil": {
+    "A0=0.50": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": null,
+      "holm_2": null
+     }
+    },
+    "A0=0.55": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": null,
+      "holm_2": null
+     }
+    },
+    "A0=0.58": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": null,
+      "holm_2": null
+     }
+    },
+    "A0=0.60": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": null,
+      "holm_2": null
+     }
+    },
+    "A0=0.70": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": null,
+      "holm_2": null
+     }
+    }
+   }
+  },
+  "nucleo_AUS_CHE|T2|sin_2020": {
+   "filas": 47,
+   "eventos": 26,
+   "no_eventos": 21,
+   "tasa_base": 0.553,
+   "años_distintos_con_evento": 5,
+   "eventos_por_año_objetivo": {
+    "2010": 14,
+    "2012": 2,
+    "2013": 3,
+    "2014": 5,
+    "2015": 2
+   },
+   "filas_por_año_objetivo": {
+    "2009": 10,
+    "2010": 15,
+    "2011": 1,
+    "2012": 4,
+    "2013": 8,
+    "2014": 7,
+    "2015": 2
+   },
+   "eventos_por_pais": {
+    "BEL": [
+     2010,
+     2014
+    ],
+    "CHE": [
+     2010
+    ],
+    "DEU": [
+     2010
+    ],
+    "DNK": [
+     2010,
+     2013
+    ],
+    "ESP": [
+     2014
+    ],
+    "FIN": [
+     2010,
+     2015
+    ],
+    "FRA": [
+     2010,
+     2013
+    ],
+    "GBR": [
+     2010
+    ],
+    "ITA": [
+     2010,
+     2015
+    ],
+    "JPN": [
+     2010,
+     2012
+    ],
+    "NLD": [
+     2010,
+     2014
+    ],
+    "NOR": [
+     2010,
+     2012,
+     2014
+    ],
+    "PRT": [
+     2010,
+     2014
+    ],
+    "SWE": [
+     2010,
+     2013
+    ],
+    "USA": [
+     2010
+    ]
+   },
+   "paises_con_evento": 15,
+   "icc_por_año": 0.534,
+   "m_kish": 9.77,
+   "efecto_diseño": 5.68,
+   "pos_ef_central": 4.6,
+   "neg_ef_central": 3.7,
+   "pos_ef_prudente": 5,
+   "mde_hanley_mcneil": {
+    "A0=0.50": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": null,
+      "holm_2": null
+     }
+    },
+    "A0=0.55": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": null,
+      "holm_2": null
+     }
+    },
+    "A0=0.58": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": null,
+      "holm_2": null
+     }
+    },
+    "A0=0.60": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": null,
+      "holm_2": null
+     }
+    },
+    "A0=0.70": {
+     "central": {
+      "1_contraste": null,
+      "holm_2": null
+     },
+     "prudente": {
+      "1_contraste": null,
+      "holm_2": null
+     }
+    }
+   }
+  }
+ },
+ "simulacion": {
+  "nucleo|T1|con_2020": {
+   "H0_rho0.0": {
+    "a0": 0.55,
+    "a1": 0.55,
+    "rho": 0.0,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.045,
+     "a_dauc_ic_excluye_0_holm2": 0.025,
+     "a_estratificada_ic95_excluye_0": 0.022,
+     "b_auc_modelo_ic95_sobre_0.5": 0.209,
+     "c_signo_dauc_pos": 0.497,
+     "d_dlogloss_neg": 0.499,
+     "d_dlogloss_ic95_bajo_0": 0.054,
+     "e_pendiente_0.5_1.5": 0.335,
+     "int4_completo_a_holm2_d_e": 0.006
+    },
+    "dauc_mediana": -0.001,
+    "dauc_p05_p95": [
+     -0.088,
+     0.091
+    ],
+    "ancho_ic_mediano": 0.196,
+    "pendiente_mediana_p10_p90": [
+     1.0,
+     -0.315,
+     2.419
+    ]
+   },
+   "H0_rho0.3": {
+    "a0": 0.55,
+    "a1": 0.55,
+    "rho": 0.3,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.041,
+     "a_dauc_ic_excluye_0_holm2": 0.02,
+     "a_estratificada_ic95_excluye_0": 0.027,
+     "b_auc_modelo_ic95_sobre_0.5": 0.123,
+     "c_signo_dauc_pos": 0.504,
+     "d_dlogloss_neg": 0.501,
+     "d_dlogloss_ic95_bajo_0": 0.053,
+     "e_pendiente_0.5_1.5": 0.202,
+     "int4_completo_a_holm2_d_e": 0.001
+    },
+    "dauc_mediana": 0.001,
+    "dauc_p05_p95": [
+     -0.157,
+     0.152
+    ],
+    "ancho_ic_mediano": 0.317,
+    "pendiente_mediana_p10_p90": [
+     1.136,
+     -1.46,
+     3.78
+    ]
+   },
+   "H0_rho0.6": {
+    "a0": 0.55,
+    "a1": 0.55,
+    "rho": 0.6,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.043,
+     "a_dauc_ic_excluye_0_holm2": 0.028,
+     "a_estratificada_ic95_excluye_0": 0.041,
+     "b_auc_modelo_ic95_sobre_0.5": 0.101,
+     "c_signo_dauc_pos": 0.508,
+     "d_dlogloss_neg": 0.506,
+     "d_dlogloss_ic95_bajo_0": 0.053,
+     "e_pendiente_0.5_1.5": 0.146,
+     "int4_completo_a_holm2_d_e": 0.002
+    },
+    "dauc_mediana": 0.005,
+    "dauc_p05_p95": [
+     -0.196,
+     0.204
+    ],
+    "ancho_ic_mediano": 0.423,
+    "pendiente_mediana_p10_p90": [
+     1.152,
+     -2.292,
+     4.899
+    ]
+   },
+   "mitad_rho0.0": {
+    "a0": 0.55,
+    "a1": 0.64,
+    "rho": 0.0,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.437,
+     "a_dauc_ic_excluye_0_holm2": 0.33,
+     "a_estratificada_ic95_excluye_0": 0.285,
+     "b_auc_modelo_ic95_sobre_0.5": 0.748,
+     "c_signo_dauc_pos": 0.959,
+     "d_dlogloss_neg": 0.909,
+     "d_dlogloss_ic95_bajo_0": 0.361,
+     "e_pendiente_0.5_1.5": 0.808,
+     "int4_completo_a_holm2_d_e": 0.26
+    },
+    "dauc_mediana": 0.089,
+    "dauc_p05_p95": [
+     0.007,
+     0.178
+    ],
+    "ancho_ic_mediano": 0.192,
+    "pendiente_mediana_p10_p90": [
+     1.002,
+     0.548,
+     1.524
+    ]
+   },
+   "mitad_rho0.3": {
+    "a0": 0.55,
+    "a1": 0.64,
+    "rho": 0.3,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.238,
+     "a_dauc_ic_excluye_0_holm2": 0.166,
+     "a_estratificada_ic95_excluye_0": 0.181,
+     "b_auc_modelo_ic95_sobre_0.5": 0.419,
+     "c_signo_dauc_pos": 0.837,
+     "d_dlogloss_neg": 0.784,
+     "d_dlogloss_ic95_bajo_0": 0.196,
+     "e_pendiente_0.5_1.5": 0.498,
+     "int4_completo_a_holm2_d_e": 0.067
+    },
+    "dauc_mediana": 0.09,
+    "dauc_p05_p95": [
+     -0.063,
+     0.241
+    ],
+    "ancho_ic_mediano": 0.312,
+    "pendiente_mediana_p10_p90": [
+     1.09,
+     0.173,
+     2.05
+    ]
+   },
+   "mitad_rho0.6": {
+    "a0": 0.55,
+    "a1": 0.64,
+    "rho": 0.6,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.171,
+     "a_dauc_ic_excluye_0_holm2": 0.115,
+     "a_estratificada_ic95_excluye_0": 0.131,
+     "b_auc_modelo_ic95_sobre_0.5": 0.29,
+     "c_signo_dauc_pos": 0.772,
+     "d_dlogloss_neg": 0.746,
+     "d_dlogloss_ic95_bajo_0": 0.158,
+     "e_pendiente_0.5_1.5": 0.379,
+     "int4_completo_a_holm2_d_e": 0.027
+    },
+    "dauc_mediana": 0.092,
+    "dauc_p05_p95": [
+     -0.101,
+     0.295
+    ],
+    "ancho_ic_mediano": 0.412,
+    "pendiente_mediana_p10_p90": [
+     1.122,
+     -0.078,
+     2.562
+    ]
+   },
+   "desarrollo_rho0.0": {
+    "a0": 0.55,
+    "a1": 0.73,
+    "rho": 0.0,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.917,
+     "a_dauc_ic_excluye_0_holm2": 0.857,
+     "a_estratificada_ic95_excluye_0": 0.827,
+     "b_auc_modelo_ic95_sobre_0.5": 0.99,
+     "c_signo_dauc_pos": 1.0,
+     "d_dlogloss_neg": 0.995,
+     "d_dlogloss_ic95_bajo_0": 0.7,
+     "e_pendiente_0.5_1.5": 0.953,
+     "int4_completo_a_holm2_d_e": 0.816
+    },
+    "dauc_mediana": 0.18,
+    "dauc_p05_p95": [
+     0.103,
+     0.266
+    ],
+    "ancho_ic_mediano": 0.187,
+    "pendiente_mediana_p10_p90": [
+     1.002,
+     0.731,
+     1.332
+    ]
+   },
+   "desarrollo_rho0.3": {
+    "a0": 0.55,
+    "a1": 0.73,
+    "rho": 0.3,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.597,
+     "a_dauc_ic_excluye_0_holm2": 0.507,
+     "a_estratificada_ic95_excluye_0": 0.515,
+     "b_auc_modelo_ic95_sobre_0.5": 0.785,
+     "c_signo_dauc_pos": 0.98,
+     "d_dlogloss_neg": 0.921,
+     "d_dlogloss_ic95_bajo_0": 0.404,
+     "e_pendiente_0.5_1.5": 0.726,
+     "int4_completo_a_holm2_d_e": 0.352
+    },
+    "dauc_mediana": 0.18,
+    "dauc_p05_p95": [
+     0.037,
+     0.33
+    ],
+    "ancho_ic_mediano": 0.3,
+    "pendiente_mediana_p10_p90": [
+     1.083,
+     0.51,
+     1.675
+    ]
+   },
+   "desarrollo_rho0.6": {
+    "a0": 0.55,
+    "a1": 0.73,
+    "rho": 0.6,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.452,
+     "a_dauc_ic_excluye_0_holm2": 0.364,
+     "a_estratificada_ic95_excluye_0": 0.379,
+     "b_auc_modelo_ic95_sobre_0.5": 0.615,
+     "c_signo_dauc_pos": 0.947,
+     "d_dlogloss_neg": 0.86,
+     "d_dlogloss_ic95_bajo_0": 0.311,
+     "e_pendiente_0.5_1.5": 0.58,
+     "int4_completo_a_holm2_d_e": 0.183
+    },
+    "dauc_mediana": 0.179,
+    "dauc_p05_p95": [
+     -0.002,
+     0.379
+    ],
+    "ancho_ic_mediano": 0.392,
+    "pendiente_mediana_p10_p90": [
+     1.14,
+     0.387,
+     2.05
+    ]
+   },
+   "desarrollo_estratificado_rho0.0": {
+    "a0": 0.55,
+    "a1": 0.75,
+    "rho": 0.0,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.957,
+     "a_dauc_ic_excluye_0_holm2": 0.922,
+     "a_estratificada_ic95_excluye_0": 0.887,
+     "b_auc_modelo_ic95_sobre_0.5": 0.995,
+     "c_signo_dauc_pos": 1.0,
+     "d_dlogloss_neg": 0.998,
+     "d_dlogloss_ic95_bajo_0": 0.765,
+     "e_pendiente_0.5_1.5": 0.967,
+     "int4_completo_a_holm2_d_e": 0.89
+    },
+    "dauc_mediana": 0.199,
+    "dauc_p05_p95": [
+     0.122,
+     0.286
+    ],
+    "ancho_ic_mediano": 0.185,
+    "pendiente_mediana_p10_p90": [
+     1.005,
+     0.752,
+     1.31
+    ]
+   },
+   "desarrollo_estratificado_rho0.3": {
+    "a0": 0.55,
+    "a1": 0.75,
+    "rho": 0.3,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.681,
+     "a_dauc_ic_excluye_0_holm2": 0.592,
+     "a_estratificada_ic95_excluye_0": 0.591,
+     "b_auc_modelo_ic95_sobre_0.5": 0.844,
+     "c_signo_dauc_pos": 0.991,
+     "d_dlogloss_neg": 0.946,
+     "d_dlogloss_ic95_bajo_0": 0.463,
+     "e_pendiente_0.5_1.5": 0.767,
+     "int4_completo_a_holm2_d_e": 0.446
+    },
+    "dauc_mediana": 0.201,
+    "dauc_p05_p95": [
+     0.057,
+     0.347
+    ],
+    "ancho_ic_mediano": 0.297,
+    "pendiente_mediana_p10_p90": [
+     1.087,
+     0.553,
+     1.639
+    ]
+   },
+   "desarrollo_estratificado_rho0.6": {
+    "a0": 0.55,
+    "a1": 0.75,
+    "rho": 0.6,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.515,
+     "a_dauc_ic_excluye_0_holm2": 0.431,
+     "a_estratificada_ic95_excluye_0": 0.449,
+     "b_auc_modelo_ic95_sobre_0.5": 0.677,
+     "c_signo_dauc_pos": 0.963,
+     "d_dlogloss_neg": 0.882,
+     "d_dlogloss_ic95_bajo_0": 0.349,
+     "e_pendiente_0.5_1.5": 0.613,
+     "int4_completo_a_holm2_d_e": 0.239
+    },
+    "dauc_mediana": 0.199,
+    "dauc_p05_p95": [
+     0.019,
+     0.398
+    ],
+    "ancho_ic_mediano": 0.39,
+    "pendiente_mediana_p10_p90": [
+     1.146,
+     0.436,
+     1.992
+    ]
+   },
+   "mde_sim_rho0.3_holm2": {
+    "rejilla_dauc": [
+     0.05,
+     0.1,
+     0.15,
+     0.2,
+     0.25,
+     0.3,
+     0.35,
+     0.4
+    ],
+    "potencia": [
+     0.082,
+     0.2,
+     0.378,
+     0.626,
+     0.788,
+     0.934,
+     0.994,
+     1.0
+    ],
+    "mde_80": 0.254
+   },
+   "mde_sim_rho0.3_auc_sobre_0.5": {
+    "rejilla_dauc": [
+     0.05,
+     0.1,
+     0.15,
+     0.2,
+     0.25,
+     0.3,
+     0.35,
+     0.4
+    ],
+    "potencia": [
+     0.134,
+     0.234,
+     0.424,
+     0.694,
+     0.86,
+     0.956,
+     0.994,
+     1.0
+    ],
+    "mde_80": 0.232,
+    "nota": "rejilla en AUC − 0,5 del modelo (no ΔAUC)"
+   }
+  },
+  "nucleo|T1|sin_2020": {
+   "H0_rho0.0": {
+    "a0": 0.55,
+    "a1": 0.55,
+    "rho": 0.0,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.037,
+     "a_dauc_ic_excluye_0_holm2": 0.024,
+     "a_estratificada_ic95_excluye_0": 0.013,
+     "b_auc_modelo_ic95_sobre_0.5": 0.161,
+     "c_signo_dauc_pos": 0.487,
+     "d_dlogloss_neg": 0.49,
+     "d_dlogloss_ic95_bajo_0": 0.042,
+     "e_pendiente_0.5_1.5": 0.32,
+     "int4_completo_a_holm2_d_e": 0.007
+    },
+    "dauc_mediana": -0.002,
+    "dauc_p05_p95": [
+     -0.103,
+     0.094
+    ],
+    "ancho_ic_mediano": 0.233,
+    "pendiente_mediana_p10_p90": [
+     0.962,
+     -0.472,
+     2.583
+    ]
+   },
+   "H0_rho0.3": {
+    "a0": 0.55,
+    "a1": 0.55,
+    "rho": 0.3,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.039,
+     "a_dauc_ic_excluye_0_holm2": 0.02,
+     "a_estratificada_ic95_excluye_0": 0.021,
+     "b_auc_modelo_ic95_sobre_0.5": 0.1,
+     "c_signo_dauc_pos": 0.497,
+     "d_dlogloss_neg": 0.491,
+     "d_dlogloss_ic95_bajo_0": 0.039,
+     "e_pendiente_0.5_1.5": 0.201,
+     "int4_completo_a_holm2_d_e": 0.001
+    },
+    "dauc_mediana": -0.001,
+    "dauc_p05_p95": [
+     -0.162,
+     0.156
+    ],
+    "ancho_ic_mediano": 0.345,
+    "pendiente_mediana_p10_p90": [
+     0.969,
+     -1.707,
+     3.635
+    ]
+   },
+   "H0_rho0.6": {
+    "a0": 0.55,
+    "a1": 0.55,
+    "rho": 0.6,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.042,
+     "a_dauc_ic_excluye_0_holm2": 0.024,
+     "a_estratificada_ic95_excluye_0": 0.032,
+     "b_auc_modelo_ic95_sobre_0.5": 0.075,
+     "c_signo_dauc_pos": 0.503,
+     "d_dlogloss_neg": 0.513,
+     "d_dlogloss_ic95_bajo_0": 0.045,
+     "e_pendiente_0.5_1.5": 0.145,
+     "int4_completo_a_holm2_d_e": 0.0
+    },
+    "dauc_mediana": 0.001,
+    "dauc_p05_p95": [
+     -0.207,
+     0.209
+    ],
+    "ancho_ic_mediano": 0.447,
+    "pendiente_mediana_p10_p90": [
+     1.054,
+     -2.616,
+     4.624
+    ]
+   },
+   "mitad_rho0.0": {
+    "a0": 0.55,
+    "a1": 0.64,
+    "rho": 0.0,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.352,
+     "a_dauc_ic_excluye_0_holm2": 0.259,
+     "a_estratificada_ic95_excluye_0": 0.197,
+     "b_auc_modelo_ic95_sobre_0.5": 0.597,
+     "c_signo_dauc_pos": 0.928,
+     "d_dlogloss_neg": 0.884,
+     "d_dlogloss_ic95_bajo_0": 0.267,
+     "e_pendiente_0.5_1.5": 0.757,
+     "int4_completo_a_holm2_d_e": 0.19
+    },
+    "dauc_mediana": 0.089,
+    "dauc_p05_p95": [
+     -0.012,
+     0.187
+    ],
+    "ancho_ic_mediano": 0.228,
+    "pendiente_mediana_p10_p90": [
+     1.005,
+     0.47,
+     1.605
+    ]
+   },
+   "mitad_rho0.3": {
+    "a0": 0.55,
+    "a1": 0.64,
+    "rho": 0.3,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.216,
+     "a_dauc_ic_excluye_0_holm2": 0.15,
+     "a_estratificada_ic95_excluye_0": 0.152,
+     "b_auc_modelo_ic95_sobre_0.5": 0.349,
+     "c_signo_dauc_pos": 0.825,
+     "d_dlogloss_neg": 0.766,
+     "d_dlogloss_ic95_bajo_0": 0.153,
+     "e_pendiente_0.5_1.5": 0.519,
+     "int4_completo_a_holm2_d_e": 0.069
+    },
+    "dauc_mediana": 0.092,
+    "dauc_p05_p95": [
+     -0.069,
+     0.244
+    ],
+    "ancho_ic_mediano": 0.338,
+    "pendiente_mediana_p10_p90": [
+     1.036,
+     0.101,
+     2.006
+    ]
+   },
+   "mitad_rho0.6": {
+    "a0": 0.55,
+    "a1": 0.64,
+    "rho": 0.6,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.17,
+     "a_dauc_ic_excluye_0_holm2": 0.116,
+     "a_estratificada_ic95_excluye_0": 0.124,
+     "b_auc_modelo_ic95_sobre_0.5": 0.262,
+     "c_signo_dauc_pos": 0.769,
+     "d_dlogloss_neg": 0.721,
+     "d_dlogloss_ic95_bajo_0": 0.139,
+     "e_pendiente_0.5_1.5": 0.378,
+     "int4_completo_a_holm2_d_e": 0.038
+    },
+    "dauc_mediana": 0.094,
+    "dauc_p05_p95": [
+     -0.12,
+     0.3
+    ],
+    "ancho_ic_mediano": 0.436,
+    "pendiente_mediana_p10_p90": [
+     1.1,
+     -0.172,
+     2.5
+    ]
+   },
+   "desarrollo_rho0.0": {
+    "a0": 0.55,
+    "a1": 0.73,
+    "rho": 0.0,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.796,
+     "a_dauc_ic_excluye_0_holm2": 0.692,
+     "a_estratificada_ic95_excluye_0": 0.617,
+     "b_auc_modelo_ic95_sobre_0.5": 0.935,
+     "c_signo_dauc_pos": 1.0,
+     "d_dlogloss_neg": 0.983,
+     "d_dlogloss_ic95_bajo_0": 0.561,
+     "e_pendiente_0.5_1.5": 0.93,
+     "int4_completo_a_holm2_d_e": 0.638
+    },
+    "dauc_mediana": 0.177,
+    "dauc_p05_p95": [
+     0.08,
+     0.274
+    ],
+    "ancho_ic_mediano": 0.217,
+    "pendiente_mediana_p10_p90": [
+     1.022,
+     0.684,
+     1.392
+    ]
+   },
+   "desarrollo_rho0.3": {
+    "a0": 0.55,
+    "a1": 0.73,
+    "rho": 0.3,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.56,
+     "a_dauc_ic_excluye_0_holm2": 0.453,
+     "a_estratificada_ic95_excluye_0": 0.453,
+     "b_auc_modelo_ic95_sobre_0.5": 0.728,
+     "c_signo_dauc_pos": 0.976,
+     "d_dlogloss_neg": 0.903,
+     "d_dlogloss_ic95_bajo_0": 0.335,
+     "e_pendiente_0.5_1.5": 0.72,
+     "int4_completo_a_holm2_d_e": 0.314
+    },
+    "dauc_mediana": 0.183,
+    "dauc_p05_p95": [
+     0.028,
+     0.336
+    ],
+    "ancho_ic_mediano": 0.323,
+    "pendiente_mediana_p10_p90": [
+     1.068,
+     0.485,
+     1.672
+    ]
+   },
+   "desarrollo_rho0.6": {
+    "a0": 0.55,
+    "a1": 0.73,
+    "rho": 0.6,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.432,
+     "a_dauc_ic_excluye_0_holm2": 0.337,
+     "a_estratificada_ic95_excluye_0": 0.337,
+     "b_auc_modelo_ic95_sobre_0.5": 0.549,
+     "c_signo_dauc_pos": 0.93,
+     "d_dlogloss_neg": 0.842,
+     "d_dlogloss_ic95_bajo_0": 0.281,
+     "e_pendiente_0.5_1.5": 0.547,
+     "int4_completo_a_holm2_d_e": 0.161
+    },
+    "dauc_mediana": 0.182,
+    "dauc_p05_p95": [
+     -0.019,
+     0.389
+    ],
+    "ancho_ic_mediano": 0.415,
+    "pendiente_mediana_p10_p90": [
+     1.108,
+     0.35,
+     2.076
+    ]
+   },
+   "desarrollo_estratificado_rho0.0": {
+    "a0": 0.55,
+    "a1": 0.75,
+    "rho": 0.0,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.856,
+     "a_dauc_ic_excluye_0_holm2": 0.776,
+     "a_estratificada_ic95_excluye_0": 0.701,
+     "b_auc_modelo_ic95_sobre_0.5": 0.965,
+     "c_signo_dauc_pos": 1.0,
+     "d_dlogloss_neg": 0.991,
+     "d_dlogloss_ic95_bajo_0": 0.637,
+     "e_pendiente_0.5_1.5": 0.942,
+     "int4_completo_a_holm2_d_e": 0.727
+    },
+    "dauc_mediana": 0.197,
+    "dauc_p05_p95": [
+     0.101,
+     0.294
+    ],
+    "ancho_ic_mediano": 0.217,
+    "pendiente_mediana_p10_p90": [
+     1.023,
+     0.708,
+     1.368
+    ]
+   },
+   "desarrollo_estratificado_rho0.3": {
+    "a0": 0.55,
+    "a1": 0.75,
+    "rho": 0.3,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.641,
+     "a_dauc_ic_excluye_0_holm2": 0.548,
+     "a_estratificada_ic95_excluye_0": 0.518,
+     "b_auc_modelo_ic95_sobre_0.5": 0.792,
+     "c_signo_dauc_pos": 0.991,
+     "d_dlogloss_neg": 0.925,
+     "d_dlogloss_ic95_bajo_0": 0.379,
+     "e_pendiente_0.5_1.5": 0.76,
+     "int4_completo_a_holm2_d_e": 0.403
+    },
+    "dauc_mediana": 0.202,
+    "dauc_p05_p95": [
+     0.052,
+     0.357
+    ],
+    "ancho_ic_mediano": 0.318,
+    "pendiente_mediana_p10_p90": [
+     1.066,
+     0.54,
+     1.627
+    ]
+   },
+   "desarrollo_estratificado_rho0.6": {
+    "a0": 0.55,
+    "a1": 0.75,
+    "rho": 0.6,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.511,
+     "a_dauc_ic_excluye_0_holm2": 0.41,
+     "a_estratificada_ic95_excluye_0": 0.402,
+     "b_auc_modelo_ic95_sobre_0.5": 0.624,
+     "c_signo_dauc_pos": 0.953,
+     "d_dlogloss_neg": 0.866,
+     "d_dlogloss_ic95_bajo_0": 0.307,
+     "e_pendiente_0.5_1.5": 0.586,
+     "int4_completo_a_holm2_d_e": 0.211
+    },
+    "dauc_mediana": 0.202,
+    "dauc_p05_p95": [
+     0.005,
+     0.41
+    ],
+    "ancho_ic_mediano": 0.41,
+    "pendiente_mediana_p10_p90": [
+     1.114,
+     0.41,
+     2.005
+    ]
+   },
+   "mde_sim_rho0.3_holm2": {
+    "rejilla_dauc": [
+     0.05,
+     0.1,
+     0.15,
+     0.2,
+     0.25,
+     0.3,
+     0.35,
+     0.4
+    ],
+    "potencia": [
+     0.09,
+     0.172,
+     0.358,
+     0.52,
+     0.724,
+     0.878,
+     0.976,
+     0.996
+    ],
+    "mde_80": 0.275
+   },
+   "mde_sim_rho0.3_auc_sobre_0.5": {
+    "rejilla_dauc": [
+     0.05,
+     0.1,
+     0.15,
+     0.2,
+     0.25,
+     0.3,
+     0.35,
+     0.4
+    ],
+    "potencia": [
+     0.138,
+     0.23,
+     0.42,
+     0.61,
+     0.772,
+     0.926,
+     0.97,
+     1.0
+    ],
+    "mde_80": 0.259,
+    "nota": "rejilla en AUC − 0,5 del modelo (no ΔAUC)"
+   }
+  },
+  "nucleo|T2|con_2020": {
+   "H0_rho0.0": {
+    "a0": 0.58,
+    "a1": 0.58,
+    "rho": 0.0,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.044,
+     "a_dauc_ic_excluye_0_holm2": 0.027,
+     "a_estratificada_ic95_excluye_0": 0.005,
+     "b_auc_modelo_ic95_sobre_0.5": 0.192,
+     "c_signo_dauc_pos": 0.509,
+     "d_dlogloss_neg": 0.505,
+     "d_dlogloss_ic95_bajo_0": 0.086,
+     "e_pendiente_0.5_1.5": 0.336,
+     "int4_completo_a_holm2_d_e": 0.007
+    },
+    "dauc_mediana": 0.003,
+    "dauc_p05_p95": [
+     -0.143,
+     0.16
+    ],
+    "ancho_ic_mediano": 0.335,
+    "pendiente_mediana_p10_p90": [
+     1.054,
+     -0.321,
+     2.624
+    ]
+   },
+   "H0_rho0.3": {
+    "a0": 0.58,
+    "a1": 0.58,
+    "rho": 0.3,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.047,
+     "a_dauc_ic_excluye_0_holm2": 0.031,
+     "a_estratificada_ic95_excluye_0": 0.005,
+     "b_auc_modelo_ic95_sobre_0.5": 0.158,
+     "c_signo_dauc_pos": 0.513,
+     "d_dlogloss_neg": 0.51,
+     "d_dlogloss_ic95_bajo_0": 0.087,
+     "e_pendiente_0.5_1.5": 0.208,
+     "int4_completo_a_holm2_d_e": 0.004
+    },
+    "dauc_mediana": 0.006,
+    "dauc_p05_p95": [
+     -0.217,
+     0.225
+    ],
+    "ancho_ic_mediano": 0.404,
+    "pendiente_mediana_p10_p90": [
+     1.272,
+     -1.092,
+     3.703
+    ]
+   },
+   "H0_rho0.6": {
+    "a0": 0.58,
+    "a1": 0.58,
+    "rho": 0.6,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.037,
+     "a_dauc_ic_excluye_0_holm2": 0.024,
+     "a_estratificada_ic95_excluye_0": 0.006,
+     "b_auc_modelo_ic95_sobre_0.5": 0.138,
+     "c_signo_dauc_pos": 0.522,
+     "d_dlogloss_neg": 0.513,
+     "d_dlogloss_ic95_bajo_0": 0.092,
+     "e_pendiente_0.5_1.5": 0.129,
+     "int4_completo_a_holm2_d_e": 0.001
+    },
+    "dauc_mediana": 0.011,
+    "dauc_p05_p95": [
+     -0.267,
+     0.29
+    ],
+    "ancho_ic_mediano": 0.465,
+    "pendiente_mediana_p10_p90": [
+     1.388,
+     -1.876,
+     4.733
+    ]
+   },
+   "mitad_rho0.0": {
+    "a0": 0.58,
+    "a1": 0.675,
+    "rho": 0.0,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.229,
+     "a_dauc_ic_excluye_0_holm2": 0.166,
+     "a_estratificada_ic95_excluye_0": 0.022,
+     "b_auc_modelo_ic95_sobre_0.5": 0.523,
+     "c_signo_dauc_pos": 0.874,
+     "d_dlogloss_neg": 0.867,
+     "d_dlogloss_ic95_bajo_0": 0.299,
+     "e_pendiente_0.5_1.5": 0.636,
+     "int4_completo_a_holm2_d_e": 0.088
+    },
+    "dauc_mediana": 0.097,
+    "dauc_p05_p95": [
+     -0.04,
+     0.244
+    ],
+    "ancho_ic_mediano": 0.324,
+    "pendiente_mediana_p10_p90": [
+     1.057,
+     0.431,
+     1.873
+    ]
+   },
+   "mitad_rho0.3": {
+    "a0": 0.58,
+    "a1": 0.675,
+    "rho": 0.3,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.19,
+     "a_dauc_ic_excluye_0_holm2": 0.135,
+     "a_estratificada_ic95_excluye_0": 0.019,
+     "b_auc_modelo_ic95_sobre_0.5": 0.419,
+     "c_signo_dauc_pos": 0.782,
+     "d_dlogloss_neg": 0.77,
+     "d_dlogloss_ic95_bajo_0": 0.279,
+     "e_pendiente_0.5_1.5": 0.431,
+     "int4_completo_a_holm2_d_e": 0.047
+    },
+    "dauc_mediana": 0.096,
+    "dauc_p05_p95": [
+     -0.111,
+     0.316
+    ],
+    "ancho_ic_mediano": 0.39,
+    "pendiente_mediana_p10_p90": [
+     1.216,
+     0.132,
+     2.413
+    ]
+   },
+   "mitad_rho0.6": {
+    "a0": 0.58,
+    "a1": 0.675,
+    "rho": 0.6,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.184,
+     "a_dauc_ic_excluye_0_holm2": 0.147,
+     "a_estratificada_ic95_excluye_0": 0.015,
+     "b_auc_modelo_ic95_sobre_0.5": 0.388,
+     "c_signo_dauc_pos": 0.734,
+     "d_dlogloss_neg": 0.713,
+     "d_dlogloss_ic95_bajo_0": 0.28,
+     "e_pendiente_0.5_1.5": 0.301,
+     "int4_completo_a_holm2_d_e": 0.023
+    },
+    "dauc_mediana": 0.097,
+    "dauc_p05_p95": [
+     -0.158,
+     0.387
+    ],
+    "ancho_ic_mediano": 0.439,
+    "pendiente_mediana_p10_p90": [
+     1.356,
+     -0.169,
+     3.014
+    ]
+   },
+   "desarrollo_rho0.0": {
+    "a0": 0.58,
+    "a1": 0.77,
+    "rho": 0.0,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.634,
+     "a_dauc_ic_excluye_0_holm2": 0.508,
+     "a_estratificada_ic95_excluye_0": 0.079,
+     "b_auc_modelo_ic95_sobre_0.5": 0.86,
+     "c_signo_dauc_pos": 0.992,
+     "d_dlogloss_neg": 0.971,
+     "d_dlogloss_ic95_bajo_0": 0.58,
+     "e_pendiente_0.5_1.5": 0.778,
+     "int4_completo_a_holm2_d_e": 0.377
+    },
+    "dauc_mediana": 0.19,
+    "dauc_p05_p95": [
+     0.057,
+     0.332
+    ],
+    "ancho_ic_mediano": 0.311,
+    "pendiente_mediana_p10_p90": [
+     1.056,
+     0.632,
+     1.67
+    ]
+   },
+   "desarrollo_rho0.3": {
+    "a0": 0.58,
+    "a1": 0.77,
+    "rho": 0.3,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.523,
+     "a_dauc_ic_excluye_0_holm2": 0.42,
+     "a_estratificada_ic95_excluye_0": 0.064,
+     "b_auc_modelo_ic95_sobre_0.5": 0.755,
+     "c_signo_dauc_pos": 0.948,
+     "d_dlogloss_neg": 0.904,
+     "d_dlogloss_ic95_bajo_0": 0.485,
+     "e_pendiente_0.5_1.5": 0.601,
+     "int4_completo_a_holm2_d_e": 0.236
+    },
+    "dauc_mediana": 0.189,
+    "dauc_p05_p95": [
+     -0.004,
+     0.411
+    ],
+    "ancho_ic_mediano": 0.365,
+    "pendiente_mediana_p10_p90": [
+     1.188,
+     0.492,
+     2.048
+    ]
+   },
+   "desarrollo_rho0.6": {
+    "a0": 0.58,
+    "a1": 0.77,
+    "rho": 0.6,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.456,
+     "a_dauc_ic_excluye_0_holm2": 0.379,
+     "a_estratificada_ic95_excluye_0": 0.05,
+     "b_auc_modelo_ic95_sobre_0.5": 0.666,
+     "c_signo_dauc_pos": 0.894,
+     "d_dlogloss_neg": 0.844,
+     "d_dlogloss_ic95_bajo_0": 0.444,
+     "e_pendiente_0.5_1.5": 0.422,
+     "int4_completo_a_holm2_d_e": 0.13
+    },
+    "dauc_mediana": 0.187,
+    "dauc_p05_p95": [
+     -0.059,
+     0.472
+    ],
+    "ancho_ic_mediano": 0.413,
+    "pendiente_mediana_p10_p90": [
+     1.349,
+     0.309,
+     2.605
+    ]
+   },
+   "desarrollo_estratificado_rho0.0": {
+    "a0": 0.58,
+    "a1": 0.77,
+    "rho": 0.0,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.634,
+     "a_dauc_ic_excluye_0_holm2": 0.508,
+     "a_estratificada_ic95_excluye_0": 0.079,
+     "b_auc_modelo_ic95_sobre_0.5": 0.86,
+     "c_signo_dauc_pos": 0.992,
+     "d_dlogloss_neg": 0.971,
+     "d_dlogloss_ic95_bajo_0": 0.58,
+     "e_pendiente_0.5_1.5": 0.778,
+     "int4_completo_a_holm2_d_e": 0.377
+    },
+    "dauc_mediana": 0.19,
+    "dauc_p05_p95": [
+     0.057,
+     0.332
+    ],
+    "ancho_ic_mediano": 0.311,
+    "pendiente_mediana_p10_p90": [
+     1.056,
+     0.632,
+     1.67
+    ]
+   },
+   "desarrollo_estratificado_rho0.3": {
+    "a0": 0.58,
+    "a1": 0.77,
+    "rho": 0.3,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.523,
+     "a_dauc_ic_excluye_0_holm2": 0.42,
+     "a_estratificada_ic95_excluye_0": 0.064,
+     "b_auc_modelo_ic95_sobre_0.5": 0.755,
+     "c_signo_dauc_pos": 0.948,
+     "d_dlogloss_neg": 0.904,
+     "d_dlogloss_ic95_bajo_0": 0.485,
+     "e_pendiente_0.5_1.5": 0.601,
+     "int4_completo_a_holm2_d_e": 0.236
+    },
+    "dauc_mediana": 0.189,
+    "dauc_p05_p95": [
+     -0.004,
+     0.411
+    ],
+    "ancho_ic_mediano": 0.365,
+    "pendiente_mediana_p10_p90": [
+     1.188,
+     0.492,
+     2.048
+    ]
+   },
+   "desarrollo_estratificado_rho0.6": {
+    "a0": 0.58,
+    "a1": 0.77,
+    "rho": 0.6,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.456,
+     "a_dauc_ic_excluye_0_holm2": 0.379,
+     "a_estratificada_ic95_excluye_0": 0.05,
+     "b_auc_modelo_ic95_sobre_0.5": 0.666,
+     "c_signo_dauc_pos": 0.894,
+     "d_dlogloss_neg": 0.844,
+     "d_dlogloss_ic95_bajo_0": 0.444,
+     "e_pendiente_0.5_1.5": 0.422,
+     "int4_completo_a_holm2_d_e": 0.13
+    },
+    "dauc_mediana": 0.187,
+    "dauc_p05_p95": [
+     -0.059,
+     0.472
+    ],
+    "ancho_ic_mediano": 0.413,
+    "pendiente_mediana_p10_p90": [
+     1.349,
+     0.309,
+     2.605
+    ]
+   },
+   "mde_sim_rho0.3_holm2": {
+    "rejilla_dauc": [
+     0.05,
+     0.1,
+     0.15,
+     0.2,
+     0.25,
+     0.3,
+     0.35
+    ],
+    "potencia": [
+     0.09,
+     0.142,
+     0.308,
+     0.42,
+     0.696,
+     0.806,
+     0.944
+    ],
+    "mde_80": 0.297
+   },
+   "mde_sim_rho0.3_auc_sobre_0.5": {
+    "rejilla_dauc": [
+     0.05,
+     0.1,
+     0.15,
+     0.2,
+     0.25,
+     0.3,
+     0.35,
+     0.4
+    ],
+    "potencia": [
+     0.104,
+     0.202,
+     0.362,
+     0.548,
+     0.724,
+     0.84,
+     0.946,
+     0.992
+    ],
+    "mde_80": 0.283,
+    "nota": "rejilla en AUC − 0,5 del modelo (no ΔAUC)"
+   }
+  },
+  "nucleo|T2|sin_2020": {
+   "H0_rho0.0": {
+    "a0": 0.58,
+    "a1": 0.58,
+    "rho": 0.0,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.044,
+     "a_dauc_ic_excluye_0_holm2": 0.027,
+     "a_estratificada_ic95_excluye_0": 0.005,
+     "b_auc_modelo_ic95_sobre_0.5": 0.192,
+     "c_signo_dauc_pos": 0.509,
+     "d_dlogloss_neg": 0.505,
+     "d_dlogloss_ic95_bajo_0": 0.086,
+     "e_pendiente_0.5_1.5": 0.336,
+     "int4_completo_a_holm2_d_e": 0.007
+    },
+    "dauc_mediana": 0.003,
+    "dauc_p05_p95": [
+     -0.143,
+     0.16
+    ],
+    "ancho_ic_mediano": 0.335,
+    "pendiente_mediana_p10_p90": [
+     1.054,
+     -0.321,
+     2.624
+    ]
+   },
+   "H0_rho0.3": {
+    "a0": 0.58,
+    "a1": 0.58,
+    "rho": 0.3,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.047,
+     "a_dauc_ic_excluye_0_holm2": 0.031,
+     "a_estratificada_ic95_excluye_0": 0.005,
+     "b_auc_modelo_ic95_sobre_0.5": 0.158,
+     "c_signo_dauc_pos": 0.513,
+     "d_dlogloss_neg": 0.51,
+     "d_dlogloss_ic95_bajo_0": 0.087,
+     "e_pendiente_0.5_1.5": 0.208,
+     "int4_completo_a_holm2_d_e": 0.004
+    },
+    "dauc_mediana": 0.006,
+    "dauc_p05_p95": [
+     -0.217,
+     0.225
+    ],
+    "ancho_ic_mediano": 0.404,
+    "pendiente_mediana_p10_p90": [
+     1.272,
+     -1.092,
+     3.703
+    ]
+   },
+   "H0_rho0.6": {
+    "a0": 0.58,
+    "a1": 0.58,
+    "rho": 0.6,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.037,
+     "a_dauc_ic_excluye_0_holm2": 0.024,
+     "a_estratificada_ic95_excluye_0": 0.006,
+     "b_auc_modelo_ic95_sobre_0.5": 0.138,
+     "c_signo_dauc_pos": 0.522,
+     "d_dlogloss_neg": 0.513,
+     "d_dlogloss_ic95_bajo_0": 0.092,
+     "e_pendiente_0.5_1.5": 0.129,
+     "int4_completo_a_holm2_d_e": 0.001
+    },
+    "dauc_mediana": 0.011,
+    "dauc_p05_p95": [
+     -0.267,
+     0.29
+    ],
+    "ancho_ic_mediano": 0.465,
+    "pendiente_mediana_p10_p90": [
+     1.388,
+     -1.876,
+     4.733
+    ]
+   },
+   "mitad_rho0.0": {
+    "a0": 0.58,
+    "a1": 0.675,
+    "rho": 0.0,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.229,
+     "a_dauc_ic_excluye_0_holm2": 0.166,
+     "a_estratificada_ic95_excluye_0": 0.022,
+     "b_auc_modelo_ic95_sobre_0.5": 0.523,
+     "c_signo_dauc_pos": 0.874,
+     "d_dlogloss_neg": 0.867,
+     "d_dlogloss_ic95_bajo_0": 0.299,
+     "e_pendiente_0.5_1.5": 0.636,
+     "int4_completo_a_holm2_d_e": 0.088
+    },
+    "dauc_mediana": 0.097,
+    "dauc_p05_p95": [
+     -0.04,
+     0.244
+    ],
+    "ancho_ic_mediano": 0.324,
+    "pendiente_mediana_p10_p90": [
+     1.057,
+     0.431,
+     1.873
+    ]
+   },
+   "mitad_rho0.3": {
+    "a0": 0.58,
+    "a1": 0.675,
+    "rho": 0.3,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.19,
+     "a_dauc_ic_excluye_0_holm2": 0.135,
+     "a_estratificada_ic95_excluye_0": 0.019,
+     "b_auc_modelo_ic95_sobre_0.5": 0.419,
+     "c_signo_dauc_pos": 0.782,
+     "d_dlogloss_neg": 0.77,
+     "d_dlogloss_ic95_bajo_0": 0.279,
+     "e_pendiente_0.5_1.5": 0.431,
+     "int4_completo_a_holm2_d_e": 0.047
+    },
+    "dauc_mediana": 0.096,
+    "dauc_p05_p95": [
+     -0.111,
+     0.316
+    ],
+    "ancho_ic_mediano": 0.39,
+    "pendiente_mediana_p10_p90": [
+     1.216,
+     0.132,
+     2.413
+    ]
+   },
+   "mitad_rho0.6": {
+    "a0": 0.58,
+    "a1": 0.675,
+    "rho": 0.6,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.184,
+     "a_dauc_ic_excluye_0_holm2": 0.147,
+     "a_estratificada_ic95_excluye_0": 0.015,
+     "b_auc_modelo_ic95_sobre_0.5": 0.388,
+     "c_signo_dauc_pos": 0.734,
+     "d_dlogloss_neg": 0.713,
+     "d_dlogloss_ic95_bajo_0": 0.28,
+     "e_pendiente_0.5_1.5": 0.301,
+     "int4_completo_a_holm2_d_e": 0.023
+    },
+    "dauc_mediana": 0.097,
+    "dauc_p05_p95": [
+     -0.158,
+     0.387
+    ],
+    "ancho_ic_mediano": 0.439,
+    "pendiente_mediana_p10_p90": [
+     1.356,
+     -0.169,
+     3.014
+    ]
+   },
+   "desarrollo_rho0.0": {
+    "a0": 0.58,
+    "a1": 0.77,
+    "rho": 0.0,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.634,
+     "a_dauc_ic_excluye_0_holm2": 0.508,
+     "a_estratificada_ic95_excluye_0": 0.079,
+     "b_auc_modelo_ic95_sobre_0.5": 0.86,
+     "c_signo_dauc_pos": 0.992,
+     "d_dlogloss_neg": 0.971,
+     "d_dlogloss_ic95_bajo_0": 0.58,
+     "e_pendiente_0.5_1.5": 0.778,
+     "int4_completo_a_holm2_d_e": 0.377
+    },
+    "dauc_mediana": 0.19,
+    "dauc_p05_p95": [
+     0.057,
+     0.332
+    ],
+    "ancho_ic_mediano": 0.311,
+    "pendiente_mediana_p10_p90": [
+     1.056,
+     0.632,
+     1.67
+    ]
+   },
+   "desarrollo_rho0.3": {
+    "a0": 0.58,
+    "a1": 0.77,
+    "rho": 0.3,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.523,
+     "a_dauc_ic_excluye_0_holm2": 0.42,
+     "a_estratificada_ic95_excluye_0": 0.064,
+     "b_auc_modelo_ic95_sobre_0.5": 0.755,
+     "c_signo_dauc_pos": 0.948,
+     "d_dlogloss_neg": 0.904,
+     "d_dlogloss_ic95_bajo_0": 0.485,
+     "e_pendiente_0.5_1.5": 0.601,
+     "int4_completo_a_holm2_d_e": 0.236
+    },
+    "dauc_mediana": 0.189,
+    "dauc_p05_p95": [
+     -0.004,
+     0.411
+    ],
+    "ancho_ic_mediano": 0.365,
+    "pendiente_mediana_p10_p90": [
+     1.188,
+     0.492,
+     2.048
+    ]
+   },
+   "desarrollo_rho0.6": {
+    "a0": 0.58,
+    "a1": 0.77,
+    "rho": 0.6,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.456,
+     "a_dauc_ic_excluye_0_holm2": 0.379,
+     "a_estratificada_ic95_excluye_0": 0.05,
+     "b_auc_modelo_ic95_sobre_0.5": 0.666,
+     "c_signo_dauc_pos": 0.894,
+     "d_dlogloss_neg": 0.844,
+     "d_dlogloss_ic95_bajo_0": 0.444,
+     "e_pendiente_0.5_1.5": 0.422,
+     "int4_completo_a_holm2_d_e": 0.13
+    },
+    "dauc_mediana": 0.187,
+    "dauc_p05_p95": [
+     -0.059,
+     0.472
+    ],
+    "ancho_ic_mediano": 0.413,
+    "pendiente_mediana_p10_p90": [
+     1.349,
+     0.309,
+     2.605
+    ]
+   },
+   "desarrollo_estratificado_rho0.0": {
+    "a0": 0.58,
+    "a1": 0.77,
+    "rho": 0.0,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.634,
+     "a_dauc_ic_excluye_0_holm2": 0.508,
+     "a_estratificada_ic95_excluye_0": 0.079,
+     "b_auc_modelo_ic95_sobre_0.5": 0.86,
+     "c_signo_dauc_pos": 0.992,
+     "d_dlogloss_neg": 0.971,
+     "d_dlogloss_ic95_bajo_0": 0.58,
+     "e_pendiente_0.5_1.5": 0.778,
+     "int4_completo_a_holm2_d_e": 0.377
+    },
+    "dauc_mediana": 0.19,
+    "dauc_p05_p95": [
+     0.057,
+     0.332
+    ],
+    "ancho_ic_mediano": 0.311,
+    "pendiente_mediana_p10_p90": [
+     1.056,
+     0.632,
+     1.67
+    ]
+   },
+   "desarrollo_estratificado_rho0.3": {
+    "a0": 0.58,
+    "a1": 0.77,
+    "rho": 0.3,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.523,
+     "a_dauc_ic_excluye_0_holm2": 0.42,
+     "a_estratificada_ic95_excluye_0": 0.064,
+     "b_auc_modelo_ic95_sobre_0.5": 0.755,
+     "c_signo_dauc_pos": 0.948,
+     "d_dlogloss_neg": 0.904,
+     "d_dlogloss_ic95_bajo_0": 0.485,
+     "e_pendiente_0.5_1.5": 0.601,
+     "int4_completo_a_holm2_d_e": 0.236
+    },
+    "dauc_mediana": 0.189,
+    "dauc_p05_p95": [
+     -0.004,
+     0.411
+    ],
+    "ancho_ic_mediano": 0.365,
+    "pendiente_mediana_p10_p90": [
+     1.188,
+     0.492,
+     2.048
+    ]
+   },
+   "desarrollo_estratificado_rho0.6": {
+    "a0": 0.58,
+    "a1": 0.77,
+    "rho": 0.6,
+    "nsim": 1000,
+    "B": 1000,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.456,
+     "a_dauc_ic_excluye_0_holm2": 0.379,
+     "a_estratificada_ic95_excluye_0": 0.05,
+     "b_auc_modelo_ic95_sobre_0.5": 0.666,
+     "c_signo_dauc_pos": 0.894,
+     "d_dlogloss_neg": 0.844,
+     "d_dlogloss_ic95_bajo_0": 0.444,
+     "e_pendiente_0.5_1.5": 0.422,
+     "int4_completo_a_holm2_d_e": 0.13
+    },
+    "dauc_mediana": 0.187,
+    "dauc_p05_p95": [
+     -0.059,
+     0.472
+    ],
+    "ancho_ic_mediano": 0.413,
+    "pendiente_mediana_p10_p90": [
+     1.349,
+     0.309,
+     2.605
+    ]
+   },
+   "mde_sim_rho0.3_holm2": {
+    "rejilla_dauc": [
+     0.05,
+     0.1,
+     0.15,
+     0.2,
+     0.25,
+     0.3,
+     0.35
+    ],
+    "potencia": [
+     0.09,
+     0.142,
+     0.308,
+     0.42,
+     0.696,
+     0.806,
+     0.944
+    ],
+    "mde_80": 0.297
+   },
+   "mde_sim_rho0.3_auc_sobre_0.5": {
+    "rejilla_dauc": [
+     0.05,
+     0.1,
+     0.15,
+     0.2,
+     0.25,
+     0.3,
+     0.35,
+     0.4
+    ],
+    "potencia": [
+     0.104,
+     0.202,
+     0.362,
+     0.548,
+     0.724,
+     0.84,
+     0.946,
+     0.992
+    ],
+    "mde_80": 0.283,
+    "nota": "rejilla en AUC − 0,5 del modelo (no ΔAUC)"
+   }
+  },
+  "nucleo_AUS_CHE|T1|con_2020": {
+   "H0_rho0.0": {
+    "a0": 0.55,
+    "a1": 0.55,
+    "rho": 0.0,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.044,
+     "a_dauc_ic_excluye_0_holm2": 0.032,
+     "a_estratificada_ic95_excluye_0": 0.008,
+     "b_auc_modelo_ic95_sobre_0.5": 0.204,
+     "c_signo_dauc_pos": 0.452,
+     "d_dlogloss_neg": 0.46,
+     "d_dlogloss_ic95_bajo_0": 0.04,
+     "e_pendiente_0.5_1.5": 0.424,
+     "int4_completo_a_holm2_d_e": 0.008
+    },
+    "dauc_mediana": -0.006,
+    "dauc_p05_p95": [
+     -0.081,
+     0.077
+    ],
+    "ancho_ic_mediano": 0.181,
+    "pendiente_mediana_p10_p90": [
+     0.98,
+     -0.223,
+     2.339
+    ]
+   },
+   "H0_rho0.3": {
+    "a0": 0.55,
+    "a1": 0.55,
+    "rho": 0.3,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.048,
+     "a_dauc_ic_excluye_0_holm2": 0.028,
+     "a_estratificada_ic95_excluye_0": 0.024,
+     "b_auc_modelo_ic95_sobre_0.5": 0.16,
+     "c_signo_dauc_pos": 0.484,
+     "d_dlogloss_neg": 0.488,
+     "d_dlogloss_ic95_bajo_0": 0.048,
+     "e_pendiente_0.5_1.5": 0.208,
+     "int4_completo_a_holm2_d_e": 0.008
+    },
+    "dauc_mediana": -0.005,
+    "dauc_p05_p95": [
+     -0.153,
+     0.144
+    ],
+    "ancho_ic_mediano": 0.298,
+    "pendiente_mediana_p10_p90": [
+     1.125,
+     -1.565,
+     3.669
+    ]
+   },
+   "H0_rho0.6": {
+    "a0": 0.55,
+    "a1": 0.55,
+    "rho": 0.6,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.04,
+     "a_dauc_ic_excluye_0_holm2": 0.02,
+     "a_estratificada_ic95_excluye_0": 0.024,
+     "b_auc_modelo_ic95_sobre_0.5": 0.116,
+     "c_signo_dauc_pos": 0.484,
+     "d_dlogloss_neg": 0.48,
+     "d_dlogloss_ic95_bajo_0": 0.068,
+     "e_pendiente_0.5_1.5": 0.172,
+     "int4_completo_a_holm2_d_e": 0.004
+    },
+    "dauc_mediana": -0.004,
+    "dauc_p05_p95": [
+     -0.214,
+     0.203
+    ],
+    "ancho_ic_mediano": 0.403,
+    "pendiente_mediana_p10_p90": [
+     1.214,
+     -2.452,
+     4.666
+    ]
+   },
+   "mitad_rho0.0": {
+    "a0": 0.55,
+    "a1": 0.64,
+    "rho": 0.0,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.44,
+     "a_dauc_ic_excluye_0_holm2": 0.34,
+     "a_estratificada_ic95_excluye_0": 0.212,
+     "b_auc_modelo_ic95_sobre_0.5": 0.78,
+     "c_signo_dauc_pos": 0.972,
+     "d_dlogloss_neg": 0.932,
+     "d_dlogloss_ic95_bajo_0": 0.352,
+     "e_pendiente_0.5_1.5": 0.848,
+     "int4_completo_a_holm2_d_e": 0.28
+    },
+    "dauc_mediana": 0.082,
+    "dauc_p05_p95": [
+     0.008,
+     0.168
+    ],
+    "ancho_ic_mediano": 0.177,
+    "pendiente_mediana_p10_p90": [
+     0.996,
+     0.564,
+     1.465
+    ]
+   },
+   "mitad_rho0.3": {
+    "a0": 0.55,
+    "a1": 0.64,
+    "rho": 0.3,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.252,
+     "a_dauc_ic_excluye_0_holm2": 0.192,
+     "a_estratificada_ic95_excluye_0": 0.236,
+     "b_auc_modelo_ic95_sobre_0.5": 0.488,
+     "c_signo_dauc_pos": 0.82,
+     "d_dlogloss_neg": 0.78,
+     "d_dlogloss_ic95_bajo_0": 0.228,
+     "e_pendiente_0.5_1.5": 0.508,
+     "int4_completo_a_holm2_d_e": 0.088
+    },
+    "dauc_mediana": 0.083,
+    "dauc_p05_p95": [
+     -0.06,
+     0.237
+    ],
+    "ancho_ic_mediano": 0.293,
+    "pendiente_mediana_p10_p90": [
+     1.095,
+     0.168,
+     2.021
+    ]
+   },
+   "mitad_rho0.6": {
+    "a0": 0.55,
+    "a1": 0.64,
+    "rho": 0.6,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.224,
+     "a_dauc_ic_excluye_0_holm2": 0.14,
+     "a_estratificada_ic95_excluye_0": 0.184,
+     "b_auc_modelo_ic95_sobre_0.5": 0.316,
+     "c_signo_dauc_pos": 0.764,
+     "d_dlogloss_neg": 0.748,
+     "d_dlogloss_ic95_bajo_0": 0.208,
+     "e_pendiente_0.5_1.5": 0.408,
+     "int4_completo_a_holm2_d_e": 0.044
+    },
+    "dauc_mediana": 0.082,
+    "dauc_p05_p95": [
+     -0.114,
+     0.3
+    ],
+    "ancho_ic_mediano": 0.386,
+    "pendiente_mediana_p10_p90": [
+     1.158,
+     -0.145,
+     2.421
+    ]
+   },
+   "desarrollo_rho0.0": {
+    "a0": 0.55,
+    "a1": 0.73,
+    "rho": 0.0,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.924,
+     "a_dauc_ic_excluye_0_holm2": 0.884,
+     "a_estratificada_ic95_excluye_0": 0.792,
+     "b_auc_modelo_ic95_sobre_0.5": 0.988,
+     "c_signo_dauc_pos": 1.0,
+     "d_dlogloss_neg": 1.0,
+     "d_dlogloss_ic95_bajo_0": 0.748,
+     "e_pendiente_0.5_1.5": 0.976,
+     "int4_completo_a_holm2_d_e": 0.864
+    },
+    "dauc_mediana": 0.172,
+    "dauc_p05_p95": [
+     0.098,
+     0.256
+    ],
+    "ancho_ic_mediano": 0.171,
+    "pendiente_mediana_p10_p90": [
+     0.999,
+     0.753,
+     1.313
+    ]
+   },
+   "desarrollo_rho0.3": {
+    "a0": 0.55,
+    "a1": 0.73,
+    "rho": 0.3,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.596,
+     "a_dauc_ic_excluye_0_holm2": 0.536,
+     "a_estratificada_ic95_excluye_0": 0.532,
+     "b_auc_modelo_ic95_sobre_0.5": 0.812,
+     "c_signo_dauc_pos": 0.984,
+     "d_dlogloss_neg": 0.916,
+     "d_dlogloss_ic95_bajo_0": 0.444,
+     "e_pendiente_0.5_1.5": 0.744,
+     "int4_completo_a_holm2_d_e": 0.38
+    },
+    "dauc_mediana": 0.167,
+    "dauc_p05_p95": [
+     0.046,
+     0.324
+    ],
+    "ancho_ic_mediano": 0.284,
+    "pendiente_mediana_p10_p90": [
+     1.098,
+     0.529,
+     1.643
+    ]
+   },
+   "desarrollo_rho0.6": {
+    "a0": 0.55,
+    "a1": 0.73,
+    "rho": 0.6,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.464,
+     "a_dauc_ic_excluye_0_holm2": 0.4,
+     "a_estratificada_ic95_excluye_0": 0.4,
+     "b_auc_modelo_ic95_sobre_0.5": 0.656,
+     "c_signo_dauc_pos": 0.936,
+     "d_dlogloss_neg": 0.852,
+     "d_dlogloss_ic95_bajo_0": 0.324,
+     "e_pendiente_0.5_1.5": 0.568,
+     "int4_completo_a_holm2_d_e": 0.216
+    },
+    "dauc_mediana": 0.17,
+    "dauc_p05_p95": [
+     -0.015,
+     0.389
+    ],
+    "ancho_ic_mediano": 0.373,
+    "pendiente_mediana_p10_p90": [
+     1.172,
+     0.376,
+     1.932
+    ]
+   },
+   "desarrollo_estratificado_rho0.0": {
+    "a0": 0.55,
+    "a1": 0.75,
+    "rho": 0.0,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.956,
+     "a_dauc_ic_excluye_0_holm2": 0.928,
+     "a_estratificada_ic95_excluye_0": 0.876,
+     "b_auc_modelo_ic95_sobre_0.5": 0.992,
+     "c_signo_dauc_pos": 1.0,
+     "d_dlogloss_neg": 1.0,
+     "d_dlogloss_ic95_bajo_0": 0.812,
+     "e_pendiente_0.5_1.5": 0.988,
+     "int4_completo_a_holm2_d_e": 0.916
+    },
+    "dauc_mediana": 0.192,
+    "dauc_p05_p95": [
+     0.118,
+     0.275
+    ],
+    "ancho_ic_mediano": 0.167,
+    "pendiente_mediana_p10_p90": [
+     1.0,
+     0.771,
+     1.286
+    ]
+   },
+   "desarrollo_estratificado_rho0.3": {
+    "a0": 0.55,
+    "a1": 0.75,
+    "rho": 0.3,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.672,
+     "a_dauc_ic_excluye_0_holm2": 0.604,
+     "a_estratificada_ic95_excluye_0": 0.608,
+     "b_auc_modelo_ic95_sobre_0.5": 0.872,
+     "c_signo_dauc_pos": 0.988,
+     "d_dlogloss_neg": 0.932,
+     "d_dlogloss_ic95_bajo_0": 0.484,
+     "e_pendiente_0.5_1.5": 0.76,
+     "int4_completo_a_holm2_d_e": 0.448
+    },
+    "dauc_mediana": 0.186,
+    "dauc_p05_p95": [
+     0.066,
+     0.342
+    ],
+    "ancho_ic_mediano": 0.28,
+    "pendiente_mediana_p10_p90": [
+     1.1,
+     0.576,
+     1.592
+    ]
+   },
+   "desarrollo_estratificado_rho0.6": {
+    "a0": 0.55,
+    "a1": 0.75,
+    "rho": 0.6,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.536,
+     "a_dauc_ic_excluye_0_holm2": 0.452,
+     "a_estratificada_ic95_excluye_0": 0.448,
+     "b_auc_modelo_ic95_sobre_0.5": 0.728,
+     "c_signo_dauc_pos": 0.956,
+     "d_dlogloss_neg": 0.88,
+     "d_dlogloss_ic95_bajo_0": 0.36,
+     "e_pendiente_0.5_1.5": 0.604,
+     "int4_completo_a_holm2_d_e": 0.252
+    },
+    "dauc_mediana": 0.19,
+    "dauc_p05_p95": [
+     0.01,
+     0.407
+    ],
+    "ancho_ic_mediano": 0.369,
+    "pendiente_mediana_p10_p90": [
+     1.159,
+     0.443,
+     1.855
+    ]
+   },
+   "mde_sim_rho0.3_holm2": {
+    "rejilla_dauc": [
+     0.05,
+     0.1,
+     0.15,
+     0.2,
+     0.25,
+     0.3,
+     0.35,
+     0.4
+    ],
+    "potencia": [
+     0.072,
+     0.192,
+     0.448,
+     0.616,
+     0.864,
+     0.968,
+     0.992,
+     1.0
+    ],
+    "mde_80": 0.237
+   },
+   "mde_sim_rho0.3_auc_sobre_0.5": {
+    "rejilla_dauc": [
+     0.05,
+     0.1,
+     0.15,
+     0.2,
+     0.25,
+     0.3,
+     0.35,
+     0.4
+    ],
+    "potencia": [
+     0.12,
+     0.264,
+     0.464,
+     0.664,
+     0.84,
+     0.952,
+     0.984,
+     1.0
+    ],
+    "mde_80": 0.239,
+    "nota": "rejilla en AUC − 0,5 del modelo (no ΔAUC)"
+   }
+  },
+  "nucleo_AUS_CHE|T1|sin_2020": {
+   "H0_rho0.0": {
+    "a0": 0.55,
+    "a1": 0.55,
+    "rho": 0.0,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.076,
+     "a_dauc_ic_excluye_0_holm2": 0.06,
+     "a_estratificada_ic95_excluye_0": 0.028,
+     "b_auc_modelo_ic95_sobre_0.5": 0.216,
+     "c_signo_dauc_pos": 0.528,
+     "d_dlogloss_neg": 0.532,
+     "d_dlogloss_ic95_bajo_0": 0.052,
+     "e_pendiente_0.5_1.5": 0.356,
+     "int4_completo_a_holm2_d_e": 0.008
+    },
+    "dauc_mediana": 0.003,
+    "dauc_p05_p95": [
+     -0.079,
+     0.101
+    ],
+    "ancho_ic_mediano": 0.22,
+    "pendiente_mediana_p10_p90": [
+     1.078,
+     -0.368,
+     2.542
+    ]
+   },
+   "H0_rho0.3": {
+    "a0": 0.55,
+    "a1": 0.55,
+    "rho": 0.3,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.048,
+     "a_dauc_ic_excluye_0_holm2": 0.04,
+     "a_estratificada_ic95_excluye_0": 0.024,
+     "b_auc_modelo_ic95_sobre_0.5": 0.136,
+     "c_signo_dauc_pos": 0.496,
+     "d_dlogloss_neg": 0.488,
+     "d_dlogloss_ic95_bajo_0": 0.04,
+     "e_pendiente_0.5_1.5": 0.176,
+     "int4_completo_a_holm2_d_e": 0.008
+    },
+    "dauc_mediana": -0.002,
+    "dauc_p05_p95": [
+     -0.157,
+     0.146
+    ],
+    "ancho_ic_mediano": 0.334,
+    "pendiente_mediana_p10_p90": [
+     0.939,
+     -1.602,
+     3.636
+    ]
+   },
+   "H0_rho0.6": {
+    "a0": 0.55,
+    "a1": 0.55,
+    "rho": 0.6,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.052,
+     "a_dauc_ic_excluye_0_holm2": 0.04,
+     "a_estratificada_ic95_excluye_0": 0.044,
+     "b_auc_modelo_ic95_sobre_0.5": 0.1,
+     "c_signo_dauc_pos": 0.48,
+     "d_dlogloss_neg": 0.488,
+     "d_dlogloss_ic95_bajo_0": 0.056,
+     "e_pendiente_0.5_1.5": 0.168,
+     "int4_completo_a_holm2_d_e": 0.008
+    },
+    "dauc_mediana": -0.004,
+    "dauc_p05_p95": [
+     -0.198,
+     0.208
+    ],
+    "ancho_ic_mediano": 0.421,
+    "pendiente_mediana_p10_p90": [
+     0.957,
+     -2.405,
+     4.493
+    ]
+   },
+   "mitad_rho0.0": {
+    "a0": 0.55,
+    "a1": 0.64,
+    "rho": 0.0,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.384,
+     "a_dauc_ic_excluye_0_holm2": 0.316,
+     "a_estratificada_ic95_excluye_0": 0.2,
+     "b_auc_modelo_ic95_sobre_0.5": 0.66,
+     "c_signo_dauc_pos": 0.96,
+     "d_dlogloss_neg": 0.928,
+     "d_dlogloss_ic95_bajo_0": 0.288,
+     "e_pendiente_0.5_1.5": 0.776,
+     "int4_completo_a_holm2_d_e": 0.236
+    },
+    "dauc_mediana": 0.094,
+    "dauc_p05_p95": [
+     0.014,
+     0.186
+    ],
+    "ancho_ic_mediano": 0.221,
+    "pendiente_mediana_p10_p90": [
+     1.04,
+     0.504,
+     1.558
+    ]
+   },
+   "mitad_rho0.3": {
+    "a0": 0.55,
+    "a1": 0.64,
+    "rho": 0.3,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.248,
+     "a_dauc_ic_excluye_0_holm2": 0.184,
+     "a_estratificada_ic95_excluye_0": 0.168,
+     "b_auc_modelo_ic95_sobre_0.5": 0.376,
+     "c_signo_dauc_pos": 0.856,
+     "d_dlogloss_neg": 0.764,
+     "d_dlogloss_ic95_bajo_0": 0.164,
+     "e_pendiente_0.5_1.5": 0.464,
+     "int4_completo_a_holm2_d_e": 0.052
+    },
+    "dauc_mediana": 0.088,
+    "dauc_p05_p95": [
+     -0.066,
+     0.24
+    ],
+    "ancho_ic_mediano": 0.331,
+    "pendiente_mediana_p10_p90": [
+     1.047,
+     0.153,
+     1.985
+    ]
+   },
+   "mitad_rho0.6": {
+    "a0": 0.55,
+    "a1": 0.64,
+    "rho": 0.6,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.172,
+     "a_dauc_ic_excluye_0_holm2": 0.104,
+     "a_estratificada_ic95_excluye_0": 0.124,
+     "b_auc_modelo_ic95_sobre_0.5": 0.284,
+     "c_signo_dauc_pos": 0.8,
+     "d_dlogloss_neg": 0.7,
+     "d_dlogloss_ic95_bajo_0": 0.136,
+     "e_pendiente_0.5_1.5": 0.384,
+     "int4_completo_a_holm2_d_e": 0.024
+    },
+    "dauc_mediana": 0.085,
+    "dauc_p05_p95": [
+     -0.103,
+     0.282
+    ],
+    "ancho_ic_mediano": 0.414,
+    "pendiente_mediana_p10_p90": [
+     1.025,
+     -0.184,
+     2.338
+    ]
+   },
+   "desarrollo_rho0.0": {
+    "a0": 0.55,
+    "a1": 0.73,
+    "rho": 0.0,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.848,
+     "a_dauc_ic_excluye_0_holm2": 0.752,
+     "a_estratificada_ic95_excluye_0": 0.688,
+     "b_auc_modelo_ic95_sobre_0.5": 0.952,
+     "c_signo_dauc_pos": 1.0,
+     "d_dlogloss_neg": 0.992,
+     "d_dlogloss_ic95_bajo_0": 0.62,
+     "e_pendiente_0.5_1.5": 0.924,
+     "int4_completo_a_holm2_d_e": 0.7
+    },
+    "dauc_mediana": 0.183,
+    "dauc_p05_p95": [
+     0.099,
+     0.279
+    ],
+    "ancho_ic_mediano": 0.215,
+    "pendiente_mediana_p10_p90": [
+     1.035,
+     0.704,
+     1.362
+    ]
+   },
+   "desarrollo_rho0.3": {
+    "a0": 0.55,
+    "a1": 0.73,
+    "rho": 0.3,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.576,
+     "a_dauc_ic_excluye_0_holm2": 0.468,
+     "a_estratificada_ic95_excluye_0": 0.444,
+     "b_auc_modelo_ic95_sobre_0.5": 0.724,
+     "c_signo_dauc_pos": 0.984,
+     "d_dlogloss_neg": 0.936,
+     "d_dlogloss_ic95_bajo_0": 0.308,
+     "e_pendiente_0.5_1.5": 0.708,
+     "int4_completo_a_holm2_d_e": 0.296
+    },
+    "dauc_mediana": 0.183,
+    "dauc_p05_p95": [
+     0.026,
+     0.322
+    ],
+    "ancho_ic_mediano": 0.312,
+    "pendiente_mediana_p10_p90": [
+     1.02,
+     0.533,
+     1.622
+    ]
+   },
+   "desarrollo_rho0.6": {
+    "a0": 0.55,
+    "a1": 0.73,
+    "rho": 0.6,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.44,
+     "a_dauc_ic_excluye_0_holm2": 0.38,
+     "a_estratificada_ic95_excluye_0": 0.348,
+     "b_auc_modelo_ic95_sobre_0.5": 0.564,
+     "c_signo_dauc_pos": 0.932,
+     "d_dlogloss_neg": 0.852,
+     "d_dlogloss_ic95_bajo_0": 0.244,
+     "e_pendiente_0.5_1.5": 0.564,
+     "int4_completo_a_holm2_d_e": 0.172
+    },
+    "dauc_mediana": 0.177,
+    "dauc_p05_p95": [
+     -0.01,
+     0.353
+    ],
+    "ancho_ic_mediano": 0.396,
+    "pendiente_mediana_p10_p90": [
+     1.062,
+     0.399,
+     1.978
+    ]
+   },
+   "desarrollo_estratificado_rho0.0": {
+    "a0": 0.55,
+    "a1": 0.75,
+    "rho": 0.0,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.892,
+     "a_dauc_ic_excluye_0_holm2": 0.824,
+     "a_estratificada_ic95_excluye_0": 0.772,
+     "b_auc_modelo_ic95_sobre_0.5": 0.972,
+     "c_signo_dauc_pos": 1.0,
+     "d_dlogloss_neg": 0.996,
+     "d_dlogloss_ic95_bajo_0": 0.7,
+     "e_pendiente_0.5_1.5": 0.944,
+     "int4_completo_a_holm2_d_e": 0.78
+    },
+    "dauc_mediana": 0.203,
+    "dauc_p05_p95": [
+     0.119,
+     0.297
+    ],
+    "ancho_ic_mediano": 0.212,
+    "pendiente_mediana_p10_p90": [
+     1.033,
+     0.72,
+     1.344
+    ]
+   },
+   "desarrollo_estratificado_rho0.3": {
+    "a0": 0.55,
+    "a1": 0.75,
+    "rho": 0.3,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.668,
+     "a_dauc_ic_excluye_0_holm2": 0.552,
+     "a_estratificada_ic95_excluye_0": 0.52,
+     "b_auc_modelo_ic95_sobre_0.5": 0.8,
+     "c_signo_dauc_pos": 0.992,
+     "d_dlogloss_neg": 0.936,
+     "d_dlogloss_ic95_bajo_0": 0.364,
+     "e_pendiente_0.5_1.5": 0.752,
+     "int4_completo_a_holm2_d_e": 0.38
+    },
+    "dauc_mediana": 0.205,
+    "dauc_p05_p95": [
+     0.05,
+     0.34
+    ],
+    "ancho_ic_mediano": 0.311,
+    "pendiente_mediana_p10_p90": [
+     1.018,
+     0.559,
+     1.588
+    ]
+   },
+   "desarrollo_estratificado_rho0.6": {
+    "a0": 0.55,
+    "a1": 0.75,
+    "rho": 0.6,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.504,
+     "a_dauc_ic_excluye_0_holm2": 0.424,
+     "a_estratificada_ic95_excluye_0": 0.396,
+     "b_auc_modelo_ic95_sobre_0.5": 0.636,
+     "c_signo_dauc_pos": 0.964,
+     "d_dlogloss_neg": 0.868,
+     "d_dlogloss_ic95_bajo_0": 0.28,
+     "e_pendiente_0.5_1.5": 0.604,
+     "int4_completo_a_holm2_d_e": 0.196
+    },
+    "dauc_mediana": 0.197,
+    "dauc_p05_p95": [
+     0.013,
+     0.366
+    ],
+    "ancho_ic_mediano": 0.394,
+    "pendiente_mediana_p10_p90": [
+     1.076,
+     0.436,
+     1.933
+    ]
+   },
+   "mde_sim_rho0.3_holm2": {
+    "rejilla_dauc": [
+     0.05,
+     0.1,
+     0.15,
+     0.2,
+     0.25,
+     0.3,
+     0.35,
+     0.4
+    ],
+    "potencia": [
+     0.096,
+     0.232,
+     0.384,
+     0.568,
+     0.816,
+     0.944,
+     0.992,
+     1.0
+    ],
+    "mde_80": 0.247
+   },
+   "mde_sim_rho0.3_auc_sobre_0.5": {
+    "rejilla_dauc": [
+     0.05,
+     0.1,
+     0.15,
+     0.2,
+     0.25,
+     0.3,
+     0.35,
+     0.4
+    ],
+    "potencia": [
+     0.12,
+     0.232,
+     0.464,
+     0.68,
+     0.864,
+     0.912,
+     0.976,
+     1.0
+    ],
+    "mde_80": 0.233,
+    "nota": "rejilla en AUC − 0,5 del modelo (no ΔAUC)"
+   }
+  },
+  "nucleo_AUS_CHE|T2|con_2020": {
+   "H0_rho0.0": {
+    "a0": 0.58,
+    "a1": 0.58,
+    "rho": 0.0,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.032,
+     "a_dauc_ic_excluye_0_holm2": 0.032,
+     "a_estratificada_ic95_excluye_0": 0.0,
+     "b_auc_modelo_ic95_sobre_0.5": 0.204,
+     "c_signo_dauc_pos": 0.484,
+     "d_dlogloss_neg": 0.464,
+     "d_dlogloss_ic95_bajo_0": 0.072,
+     "e_pendiente_0.5_1.5": 0.364,
+     "int4_completo_a_holm2_d_e": 0.004
+    },
+    "dauc_mediana": -0.001,
+    "dauc_p05_p95": [
+     -0.13,
+     0.114
+    ],
+    "ancho_ic_mediano": 0.36,
+    "pendiente_mediana_p10_p90": [
+     1.021,
+     -0.122,
+     2.667
+    ]
+   },
+   "H0_rho0.3": {
+    "a0": 0.58,
+    "a1": 0.58,
+    "rho": 0.3,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.024,
+     "a_dauc_ic_excluye_0_holm2": 0.024,
+     "a_estratificada_ic95_excluye_0": 0.004,
+     "b_auc_modelo_ic95_sobre_0.5": 0.176,
+     "c_signo_dauc_pos": 0.508,
+     "d_dlogloss_neg": 0.484,
+     "d_dlogloss_ic95_bajo_0": 0.104,
+     "e_pendiente_0.5_1.5": 0.168,
+     "int4_completo_a_holm2_d_e": 0.0
+    },
+    "dauc_mediana": 0.002,
+    "dauc_p05_p95": [
+     -0.207,
+     0.246
+    ],
+    "ancho_ic_mediano": 0.438,
+    "pendiente_mediana_p10_p90": [
+     1.452,
+     -1.129,
+     3.551
+    ]
+   },
+   "H0_rho0.6": {
+    "a0": 0.58,
+    "a1": 0.58,
+    "rho": 0.6,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.04,
+     "a_dauc_ic_excluye_0_holm2": 0.032,
+     "a_estratificada_ic95_excluye_0": 0.012,
+     "b_auc_modelo_ic95_sobre_0.5": 0.172,
+     "c_signo_dauc_pos": 0.52,
+     "d_dlogloss_neg": 0.512,
+     "d_dlogloss_ic95_bajo_0": 0.092,
+     "e_pendiente_0.5_1.5": 0.12,
+     "int4_completo_a_holm2_d_e": 0.004
+    },
+    "dauc_mediana": 0.013,
+    "dauc_p05_p95": [
+     -0.272,
+     0.319
+    ],
+    "ancho_ic_mediano": 0.52,
+    "pendiente_mediana_p10_p90": [
+     1.576,
+     -1.903,
+     4.732
+    ]
+   },
+   "mitad_rho0.0": {
+    "a0": 0.58,
+    "a1": 0.675,
+    "rho": 0.0,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.2,
+     "a_dauc_ic_excluye_0_holm2": 0.168,
+     "a_estratificada_ic95_excluye_0": 0.004,
+     "b_auc_modelo_ic95_sobre_0.5": 0.544,
+     "c_signo_dauc_pos": 0.884,
+     "d_dlogloss_neg": 0.844,
+     "d_dlogloss_ic95_bajo_0": 0.272,
+     "e_pendiente_0.5_1.5": 0.668,
+     "int4_completo_a_holm2_d_e": 0.096
+    },
+    "dauc_mediana": 0.093,
+    "dauc_p05_p95": [
+     -0.038,
+     0.203
+    ],
+    "ancho_ic_mediano": 0.344,
+    "pendiente_mediana_p10_p90": [
+     1.052,
+     0.473,
+     1.858
+    ]
+   },
+   "mitad_rho0.3": {
+    "a0": 0.58,
+    "a1": 0.675,
+    "rho": 0.3,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.152,
+     "a_dauc_ic_excluye_0_holm2": 0.1,
+     "a_estratificada_ic95_excluye_0": 0.024,
+     "b_auc_modelo_ic95_sobre_0.5": 0.436,
+     "c_signo_dauc_pos": 0.764,
+     "d_dlogloss_neg": 0.76,
+     "d_dlogloss_ic95_bajo_0": 0.28,
+     "e_pendiente_0.5_1.5": 0.436,
+     "int4_completo_a_holm2_d_e": 0.028
+    },
+    "dauc_mediana": 0.095,
+    "dauc_p05_p95": [
+     -0.106,
+     0.325
+    ],
+    "ancho_ic_mediano": 0.407,
+    "pendiente_mediana_p10_p90": [
+     1.218,
+     0.148,
+     2.288
+    ]
+   },
+   "mitad_rho0.6": {
+    "a0": 0.58,
+    "a1": 0.675,
+    "rho": 0.6,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.164,
+     "a_dauc_ic_excluye_0_holm2": 0.104,
+     "a_estratificada_ic95_excluye_0": 0.02,
+     "b_auc_modelo_ic95_sobre_0.5": 0.396,
+     "c_signo_dauc_pos": 0.716,
+     "d_dlogloss_neg": 0.744,
+     "d_dlogloss_ic95_bajo_0": 0.26,
+     "e_pendiente_0.5_1.5": 0.292,
+     "int4_completo_a_holm2_d_e": 0.008
+    },
+    "dauc_mediana": 0.091,
+    "dauc_p05_p95": [
+     -0.179,
+     0.399
+    ],
+    "ancho_ic_mediano": 0.497,
+    "pendiente_mediana_p10_p90": [
+     1.435,
+     -0.214,
+     2.941
+    ]
+   },
+   "desarrollo_rho0.0": {
+    "a0": 0.58,
+    "a1": 0.77,
+    "rho": 0.0,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.576,
+     "a_dauc_ic_excluye_0_holm2": 0.46,
+     "a_estratificada_ic95_excluye_0": 0.052,
+     "b_auc_modelo_ic95_sobre_0.5": 0.884,
+     "c_signo_dauc_pos": 0.992,
+     "d_dlogloss_neg": 0.988,
+     "d_dlogloss_ic95_bajo_0": 0.596,
+     "e_pendiente_0.5_1.5": 0.804,
+     "int4_completo_a_holm2_d_e": 0.36
+    },
+    "dauc_mediana": 0.184,
+    "dauc_p05_p95": [
+     0.06,
+     0.297
+    ],
+    "ancho_ic_mediano": 0.324,
+    "pendiente_mediana_p10_p90": [
+     1.039,
+     0.655,
+     1.694
+    ]
+   },
+   "desarrollo_rho0.3": {
+    "a0": 0.58,
+    "a1": 0.77,
+    "rho": 0.3,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.476,
+     "a_dauc_ic_excluye_0_holm2": 0.372,
+     "a_estratificada_ic95_excluye_0": 0.048,
+     "b_auc_modelo_ic95_sobre_0.5": 0.796,
+     "c_signo_dauc_pos": 0.952,
+     "d_dlogloss_neg": 0.896,
+     "d_dlogloss_ic95_bajo_0": 0.468,
+     "e_pendiente_0.5_1.5": 0.568,
+     "int4_completo_a_holm2_d_e": 0.192
+    },
+    "dauc_mediana": 0.19,
+    "dauc_p05_p95": [
+     0.003,
+     0.403
+    ],
+    "ancho_ic_mediano": 0.402,
+    "pendiente_mediana_p10_p90": [
+     1.186,
+     0.476,
+     1.984
+    ]
+   },
+   "desarrollo_rho0.6": {
+    "a0": 0.58,
+    "a1": 0.77,
+    "rho": 0.6,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.412,
+     "a_dauc_ic_excluye_0_holm2": 0.328,
+     "a_estratificada_ic95_excluye_0": 0.052,
+     "b_auc_modelo_ic95_sobre_0.5": 0.708,
+     "c_signo_dauc_pos": 0.904,
+     "d_dlogloss_neg": 0.84,
+     "d_dlogloss_ic95_bajo_0": 0.392,
+     "e_pendiente_0.5_1.5": 0.404,
+     "int4_completo_a_holm2_d_e": 0.092
+    },
+    "dauc_mediana": 0.187,
+    "dauc_p05_p95": [
+     -0.059,
+     0.483
+    ],
+    "ancho_ic_mediano": 0.468,
+    "pendiente_mediana_p10_p90": [
+     1.384,
+     0.326,
+     2.583
+    ]
+   },
+   "desarrollo_estratificado_rho0.0": {
+    "a0": 0.58,
+    "a1": 0.77,
+    "rho": 0.0,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.576,
+     "a_dauc_ic_excluye_0_holm2": 0.46,
+     "a_estratificada_ic95_excluye_0": 0.052,
+     "b_auc_modelo_ic95_sobre_0.5": 0.884,
+     "c_signo_dauc_pos": 0.992,
+     "d_dlogloss_neg": 0.988,
+     "d_dlogloss_ic95_bajo_0": 0.596,
+     "e_pendiente_0.5_1.5": 0.804,
+     "int4_completo_a_holm2_d_e": 0.36
+    },
+    "dauc_mediana": 0.184,
+    "dauc_p05_p95": [
+     0.06,
+     0.297
+    ],
+    "ancho_ic_mediano": 0.324,
+    "pendiente_mediana_p10_p90": [
+     1.039,
+     0.655,
+     1.694
+    ]
+   },
+   "desarrollo_estratificado_rho0.3": {
+    "a0": 0.58,
+    "a1": 0.77,
+    "rho": 0.3,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.476,
+     "a_dauc_ic_excluye_0_holm2": 0.372,
+     "a_estratificada_ic95_excluye_0": 0.048,
+     "b_auc_modelo_ic95_sobre_0.5": 0.796,
+     "c_signo_dauc_pos": 0.952,
+     "d_dlogloss_neg": 0.896,
+     "d_dlogloss_ic95_bajo_0": 0.468,
+     "e_pendiente_0.5_1.5": 0.568,
+     "int4_completo_a_holm2_d_e": 0.192
+    },
+    "dauc_mediana": 0.19,
+    "dauc_p05_p95": [
+     0.003,
+     0.403
+    ],
+    "ancho_ic_mediano": 0.402,
+    "pendiente_mediana_p10_p90": [
+     1.186,
+     0.476,
+     1.984
+    ]
+   },
+   "desarrollo_estratificado_rho0.6": {
+    "a0": 0.58,
+    "a1": 0.77,
+    "rho": 0.6,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.412,
+     "a_dauc_ic_excluye_0_holm2": 0.328,
+     "a_estratificada_ic95_excluye_0": 0.052,
+     "b_auc_modelo_ic95_sobre_0.5": 0.708,
+     "c_signo_dauc_pos": 0.904,
+     "d_dlogloss_neg": 0.84,
+     "d_dlogloss_ic95_bajo_0": 0.392,
+     "e_pendiente_0.5_1.5": 0.404,
+     "int4_completo_a_holm2_d_e": 0.092
+    },
+    "dauc_mediana": 0.187,
+    "dauc_p05_p95": [
+     -0.059,
+     0.483
+    ],
+    "ancho_ic_mediano": 0.468,
+    "pendiente_mediana_p10_p90": [
+     1.384,
+     0.326,
+     2.583
+    ]
+   },
+   "mde_sim_rho0.3_holm2": {
+    "rejilla_dauc": [
+     0.05,
+     0.1,
+     0.15,
+     0.2,
+     0.25,
+     0.3,
+     0.35
+    ],
+    "potencia": [
+     0.104,
+     0.152,
+     0.28,
+     0.448,
+     0.696,
+     0.872,
+     0.96
+    ],
+    "mde_80": 0.28
+   },
+   "mde_sim_rho0.3_auc_sobre_0.5": {
+    "rejilla_dauc": [
+     0.05,
+     0.1,
+     0.15,
+     0.2,
+     0.25,
+     0.3,
+     0.35,
+     0.4
+    ],
+    "potencia": [
+     0.136,
+     0.248,
+     0.416,
+     0.536,
+     0.688,
+     0.896,
+     0.928,
+     0.992
+    ],
+    "mde_80": 0.277,
+    "nota": "rejilla en AUC − 0,5 del modelo (no ΔAUC)"
+   }
+  },
+  "nucleo_AUS_CHE|T2|sin_2020": {
+   "H0_rho0.0": {
+    "a0": 0.58,
+    "a1": 0.58,
+    "rho": 0.0,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.032,
+     "a_dauc_ic_excluye_0_holm2": 0.032,
+     "a_estratificada_ic95_excluye_0": 0.0,
+     "b_auc_modelo_ic95_sobre_0.5": 0.204,
+     "c_signo_dauc_pos": 0.484,
+     "d_dlogloss_neg": 0.464,
+     "d_dlogloss_ic95_bajo_0": 0.072,
+     "e_pendiente_0.5_1.5": 0.364,
+     "int4_completo_a_holm2_d_e": 0.004
+    },
+    "dauc_mediana": -0.001,
+    "dauc_p05_p95": [
+     -0.13,
+     0.114
+    ],
+    "ancho_ic_mediano": 0.36,
+    "pendiente_mediana_p10_p90": [
+     1.021,
+     -0.122,
+     2.667
+    ]
+   },
+   "H0_rho0.3": {
+    "a0": 0.58,
+    "a1": 0.58,
+    "rho": 0.3,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.024,
+     "a_dauc_ic_excluye_0_holm2": 0.024,
+     "a_estratificada_ic95_excluye_0": 0.004,
+     "b_auc_modelo_ic95_sobre_0.5": 0.176,
+     "c_signo_dauc_pos": 0.508,
+     "d_dlogloss_neg": 0.484,
+     "d_dlogloss_ic95_bajo_0": 0.104,
+     "e_pendiente_0.5_1.5": 0.168,
+     "int4_completo_a_holm2_d_e": 0.0
+    },
+    "dauc_mediana": 0.002,
+    "dauc_p05_p95": [
+     -0.207,
+     0.246
+    ],
+    "ancho_ic_mediano": 0.438,
+    "pendiente_mediana_p10_p90": [
+     1.452,
+     -1.129,
+     3.551
+    ]
+   },
+   "H0_rho0.6": {
+    "a0": 0.58,
+    "a1": 0.58,
+    "rho": 0.6,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.04,
+     "a_dauc_ic_excluye_0_holm2": 0.032,
+     "a_estratificada_ic95_excluye_0": 0.012,
+     "b_auc_modelo_ic95_sobre_0.5": 0.172,
+     "c_signo_dauc_pos": 0.52,
+     "d_dlogloss_neg": 0.512,
+     "d_dlogloss_ic95_bajo_0": 0.092,
+     "e_pendiente_0.5_1.5": 0.12,
+     "int4_completo_a_holm2_d_e": 0.004
+    },
+    "dauc_mediana": 0.013,
+    "dauc_p05_p95": [
+     -0.272,
+     0.319
+    ],
+    "ancho_ic_mediano": 0.52,
+    "pendiente_mediana_p10_p90": [
+     1.576,
+     -1.903,
+     4.732
+    ]
+   },
+   "mitad_rho0.0": {
+    "a0": 0.58,
+    "a1": 0.675,
+    "rho": 0.0,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.2,
+     "a_dauc_ic_excluye_0_holm2": 0.168,
+     "a_estratificada_ic95_excluye_0": 0.004,
+     "b_auc_modelo_ic95_sobre_0.5": 0.544,
+     "c_signo_dauc_pos": 0.884,
+     "d_dlogloss_neg": 0.844,
+     "d_dlogloss_ic95_bajo_0": 0.272,
+     "e_pendiente_0.5_1.5": 0.668,
+     "int4_completo_a_holm2_d_e": 0.096
+    },
+    "dauc_mediana": 0.093,
+    "dauc_p05_p95": [
+     -0.038,
+     0.203
+    ],
+    "ancho_ic_mediano": 0.344,
+    "pendiente_mediana_p10_p90": [
+     1.052,
+     0.473,
+     1.858
+    ]
+   },
+   "mitad_rho0.3": {
+    "a0": 0.58,
+    "a1": 0.675,
+    "rho": 0.3,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.152,
+     "a_dauc_ic_excluye_0_holm2": 0.1,
+     "a_estratificada_ic95_excluye_0": 0.024,
+     "b_auc_modelo_ic95_sobre_0.5": 0.436,
+     "c_signo_dauc_pos": 0.764,
+     "d_dlogloss_neg": 0.76,
+     "d_dlogloss_ic95_bajo_0": 0.28,
+     "e_pendiente_0.5_1.5": 0.436,
+     "int4_completo_a_holm2_d_e": 0.028
+    },
+    "dauc_mediana": 0.095,
+    "dauc_p05_p95": [
+     -0.106,
+     0.325
+    ],
+    "ancho_ic_mediano": 0.407,
+    "pendiente_mediana_p10_p90": [
+     1.218,
+     0.148,
+     2.288
+    ]
+   },
+   "mitad_rho0.6": {
+    "a0": 0.58,
+    "a1": 0.675,
+    "rho": 0.6,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.164,
+     "a_dauc_ic_excluye_0_holm2": 0.104,
+     "a_estratificada_ic95_excluye_0": 0.02,
+     "b_auc_modelo_ic95_sobre_0.5": 0.396,
+     "c_signo_dauc_pos": 0.716,
+     "d_dlogloss_neg": 0.744,
+     "d_dlogloss_ic95_bajo_0": 0.26,
+     "e_pendiente_0.5_1.5": 0.292,
+     "int4_completo_a_holm2_d_e": 0.008
+    },
+    "dauc_mediana": 0.091,
+    "dauc_p05_p95": [
+     -0.179,
+     0.399
+    ],
+    "ancho_ic_mediano": 0.497,
+    "pendiente_mediana_p10_p90": [
+     1.435,
+     -0.214,
+     2.941
+    ]
+   },
+   "desarrollo_rho0.0": {
+    "a0": 0.58,
+    "a1": 0.77,
+    "rho": 0.0,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.576,
+     "a_dauc_ic_excluye_0_holm2": 0.46,
+     "a_estratificada_ic95_excluye_0": 0.052,
+     "b_auc_modelo_ic95_sobre_0.5": 0.884,
+     "c_signo_dauc_pos": 0.992,
+     "d_dlogloss_neg": 0.988,
+     "d_dlogloss_ic95_bajo_0": 0.596,
+     "e_pendiente_0.5_1.5": 0.804,
+     "int4_completo_a_holm2_d_e": 0.36
+    },
+    "dauc_mediana": 0.184,
+    "dauc_p05_p95": [
+     0.06,
+     0.297
+    ],
+    "ancho_ic_mediano": 0.324,
+    "pendiente_mediana_p10_p90": [
+     1.039,
+     0.655,
+     1.694
+    ]
+   },
+   "desarrollo_rho0.3": {
+    "a0": 0.58,
+    "a1": 0.77,
+    "rho": 0.3,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.476,
+     "a_dauc_ic_excluye_0_holm2": 0.372,
+     "a_estratificada_ic95_excluye_0": 0.048,
+     "b_auc_modelo_ic95_sobre_0.5": 0.796,
+     "c_signo_dauc_pos": 0.952,
+     "d_dlogloss_neg": 0.896,
+     "d_dlogloss_ic95_bajo_0": 0.468,
+     "e_pendiente_0.5_1.5": 0.568,
+     "int4_completo_a_holm2_d_e": 0.192
+    },
+    "dauc_mediana": 0.19,
+    "dauc_p05_p95": [
+     0.003,
+     0.403
+    ],
+    "ancho_ic_mediano": 0.402,
+    "pendiente_mediana_p10_p90": [
+     1.186,
+     0.476,
+     1.984
+    ]
+   },
+   "desarrollo_rho0.6": {
+    "a0": 0.58,
+    "a1": 0.77,
+    "rho": 0.6,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.412,
+     "a_dauc_ic_excluye_0_holm2": 0.328,
+     "a_estratificada_ic95_excluye_0": 0.052,
+     "b_auc_modelo_ic95_sobre_0.5": 0.708,
+     "c_signo_dauc_pos": 0.904,
+     "d_dlogloss_neg": 0.84,
+     "d_dlogloss_ic95_bajo_0": 0.392,
+     "e_pendiente_0.5_1.5": 0.404,
+     "int4_completo_a_holm2_d_e": 0.092
+    },
+    "dauc_mediana": 0.187,
+    "dauc_p05_p95": [
+     -0.059,
+     0.483
+    ],
+    "ancho_ic_mediano": 0.468,
+    "pendiente_mediana_p10_p90": [
+     1.384,
+     0.326,
+     2.583
+    ]
+   },
+   "desarrollo_estratificado_rho0.0": {
+    "a0": 0.58,
+    "a1": 0.77,
+    "rho": 0.0,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.576,
+     "a_dauc_ic_excluye_0_holm2": 0.46,
+     "a_estratificada_ic95_excluye_0": 0.052,
+     "b_auc_modelo_ic95_sobre_0.5": 0.884,
+     "c_signo_dauc_pos": 0.992,
+     "d_dlogloss_neg": 0.988,
+     "d_dlogloss_ic95_bajo_0": 0.596,
+     "e_pendiente_0.5_1.5": 0.804,
+     "int4_completo_a_holm2_d_e": 0.36
+    },
+    "dauc_mediana": 0.184,
+    "dauc_p05_p95": [
+     0.06,
+     0.297
+    ],
+    "ancho_ic_mediano": 0.324,
+    "pendiente_mediana_p10_p90": [
+     1.039,
+     0.655,
+     1.694
+    ]
+   },
+   "desarrollo_estratificado_rho0.3": {
+    "a0": 0.58,
+    "a1": 0.77,
+    "rho": 0.3,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.476,
+     "a_dauc_ic_excluye_0_holm2": 0.372,
+     "a_estratificada_ic95_excluye_0": 0.048,
+     "b_auc_modelo_ic95_sobre_0.5": 0.796,
+     "c_signo_dauc_pos": 0.952,
+     "d_dlogloss_neg": 0.896,
+     "d_dlogloss_ic95_bajo_0": 0.468,
+     "e_pendiente_0.5_1.5": 0.568,
+     "int4_completo_a_holm2_d_e": 0.192
+    },
+    "dauc_mediana": 0.19,
+    "dauc_p05_p95": [
+     0.003,
+     0.403
+    ],
+    "ancho_ic_mediano": 0.402,
+    "pendiente_mediana_p10_p90": [
+     1.186,
+     0.476,
+     1.984
+    ]
+   },
+   "desarrollo_estratificado_rho0.6": {
+    "a0": 0.58,
+    "a1": 0.77,
+    "rho": 0.6,
+    "nsim": 250,
+    "B": 500,
+    "potencia": {
+     "a_dauc_ic95_excluye_0": 0.412,
+     "a_dauc_ic_excluye_0_holm2": 0.328,
+     "a_estratificada_ic95_excluye_0": 0.052,
+     "b_auc_modelo_ic95_sobre_0.5": 0.708,
+     "c_signo_dauc_pos": 0.904,
+     "d_dlogloss_neg": 0.84,
+     "d_dlogloss_ic95_bajo_0": 0.392,
+     "e_pendiente_0.5_1.5": 0.404,
+     "int4_completo_a_holm2_d_e": 0.092
+    },
+    "dauc_mediana": 0.187,
+    "dauc_p05_p95": [
+     -0.059,
+     0.483
+    ],
+    "ancho_ic_mediano": 0.468,
+    "pendiente_mediana_p10_p90": [
+     1.384,
+     0.326,
+     2.583
+    ]
+   },
+   "mde_sim_rho0.3_holm2": {
+    "rejilla_dauc": [
+     0.05,
+     0.1,
+     0.15,
+     0.2,
+     0.25,
+     0.3,
+     0.35
+    ],
+    "potencia": [
+     0.104,
+     0.152,
+     0.28,
+     0.448,
+     0.696,
+     0.872,
+     0.96
+    ],
+    "mde_80": 0.28
+   },
+   "mde_sim_rho0.3_auc_sobre_0.5": {
+    "rejilla_dauc": [
+     0.05,
+     0.1,
+     0.15,
+     0.2,
+     0.25,
+     0.3,
+     0.35,
+     0.4
+    ],
+    "potencia": [
+     0.136,
+     0.248,
+     0.416,
+     0.536,
+     0.688,
+     0.896,
+     0.928,
+     0.992
+    ],
+    "mde_80": 0.277,
+    "nota": "rejilla en AUC − 0,5 del modelo (no ΔAUC)"
+   }
+  }
+ }
+}
