@@ -1,6 +1,6 @@
 ---
 documento: Termómetro de recesión INFORMATIVO (probabilidad mensual de entrar y de salir de recesión por país) — diseño corregido
-version: 1.1 APROBADO (2026-10-26; las 4 decisiones + ajustes a/b del usuario fijados aquí antes de escribir código)
+version: 1.2 APROBADO (2026-10-29; v1.1 + opciones a, b, d, e del usuario por el bloqueo de datos, §8, fijadas antes de escribir código)
 estado: APROBADO. Nada construido. Sustituye a la parte "cartera" de docs/int/INT5_diseno_v0.md (INT-5 aparcado).
 depende_de: INT-4 (P-DEV-INT4 v1.0; T1 y T2 establecidos; Validador ⚠️), sensibilidad del listón (int4_sensibilidad_liston*.json)
 ---
@@ -88,3 +88,40 @@ b) **Mínimo de 15 años** con los dos datos (anual JST y mensual traducido) **e
 - La puerta agregada (§2) se mide con los impares de los países que tienen recta propia.
 - Decisiones aprobadas (26-oct): PIB trimestral OCDE como fuente nueva; dos trimestres seguidos para entrar y salir;
   bandas p50 / p80 / p95; puerta correlación ≥ 0,8 y pendiente en [0,8; 1,25].
+
+## 8. Bloqueo de datos y opciones aprobadas (v1.2, 2026-10-29, antes de escribir código)
+Bloqueo (agente, 26-oct): el tipo a 3 meses de la OCDE empieza ≈ 1980-1990 en casi todos los países → con ≥ 15 años por
+mitad solo DEU y USA tendrían recta; C4 (difusión) no llega a 15 años; S4 no tenía traducción mensual; faltaba fijar las
+filas y el B1 de la puerta. El usuario eligió **a + b + d + e**:
+
+a) **C4 sin recta.** Mensual = % de los otros países del núcleo con curva mensual (C1 mensual sin traducir) < 0, con ≥ 5
+   países con dato. Es una proporción, como la anual: se usa tal cual.
+b) **Rectas agrupadas.** Si un país-indicador no tiene ≥ 15 años con ambos datos en cada mitad (pares e impares ≤ 2004), se
+   le aplica la recta **agrupada** (ajustada con los años pares de todos los países del núcleo con ambos datos). Se publica
+   qué recta usa cada país-indicador.
+d) **S4 con el PIB trimestral.** Mensual = % de los otros países del núcleo con la suma de 4 trimestres del PIB real por
+   debajo de la de 4 trimestres antes (dato conocido 75 días tras el trimestre), con ≥ 5 países con dato. Sin recta (como
+   C4). JST usa PIB per cápita; aquí PIB total (declarado).
+e) **Puerta de T1 en las filas de T1 y de T2 en las de T2**, las mismas filas (país, año t) del ajuste de INT-4, con el
+   **B1 del fechado anual JST** en las dos probabilidades (la puerta mide solo la traducción de los indicadores). Solo
+   años impares, y solo filas con todos los indicadores anuales y mensuales.
+
+Concreciones (fijadas aquí, antes de calcular nada):
+- Fecha mensual de cada fila: fin de abril de t + 1 (el origen de INT-4).
+- C1 mensual = media de los 12 últimos meses de la curva "as of" (10 años − 3 meses, `src/intl/panel.py`), con ≥ 9 de 12.
+- C5 mensual = r(m) − r(m − 12), con r = media de 12 meses del tipo a 3 meses / 100 − IPC interanual (log).
+- C6 mensual = variación de 12 meses (log) del índice de bolsa OCDE − IPC interanual (log). DNK y JPN sin bolsa mensual
+  (índices OCDE rotos, como en `panel.py`) → sin T1 ni T2 (solo indicadores).
+- C2 mensual = Δ 20 trimestres del crédito/PIB del BIS (%), conocido 183 días después del fin del trimestre.
+- S1 = C1, S2 = C5, S3 = C6 (mensuales); S5 = C2 mensual traducida en abril del año del pico + 1.
+- Recta: MCO de x anual (JST, año t) sobre x mensual (abril de t + 1), todos los años ≤ 2004 con ambos datos (no solo las
+  filas del modelo), sin guerras (todo es ≥ 1950).
+- Modelo congelado: logit de INT-4 (B1 + C1, C2, C4, C5, C6 para T1; B1 + S1-S5 para T2) ajustado UNA vez con todas las
+  filas completas del núcleo 1871-2004 sin guerras, h = 1.
+- Puerta: correlación de Pearson entre p anual y p mensual ≥ 0,8 y pendiente de la MCO de p anual sobre p mensual en
+  [0,8; 1,25], por giro (T1 y T2 por separado). Agregado: impares de todo el núcleo. Por país: si tiene ≥ 8 filas impares
+  debe pasar su propia puerta; con < 8, depende solo del agregado (marcado "sin puerta propia").
+- Informativo: partición temporal (rectas con ≤ 1984, puerta 1985-2004).
+- Percentiles de referencia (§4): probabilidades mensuales traducidas de todos los meses 1960-2004 del núcleo con datos
+  completos, B1 del fechado en vivo (§3): T1 en meses fuera de recesión, T2 dentro.
+- La parte en vivo (datos ≥ 2005, reporte semanal) se construye solo si pasa la puerta agregada y tras el Validador.
