@@ -108,3 +108,4 @@ mira salvo en la evaluación única preregistrada.
 | 2026-10-29T11:20:34+00:00 | termometro_puerta | 24979da | puerta traducción T1 False T2 False | ejecución única con puerta (diseño v1.2) |
 | 2026-10-29T11:29:39+00:00 | termometro_puerta_v2 (2.º y último intento) | eb3c73d | puerta T1 False T2 True | recalibración logit + validación cruzada 2 mitades |
 | 2026-10-29T12:35:54+00:00 | termometro_puerta_v2_corr (2.º y último intento — corrección de error del Validador) | d21901f | puerta T1 False T2 True | recalibración logit + validación cruzada 2 mitades |
+| 2026-10-29T18:47:12+00:00 | Constructor (P-DEV-INT7 v1.0, corrida única) | 65a7cb9 | V1-V2 Holm-2 sobre p del bootstrap nulo que conserva δ; establecidos {"V1": false, "V2": false} | research/int/int7_resultado.json |
