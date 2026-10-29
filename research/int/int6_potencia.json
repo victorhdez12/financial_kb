@@ -1,8 +1,8 @@
 {
  "procedencia": {
-  "commit": "4e628a1d930b13b48c821ea068b7c78c3cb8779a",
+  "commit": "5e19c602c46b38ed38d408a1eb6c596bbe82db26",
   "arbol_limpio": true,
-  "hora_utc": "2026-10-29T14:42:24+00:00"
+  "hora_utc": "2026-10-29T14:43:50+00:00"
  },
  "nucleo": [
   "BEL",
@@ -165,6 +165,22 @@
     "mde_pp_0a100_zholm6": 13.5,
     "mde_pp_por_dt_zholm6": 5.0
    }
+  },
+  "mensual_caida_bolsa_usa_5pc_1973_2004": {
+   "meses_estado": 24,
+   "meses_resto": 360,
+   "ar1_estado": 0.2,
+   "dt_oro_mensual": 0.053,
+   "mde_pp_mes_z1": 3.3,
+   "mde_pp_mes_zholm6": 4.1
+  },
+  "mensual_caida_bolsa_usa_8pc_1973_2004": {
+   "meses_estado": 14,
+   "meses_resto": 370,
+   "ar1_estado": 0.26,
+   "dt_oro_mensual": 0.053,
+   "mde_pp_mes_z1": 4.33,
+   "mde_pp_mes_zholm6": 5.38
   }
  },
  "Q2_oro_tipo_real": {
