@@ -121,3 +121,67 @@ método: lectura del código; reproducción con el warehouse real (fechas ≤ 20
 - Menor: B1 (duración) entra como una "variable" más en "lo que más pesa"; es correcto, pero en los primeros 12 meses de
   recesión B1 = 0 y siempre restará frente a un centro de 0,15 (el modelo cree que las recesiones recién empezadas salen
   menos): conviene que el texto lo diga como "duración aún corta" en vez de una variable de indicador.
+
+## 6. Robustez ante series que faltan o se cortan — ⚠️ (no miente, pero calla el porqué; un caso tumba todo)
+
+Pruebas sintéticas del Validador (warehouse en memoria de los tests) y caso real:
+
+| caso | qué pasa | juicio |
+|---|---|---|
+| GBR real: `oecd_ir3m_gbr` acaba en 2026-02 | C1 (y C5/S2) de GBR = "—" desde sep-2026; C4 de los demás pasa a contar 12 países sin decirlo; si GBR entrara en recesión, "falta algún indicador de T2 este mes" | ⚠️ silencio sobre la causa; GBR pierde T2 indefinidamente sin que el reporte lo diga |
+| tipo a 3 meses de ESP cortado en 2026-03, ESP en recesión | C1 "—", salida "falta algún indicador de T2 este mes" | ⚠️ no dice cuál ni desde cuándo |
+| falta entera `oecd_share_usa`, `oecd_ir3m_usa`, `oecd_cpi_usa_idx` o `bis_creditgap_us_ratio` | el indicador afectado sale `None`/"—", el resto se calcula | ✅ no inventa, ⚠️ no avisa |
+| falta entera `oecd_gdpq_esp` | **excepción `ValueError: start and end must not be NaT`** en `T.mensuales` (`_rejilla_q` de una serie vacía): no sale nada para ningún país | ❌ falla ruidosa pero críptica, y un país sin PIB tumba los 18 (`calcular` ya prevé `pib` vacío en el bucle de estados, pero `mensuales` no) |
+| warehouse sin actualizar (mensual hasta 2026-03, PIB hasta 2025T4), fecha 2026-10-29 | sigue "en recesión" con el PIB de 2025T4 (198 días < 200); C6 "—"; C1 sale con meses repetidos; ningún aviso de datos viejos (solo "(2025Q4)" en la columna) | ⚠️ |
+| fecha futura (2030-01-15) | calcula 2029-12-31: todo "sin dato" / "—", sin error ni aviso | ⚠️ menor |
+
+- Lo bueno: nunca rellena con datos inventados ni muestra una probabilidad con un indicador ausente (NaN se propaga y
+  `prob_salida` exige todo). La columna "(último PIB)" deja ver un PIB viejo.
+- Lo que falta para el reporte semanal (diff 2): (a) que `mensuales` acepte un país sin PIB (o que `cargar` lo excluya
+  con un aviso explícito), en vez de abortar todo; (b) por país, la última fecha conocida de cada serie y una lista
+  `avisos_datos` ("GBR: tipo a 3 meses sin datos desde 2026-02 → sin curva ni T2"), que el Markdown imprima; (c) el motivo
+  de "falta algún indicador" con el nombre del indicador; (d) un aviso global si la fecha pedida está más de ≈ 45 días
+  por delante del último dato mensual del núcleo.
+- **Acción de datos (fuera de este módulo):** comprobar por qué `oecd_ir3m_gbr` se corta en 2026-02 (cambio de
+  dataset/clave en la OCDE o del ingest). Sin ella, GBR —uno de los 12 de T2— no puede mostrar probabilidad de salir.
+
+## 7. Texto de los avisos — ⚠️ / ❌ (una cifra del aviso de T2 es de la versión anterior)
+
+- `AVISO` ✅: "Informativo, no es una señal de cartera", modelo 1871-2004, T1 no pasó → solo indicadores, T2 con pocas
+  filas, la inflación no se anticipa. Se aparta del texto fijo de §4 (que citaba AUC 0,73/0,77) solo en lo que obliga el
+  veredicto (T1 no pasa); aceptable.
+- `AVISO_NIVEL` ("nivel no calibrado en vivo") ✅ y "Léase la banda, no el porcentaje" ✅ (lo pedido en el diff 4 anterior).
+- ❌ **El intervalo del r en `AVISO_T2` no corresponde al r que cita.** Dice "r 0,82, IC 95 % ≈ [0,65; 0,96]". El 0,82 es
+  la puerta corregida (S4 de §8 d: 0,8183 / 0,9064, reproducido aquí), pero [0,65; 0,96] es el bootstrap de la versión
+  ANTERIOR (S4 errónea, r 0,878). Rehecho por el Validador con el código actual (mismo `boot`, 2.000 réplicas, semilla 0):
+  - por años (12 bloques): **r IC 95 % [0,49; 0,94]**, pendiente [0,54; 1,08]; **pasa en el 58 %** de las réplicas
+    (antes 85 %);
+  - por episodio (22): r [0,51; 0,91], pendiente [0,61; 1,05]; pasa en el 59 %.
+  El aviso hace parecer la evidencia más sólida de lo que es. Corrección de texto (diff 1). "31 filas / 22 episodios"
+  ✅; "≈ 70 %" de coincidencia del estado ✅ (no depende de S4).
+- ⚠️ El Markdown dice "su percentil frente a los meses 1960-2004 del propio país": para C4 y S4 es la difusión vista desde
+  ese país (los otros del núcleo) y tiene el problema de empates de §5.
+- ⚠️ Las bandas de T2 son relativas a meses en recesión (p50 = 0,82): "bajo" con 0,78 de probabilidad de salir puede leerse
+  como "la recesión sigue". El texto ya dice "banda frente a los meses en recesión 1960-2004"; conviene añadir "más alto =
+  más probable salir" en la línea de cada país.
+- ⚠️ `scripts/termometro_vivo.py` usa `procedencia(exigir_limpio=False)`: la salida commiteada en `aa72ed2` venía de
+  `4d091c7` con el árbol sucio. Para el reporte es aceptable (es informativo y queda anotado), pero el JSON del reporte
+  semanal debería generarse con el árbol limpio o marcarlo en el Markdown.
+
+## 8. ¿Prueban los tests lo que dicen? — ⚠️
+
+9 tests, todos pasan (4,2 s).
+
+| test | ¿lo prueba? |
+|---|---|
+| `test_estado_y_probabilidad_solo_en_recesion` | ✅ estado, fecha de cálculo, último trimestre, motivos de DNK/AUS, nada fuera de recesión |
+| `test_contribuciones_suman_al_logit` | ❌ **el nombre promete la suma y solo comprueba que `empuja_mas` es el máximo en valor absoluto**. La suma es correcta (medida aquí), pero el test no la mide (diff 4) |
+| `test_markdown` | ✅ avisos, sin DNK en la lista de probabilidades, EE. UU. una vez |
+| `test_no_mira_el_futuro` | ⚠️ débil: altera solo datos con fecha > 2026-03-01, que el filtro SQL `date ≤ corte` ya excluye. No prueba los retrasos (datos con fecha ≤ corte aún no publicados). La versión estricta del Validador (§2) pasa; conviene añadirla (diff 4) |
+| `test_nunca_jst` | ✅ para `_serie`; no comprueba que `cargar` no pida nada fuera de OCDE/BIS (estructural, aceptable) |
+| `test_bandas_y_fin_de_mes` | ✅ |
+| `test_parametros_incompletos` | ✅ lista de 12 países, recta que falta, T2 no aprobado |
+| `test_fuera_de_src_intl` | ✅ |
+| `test_corte_2004_reproduce_desarrollo` | ✅ bloque mensual y PIB idénticos; percentiles de T2 a 5e-4. ⚠️ el docstring habla de "diferencia máxima por mes ≈ 5e-4", que el test no comprueba (lo he medido: 5,3e-4) |
+
+Faltan: un test de serie que falta/se corta (que hoy revelaría el ❌ del PIB vacío) y uno de empates en percentiles.
