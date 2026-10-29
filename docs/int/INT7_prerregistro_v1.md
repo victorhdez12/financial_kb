@@ -1,7 +1,7 @@
 ---
 documento: P-DEV-INT7 — valoración → rentabilidad (prerregistro interno)
-version: 0.1 BORRADOR (2026-10-29)
-estado: BORRADOR, pendiente de las decisiones del usuario (§10). No se ha cruzado ningún indicador de valoración con ninguna rentabilidad. Solo varianzas incondicionales, AR(1), correlaciones entre países de cada serie POR SEPARADO, recuentos y disponibilidad.
+version: 1.0 CONGELADO (2026-10-29T18:34:16Z)
+estado: CONGELADO v1.0 (decisiones §11). Antes de congelar: No se ha cruzado ningún indicador de valoración con ninguna rentabilidad. Solo varianzas incondicionales, AR(1), correlaciones entre países de cada serie POR SEPARADO, recuentos y disponibilidad.
 depende_de: INVENTARIO_relaciones.md (§3 y §4, hueco 8), INT-6 v1 §8 (anotada como candidata a INT-7), INT-3b (método de panel, Driscoll-Kraay, placebo calibrado, Holm), INT-3c (C1, descomposición de la bolsa)
 potencia: scripts/int7_potencia.py (28d1359, árbol limpio, 2026-10-29T18:12:36Z) → research/int/int7_potencia.json (22d20b5)
 ---
@@ -265,3 +265,15 @@ Ningún indicador de valoración cruzado con ninguna rentabilidad. δ **no** se 
 
 Si se aprueba: se congela como v1.0 con hora, se escribe `scripts/int7_corrida.py` con puerta, se commitea sin ejecutar,
 **una sola corrida**, Validador, y después Bitácora, atlas e inventario.
+
+## 11. Decisiones tomadas y congelación (v1.0, 2026-10-29T18:34:16Z)
+El usuario delegó ("haz lo que me recomiendes", 29-oct) → recomendadas: (1) V1 y V2 confirmatorias, Holm-2; V3 informativa,
+V5 descriptiva. (2) V4 (CAPE EE. UU.) descriptiva. (3) p principal del bootstrap nulo que conserva δ; efecto con
+Amihud-Hurvich. (4) Familia de Shiller añadida a `src/intl/data.py`. (5) D/P conocido al cierre de t; sensibilidad estricta
+x_(t−1). (6) Fuera de muestra solo informativo.
+
+**Añadido antes de congelar (pregunta del usuario: "¿un año vista no es mucho?"):** V6, **informativa, sin veredicto**:
+D/P y CAPE de EE. UU. (Shiller, mensual, 1881-2004, dato del mes t conocido al cierre de t) → bolsa real acumulada a
+3 y 6 meses (meses t + 1 … t + h). Pendiente y R² con errores Newey-West (rezagos h) y el mismo bootstrap nulo que conserva δ,
+expresadas también por año para compararlas con V1. Se publica siempre, con la frase: "a horizontes cortos la valoración
+explica muy poco de la rentabilidad; su información se acumula con el horizonte".
