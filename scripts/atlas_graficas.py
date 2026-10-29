@@ -73,6 +73,7 @@ def guardar(fig, nombre: str) -> Path:
 
 # Clasificación: docs/int/ATLAS_regimenes.md §1 (fijada por escrito antes de clasificar; no se recalcula aquí).
 CONF_MARCA = {"establecido": "●●●", "establecido (frágil)": "●●○", "probable": "●●", "no establecido": "○"}
+CORTO = {"establecido (frágil)": "estab. frágil"}
 
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -103,10 +104,13 @@ def g1_mapa() -> Path:
         ("Crédito − bono (EE. UU., R. U.)", 5, b["B4"]["efecto"], b["B4"]["ic95"], "no establecido", "B4"),
     ]
     lim = 12.0
-    fig, ax = plt.subplots(figsize=(11.5, 6.6))
-    fig.subplots_adjust(left=0.2, right=0.88, top=0.84, bottom=0.2)
+    fig, ax = plt.subplots(figsize=(12, 6.6))
+    fig.subplots_adjust(left=0.19, right=0.85, top=0.84, bottom=0.2)
+    llenas = {(activos.index(c[0]), c[1]) for c in celdas}
     for i in range(len(activos)):
         for j in range(len(regs)):
+            if (i, j) in llenas:
+                continue
             ax.add_patch(Rectangle((j, i), 1, 1, facecolor="#e6e5e0", edgecolor=SUPERFICIE, lw=2, hatch="///"))
             ax.text(j + 0.5, i + 0.5, "no contrastado", ha="center", va="center", fontsize=6.5, color="#8a8984")
     for act, j, ef, ic, cl, et in celdas:
@@ -121,7 +125,7 @@ def g1_mapa() -> Path:
                 color=tinta)
         ax.text(j + 0.5, i + 0.62, f"[{coma(pp(ic[0]), 1)}; {coma(pp(ic[1]), 1)}]", ha="center", va="center",
                 fontsize=6.8, color=tinta)
-        ax.text(j + 0.5, i + 0.86, f"{CONF_MARCA[cl]} {cl} · {et}", ha="center", va="center", fontsize=6.5,
+        ax.text(j + 0.5, i + 0.86, f"{CONF_MARCA[cl]} {CORTO.get(cl, cl)} · {et}", ha="center", va="center", fontsize=6.5,
                 color=tinta)
     ax.axvline(4, color=TINTA, lw=1.2)
     ax.set_xlim(0, len(regs))
@@ -136,13 +140,13 @@ def g1_mapa() -> Path:
                  x=0.01, ha="left", fontsize=12.5, fontweight="bold")
     fig.text(0.01, 0.905, "Rojo = rinde peor de lo normal; azul = mejor. Cuadros grises = no se contrastó. "
              "Las dos últimas columnas agrupan regímenes (a la derecha de la línea).", fontsize=9, color=GRIS_TXT)
-    cax = fig.add_axes([0.9, 0.3, 0.018, 0.45])
+    cax = fig.add_axes([0.87, 0.42, 0.016, 0.38])
     sm = plt.cm.ScalarMappable(cmap=DIVERGENTE, norm=plt.Normalize(-lim, lim))
     cb = fig.colorbar(sm, cax=cax)
     cb.set_label("pp/año (recortado a ±12)", fontsize=8)
     cb.outline.set_visible(False)
-    fig.text(0.89, 0.24, "Confianza:\n●●● establecido\n●●○ establecido (frágil)\n●● probable\n○ no establecido\n"
-             "(punteado: no fiarse del número)", fontsize=7.2, color=TINTA, va="top")
+    fig.text(0.865, 0.37, "Confianza:\n●●● establecido\n●●○ establecido (frágil)\n●● probable\n○ no establecido\n"
+             "(punteado: no fiarse\ndel número)", fontsize=7.2, color=TINTA, va="top")
     nota(fig, "Fuente: docs/int/ATLAS_regimenes.md §1 (clasificación); cifras de research/int/int3_resultado.json, "
          "int3_sensibilidad_robusta.json (IC Driscoll-Kraay), int3b_resultado.json, int3d_resultado.json (C3). "
          "14 países JST, 1870/1877-1999/2004, rentabilidades reales anuales.\n"
@@ -173,8 +177,8 @@ def g2_efectos() -> Path:
         ("Vivienda − bolsa con\ninflación alta (Q6)", "establecido", (q["Q6"]["efecto"], dk["Q6"]["dk"]["ic95"]), None),
         ("Precio de los bonos en\ncrecimiento bajo (C4, INT-3b)", "establecido", (c4["efecto"], c4["ic95"]), None),
     ]
-    fig, ax = plt.subplots(figsize=(11, 7.2))
-    fig.subplots_adjust(left=0.27, right=0.97, top=0.83, bottom=0.17)
+    fig, ax = plt.subplots(figsize=(12, 7.6))
+    fig.subplots_adjust(left=0.24, right=0.97, top=0.85, bottom=0.21)
     off = 0.24
     for i, (txt, cl, ex, k) in enumerate(filas):
         if ex is not None:
@@ -204,13 +208,13 @@ def g2_efectos() -> Path:
     fig.suptitle("Los efectos principales y cuánto queda si solo usas lo que se sabía a tiempo", x=0.01, ha="left",
                  fontsize=12.5, fontweight="bold")
     fig.text(0.01, 0.905, "Si la barra cruza el 0, el dato es compatible con «ningún efecto». "
-             "Las versiones a tiempo son más pequeñas y casi todas cruzan o rozan el 0 con un año más de retraso.",
+             "Las versiones a tiempo son más pequeñas y, con un año más de retraso (t − 2), la mayoría cruzan o rozan el 0.",
              fontsize=9, color=GRIS_TXT)
-    ax.legend(handles=[
+    fig.legend(handles=[
         Line2D([], [], color=AZUL, marker="o", lw=2, label="Ex post: régimen con ventana centrada (mira el futuro)"),
         Line2D([], [], color=NARANJA, marker="s", lw=2, label="A tiempo: estado observado en t − 1 (atlas §8)"),
         Line2D([], [], color=AQUA, marker="D", lw=2, label="A tiempo estricto: estado observado en t − 2"),
-    ], loc="lower right", fontsize=8, frameon=False)
+    ], loc="lower center", bbox_to_anchor=(0.6, 0.085), ncol=3, fontsize=7.8, frameon=False)
     nota(fig, "Fuente: research/int/int3_resultado.json + int3_sensibilidad_robusta.json (Q1-Q6, IC Driscoll-Kraay), "
          "int3b_resultado.json (C4), atlas_operable.json (§8 de docs/int/ATLAS_regimenes.md). 14 países JST, "
          "1876-1999.\nConfianza: azul = clasificación del atlas §1. Las versiones a tiempo son DESCRIPTIVAS, declaradas "
@@ -227,8 +231,8 @@ def g3_trayectorias() -> Path:
     activos = [("eq", "Bolsa", AZUL), ("bond", "Bonos", NARANJA), ("bill", "Letras", AQUA)]
     anclas = [("trayectorias_pico", "Alrededor del PICO (0 = año del pico, último de expansión)"),
               ("trayectorias_valle", "Alrededor del VALLE (0 = año del valle, fondo del PIB)")]
-    fig, axs = plt.subplots(2, 3, figsize=(12, 7.2), sharey=True)
-    fig.subplots_adjust(left=0.07, right=0.98, top=0.84, bottom=0.16, hspace=0.5, wspace=0.08)
+    fig, axs = plt.subplots(2, 3, figsize=(12, 7.8), sharey=True)
+    fig.subplots_adjust(left=0.07, right=0.98, top=0.79, bottom=0.14, hspace=0.62, wspace=0.08)
     for r, (clave, titulo) in enumerate(anclas):
         for c, (a, nombre, col) in enumerate(activos):
             ax = axs[r, c]
@@ -252,8 +256,8 @@ def g3_trayectorias() -> Path:
                      loc="lower right", fontsize=7.5, frameon=False)
     fig.suptitle("¿Qué hacen bolsa, bonos y letras alrededor de una recesión?", x=0.01, ha="left", fontsize=12.5,
                  fontweight="bold")
-    fig.text(0.01, 0.905, "Fuera de la banda gris = más de lo que dan fechas al azar. La bolsa cae en el año de entrada "
-             "y sobre todo el año antes del valle; luego rebota.", fontsize=9, color=GRIS_TXT)
+    fig.text(0.01, 0.875, "Fuera de la banda gris = más de lo que dan fechas al azar. Bolsa y bonos caen ya en el año del pico;\nla bolsa "
+             "tiene su peor año justo antes del valle y luego rebota. Las letras apenas se mueven.", fontsize=9, color=GRIS_TXT)
     nota(fig, "Fuente: research/int/int3d_resultado.json (descriptivos → trayectorias_pico / trayectorias_valle, "
          "«todas» las recesiones), guardadas por scripts/int3d_corrida.py; no se reconstruye nada. 14 países JST, "
          "1870-2004, datos anuales.\nConfianza: DESCRIPTIVO (sin contraste). Medias con datos anuales; el momento del "
@@ -305,8 +309,8 @@ def g4_termometro() -> Path:
         ag = pu[g]["agregado"]
         a2.plot(ag["r"], ag["pendiente"], mk, color=col, ms=12, mec=TINTA, mew=1)
         a2.annotate(f"{txt}: {ag['filas']} filas\nr {coma(ag['r'], 2, False)}, pend. {coma(ag['pendiente'], 2, False)}"
-                    f" → {'PASA' if ag['pasa'] else 'NO pasa'}", (ag["r"], ag["pendiente"]), xytext=(-10, -30 if g == "T1" else 14),
-                    textcoords="offset points", fontsize=8, ha="right", color=TINTA,
+                    f" → {'PASA' if ag['pasa'] else 'NO pasa'}", (ag["r"], ag["pendiente"]), xytext=((60, -55) if g == "T1" else (-10, 14)),
+                    textcoords="offset points", fontsize=8, ha="right" if g == "T2" else "left", color=TINTA,
                     arrowprops=dict(arrowstyle="-", color=GRIS_SUAVE))
     a2.set_xlim(0.6, 1.0)
     a2.set_ylim(0.4, 1.3)
@@ -337,8 +341,8 @@ def g5_vivo() -> Path:
     paises = list(v["paises"])
     nombres = {k: v["paises"][paises[0]]["indicadores"][k]["indicador"] for k in orden}
     unidades = {k: v["paises"][paises[0]]["indicadores"][k]["unidad"] for k in orden}
-    fig, ax = plt.subplots(figsize=(11, 9))
-    fig.subplots_adjust(left=0.2, right=0.88, top=0.84, bottom=0.12)
+    fig, ax = plt.subplots(figsize=(12, 9.4))
+    fig.subplots_adjust(left=0.2, right=0.86, top=0.82, bottom=0.12)
     for i, p in enumerate(paises):
         x = v["paises"][p]
         for j, k in enumerate(orden):
@@ -360,11 +364,11 @@ def g5_vivo() -> Path:
         x = v["paises"][p]
         e = p + (" (prueba)" if x["grupo"] == "prueba" else "")
         if x["estado"]["en_recesion"]:
-            e += f"  ■ EN RECESIÓN ({x['estado']['meses_desde_entrada']} m)"
+            e += f" · EN RECESIÓN ({x['estado']['meses_desde_entrada']} m)"
         etiquetas.append(e)
     ax.set_xlim(0, len(orden))
     ax.set_ylim(len(paises), 0)
-    ax.set_xticks(np.arange(len(orden)) + 0.5, [f"{k}\n{nombres[k]}" for k in orden], fontsize=8)
+    ax.set_xticks(np.arange(len(orden)) + 0.5, [f"{k}\n" + nombres[k].replace(" (", "\n(").replace(" de ", "\nde ", 1) for k in orden], fontsize=8)
     ax.xaxis.tick_top()
     ax.set_yticks(np.arange(len(paises)) + 0.5, etiquetas, fontsize=8.5)
     for t, p in zip(ax.get_yticklabels(), paises):
@@ -385,7 +389,7 @@ def g5_vivo() -> Path:
     nota(fig, f"Fuente: research/int/termometro_vivo_ultimo.json (calculado {v['procedencia']['hora_utc'][:10]}, commit "
          f"{v['procedencia']['commit'][:7]}); percentil = rango frente a los meses 1960-2004 del propio país (≥ 60 meses).\n"
          "Confianza: INFORMATIVO, no es señal de cartera. La probabilidad de ENTRAR no pasó su puerta: solo se muestran "
-         "indicadores. En INT-4, curva baja, más curvas invertidas fuera y bolsa a la baja acompañaron más entradas en "
+         "indicadores.\nEn INT-4, curva baja, más curvas invertidas fuera y bolsa a la baja acompañaron más entradas en "
          "recesión.\nNiveles revisados (sin vintages). «Prueba» = país fuera del núcleo del modelo.")
     return guardar(fig, "05_termometro_hoy.png")
 
