@@ -223,12 +223,13 @@ def calcular(pm: pd.DataFrame, bis: dict, pib: dict, corte: pd.Timestamp, par: d
                 salida = {"motivo": "falta algún indicador de T2 este mes"}
             else:
                 contrib = par["b_T2"][1:] * (Z2[c][i] - centro)
-                j = int(np.nanargmax(np.abs(contrib)))
                 salida = {"probabilidad": round(float(p2[c][i]), 3), "banda": banda(float(p2[c][i]), par["pct_T2"]),
-                          "aviso": AVISO_NIVEL,
-                          "empuja_mas": {"variable": VARS_T2[j], "contribucion_logit": round(float(contrib[j]), 3),
-                                         "sentido": "a favor de salir" if contrib[j] > 0 else "en contra de salir"},
-                          "contribuciones_logit": {VARS_T2[k]: round(float(v), 3) for k, v in enumerate(contrib)}}
+                          "aviso": AVISO_NIVEL, "empuja_mas": None, "contribuciones_logit": None}
+                if np.isfinite(contrib).all():
+                    j = int(np.argmax(np.abs(contrib)))
+                    salida["empuja_mas"] = {"variable": VARS_T2[j], "contribucion_logit": round(float(contrib[j]), 3),
+                                            "sentido": "a favor de salir" if contrib[j] > 0 else "en contra de salir"}
+                    salida["contribuciones_logit"] = {VARS_T2[k]: round(float(v), 3) for k, v in enumerate(contrib)}
         paises[c] = {"grupo": "usa" if c == "USA" else ("nucleo" if c in NUCLEO else "prueba"), "estado": estado,
                      "indicadores": filas_ind, "salida_12m": salida}
     return {"fecha_calculo": str(corte.date()), "aviso": AVISO, "paises": paises,
@@ -289,9 +290,10 @@ def markdown(res: dict) -> str:
         for c in rec:
             s = P_[c]["salida_12m"]
             em = s["empuja_mas"]
+            pesa = ("sin referencia ≤ 2004 para la contribución" if em is None else
+                    f"lo que más pesa: {em['variable']} ({em['contribucion_logit']:+.2f} en el logit, {em['sentido']})")
             out.append(f"- {c}: **{s['banda']}** ({s['probabilidad']:.2f}; {AVISO_NIVEL}), en recesión desde hace "
-                       f"{P_[c]['estado']['meses_desde_entrada']} meses; lo que más pesa: {em['variable']} "
-                       f"({em['contribucion_logit']:+.2f} en el logit, {em['sentido']}).")
+                       f"{P_[c]['estado']['meses_desde_entrada']} meses; {pesa}.")
         out.append("")
     elif not res["en_recesion"]:
         out += ["Ningún país está en recesión según el fechado trimestral en vivo: no se muestra ninguna probabilidad "
