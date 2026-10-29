@@ -125,3 +125,21 @@ Concreciones (fijadas aquí, antes de calcular nada):
 - Percentiles de referencia (§4): probabilidades mensuales traducidas de todos los meses 1960-2004 del núcleo con datos
   completos, B1 del fechado en vivo (§3): T1 en meses fuera de recesión, T2 dentro.
 - La parte en vivo (datos ≥ 2005, reporte semanal) se construye solo si pasa la puerta agregada y tras el Validador.
+
+## 9. Segundo y último intento (v1.3, 2026-10-29, fijado ANTES de correrlo; el usuario lo delegó: "confío en tu criterio")
+Resultado del 1.er intento (`188cc30`): T1 r 0,81 pero pendiente 0,66; T2 r 0,79 con solo 18 filas impares. **Contaminación
+declarada:** este intento se diseña sabiendo que el fallo de T1 es de escala (pendiente < 1, orden bien) y que T2 tiene
+pocas filas. Para compensar, la puerta NO se relaja (mismos umbrales: r ≥ 0,8 y pendiente en [0,8; 1,25]) y **no habrá un
+3.er intento**: si falla, el termómetro queda definitivamente en "solo indicadores".
+
+Cambios (los únicos):
+1. **Recalibración de la escala.** Con las filas de la mitad de ajuste: MCO de logit(p anual) sobre logit(p mensual
+   traducida) → (α, β); la probabilidad mostrada es σ(α + β · logit(p mensual)). Solo usa las dos probabilidades (no el
+   objetivo).
+2. **Validación cruzada en dos mitades.** Pliegue 1: rectas y recalibración con los pares, puerta con los impares; pliegue
+   2: al revés. La puerta se mide con las filas de los dos pliegues juntas (cada fila predicha por el pliegue que no la
+   usó). Regla propia/agrupada de las rectas: la misma (≥ 15 años en cada mitad).
+3. Por país: puerta propia si tiene ≥ 8 filas en total (los dos pliegues); si no, depende del agregado.
+- En vivo (si pasa): rectas y recalibración ajustadas con TODOS los años ≤ 2004; percentiles de referencia recalculados con
+  esas probabilidades recalibradas.
+- T1 y T2 se juzgan por separado: si solo pasa uno, solo se muestra ese.
