@@ -185,3 +185,74 @@ Pruebas sintéticas del Validador (warehouse en memoria de los tests) y caso rea
 | `test_corte_2004_reproduce_desarrollo` | ✅ bloque mensual y PIB idénticos; percentiles de T2 a 5e-4. ⚠️ el docstring habla de "diferencia máxima por mes ≈ 5e-4", que el test no comprueba (lo he medido: 5,3e-4) |
 
 Faltan: un test de serie que falta/se corta (que hoy revelaría el ❌ del PIB vacío) y uno de empates en percentiles.
+
+## 9. Ejecución de hoy (2026-10-29) y si tiene sentido — ✅
+
+`.venv/bin/python -m scripts.termometro_vivo` con el árbol limpio en `aa72ed2`: idéntico a la salida commiteada salvo
+la procedencia (antes `4d091c7`, árbol sucio; ahora `aa72ed2`, limpio). No se ha commiteado la salida regenerada.
+
+- **Fecha de cálculo 2026-09-30.** Ningún país del núcleo está en recesión según el fechado trimestral (último PIB
+  2026T2 en los 18) → **no se muestra ninguna probabilidad**, lo que es correcto (T1 no pasó; T2 solo en recesión).
+- **IRL "en recesión" desde 2026T1** (país de prueba → solo indicadores). Viene del PIB irlandés: 2025T1 536.883 →
+  2026T1 465.102 (−13 %), el efecto de las multinacionales (exportaciones farmacéuticas adelantadas a 2025T1). La regla lo
+  marca bien; económicamente es ruido del PIB irlandés. Que sea país de prueba y no muestre nada es lo prudente.
+- **Indicadores:** curvas positivas en todos menos NOR (−0,17 pp, p61: Noruega tuvo a menudo curva invertida antes de
+  2005); C4 = 1 de 12-13 países con curva invertida (NOR); bolsa real 12 m alta (p54-p92); **Δ5 años crédito/PIB muy
+  negativo en todos (p0-p19; NLD −80 pp, IRL −76, ESP −53)**. Comprobado en el BIS: NLD 343 % (2021T1) → 263 % (2026T1).
+  Es la caída del ratio por el PIB nominal de 2021-2025, algo casi sin precedente antes de 2005 (de ahí el p0). Con el
+  signo de T1 (más crédito = más riesgo), lectura de riesgo bajo. S4 = 0 % en todos (ningún PIB de 4 trimestres cae),
+  mostrado como p60 por los empates (§5).
+- GBR sin curva (tipo a 3 meses cortado, §6); JPN y CHE sin percentil de la curva (< 60 meses antes de 2005); AUS sin
+  percentil de bolsa (sin historia ≤ 2004 de `oecd_share_aus`). Coherente con los datos.
+- Lectura global: un cuadro tranquilo (ningún país del núcleo en recesión, curvas positivas, bolsa fuerte, desapalancamiento).
+  Tiene sentido; lo que menos sentido tiene a la vista es el "p60" de S4 = 0.
+
+## 10. Diffs propuestos (no aplicados)
+
+**Diff 1 — `AVISO_T2` con el intervalo de la puerta corregida (❌, bloquea).** `src/report/termometro_vivo.py`:
+```diff
+-AVISO_T2 = ("Léase la banda, no el porcentaje: la puerta de T2 se pasó con solo 31 filas / 22 episodios (r 0,82, IC 95 % "
+-            "≈ [0,65; 0,96]), y el «en recesión» del fechado trimestral coincide con el anual de JST solo ≈ 70 % de las "
+-            "veces.")
++AVISO_T2 = ("Léase la banda, no el porcentaje: la puerta de T2 se pasó con solo 31 filas / 22 episodios (r 0,82, IC 95 % "
++            "≈ [0,49; 0,94]; pasa en ≈ 6 de cada 10 réplicas bootstrap), y el «en recesión» del fechado trimestral "
++            "coincide con el anual de JST solo ≈ 70 % de las veces.")
+```
+(Bootstrap del Validador con la S4 corregida, `scripts/val_termometro_sens.boot`, 2.000 réplicas por años, semilla 0.)
+
+**Diff 2 — series que faltan: no abortar y decirlo (❌ el PIB vacío; ⚠️ el resto; bloquea la parte a).**
+```diff
+ def cargar(con, fecha):
+     ...
+-        pib[c] = _serie(con, f"oecd_gdpq_{lc}", corte)
++        if not (q := _serie(con, f"oecd_gdpq_{lc}", corte)).empty:
++            pib[c] = q          # sin PIB: sin estado ni S4 propios; aviso en calcular, no excepción
+     ...
++def avisos_datos(con, corte) -> list[str]:
++    """Por país y serie: último dato con fecha ≤ corte; aviso si su disponibilidad (lags) es > MAX_VIEJO antes de corte."""
+```
+y en `calcular`: `estado["sin_pib"]`, `salida["motivo"] = f"falta {nombre} este mes"` (comprobar `np.isfinite(Z2[c][i])`
+por columna) y un bloque `> [!warning] Datos` en `markdown` con la lista de avisos (p. ej. "GBR: tipo a 3 meses sin datos
+desde 2026-02 → sin curva, sin Δ tipo real, sin T2").
+
+**Diff 3 — percentil con rango medio (⚠️).**
+```diff
+-    return int(round(float((h <= v).mean() * 100))), int(len(h))
++    return int(round(float(((h < v).mean() + (h <= v).mean()) / 2 * 100))), int(len(h))   # rango medio: empates de C4/S4
+```
+
+**Diff 4 — tests.** (a) `test_contribuciones_suman_al_logit`: comprobar de verdad la suma
+```python
+    z = ...  # Z del último mes (exponer Z o recomputar con V.prob_salida)
+    assert b[0] + b[1:] @ centro + sum(c.values()) == pytest.approx(logit(p_sin_recal), abs=1e-3)
+```
+(b) `test_no_mira_el_futuro_estricto`: alterar con `update` los datos con fecha ≤ 2026-03-31 aún no publicados (tipos de
+marzo, IPC feb-mar, PIB 2026T1, BIS 2025T4) y exigir salida idéntica; y que alterar febrero (tipos) sí la cambie.
+(c) `test_falta_pib_de_un_pais`: borrar `oecd_gdpq_esp` → el resto se calcula y ESP sale "sin dato" con aviso.
+(d) `test_percentil_empates`: S4 = 0 con 60 % de ceros → p30.
+
+**Diff 5 — congelar las referencias ≤ 2004 (⚠️).** Guardar una vez (script con procedencia, árbol limpio) el centro de las
+contribuciones y, por país e indicador, los cuantiles 1960-2004 (o el vector ordenado) en
+`research/int/termometro_vivo_referencias.json`; `calcular` los lee en lugar de recalcularlos, y un test comprueba que
+recalcularlos con `obs_latest` da lo mismo (si no, la recarga del warehouse ha revisado la historia: se avisa, no se
+cambia en silencio).
