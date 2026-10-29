@@ -80,7 +80,7 @@ def test_contribuciones_suman_al_logit(vivo):
 
 def test_markdown(vivo):
     md = V.markdown(vivo)
-    assert V.AVISO in md and "**EE. UU.**" in md and "- ESP: **" in md and V.AVISO_NIVEL in md
+    assert V.AVISO in md and V.AVISO_T2 in md and "**EE. UU.**" in md and "- ESP: **" in md and V.AVISO_NIVEL in md
     assert "- DNK" not in md                                                   # sin probabilidad
     assert md.count("| USA |") == 1
 
@@ -108,7 +108,8 @@ def test_bandas_y_fin_de_mes():
 
 def test_parametros_incompletos(tmp_path):
     d = json.loads(V.CONGELADO.read_text())
-    assert V.parametros()["paises_T2"] == [c for c in V.NUCLEO if c not in {"DNK", "JPN"}]
+    assert V.parametros()["paises_T2"] == ["BEL", "DEU", "ESP", "FIN", "FRA", "GBR", "ITA", "NLD", "NOR", "PRT", "SWE",
+                                           "USA"]
     d["final"]["rectas"]["C2"]["USA"]["b"] = None
     p = tmp_path / "x.json"
     p.write_text(json.dumps(d))
@@ -131,7 +132,7 @@ def test_corte_2004_reproduce_desarrollo():
     """Con fecha de corte 2004-12 el bloque mensual es idéntico al de src/intl/panel.mensual (load_dev) y las
     probabilidades traducidas y recalibradas de T2 en los meses en recesión 1960-2004 del núcleo reproducen los
     percentiles de referencia del JSON de la puerta (295 meses). Con los parámetros sin redondear (recalculados con el
-    código de la puerta, ≤ 2004) la diferencia máxima por mes es ≈ 5e-4 (medido el 29-oct)."""
+    código de la puerta, ≤ 2004) la diferencia máxima por mes es ≈ 5e-4 (medido el 29-oct con el JSON corregido)."""
     from src.intl import panel as P
     from src.intl import termometro as T
     con = db.connect(read_only=True)

@@ -1,9 +1,9 @@
 {
  "fecha_pedida": "2026-10-29",
  "procedencia": {
-  "commit": "746341c0542132ca1547d1079a0aa5724361d66d",
+  "commit": "900900a960db8899f41e1a24de26d7fa4d6d8ada",
   "arbol_limpio": false,
-  "hora_utc": "2026-10-29T12:33:59+00:00"
+  "hora_utc": "2026-10-29T12:38:04+00:00"
  },
  "fecha_calculo": "2026-09-30",
  "aviso": "Informativo, no es una señal de cartera. Modelo histórico 1871-2004; el riesgo de ENTRAR en recesión no superó su puerta y se muestran solo sus indicadores; la probabilidad de SALIR sí (con pocas filas: prudencia). La inflación no se anticipa.",
@@ -48,8 +48,8 @@
      "indicador": "Difusión de PIB cayendo",
      "unidad": "% países",
      "valor": 0.0,
-     "percentil_hasta_2004": 50,
-     "meses_hist": 523
+     "percentil_hasta_2004": 60,
+     "meses_hist": 514
     }
    },
    "salida_12m": null
@@ -94,8 +94,8 @@
      "indicador": "Difusión de PIB cayendo",
      "unidad": "% países",
      "valor": 0.0,
-     "percentil_hasta_2004": 51,
-     "meses_hist": 523
+     "percentil_hasta_2004": 62,
+     "meses_hist": 514
     }
    },
    "salida_12m": null
@@ -140,8 +140,8 @@
      "indicador": "Difusión de PIB cayendo",
      "unidad": "% países",
      "valor": 0.0,
-     "percentil_hasta_2004": 53,
-     "meses_hist": 523
+     "percentil_hasta_2004": 61,
+     "meses_hist": 514
     }
    },
    "salida_12m": null
@@ -186,8 +186,8 @@
      "indicador": "Difusión de PIB cayendo",
      "unidad": "% países",
      "valor": 0.0,
-     "percentil_hasta_2004": 50,
-     "meses_hist": 523
+     "percentil_hasta_2004": 60,
+     "meses_hist": 514
     }
    },
    "salida_12m": null
@@ -232,8 +232,8 @@
      "indicador": "Difusión de PIB cayendo",
      "unidad": "% países",
      "valor": 0.0,
-     "percentil_hasta_2004": 51,
-     "meses_hist": 523
+     "percentil_hasta_2004": 60,
+     "meses_hist": 514
     }
    },
    "salida_12m": null
@@ -278,8 +278,8 @@
      "indicador": "Difusión de PIB cayendo",
      "unidad": "% países",
      "valor": 0.0,
-     "percentil_hasta_2004": 50,
-     "meses_hist": 523
+     "percentil_hasta_2004": 60,
+     "meses_hist": 514
     }
    },
    "salida_12m": null
@@ -324,8 +324,8 @@
      "indicador": "Difusión de PIB cayendo",
      "unidad": "% países",
      "valor": 0.0,
-     "percentil_hasta_2004": 50,
-     "meses_hist": 523
+     "percentil_hasta_2004": 61,
+     "meses_hist": 514
     }
    },
    "salida_12m": null
@@ -370,8 +370,8 @@
      "indicador": "Difusión de PIB cayendo",
      "unidad": "% países",
      "valor": 0.0,
-     "percentil_hasta_2004": 51,
-     "meses_hist": 523
+     "percentil_hasta_2004": 60,
+     "meses_hist": 514
     }
    },
    "salida_12m": null
@@ -416,8 +416,8 @@
      "indicador": "Difusión de PIB cayendo",
      "unidad": "% países",
      "valor": 0.0,
-     "percentil_hasta_2004": 53,
-     "meses_hist": 523
+     "percentil_hasta_2004": 65,
+     "meses_hist": 514
     }
    },
    "salida_12m": null
@@ -462,8 +462,8 @@
      "indicador": "Difusión de PIB cayendo",
      "unidad": "% países",
      "valor": 0.0,
-     "percentil_hasta_2004": 51,
-     "meses_hist": 523
+     "percentil_hasta_2004": 61,
+     "meses_hist": 514
     }
    },
    "salida_12m": null
@@ -508,8 +508,8 @@
      "indicador": "Difusión de PIB cayendo",
      "unidad": "% países",
      "valor": 0.0,
-     "percentil_hasta_2004": 51,
-     "meses_hist": 523
+     "percentil_hasta_2004": 61,
+     "meses_hist": 514
     }
    },
    "salida_12m": null
@@ -554,8 +554,8 @@
      "indicador": "Difusión de PIB cayendo",
      "unidad": "% países",
      "valor": 0.0,
-     "percentil_hasta_2004": 52,
-     "meses_hist": 523
+     "percentil_hasta_2004": 63,
+     "meses_hist": 514
     }
    },
    "salida_12m": null
@@ -600,8 +600,8 @@
      "indicador": "Difusión de PIB cayendo",
      "unidad": "% países",
      "valor": 0.0,
-     "percentil_hasta_2004": 53,
-     "meses_hist": 523
+     "percentil_hasta_2004": 63,
+     "meses_hist": 514
     }
    },
    "salida_12m": null
@@ -646,8 +646,8 @@
      "indicador": "Difusión de PIB cayendo",
      "unidad": "% países",
      "valor": 0.0,
-     "percentil_hasta_2004": 51,
-     "meses_hist": 523
+     "percentil_hasta_2004": 60,
+     "meses_hist": 514
     }
    },
    "salida_12m": null
@@ -692,8 +692,8 @@
      "indicador": "Difusión de PIB cayendo",
      "unidad": "% países",
      "valor": 0.0,
-     "percentil_hasta_2004": 50,
-     "meses_hist": 523
+     "percentil_hasta_2004": 60,
+     "meses_hist": 514
     }
    },
    "salida_12m": null
@@ -738,8 +738,8 @@
      "indicador": "Difusión de PIB cayendo",
      "unidad": "% países",
      "valor": 0.0,
-     "percentil_hasta_2004": 50,
-     "meses_hist": 523
+     "percentil_hasta_2004": 60,
+     "meses_hist": 514
     }
    },
    "salida_12m": null
@@ -784,8 +784,8 @@
      "indicador": "Difusión de PIB cayendo",
      "unidad": "% países",
      "valor": 0.0,
-     "percentil_hasta_2004": 50,
-     "meses_hist": 523
+     "percentil_hasta_2004": 60,
+     "meses_hist": 514
     }
    },
    "salida_12m": null
@@ -830,8 +830,8 @@
      "indicador": "Difusión de PIB cayendo",
      "unidad": "% países",
      "valor": 0.0,
-     "percentil_hasta_2004": 50,
-     "meses_hist": 523
+     "percentil_hasta_2004": 60,
+     "meses_hist": 514
     }
    },
    "salida_12m": {
@@ -843,15 +843,16 @@
   "IRL"
  ],
  "percentiles_T2": {
-  "p50": 0.8056,
-  "p80": 0.9017,
-  "p95": 0.9529
+  "p50": 0.816,
+  "p80": 0.9068,
+  "p95": 0.9552
  },
- "parametros": "/Users/victorhdez12/Proyectos/financial_kb_int3/research/int/termometro_puerta_v2.json",
+ "aviso_T2": "Léase la banda, no el porcentaje: la puerta de T2 se pasó con solo 31 filas / 22 episodios (r 0,82, IC 95 % ≈ [0,65; 0,96]), y el «en recesión» del fechado trimestral coincide con el anual de JST solo ≈ 70 % de las veces.",
+ "parametros": "/Users/victorhdez12/Proyectos/financial_kb_int3/research/int/termometro_puerta_v2_corr.json",
  "procedencia_puerta": {
-  "commit": "eb3c73d60d811fbc1cfd714693c436b45f79381e",
+  "commit": "d21901f4f5b2937375464210dc430c60e1cdd389",
   "arbol_limpio": true,
-  "hora_utc": "2026-10-29T11:29:39+00:00"
+  "hora_utc": "2026-10-29T12:35:54+00:00"
  },
  "metodo": {
   "contribucion": "b_k · (x_k − media ≤ 2004 de los meses en recesión del núcleo), en unidades del logit antes de recalibrar",

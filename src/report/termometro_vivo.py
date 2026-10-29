@@ -1,8 +1,10 @@
 """Termómetro de recesión INFORMATIVO, parte en vivo (docs/int/TERMOMETRO_diseno_v1.md §3, §4, §8, §9).
 
-Resultado de la puerta (definitivo, `research/int/termometro_puerta_v2.json`): T1 (riesgo de ENTRAR) no pasó → solo sus
-indicadores; T2 (probabilidad de SALIR) sí → se muestra solo para los países "en recesión" según el fechado trimestral en
-vivo (§3), salvo DNK y JPN (sin bolsa mensual: solo indicadores). Los 4 países de prueba (AUS, CHE, CAN, IRL) no tienen
+Resultado de la puerta (definitivo; parámetros de `research/int/termometro_puerta_v2_corr.json`, la reejecución con la
+corrección del Validador, docs/validation/2026-10-29_termometro.md: S4 como suma de 4 trimestres, §8 d, y lista de países
+sin DNK/JPN): T1 (riesgo de ENTRAR) no pasó → solo sus indicadores; T2 (probabilidad de SALIR) sí → se muestra solo para
+los 12 países del veredicto (BEL, DEU, ESP, FIN, FRA, GBR, ITA, NLD, NOR, PRT, SWE, USA) cuando están "en recesión"
+según el fechado trimestral en vivo (§3); DNK y JPN, sin bolsa mensual: solo indicadores. Los 4 países de prueba (AUS, CHE, CAN, IRL) no tienen
 puerta propia de T2 (la puerta se midió en el núcleo): solo indicadores.
 
 Vive en src/report/ y no en src/intl/ porque lee datos ≥ 2005: el único acceso a datos de src/intl/ sigue siendo
@@ -36,7 +38,7 @@ from src.intl import panel as P
 from src.intl import termometro as T
 
 REPO = Path(__file__).resolve().parents[2]
-CONGELADO = REPO / "research" / "int" / "termometro_puerta_v2.json"
+CONGELADO = REPO / "research" / "int" / "termometro_puerta_v2_corr.json"   # corregido por el Validador (29-oct)
 
 NUCLEO = ["BEL", "DEU", "DNK", "ESP", "FIN", "FRA", "GBR", "ITA", "JPN", "NLD", "NOR", "PRT", "SWE", "USA"]
 PRUEBA = ["AUS", "CHE", "CAN", "IRL"]
@@ -48,6 +50,9 @@ AVISO = ("Informativo, no es una señal de cartera. Modelo histórico 1871-2004;
          "su puerta y se muestran solo sus indicadores; la probabilidad de SALIR sí (con pocas filas: prudencia). "
          "La inflación no se anticipa.")
 AVISO_NIVEL = "nivel no calibrado en vivo"
+AVISO_T2 = ("Léase la banda, no el porcentaje: la puerta de T2 se pasó con solo 31 filas / 22 episodios (r 0,82, IC 95 % "
+            "≈ [0,65; 0,96]), y el «en recesión» del fechado trimestral coincide con el anual de JST solo ≈ 70 % de las "
+            "veces.")
 
 # indicadores que se enseñan (clave del panel mensual sin traducir, etiqueta, unidad, factor para enseñarlo)
 INDICADORES = [("C1", "Curva 10a−3m (media 12 m)", "pp", 1.0),
@@ -234,7 +239,7 @@ def calcular(pm: pd.DataFrame, bis: dict, pib: dict, corte: pd.Timestamp, par: d
                      "indicadores": filas_ind, "salida_12m": salida}
     return {"fecha_calculo": str(corte.date()), "aviso": AVISO, "paises": paises,
             "en_recesion": [c for c, v in paises.items() if v["estado"]["en_recesion"]],
-            "percentiles_T2": par["pct_T2"], "parametros": par["fuente"],
+            "percentiles_T2": par["pct_T2"], "aviso_T2": AVISO_T2, "parametros": par["fuente"],
             "procedencia_puerta": par.get("procedencia_puerta"),
             "metodo": {"contribucion": "b_k · (x_k − media ≤ 2004 de los meses en recesión del núcleo), en unidades "
                                        "del logit antes de recalibrar",
@@ -286,7 +291,7 @@ def markdown(res: dict) -> str:
         out.append("**Probabilidad de salir en ≈ 12 meses** (solo países en recesión; banda frente a los meses en "
                    f"recesión 1960-2004 del núcleo: bajo < {pct['p50']:.2f} ≤ medio < {pct['p80']:.2f} ≤ alto < "
                    f"{pct['p95']:.2f} ≤ muy alto; entre paréntesis la probabilidad, {AVISO_NIVEL}):")
-        out.append("")
+        out += ["", f"> [!warning] Prudencia con T2\n> {AVISO_T2}", ""]
         for c in rec:
             s = P_[c]["salida_12m"]
             em = s["empuja_mas"]
