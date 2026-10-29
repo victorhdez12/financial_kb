@@ -221,8 +221,9 @@ def ultimos_datos(con, corte: pd.Timestamp) -> dict:
 
 
 def _sin_dato(pm: pd.DataFrame, ultimos: dict, c: str, clave: str, corte: pd.Timestamp) -> list[str]:
-    """Avisos "sin <serie> desde AAAA-MM" para las series de `clave` que no tienen dato vigente en `corte` (cortadas o
-    viejas). AAAA-MM = primer mes sin dato tras la última observación (trimestral: el mes siguiente al trimestre)."""
+    """Avisos "sin <serie> desde AAAA-MM (último dato)" para las series de `clave` que no tienen dato vigente en `corte`
+    (cortadas o viejas), con el mes de la última observación (trimestral: su trimestre, AAAAQn); "sin serie" si no hay
+    ninguna."""
     out = []
     for col, lab, sid, fr in ENTRADAS[clave]:
         sid = sid.format(lc=c.lower(), i2=D.ISO2[c])
@@ -232,8 +233,8 @@ def _sin_dato(pm: pd.DataFrame, ultimos: dict, c: str, clave: str, corte: pd.Tim
         if u is None:
             out.append(f"sin {lab} (sin serie)")
             continue
-        sig = (u + pd.offsets.MonthBegin(1)) if fr == "M" else (u.to_period("Q").end_time.normalize() + pd.Timedelta(days=1))
-        out.append(f"sin {lab} desde {sig:%Y-%m}")
+        out.append(f"sin {lab} desde {u:%Y-%m} (último dato)" if fr == "M" else
+                   f"sin {lab} desde {u.to_period('Q')} (último dato)")
     return out
 
 
@@ -340,7 +341,9 @@ def calcular(pm: pd.DataFrame, bis: dict, pib: dict, corte: pd.Timestamp, par: d
                 salida = {"motivo": "sin bolsa mensual (solo indicadores)" if c in T.SIN_BOLSA
                           else "país de prueba: sin puerta propia de T2 (solo indicadores)"}
             elif not np.isfinite(p2[c][i]):
-                salida = {"motivo": "falta algún indicador de T2 este mes"}
+                faltan = [VARS_T2[j] for j in range(len(VARS_T2)) if not np.isfinite(Z2[c][i][j])]
+                salida = {"motivo": "falta algún indicador de T2 este mes"
+                          + (f" ({', '.join(faltan)})" if faltan else "")}
             else:
                 contrib = par["b_T2"][1:] * (Z2[c][i] - centro)
                 salida = {"probabilidad": round(float(p2[c][i]), 3), "banda": banda(float(p2[c][i]), par["pct_T2"]),

@@ -107,20 +107,31 @@ def test_no_mira_el_futuro():
 
 
 def test_aviso_serie_cortada(vivo):
-    """GBR sin tipo a 3 meses desde 2026-03 y DEU sin crédito/PIB desde 2025-Q2: el indicador sale «—» con aviso."""
+    """Series cortadas o viejas (como GBR real, tipo a 3 meses hasta 2026-02): el indicador sale «—» con aviso por país;
+    un país sin PIB trimestral sale "sin dato" y el resto del termómetro sigue (Validador, diff 2)."""
     con = _warehouse(cortes={"oecd_ir3m_gbr": "2026-02-01", "bis_creditgap_de_ratio": "2025-01-01",
-                             "oecd_gdpq_fra": "2025-07-01"})
+                             "oecd_gdpq_fra": "2025-07-01", "oecd_gdpq_bel": "1900-01-01",
+                             "oecd_ir3m_esp": "2026-02-01"})
     res = _termometro(con, "2026-10-29")
     p = res["paises"]
     assert p["GBR"]["indicadores"]["C1"]["valor"] is None
-    assert p["GBR"]["indicadores"]["C1"]["sin_dato"] == ["sin tipo a 3 meses desde 2026-03"]
-    assert p["GBR"]["avisos_datos"] == ["Curva 10a−3m (media 12 m): sin tipo a 3 meses desde 2026-03"]
-    assert p["DEU"]["avisos_datos"] == ["Δ5 años crédito/PIB (BIS): sin crédito/PIB (BIS) desde 2025-04"]
+    assert p["GBR"]["indicadores"]["C1"]["sin_dato"] == ["sin tipo a 3 meses desde 2026-02 (último dato)"]
+    assert p["GBR"]["avisos_datos"] == ["Curva 10a−3m (media 12 m): sin tipo a 3 meses desde 2026-02 (último dato)"]
+    assert p["DEU"]["avisos_datos"] == ["Δ5 años crédito/PIB (BIS): sin crédito/PIB (BIS) desde 2025Q1 (último dato)"]
     assert p["FRA"]["estado"]["en_recesion"] is None
-    assert p["FRA"]["avisos_datos"] == ["estado de recesión: sin PIB trimestral desde 2025-10"]
-    assert all(not p[c]["avisos_datos"] for c in V.TODOS if c not in {"GBR", "DEU", "FRA"})
+    assert p["FRA"]["avisos_datos"] == ["estado de recesión: sin PIB trimestral desde 2025Q3 (último dato)"]
+    assert p["BEL"]["estado"] == {"en_recesion": None, "ultimo_trimestre_pib": None, "meses_desde_entrada": None}
+    assert p["BEL"]["avisos_datos"] == ["estado de recesión: sin PIB trimestral (sin serie)"]
+    # ESP en recesión sin tipo a 3 meses: sin probabilidad, y se dice qué variables faltan
+    assert p["ESP"]["estado"]["en_recesion"] is True
+    assert p["ESP"]["salida_12m"] == {"motivo": "falta algún indicador de T2 este mes (S1 curva, S2 Δ tipo real corto)"}
+    assert p["ESP"]["avisos_datos"] == ["Curva 10a−3m (media 12 m): sin tipo a 3 meses desde 2026-02 (último dato)"]
+    assert all(not p[c]["avisos_datos"] for c in V.TODOS if c not in {"GBR", "DEU", "FRA", "BEL", "ESP"})
+    assert set(res["en_recesion"]) == EN_RECESION and p["USA"]["indicadores"]["C1"]["valor"] is not None
     assert all(not vivo["paises"][c]["avisos_datos"] for c in V.TODOS)              # sin cortes: sin avisos
-    assert "> - GBR: Curva 10a−3m (media 12 m): sin tipo a 3 meses desde 2026-03." in V.markdown(res)
+    md = V.markdown(res)
+    assert "> - GBR: Curva 10a−3m (media 12 m): sin tipo a 3 meses desde 2026-02 (último dato)." in md
+    assert "> - BEL: estado de recesión: sin PIB trimestral (sin serie)." in md
     assert "Datos que faltan" not in V.markdown(vivo)
 
 
