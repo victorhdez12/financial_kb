@@ -1,0 +1,258 @@
+{
+ "nota": "sensibilidades a posteriori del Validador; no cambian el veredicto oficial",
+ "reproduccion": {
+  "T1": {
+   "filas": 190,
+   "r": 0.7882,
+   "pendiente": 0.7943,
+   "pasa": false
+  },
+  "T2": {
+   "filas": 31,
+   "r": 0.8781,
+   "pendiente": 0.9428,
+   "pasa": true
+  }
+ },
+ "bootstrap_T2": {
+  "por_año": {
+   "grupos": 12,
+   "replicas": 2000,
+   "r_ic95": [
+    0.6533,
+    0.8785,
+    0.9555
+   ],
+   "pendiente_ic95": [
+    0.7752,
+    0.9326,
+    1.1639
+   ],
+   "frac_pasa": 0.8485
+  },
+  "por_episodio": {
+   "grupos": 22,
+   "replicas": 2000,
+   "r_ic95": [
+    0.6989,
+    0.88,
+    0.9351
+   ],
+   "pendiente_ic95": [
+    0.7626,
+    0.94,
+    1.1097
+   ],
+   "frac_pasa": 0.885
+  }
+ },
+ "loco_T1": {
+  "BEL": {
+   "filas": 173,
+   "r": 0.7856,
+   "pendiente": 0.7825,
+   "pasa": false
+  },
+  "DEU": {
+   "filas": 173,
+   "r": 0.7772,
+   "pendiente": 0.7775,
+   "pasa": false
+  },
+  "DNK": {
+   "filas": 190,
+   "r": 0.7882,
+   "pendiente": 0.7943,
+   "pasa": false
+  },
+  "ESP": {
+   "filas": 172,
+   "r": 0.7777,
+   "pendiente": 0.7831,
+   "pasa": false
+  },
+  "FIN": {
+   "filas": 178,
+   "r": 0.8141,
+   "pendiente": 0.863,
+   "pasa": true
+  },
+  "FRA": {
+   "filas": 169,
+   "r": 0.7881,
+   "pendiente": 0.793,
+   "pasa": false
+  },
+  "GBR": {
+   "filas": 175,
+   "r": 0.7971,
+   "pendiente": 0.8105,
+   "pasa": false
+  },
+  "ITA": {
+   "filas": 179,
+   "r": 0.7863,
+   "pendiente": 0.789,
+   "pasa": false
+  },
+  "JPN": {
+   "filas": 190,
+   "r": 0.7882,
+   "pendiente": 0.7943,
+   "pasa": false
+  },
+  "NLD": {
+   "filas": 171,
+   "r": 0.7866,
+   "pendiente": 0.7928,
+   "pasa": false
+  },
+  "NOR": {
+   "filas": 173,
+   "r": 0.7679,
+   "pendiente": 0.747,
+   "pasa": false
+  },
+  "PRT": {
+   "filas": 181,
+   "r": 0.7913,
+   "pendiente": 0.796,
+   "pasa": false
+  },
+  "SWE": {
+   "filas": 176,
+   "r": 0.7965,
+   "pendiente": 0.7952,
+   "pasa": false
+  },
+  "USA": {
+   "filas": 170,
+   "r": 0.7896,
+   "pendiente": 0.8041,
+   "pasa": false
+  }
+ },
+ "sin_B1": {
+  "T1": {
+   "filas": 190,
+   "r": 0.8702,
+   "pendiente": 0.8848,
+   "pasa": true
+  },
+  "T2": {
+   "filas": 31,
+   "r": 0.8582,
+   "pendiente": 0.8435,
+   "pasa": true
+  }
+ },
+ "s4_diseno_T2": {
+  "puerta": {
+   "filas": 31,
+   "r": 0.8183,
+   "pendiente": 0.9064,
+   "pasa": true
+  },
+  "sin_recalibrar": {
+   "filas": 31,
+   "r": 0.8898,
+   "pendiente": 0.8685,
+   "pasa": true
+  },
+  "corr_s4_codigo_vs_diseno_abril": 0.5872
+ },
+ "T2_filas": {
+  "por_pais": {
+   "DEU": 6,
+   "USA": 6,
+   "FIN": 4,
+   "SWE": 3,
+   "GBR": 2,
+   "ITA": 2,
+   "NLD": 2,
+   "PRT": 2,
+   "BEL": 1,
+   "ESP": 1,
+   "FRA": 1,
+   "NOR": 1
+  },
+  "episodios": 22,
+  "años": [
+   1970,
+   1974,
+   1975,
+   1980,
+   1982,
+   1988,
+   1990,
+   1991,
+   1992,
+   1993,
+   2002,
+   2003
+  ],
+  "pa_rango": [
+   0.1943,
+   0.9958
+  ]
+ },
+ "bootstrap_T1": {
+  "por_año": {
+   "grupos": 22,
+   "replicas": 2000,
+   "r_ic95": [
+    0.6448,
+    0.7929,
+    0.92
+   ],
+   "pendiente_ic95": [
+    0.5312,
+    0.7956,
+    1.1521
+   ],
+   "frac_pasa": 0.3705
+  }
+ },
+ "b1_equivalencia": {
+  "T1": {
+   "filas": 525,
+   "estado_vivo_coincide": 0.9867,
+   "col0": {
+    "corr": 0.4181,
+    "media_anual": 0.08,
+    "media_vivo": 0.0381,
+    "iguales": 0.9314
+   },
+   "col1": {
+    "corr": 0.6918,
+    "media_anual": 1.8447,
+    "media_vivo": 1.696,
+    "iguales": 0.0248
+   }
+  },
+  "T2": {
+   "filas": 63,
+   "estado_vivo_coincide": 0.6984,
+   "col0": {
+    "corr": null,
+    "media_anual": 0.2219,
+    "media_vivo": 0.3896,
+    "iguales": 0.3968
+   }
+  }
+ },
+ "paises_T2_regla_corregida": [
+  "BEL",
+  "DEU",
+  "ESP",
+  "FIN",
+  "FRA",
+  "GBR",
+  "ITA",
+  "NLD",
+  "NOR",
+  "PRT",
+  "SWE",
+  "USA"
+ ]
+}
