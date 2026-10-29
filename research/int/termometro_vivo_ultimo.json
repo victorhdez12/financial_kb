@@ -1,9 +1,9 @@
 {
  "fecha_pedida": "2026-10-29",
  "procedencia": {
-  "commit": "900900a960db8899f41e1a24de26d7fa4d6d8ada",
+  "commit": "4d091c7fa38f14688602d45e3d08c06071a58890",
   "arbol_limpio": false,
-  "hora_utc": "2026-10-29T12:38:04+00:00"
+  "hora_utc": "2026-10-29T12:38:13+00:00"
  },
  "fecha_calculo": "2026-09-30",
  "aviso": "Informativo, no es una señal de cartera. Modelo histórico 1871-2004; el riesgo de ENTRAR en recesión no superó su puerta y se muestran solo sus indicadores; la probabilidad de SALIR sí (con pocas filas: prudencia). La inflación no se anticipa.",
@@ -848,7 +848,7 @@
   "p95": 0.9552
  },
  "aviso_T2": "Léase la banda, no el porcentaje: la puerta de T2 se pasó con solo 31 filas / 22 episodios (r 0,82, IC 95 % ≈ [0,65; 0,96]), y el «en recesión» del fechado trimestral coincide con el anual de JST solo ≈ 70 % de las veces.",
- "parametros": "/Users/victorhdez12/Proyectos/financial_kb_int3/research/int/termometro_puerta_v2_corr.json",
+ "parametros": "research/int/termometro_puerta_v2_corr.json",
  "procedencia_puerta": {
   "commit": "d21901f4f5b2937375464210dc430c60e1cdd389",
   "arbol_limpio": true,

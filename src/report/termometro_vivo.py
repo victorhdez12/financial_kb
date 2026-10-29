@@ -107,7 +107,7 @@ def parametros(path: Path = CONGELADO) -> dict:
     return {"b_T2": np.array(b2, float), "cal_T2": (float(cal[0]), float(cal[1])),
             "pct_T2": {k: float(pct[k]) for k in ("p50", "p80", "p95")}, "rectas": rl,
             "paises_T2": [c for c in NUCLEO if c in aprob and c not in T.SIN_BOLSA],
-            "fuente": str(path), "procedencia_puerta": d.get("procedencia")}
+            "fuente": str(Path(path).resolve().relative_to(REPO)) if Path(path).resolve().is_relative_to(REPO) else str(path), "procedencia_puerta": d.get("procedencia")}
 
 
 # ---------------------------------------------------------------- datos en vivo (sin corte 2004, nunca JST)
