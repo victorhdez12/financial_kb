@@ -127,7 +127,8 @@ def resumen_auc(df: pd.DataFrame, a0s=(0.55, 0.60), r=0.5, incremental: bool = F
     if df.empty:
         return {"filas": 0}
     ev = df[df.y == 1][["pais", "E"]].drop_duplicates()
-    rho, _, mk = icc_anova(df.y, df.t)
+    # un solo país: una fila por año, no hay agrupación (el ICC por año no está definido)
+    rho, _, mk = icc_anova(df.y, df.t) if df.pais.nunique() > 1 else (0.0, 1.0, 1.0)
     de = 1 + (mk - 1) * rho
     n1p, n0c = int(ev.E.nunique()), float((df.y == 0).sum() / de)
     out = {"filas": int(len(df)), "eventos": int(len(ev)), "años_distintos": n1p, "tasa_base": _r(df.y.mean()),
