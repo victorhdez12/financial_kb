@@ -98,10 +98,13 @@ def etiquetas_inflacion(a: pd.DataFrame, paises) -> dict:
 
 
 # ---------------------------------------------------------------- indicadores: paneles país × año (1870-2004)
-def paneles(a: pd.DataFrame, extra: pd.DataFrame, nucleo: list[str], paises: list[str], mp: pd.Series | None) -> dict:
+def paneles(a: pd.DataFrame, extra: pd.DataFrame, nucleo: list[str], paises: list[str], mp: pd.Series | None,
+            hasta: int = A1) -> dict:
     """Paneles (DataFrame años × países) de los indicadores candidatos, con las fórmulas de int4_potencia
-    (cobertura_anual) e int4b_potencia (candidatos_nuevos). `extra` trae hpnom, money, wage."""
-    años = range(A0, A1 + 1)
+    (cobertura_anual) e int4b_potencia (candidatos_nuevos). `extra` trae hpnom, money, wage.
+    `hasta` (por defecto A1 = 2004, lo de toda la fase de desarrollo) solo lo cambia P-EVAL-INT4
+    (scripts/peval_int4_refutacion.py, tras su puerta) para alargar los MISMOS paneles hasta 2020."""
+    años = range(A0, hasta + 1)
     w = lambda s: s.unstack(0).reindex(index=años, columns=paises)  # noqa: E731
     x = a.join(extra, how="left")
     g = x.groupby(level=0)
@@ -139,7 +142,7 @@ def desplazar_panel(p: pd.DataFrame, k: int) -> pd.DataFrame:
 def _mira(panel: pd.DataFrame, paises, años) -> np.ndarray:
     ci = panel.columns.get_indexer(paises)
     yi = np.asarray(años) - A0
-    ok = (yi >= 0) & (yi < L) & (ci >= 0)
+    ok = (yi >= 0) & (yi < panel.shape[0]) & (ci >= 0)     # = L con los paneles de desarrollo
     out = np.full(len(yi), np.nan)
     out[ok] = panel.to_numpy()[yi[ok], ci[ok]]
     return out
