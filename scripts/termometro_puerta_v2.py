@@ -2,11 +2,13 @@
 recalibración logit de la probabilidad mensual y validación cruzada en dos mitades (pares ↔ impares), mismos umbrales.
 Si pasa: rectas y recalibración finales con todos los años ≤ 2004 y percentiles de referencia recalibrados.
 Exige el árbol limpio. Salida: research/int/termometro_puerta_v2.{json,md} y una línea en research/trial_log.md.
-Uso: .venv/bin/python -m scripts.termometro_puerta_v2
+Uso: .venv/bin/python -m scripts.termometro_puerta_v2 [--correccion]
+--correccion (29-oct, Validador): S4 según §8 d y lista de países sin DNK/JPN; salida termometro_puerta_v2_corr.*
 """
 from __future__ import annotations
 
 import json
+import sys
 
 import numpy as np
 import pandas as pd
@@ -98,7 +100,7 @@ def main() -> None:
 
     pasa = {g: bool(res["puerta"][g]["agregado"]["pasa"]) for g in GIROS}
     res["veredicto"] = {"pasa_agregado": pasa, "paises_con_probabilidad": {
-        g: [c for c, v in res["puerta"][g]["por_pais"].items() if pasa[g] and v["pasa"] is not False] for g in GIROS}}
+        g: [c for c, v in res["puerta"][g]["por_pais"].items() if pasa[g] and v["pasa"] is not False and v["filas"] > 0 and c not in T.SIN_BOLSA] for g in GIROS}}
     if any(pasa.values()):     # final: todos los años ≤ 2004
         rl = T.rectas(pan, mens, NUCLEO, TODOS, TODO, TODO)
         tr = T.traducir(mens, rl, TODOS)
@@ -112,7 +114,8 @@ def main() -> None:
                         "percentiles_referencia": referencia_cal(tr, pib, fq, b, cal, rej)}
 
     out = REPO / "research" / "int"
-    (out / "termometro_puerta_v2.json").write_text(json.dumps(_r(res), indent=1, ensure_ascii=False))
+    suf = "_corr" if "--correccion" in sys.argv else ""
+    (out / f"termometro_puerta_v2{suf}.json").write_text(json.dumps(_r(res), indent=1, ensure_ascii=False))
     fm = lambda v: "—" if v is None else f"{v:.3f}"  # noqa: E731
     md = ["# Termómetro: puerta, 2.º y último intento (recalibración + validación cruzada)", "",
           f"Diseño v1.3 §9 (`a94ac09`); commit {proc['commit'][:7]}, árbol limpio {proc['arbol_limpio']}, "
@@ -129,9 +132,9 @@ def main() -> None:
     if res["final"]:
         md += ["", f"Percentiles de referencia (recalibrados, todos los años ≤ 2004): "
                    f"{_r(res['final']['percentiles_referencia'])}"]
-    (out / "termometro_puerta_v2.md").write_text("\n".join(md) + "\n")
+    (out / f"termometro_puerta_v2{suf}.md").write_text("\n".join(md) + "\n")
     with open(REPO / "research" / "trial_log.md", "a") as fh:
-        fh.write(f"| {proc['hora_utc']} | termometro_puerta_v2 (2.º y último intento) | {proc['commit'][:7]} | "
+        fh.write(f"| {proc['hora_utc']} | termometro_puerta_v2{suf} (2.º y último intento{' — corrección de error del Validador' if suf else ''}) | {proc['commit'][:7]} | "
                  f"puerta T1 {pasa['T1']} T2 {pasa['T2']} | recalibración logit + validación cruzada 2 mitades |\n")
     print(res["veredicto"])
 

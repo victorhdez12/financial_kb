@@ -1,0 +1,850 @@
+{
+ "procedencia": {
+  "commit": "d21901f4f5b2937375464210dc430c60e1cdd389",
+  "arbol_limpio": true,
+  "hora_utc": "2026-10-29T12:35:54+00:00"
+ },
+ "diseno": "docs/int/TERMOMETRO_diseno_v1.md §9 (v1.3, a94ac09)",
+ "puerta": {
+  "T1": {
+   "agregado": {
+    "filas": 190,
+    "r": 0.7882,
+    "pendiente": 0.7943,
+    "pasa": false
+   },
+   "por_pais": {
+    "BEL": {
+     "filas": 17,
+     "r": 0.8282,
+     "pendiente": 0.9681,
+     "pasa": true,
+     "muestra": "propia"
+    },
+    "DEU": {
+     "filas": 17,
+     "r": 0.8753,
+     "pendiente": 0.9283,
+     "pasa": true,
+     "muestra": "propia"
+    },
+    "DNK": {
+     "filas": 0,
+     "pasa": null,
+     "muestra": "sin puerta propia"
+    },
+    "ESP": {
+     "filas": 18,
+     "r": 0.8937,
+     "pendiente": 0.9076,
+     "pasa": true,
+     "muestra": "propia"
+    },
+    "FIN": {
+     "filas": 12,
+     "r": 0.6882,
+     "pendiente": 0.4948,
+     "pasa": false,
+     "muestra": "propia"
+    },
+    "FRA": {
+     "filas": 21,
+     "r": 0.7822,
+     "pendiente": 0.7907,
+     "pasa": false,
+     "muestra": "propia"
+    },
+    "GBR": {
+     "filas": 15,
+     "r": 0.6709,
+     "pendiente": 0.5977,
+     "pasa": false,
+     "muestra": "propia"
+    },
+    "ITA": {
+     "filas": 11,
+     "r": 0.8495,
+     "pendiente": 0.9728,
+     "pasa": true,
+     "muestra": "propia"
+    },
+    "JPN": {
+     "filas": 0,
+     "pasa": null,
+     "muestra": "sin puerta propia"
+    },
+    "NLD": {
+     "filas": 19,
+     "r": 0.8025,
+     "pendiente": 0.815,
+     "pasa": true,
+     "muestra": "propia"
+    },
+    "NOR": {
+     "filas": 17,
+     "r": 0.8848,
+     "pendiente": 1.0191,
+     "pasa": true,
+     "muestra": "propia"
+    },
+    "PRT": {
+     "filas": 9,
+     "r": 0.6828,
+     "pendiente": 0.7323,
+     "pasa": false,
+     "muestra": "propia"
+    },
+    "SWE": {
+     "filas": 14,
+     "r": 0.7197,
+     "pendiente": 0.7857,
+     "pasa": false,
+     "muestra": "propia"
+    },
+    "USA": {
+     "filas": 20,
+     "r": 0.7603,
+     "pendiente": 0.5649,
+     "pasa": false,
+     "muestra": "propia"
+    }
+   }
+  },
+  "T2": {
+   "agregado": {
+    "filas": 31,
+    "r": 0.8183,
+    "pendiente": 0.9064,
+    "pasa": true
+   },
+   "por_pais": {
+    "BEL": {
+     "filas": 1,
+     "pasa": null,
+     "muestra": "sin puerta propia"
+    },
+    "DEU": {
+     "filas": 6,
+     "pasa": null,
+     "muestra": "sin puerta propia"
+    },
+    "DNK": {
+     "filas": 0,
+     "pasa": null,
+     "muestra": "sin puerta propia"
+    },
+    "ESP": {
+     "filas": 1,
+     "pasa": null,
+     "muestra": "sin puerta propia"
+    },
+    "FIN": {
+     "filas": 4,
+     "pasa": null,
+     "muestra": "sin puerta propia"
+    },
+    "FRA": {
+     "filas": 1,
+     "pasa": null,
+     "muestra": "sin puerta propia"
+    },
+    "GBR": {
+     "filas": 2,
+     "pasa": null,
+     "muestra": "sin puerta propia"
+    },
+    "ITA": {
+     "filas": 2,
+     "pasa": null,
+     "muestra": "sin puerta propia"
+    },
+    "JPN": {
+     "filas": 0,
+     "pasa": null,
+     "muestra": "sin puerta propia"
+    },
+    "NLD": {
+     "filas": 2,
+     "pasa": null,
+     "muestra": "sin puerta propia"
+    },
+    "NOR": {
+     "filas": 1,
+     "pasa": null,
+     "muestra": "sin puerta propia"
+    },
+    "PRT": {
+     "filas": 2,
+     "pasa": null,
+     "muestra": "sin puerta propia"
+    },
+    "SWE": {
+     "filas": 3,
+     "pasa": null,
+     "muestra": "sin puerta propia"
+    },
+    "USA": {
+     "filas": 6,
+     "pasa": null,
+     "muestra": "sin puerta propia"
+    }
+   }
+  }
+ },
+ "sin_recalibrar_cruzada": {
+  "T1": {
+   "filas": 190,
+   "r": 0.7925,
+   "pendiente": 0.6797,
+   "pasa": false
+  },
+  "T2": {
+   "filas": 31,
+   "r": 0.8898,
+   "pendiente": 0.8685,
+   "pasa": true
+  }
+ },
+ "final": {
+  "modelo": {
+   "T1": [
+    -1.7765,
+    -0.1935,
+    -0.4043,
+    -0.1353,
+    1.4058,
+    1.9357,
+    -1.0095,
+    -3.029
+   ],
+   "T2": [
+    0.956,
+    0.2221,
+    0.0468,
+    2.2756,
+    5.4296,
+    -0.541,
+    -1.5401
+   ]
+  },
+  "cal": {
+   "T1": [
+    -0.3401,
+    0.8891
+   ],
+   "T2": [
+    0.031,
+    0.9483
+   ]
+  },
+  "rectas": {
+   "C1": {
+    "agrupada": {
+     "a": 0.1573,
+     "b": 0.915,
+     "n": 323
+    },
+    "BEL": {
+     "a": 0.0499,
+     "b": 0.8694,
+     "tipo": "propia",
+     "n_ajuste": 46,
+     "n_puerta": 46
+    },
+    "DEU": {
+     "a": 0.637,
+     "b": 0.872,
+     "tipo": "propia",
+     "n_ajuste": 44,
+     "n_puerta": 44
+    },
+    "DNK": {
+     "a": 0.2301,
+     "b": 0.8508,
+     "tipo": "propia",
+     "n_ajuste": 17,
+     "n_puerta": 17
+    },
+    "ESP": {
+     "a": 0.2188,
+     "b": 1.0021,
+     "tipo": "propia",
+     "n_ajuste": 24,
+     "n_puerta": 24
+    },
+    "FIN": {
+     "a": 0.707,
+     "b": 0.7039,
+     "tipo": "propia",
+     "n_ajuste": 16,
+     "n_puerta": 16
+    },
+    "FRA": {
+     "a": -0.0495,
+     "b": 0.8332,
+     "tipo": "propia",
+     "n_ajuste": 34,
+     "n_puerta": 34
+    },
+    "GBR": {
+     "a": 0.3393,
+     "b": 1.111,
+     "tipo": "propia",
+     "n_ajuste": 18,
+     "n_puerta": 18
+    },
+    "ITA": {
+     "a": 0.1573,
+     "b": 0.915,
+     "tipo": "agrupada",
+     "n_ajuste": 13,
+     "n_puerta": 13
+    },
+    "JPN": {
+     "a": 0.1573,
+     "b": 0.915,
+     "tipo": "agrupada",
+     "n_ajuste": 2,
+     "n_puerta": 2
+    },
+    "NLD": {
+     "a": 0.0374,
+     "b": 1.0011,
+     "tipo": "propia",
+     "n_ajuste": 22,
+     "n_puerta": 22
+    },
+    "NOR": {
+     "a": -0.131,
+     "b": 0.6028,
+     "tipo": "propia",
+     "n_ajuste": 19,
+     "n_puerta": 19
+    },
+    "PRT": {
+     "a": 0.1573,
+     "b": 0.915,
+     "tipo": "agrupada",
+     "n_ajuste": 11,
+     "n_puerta": 11
+    },
+    "SWE": {
+     "a": -0.0015,
+     "b": 1.0013,
+     "tipo": "propia",
+     "n_ajuste": 17,
+     "n_puerta": 17
+    },
+    "USA": {
+     "a": 0.058,
+     "b": 1.0302,
+     "tipo": "propia",
+     "n_ajuste": 40,
+     "n_puerta": 40
+    },
+    "AUS": {
+     "a": 0.9012,
+     "b": 0.6883,
+     "tipo": "propia",
+     "n_ajuste": 35,
+     "n_puerta": 35
+    },
+    "CHE": {
+     "a": 0.1573,
+     "b": 0.915,
+     "tipo": "agrupada",
+     "n_ajuste": 5,
+     "n_puerta": 5
+    },
+    "CAN": {
+     "a": 0.709,
+     "b": 0.9242,
+     "tipo": "propia",
+     "n_ajuste": 48,
+     "n_puerta": 48
+    },
+    "IRL": {
+     "a": 0.0532,
+     "b": 0.845,
+     "tipo": "propia",
+     "n_ajuste": 20,
+     "n_puerta": 20
+    }
+   },
+   "C2": {
+    "agrupada": {
+     "a": 0.001,
+     "b": 0.0054,
+     "n": 495
+    },
+    "BEL": {
+     "a": 0.0411,
+     "b": -0.0004,
+     "tipo": "propia",
+     "n_ajuste": 28,
+     "n_puerta": 28
+    },
+    "DEU": {
+     "a": 0.0309,
+     "b": 0.004,
+     "tipo": "propia",
+     "n_ajuste": 38,
+     "n_puerta": 38
+    },
+    "DNK": {
+     "a": 0.0018,
+     "b": 0.0084,
+     "tipo": "propia",
+     "n_ajuste": 32,
+     "n_puerta": 32
+    },
+    "ESP": {
+     "a": 0.0009,
+     "b": 0.0054,
+     "tipo": "propia",
+     "n_ajuste": 29,
+     "n_puerta": 29
+    },
+    "FIN": {
+     "a": -0.0087,
+     "b": 0.0049,
+     "tipo": "propia",
+     "n_ajuste": 28,
+     "n_puerta": 28
+    },
+    "FRA": {
+     "a": -0.0089,
+     "b": 0.0032,
+     "tipo": "propia",
+     "n_ajuste": 29,
+     "n_puerta": 29
+    },
+    "GBR": {
+     "a": 0.0249,
+     "b": 0.0051,
+     "tipo": "propia",
+     "n_ajuste": 36,
+     "n_puerta": 36
+    },
+    "ITA": {
+     "a": 0.0088,
+     "b": 0.0072,
+     "tipo": "propia",
+     "n_ajuste": 38,
+     "n_puerta": 38
+    },
+    "JPN": {
+     "a": -0.0044,
+     "b": 0.0046,
+     "tipo": "propia",
+     "n_ajuste": 34,
+     "n_puerta": 34
+    },
+    "NLD": {
+     "a": -0.0363,
+     "b": 0.006,
+     "tipo": "propia",
+     "n_ajuste": 38,
+     "n_puerta": 38
+    },
+    "NOR": {
+     "a": 0.0101,
+     "b": 0.0048,
+     "tipo": "propia",
+     "n_ajuste": 38,
+     "n_puerta": 38
+    },
+    "PRT": {
+     "a": 0.0106,
+     "b": 0.0065,
+     "tipo": "propia",
+     "n_ajuste": 38,
+     "n_puerta": 38
+    },
+    "SWE": {
+     "a": 0.005,
+     "b": 0.0069,
+     "tipo": "propia",
+     "n_ajuste": 38,
+     "n_puerta": 38
+    },
+    "USA": {
+     "a": -0.0232,
+     "b": 0.006,
+     "tipo": "propia",
+     "n_ajuste": 51,
+     "n_puerta": 51
+    },
+    "AUS": {
+     "a": 0.0474,
+     "b": 0.0032,
+     "tipo": "propia",
+     "n_ajuste": 39,
+     "n_puerta": 39
+    },
+    "CHE": {
+     "a": 0.013,
+     "b": 0.0061,
+     "tipo": "propia",
+     "n_ajuste": 38,
+     "n_puerta": 38
+    },
+    "CAN": {
+     "a": 0.0084,
+     "b": 0.0052,
+     "tipo": "propia",
+     "n_ajuste": 43,
+     "n_puerta": 43
+    },
+    "IRL": {
+     "a": 0.0226,
+     "b": 0.0043,
+     "tipo": "propia",
+     "n_ajuste": 28,
+     "n_puerta": 28
+    }
+   },
+   "C5": {
+    "agrupada": {
+     "a": -0.0006,
+     "b": 0.5471,
+     "n": 343
+    },
+    "BEL": {
+     "a": -0.0003,
+     "b": 0.73,
+     "tipo": "propia",
+     "n_ajuste": 45,
+     "n_puerta": 45
+    },
+    "DEU": {
+     "a": -0.0002,
+     "b": 0.7235,
+     "tipo": "propia",
+     "n_ajuste": 43,
+     "n_puerta": 43
+    },
+    "DNK": {
+     "a": -0.0026,
+     "b": 0.5004,
+     "tipo": "propia",
+     "n_ajuste": 16,
+     "n_puerta": 16
+    },
+    "ESP": {
+     "a": 0.0009,
+     "b": 0.8891,
+     "tipo": "propia",
+     "n_ajuste": 26,
+     "n_puerta": 26
+    },
+    "FIN": {
+     "a": -0.0035,
+     "b": -0.143,
+     "tipo": "propia",
+     "n_ajuste": 16,
+     "n_puerta": 16
+    },
+    "FRA": {
+     "a": -0.0005,
+     "b": 0.6236,
+     "tipo": "propia",
+     "n_ajuste": 33,
+     "n_puerta": 33
+    },
+    "GBR": {
+     "a": -0.0003,
+     "b": 1.0225,
+     "tipo": "propia",
+     "n_ajuste": 17,
+     "n_puerta": 17
+    },
+    "ITA": {
+     "a": -0.0008,
+     "b": 0.4339,
+     "tipo": "propia",
+     "n_ajuste": 24,
+     "n_puerta": 24
+    },
+    "JPN": {
+     "a": -0.0006,
+     "b": 0.5471,
+     "tipo": "agrupada",
+     "n_ajuste": 1,
+     "n_puerta": 1
+    },
+    "NLD": {
+     "a": -0.0003,
+     "b": 0.5371,
+     "tipo": "propia",
+     "n_ajuste": 21,
+     "n_puerta": 21
+    },
+    "NOR": {
+     "a": -0.0017,
+     "b": 0.1981,
+     "tipo": "propia",
+     "n_ajuste": 24,
+     "n_puerta": 24
+    },
+    "PRT": {
+     "a": -0.0015,
+     "b": 0.3321,
+     "tipo": "propia",
+     "n_ajuste": 17,
+     "n_puerta": 17
+    },
+    "SWE": {
+     "a": -0.0003,
+     "b": 0.132,
+     "tipo": "propia",
+     "n_ajuste": 21,
+     "n_puerta": 21
+    },
+    "USA": {
+     "a": -0.0004,
+     "b": 0.5129,
+     "tipo": "propia",
+     "n_ajuste": 39,
+     "n_puerta": 39
+    },
+    "AUS": {
+     "a": -0.0006,
+     "b": 0.5471,
+     "tipo": "agrupada",
+     "n_ajuste": 0,
+     "n_puerta": 0
+    },
+    "CHE": {
+     "a": -0.0006,
+     "b": 0.5471,
+     "tipo": "agrupada",
+     "n_ajuste": 4,
+     "n_puerta": 4
+    },
+    "CAN": {
+     "a": -0.0004,
+     "b": 0.489,
+     "tipo": "propia",
+     "n_ajuste": 47,
+     "n_puerta": 47
+    },
+    "IRL": {
+     "a": -0.0013,
+     "b": 0.4844,
+     "tipo": "propia",
+     "n_ajuste": 19,
+     "n_puerta": 19
+    }
+   },
+   "C6": {
+    "agrupada": {
+     "a": 0.0614,
+     "b": 0.8706,
+     "n": 443
+    },
+    "BEL": {
+     "a": 0.0693,
+     "b": 0.7967,
+     "tipo": "propia",
+     "n_ajuste": 18,
+     "n_puerta": 18
+    },
+    "DEU": {
+     "a": 0.0578,
+     "b": 0.8159,
+     "tipo": "propia",
+     "n_ajuste": 44,
+     "n_puerta": 44
+    },
+    "DNK": {
+     "a": 0.0614,
+     "b": 0.8706,
+     "tipo": "agrupada",
+     "n_ajuste": 0,
+     "n_puerta": 0
+    },
+    "ESP": {
+     "a": 0.0924,
+     "b": 0.8986,
+     "tipo": "propia",
+     "n_ajuste": 19,
+     "n_puerta": 19
+    },
+    "FIN": {
+     "a": 0.08,
+     "b": 1.0207,
+     "tipo": "propia",
+     "n_ajuste": 47,
+     "n_puerta": 47
+    },
+    "FRA": {
+     "a": 0.0247,
+     "b": 0.7333,
+     "tipo": "propia",
+     "n_ajuste": 49,
+     "n_puerta": 49
+    },
+    "GBR": {
+     "a": 0.0804,
+     "b": 0.9811,
+     "tipo": "propia",
+     "n_ajuste": 46,
+     "n_puerta": 46
+    },
+    "ITA": {
+     "a": 0.0563,
+     "b": 0.8204,
+     "tipo": "propia",
+     "n_ajuste": 47,
+     "n_puerta": 47
+    },
+    "JPN": {
+     "a": 0.0614,
+     "b": 0.8706,
+     "tipo": "agrupada",
+     "n_ajuste": 0,
+     "n_puerta": 0
+    },
+    "NLD": {
+     "a": 0.0768,
+     "b": 0.8485,
+     "tipo": "propia",
+     "n_ajuste": 43,
+     "n_puerta": 43
+    },
+    "NOR": {
+     "a": 0.0445,
+     "b": 0.8234,
+     "tipo": "propia",
+     "n_ajuste": 18,
+     "n_puerta": 18
+    },
+    "PRT": {
+     "a": 0.0206,
+     "b": 0.7739,
+     "tipo": "propia",
+     "n_ajuste": 16,
+     "n_puerta": 16
+    },
+    "SWE": {
+     "a": 0.0653,
+     "b": 0.8908,
+     "tipo": "propia",
+     "n_ajuste": 49,
+     "n_puerta": 49
+    },
+    "USA": {
+     "a": 0.0513,
+     "b": 0.86,
+     "tipo": "propia",
+     "n_ajuste": 47,
+     "n_puerta": 47
+    },
+    "AUS": {
+     "a": 0.0614,
+     "b": 0.8706,
+     "tipo": "agrupada",
+     "n_ajuste": 0,
+     "n_puerta": 0
+    },
+    "CHE": {
+     "a": 0.0455,
+     "b": 0.9747,
+     "tipo": "propia",
+     "n_ajuste": 49,
+     "n_puerta": 49
+    },
+    "CAN": {
+     "a": 0.0614,
+     "b": 0.8706,
+     "tipo": "agrupada",
+     "n_ajuste": 0,
+     "n_puerta": 0
+    },
+    "IRL": {
+     "a": 0.0614,
+     "b": 0.8706,
+     "tipo": "agrupada",
+     "n_ajuste": 0,
+     "n_puerta": 0
+    }
+   }
+  },
+  "percentiles_referencia": {
+   "T1": {
+    "meses": 2378,
+    "p50": 0.0775,
+    "p80": 0.1552,
+    "p95": 0.2986
+   },
+   "T2": {
+    "meses": 295,
+    "p50": 0.816,
+    "p80": 0.9068,
+    "p95": 0.9552
+   }
+  }
+ },
+ "pliegues": {
+  "T1": {
+   "pares→impares": {
+    "cal": [
+     -0.187,
+     1.0075
+    ],
+    "filas_ajuste": 95,
+    "filas_puerta": 95
+   },
+   "impares→pares": {
+    "cal": [
+     -0.3863,
+     0.836
+    ],
+    "filas_ajuste": 95,
+    "filas_puerta": 95
+   }
+  },
+  "T2": {
+   "pares→impares": {
+    "cal": [
+     -0.2695,
+     0.8677
+    ],
+    "filas_ajuste": 13,
+    "filas_puerta": 18
+   },
+   "impares→pares": {
+    "cal": [
+     0.3677,
+     0.8304
+    ],
+    "filas_ajuste": 18,
+    "filas_puerta": 13
+   }
+  }
+ },
+ "veredicto": {
+  "pasa_agregado": {
+   "T1": false,
+   "T2": true
+  },
+  "paises_con_probabilidad": {
+   "T1": [],
+   "T2": [
+    "BEL",
+    "DEU",
+    "ESP",
+    "FIN",
+    "FRA",
+    "GBR",
+    "ITA",
+    "NLD",
+    "NOR",
+    "PRT",
+    "SWE",
+    "USA"
+   ]
+  }
+ }
+}

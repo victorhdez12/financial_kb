@@ -95,7 +95,10 @@ def mensuales(pm: pd.DataFrame, bis: dict, pib: dict, nucleo: list[str], paises:
     c6[[c for c in paises if c in SIN_BOLSA]] = np.nan
     c2 = pd.DataFrame({c: asof_q(_rejilla_q(bis[c]).diff(20), RETRASO_BIS, rej) if c in bis else np.nan
                        for c in paises}, index=rej)
-    g4 = pd.DataFrame({c: asof_q(np.log(_rejilla_q(pib[c])).diff(4), RETRASO_PIB, rej) if c in pib else np.nan
+    # §8 d: suma de 4 trimestres frente a la de 4 trimestres antes (corregido 29-oct, Validador: antes era la
+    # interanual de un solo trimestre)
+    g4 = pd.DataFrame({c: asof_q(np.log(_rejilla_q(pib[c]).rolling(4, min_periods=4).sum()).diff(4), RETRASO_PIB, rej)
+                       if c in pib else np.nan
                        for c in paises}, index=rej)
     out = {"C1": c1, "C2": c2, "C5": r - r.shift(12), "C6": c6}
     for k, base in (("C4", c1), ("S4", g4)):
