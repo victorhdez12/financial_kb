@@ -59,3 +59,41 @@ Comprobado leyendo el código y con valores reales (USA, abril de 1991):
   (impar), el pico es par, y el par (C2 anual del pico, C2 mensual de abril pico + 1) está en el ajuste de la recta de C2
   de ese pliegue. Es un punto entre ≥ 15 (propia) o ≈ 250 (agrupada), y solo de un indicador: efecto pequeño, pero la
   separación no es estricta para S5. Arreglo posible: separar por la paridad del pico en S5 (no se propone rehacer la puerta).
+
+## 3. Fechado trimestral, `estado_mensual` y B1 en vivo — ⚠️
+
+**Fechado (`fechado_trimestral`) ✅.** d(q) = S(q) − S(q − 1), con S la suma móvil de 4 trimestres (= PIB(q) − PIB(q − 4)).
+Entra en el trimestre de la 2.ª caída seguida estando fuera; sale en el de la 2.ª subida seguida estando dentro. Es causal
+(cada trimestre solo usa datos ≤ q) y coincide con §3. El test sintético lo cubre. Concordancia publicada (no es puerta):
+40/45 entradas y 36/45 salidas JST cazadas a ± 1 año, 8 entradas trimestrales sin recesión JST.
+
+**`estado_mensual` ✅.** El estado del trimestre q se conoce en fin(q) + 75 días (`merge_asof`). "Meses desde la entrada"
+y "desde la salida" se cuentan desde el mes de cierre del trimestre de giro. Sin salida previa, se cuenta desde el primer
+trimestre con PIB. Si el último estado conocido tiene más de 200 días, `en_rec` = NaN (y la fila no entra ni en "fuera"
+ni en "dentro"). Correcto.
+
+**⚠️ S4 no es la de §8 d.** El diseño dice: "% de los otros países con la **suma de 4 trimestres** del PIB real por debajo
+de la de 4 trimestres antes", es decir S(q) < S(q − 4). El código (`mensuales`, l. 98) usa
+`log PIB(q) − log PIB(q − 4) < 0`, la interanual de UN trimestre. Son cosas distintas: en abril de t + 1 las dos difusiones
+correlacionan solo 0,59 (1961-2003, todos los países). Con la de §8 d, T2 **sigue pasando**, con menos margen: r 0,818,
+pendiente 0,906 (oficial: 0,878 / 0,943); sin recalibrar, 0,890 / 0,869. **No cambia el veredicto**, pero es una desviación
+del diseño fijado y el margen de r pasa de 0,078 a 0,018. La suma de 4 trimestres es además la medida más parecida a la
+caída del PIB anual que usa JST. Diff en §9.
+
+**`b1_vivo` frente a `int4.liston`: no son equivalentes (⚠️, no afecta a la puerta).** La puerta usa, por diseño (§8 e),
+el B1 de JST en las dos probabilidades; `b1_vivo` solo entra en los percentiles de referencia y en vivo. Comparado en las
+filas del modelo, en abril de t + 1 (1962-2003):
+
+| | T1 (525 filas) | T2 (63 filas) |
+|---|---|---|
+| estado en vivo = estado de la fila (fuera / dentro) | 98,7 % | **69,8 %** |
+| "primer año tras el valle" igual | 93 % (corr 0,42) | — |
+| log años desde el valle / log duración | corr 0,69 (medias 1,84 / 1,70) | corr 0,85 en las 44 filas que coinciden, igual en el 52 % |
+
+- La definición se corresponde (meses/12 con suelo 1 ↔ años con suelo 1), pero el fechado es otro (PIB total trimestral
+  frente a PIB per cápita anual; p. ej. DEU 1990, con la reunificación).
+- En T2, 3 de cada 10 filas en recesión según JST están "fuera" según el fechado en vivo. En vivo no se mostraría la
+  probabilidad de salir, o se mostraría la de entrar. Y cuando coinciden, la duración difiere en la mitad de los casos.
+- La puerta **no mide** este error. Es el mayor error que no se ha medido en la cadena de T2 en vivo.
+- Recomendación (sin rehacer la puerta): publicar junto a T2 la concordancia del estado (70 %). Y, como informativo, la
+  correlación de p anual con la p mensual que usa B1 en vivo, en las filas donde coinciden los estados.
