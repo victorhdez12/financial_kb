@@ -1,9 +1,9 @@
 {
  "fecha_pedida": "2026-10-29",
  "procedencia": {
-  "commit": "4d091c7fa38f14688602d45e3d08c06071a58890",
-  "arbol_limpio": false,
-  "hora_utc": "2026-10-29T12:38:13+00:00"
+  "commit": "4f0c3a4386813d05a1d4db633b4ab721f41405a3",
+  "arbol_limpio": true,
+  "hora_utc": "2026-10-29T14:07:31+00:00"
  },
  "fecha_calculo": "2026-09-30",
  "aviso": "Informativo, no es una señal de cartera. Modelo histórico 1871-2004; el riesgo de ENTRAR en recesión no superó su puerta y se muestran solo sus indicadores; la probabilidad de SALIR sí (con pocas filas: prudencia). La inflación no se anticipa.",
@@ -52,7 +52,8 @@
      "meses_hist": 514
     }
    },
-   "salida_12m": null
+   "salida_12m": null,
+   "avisos_datos": []
   },
   "DEU": {
    "grupo": "nucleo",
@@ -98,7 +99,8 @@
      "meses_hist": 514
     }
    },
-   "salida_12m": null
+   "salida_12m": null,
+   "avisos_datos": []
   },
   "DNK": {
    "grupo": "nucleo",
@@ -144,7 +146,8 @@
      "meses_hist": 514
     }
    },
-   "salida_12m": null
+   "salida_12m": null,
+   "avisos_datos": []
   },
   "ESP": {
    "grupo": "nucleo",
@@ -190,7 +193,8 @@
      "meses_hist": 514
     }
    },
-   "salida_12m": null
+   "salida_12m": null,
+   "avisos_datos": []
   },
   "FIN": {
    "grupo": "nucleo",
@@ -236,7 +240,8 @@
      "meses_hist": 514
     }
    },
-   "salida_12m": null
+   "salida_12m": null,
+   "avisos_datos": []
   },
   "FRA": {
    "grupo": "nucleo",
@@ -282,7 +287,8 @@
      "meses_hist": 514
     }
    },
-   "salida_12m": null
+   "salida_12m": null,
+   "avisos_datos": []
   },
   "GBR": {
    "grupo": "nucleo",
@@ -297,7 +303,10 @@
      "unidad": "pp",
      "valor": null,
      "percentil_hasta_2004": null,
-     "meses_hist": 219
+     "meses_hist": 219,
+     "sin_dato": [
+      "sin tipo a 3 meses desde 2026-03"
+     ]
     },
     "C4": {
      "indicador": "Difusión de curvas invertidas",
@@ -328,7 +337,10 @@
      "meses_hist": 514
     }
    },
-   "salida_12m": null
+   "salida_12m": null,
+   "avisos_datos": [
+    "Curva 10a−3m (media 12 m): sin tipo a 3 meses desde 2026-03"
+   ]
   },
   "ITA": {
    "grupo": "nucleo",
@@ -374,7 +386,8 @@
      "meses_hist": 514
     }
    },
-   "salida_12m": null
+   "salida_12m": null,
+   "avisos_datos": []
   },
   "JPN": {
    "grupo": "nucleo",
@@ -420,7 +433,8 @@
      "meses_hist": 514
     }
    },
-   "salida_12m": null
+   "salida_12m": null,
+   "avisos_datos": []
   },
   "NLD": {
    "grupo": "nucleo",
@@ -466,7 +480,8 @@
      "meses_hist": 514
     }
    },
-   "salida_12m": null
+   "salida_12m": null,
+   "avisos_datos": []
   },
   "NOR": {
    "grupo": "nucleo",
@@ -512,7 +527,8 @@
      "meses_hist": 514
     }
    },
-   "salida_12m": null
+   "salida_12m": null,
+   "avisos_datos": []
   },
   "PRT": {
    "grupo": "nucleo",
@@ -558,7 +574,8 @@
      "meses_hist": 514
     }
    },
-   "salida_12m": null
+   "salida_12m": null,
+   "avisos_datos": []
   },
   "SWE": {
    "grupo": "nucleo",
@@ -604,7 +621,8 @@
      "meses_hist": 514
     }
    },
-   "salida_12m": null
+   "salida_12m": null,
+   "avisos_datos": []
   },
   "USA": {
    "grupo": "usa",
@@ -650,7 +668,8 @@
      "meses_hist": 514
     }
    },
-   "salida_12m": null
+   "salida_12m": null,
+   "avisos_datos": []
   },
   "AUS": {
    "grupo": "prueba",
@@ -696,7 +715,8 @@
      "meses_hist": 514
     }
    },
-   "salida_12m": null
+   "salida_12m": null,
+   "avisos_datos": []
   },
   "CHE": {
    "grupo": "prueba",
@@ -742,7 +762,8 @@
      "meses_hist": 514
     }
    },
-   "salida_12m": null
+   "salida_12m": null,
+   "avisos_datos": []
   },
   "CAN": {
    "grupo": "prueba",
@@ -788,7 +809,8 @@
      "meses_hist": 514
     }
    },
-   "salida_12m": null
+   "salida_12m": null,
+   "avisos_datos": []
   },
   "IRL": {
    "grupo": "prueba",
@@ -836,19 +858,21 @@
    },
    "salida_12m": {
     "motivo": "país de prueba: sin puerta propia de T2 (solo indicadores)"
-   }
+   },
+   "avisos_datos": []
   }
  },
  "en_recesion": [
   "IRL"
  ],
  "percentiles_T2": {
-  "p50": 0.816,
-  "p80": 0.9068,
-  "p95": 0.9552
+  "p50": 0.8159936465054107,
+  "p80": 0.9068323389130056,
+  "p95": 0.9552136637838904
  },
  "aviso_T2": "Léase la banda, no el porcentaje: la puerta de T2 se pasó con solo 31 filas / 22 episodios (r 0,82, IC 95 % ≈ [0,65; 0,96]), y el «en recesión» del fechado trimestral coincide con el anual de JST solo ≈ 70 % de las veces.",
  "parametros": "research/int/termometro_puerta_v2_corr.json",
+ "parametros_sin_redondeo": "research/int/termometro_referencias.json",
  "procedencia_puerta": {
   "commit": "d21901f4f5b2937375464210dc430c60e1cdd389",
   "arbol_limpio": true,
