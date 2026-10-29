@@ -107,3 +107,4 @@ mira salvo en la evaluación única preregistrada.
 | 2026-10-26 | Constructor (P-DEV-INT4-ML v1.0, corrida única) | commit 34858ee; M-L2 y M-GB frente al logit de INT-4, T1 y T2, dejar un país fuera, AUC estratificada, Holm-4; establecidos {"M-L2|T1": false, "M-GB|T1": false, "M-L2|T2": false, "M-GB|T2": false}; scikit-learn 1.5.2; research/int/int4ml_resultado.json |
 | 2026-10-29T11:20:34+00:00 | termometro_puerta | 24979da | puerta traducción T1 False T2 False | ejecución única con puerta (diseño v1.2) |
 | 2026-10-29T11:29:39+00:00 | termometro_puerta_v2 (2.º y último intento) | eb3c73d | puerta T1 False T2 True | recalibración logit + validación cruzada 2 mitades |
+| 2026-10-29T12:35:54+00:00 | termometro_puerta_v2_corr (2.º y último intento — corrección de error del Validador) | d21901f | puerta T1 False T2 True | recalibración logit + validación cruzada 2 mitades |
