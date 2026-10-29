@@ -214,3 +214,20 @@ def concordancia(rec: pd.DataFrame, fq: dict, desde: int = 1961, hasta: int = 20
                                                        "entradas_trimestrales")}
     tot["falsas"] = sum(len(v["falsas"]) for v in out.values())
     return {"por_pais": out, "total": tot}
+
+
+# ---------------------------------------------------------------- recalibración (v1.3, §9)
+def _lg(p):
+    p = np.clip(p, 1e-6, 1 - 1e-6)
+    return np.log(p / (1 - p))
+
+
+def calibrar(pa: np.ndarray, pm: np.ndarray) -> tuple[float, float]:
+    """MCO de logit(p anual) sobre logit(p mensual) → (α, β). Solo las dos probabilidades, nunca el objetivo."""
+    ok = np.isfinite(pa) & np.isfinite(pm)
+    b, a = np.polyfit(_lg(pm[ok]), _lg(pa[ok]), 1)
+    return float(a), float(b)
+
+
+def aplicar_cal(pm: np.ndarray, cal: tuple[float, float]) -> np.ndarray:
+    return 1 / (1 + np.exp(-(cal[0] + cal[1] * _lg(pm))))

@@ -47,3 +47,13 @@ def test_puerta():
     assert T.puerta(p, p)["pasa"]
     assert not T.puerta(p, p * 2)["pasa"]                             # pendiente 0,5
     assert not T.puerta(p, np.random.default_rng(1).permutation(p))["pasa"]
+
+
+def test_recalibracion_corrige_escala():
+    rng = np.random.default_rng(2)
+    z = rng.normal(size=200)
+    pa = 1 / (1 + np.exp(-(-2 + 0.6 * z)))
+    pm = 1 / (1 + np.exp(-(-2.5 + z)))          # mensual con más dispersión
+    cal = T.calibrar(pa, pm)
+    assert abs(cal[1] - 0.6) < 1e-6
+    assert np.allclose(T.aplicar_cal(pm, cal), pa)
