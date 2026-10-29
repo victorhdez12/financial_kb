@@ -16,11 +16,12 @@ Vive en src/report/ y no en src/intl/ porque lee datos ≥ 2005: el único acces
   `estado_mensual`, `b1_vivo`, `aplicar_cal`) y `src/intl/int4.logit_pred`; el bloque mensual (curva, tipo a 3 meses,
   IPC interanual, bolsa a 12 meses) repite las 4 transformaciones de `src/intl/panel.mensual` sin el corte (un test
   comprueba que con corte 2004-12 sale idéntico).
-- Parámetros congelados: `final` del JSON de la puerta (modelo T2, rectas, recalibración, percentiles p50/p80/p95 de T2).
-  Nunca se reajustan. Están redondeados a 4 decimales en el JSON (ver `parametros`).
-- Referencias ≤ 2004 que no están en el JSON (percentil histórico de cada indicador y media de cada variable de T2 para
-  la contribución al logit) se calculan en cada ejecución con los meses 1960-2004 de las mismas series: solo describen
-  la historia de desarrollo, no ajustan nada.
+- Parámetros congelados: `final` del JSON de la puerta (modelo T2, rectas, recalibración, percentiles p50/p80/p95 de T2),
+  leídos SIN redondear de `research/int/termometro_referencias.json` (scripts/termometro_referencias.py, mismo código y
+  datos ≤ 2004; se exige que redondeen a lo publicado en la puerta). Nunca se reajustan.
+- Referencias ≤ 2004 (distribución 1960-2004 de cada indicador para su percentil histórico y media de cada variable de
+  T2 para la contribución al logit): congeladas en el mismo JSON, calculadas solo con datos de desarrollo (`load_dev`,
+  `load_dev_curado`); un test comprueba que coinciden con las recalculadas con los datos en vivo. Si faltan, falla.
 - Fecha de cálculo: el último fin de mes ≤ la fecha pedida (la rejilla de la traducción es mensual).
 """
 from __future__ import annotations
@@ -39,6 +40,7 @@ from src.intl import termometro as T
 
 REPO = Path(__file__).resolve().parents[2]
 CONGELADO = REPO / "research" / "int" / "termometro_puerta_v2_corr.json"   # corregido por el Validador (29-oct)
+REFERENCIAS = REPO / "research" / "int" / "termometro_referencias.json"      # scripts/termometro_referencias.py
 
 NUCLEO = ["BEL", "DEU", "DNK", "ESP", "FIN", "FRA", "GBR", "ITA", "JPN", "NLD", "NOR", "PRT", "SWE", "USA"]
 PRUEBA = ["AUS", "CHE", "CAN", "IRL"]
@@ -70,11 +72,39 @@ class ParametrosIncompletos(RuntimeError):
 
 
 # ---------------------------------------------------------------- parámetros congelados
-def parametros(path: Path = CONGELADO) -> dict:
-    """Lee y valida `final` del JSON de la puerta. Falla explícitamente si falta algo necesario para T2 o para la
-    traducción de algún país. Aviso declarado: el JSON se escribió con `_r` (4 decimales); la pendiente de la recta
-    agrupada de C2 (0,0054) pierde así hasta ≈ 1 % de precisión relativa. Se usa tal cual (es lo congelado); la
-    comprobación con corte 2004-12 mide el efecto (tests/test_termometro_vivo.py)."""
+def _r4(v):
+    """Redondeo a 4 decimales como `_r` de scripts/int4_corrida.py (con el que se escribió el JSON de la puerta)."""
+    if isinstance(v, dict):
+        return {a: _r4(b) for a, b in v.items() if not str(a).startswith("_")}
+    if isinstance(v, (list, tuple)):
+        return [_r4(b) for b in v]
+    if isinstance(v, float):
+        return None if not np.isfinite(v) else round(v, 4)
+    return v
+
+
+def _validar(f: dict, falta: list, donde: str) -> None:
+    b2 = (f.get("modelo") or {}).get("T2")
+    if not b2 or len(b2) != 1 + 1 + 5 or any(v is None for v in b2):
+        falta.append(f"modelo T2 (constante + B1 + S1-S5){donde}")
+    cal = (f.get("cal") or {}).get("T2")
+    if not cal or len(cal) != 2 or any(v is None for v in cal):
+        falta.append(f"recalibración T2 (α, β){donde}")
+    pct = (f.get("percentiles_referencia") or {}).get("T2") or {}
+    if any(pct.get(k) is None for k in ("p50", "p80", "p95")):
+        falta.append(f"percentiles p50/p80/p95 de T2{donde}")
+    rl = f.get("rectas") or {}
+    for ind in T.LINEALES:
+        for c in TODOS:
+            r = (rl.get(ind) or {}).get(c) or {}
+            if r.get("a") is None or r.get("b") is None:
+                falta.append(f"recta {ind} {c}{donde}")
+
+
+def parametros(path: Path = CONGELADO, sin_redondeo: Path = REFERENCIAS) -> dict:
+    """Lee y valida `final` del JSON de la puerta (veredicto y valores publicados, a 4 decimales) y toma los mismos
+    parámetros SIN redondear de `sin_redondeo` (scripts/termometro_referencias.py), exigiendo que redondeen exactamente
+    a los publicados. Falla explícitamente si falta algo necesario para T2 o para la traducción de algún país."""
     d = json.loads(Path(path).read_text())
     f, falta = d.get("final") or {}, []
     ver = d.get("veredicto", {}).get("pasa_agregado", {})
@@ -82,21 +112,15 @@ def parametros(path: Path = CONGELADO) -> dict:
         falta.append("veredicto: T2 no consta como aprobado")
     if ver.get("T1") is not False:
         falta.append("veredicto: T1 debería constar como NO aprobado (este módulo solo enseña sus indicadores)")
-    b2 = (f.get("modelo") or {}).get("T2")
-    if not b2 or len(b2) != 1 + 1 + 5 or any(v is None for v in b2):
-        falta.append("modelo T2 (constante + B1 + S1-S5)")
-    cal = (f.get("cal") or {}).get("T2")
-    if not cal or len(cal) != 2 or any(v is None for v in cal):
-        falta.append("recalibración T2 (α, β)")
-    pct = (f.get("percentiles_referencia") or {}).get("T2") or {}
-    if any(pct.get(k) is None for k in ("p50", "p80", "p95")):
-        falta.append("percentiles p50/p80/p95 de T2")
-    rl = f.get("rectas") or {}
-    for ind in T.LINEALES:
-        for c in TODOS:
-            r = (rl.get(ind) or {}).get(c) or {}
-            if r.get("a") is None or r.get("b") is None:
-                falta.append(f"recta {ind} {c}")
+    _validar(f, falta, "")
+    fs = {}
+    if not Path(sin_redondeo).exists():
+        falta.append(f"falta {Path(sin_redondeo).name} (parámetros sin redondear)")
+    else:
+        fs = json.loads(Path(sin_redondeo).read_text()).get("final_sin_redondeo") or {}
+        _validar(fs, falta, " (sin redondear)")
+        if not falta and json.dumps(_r4(fs), sort_keys=True) != json.dumps(f, sort_keys=True):
+            falta.append(f"los parámetros sin redondear de {Path(sin_redondeo).name} no redondean a los de la puerta")
     if falta:
         raise ParametrosIncompletos(
             "parámetros congelados incompletos en " + str(path) + ": " + "; ".join(falta) + ". Propuesta: volver a "
@@ -104,10 +128,35 @@ def parametros(path: Path = CONGELADO) -> dict:
             "recalibración con todas las filas ≤ 2003), comprobar que redondea a lo publicado y fijarlo con un commit; "
             "nunca reajustar con datos ≥ 2005.")
     aprob = set(d["veredicto"]["paises_con_probabilidad"]["T2"])
+    b2, cal, pct = fs["modelo"]["T2"], fs["cal"]["T2"], fs["percentiles_referencia"]["T2"]
+    rel = lambda q: str(Path(q).resolve().relative_to(REPO)) if Path(q).resolve().is_relative_to(REPO) else str(q)  # noqa: E731
     return {"b_T2": np.array(b2, float), "cal_T2": (float(cal[0]), float(cal[1])),
-            "pct_T2": {k: float(pct[k]) for k in ("p50", "p80", "p95")}, "rectas": rl,
+            "pct_T2": {k: float(pct[k]) for k in ("p50", "p80", "p95")}, "rectas": fs["rectas"],
             "paises_T2": [c for c in NUCLEO if c in aprob and c not in T.SIN_BOLSA],
-            "fuente": str(Path(path).resolve().relative_to(REPO)) if Path(path).resolve().is_relative_to(REPO) else str(path), "procedencia_puerta": d.get("procedencia")}
+            "fuente": rel(path), "fuente_sin_redondeo": rel(sin_redondeo), "procedencia_puerta": d.get("procedencia")}
+
+
+def referencias_congeladas(path: Path = REFERENCIAS) -> dict:
+    """Referencias ≤ 2004 congeladas por scripts/termometro_referencias.py. Falla explícitamente si falta alguna (nunca
+    se recalculan aquí con datos en vivo)."""
+    falta = []
+    r = (json.loads(Path(path).read_text()).get("referencias") or {}) if Path(path).exists() else {}
+    if not r:
+        falta.append(f"sin referencias en {path}")
+    else:
+        ind = r.get("indicadores") or {}
+        falta += [f"distribución {k} {c}" for k, *_ in INDICADORES for c in TODOS
+                  if not isinstance((ind.get(k) or {}).get(c), list)]
+        cen = r.get("centro_T2")
+        if not isinstance(cen, list) or len(cen) != len(VARS_T2) or any(v is None for v in cen):
+            falta.append("centro de las contribuciones de T2")
+        if (r.get("desde"), r.get("hasta")) != (str(REF_DESDE.date()), str(REF_HASTA.date())):
+            falta.append("periodo de referencia distinto de 1960-01/2004-12")
+    if falta:
+        raise ParametrosIncompletos("referencias ≤ 2004 incompletas en " + str(path) + ": " + "; ".join(falta) +
+                                    ". Propuesta: volver a correr scripts/termometro_referencias.py con el árbol limpio "
+                                    "(solo datos ≤ 2004); nunca recalcularlas con datos en vivo.")
+    return r
 
 
 # ---------------------------------------------------------------- datos en vivo (sin corte 2004, nunca JST)
@@ -221,12 +270,11 @@ def referencias(mens: dict, tr: dict, pib: dict, par: dict) -> dict:
             "centro_T2": [float(x) for x in centro], "meses_centro": int(n), "variables_T2": VARS_T2}
 
 
-def calcular(pm: pd.DataFrame, bis: dict, pib: dict, corte: pd.Timestamp, par: dict) -> dict:
+def calcular(pm: pd.DataFrame, bis: dict, pib: dict, corte: pd.Timestamp, par: dict, refs: dict) -> dict:
     mens = T.mensuales(pm, bis, pib, NUCLEO, TODOS)
     tr = T.traducir(mens, par["rectas"], TODOS)
     rej = mens["C1"].index
     est, p2, Z2 = _estados(tr, pib, rej, par)
-    refs = referencias(mens, tr, pib, par)
     centro = np.array(refs["centro_T2"], float)
     i = len(rej) - 1
     paises = {}
@@ -264,6 +312,7 @@ def calcular(pm: pd.DataFrame, bis: dict, pib: dict, corte: pd.Timestamp, par: d
     return {"fecha_calculo": str(corte.date()), "aviso": AVISO, "paises": paises,
             "en_recesion": [c for c, v in paises.items() if v["estado"]["en_recesion"]],
             "percentiles_T2": par["pct_T2"], "aviso_T2": AVISO_T2, "parametros": par["fuente"],
+            "parametros_sin_redondeo": par.get("fuente_sin_redondeo"),
             "procedencia_puerta": par.get("procedencia_puerta"),
             "metodo": {"contribucion": "b_k · (x_k − media ≤ 2004 de los meses en recesión del núcleo), en unidades "
                                        "del logit antes de recalibrar",
@@ -272,10 +321,11 @@ def calcular(pm: pd.DataFrame, bis: dict, pib: dict, corte: pd.Timestamp, par: d
                                 "y src/intl/termometro.py"}}
 
 
-def termometro(con, fecha, par: dict | None = None) -> dict:
+def termometro(con, fecha, par: dict | None = None, refs: dict | None = None) -> dict:
     par = par or parametros()
+    refs = refs or referencias_congeladas()
     pm, bis, pib, corte = cargar(con, fecha)
-    return calcular(pm, bis, pib, corte, par)
+    return calcular(pm, bis, pib, corte, par, refs)
 
 
 # ---------------------------------------------------------------- Markdown

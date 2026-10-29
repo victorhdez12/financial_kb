@@ -48,10 +48,23 @@ def _warehouse(hasta_m="2026-09-01", hasta_q="2026-04-01", choque=0.0):
     return con
 
 
+def _refs(con, fecha="2026-10-29"):
+    """Referencias ≤ 2004 del warehouse sintético (las congeladas son las del real)."""
+    from src.intl import termometro as T
+    par = V.parametros()
+    pm, bis, pib, _ = V.cargar(con, fecha)
+    mens = T.mensuales(pm, bis, pib, V.NUCLEO, V.TODOS)
+    return V.referencias(mens, T.traducir(mens, par["rectas"], V.TODOS), pib, par)
+
+
+def _termometro(con, fecha):
+    return V.termometro(con, fecha, refs=_refs(con, fecha))
+
+
 @pytest.fixture(scope="module")
 def vivo():
     con = _warehouse()
-    res = V.termometro(con, "2026-10-29")
+    res = _termometro(con, "2026-10-29")
     con.close()
     return res
 
@@ -86,8 +99,8 @@ def test_markdown(vivo):
 
 
 def test_no_mira_el_futuro():
-    a = V.termometro(_warehouse(), "2026-03-31")
-    b = V.termometro(_warehouse(choque=1.0), "2026-03-31")    # todo lo posterior a 2026-03 cambia
+    a = _termometro(_warehouse(), "2026-03-31")
+    b = _termometro(_warehouse(choque=1.0), "2026-03-31")    # todo lo posterior a 2026-03 cambia
     assert json.dumps(a, sort_keys=True) == json.dumps(b, sort_keys=True)
 
 
@@ -120,6 +133,28 @@ def test_parametros_incompletos(tmp_path):
     p.write_text(json.dumps(d))
     with pytest.raises(V.ParametrosIncompletos, match="T2"):
         V.parametros(p)
+    # parámetros sin redondear: faltan, o no redondean a los publicados
+    with pytest.raises(V.ParametrosIncompletos, match="sin redondear"):
+        V.parametros(sin_redondeo=tmp_path / "no_existe.json")
+    r = json.loads(V.REFERENCIAS.read_text())
+    r["final_sin_redondeo"]["cal"]["T2"][1] += 1e-3
+    p.write_text(json.dumps(r))
+    with pytest.raises(V.ParametrosIncompletos, match="no redondean"):
+        V.parametros(sin_redondeo=p)
+    par = V.parametros()
+    assert par["cal_T2"] != tuple(json.loads(V.CONGELADO.read_text())["final"]["cal"]["T2"])     # sin redondear
+
+
+def test_referencias_incompletas(tmp_path):
+    with pytest.raises(V.ParametrosIncompletos, match="sin referencias"):
+        V.referencias_congeladas(tmp_path / "no_existe.json")
+    r = json.loads(V.REFERENCIAS.read_text())
+    del r["referencias"]["indicadores"]["C2"]["GBR"]
+    r["referencias"]["centro_T2"] = r["referencias"]["centro_T2"][:5]
+    p = tmp_path / "x.json"
+    p.write_text(json.dumps(r))
+    with pytest.raises(V.ParametrosIncompletos, match="distribución C2 GBR.*centro"):
+        V.referencias_congeladas(p)
 
 
 def test_fuera_de_src_intl():
@@ -158,5 +193,29 @@ def test_corte_2004_reproduce_desarrollo():
     v = np.concatenate(ps)
     ref = json.loads(V.CONGELADO.read_text())["final"]["percentiles_referencia"]["T2"]
     assert len(v) == ref["meses"]
-    for q in (50, 80, 95):
-        assert np.quantile(v, q / 100) == pytest.approx(ref[f"p{q}"], abs=5e-4)
+    for q in (50, 80, 95):      # parámetros sin redondear: reproduce los percentiles exactos (antes, error ≤ 5e-4)
+        assert np.quantile(v, q / 100) == pytest.approx(par["pct_T2"][f"p{q}"], abs=1e-12)
+        assert round(float(np.quantile(v, q / 100)), 4) == ref[f"p{q}"]
+
+
+@pytest.mark.skipif(not db.WAREHOUSE.exists(), reason="sin warehouse real")
+@pytest.mark.parametrize("fecha", ["2004-12-31", "2026-10-29"])
+def test_referencias_congeladas_igual_a_recalculadas(fecha):
+    """Las referencias ≤ 2004 congeladas (scripts/termometro_referencias.py, datos load_dev) = las que se recalculaban
+    en cada ejecución con los datos en vivo, con corte 2004-12 y con corte de hoy (as of: los meses ≤ 2004 no cambian)."""
+    from src.intl import termometro as T
+    con = db.connect(read_only=True)
+    try:
+        pm, bis, pib, _ = V.cargar(con, fecha)
+    finally:
+        con.close()
+    par = V.parametros()
+    mens = T.mensuales(pm, bis, pib, V.NUCLEO, V.TODOS)
+    rec = V.referencias(mens, T.traducir(mens, par["rectas"], V.TODOS), pib, par)
+    cong = V.referencias_congeladas()
+    assert rec["meses_centro"] == cong["meses_centro"] == 295
+    assert np.allclose(rec["centro_T2"], cong["centro_T2"], rtol=0, atol=1e-12)
+    for k, *_ in V.INDICADORES:
+        for c in V.TODOS:
+            a, b = rec["indicadores"][k][c], cong["indicadores"][k][c]
+            assert len(a) == len(b) and np.allclose(a, b, rtol=0, atol=1e-12), (k, c)
