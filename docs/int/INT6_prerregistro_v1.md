@@ -1,7 +1,7 @@
 ---
 documento: P-DEV-INT6 — oro, dinero, crédito y relaciones entre países (prerregistro interno)
-version: 0.1 BORRADOR (2026-10-29), sin congelar
-estado: BORRADOR para el usuario. No se ha cruzado ningún indicador con ningún resultado. Solo recuentos, varianzas incondicionales y disponibilidad.
+version: 1.0 CONGELADO (2026-10-29T18:01:03Z)
+estado: CONGELADO v1.0 (decisiones del usuario §9 = recomendadas, 2026-10-29). Antes de congelar: No se ha cruzado ningún indicador con ningún resultado. Solo recuentos, varianzas incondicionales y disponibilidad.
 depende_de: INVENTARIO_relaciones.md (qué falta), INT-3/3b (método de los paneles), INT-4 (objetivo T1, listón B1, evaluación), INT-4-ML (MDE sobre el logit), Validadores 26-29 oct
 potencia: scripts/int6_potencia.py (v1 4e628a1 → salida 1.ª; v2 5e19c60, árbol limpio, 2026-10-29T14:43:50Z) → research/int/int6_potencia.json (21024f5)
 ---
@@ -287,3 +287,14 @@ Ningún indicador cruzado con ningún resultado.
 
 Si se aprueba: se congela como v1.0 con hora, se escribe `scripts/int6_corrida.py` con puerta, se commitea sin ejecutar,
 **una sola corrida**, Validador, y después Bitácora y atlas.
+
+## 10. Decisiones tomadas y congelación (v1.0, 2026-10-29T18:01:03Z)
+El usuario delegó ("sigue", 29-oct) → se aplican las recomendadas:
+1. 6 confirmatorias G2, M1, M2, K1, K2, X1; G1 → descriptiva, M3 → informativa.
+2. Una sola familia Holm-6.
+3. K2 con empalme R. U. (≤ 1918) → EE. UU. (≥ 1919) en variaciones.
+4. Se añade `boe_uk_corp_bond_spread_m` a las familias permitidas de `src/intl/data.py`; `fed_ebp_*` solo descriptivo.
+5. K1 se mantiene como confirmatoria.
+
+Texto congelado: cualquier cambio posterior es una enmienda declarada con hora y motivo. Siguiente: `scripts/int6_corrida.py`
+con puerta, commit sin ejecutar, una sola corrida, Validador.
