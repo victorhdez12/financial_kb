@@ -23,6 +23,8 @@ Vive en src/report/ y no en src/intl/ porque lee datos ≥ 2005: el único acces
   T2 para la contribución al logit): congeladas en el mismo JSON, calculadas solo con datos de desarrollo (`load_dev`,
   `load_dev_curado`); un test comprueba que coinciden con las recalculadas con los datos en vivo. Si faltan, falla.
 - Fecha de cálculo: el último fin de mes ≤ la fecha pedida (la rejilla de la traducción es mensual).
+- Series cortadas o viejas: si un indicador propio del país (o su estado de recesión) falta en la fecha de cálculo, se
+  avisa por país con la serie que falta y desde cuándo ("sin tipo a 3 meses desde 2026-03"; `avisos_datos`).
 """
 from __future__ import annotations
 
@@ -65,6 +67,12 @@ INDICADORES = [("C1", "Curva 10a−3m (media 12 m)", "pp", 1.0),
 VARS_T2 = ["B1 duración de la recesión", "S1 curva", "S2 Δ tipo real corto", "S3 bolsa real", "S4 difusión de PIB cayendo",
            "S5 Δ5 crédito/PIB al entrar"]
 BANDAS = [("bajo", "p50"), ("medio", "p80"), ("alto", "p95")]      # < p50, p50-p80, p80-p95; ≥ p95 → muy alto
+# series de cada indicador propio del país (C4 y S4 son difusiones del resto: sin serie propia) y del estado (PIB):
+# (columna de `cargar` o None, etiqueta, plantilla del series_id, frecuencia)
+ENTRADAS = {"C1": [("tipo_10a", "tipo a 10 años", "oecd_irlt_{lc}", "M"), ("tipo_3m", "tipo a 3 meses", "oecd_ir3m_{lc}", "M")],
+            "C6": [("bolsa_12m", "bolsa", "oecd_share_{lc}", "M"), ("ipc_yoy", "IPC", "oecd_cpi_{lc}_idx", "M")],
+            "C2": [(None, "crédito/PIB (BIS)", "bis_creditgap_{i2}_ratio", "Q")],
+            "estado": [(None, "PIB trimestral", "oecd_gdpq_{lc}", "Q")]}
 
 
 class ParametrosIncompletos(RuntimeError):
@@ -201,6 +209,31 @@ def cargar(con, fecha) -> tuple[pd.DataFrame, dict, dict, pd.Timestamp]:
     return pm, bis, pib, corte
 
 
+def ultimos_datos(con, corte: pd.Timestamp) -> dict:
+    """Fecha de la última observación ≤ `corte` de cada serie de ENTRADAS (para los avisos de serie cortada o vieja)."""
+    sids = [sid.format(lc=c.lower(), i2=D.ISO2[c]) for c in TODOS for v in ENTRADAS.values() for _, _, sid, _ in v]
+    df = con.execute("select series_id, max(date) as d from obs_latest where value is not null and date <= ? and "
+                     "series_id in (select unnest(?)) group by 1", [corte.date(), sids]).df()
+    return {r.series_id: pd.Timestamp(r.d) for r in df.itertuples()}
+
+
+def _sin_dato(pm: pd.DataFrame, ultimos: dict, c: str, clave: str, corte: pd.Timestamp) -> list[str]:
+    """Avisos "sin <serie> desde AAAA-MM" para las series de `clave` que no tienen dato vigente en `corte` (cortadas o
+    viejas). AAAA-MM = primer mes sin dato tras la última observación (trimestral: el mes siguiente al trimestre)."""
+    out = []
+    for col, lab, sid, fr in ENTRADAS[clave]:
+        sid = sid.format(lc=c.lower(), i2=D.ISO2[c])
+        if col is not None and (c, corte) in pm.index and np.isfinite(pm.loc[(c, corte), col]):
+            continue                     # esta serie sí tiene dato: falta por otra
+        u = ultimos.get(sid)
+        if u is None:
+            out.append(f"sin {lab} (sin serie)")
+            continue
+        sig = (u + pd.offsets.MonthBegin(1)) if fr == "M" else (u.to_period("Q").end_time.normalize() + pd.Timedelta(days=1))
+        out.append(f"sin {lab} desde {sig:%Y-%m}")
+    return out
+
+
 # ---------------------------------------------------------------- cálculo
 def prob_salida(tr: dict, est: pd.DataFrame, c: str, b: np.ndarray, cal: tuple) -> tuple[np.ndarray, np.ndarray]:
     """Probabilidad recalibrada de salir (T2) cada mes en recesión (NaN fuera) y la matriz de variables [B1, S1-S5].
@@ -270,7 +303,9 @@ def referencias(mens: dict, tr: dict, pib: dict, par: dict) -> dict:
             "centro_T2": [float(x) for x in centro], "meses_centro": int(n), "variables_T2": VARS_T2}
 
 
-def calcular(pm: pd.DataFrame, bis: dict, pib: dict, corte: pd.Timestamp, par: dict, refs: dict) -> dict:
+def calcular(pm: pd.DataFrame, bis: dict, pib: dict, corte: pd.Timestamp, par: dict, refs: dict,
+             ultimos: dict | None = None) -> dict:
+    ultimos = ultimos or {}
     mens = T.mensuales(pm, bis, pib, NUCLEO, TODOS)
     tr = T.traducir(mens, par["rectas"], TODOS)
     rej = mens["C1"].index
@@ -286,8 +321,13 @@ def calcular(pm: pd.DataFrame, bis: dict, pib: dict, corte: pd.Timestamp, par: d
             pc, n = _pct(np.asarray(refs["indicadores"][k][c], float), v)
             filas_ind[k] = {"indicador": lab, "unidad": uni, "valor": None if not np.isfinite(v) else round(v * fac, 2),
                             "percentil_hasta_2004": pc, "meses_hist": n}
+            if not np.isfinite(v) and k in ENTRADAS and not (k == "C6" and c in T.SIN_BOLSA):
+                filas_ind[k]["sin_dato"] = _sin_dato(pm, ultimos, c, k, corte) or None
         e = est.get(c)
         en = None if e is None or not np.isfinite(e["en_rec"].iloc[i]) else bool(e["en_rec"].iloc[i])
+        avisos = [f"{filas_ind[k]['indicador']}: {a}" for k, *_ in INDICADORES for a in filas_ind[k].get("sin_dato") or []]
+        if en is None:
+            avisos += [f"estado de recesión: {a}" for a in _sin_dato(pm, ultimos, c, "estado", corte)]
         uq = _q_conocido(pib[c], corte) if c in pib else None
         estado = {"en_recesion": en, "ultimo_trimestre_pib": None if uq is None else str(uq),
                   "meses_desde_entrada": None if not en else int(e["meses_desde_entrada"].iloc[i])}
@@ -308,7 +348,7 @@ def calcular(pm: pd.DataFrame, bis: dict, pib: dict, corte: pd.Timestamp, par: d
                                             "sentido": "a favor de salir" if contrib[j] > 0 else "en contra de salir"}
                     salida["contribuciones_logit"] = {VARS_T2[k]: round(float(v), 3) for k, v in enumerate(contrib)}
         paises[c] = {"grupo": "usa" if c == "USA" else ("nucleo" if c in NUCLEO else "prueba"), "estado": estado,
-                     "indicadores": filas_ind, "salida_12m": salida}
+                     "indicadores": filas_ind, "salida_12m": salida, "avisos_datos": avisos}
     return {"fecha_calculo": str(corte.date()), "aviso": AVISO, "paises": paises,
             "en_recesion": [c for c, v in paises.items() if v["estado"]["en_recesion"]],
             "percentiles_T2": par["pct_T2"], "aviso_T2": AVISO_T2, "parametros": par["fuente"],
@@ -325,7 +365,7 @@ def termometro(con, fecha, par: dict | None = None, refs: dict | None = None) ->
     par = par or parametros()
     refs = refs or referencias_congeladas()
     pm, bis, pib, corte = cargar(con, fecha)
-    return calcular(pm, bis, pib, corte, par, refs)
+    return calcular(pm, bis, pib, corte, par, refs, ultimos_datos(con, corte))
 
 
 # ---------------------------------------------------------------- Markdown
@@ -377,6 +417,9 @@ def markdown(res: dict) -> str:
     elif not res["en_recesion"]:
         out += ["Ningún país está en recesión según el fechado trimestral en vivo: no se muestra ninguna probabilidad "
                 "de salir (y la de entrar no superó su puerta).", ""]
+    faltan = [f"> - {c}: " + "; ".join(P_[c]["avisos_datos"]) + "." for c in TODOS if P_[c].get("avisos_datos")]
+    if faltan:
+        out += ["> [!warning] Datos que faltan (serie cortada o vieja: el indicador sale «—»)", *faltan, ""]
     out.append("Método: «en recesión» = la suma de 4 trimestres del PIB real (OCDE) cae dos trimestres seguidos (sale "
                "con dos subidas seguidas), dato conocido 75 días tras el trimestre. Entre paréntesis tras cada "
                "indicador, su percentil frente a los meses 1960-2004 del propio país. Modelo y escalas congelados "

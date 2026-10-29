@@ -18,9 +18,9 @@ def _obs(sid, fechas, valores):
     return pd.DataFrame({"series_id": sid, "date": pd.to_datetime(fechas).date, "value": np.asarray(valores, float)})
 
 
-def _warehouse(hasta_m="2026-09-01", hasta_q="2026-04-01", choque=0.0):
+def _warehouse(hasta_m="2026-09-01", hasta_q="2026-04-01", choque=0.0, cortes=None):
     """obs_latest sintético para los 18 países desde 1985. `choque` altera todo lo posterior a 2026-03 (para comprobar
-    que no se mira el futuro)."""
+    que no se mira el futuro); `cortes` = {series_id: última fecha} corta esas series."""
     rng = np.random.default_rng(0)
     fm = pd.date_range("1985-01-01", hasta_m, freq="MS")
     fq = pd.date_range("1985-01-01", hasta_q, freq="QS")
@@ -43,7 +43,9 @@ def _warehouse(hasta_m="2026-09-01", hasta_q="2026-04-01", choque=0.0):
         partes.append(_obs(f"oecd_gdpq_{lc}", fq, g * (1 + choque * pos_q)))
     partes.append(_obs("jst_usa_cpi", ["2010-01-01"], [1.0]))
     con = duckdb.connect(":memory:")
-    df = pd.concat(partes, ignore_index=True)  # noqa: F841
+    df = pd.concat(partes, ignore_index=True)
+    for sid, hasta in (cortes or {}).items():
+        df = df[(df.series_id != sid) | (pd.to_datetime(df.date) <= pd.Timestamp(hasta))]
     con.execute("create table obs_latest as select series_id, date, value from df")
     return con
 
@@ -102,6 +104,24 @@ def test_no_mira_el_futuro():
     a = _termometro(_warehouse(), "2026-03-31")
     b = _termometro(_warehouse(choque=1.0), "2026-03-31")    # todo lo posterior a 2026-03 cambia
     assert json.dumps(a, sort_keys=True) == json.dumps(b, sort_keys=True)
+
+
+def test_aviso_serie_cortada(vivo):
+    """GBR sin tipo a 3 meses desde 2026-03 y DEU sin crédito/PIB desde 2025-Q2: el indicador sale «—» con aviso."""
+    con = _warehouse(cortes={"oecd_ir3m_gbr": "2026-02-01", "bis_creditgap_de_ratio": "2025-01-01",
+                             "oecd_gdpq_fra": "2025-07-01"})
+    res = _termometro(con, "2026-10-29")
+    p = res["paises"]
+    assert p["GBR"]["indicadores"]["C1"]["valor"] is None
+    assert p["GBR"]["indicadores"]["C1"]["sin_dato"] == ["sin tipo a 3 meses desde 2026-03"]
+    assert p["GBR"]["avisos_datos"] == ["Curva 10a−3m (media 12 m): sin tipo a 3 meses desde 2026-03"]
+    assert p["DEU"]["avisos_datos"] == ["Δ5 años crédito/PIB (BIS): sin crédito/PIB (BIS) desde 2025-04"]
+    assert p["FRA"]["estado"]["en_recesion"] is None
+    assert p["FRA"]["avisos_datos"] == ["estado de recesión: sin PIB trimestral desde 2025-10"]
+    assert all(not p[c]["avisos_datos"] for c in V.TODOS if c not in {"GBR", "DEU", "FRA"})
+    assert all(not vivo["paises"][c]["avisos_datos"] for c in V.TODOS)              # sin cortes: sin avisos
+    assert "> - GBR: Curva 10a−3m (media 12 m): sin tipo a 3 meses desde 2026-03." in V.markdown(res)
+    assert "Datos que faltan" not in V.markdown(vivo)
 
 
 def test_nunca_jst():
