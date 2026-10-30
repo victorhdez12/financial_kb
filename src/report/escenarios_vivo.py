@@ -50,3 +50,28 @@ def estado_actual(con, fecha) -> dict:
         lc = c.lower()
         out[c] = estado_pais(TV._serie(con, f"oecd_cpi_{lc}_idx", corte), TV._serie(con, f"oecd_gdpq_{lc}", corte))
     return {"corte": str(corte.date()), "paises": out}
+
+
+def _poblacion(con, lc: str, corte) -> pd.Series | None:
+    """Población anual de Maddison (solo demografía, para el PIB per cápita del ESTADO; no es un resultado)."""
+    df = con.execute("select date, value from obs_latest where series_id = ? and value is not null and date <= ? "
+                     "order by date", [f"maddison_{lc}_pop", pd.Timestamp(corte).date()]).df()
+    if len(df) < 2:
+        return None
+    return pd.Series(df["value"].astype(float).values, index=pd.to_datetime(df["date"]).dt.year)
+
+
+def estado_actual_movil(con, fecha, per_capita: bool = True) -> dict:
+    """v2 (docs/int/INT11_v2_diseno.md §4): estado con ventanas MÓVILES de 12 meses hasta el último dato publicado y
+    horizonte del abanico = los 12 meses siguientes al corte (no el año natural). Per cápita con la población de
+    Maddison (anual, termina antes que el PIB: se extrapola con su crecimiento de los últimos 10 años; declarado)."""
+    corte = TV.fin_de_mes(fecha)
+    out = {}
+    for c in NUCLEO:
+        lc = c.lower()
+        pob = _poblacion(con, lc, corte) if per_capita else None
+        out[c] = E.estado_movil(TV._serie(con, f"oecd_cpi_{lc}_idx", corte), TV._serie(con, f"oecd_gdpq_{lc}", corte),
+                                pob)
+    # el abanico empieza el mes SIGUIENTE a la fecha de emisión (no al corte de datos): sin solapar meses ya vividos
+    return {"corte": str(corte.date()), "emision": str(pd.Timestamp(fecha).date()),
+            "ventana_objetivo": E.ventana_objetivo(fecha), "paises": out}
