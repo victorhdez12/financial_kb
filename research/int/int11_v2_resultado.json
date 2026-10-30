@@ -1,0 +1,800 @@
+{
+ "procedencia": {
+  "commit": "61a3a978073b5ac073dd6c74c6dc2c9129ed446d",
+  "arbol_limpio": true,
+  "hora_utc": "2026-10-30T12:50:41+00:00"
+ },
+ "prerregistro": "docs/int/INT11_prerregistro_v2.md (v1.0)",
+ "semilla": 20261101,
+ "config": "Config(activos=('bolsa', 'bonos', 'letras', 'vivienda', 'oro'), modo='bootstrap', k_pais=40.0, bloque_medio=3.0, n_min_celda=25, contagio=False, incertidumbre=True, nu_t=5.0, n0_cov=30.0, anio_max=2004, escala_pais=True, min_paises_año=3, k_mezcla=0.0, c_suavizado=4.0, nu_suavizado=5.0, rejilla_kappa=(0.0, 6.0, 121))",
+ "filas": 1548,
+ "años": [
+  1881,
+  2004
+ ],
+ "loco": {
+  "filas": 1548,
+  "años": 112,
+  "d_media": 0.017216064572305276,
+  "dm": {
+   "media": 0.017216064572305276,
+   "se": 0.007069636651591822,
+   "t": 2.4352120795951873,
+   "p_unilateral": 0.008237680772019812,
+   "años": 112,
+   "n": 1548
+  },
+  "crpss_%": {
+   "bolsa": 0.983,
+   "bonos": 2.286,
+   "letras": 3.21,
+   "vivienda": -0.033,
+   "oro": 3.027
+  },
+  "crpss_medio_%": 1.895,
+  "S5": 0.896156330749354,
+  "Sb": 0.9013422818791946,
+  "S_activo": {
+   "bolsa": 0.9013,
+   "bonos": 0.9009,
+   "letras": 0.8968,
+   "vivienda": 0.907,
+   "oro": 0.8874
+  },
+  "cobertura_80_activo": {
+   "bolsa": 0.8074,
+   "bonos": 0.805,
+   "letras": 0.7988,
+   "vivienda": 0.8117,
+   "oro": 0.7879
+  },
+  "cobertura_90_m0_activo": {
+   "bolsa": 0.9,
+   "bonos": 0.8976,
+   "letras": 0.8968,
+   "vivienda": 0.8984,
+   "oro": 0.8961
+  },
+  "n_activo": {
+   "bolsa": 1490,
+   "bonos": 1523,
+   "letras": 1531,
+   "vivienda": 1280,
+   "oro": 462
+  }
+ },
+ "temporal": {
+  "filas": 770,
+  "años": 55,
+  "d_media": 0.010720509653306285,
+  "dm": {
+   "media": 0.010720509653306285,
+   "se": 0.020448159495600943,
+   "t": 0.52427748598169,
+   "p_unilateral": 0.3011155381611946,
+   "años": 55,
+   "n": 770
+  },
+  "crpss_%": {
+   "bolsa": 0.985,
+   "bonos": 1.378,
+   "letras": 4.431,
+   "vivienda": -2.397,
+   "oro": NaN
+  },
+  "crpss_medio_%": 1.099,
+  "S5": 0.9046536796536797,
+  "Sb": 0.8155844155844156,
+  "S_activo": {
+   "bolsa": 0.8156,
+   "bonos": 0.9,
+   "letras": 0.9766,
+   "vivienda": 0.9293,
+   "oro": NaN
+  },
+  "cobertura_80_activo": {
+   "bolsa": 0.6597,
+   "bonos": 0.7792,
+   "letras": 0.939,
+   "vivienda": 0.8505,
+   "oro": NaN
+  },
+  "cobertura_90_m0_activo": {
+   "bolsa": 0.8156,
+   "bonos": 0.9104,
+   "letras": 0.9468,
+   "vivienda": 0.9321,
+   "oro": NaN
+  },
+  "n_activo": {
+   "bolsa": 770,
+   "bonos": 770,
+   "letras": 770,
+   "vivienda": 736,
+   "oro": 0
+  }
+ },
+ "nulo": {
+  "loco": {
+   "S5": {
+    "banda_2.5_97.5": [
+     0.8976,
+     0.9078
+    ],
+    "media": 0.9026
+   },
+   "Sb": {
+    "banda_2.5_97.5": [
+     0.8966,
+     0.9134
+    ],
+    "media": 0.9047
+   },
+   "S_raros": {
+    "banda_2.5_97.5": [
+     0.8571,
+     0.9446
+    ],
+    "media": 0.9019
+   }
+  },
+  "temporal": {
+   "S5": {
+    "banda_2.5_97.5": [
+     0.8739,
+     0.9239
+    ],
+    "media": 0.9011
+   },
+   "Sb": {
+    "banda_2.5_97.5": [
+     0.8493,
+     0.9417
+    ],
+    "media": 0.8987
+   },
+   "S_raros": {
+    "banda_2.5_97.5": [
+     0.7955,
+     0.9729
+    ],
+    "media": 0.8939
+   }
+  }
+ },
+ "S_raros_loco": 0.8885542168674698,
+ "S_raros_bolsa_loco": 0.875,
+ "S_raros_temporal": 0.8888888888888888,
+ "puerta_D": {
+  "S5_a_1.5pp": true,
+  "activos_a_3pp": {
+   "bolsa": true,
+   "bonos": true,
+   "letras": true,
+   "vivienda": true,
+   "oro": true
+  },
+  "raros_sobre_p2.5_nulo": true,
+  "pasa": true
+ },
+ "C1_descriptivo": {
+  "d_media": 0.017216064572305276,
+  "t": 2.4352120795951873,
+  "p": 0.008237680772019812,
+  "d_media_temporal": 0.010720509653306285
+ },
+ "cobertura_por_regimen_loco": {
+  "expansion": {
+   "filas": 833,
+   "bolsa": 0.9019,
+   "bonos": 0.9005,
+   "letras": 0.9012,
+   "vivienda": 0.9111,
+   "oro": 0.8988
+  },
+  "sobrecalentamiento": {
+   "filas": 616,
+   "bolsa": 0.9044,
+   "bonos": 0.9021,
+   "letras": 0.8941,
+   "vivienda": 0.9015,
+   "oro": 0.8797
+  },
+  "estanflacion": {
+   "filas": 34,
+   "bolsa": 0.9,
+   "bonos": 0.8929,
+   "letras": 0.8846,
+   "vivienda": 0.8947,
+   "oro": 1.0
+  },
+  "crecimiento_bajo": {
+   "filas": 65,
+   "bolsa": 0.8621,
+   "bonos": 0.8966,
+   "letras": 0.8689,
+   "vivienda": 0.9184,
+   "oro": 1.0
+  }
+ },
+ "cobertura_por_regimen_temporal": {
+  "expansion": {
+   "filas": 309,
+   "bolsa": 0.7443,
+   "bonos": 0.8479,
+   "letras": 0.9579,
+   "vivienda": 0.9354,
+   "oro": NaN
+  },
+  "sobrecalentamiento": {
+   "filas": 451,
+   "bolsa": 0.8625,
+   "bonos": 0.9335,
+   "letras": 0.9956,
+   "vivienda": 0.9243,
+   "oro": NaN
+  },
+  "estanflacion": {
+   "filas": 4,
+   "bolsa": 1.0,
+   "bonos": 1.0,
+   "letras": 1.0,
+   "vivienda": 1.0,
+   "oro": NaN
+  },
+  "crecimiento_bajo": {
+   "filas": 6,
+   "bolsa": 0.8333,
+   "bonos": 1.0,
+   "letras": 0.5,
+   "vivienda": 1.0,
+   "oro": NaN
+  }
+ },
+ "cobertura_por_pais_loco": {
+  "BEL": {
+   "filas": 112,
+   "S5": 0.8685,
+   "bolsa": 0.8929
+  },
+  "DEU": {
+   "filas": 106,
+   "S5": 0.9022,
+   "bolsa": 0.8396
+  },
+  "DNK": {
+   "filas": 112,
+   "S5": 0.9371,
+   "bolsa": 0.9732
+  },
+  "ESP": {
+   "filas": 112,
+   "S5": 0.8826,
+   "bolsa": 0.9462
+  },
+  "FIN": {
+   "filas": 111,
+   "S5": 0.8141,
+   "bolsa": 0.8229
+  },
+  "FRA": {
+   "filas": 109,
+   "S5": 0.9101,
+   "bolsa": 0.9266
+  },
+  "GBR": {
+   "filas": 112,
+   "S5": 0.9241,
+   "bolsa": 0.9464
+  },
+  "ITA": {
+   "filas": 110,
+   "S5": 0.9098,
+   "bolsa": 0.8727
+  },
+  "JPN": {
+   "filas": 109,
+   "S5": 0.8601,
+   "bolsa": 0.875
+  },
+  "NLD": {
+   "filas": 112,
+   "S5": 0.9243,
+   "bolsa": 0.9247
+  },
+  "NOR": {
+   "filas": 112,
+   "S5": 0.9161,
+   "bolsa": 0.9107
+  },
+  "PRT": {
+   "filas": 107,
+   "S5": 0.8452,
+   "bolsa": 0.8318
+  },
+  "SWE": {
+   "filas": 112,
+   "S5": 0.9308,
+   "bolsa": 0.9196
+  },
+  "USA": {
+   "filas": 112,
+   "S5": 0.9183,
+   "bolsa": 0.9286
+  }
+ },
+ "descriptivo_loco": {
+  "pit_10": {
+   "bolsa": [
+    142,
+    148,
+    150,
+    154,
+    157,
+    151,
+    157,
+    141,
+    145,
+    145
+   ],
+   "bonos": [
+    145,
+    149,
+    160,
+    149,
+    161,
+    154,
+    151,
+    153,
+    149,
+    152
+   ],
+   "letras": [
+    157,
+    131,
+    165,
+    165,
+    153,
+    168,
+    146,
+    159,
+    136,
+    151
+   ],
+   "vivienda": [
+    126,
+    116,
+    140,
+    122,
+    147,
+    126,
+    143,
+    126,
+    119,
+    115
+   ],
+   "oro": [
+    50,
+    45,
+    49,
+    46,
+    39,
+    46,
+    47,
+    40,
+    52,
+    48
+   ]
+  },
+  "por_regimen_partida": {
+   "expansion": {
+    "filas": 833,
+    "cobertura_90": {
+     "bolsa": 0.902,
+     "bonos": 0.9,
+     "letras": 0.901,
+     "vivienda": 0.911,
+     "oro": 0.899
+    },
+    "crpss_%": {
+     "bolsa": 0.93,
+     "bonos": 1.46,
+     "letras": 2.52,
+     "vivienda": 0.1,
+     "oro": 10.5
+    }
+   },
+   "sobrecalentamiento": {
+    "filas": 616,
+    "cobertura_90": {
+     "bolsa": 0.904,
+     "bonos": 0.902,
+     "letras": 0.894,
+     "vivienda": 0.901,
+     "oro": 0.88
+    },
+    "crpss_%": {
+     "bolsa": 1.13,
+     "bonos": 1.67,
+     "letras": 3.18,
+     "vivienda": -0.18,
+     "oro": 1.22
+    }
+   },
+   "estanflacion": {
+    "filas": 34,
+    "cobertura_90": {
+     "bolsa": 0.9,
+     "bonos": 0.893,
+     "letras": 0.885,
+     "vivienda": 0.895,
+     "oro": 1.0
+    },
+    "crpss_%": {
+     "bolsa": -0.28,
+     "bonos": 18.69,
+     "letras": 6.96,
+     "vivienda": -3.34,
+     "oro": -1.69
+    }
+   },
+   "crecimiento_bajo": {
+    "filas": 65,
+    "cobertura_90": {
+     "bolsa": 0.862,
+     "bonos": 0.897,
+     "letras": 0.869,
+     "vivienda": 0.918,
+     "oro": 1.0
+    },
+    "crpss_%": {
+     "bolsa": 0.91,
+     "bonos": 3.55,
+     "letras": 5.12,
+     "vivienda": 2.04,
+     "oro": 0.02
+    }
+   }
+  },
+  "brier": {
+   "caida_bolsa_20": {
+    "frecuencia": 0.0913,
+    "brier_m1": 0.08147,
+    "brier_m0": 0.08311,
+    "bss_%": 1.97
+   },
+   "inflacion_5": {
+    "frecuencia": 0.2674,
+    "brier_m1": 0.14715,
+    "brier_m0": 0.19658,
+    "bss_%": 25.14
+   }
+  },
+  "h5": {
+   "ventanas_activo": {
+    "bolsa": 262,
+    "bonos": 269,
+    "letras": 270,
+    "vivienda": 220,
+    "oro": 70
+   },
+   "crpss_%": {
+    "bolsa": -0.4,
+    "bonos": -0.83,
+    "letras": -0.48,
+    "vivienda": 0.32,
+    "oro": -1.64
+   },
+   "cobertura_90": {
+    "bolsa": 0.927,
+    "bonos": 0.881,
+    "letras": 0.83,
+    "vivienda": 0.877,
+    "oro": 0.943
+   }
+  }
+ },
+ "descriptivo_temporal": {
+  "pit_10": {
+   "bolsa": [
+    84,
+    95,
+    68,
+    37,
+    51,
+    46,
+    54,
+    64,
+    93,
+    178
+   ],
+   "bonos": [
+    95,
+    91,
+    49,
+    76,
+    81,
+    91,
+    70,
+    81,
+    61,
+    75
+   ],
+   "letras": [
+    46,
+    110,
+    117,
+    138,
+    99,
+    85,
+    58,
+    76,
+    40,
+    1
+   ],
+   "vivienda": [
+    40,
+    52,
+    70,
+    89,
+    103,
+    99,
+    77,
+    74,
+    62,
+    70
+   ],
+   "oro": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  "por_regimen_partida": {
+   "expansion": {
+    "filas": 309,
+    "cobertura_90": {
+     "bolsa": 0.744,
+     "bonos": 0.848,
+     "letras": 0.958,
+     "vivienda": 0.935,
+     "oro": NaN
+    },
+    "crpss_%": {
+     "bolsa": -0.75,
+     "bonos": -1.7,
+     "letras": -2.62,
+     "vivienda": -3.59,
+     "oro": NaN
+    }
+   },
+   "sobrecalentamiento": {
+    "filas": 451,
+    "cobertura_90": {
+     "bolsa": 0.863,
+     "bonos": 0.933,
+     "letras": 0.996,
+     "vivienda": 0.924,
+     "oro": NaN
+    },
+    "crpss_%": {
+     "bolsa": 2.09,
+     "bonos": 3.2,
+     "letras": 8.55,
+     "vivienda": -1.26,
+     "oro": NaN
+    }
+   },
+   "estanflacion": {
+    "filas": 4,
+    "cobertura_90": {
+     "bolsa": 1.0,
+     "bonos": 1.0,
+     "letras": 1.0,
+     "vivienda": 1.0,
+     "oro": NaN
+    },
+    "crpss_%": {
+     "bolsa": -29.91,
+     "bonos": 12.2,
+     "letras": -9.67,
+     "vivienda": -72.05,
+     "oro": NaN
+    }
+   },
+   "crecimiento_bajo": {
+    "filas": 6,
+    "cobertura_90": {
+     "bolsa": 0.833,
+     "bonos": 1.0,
+     "letras": 0.5,
+     "vivienda": 1.0,
+     "oro": NaN
+    },
+    "crpss_%": {
+     "bolsa": 11.87,
+     "bonos": -14.01,
+     "letras": -42.44,
+     "vivienda": -53.33,
+     "oro": NaN
+    }
+   }
+  },
+  "brier": {
+   "caida_bolsa_20": {
+    "frecuencia": 0.113,
+    "brier_m1": 0.09998,
+    "brier_m0": 0.10224,
+    "bss_%": 2.21
+   },
+   "inflacion_5": {
+    "frecuencia": 0.3857,
+    "brier_m1": 0.22185,
+    "brier_m0": 0.29232,
+    "bss_%": 24.11
+   }
+  }
+ },
+ "kappa": 1000000.0,
+ "kappa_en_borde": true,
+ "factor_bolsa": {
+  "BEL": 0.91,
+  "DEU": 1.077,
+  "DNK": 0.896,
+  "ESP": 0.947,
+  "FIN": 0.985,
+  "FRA": 0.907,
+  "GBR": 0.914,
+  "ITA": 0.947,
+  "JPN": 1.015,
+  "NLD": 0.9,
+  "NOR": 0.909,
+  "PRT": 1.032,
+  "SWE": 0.872,
+  "USA": 0.914
+ },
+ "escala_resumen": {
+  "m": [
+   -0.058,
+   -0.06,
+   -0.1301,
+   -0.0238,
+   -0.1252
+  ],
+  "tau": [
+   0.1229,
+   0.216,
+   0.2826,
+   0.1266,
+   0.3081
+  ],
+  "curtosis": [
+   16.75,
+   4.7,
+   22.61,
+   3.94,
+   1.5
+  ],
+  "factor_pais": {
+   "BEL": [
+    0.91,
+    0.914,
+    1.29,
+    1.094,
+    0.701
+   ],
+   "DEU": [
+    1.077,
+    0.782,
+    0.742,
+    0.968,
+    0.761
+   ],
+   "DNK": [
+    0.896,
+    1.021,
+    0.866,
+    0.861,
+    0.611
+   ],
+   "ESP": [
+    0.947,
+    0.948,
+    0.937,
+    1.109,
+    0.923
+   ],
+   "FIN": [
+    0.985,
+    1.214,
+    1.117,
+    1.176,
+    0.818
+   ],
+   "FRA": [
+    0.907,
+    0.969,
+    0.99,
+    0.93,
+    0.644
+   ],
+   "GBR": [
+    0.914,
+    0.975,
+    0.674,
+    0.959,
+    1.189
+   ],
+   "ITA": [
+    0.947,
+    1.055,
+    0.757,
+    0.993,
+    0.934
+   ],
+   "JPN": [
+    1.015,
+    1.033,
+    1.095,
+    0.906,
+    1.451
+   ],
+   "NLD": [
+    0.9,
+    0.797,
+    0.672,
+    0.972,
+    0.712
+   ],
+   "NOR": [
+    0.909,
+    0.693,
+    0.815,
+    0.915,
+    0.791
+   ],
+   "PRT": [
+    1.032,
+    1.395,
+    1.152,
+    0.971,
+    0.894
+   ],
+   "SWE": [
+    0.872,
+    0.789,
+    0.733,
+    0.907,
+    0.926
+   ],
+   "USA": [
+    0.914,
+    0.818,
+    0.728,
+    0.937,
+    1.453
+   ]
+  }
+ },
+ "comparacion_v1": {
+  "S5": 0.8861864771748492,
+  "S_activo": {
+   "bolsa": 0.8953,
+   "bonos": 0.8917,
+   "letras": 0.8883,
+   "vivienda": 0.8945,
+   "oro": 0.8766
+  },
+  "crpss_medio_%": 1.792,
+  "S_raros_bolsa": 0.8413939393939394
+ },
+ "lectura": "- **Calibración (desarrollo):** 89.6 % frente al 90 % nominal (v1 88.6 %); activo más desviado oro (88.7 %); regímenes raros 88.9 %; país peor cubierto FIN (81.4 %). La puerta D pasa.\n- **Temporal (≤ 1949 → 1950-2004, descriptivo):** S5 90.5 %, bolsa 81.6 % (v1: bolsa 80,5 %). Es el diseño que más se parece a la confirmación futura.\n- **Qué significa:** NO es una confirmación: v2 se diseñó mirando v1 en estos mismos datos. Solo dice si los arreglos hacen lo que se esperaba. La confirmación (K1 calibración, K2 inflación) está escrita en el prerregistro §6 y se hará una vez, dentro de la confirmación final del proyecto.",
+ "segundos": 258
+}
