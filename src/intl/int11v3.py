@@ -146,27 +146,33 @@ def evaluar_suave(filas: pd.DataFrame, diseño: str, cfg: E.Config, n_lotes: int
         raise ValueError(diseño)
     m, A = len(filas), len(acts)
     out = {k: np.full((m, A), np.nan) for k in ("dentro90", "ancho90")}
-    out.update({k: np.full(m, np.nan) for k in ("p_infl_m1", "p_infl_m0")})
+    out.update({k: np.full(m, np.nan) for k in ("p_infl_m1", "p_infl_m0", "p_caida_m1", "p_caida_m0")})
     dk = np.full((m, A, len(k_anchura)), np.nan)
     prueba = np.zeros(m, bool)
     for k, tr, te in pliegues:
         gen = E.Generador(cfg).ajustar(E.recalcular_sucesor(filas[tr]))
         it = infl[tr]
         infl_m0 = float(np.mean(it[np.isfinite(it)] > 0.05))
+        b0 = V[tr, 0]
+        caida_m0 = float(np.mean(b0[np.isfinite(b0)] <= -0.20))
         te_idx = np.flatnonzero(te)
         prueba[te_idx] = True
         for c in np.unique(pais[te_idx]):
             idx = te_idx[pais[te_idx] == c]
             W = Wtodo[idx]
             usa = np.flatnonzero(W.max(0) > 0)
-            R, pinf = {}, np.zeros(E.K)
+            R, pinf, pcai = {}, np.zeros(E.K), np.zeros(E.K)
             for s0 in usa:
                 esc = gen.simular(c, int(s0), horizonte=1, n_lotes=n_lotes, por_lote=por_lote,
                                   semilla=semilla + 1000 * k + 10 * paises.index(c) + int(s0))
                 R[s0] = esc.rent[:, 0, :]
                 pinf[s0] = float(np.mean(np.expm1(esc.inflacion[:, 0]) > 0.05))
+                xb = R[s0][:, 0]
+                pcai[s0] = float(np.mean(xb[np.isfinite(xb)] <= -0.20))
             out["p_infl_m1"][idx] = W @ pinf
             out["p_infl_m0"][idx] = infl_m0
+            out["p_caida_m1"][idx] = W @ pcai
+            out["p_caida_m0"][idx] = caida_m0
             for j in range(A):
                 ms = [R[s][np.isfinite(R[s][:, j]), j] if s in R else np.zeros(0) for s in range(E.K)]
                 if min(len(ms[s]) for s in usa) < n_min:
@@ -217,4 +223,12 @@ def estadisticos(ev: dict, sel: np.ndarray | None = None, cerca_pp: float = 0.5)
                   "p_media_cerca": float(p1[cerca].mean()) if cerca.any() else np.nan,
                   "frec_cerca": float(y[cerca].mean()) if cerca.any() else np.nan,
                   "eventos": int(y.sum()), "n": int(len(y))}
+    if "p_caida_m1" in ev:
+        yb = ev["y"][sel, 0]
+        okb = np.isfinite(yb)
+        yc = (yb[okb] <= -0.20).astype(float)
+        c1, c0 = (ev["p_caida_m1"][sel][okb] - yc) ** 2, (ev["p_caida_m0"][sel][okb] - yc) ** 2
+        dmc = E.dm_conglomerado(c0 - c1, ev["año"][sel][okb], lags=2)
+        o["caida20"] = {"bss": float(1 - c1.mean() / max(c0.mean(), 1e-12)), "p": dmc["p_unilateral"],
+                        "frecuencia": float(yc.mean()), "n": int(len(yc))}
     return o
