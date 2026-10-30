@@ -107,20 +107,25 @@ def filas_v3(reg_obs, Y, infl_true, infl_obs, brecha_obs, paises, años, existe=
 
 
 # ============================================================================ 3. evaluación con pertenencia suave
-def _cuantiles_mezcla(muestras: list[np.ndarray], w: np.ndarray, qs) -> np.ndarray:
+def _cuantiles_filas(muestras: list[np.ndarray], W: np.ndarray, qs) -> np.ndarray:
+    """Cuantiles (inversa izquierda de la CDF) de la mezcla Σ_s W[r, s]·F_s para cada fila r. muestras: K arrays (los
+    de peso 0 pueden estar vacíos). Devuelve (len(qs), filas)."""
     x = np.concatenate(muestras)
-    p = np.concatenate([np.full(len(m), wi / max(len(m), 1)) for m, wi in zip(muestras, w)])
+    lab = np.concatenate([np.full(len(m), k) for k, m in enumerate(muestras)])
+    n = np.array([max(len(m), 1) for m in muestras], float)
     o = np.argsort(x, kind="stable")
-    cw = np.cumsum(p[o])
-    cw /= cw[-1]
-    return np.array([x[o][min(np.searchsorted(cw, q), len(x) - 1)] for q in qs])
+    x, lab = x[o], lab[o]
+    cw = np.cumsum((W / n[None, :])[:, lab], axis=1)
+    cw /= cw[:, -1:]
+    return np.stack([x[np.minimum((cw < q).sum(1), len(x) - 1)] for q in qs])
 
 
 def evaluar_suave(filas: pd.DataFrame, diseño: str, cfg: E.Config, n_lotes: int, por_lote: int, semilla: int,
                   corte: int = 1950, sigmas: tuple | None = None, k_anchura: tuple = (), n_min: int = 30) -> dict:
     """Como `int11.evaluar_motor` (H = 1) pero con la predictiva de cada fila = mezcla de los 4 estados de partida con
-    pesos `E.pesos_estado(infl_prev, brecha_prev, σπ, σb)` (σ = 0 → régimen duro = s_prev). Devuelve por fila de prueba:
-    dentro90 (m, A), dentro_k (m, A, K), p_infl_m1/m0, p_caida_m1/m0, y, infl, año, pais, s_prev, infl_prev, crps0/1."""
+    pesos `E.pesos_estado(infl_prev, brecha_prev, σπ, σb)` (σ = 0 en los dos ejes → régimen duro = s_prev). Los mismos
+    sorteos sirven a todas las filas del país en el pliegue. Devuelve por fila de prueba: dentro90 (m, A), ancho90
+    (m, A), dentro_k (m, A, K), p_infl_m1/m0, y, infl, año, pais, s_prev, infl_prev."""
     filas = E.recalcular_sucesor(filas)
     acts = list(E.ACTIVOS)
     V = filas[acts].to_numpy(float)
@@ -128,6 +133,10 @@ def evaluar_suave(filas: pd.DataFrame, diseño: str, cfg: E.Config, n_lotes: int
     paises = sorted(filas["pais"].unique())
     sp, sb = sigmas if sigmas is not None else (cfg.sigma_infl, cfg.sigma_brecha)
     pais = filas["pais"].to_numpy()
+    if sp > 0 or sb > 0:
+        Wtodo = np.array([E.pesos_estado(a, b, sp, sb) for a, b in zip(filas["infl_prev"], filas["brecha_prev"])])
+    else:
+        Wtodo = np.eye(E.K)[filas["s_prev"].to_numpy(int)]
     if diseño == "loco":
         pliegues = [(k, pais != c, pais == c) for k, c in enumerate(paises)]
     elif diseño == "temporal":
@@ -136,54 +145,42 @@ def evaluar_suave(filas: pd.DataFrame, diseño: str, cfg: E.Config, n_lotes: int
     else:
         raise ValueError(diseño)
     m, A = len(filas), len(acts)
-    out = {k: np.full((m, A), np.nan) for k in ("dentro90", "crps0", "crps1")}
-    out.update({k: np.full(m, np.nan) for k in ("p_infl_m1", "p_infl_m0", "p_caida_m1", "p_caida_m0")})
+    out = {k: np.full((m, A), np.nan) for k in ("dentro90", "ancho90")}
+    out.update({k: np.full(m, np.nan) for k in ("p_infl_m1", "p_infl_m0")})
     dk = np.full((m, A, len(k_anchura)), np.nan)
     prueba = np.zeros(m, bool)
     for k, tr, te in pliegues:
         gen = E.Generador(cfg).ajustar(E.recalcular_sucesor(filas[tr]))
-        Vtr = V[tr]
-        p0 = [Vtr[np.isfinite(Vtr[:, j]), j] for j in range(A)]
         it = infl[tr]
         infl_m0 = float(np.mean(it[np.isfinite(it)] > 0.05))
-        caida_m0 = float(np.mean(Vtr[np.isfinite(Vtr[:, 0]), 0] <= -0.20))
         te_idx = np.flatnonzero(te)
         prueba[te_idx] = True
         for c in np.unique(pais[te_idx]):
             idx = te_idx[pais[te_idx] == c]
-            sims = []
-            for s0 in range(E.K):
-                esc = gen.simular(c, s0, horizonte=1, n_lotes=n_lotes, por_lote=por_lote,
-                                  semilla=semilla + 1000 * k + 10 * paises.index(c) + s0)
-                R1 = esc.rent[:, 0, :]
-                sims.append(([R1[np.isfinite(R1[:, j]), j] for j in range(A)],
-                             float(np.mean(np.expm1(esc.inflacion[:, 0]) > 0.05)),
-                             float(np.mean(R1[np.isfinite(R1[:, 0]), 0] <= -0.20))))
-            for i in idx:
-                if sp > 0 or sb > 0:
-                    w = E.pesos_estado(filas["infl_prev"].iat[i], filas["brecha_prev"].iat[i], sp, sb)
-                else:
-                    w = np.eye(E.K)[int(filas["s_prev"].iat[i])]
-                out["p_infl_m1"][i] = float(np.dot(w, [s[1] for s in sims]))
-                out["p_caida_m1"][i] = float(np.dot(w, [s[2] for s in sims]))
-                out["p_infl_m0"][i], out["p_caida_m0"][i] = infl_m0, caida_m0
-                usa = np.flatnonzero(w > 1e-12)
-                for j in range(A):
-                    y = V[i, j]
-                    if not np.isfinite(y) or len(p0[j]) < n_min:
-                        continue
-                    ms = [sims[s][0][j] for s in usa]
-                    if min(len(x) for x in ms) < n_min:
-                        continue
-                    q = _cuantiles_mezcla(ms, w[usa], (0.05, 0.5, 0.95))
-                    out["dentro90"][i, j] = q[0] <= y <= q[2]
-                    out["crps0"][i, j] = E.crps_muestra(p0[j], y)[0]
-                    # CRPS de la mezcla: con pesos, aproximado por remuestreo proporcional (4.000 sorteos)
-                    x = np.concatenate([np.random.default_rng(i).choice(mm, max(int(round(4000 * ww)), 1))
-                                        for mm, ww in zip(ms, w[usa])])
-                    out["crps1"][i, j] = E.crps_muestra(x, y)[0]
-                    for kk, fk in enumerate(k_anchura):
-                        dk[i, j, kk] = (y >= q[1] - fk * (q[1] - q[0])) & (y <= q[1] + fk * (q[2] - q[1]))
+            W = Wtodo[idx]
+            usa = np.flatnonzero(W.max(0) > 0)
+            R, pinf = {}, np.zeros(E.K)
+            for s0 in usa:
+                esc = gen.simular(c, int(s0), horizonte=1, n_lotes=n_lotes, por_lote=por_lote,
+                                  semilla=semilla + 1000 * k + 10 * paises.index(c) + int(s0))
+                R[s0] = esc.rent[:, 0, :]
+                pinf[s0] = float(np.mean(np.expm1(esc.inflacion[:, 0]) > 0.05))
+            out["p_infl_m1"][idx] = W @ pinf
+            out["p_infl_m0"][idx] = infl_m0
+            for j in range(A):
+                ms = [R[s][np.isfinite(R[s][:, j]), j] if s in R else np.zeros(0) for s in range(E.K)]
+                if min(len(ms[s]) for s in usa) < n_min:
+                    continue
+                y = V[idx, j]
+                ok = np.isfinite(y)
+                if not ok.any():
+                    continue
+                q = _cuantiles_filas(ms, W[ok], (0.05, 0.5, 0.95))
+                ii = idx[ok]
+                out["dentro90"][ii, j] = (y[ok] >= q[0]) & (y[ok] <= q[2])
+                out["ancho90"][ii, j] = q[2] - q[0]
+                for kk, fk in enumerate(k_anchura):
+                    dk[ii, j, kk] = (y[ok] >= q[1] - fk * (q[1] - q[0])) & (y[ok] <= q[1] + fk * (q[2] - q[1]))
     sel = prueba
     res = {k: v[sel] for k, v in out.items()}
     res.update({"pais": pais[sel], "año": filas["año"].to_numpy()[sel], "s_prev": filas["s_prev"].to_numpy()[sel],
@@ -195,13 +192,13 @@ def evaluar_suave(filas: pd.DataFrame, diseño: str, cfg: E.Config, n_lotes: int
 
 
 def estadisticos(ev: dict, sel: np.ndarray | None = None, cerca_pp: float = 0.5) -> dict:
-    """S5, S_raros, cobertura cerca del umbral (|π_{t−1} − 3 %| < cerca_pp), CRPSS, Brier de inflación > 5 % (global y
-    cerca), con DM por años; y cobertura de los intervalos escalados (potencia de la puerta)."""
+    """S5, S_raros, cobertura cerca del umbral (|π_{t−1} − 3 %| < cerca_pp), anchura media del p5-p95, Brier de
+    inflación > 5 % (global y cerca) con DM por años, y cobertura de los intervalos escalados (potencia de la puerta)."""
     sel = np.ones(len(ev["año"]), bool) if sel is None else sel
     dn = ev["dentro90"][sel]
     fila = np.isfinite(dn).any(1)
     o = {"S5": float(np.mean(np.nanmean(dn[fila], 1))), "Sb": float(np.nanmean(dn[:, 0])),
-         "S_activo": np.nanmean(dn, 0).tolist()}
+         "S_activo": np.nanmean(dn, 0).tolist(), "ancho_bolsa": float(np.nanmean(ev["ancho90"][sel][:, 0]))}
     raro = np.isin(ev["s_prev"][sel], (2, 3))
     o["S_raros"] = float(np.nanmean(dn[raro])) if raro.any() else np.nan
     cerca = (np.abs(ev["infl_prev"][sel] - 0.03) < cerca_pp / 100) if ev.get("infl_prev") is not None else \
@@ -211,9 +208,6 @@ def estadisticos(ev: dict, sel: np.ndarray | None = None, cerca_pp: float = 0.5)
     if "dentro_k" in ev:
         dkk = ev["dentro_k"][sel]
         o["S5_k"] = [float(np.mean(np.nanmean(dkk[fila, :, k], 1))) for k in range(dkk.shape[2])]
-    c0, c1 = ev["crps0"][sel], ev["crps1"][sel]
-    usa = np.isfinite(c0).any(1)
-    o["crpss_medio"] = float(np.nanmean(1 - np.nanmean(c1[usa], 0) / np.nanmean(c0[usa], 0)))
     y = (ev["infl"][sel] > 0.05).astype(float)
     p1, p0 = ev["p_infl_m1"][sel], ev["p_infl_m0"][sel]
     b1, b0 = (p1 - y) ** 2, (p0 - y) ** 2

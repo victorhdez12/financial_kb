@@ -313,3 +313,14 @@ def test_hoy_v2_registro_no_reescribe_la_salida_hoy(monkeypatch, tmp_path):
     monkeypatch.setattr("sys.argv", ["x", "2026-10-30", "--registro"])
     H.main()
     assert llamadas["r"] and not (tmp_path / "hoy.json").exists()
+
+
+def test_cuantiles_filas_de_la_mezcla():
+    from src.intl import int11v3 as V
+    rng = np.random.default_rng(0)
+    a, b = rng.normal(0, 1, 4000), rng.normal(5, 1, 4000)
+    W = np.array([[1.0, 0, 0, 0], [0.5, 0.5, 0, 0], [0, 1.0, 0, 0]])
+    q = V._cuantiles_filas([a, b, np.zeros(0), np.zeros(0)], W, (0.05, 0.5, 0.95))
+    assert q[1, 0] == pytest.approx(np.quantile(a, 0.5), abs=0.01) and q[1, 2] == pytest.approx(5, abs=0.06)
+    assert q[0, 1] == pytest.approx(np.quantile(a, 0.10), abs=0.03)          # p5 de la mezcla = p10 de a
+    assert q[2, 1] == pytest.approx(np.quantile(b, 0.90), abs=0.03)
