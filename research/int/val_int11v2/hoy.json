@@ -1,0 +1,1236 @@
+{
+ "procedencia": {
+  "commit": "d80951e8e978dafb7bfc5620de3156eebff57b04",
+  "arbol_limpio": true,
+  "hora_utc": "2026-10-30T14:07:54+00:00"
+ },
+ "ventana": {
+  "desde": "2026-11-01",
+  "hasta": "2027-10-31",
+  "meses": 12
+ },
+ "corte": "2026-09-30",
+ "interp": {
+  "pais": "USA",
+  "meses_faltan": [
+   "2025-10-01"
+  ],
+  "inflacion_interp_log": 0.03149421004902835,
+  "inflacion_interp_nivel": 0.03149425475216669,
+  "inflacion_retrocediendo": 0.026650861129476955,
+  "mes_final_retrocediendo": "2025-09-01",
+  "regimen_retrocediendo": "expansion"
+ },
+ "hoy": {
+  "BEL": {
+   "inflacion": 0.028229913604236195,
+   "brecha_maddison": 0.0551541656526533,
+   "brecha_total": 0.08476827765169936,
+   "regimen": "expansion",
+   "mes_ipc": "2026-09-01",
+   "trimestre_pib": "2026-04-01",
+   "huecos": 0,
+   "maddison_ultimo": 2022,
+   "meses_ipc_a_ventana": 1,
+   "meses_pib_a_ventana": 4
+  },
+  "DEU": {
+   "inflacion": 0.024637300203718324,
+   "brecha_maddison": 0.007323466598941231,
+   "brecha_total": 0.027589650260239296,
+   "regimen": "expansion",
+   "mes_ipc": "2026-09-01",
+   "trimestre_pib": "2026-04-01",
+   "huecos": 0,
+   "maddison_ultimo": 2022,
+   "brecha_wdi": 0.020502037705584453,
+   "sesgo_maddison_pp": -1.3178571106643222,
+   "regimen_wdi": "expansion",
+   "crec_pob_wdi_2022_2025_%_anual": 0.12537274594353504,
+   "crec_pob_maddison_extrap_%_anual": 0.41023951659584873,
+   "meses_ipc_a_ventana": 1,
+   "meses_pib_a_ventana": 4
+  },
+  "DNK": {
+   "inflacion": 0.016452585806634504,
+   "brecha_maddison": 0.11899919439624007,
+   "brecha_total": 0.1487154493349898,
+   "regimen": "expansion",
+   "mes_ipc": "2026-09-01",
+   "trimestre_pib": "2026-04-01",
+   "huecos": 0,
+   "maddison_ultimo": 2022,
+   "meses_ipc_a_ventana": 1,
+   "meses_pib_a_ventana": 4
+  },
+  "ESP": {
+   "inflacion": 0.032489044246234555,
+   "brecha_maddison": 0.11141979524471246,
+   "brecha_total": 0.12706336438727917,
+   "regimen": "sobrecalentamiento",
+   "mes_ipc": "2026-09-01",
+   "trimestre_pib": "2026-04-01",
+   "huecos": 0,
+   "maddison_ultimo": 2022,
+   "brecha_wdi": 0.08470509460307474,
+   "sesgo_maddison_pp": 2.6714700641637723,
+   "regimen_wdi": "sobrecalentamiento",
+   "crec_pob_wdi_2022_2025_%_anual": 1.0769043719786608,
+   "crec_pob_maddison_extrap_%_anual": 0.17983368261934168,
+   "meses_ipc_a_ventana": 1,
+   "meses_pib_a_ventana": 4
+  },
+  "FIN": {
+   "inflacion": 0.011795203821491492,
+   "brecha_maddison": 0.02126367320669864,
+   "brecha_total": 0.03392892987090157,
+   "regimen": "expansion",
+   "mes_ipc": "2026-09-01",
+   "trimestre_pib": "2026-04-01",
+   "huecos": 0,
+   "maddison_ultimo": 2022,
+   "meses_ipc_a_ventana": 1,
+   "meses_pib_a_ventana": 4
+  },
+  "FRA": {
+   "inflacion": 0.016081233911586106,
+   "brecha_maddison": 0.04803314914365231,
+   "brecha_total": 0.0705438249867818,
+   "regimen": "expansion",
+   "mes_ipc": "2026-09-01",
+   "trimestre_pib": "2026-04-01",
+   "huecos": 0,
+   "maddison_ultimo": 2022,
+   "brecha_wdi": 0.0530006265661751,
+   "sesgo_maddison_pp": -0.49674774225227925,
+   "regimen_wdi": "expansion",
+   "crec_pob_wdi_2022_2025_%_anual": 0.2609515324114306,
+   "crec_pob_maddison_extrap_%_anual": 0.42334894198178863,
+   "meses_ipc_a_ventana": 1,
+   "meses_pib_a_ventana": 4
+  },
+  "GBR": {
+   "inflacion": 0.03243203473587624,
+   "brecha_maddison": 0.04138280251580895,
+   "brecha_total": 0.07338239206426067,
+   "regimen": "sobrecalentamiento",
+   "mes_ipc": "2026-09-01",
+   "trimestre_pib": "2026-04-01",
+   "huecos": 0,
+   "maddison_ultimo": 2022,
+   "brecha_wdi": 0.03488008584604074,
+   "sesgo_maddison_pp": 0.6502716669768205,
+   "regimen_wdi": "sobrecalentamiento",
+   "crec_pob_wdi_2022_2025_%_anual": 0.8999766346250397,
+   "crec_pob_maddison_extrap_%_anual": 0.6216646070732894,
+   "meses_ipc_a_ventana": 1,
+   "meses_pib_a_ventana": 4
+  },
+  "ITA": {
+   "inflacion": 0.0222405368810638,
+   "brecha_maddison": 0.08814017354240189,
+   "brecha_total": 0.07284006544679755,
+   "regimen": "expansion",
+   "mes_ipc": "2026-09-01",
+   "trimestre_pib": "2026-04-01",
+   "huecos": 0,
+   "maddison_ultimo": 2022,
+   "brecha_wdi": 0.08347400036449182,
+   "sesgo_maddison_pp": 0.4666173177910071,
+   "regimen_wdi": "expansion",
+   "crec_pob_wdi_2022_2025_%_anual": -0.055406645309788116,
+   "crec_pob_maddison_extrap_%_anual": -0.20979176076903888,
+   "meses_ipc_a_ventana": 1,
+   "meses_pib_a_ventana": 4
+  },
+  "JPN": {
+   "inflacion": 0.018981608077199733,
+   "brecha_maddison": 0.04686260358345251,
+   "brecha_total": 0.03267953500924037,
+   "regimen": "expansion",
+   "mes_ipc": "2026-08-01",
+   "trimestre_pib": "2026-04-01",
+   "huecos": 0,
+   "maddison_ultimo": 2022,
+   "brecha_wdi": 0.05391193212473233,
+   "sesgo_maddison_pp": -0.704932854127982,
+   "regimen_wdi": "expansion",
+   "crec_pob_wdi_2022_2025_%_anual": -0.4717217733669467,
+   "crec_pob_maddison_extrap_%_anual": -0.21519699747959728,
+   "meses_ipc_a_ventana": 2,
+   "meses_pib_a_ventana": 4
+  },
+  "NLD": {
+   "inflacion": 0.02889306097472429,
+   "brecha_maddison": 0.06018408735730674,
+   "brecha_total": 0.09351844965942391,
+   "regimen": "expansion",
+   "mes_ipc": "2026-09-01",
+   "trimestre_pib": "2026-04-01",
+   "huecos": 0,
+   "maddison_ultimo": 2022,
+   "brecha_wdi": 0.05586781177110067,
+   "sesgo_maddison_pp": 0.4316275586206064,
+   "regimen_wdi": "expansion",
+   "crec_pob_wdi_2022_2025_%_anual": 0.72027756027345,
+   "crec_pob_maddison_extrap_%_anual": 0.5503756308774205,
+   "meses_ipc_a_ventana": 1,
+   "meses_pib_a_ventana": 4
+  },
+  "NOR": {
+   "inflacion": 0.031209911014539952,
+   "brecha_maddison": 0.04742025321815291,
+   "brecha_total": 0.08997544790281964,
+   "regimen": "sobrecalentamiento",
+   "mes_ipc": "2026-09-01",
+   "trimestre_pib": "2026-04-01",
+   "huecos": 0,
+   "maddison_ultimo": 2022,
+   "meses_ipc_a_ventana": 1,
+   "meses_pib_a_ventana": 4
+  },
+  "PRT": {
+   "inflacion": 0.027379622946060757,
+   "brecha_maddison": 0.14223773646093818,
+   "brecha_total": 0.1334468766023793,
+   "regimen": "expansion",
+   "mes_ipc": "2026-09-01",
+   "trimestre_pib": "2026-04-01",
+   "huecos": 0,
+   "maddison_ultimo": 2022,
+   "meses_ipc_a_ventana": 1,
+   "meses_pib_a_ventana": 4
+  },
+  "SWE": {
+   "inflacion": 0.004920883505423238,
+   "brecha_maddison": 0.03943083497680533,
+   "brecha_total": 0.08902406545836428,
+   "regimen": "expansion",
+   "mes_ipc": "2026-09-01",
+   "trimestre_pib": "2026-04-01",
+   "huecos": 0,
+   "maddison_ultimo": 2022,
+   "meses_ipc_a_ventana": 1,
+   "meses_pib_a_ventana": 4
+  },
+  "USA": {
+   "inflacion": 0.03149421004902835,
+   "brecha_maddison": 0.11057292543465902,
+   "brecha_total": 0.14074320536430562,
+   "regimen": "sobrecalentamiento",
+   "mes_ipc": "2026-09-01",
+   "trimestre_pib": "2026-04-01",
+   "huecos": 1,
+   "maddison_ultimo": 2022,
+   "brecha_wdi": 0.10734050792150329,
+   "sesgo_maddison_pp": 0.32324175131557276,
+   "regimen_wdi": "sobrecalentamiento",
+   "crec_pob_wdi_2022_2025_%_anual": 0.7683846322159071,
+   "crec_pob_maddison_extrap_%_anual": 0.6000260568807484,
+   "meses_ipc_a_ventana": 1,
+   "meses_pib_a_ventana": 4
+  }
+ },
+ "umbral": {
+  "hoy_a_menos_de": {
+   "0.1pp": 0,
+   "0.25pp": 6,
+   "0.5pp": 7,
+   "1.0pp": 9
+  },
+  "hoy_distancia_pp": {
+   "BEL": -0.18,
+   "DEU": -0.54,
+   "DNK": -1.35,
+   "ESP": 0.25,
+   "FIN": -1.82,
+   "FRA": -1.39,
+   "GBR": 0.24,
+   "ITA": -0.78,
+   "JPN": -1.1,
+   "NLD": -0.11,
+   "NOR": 0.12,
+   "PRT": -0.26,
+   "SWE": -2.51,
+   "USA": 0.15
+  },
+  "pais_meses_12_cortes": 168,
+  "a_menos_de": {
+   "0.1pp": 12,
+   "0.25pp": 38,
+   "0.5pp": 66,
+   "1.0pp": 106
+  },
+  "cambios_de_lado_mes_a_mes": 5,
+  "paises_con_algun_cambio": [
+   "ESP",
+   "JPN",
+   "NLD",
+   "NOR",
+   "USA"
+  ],
+  "serie": {
+   "BEL": [
+    [
+     "2025-10",
+     2.59,
+     "expansion"
+    ],
+    [
+     "2025-11",
+     2.526,
+     "expansion"
+    ],
+    [
+     "2025-12",
+     2.437,
+     "expansion"
+    ],
+    [
+     "2026-01",
+     2.195,
+     "expansion"
+    ],
+    [
+     "2026-02",
+     2.023,
+     "expansion"
+    ],
+    [
+     "2026-03",
+     1.92,
+     "expansion"
+    ],
+    [
+     "2026-04",
+     2.041,
+     "expansion"
+    ],
+    [
+     "2026-05",
+     2.21,
+     "expansion"
+    ],
+    [
+     "2026-06",
+     2.314,
+     "expansion"
+    ],
+    [
+     "2026-07",
+     2.447,
+     "expansion"
+    ],
+    [
+     "2026-08",
+     2.615,
+     "expansion"
+    ],
+    [
+     "2026-09",
+     2.823,
+     "expansion"
+    ]
+   ],
+   "DEU": [
+    [
+     "2025-10",
+     2.205,
+     "expansion"
+    ],
+    [
+     "2025-11",
+     2.215,
+     "expansion"
+    ],
+    [
+     "2025-12",
+     2.149,
+     "expansion"
+    ],
+    [
+     "2026-01",
+     2.131,
+     "expansion"
+    ],
+    [
+     "2026-02",
+     2.1,
+     "expansion"
+    ],
+    [
+     "2026-03",
+     2.144,
+     "expansion"
+    ],
+    [
+     "2026-04",
+     2.208,
+     "expansion"
+    ],
+    [
+     "2026-05",
+     2.251,
+     "expansion"
+    ],
+    [
+     "2026-06",
+     2.275,
+     "expansion"
+    ],
+    [
+     "2026-07",
+     2.338,
+     "expansion"
+    ],
+    [
+     "2026-08",
+     2.395,
+     "expansion"
+    ],
+    [
+     "2026-09",
+     2.464,
+     "expansion"
+    ]
+   ],
+   "DNK": [
+    [
+     "2025-10",
+     1.833,
+     "expansion"
+    ],
+    [
+     "2025-11",
+     1.872,
+     "expansion"
+    ],
+    [
+     "2025-12",
+     1.876,
+     "expansion"
+    ],
+    [
+     "2026-01",
+     1.812,
+     "expansion"
+    ],
+    [
+     "2026-02",
+     1.707,
+     "expansion"
+    ],
+    [
+     "2026-03",
+     1.682,
+     "expansion"
+    ],
+    [
+     "2026-04",
+     1.671,
+     "expansion"
+    ],
+    [
+     "2026-05",
+     1.694,
+     "expansion"
+    ],
+    [
+     "2026-06",
+     1.695,
+     "expansion"
+    ],
+    [
+     "2026-07",
+     1.651,
+     "expansion"
+    ],
+    [
+     "2026-08",
+     1.654,
+     "expansion"
+    ],
+    [
+     "2026-09",
+     1.645,
+     "expansion"
+    ]
+   ],
+   "ESP": [
+    [
+     "2025-10",
+     2.58,
+     "expansion"
+    ],
+    [
+     "2025-11",
+     2.631,
+     "expansion"
+    ],
+    [
+     "2025-12",
+     2.638,
+     "expansion"
+    ],
+    [
+     "2026-01",
+     2.586,
+     "expansion"
+    ],
+    [
+     "2026-02",
+     2.533,
+     "expansion"
+    ],
+    [
+     "2026-03",
+     2.63,
+     "expansion"
+    ],
+    [
+     "2026-04",
+     2.717,
+     "expansion"
+    ],
+    [
+     "2026-05",
+     2.819,
+     "expansion"
+    ],
+    [
+     "2026-06",
+     2.894,
+     "expansion"
+    ],
+    [
+     "2026-07",
+     2.966,
+     "expansion"
+    ],
+    [
+     "2026-08",
+     3.095,
+     "sobrecalentamiento"
+    ],
+    [
+     "2026-09",
+     3.249,
+     "sobrecalentamiento"
+    ]
+   ],
+   "FIN": [
+    [
+     "2025-10",
+     0.466,
+     "expansion"
+    ],
+    [
+     "2025-11",
+     0.376,
+     "expansion"
+    ],
+    [
+     "2025-12",
+     0.337,
+     "expansion"
+    ],
+    [
+     "2026-01",
+     0.266,
+     "expansion"
+    ],
+    [
+     "2026-02",
+     0.276,
+     "expansion"
+    ],
+    [
+     "2026-03",
+     0.344,
+     "expansion"
+    ],
+    [
+     "2026-04",
+     0.429,
+     "expansion"
+    ],
+    [
+     "2026-05",
+     0.563,
+     "expansion"
+    ],
+    [
+     "2026-06",
+     0.714,
+     "expansion"
+    ],
+    [
+     "2026-07",
+     0.873,
+     "expansion"
+    ],
+    [
+     "2026-08",
+     1.013,
+     "expansion"
+    ],
+    [
+     "2026-09",
+     1.18,
+     "expansion"
+    ]
+   ],
+   "FRA": [
+    [
+     "2025-10",
+     1.012,
+     "expansion"
+    ],
+    [
+     "2025-11",
+     0.982,
+     "expansion"
+    ],
+    [
+     "2025-12",
+     0.939,
+     "expansion"
+    ],
+    [
+     "2026-01",
+     0.828,
+     "expansion"
+    ],
+    [
+     "2026-02",
+     0.837,
+     "expansion"
+    ],
+    [
+     "2026-03",
+     0.913,
+     "expansion"
+    ],
+    [
+     "2026-04",
+     1.024,
+     "expansion"
+    ],
+    [
+     "2026-05",
+     1.17,
+     "expansion"
+    ],
+    [
+     "2026-06",
+     1.237,
+     "expansion"
+    ],
+    [
+     "2026-07",
+     1.329,
+     "expansion"
+    ],
+    [
+     "2026-08",
+     1.451,
+     "expansion"
+    ],
+    [
+     "2026-09",
+     1.608,
+     "expansion"
+    ]
+   ],
+   "GBR": [
+    [
+     "2025-10",
+     3.807,
+     "sobrecalentamiento"
+    ],
+    [
+     "2025-11",
+     3.808,
+     "sobrecalentamiento"
+    ],
+    [
+     "2025-12",
+     3.81,
+     "sobrecalentamiento"
+    ],
+    [
+     "2026-01",
+     3.749,
+     "sobrecalentamiento"
+    ],
+    [
+     "2026-02",
+     3.714,
+     "sobrecalentamiento"
+    ],
+    [
+     "2026-03",
+     3.716,
+     "sobrecalentamiento"
+    ],
+    [
+     "2026-04",
+     3.62,
+     "sobrecalentamiento"
+    ],
+    [
+     "2026-05",
+     3.537,
+     "sobrecalentamiento"
+    ],
+    [
+     "2026-06",
+     3.436,
+     "sobrecalentamiento"
+    ],
+    [
+     "2026-07",
+     3.342,
+     "sobrecalentamiento"
+    ],
+    [
+     "2026-08",
+     3.271,
+     "sobrecalentamiento"
+    ],
+    [
+     "2026-09",
+     3.243,
+     "sobrecalentamiento"
+    ]
+   ],
+   "ITA": [
+    [
+     "2025-10",
+     1.551,
+     "expansion"
+    ],
+    [
+     "2025-11",
+     1.528,
+     "expansion"
+    ],
+    [
+     "2025-12",
+     1.52,
+     "expansion"
+    ],
+    [
+     "2026-01",
+     1.477,
+     "expansion"
+    ],
+    [
+     "2026-02",
+     1.471,
+     "expansion"
+    ],
+    [
+     "2026-03",
+     1.453,
+     "expansion"
+    ],
+    [
+     "2026-04",
+     1.519,
+     "expansion"
+    ],
+    [
+     "2026-05",
+     1.652,
+     "expansion"
+    ],
+    [
+     "2026-06",
+     1.764,
+     "expansion"
+    ],
+    [
+     "2026-07",
+     1.867,
+     "expansion"
+    ],
+    [
+     "2026-08",
+     2.01,
+     "expansion"
+    ],
+    [
+     "2026-09",
+     2.224,
+     "expansion"
+    ]
+   ],
+   "JPN": [
+    [
+     "2025-10",
+     3.291,
+     "sobrecalentamiento"
+    ],
+    [
+     "2025-11",
+     3.275,
+     "sobrecalentamiento"
+    ],
+    [
+     "2025-12",
+     3.14,
+     "sobrecalentamiento"
+    ],
+    [
+     "2026-01",
+     2.939,
+     "expansion"
+    ],
+    [
+     "2026-02",
+     2.756,
+     "expansion"
+    ],
+    [
+     "2026-03",
+     2.582,
+     "expansion"
+    ],
+    [
+     "2026-04",
+     2.392,
+     "expansion"
+    ],
+    [
+     "2026-05",
+     2.22,
+     "expansion"
+    ],
+    [
+     "2026-06",
+     2.081,
+     "expansion"
+    ],
+    [
+     "2026-07",
+     1.977,
+     "expansion"
+    ],
+    [
+     "2026-08",
+     1.898,
+     "expansion"
+    ],
+    [
+     "2026-09",
+     1.898,
+     "expansion"
+    ]
+   ],
+   "NLD": [
+    [
+     "2025-10",
+     3.405,
+     "sobrecalentamiento"
+    ],
+    [
+     "2025-11",
+     3.314,
+     "sobrecalentamiento"
+    ],
+    [
+     "2025-12",
+     3.208,
+     "sobrecalentamiento"
+    ],
+    [
+     "2026-01",
+     3.134,
+     "sobrecalentamiento"
+    ],
+    [
+     "2026-02",
+     3.019,
+     "sobrecalentamiento"
+    ],
+    [
+     "2026-03",
+     2.938,
+     "expansion"
+    ],
+    [
+     "2026-04",
+     2.833,
+     "expansion"
+    ],
+    [
+     "2026-05",
+     2.844,
+     "expansion"
+    ],
+    [
+     "2026-06",
+     2.822,
+     "expansion"
+    ],
+    [
+     "2026-07",
+     2.844,
+     "expansion"
+    ],
+    [
+     "2026-08",
+     2.879,
+     "expansion"
+    ],
+    [
+     "2026-09",
+     2.889,
+     "expansion"
+    ]
+   ],
+   "NOR": [
+    [
+     "2025-10",
+     2.881,
+     "expansion"
+    ],
+    [
+     "2025-11",
+     2.93,
+     "expansion"
+    ],
+    [
+     "2025-12",
+     3.01,
+     "sobrecalentamiento"
+    ],
+    [
+     "2026-01",
+     3.108,
+     "sobrecalentamiento"
+    ],
+    [
+     "2026-02",
+     3.042,
+     "sobrecalentamiento"
+    ],
+    [
+     "2026-03",
+     3.121,
+     "sobrecalentamiento"
+    ],
+    [
+     "2026-04",
+     3.191,
+     "sobrecalentamiento"
+    ],
+    [
+     "2026-05",
+     3.204,
+     "sobrecalentamiento"
+    ],
+    [
+     "2026-06",
+     3.182,
+     "sobrecalentamiento"
+    ],
+    [
+     "2026-07",
+     3.153,
+     "sobrecalentamiento"
+    ],
+    [
+     "2026-08",
+     3.134,
+     "sobrecalentamiento"
+    ],
+    [
+     "2026-09",
+     3.121,
+     "sobrecalentamiento"
+    ]
+   ],
+   "PRT": [
+    [
+     "2025-10",
+     2.397,
+     "expansion"
+    ],
+    [
+     "2025-11",
+     2.375,
+     "expansion"
+    ],
+    [
+     "2025-12",
+     2.309,
+     "expansion"
+    ],
+    [
+     "2026-01",
+     2.259,
+     "expansion"
+    ],
+    [
+     "2026-02",
+     2.236,
+     "expansion"
+    ],
+    [
+     "2026-03",
+     2.306,
+     "expansion"
+    ],
+    [
+     "2026-04",
+     2.409,
+     "expansion"
+    ],
+    [
+     "2026-05",
+     2.493,
+     "expansion"
+    ],
+    [
+     "2026-06",
+     2.562,
+     "expansion"
+    ],
+    [
+     "2026-07",
+     2.595,
+     "expansion"
+    ],
+    [
+     "2026-08",
+     2.639,
+     "expansion"
+    ],
+    [
+     "2026-09",
+     2.738,
+     "expansion"
+    ]
+   ],
+   "SWE": [
+    [
+     "2025-10",
+     0.827,
+     "expansion"
+    ],
+    [
+     "2025-11",
+     0.72,
+     "expansion"
+    ],
+    [
+     "2025-12",
+     0.678,
+     "expansion"
+    ],
+    [
+     "2026-01",
+     0.639,
+     "expansion"
+    ],
+    [
+     "2026-02",
+     0.573,
+     "expansion"
+    ],
+    [
+     "2026-03",
+     0.58,
+     "expansion"
+    ],
+    [
+     "2026-04",
+     0.544,
+     "expansion"
+    ],
+    [
+     "2026-05",
+     0.593,
+     "expansion"
+    ],
+    [
+     "2026-06",
+     0.588,
+     "expansion"
+    ],
+    [
+     "2026-07",
+     0.532,
+     "expansion"
+    ],
+    [
+     "2026-08",
+     0.47,
+     "expansion"
+    ],
+    [
+     "2026-09",
+     0.492,
+     "expansion"
+    ]
+   ],
+   "USA": [
+    [
+     "2025-10",
+     2.665,
+     "expansion"
+    ],
+    [
+     "2025-11",
+     2.679,
+     "expansion"
+    ],
+    [
+     "2025-12",
+     2.662,
+     "expansion"
+    ],
+    [
+     "2026-01",
+     2.613,
+     "expansion"
+    ],
+    [
+     "2026-02",
+     2.58,
+     "expansion"
+    ],
+    [
+     "2026-03",
+     2.65,
+     "expansion"
+    ],
+    [
+     "2026-04",
+     2.773,
+     "expansion"
+    ],
+    [
+     "2026-05",
+     2.928,
+     "expansion"
+    ],
+    [
+     "2026-06",
+     2.998,
+     "expansion"
+    ],
+    [
+     "2026-07",
+     3.051,
+     "sobrecalentamiento"
+    ],
+    [
+     "2026-08",
+     3.09,
+     "sobrecalentamiento"
+    ],
+    [
+     "2026-09",
+     3.149,
+     "sobrecalentamiento"
+    ]
+   ]
+  }
+ },
+ "p_infl5_por_regimen": {
+  "ESP|expansion": 0.07065,
+  "ESP|sobrecalentamiento": 0.5614,
+  "NLD|expansion": 0.0708,
+  "NLD|sobrecalentamiento": 0.50955
+ },
+ "p_infl5_suave_hoy": {
+  "BEL": {
+   "infl_%": 2.82,
+   "duro": 0.071,
+   "sigma=0.25pp": 0.188,
+   "sigma=0.5pp": 0.248
+  },
+  "DEU": {
+   "infl_%": 2.46,
+   "duro": 0.071,
+   "sigma=0.25pp": 0.078,
+   "sigma=0.5pp": 0.14
+  },
+  "DNK": {
+   "infl_%": 1.65,
+   "duro": 0.071,
+   "sigma=0.25pp": 0.071,
+   "sigma=0.5pp": 0.072
+  },
+  "ESP": {
+   "infl_%": 3.25,
+   "duro": 0.561,
+   "sigma=0.25pp": 0.483,
+   "sigma=0.5pp": 0.41
+  },
+  "FIN": {
+   "infl_%": 1.18,
+   "duro": 0.071,
+   "sigma=0.25pp": 0.071,
+   "sigma=0.5pp": 0.071
+  },
+  "FRA": {
+   "infl_%": 1.61,
+   "duro": 0.071,
+   "sigma=0.25pp": 0.071,
+   "sigma=0.5pp": 0.072
+  },
+  "GBR": {
+   "infl_%": 3.24,
+   "duro": 0.561,
+   "sigma=0.25pp": 0.48,
+   "sigma=0.5pp": 0.408
+  },
+  "ITA": {
+   "infl_%": 2.22,
+   "duro": 0.071,
+   "sigma=0.25pp": 0.071,
+   "sigma=0.5pp": 0.1
+  },
+  "JPN": {
+   "infl_%": 1.9,
+   "duro": 0.071,
+   "sigma=0.25pp": 0.071,
+   "sigma=0.5pp": 0.077
+  },
+  "NLD": {
+   "infl_%": 2.89,
+   "duro": 0.071,
+   "sigma=0.25pp": 0.215,
+   "sigma=0.5pp": 0.252
+  },
+  "NOR": {
+   "infl_%": 3.12,
+   "duro": 0.561,
+   "sigma=0.25pp": 0.407,
+   "sigma=0.5pp": 0.363
+  },
+  "PRT": {
+   "infl_%": 2.74,
+   "duro": 0.071,
+   "sigma=0.25pp": 0.143,
+   "sigma=0.5pp": 0.218
+  },
+  "SWE": {
+   "infl_%": 0.49,
+   "duro": 0.071,
+   "sigma=0.25pp": 0.071,
+   "sigma=0.5pp": 0.071
+  },
+  "USA": {
+   "infl_%": 3.15,
+   "duro": 0.561,
+   "sigma=0.25pp": 0.426,
+   "sigma=0.5pp": 0.374
+  }
+ },
+ "segundos": 5
+}

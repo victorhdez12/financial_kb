@@ -1,0 +1,58 @@
+{
+ "procedencia": {
+  "commit": "42feb37387d28fbb064c72a9d80ca2f9a8739898",
+  "arbol_limpio": true,
+  "hora_utc": "2026-10-30T14:05:44+00:00"
+ },
+ "modo": "oficial",
+ "res": {
+  "loco": {
+   "S5": 0.896156330749354,
+   "Sb": 0.9013422818791946,
+   "S_activo": {
+    "bolsa": 0.9013,
+    "bonos": 0.9009,
+    "letras": 0.8968,
+    "vivienda": 0.907,
+    "oro": 0.8874
+   },
+   "crpss_medio_%": 1.895,
+   "d_media": 0.017216064572305276,
+   "dm": {
+    "media": 0.017216064572305276,
+    "se": 0.007069636651591822,
+    "t": 2.4352120795951873,
+    "p_unilateral": 0.008237680772019812,
+    "años": 112,
+    "n": 1548
+   }
+  },
+  "S_raros": 0.8885542168674698,
+  "temporal": {
+   "S5": 0.9046536796536797,
+   "Sb": 0.8155844155844156,
+   "S_activo": {
+    "bolsa": 0.8156,
+    "bonos": 0.9,
+    "letras": 0.9766,
+    "vivienda": 0.9293,
+    "oro": NaN
+   }
+  },
+  "brier": {
+   "caida_bolsa_20": {
+    "frecuencia": 0.0913,
+    "brier_m1": 0.08147,
+    "brier_m0": 0.08311,
+    "bss_%": 1.97
+   },
+   "inflacion_5": {
+    "frecuencia": 0.2674,
+    "brier_m1": 0.14715,
+    "brier_m0": 0.19658,
+    "bss_%": 25.14
+   }
+  }
+ },
+ "segundos": 44
+}
