@@ -42,9 +42,27 @@ REJILLA_KAPPA = np.logspace(0, 3.5, 71)          # v1 (κ salió en el borde, 10
 REJILLA_KAPPA_V2 = (0.0, 6.0, 121)                # v2: log10 κ ∈ [0, 6]; κ = 10^6 ≈ "todos los países = panel"
 C_SUAVIZADO_V2 = 4.0                              # v2: inflado de varianza de la celda 1 + c/n (fijado en sintético iid t)
 K_MEZCLA_V2 = 0.0                                 # v2: mezcla con el incondicional k/(n + k); 0 recomendado (potencia v2: no aporta cobertura, resta en raros); opción D3
+# ---- v3 (docs/int/INT11_v3_diseno.md). Valores fijados ANTES de evaluar nada de v3 (ver el diseño para cada origen).
+C_SUAVIZADO_V3 = 5.25                             # re-derivado: research/int/int11_v3_c_suavizado.json (regla fijada antes)
+N0_CURTOSIS_V3 = 50.0                             # encogimiento de la curtosis de cada país hacia la del panel (pseudo-n)
+SEMIVIDA_V3 = 50.0                                # años: peso de una fila = 0,5^((año_ref − año) / semivida)
+SIGMA_INFL_V3 = 0.005                             # 0,5 pp: incertidumbre de medida/definición de la inflación
+SIGMA_BRECHA_V3 = 0.01                            # 1 pp: revisión del PIB + población extrapolada en la brecha
 
 
 # ============================================================================ régimen operable
+def pesos_estado(infl, brecha, sigma_infl: float, sigma_brecha: float) -> np.ndarray:
+    """v3: pertenencia SUAVE al régimen de partida. (K,) pesos de expansión, sobrecalentamiento, estanflación y
+    crecimiento bajo: P(alta) = Φ((π − 3 %)/σπ), P(baja) = Φ(−brecha/σb), independientes (error de medida de cada eje).
+    σ = 0 en un eje → regla dura en ese eje (la de `codigo_regimen`). infl en Δlog (como el panel)."""
+    infl, brecha = float(infl), float(brecha)
+    if not (np.isfinite(infl) and np.isfinite(brecha)):
+        raise ValueError("pesos_estado: inflación y brecha deben ser finitas")
+    pa = float(stats.norm.cdf((infl - UMBRAL_INFL) / sigma_infl)) if sigma_infl > 0 else float(infl > UMBRAL_INFL)
+    pb = float(stats.norm.cdf(-brecha / sigma_brecha)) if sigma_brecha > 0 else float(brecha < 0)
+    return np.array([(1 - pa) * (1 - pb), pa * (1 - pb), pa * pb, (1 - pa) * pb])
+
+
 def codigo_regimen(infl, brecha) -> np.ndarray:
     """0 expansión (brecha ≥ 0, infl ≤ 3 %), 1 sobrecalentamiento (≥ 0, > 3 %), 2 estanflación (< 0, > 3 %),
     3 crecimiento bajo (< 0, ≤ 3 %); −1 si falta algo."""
@@ -161,11 +179,13 @@ def _comprobar_corte(años, anio_max: int) -> None:
 
 
 def preparar_filas(df: pd.DataFrame, activos=ACTIVOS, covariables=(), excluir=None,
-                   anio_max: int = DEV_END.year, eje: str = "p3") -> pd.DataFrame:
+                   anio_max: int = DEV_END.year, eje: str = "p3", eventos=(), estado_previo: bool = False) -> pd.DataFrame:
     """Filas país-año del pool. df: pais, año, inflacion, rgdpmad, los `activos` (rentabilidad real simple del año) y
     opcionalmente `crecimiento` y covariables (valor del año; se usan RETARDADAS: z_<col> = valor de t − 1).
     Salida: pais, año, s_prev (régimen de t − 1), s (régimen de t), w_prev / w (régimen mundo), activos, MACRO,
-    z_*, sucesor (índice de la fila del mismo país en t + 1 o −1). `excluir`: conjunto de (pais, año) o de años."""
+    z_*, sucesor (índice de la fila del mismo país en t + 1 o −1). `excluir`: conjunto de (pais, año) o de años.
+    v3 (opcional): `eventos` = nombres; se conserva la columna ev_<nombre> (0/1 del evento EN el año t, sin retardo);
+    `estado_previo` añade infl_prev y brecha_prev (estado observado de t − 1, para la pertenencia suave)."""
     _comprobar_corte(df["año"].to_numpy(), anio_max)
     d = estados_operables(df, eje)
     if "crecimiento" not in d:
@@ -175,6 +195,9 @@ def preparar_filas(df: pd.DataFrame, activos=ACTIVOS, covariables=(), excluir=No
     d["s_prev"] = g["regimen"].shift(1).where(consecutivo).fillna(-1).astype(int)
     for c in covariables:
         d[f"z_{c}"] = g[c].shift(1).where(consecutivo)
+    if estado_previo:
+        d["infl_prev"] = g["inflacion"].shift(1).where(consecutivo)
+        d["brecha_prev"] = g["brecha"].shift(1).where(consecutivo)
     # régimen mundo del año: mayoría de países con inflación > 3 % y mayoría con brecha < 0 (≥ 5 países con dato)
     ok = d["regimen"] >= 0
     agg = d[ok].assign(alta=d["inflacion"] > UMBRAL_INFL, baja=d["brecha"] < 0).groupby("año").agg(
@@ -189,7 +212,8 @@ def preparar_filas(df: pd.DataFrame, activos=ACTIVOS, covariables=(), excluir=No
         quita = d.apply(lambda r: (r["pais"], int(r["año"])) in ex or int(r["año"]) in ex, axis=1)
         d = d[~quita]
     d = d[(d["s_prev"] >= 0) & (d["regimen"] >= 0)].rename(columns={"regimen": "s"})
-    cols = ["pais", "año", "s_prev", "s", "w_prev", "w", *activos, *MACRO, *[f"z_{c}" for c in covariables]]
+    cols = ["pais", "año", "s_prev", "s", "w_prev", "w", *activos, *MACRO, *[f"z_{c}" for c in covariables],
+            *[f"ev_{e}" for e in eventos], *(["infl_prev", "brecha_prev"] if estado_previo else [])]
     for a in activos:
         if a not in d:
             d[a] = np.nan
@@ -270,11 +294,36 @@ class Config:
     #                                    predictiva de la celda pasa a ser (1 + c/n)·var: ensancha donde hay pocas filas
     nu_suavizado: float = 5.0          # grados de libertad del ruido de suavizado (colas)
     rejilla_kappa: tuple = (0.0, 3.5, 71)   # log10 κ mín, máx, puntos (v1: borde en 10^3,5)
+    # ---- v3 (docs/int/INT11_v3_diseno.md). Los valores por defecto reproducen v1 y v2 BIT A BIT; Config.v3() los activa.
+    curtosis_escala: str = "agrupada"  # error de medida del factor de país: "agrupada" (v2) | "pais" (estandarizada por
+    #                                    país y encogida hacia la del panel con pseudo-n n0_curtosis)
+    n0_curtosis: float = N0_CURTOSIS_V3
+    semivida_epoca: float = 0.0        # años; > 0 → las filas pesan 0,5^((año_ref − año)/semivida) en el sorteo y el
+    #                                    suavizado usa el n efectivo de Kish (no estacionariedad, fijado a priori)
+    anio_ref_epoca: int | None = None  # año de referencia de la semivida (None = último año del entrenamiento)
+    sigma_infl: float = 0.0            # pertenencia suave (solo en `simular_suave` / evaluación); 0 = régimen duro
+    sigma_brecha: float = 0.0
+    eventos: tuple = ()                # estados de evento opcionales: nombres e con columna ev_<e> en las filas
+    evento_condiciona: bool = False    # False: el evento se simula y se informa, sin tocar las rentabilidades (efectos
+    #                                    sin medir: INT-14); True: las filas del año se sortean entre años con el mismo
+    #                                    estado de evento
+    recuentos_evento: dict = field(default_factory=dict)   # {e: (eventos, años)} fija el recuento (si no, de las filas)
+    n_min_evento: int = 5              # celda (s_prev, s) ∩ evento con menos filas → (·, s) ∩ evento → evento
 
     @classmethod
     def v2(cls, **cambios) -> "Config":
         """Configuración v2 propuesta (borrador de prerregistro docs/int/INT11_prerregistro_v2_v0.md)."""
         base = dict(escala_pais=True, k_mezcla=K_MEZCLA_V2, c_suavizado=C_SUAVIZADO_V2, rejilla_kappa=REJILLA_KAPPA_V2)
+        base.update(cambios)
+        return cls(**base)
+
+    @classmethod
+    def v3(cls, **cambios) -> "Config":
+        """Configuración v3 propuesta (borrador docs/int/INT11_prerregistro_v3_v0.md): v2 + curtosis por país +
+        c re-derivado + semivida por época + pertenencia suave. Eventos: desactivados (interfaz lista, efectos sin medir)."""
+        base = dict(escala_pais=True, k_mezcla=0.0, c_suavizado=C_SUAVIZADO_V3, rejilla_kappa=REJILLA_KAPPA_V2,
+                    curtosis_escala="pais", n0_curtosis=N0_CURTOSIS_V3, semivida_epoca=SEMIVIDA_V3,
+                    sigma_infl=SIGMA_INFL_V3, sigma_brecha=SIGMA_BRECHA_V3)
         base.update(cambios)
         return cls(**base)
 
@@ -296,6 +345,8 @@ class Escenarios:
     lote: np.ndarray
     activos: tuple
     meta: dict = field(default_factory=dict)
+    inicio: np.ndarray | None = None          # v3: (P,) régimen de partida de cada trayectoria (pertenencia suave)
+    eventos: dict | None = None               # v3: {e: (P, H) booleano, evento en el año h de la trayectoria}
 
     @property
     def horizonte(self) -> int:
@@ -337,6 +388,10 @@ class Escenarios:
         x = np.expm1(self.inflacion[:, :h])
         return self.prob((x > umbral).any(axis=1) if algun_año else x[:, -1] > umbral)
 
+    def prob_evento(self, nombre: str, h: int = 1, algun_año: bool = True) -> dict:
+        x = self.eventos[nombre][:, :h]
+        return self.prob(x.any(axis=1) if algun_año else x[:, -1])
+
     def prob_regimen(self, h: int = 1) -> pd.DataFrame:
         return pd.DataFrame([{"regimen": r, **self.prob(self.regimen[:, h - 1] == i)} for i, r in enumerate(REGIMENES)])
 
@@ -348,6 +403,10 @@ class Escenarios:
              "inflacion": self.inflacion.ravel(), "crecimiento": self.crecimiento.ravel()}
         if self.mundo is not None:
             d["regimen_mundo"] = self.mundo.ravel()
+        if self.inicio is not None:
+            d["regimen_inicial"] = np.repeat(self.inicio, H)
+        for e, x in (self.eventos or {}).items():
+            d[f"ev_{e}"] = x.ravel()
         for j, a in enumerate(self.activos):
             d[a] = self.rent[:, :, j].ravel()
         return pd.DataFrame(d)
@@ -400,6 +459,15 @@ class Generador:
         self.suc = self.filas["sucesor"].to_numpy(int)
         self.paises = sorted(self.filas["pais"].unique())
         self.años_u, self.año_idx = np.unique(self.anio, return_inverse=True)
+        # v3: peso por época (semivida); None = sin ponderar (v1/v2, bit a bit)
+        self.peso_epoca = None
+        if cfg.semivida_epoca > 0:
+            ref = cfg.anio_ref_epoca if cfg.anio_ref_epoca is not None else int(self.anio.max())
+            self.peso_epoca = 0.5 ** ((ref - self.anio) / cfg.semivida_epoca)
+        if cfg.eventos:
+            if cfg.evento_condiciona and cfg.modo != "bootstrap":
+                raise ValueError("evento_condiciona solo en modo bootstrap")
+            self._ajustar_eventos()
         # Markov: panel → país (Bayes empírico)
         n0 = recuentos(self.filas, self.paises, False)
         self.p_panel = (n0.sum(0) + 1) / (n0.sum(0) + 1).sum(-1, keepdims=True)
@@ -445,6 +513,33 @@ class Generador:
             self._ajustar_v2(alta)
         return self
 
+    # ------------------------------------------------------------ v3: eventos como estados opcionales
+    def _ajustar_eventos(self) -> None:
+        """Recuento por evento (≤ 2004 por construcción: `ajustar` rechaza años posteriores). Si el indicador es igual
+        en todos los países de cada año (evento GLOBAL: petróleo, pico de volatilidad) se cuentan AÑOS; si no (crisis
+        bancaria del país), país-años. `cfg.recuentos_evento` lo sustituye (p. ej. recuentos de INT-14 §3)."""
+        cfg = self.cfg
+        self.ev = np.zeros((len(self.filas), len(cfg.eventos)), bool)
+        self.recuento_evento = {}
+        for k, e in enumerate(cfg.eventos):
+            col = f"ev_{e}"
+            if col not in self.filas:
+                raise ValueError(f"evento {e}: falta la columna {col} en las filas (preparar_filas(..., eventos=...))")
+            x = self.filas[col].to_numpy(float)
+            self.ev[:, k] = x == 1
+            if e in cfg.recuentos_evento:
+                n_ev, n = cfg.recuentos_evento[e]
+                tipo = "dado"
+            else:
+                ok = np.isfinite(x)
+                por_año = pd.Series(x[ok]).groupby(self.anio[ok]).agg(["min", "max"])
+                if len(por_año) and (por_año["min"] == por_año["max"]).all():
+                    n_ev, n, tipo = int((por_año["max"] == 1).sum()), int(len(por_año)), "global (años)"
+                else:
+                    n_ev, n, tipo = int((x[ok] == 1).sum()), int(ok.sum()), "país-año"
+            self.recuento_evento[e] = {"eventos": int(n_ev), "n": int(n), "tipo": tipo,
+                                       "beta": (n_ev + 0.5, n - n_ev + 0.5)}
+
     # ------------------------------------------------------------ v2: escala por país, mezcla, suavizado
     def _ajustar_v2(self, alta: np.ndarray) -> None:
         """Piezas de v2 (docs/int/INT11_v2_diseno.md §2). Todo en log(1 + r) para los activos.
@@ -478,13 +573,18 @@ class Generador:
             z = dev / rms
             kurt = np.array([np.nanmean(z[:, a] ** 4) / np.nanmean(z[:, a] ** 2) ** 2 - 3 if np.isfinite(z[:, a]).any()
                              else 0.0 for a in range(A)])
+            if cfg.curtosis_escala == "pais":
+                kurt_c, kurt = self._curtosis_por_pais(dev)
+            elif cfg.curtosis_escala != "agrupada":
+                raise ValueError(cfg.curtosis_escala)
             lf, se2, nc = [], [], []
-            for c in self.paises:
+            for k, c in enumerate(self.paises):
                 mc = self.pais == c
                 n_c = np.isfinite(dev[mc]).sum(0)
                 sd_c = np.sqrt(np.nanmean(dev[mc] ** 2, 0)) / rms if mc.any() else np.full(A, np.nan)
                 lf.append(np.where(n_c >= 5, np.log(np.maximum(sd_c, 1e-6)), np.nan))
-                se2.append((np.maximum(kurt, 0) + 2) / (4 * np.maximum(n_c, 1)))
+                ku = kurt_c[k] if cfg.curtosis_escala == "pais" else kurt
+                se2.append((np.maximum(ku, 0) + 2) / (4 * np.maximum(n_c, 1)))
                 nc.append(n_c)
             lf, se2 = np.array(lf), np.array(se2)                       # (C, A)
             m = np.nanmean(lf, 0)
@@ -500,17 +600,45 @@ class Generador:
             self.devn = dev / np.exp(fila_m)
             self.escala_resumen = {"m": m.round(4).tolist(), "tau": np.sqrt(tau2).round(4).tolist(),
                                    "curtosis": kurt.round(2).tolist(),
+                                   **({"curtosis_pais": {c: kurt_c[k].round(2).tolist() for k, c in enumerate(self.paises)},
+                                       "B": {c: B[k].round(3).tolist() for k, c in enumerate(self.paises)}}
+                                      if cfg.curtosis_escala == "pais" else {}),
                                    "factor_pais": {c: np.exp(self.escala_post[c][0]).round(3).tolist()
                                                    for c in self.paises}}
         # dispersión y n con dato por celda y por padre (suavizado)
         def _sd_n(idx):
             x = self.L[idx]
             n = np.isfinite(x).sum(0)
+            if self.peso_epoca is not None:                      # v3: dt ponderada y n efectivo de Kish por activo
+                return _sd_n_ponderado(x, self.peso_epoca[idx])
             with np.errstate(all="ignore"):
                 sd = np.array([np.nanstd(x[:, a], ddof=1) if n[a] >= 2 else 0.0 for a in range(A)])
             return np.nan_to_num(sd), n
         self.sd_celda = {c: _sd_n(idx) for c, idx in self.celdas.items()}
         self.sd_padre = {lado: _sd_n(idx) for lado, idx in self.padres.items()}
+
+    def _curtosis_por_pais(self, dev: np.ndarray):
+        """v3 (validación v2, hallazgo 1): curtosis (exceso) de la desviación ESTANDARIZADA POR PAÍS, encogida hacia la
+        del panel estandarizado: κ_c* = (n_c·κ_c + n0·κ̄)/(n_c + n0). La agrupada mezcla países de distinta escala y
+        sale inflada (16,8 frente a ≈ 4 en bolsa), lo que encogía de más a los países volátiles."""
+        A = dev.shape[1]
+        z = np.full_like(dev, np.nan)
+        for c in self.paises:
+            mc = self.pais == c
+            with np.errstate(all="ignore"):
+                z[mc] = dev[mc] / np.sqrt(np.nanmean(dev[mc] ** 2, 0))
+        with np.errstate(all="ignore"):
+            kbar = np.nan_to_num(np.nanmean(z ** 4, 0) / np.nanmean(z ** 2, 0) ** 2 - 3)
+        n0 = self.cfg.n0_curtosis
+        out = []
+        for c in self.paises:
+            zc = z[self.pais == c]
+            n_c = np.isfinite(zc).sum(0)
+            with np.errstate(all="ignore"):
+                kc = np.nanmean(zc ** 4, 0) / np.nanmean(zc ** 2, 0) ** 2 - 3
+            kc = np.where((n_c >= 5) & np.isfinite(kc), kc, kbar)
+            out.append((n_c * kc + n0 * kbar) / np.maximum(n_c + n0, 1e-12))
+        return np.array(out).reshape(len(self.paises), A), kbar
 
     def _factor_lote(self, pais: str, rng) -> np.ndarray:
         """g_c (A,) del lote: sorteo del posterior (país en el pool) o de la predictiva (país nuevo / dejado fuera)."""
@@ -560,11 +688,35 @@ class Generador:
         return np.where(np.isfinite(w), w, np.nanmedian(w))
 
     # ------------------------------------------------------------ simulación
+    def simular_suave(self, pais: str, inflacion: float, brecha: float, **kw) -> Escenarios:
+        """v3: estado de partida con pertenencia SUAVE (`pesos_estado` con cfg.sigma_infl / cfg.sigma_brecha): cada lote
+        reparte sus trayectorias entre los 4 regímenes en proporción a los pesos (resto mayor; sin azar extra).
+        inflacion en Δlog, brecha en log (como `estado_movil`)."""
+        w = pesos_estado(inflacion, brecha, self.cfg.sigma_infl, self.cfg.sigma_brecha)
+        esc = self.simular(pais, w, **kw)
+        esc.meta["estado_observado"] = {"inflacion": float(inflacion), "brecha": float(brecha),
+                                        "sigma_infl": self.cfg.sigma_infl, "sigma_brecha": self.cfg.sigma_brecha}
+        return esc
+
     def simular(self, pais: str, estado, horizonte: int = 5, n_lotes: int = 200, por_lote: int = 100,
                 semilla: int = 0, mundo=None, inclinacion: dict | None = None) -> Escenarios:
+        """estado: régimen (nombre o código) o, v3, vector de K pesos (pertenencia suave; ver `simular_suave`)."""
         cfg = self.cfg
-        s0 = REGIMENES.index(estado) if isinstance(estado, str) else int(estado)
-        w0 = s0 if mundo is None else (REGIMENES.index(mundo) if isinstance(mundo, str) else int(mundo))
+        pesos = None
+        if isinstance(estado, str):
+            s0 = REGIMENES.index(estado)
+        elif np.ndim(estado) == 1:
+            pesos = np.asarray(estado, float)
+            if len(pesos) != K or pesos.min() < 0 or pesos.sum() <= 0:
+                raise ValueError("estado: vector de K pesos ≥ 0")
+            pesos = pesos / pesos.sum()
+            s0 = _reparto(pesos, por_lote)                          # (por_lote,) estados de partida de cada lote
+        else:
+            s0 = int(estado)
+        if mundo is None:
+            w0 = s0
+        else:
+            w0 = REGIMENES.index(mundo) if isinstance(mundo, str) else int(mundo)
         rng = np.random.default_rng(semilla)
         alpha = self.posterior_transicion(pais)
         base = self._pesos_base(pais)
@@ -573,6 +725,7 @@ class Generador:
         X = np.full((P, H, nv), np.nan)
         S = np.zeros((P, H), int)
         W = np.zeros((P, H), int) if cfg.contagio else None
+        EV = np.zeros((P, H, len(cfg.eventos)), bool) if cfg.eventos else None
         for b in range(n_lotes):
             sl = slice(b * por_lote, (b + 1) * por_lote)
             if cfg.incertidumbre:
@@ -584,18 +737,39 @@ class Generador:
                 gy = np.ones(len(self.años_u))
                 Tw = (self.n_mundo + 1) / (self.n_mundo + 1).sum(-1, keepdims=True) if cfg.contagio else None
             g = self._factor_lote(pais, rng) if cfg.es_v2 else None
-            Xb, Sb, Wb = self._lote(T, Tw, base, gy[self.año_idx], nuc, s0, w0, por_lote, H, rng, g)
+            peso_año = gy[self.año_idx] if self.peso_epoca is None else gy[self.año_idx] * self.peso_epoca
+            ev = self._eventos_lote(por_lote, H, rng) if cfg.eventos else None
+            Xb, Sb, Wb = self._lote(T, Tw, base, peso_año, nuc, s0, w0, por_lote, H, rng, g, ev)
             X[sl], S[sl] = Xb, Sb
             if cfg.contagio:
                 W[sl] = Wb
+            if cfg.eventos:
+                EV[sl] = ev
         A = len(cfg.activos)
-        meta = {"version": VERSION, "pais": pais, "estado_inicial": REGIMENES[s0],
-                "mundo_inicial": REGIMENES[w0] if cfg.contagio else None, "horizonte": H, "n_lotes": n_lotes,
+        meta = {"version": VERSION, "pais": pais,
+                "estado_inicial": REGIMENES[s0] if pesos is None else dict(zip(REGIMENES, pesos.round(6).tolist())),
+                "mundo_inicial": REGIMENES[w0] if cfg.contagio and np.ndim(w0) == 0 else None, "horizonte": H, "n_lotes": n_lotes,
                 "por_lote": por_lote, "semilla": semilla, "config": asdict(self.cfg), "inclinacion": inclinacion,
                 "kappa": self.kappa, "kappa_en_borde": self.kappa_en_borde, "años_pool": [int(self.años_u.min()), int(self.años_u.max())],
                 "filas_pool": int(len(self.filas)), "unidades": "rentabilidad real simple anual (fracción)"}
+        if cfg.eventos:
+            meta["eventos"] = {"recuentos": self.recuento_evento, "condiciona": cfg.evento_condiciona,
+                               "aviso": "probabilidad anual por recuentos ≤ 2004 (Beta(k + ½, n − k + ½) por lote), "
+                                        "independiente del régimen y entre años"
+                                        + ("" if cfg.evento_condiciona else "; SIN efecto en las rentabilidades")}
         return Escenarios(rent=X[:, :, :A], inflacion=X[:, :, A], crecimiento=X[:, :, A + 1], regimen=S, mundo=W,
-                          lote=np.repeat(np.arange(n_lotes), por_lote), activos=tuple(cfg.activos), meta=meta)
+                          lote=np.repeat(np.arange(n_lotes), por_lote), activos=tuple(cfg.activos), meta=meta,
+                          inicio=None if pesos is None else np.tile(s0, n_lotes),
+                          eventos=None if not cfg.eventos else {e: EV[:, :, k] for k, e in enumerate(cfg.eventos)})
+
+    def _eventos_lote(self, n: int, H: int, rng) -> np.ndarray:
+        """(n, H, E) evento en cada año: riesgo anual del lote ~ Beta(k + ½, n − k + ½) (o su media sin incertidumbre)."""
+        out = np.zeros((n, H, len(self.cfg.eventos)), bool)
+        for k, e in enumerate(self.cfg.eventos):
+            a, b = self.recuento_evento[e]["beta"]
+            p = rng.beta(a, b) if self.cfg.incertidumbre else a / (a + b)
+            out[:, :, k] = rng.random((n, H)) < p
+        return out
 
     def _transicion(self, T, Tw, s, w, rng, ratio=None):
         if self.cfg.contagio:
@@ -625,13 +799,13 @@ class Generador:
                     r[i, j] = nuc[c].mean() / mi
         return r
 
-    def _lote(self, T, Tw, base, peso_año, nuc, s0, w0, n, H, rng, g=None):
+    def _lote(self, T, Tw, base, peso_año, nuc, s0, w0, n, H, rng, g=None, ev=None):
         cfg = self.cfg
         X = np.full((n, H, len(self.vars)), np.nan)
         S = np.zeros((n, H), int)
         W = np.zeros((n, H), int)
-        s = np.full(n, s0)
-        w = np.full(n, w0)
+        s = np.array(np.broadcast_to(s0, (n,)), int)
+        w = np.array(np.broadcast_to(w0, (n,)), int)
         r_prev = np.full(n, -1)
         ratio = self._ratio_inclinacion(nuc)
         pcont = 1 - 1 / cfg.bloque_medio
@@ -658,6 +832,8 @@ class Generador:
                         else:
                             cw = np.cumsum(base[(i, j)] * peso_año[idx] * (nuc[idx] if h == 0 else 1.0))
                             r[m] = idx[np.searchsorted(cw, rng.random(m.sum()) * cw[-1], side="right").clip(0, len(idx) - 1)]
+                if ev is not None and cfg.evento_condiciona:
+                    self._condicionar_evento(r, cont, s, s_new, ev[:, h], base, peso_año, nuc, h, rng)
                 if cfg.es_v2:
                     X[:, h] = self._valores_v2(r, s, s_new, g, rng)
                 else:
@@ -674,6 +850,29 @@ class Generador:
                 W[:, h] = w_new
             s, w = s_new, (w_new if w_new is not None else w)
         return X, S, (W if cfg.contagio else None)
+
+    def _condicionar_evento(self, r, cont, s, s_new, ev_h, base, peso_año, nuc, h, rng) -> None:
+        """v3: las trayectorias cuyo estado de evento simulado no casa con el de la fila sorteada se vuelven a sortear
+        entre filas con el MISMO patrón de eventos: celda (s_prev, s) → (·, s) → todas (respaldo si < n_min_evento).
+        Una continuación de bloque que no casa se corta (se sortea de nuevo)."""
+        mal = np.flatnonzero((self.ev[np.maximum(r, 0)] != ev_h).any(1))
+        if not len(mal):
+            return
+        cont[mal] = False
+        clave_f = self.ev @ (1 << np.arange(self.ev.shape[1]))
+        clave_t = ev_h[mal] @ (1 << np.arange(self.ev.shape[1]))
+        for (i, j, kk) in {(int(s[t]), int(s_new[t]), int(c)) for t, c in zip(mal, clave_t)}:
+            m = mal[(s[mal] == i) & (s_new[mal] == j) & (clave_t == kk)]
+            idx = self.celdas[(i, j)]
+            sel = clave_f[idx] == kk
+            if sel.sum() >= self.cfg.n_min_evento:
+                r[m] = self._sortear(idx[sel], base[(i, j)][sel], peso_año, nuc, h, len(m), rng)
+                continue
+            for cand in (np.flatnonzero((self.s == j) & (clave_f == kk)), np.flatnonzero(clave_f == kk)):
+                if len(cand) >= self.cfg.n_min_evento:
+                    break
+            if len(cand):
+                r[m] = self._sortear(cand, np.full(len(cand), 1.0 / len(cand)), peso_año, nuc, h, len(m), rng)
 
     def _sortear(self, idx, b, peso_año, nuc, h, m, rng):
         if m == 0:
@@ -779,6 +978,32 @@ class Generador:
 
 
 # ============================================================================ utilidades
+def _reparto(pesos: np.ndarray, n: int) -> np.ndarray:
+    """(n,) estados repartidos en proporción a `pesos` por el método del resto mayor (determinista)."""
+    cuota = pesos * n
+    k = np.floor(cuota).astype(int)
+    falta = n - k.sum()
+    if falta > 0:
+        k[np.argsort(-(cuota - k), kind="stable")[:falta]] += 1
+    return np.repeat(np.arange(len(pesos)), k)
+
+
+def _sd_n_ponderado(x: np.ndarray, w: np.ndarray):
+    """(dt ponderada por activo, n efectivo de Kish por activo) de x (n, A) con pesos w (n,), ignorando NaN."""
+    A = x.shape[1]
+    sd, ne = np.zeros(A), np.zeros(A)
+    for a in range(A):
+        ok = np.isfinite(x[:, a])
+        if ok.sum() < 2:
+            continue
+        ww, xx = w[ok], x[ok, a]
+        ne[a] = ww.sum() ** 2 / (ww ** 2).sum()
+        mu = np.average(xx, weights=ww)
+        v = np.average((xx - mu) ** 2, weights=ww) * ne[a] / max(ne[a] - 1, 1e-12)
+        sd[a] = np.sqrt(v)
+    return sd, ne
+
+
 def _dirichlet_filas(alpha: np.ndarray, rng) -> np.ndarray:
     g = rng.standard_gamma(np.maximum(alpha, 1e-9))
     return g / g.sum(-1, keepdims=True)

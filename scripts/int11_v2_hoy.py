@@ -6,12 +6,15 @@ cápita con población Maddison); abanico de los 12 meses que siguen a la emisi�
 la fase D (cobertura LOCO ≤ 2004 del activo, del régimen de partida y del país), no el nominal.
 
 Uso: .venv/bin/python -m scripts.int11_v2_hoy [AAAA-MM-DD]              → research/int/int11_v2_hoy.{json,md}
-     .venv/bin/python -m scripts.int11_v2_hoy [AAAA-MM-DD] --registro   → además research/int/int11_vivo/AAAA-MM.json
+     .venv/bin/python -m scripts.int11_v2_hoy [AAAA-MM-DD] --registro   → SOLO research/int/int11_vivo/AAAA-MM.json
                                                                            (+ índice con sha256; nunca sobrescribe)
+     ... --registro --vintage                                            → fecha atrasada: solo países con vintages
+Registro (v0.2, arreglos de la validación v2, hallazgo 3; src/report/registro_vivo.py): con --registro NO se reescribe
+la salida "hoy" (la 2.ª emisión ya no aborta por árbol sucio), el árbol puede tener cambios solo dentro de
+research/int/int11_vivo, la fecha debe ser hoy ± 3 días (o --vintage) y se guarda la huella de las entradas.
 """
 from __future__ import annotations
 
-import hashlib
 import json
 import sys
 import warnings
@@ -25,6 +28,7 @@ from src.intl import data as D
 from src.intl import escenarios as E
 from src.intl.procedencia import procedencia
 from src.report import escenarios_vivo as V
+from src.report import registro_vivo as RV
 
 REPO = Path(__file__).resolve().parents[1]
 SALIDA = REPO / "research/int/int11_v2_hoy.json"
@@ -52,8 +56,10 @@ def pais_escenario(gen: E.Generador, c: str, e: dict, semilla: int) -> dict:
             "p_inflacion_5": esc.prob_inflacion(0.05, h=1), "factor_dispersion": gen.escala_resumen["factor_pais"].get(c)}
 
 
-def emitir(fecha: str) -> dict:
-    proc = procedencia()
+def emitir(fecha: str, registro: bool = False, vintage: bool = False) -> dict:
+    if registro:
+        RV.comprobar_fecha(fecha, vintage=vintage)
+    proc = RV.procedencia_registro(VIVO) if registro else procedencia()
     if not RESULTADO.exists():
         raise SystemExit("falta research/int/int11_v2_resultado.json (fase D): la salida v2 se etiqueta con su acierto")
     ac = acierto_medido(json.loads(RESULTADO.read_text()))
@@ -62,7 +68,8 @@ def emitir(fecha: str) -> dict:
     if filas["año"].max() > 2004:
         raise D.FactorCutoffError("filas > 2004")
     gen = E.Generador(E.Config.v2()).ajustar(filas)
-    est = V.estado_actual_movil(con, fecha)
+    est = V.estado_actual_movil(con, fecha, vintage=vintage, entradas=registro)
+    entradas = RV.huella_entradas(est.pop("_series")) if registro else None
     paises = {}
     for i, c in enumerate(NUCLEO):
         e = est["paises"][c]
@@ -73,6 +80,7 @@ def emitir(fecha: str) -> dict:
     return {"procedencia": proc, "version_motor": E.VERSION, "config": str(gen.cfg), "emision": est["emision"],
             "corte_datos": est["corte"], "ventana_objetivo": est["ventana_objetivo"], "kappa": gen.kappa,
             "kappa_en_borde": gen.kappa_en_borde, "acierto_medido_fase_D": ac, "paises": paises,
+            **({"entradas": entradas, "vintage": vintage} if registro else {}),
             "aviso": "DESCRIPTIVO. Motor v2 estimado SOLO con ≤ 2004 (JST, 14 países); estado OCDE en vivo (12 meses móviles,"
                      " PIB per cápita con población Maddison extrapolada). Calibración comprobada solo en desarrollo "
                      "(contaminado); NO confirmada fuera de muestra. Rentabilidades reales en moneda local. No es una "
@@ -130,35 +138,22 @@ research/int/int11_v2_hoy.json.
 
 
 def registrar(o: dict, carpeta: Path = VIVO) -> Path:
-    """Guarda la emisión del mes (inmutable): carpeta/AAAA-MM.json + línea en indice.csv con sha256 y commit."""
-    carpeta.mkdir(parents=True, exist_ok=True)
-    mes = o["emision"][:7]
-    ruta = carpeta / f"{mes}.json"
-    if ruta.exists():
-        raise SystemExit(f"{ruta} ya existe: el registro en vivo no se sobrescribe")
-    texto = json.dumps(o, ensure_ascii=False, indent=1, sort_keys=True, default=float)
-    ruta.write_text(texto)
-    h = hashlib.sha256(texto.encode()).hexdigest()
-    idx = carpeta / "indice.csv"
-    nuevo = not idx.exists()
-    with idx.open("a") as f:
-        if nuevo:
-            f.write("mes,archivo,sha256,commit,emision,ventana_desde,ventana_hasta\n")
-        f.write(f"{mes},{ruta.name},{h},{o['procedencia'].get('commit', '')},{o['emision']},"
-                f"{o['ventana_objetivo']['desde']},{o['ventana_objetivo']['hasta']}\n")
-    return ruta
+    """Guarda la emisión del mes (inmutable): carpeta/AAAA-MM.json + línea en indice.csv (src/report/registro_vivo)."""
+    return RV.registrar(o, carpeta)
 
 
 def main() -> None:
     warnings.filterwarnings("ignore", category=RuntimeWarning)
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     fecha = args[0] if args else str(pd.Timestamp.today().date())
-    o = emitir(fecha)
-    SALIDA.write_text(json.dumps(o, ensure_ascii=False, indent=1, default=float))
+    registro = "--registro" in sys.argv
+    o = emitir(fecha, registro=registro, vintage="--vintage" in sys.argv)
     md = markdown(o)
-    SALIDA.with_suffix(".md").write_text(md)
-    if "--registro" in sys.argv:
+    if registro:                     # solo el registro: no ensucia el árbol con la salida "hoy"
         print("registro:", registrar(o))
+    else:
+        SALIDA.write_text(json.dumps(o, ensure_ascii=False, indent=1, default=float))
+        SALIDA.with_suffix(".md").write_text(md)
     print(md)
 
 
