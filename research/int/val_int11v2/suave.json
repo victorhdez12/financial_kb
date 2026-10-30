@@ -1,0 +1,99 @@
+{
+ "procedencia": {
+  "commit": "145987289ef27b169bdfb003a41e85f79320a54a",
+  "arbol_limpio": true,
+  "hora_utc": "2026-10-30T14:08:50+00:00"
+ },
+ "R": 40,
+ "res": {
+  "sin_ruido": {
+   "sigma=0.00pp": {
+    "S5": 0.9024,
+    "S_raros": 0.9053,
+    "S5_cerca": 0.9014,
+    "brier": 0.1309,
+    "brier_cerca": 0.2281,
+    "p_media_cerca": 0.2903,
+    "freq_cerca": 0.2219,
+    "n_cerca": 119.625,
+    "S5_banda": [
+     0.8968,
+     0.9086
+    ]
+   },
+   "sigma=0.25pp": {
+    "S5": 0.9032,
+    "S_raros": 0.9064,
+    "S5_cerca": 0.9051,
+    "brier": 0.1286,
+    "brier_cerca": 0.1997,
+    "p_media_cerca": 0.29,
+    "freq_cerca": 0.2219,
+    "n_cerca": 119.625,
+    "S5_banda": [
+     0.8968,
+     0.9096
+    ]
+   },
+   "sigma=0.50pp": {
+    "S5": 0.9035,
+    "S_raros": 0.9071,
+    "S5_cerca": 0.9048,
+    "brier": 0.1267,
+    "brier_cerca": 0.1858,
+    "p_media_cerca": 0.2915,
+    "freq_cerca": 0.2219,
+    "n_cerca": 119.625,
+    "S5_banda": [
+     0.8972,
+     0.9103
+    ]
+   }
+  },
+  "ruido_0.25pp": {
+   "sigma=0.00pp": {
+    "S5": 0.9025,
+    "S_raros": 0.9045,
+    "S5_cerca": 0.8944,
+    "brier": 0.1306,
+    "brier_cerca": 0.221,
+    "p_media_cerca": 0.2888,
+    "freq_cerca": 0.2215,
+    "n_cerca": 119.8,
+    "S5_banda": [
+     0.8984,
+     0.9073
+    ]
+   },
+   "sigma=0.25pp": {
+    "S5": 0.9038,
+    "S_raros": 0.9056,
+    "S5_cerca": 0.9035,
+    "brier": 0.1285,
+    "brier_cerca": 0.1952,
+    "p_media_cerca": 0.2893,
+    "freq_cerca": 0.2215,
+    "n_cerca": 119.8,
+    "S5_banda": [
+     0.8989,
+     0.9091
+    ]
+   },
+   "sigma=0.50pp": {
+    "S5": 0.9042,
+    "S_raros": 0.906,
+    "S5_cerca": 0.9056,
+    "brier": 0.1267,
+    "brier_cerca": 0.1828,
+    "p_media_cerca": 0.2909,
+    "freq_cerca": 0.2215,
+    "n_cerca": 119.8,
+    "S5_banda": [
+     0.8992,
+     0.9106
+    ]
+   }
+  }
+ },
+ "segundos": 215
+}
