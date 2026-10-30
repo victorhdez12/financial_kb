@@ -1,7 +1,8 @@
 ---
 documento: INT-11 v2 — diseño del registro mensual en vivo (para evaluar K1 y K2 sin gastar el periodo bloqueado)
-version: 0.1 (2026-10-30) — DISEÑO. launchd NO activado.
-parte_de: docs/int/INT11_prerregistro_v2.md §5-§8 · código: scripts/int11_v2_hoy.py (--registro)
+version: 0.2 (2026-10-30) — DISEÑO + arreglos de la validación v2 (hallazgo 3). launchd NO activado.
+parte_de: docs/int/INT11_prerregistro_v2.md §5-§8 · código: scripts/int11_v2_hoy.py (--registro),
+          src/report/registro_vivo.py (reglas), src/report/escenarios_vivo.py (vintages)
 ---
 
 # Registro en vivo de INT-11 v2
@@ -26,12 +27,25 @@ Contenido:
 Regla: un mes sin emisión queda vacío (no se rellena después). El código del motor no cambia entre emisiones salvo
 prerregistro nuevo; si cambia, el registro empieza una serie nueva.
 
+## 1 bis. Reglas que lo hacen fiable (v0.2, tras la validación v2)
+- **La 2.ª emisión ya no aborta.** Con `--registro` el script NO reescribe `research/int/int11_v2_hoy.{json,md}` (antes
+  los reescribía y el mes siguiente el árbol estaba sucio → la emisión abortaba). La comprobación de procedencia tolera
+  cambios sin commitear SOLO dentro de `research/int/int11_vivo/` (p. ej. si falló el commit automático del mes
+  anterior; se anotan en `procedencia.pendientes_en_registro`); cualquier otro cambio sigue abortando.
+- **Sin fechas atrasadas.** La fecha de emisión debe ser hoy ± 3 días. Una emisión atrasada usaría datos OCDE revisados
+  después de esa fecha (fuga). Excepción `--vintage`: solo emite los países con vintages en el warehouse (ALFRED:
+  EE. UU., IPC CPIAUCSL y PIB GDPC1 "tal como se publicaron" en la fecha); el resto queda "sin vintages". La OCDE del
+  warehouse no tiene vintages.
+- **Huella de las entradas.** Cada emisión guarda las series exactas de IPC (30 meses) y PIB (48 trimestres) que usó y
+  su sha256 (`entradas`, y columna `sha256_entradas` del índice): es la "vintage propia" del registro.
+
 ## 2. Cuándo
 Día 20 de cada mes (después de la publicación habitual del IPC OCDE del mes anterior), emisión con `fecha` = ese día;
 la ventana empieza el día 1 del mes siguiente. Plantilla de launchd (NO instalada):
 `~/Library/LaunchAgents/com.financialkb.int11vivo.plist` con `StartCalendarInterval` {Day 20, Hour 9} ejecutando
 `cd ~/Proyectos/financial_kb && .venv/bin/python -m scripts.int11_v2_hoy --registro && git add research/int/int11_vivo
-&& git commit -m "INT-11 live record AAAA-MM"`. Se activa solo con permiso del usuario (como el resto de automatizaciones;
+&& git commit -m "INT-11 live record AAAA-MM"` (con v0.2 la emisión solo escribe en `research/int/int11_vivo`, así que
+este `git add` deja el árbol limpio para el mes siguiente). Se activa solo con permiso del usuario (como el resto de automatizaciones;
 ver Actualizaciones.md).
 
 ## 3. Cómo se evaluará (cuando cierre cada ventana; script futuro `scripts/int11_v2_vivo_eval.py`)
