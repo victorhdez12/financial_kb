@@ -73,7 +73,9 @@ def cargar(con, fecha) -> tuple[pd.DataFrame, dict, dict, dict, pd.Timestamp]:
 
 
 def _r(v, n=1):
-    return None if v is None or not np.isfinite(v) else round(float(v), n)
+    if v is None or not np.isfinite(v):
+        return None
+    return int(round(float(v))) if n == 0 else round(float(v), n)
 
 
 def calcular(pm, bis, pib, paro, corte, refs) -> dict:
