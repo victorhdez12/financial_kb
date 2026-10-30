@@ -266,3 +266,34 @@ def test_potencia_v2_tuberia_estadisticos():
     assert st["infl5"]["bss"] > 0 and 0 <= st["infl5"]["p"] <= 1
     o = PV.potencia_puerta([st, PV.estadisticos(ev, ev["año"] >= 1960), st])
     assert o["R"] == 3 and len(o["banda_nula_S5"]) == 2
+
+
+# ------------------------------------------------------------------ corrida v2 (fase D)
+def test_corrida_v2_se_niega_a_repetir(tmp_path, monkeypatch):
+    from scripts import int11_v2_corrida as C
+    falso = tmp_path / "int11_v2_resultado.json"
+    falso.write_text("{}")
+    monkeypatch.setattr(C, "SALIDA", falso)
+    monkeypatch.setattr("sys.argv", ["int11_v2_corrida"])
+    with pytest.raises(SystemExit):
+        C.main()
+
+
+def test_puerta_d_criterios():
+    from scripts import int11_v2_corrida as C
+    banda = {"S_raros": {"banda_2.5_97.5": [0.86, 0.95]}}
+    L = {"S5": 0.905, "S_activo": {"bolsa": 0.90, "bonos": 0.875, "oro": np.nan}}
+    assert C.puerta_d(L, 0.87, banda)["pasa"]
+    assert not C.puerta_d(L, 0.85, banda)["pasa"]
+    assert not C.puerta_d({**L, "S5": 0.884}, 0.87, banda)["pasa"]
+    assert not C.puerta_d({**L, "S_activo": {"bolsa": 0.869}}, 0.87, banda)["pasa"]
+
+
+def test_corrida_v2_estadisticos_auxiliares():
+    from scripts import int11_v2_corrida as C
+    ev = {"s_prev": np.array([0, 2, 3, 1]), "pais": np.array(["A", "A", "B", "B"]),
+          "dentro90": np.array([[1, 1, 1, 1, np.nan], [0, 1, 1, 1, 1], [1, 0, 1, 1, np.nan], [1, 1, 1, 1, 1.0]])}
+    assert C.s_raros(ev) == pytest.approx(7 / 9)
+    pp = C.por_pais(ev)
+    assert pp["A"]["filas"] == 2 and pp["B"]["bolsa"] == 1.0
+    assert C.por_regimen_activo(ev)["estanflacion"]["bolsa"] == 0.0
