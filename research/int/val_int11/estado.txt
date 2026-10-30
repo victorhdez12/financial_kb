@@ -1,0 +1,25 @@
+procedencia {'commit': '3ac7c427b9fd01a6c56648d4f0563d3e1fbed122', 'arbol_limpio': True, 'hora_utc': '2026-10-30T11:50:13+00:00'}
+dev ≤2004: n 508 años 1957 2004
+diferencia media brecha total − pc (pp): 2.91  mediana 2.6
+P(brecha<0) total 0.0  pc 0.006
+acuerdo de régimen 0.994
+r_t     0    1
+r_pc          
+0     194    0
+1       0  311
+2       0    1
+3       2    0
+BEL (2025, 2.44, 8.88, np.float64(5.91), 'expansion', 'expansion', np.float64(0.51))
+DEU (2025, 2.15, 2.79, np.float64(0.78), 'expansion', 'expansion', np.float64(0.41))
+DNK (2025, 1.88, 13.03, np.float64(10.06), 'expansion', 'expansion', np.float64(0.55))
+ESP (2025, 2.64, 12.43, np.float64(10.8), 'expansion', 'expansion', np.float64(0.18))
+FIN (2025, 0.34, 3.27, np.float64(2.02), 'expansion', 'expansion', np.float64(0.26))
+FRA (2025, 0.94, 7.35, np.float64(5.1), 'expansion', 'expansion', np.float64(0.42))
+GBR (2025, 3.81, 7.51, np.float64(4.32), 'sobrecalentamiento', 'sobrecalentamiento', np.float64(0.62))
+ITA (2025, 1.52, 7.44, np.float64(9.0), 'expansion', 'expansion', np.float64(-0.21))
+JPN (2025, 3.14, 3.24, np.float64(4.67), 'sobrecalentamiento', 'sobrecalentamiento', np.float64(-0.22))
+NLD (2025, 3.21, 9.49, np.float64(6.13), 'sobrecalentamiento', 'sobrecalentamiento', np.float64(0.55))
+NOR (2025, 3.01, 8.92, np.float64(4.71), 'sobrecalentamiento', 'sobrecalentamiento', np.float64(0.84))
+PRT (2025, 2.31, 13.2, np.float64(14.04), 'expansion', 'expansion', np.float64(-0.23))
+SWE (2025, 0.68, 8.35, np.float64(3.39), 'expansion', 'expansion', np.float64(0.97))
+USA (2024, 2.91, 14.24, np.float64(11.26), 'expansion', 'expansion', np.float64(0.6))

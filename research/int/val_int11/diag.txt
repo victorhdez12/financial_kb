@@ -1,0 +1,7 @@
+procedencia {'commit': '3ac7c427b9fd01a6c56648d4f0563d3e1fbed122', 'arbol_limpio': True, 'hora_utc': '2026-10-30T11:50:13+00:00'}
+procedencia {'commit': '3ac7c427b9fd01a6c56648d4f0563d3e1fbed122', 'arbol_limpio': True, 'hora_utc': '2026-10-30T11:50:14+00:00'}
+OFICIAL repro exacta: S5 0.8861864771748492 Sb 0.8953020134228188 d 0.015801782193433585 p 0.010613994641291537 crpss 1.792
+(a) empírica por s_prev: S5 0.889704918032787 [0.8967 0.8949 0.8923 0.8935 0.8867]
+(b) motor con celdas = todo (n_min 10^6) S5 0.8931 [0.8953, 0.8949, 0.8975, 0.8953, 0.8983] M0 0.8951 crpss 0.038
+(c) motor sin incertidumbre ni celdas S5 0.895 [0.898, 0.8976, 0.8981, 0.8984, 0.8939] M0 0.8951 crpss -0.041
+(d) motor n_min 200 S5 0.8657 [0.894, 0.87, 0.8321, 0.8859, 0.8939] M0 0.8951 crpss 1.151

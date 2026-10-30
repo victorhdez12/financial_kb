@@ -1,0 +1,9 @@
+procedencia {'commit': '3ac7c427b9fd01a6c56648d4f0563d3e1fbed122', 'arbol_limpio': True, 'hora_utc': '2026-10-30T11:50:13+00:00'}
+sin arreglo, fuera BEL: sucesores erróneos 1.000 de 1397
+sin arreglo, fuera DEU: sucesores erróneos 0.922 de 1403
+sin arreglo, fuera USA: sucesores erróneos 0.000 de 1397
+crps1 idéntico: True
+dentro90 idéntico: True
+crps1_5 idéntico: True
+dentro90_5 idéntico: True
+fuga LOCO (predictiva cambia al perturbar el excluido): False | excluido en pool: False | kappa 3162.2776601683795
