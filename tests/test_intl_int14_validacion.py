@@ -54,8 +54,8 @@ def test_efecto_propio_coincide_con_efecto_panel(H):
 def test_placebo_propio_reproduce_el_oficial_corregido():
     p = _panel(T=V.AÑOS.size, cols=V.PAISES[:3]).set_axis(V.AÑOS)
     ev = [(V.PAISES[0], 1890), (V.PAISES[0], 1960), (V.PAISES[1], 1930), (V.PAISES[2], 1980)]
-    of = E.placebo_panel(p, pd.DataFrame(ev, columns=["pais", "año"]), 2, False, 5, n_rep=40, semilla=5, excluir_años=frozenset(V.WAR),
-                         solo_con_dato=True)
+    of = E.placebo_panel(p, pd.DataFrame(ev, columns=["pais", "año"]), 2, False, 5, n_rep=40, semilla=5,
+                         excluir_años=frozenset(V.WAR), solo_con_dato=True)
     usados = {}
     for c, a in ev:
         usados.setdefault(c, []).append(a)
