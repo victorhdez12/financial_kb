@@ -1,0 +1,163 @@
+{
+ "nota": "Validador, código propio; sensibilidades A POSTERIORI",
+ "crisis_igual_oficial": true,
+ "vol_igual_oficial": true,
+ "principales": {
+  "H1": {
+   "n": 43,
+   "efecto_pp": -6.729430033353278,
+   "ic90_pp": [
+    -13.338378312176866,
+    -0.5352250235663565
+   ],
+   "p": 0.010494752623688156,
+   "validos": 2000,
+   "media_abs_pct": 16.25379166831028,
+   "p_holm": 0.041979010494752625
+  },
+  "H2": {
+   "n": 63,
+   "efecto_pp": -0.6055574730050601,
+   "ic90_pp": [
+    -4.214348495725007,
+    3.7523548865277174
+   ],
+   "p": 0.8175912043978011,
+   "validos": 2000,
+   "media_abs_pct": 4.698886445476079,
+   "p_holm": 1
+  },
+  "H3": {
+   "n": 16,
+   "efecto_pp": 3.993851947182632,
+   "ic90_pp": [
+    -4.622074977147561,
+    12.941383392225791
+   ],
+   "p": 0.5642178910544727,
+   "p_holm": 1
+  },
+  "H4": {
+   "n": 157,
+   "años": [
+    1895,
+    1899,
+    1903,
+    1920,
+    1971,
+    1973,
+    1979,
+    1990,
+    1996,
+    2000
+   ],
+   "efecto_pp": -3.7361575351498413,
+   "ic90_pp": [
+    -13.696203774017945,
+    4.646578294670914
+   ],
+   "p": 0.3713143428285857,
+   "p_holm": 1
+  }
+ },
+ "sens_placebo_H1": {
+  "distribucion_placebo_oficial_pp": {
+   "media": 1.33,
+   "sd": 2.26,
+   "cuantiles_0.5_2.5_50_97.5_99.5": [
+    -4.75,
+    -2.89,
+    1.28,
+    5.69,
+    7.55
+   ]
+  },
+  "sincronizado_por_episodio": {
+   "p": 0.0295,
+   "validos": 1866,
+   "p_holm_H1": 0.1178,
+   "frac_placebo_mas_negativo": 0.0011,
+   "media_pp": 1.62,
+   "sd_pp": 2.74
+  },
+  "oficial_corregido_semilla": {
+   "p": 0.0105,
+   "validos": 2000,
+   "p_holm_H1": 0.042,
+   "frac_placebo_mas_negativo": 0.0
+  },
+  "semillas_10x2000": {
+   "p": [
+    0.0135,
+    0.013,
+    0.01,
+    0.01,
+    0.017,
+    0.011,
+    0.008,
+    0.0115,
+    0.0095,
+    0.0135
+   ],
+   "media": 0.011699999999999999,
+   "min": 0.008,
+   "max": 0.017
+  },
+  "oficial_20000_semilla7": {
+   "p": 0.0118,
+   "validos": 20000,
+   "p_holm_H1": 0.0472,
+   "frac_placebo_mas_negativo": 0.0003
+  },
+  "literal_todas_crisis_omitir_CAN": {
+   "p": 0.0048,
+   "validos": 1892,
+   "p_holm_H1": 0.019,
+   "frac_placebo_mas_negativo": 0.0
+  },
+  "exclusion_todas_crisis": {
+   "p": 0.0105,
+   "validos": 2000,
+   "p_holm_H1": 0.042,
+   "frac_placebo_mas_negativo": 0.0
+  },
+  "separacion_3": {
+   "p": 0.0105,
+   "validos": 2000,
+   "p_holm_H1": 0.042,
+   "frac_placebo_mas_negativo": 0.001
+  },
+  "separacion_1": {
+   "p": 0.0125,
+   "validos": 2000,
+   "p_holm_H1": 0.05,
+   "frac_placebo_mas_negativo": 0.0005
+  },
+  "sin_exclusion": {
+   "p": 0.0125,
+   "validos": 2000,
+   "p_holm_H1": 0.05,
+   "frac_placebo_mas_negativo": 0.004
+  },
+  "t_conglomerados_episodio": {
+   "G": 18,
+   "t": -1.726,
+   "p_bilateral_tG-1": 0.1024
+  },
+  "jackknife_episodio_efecto_pp": {
+   "min": -8.71,
+   "max": -3.16
+  },
+  "por_periodo_pp": {
+   "<1914": -0.5,
+   "1919-1938": -2.82,
+   "1946-2004": -19.34,
+   "n": [
+    13,
+    18,
+    12
+   ]
+  }
+ },
+ "segundos": 17
+}
