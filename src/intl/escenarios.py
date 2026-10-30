@@ -370,7 +370,7 @@ class Escenarios:
     def prob(self, evento: np.ndarray) -> dict:
         """evento: booleano (P,). Probabilidad (media de todas las trayectorias = predictiva posterior) y un IC 90 %
         aproximado de la parte de PARÁMETROS: varianza entre lotes menos el ruido Monte Carlo binomial."""
-        return _media_e_ic(evento.astype(float), self.lote)
+        return _media_e_ic(evento.astype(float), self.lote, estrato=self.inicio)
 
     def prob_caida(self, activo: str, umbral: float = -0.20, h: int = 1, desde_maximo: bool = False) -> dict:
         """P(rentabilidad real acumulada a h años ≤ umbral); con desde_maximo, caída desde el máximo de la trayectoria
@@ -417,10 +417,34 @@ class Escenarios:
         ruta.with_suffix(".json").write_text(json.dumps(self.meta, ensure_ascii=False, indent=1, default=str))
 
 
-def _media_e_ic(x: np.ndarray, lote: np.ndarray, z: float = 1.645) -> dict:
-    """x (P,) valores por trayectoria. IC 90 % de la incertidumbre de PARÁMETROS: var(medias de lote) − var MC."""
+def _media_e_ic_estratos(x, lote, estrato, z):
+    m = float(x.mean()) if len(x) else np.nan
+    ids = np.unique(lote)
+    if len(ids) < 3:
+        return {"p": m, "ic90": (np.nan, np.nan)}
+    medias, var_mc = [], []
+    for b in ids:
+        xb, sb = x[lote == b], estrato[lote == b]
+        medias.append(xb.mean())
+        v = 0.0
+        for s_ in np.unique(sb):
+            xs = xb[sb == s_]
+            if len(xs) > 1:
+                v += (len(xs) / len(xb)) ** 2 * xs.var(ddof=1) / len(xs)
+        var_mc.append(v)
+    var_par = max(float(np.var(medias, ddof=1) - np.mean(var_mc)), 0.0)
+    s = np.sqrt(var_par)
+    return {"p": m, "ic90": (m - z * s, m + z * s)}
+
+
+def _media_e_ic(x: np.ndarray, lote: np.ndarray, z: float = 1.645, estrato: np.ndarray | None = None) -> dict:
+    """x (P,) valores por trayectoria. IC 90 % de la incertidumbre de PARÁMETROS: var(medias de lote) − var MC.
+    v3: con `estrato` (régimen de partida repartido de forma determinista en cada lote, pertenencia suave) el ruido MC
+    de la media del lote es el ESTRATIFICADO Σ_s (n_s/n)² var_s / n_s (la variación entre regímenes no es ruido)."""
     x = np.asarray(x, float)
     ok = np.isfinite(x)
+    if estrato is not None:
+        return _media_e_ic_estratos(x[ok], lote[ok], np.asarray(estrato)[ok], z)
     x, lote = x[ok], lote[ok]
     m = float(x.mean()) if len(x) else np.nan
     ids, inv, n_b = np.unique(lote, return_inverse=True, return_counts=True)
