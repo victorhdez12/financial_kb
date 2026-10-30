@@ -25,3 +25,4 @@ brotli==1.2.0
 pycountry==26.2.16
 anthropic==1.12.0
 xgboost==2.1.1       # INT-13 (docs/int/INT13_plan_exploratorio.md)
+scikit-learn==1.5.2
