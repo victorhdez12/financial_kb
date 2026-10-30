@@ -1,0 +1,27 @@
+{
+ "procedencia": {
+  "commit": "42feb37387d28fbb064c72a9d80ca2f9a8739898",
+  "arbol_limpio": true,
+  "hora_utc": "2026-10-30T14:05:44+00:00"
+ },
+ "modo": "nulo",
+ "res": {
+  "S5": {
+   "banda_2.5_97.5": [
+    0.8976,
+    0.9075
+   ],
+   "media": 0.9024,
+   "min": 0.8972
+  },
+  "S_raros": {
+   "banda_2.5_97.5": [
+    0.8203,
+    0.9478
+   ],
+   "media": 0.897,
+   "min": 0.8018
+  }
+ },
+ "segundos": 49
+}

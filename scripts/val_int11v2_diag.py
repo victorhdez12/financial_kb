@@ -46,6 +46,35 @@ def iid(R=3000, seed=11):
     return out
 
 
+def iid2(R=20000, seed=12):
+    """Más réplicas en n = 20 y 34 (error MC ± 0,002) y dos variantes de remuestreo: bootstrap bayesiano por lotes
+    (como el motor) y bootstrap simple; 4.000 sorteos por predictiva."""
+    rng = np.random.default_rng(seed)
+    out = {}
+    for n in (20, 34):
+        for c in (0, 4, 6, 8):
+            for var in ("bayes", "simple"):
+                dentro = 0
+                for _ in range(R):
+                    x = rng.standard_t(4.5, n + 1)
+                    s, y = x[:n], x[n]
+                    sd = np.std(s, ddof=1)
+                    if var == "bayes":
+                        w = rng.dirichlet(np.ones(n), 20)
+                        u = rng.random((20, 200))
+                        v = np.concatenate([s[np.searchsorted(np.cumsum(w[b]), u[b] * w[b].sum()).clip(0, n - 1)]
+                                            for b in range(20)])
+                    else:
+                        v = s[rng.integers(0, n, 4000)]
+                    if c:
+                        v = v + rng.standard_t(5, len(v)) * np.sqrt(3 / 5) * sd * np.sqrt(c / n)
+                    q = np.quantile(v, [.05, .95])
+                    dentro += q[0] <= y <= q[1]
+                out[f"n={n}|c={c}|{var}"] = round(dentro / R, 4)
+                print(n, c, var, out[f"n={n}|c={c}|{var}"], flush=True)
+    return out
+
+
 def curtosis():
     f = cargar_real(D.connect())
     assert f["año"].max() <= 2004
@@ -93,7 +122,7 @@ if __name__ == "__main__":
     t0 = time.time()
     modo = sys.argv[1]
     OUT.mkdir(parents=True, exist_ok=True)
-    o = {"procedencia": procedencia(), "modo": modo, "res": iid() if modo == "iid" else curtosis(),
+    o = {"procedencia": procedencia(), "modo": modo, "res": {"iid": iid, "iid2": iid2, "curtosis": curtosis}[modo](),
          "segundos": round(time.time() - t0)}
     (OUT / f"diag_{modo}.json").write_text(json.dumps(o, ensure_ascii=False, indent=1, default=float))
     print(json.dumps(o, ensure_ascii=False, default=float)[:4000])
