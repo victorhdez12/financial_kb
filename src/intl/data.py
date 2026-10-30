@@ -36,6 +36,8 @@ FAMILIAS: dict[str, str] = {
     # Termómetro de recesión informativo (docs/int/TERMOMETRO_diseno_v1.md)
     r"oecd_gdpq_[a-z]{3}": "OCDE Quarterly National Accounts, PIB real en volumen, trimestral (CC BY 4.0; curado, ver load_dev_curado)",
     r"bis_creditgap_[a-z]{2}_ratio": "BIS crédito total al sector privado no financiero / PIB, trimestral",
+    # INT-7 (docs/int/INT7_prerregistro_v1.md §9, decisión 4): Shiller, EE. UU., mensual 1871-
+    r"shiller_(cape|real_price|real_earnings|real_dividend|real_stock_tr_ret_m)": "Shiller ie_data (EE. UU., mensual)",
 }
 _RX = [re.compile(f"^(?:{p})$") for p in FAMILIAS]
 
