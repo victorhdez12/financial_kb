@@ -324,3 +324,23 @@ def test_cuantiles_filas_de_la_mezcla():
     assert q[1, 0] == pytest.approx(np.quantile(a, 0.5), abs=0.01) and q[1, 2] == pytest.approx(5, abs=0.06)
     assert q[0, 1] == pytest.approx(np.quantile(a, 0.10), abs=0.03)          # p5 de la mezcla = p10 de a
     assert q[2, 1] == pytest.approx(np.quantile(b, 0.90), abs=0.03)
+
+
+def test_hoy_v3_markdown_etiqueta_acierto_y_aviso_del_umbral():
+    from scripts import int11_v3_hoy as H
+    q = list(np.linspace(-0.3, 0.4, 99))
+    r = {"estado": {"mes_ipc": "2026-09-01", "inflacion": 0.0312, "brecha": 0.02, "codigo": 1},
+         "pesos_regimen": {"expansion": 0.4, "sobrecalentamiento": 0.6, "estanflacion": 0.0, "crecimiento_bajo": 0.0},
+         "regimen_dominante": "sobrecalentamiento", "cuantiles_1_99": {a: q for a in E.ACTIVOS},
+         "p_caida_bolsa_20": {"p": 0.1, "ic90": (0.05, 0.15)}, "p_inflacion_5": {"p": 0.3, "ic90": (0.2, 0.4)},
+         "p_inflacion_5_regimen_duro": 0.5, "distancia_umbral_pp": 0.12, "cerca_umbral": True}
+    lejos = {**r, "cerca_umbral": False, "distancia_umbral_pp": -2.0}
+    o = {"procedencia": {}, "emision": "2026-10-30", "corte_datos": "2026-09-30", "kappa": 1e6, "kappa_en_borde": True,
+         "ventana_objetivo": {"desde": "2026-11-01", "hasta": "2027-10-31"}, "aviso": "x",
+         "acierto_medido_fase_D": {"activo": {a: 0.9 for a in E.ACTIVOS}, "global": 0.903, "puerta_D": True,
+                                   "cerca_umbral": 0.91, "regimen": {"sobrecalentamiento": {"bolsa": 0.91}},
+                                   "pais": {"ESP": {"bolsa": 0.88}, "DEU": {"bolsa": 0.9}}},
+         "paises": {"ESP": r, "DEU": lejos, "USA": {"estado": {}, "aviso": "sin datos"}}}
+    md = H.markdown(o)
+    assert "2026-11-01" in md and "acertó 88 % país / 91 % régimen" in md and "| USA | — |" in md
+    assert "ESP (inflación +0.12 pp" in md and "DEU (" not in md and "30 % suave frente a 50 %" in md
