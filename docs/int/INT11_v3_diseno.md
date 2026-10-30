@@ -63,7 +63,7 @@ y `test_config_v2_reproduce_v2_bit_a_bit`): todo lo nuevo está apagado por defe
 - σπ = 0,5 pp y σb = 1 pp: incertidumbre de medida/definición fijada a priori (diferencias IPC OCDE-JST y de
   definición ≈ 0,25-0,5 pp; revisiones del PIB real ≈ 0,5-1 pp y la población extrapolada ≈ 1-3 pp en la brecha per
   cápita). La validación v2 probó 0,25 y 0,5 pp en sintético (§5.4): misma calibración global, Brier cerca del umbral
-  −12 % / −17 %. Se elige 0,5 por ser el extremo alto de la incertidumbre de medida razonable (decisión D1).
+  −12 % / −17 %. Se elige 0,5 por ser el extremo alto de la incertidumbre de medida razonable (decisión D1). Potencia v3 (§5.2): Brier cerca del umbral −17-19 %.
 - `gen.simular_suave(pais, inflacion, brecha)`: cada lote reparte sus trayectorias entre regímenes en proporción a los
   pesos (resto mayor, sin azar extra: con pesos puros es **idéntico** a `simular` del régimen). Salida nueva
   `Escenarios.inicio` (régimen de partida de cada trayectoria) y `meta["estado_observado"]`.
@@ -136,7 +136,56 @@ y `test_config_v2_reproduce_v2_bit_a_bit`): todo lo nuevo está apagado por defe
   en vivo.
 
 ## 5. Potencia por simulación (research/int/int11_v3_potencia_P{0,1,2}.json)
-PENDIENTE: se rellena con los resultados de scripts/int11_v3_potencia.py (commit 8c6d5c5, árbol limpio).
+Commit 8c6d5c5 (árbol limpio), 100 réplicas por proceso, motor completo con 20 × 100 sorteos por régimen de partida
+(`int11v3.evaluar_suave`). Medido en real (≤ 2004, solo macro): dt robusta de la brecha P3 = 7,8 pp (IQR/1,349).
+P0 = nulo v2 sin error de medida; P1 = P0 + error de medida (0,25 pp inflación, 0,5 pp brecha); P2 = P1 + choques
+× 1,3 desde 1950 (hipotético). Cobertura del p5-p95 en %; "cerca" = |π_{t−1} − 3 %| < 0,5 pp (≈ 5 % de las filas).
+
+### 5.1 Calibración (S5 / raros / cerca del umbral) y anchura media del p5-p95 de la bolsa
+| proceso | diseño | v2 | v3 | v3 sin suave | v3 sin época |
+|---|---|---|---|---|---|
+| P0 | LOCO | 90,4 / 90,3 / 90,0; 0,717 | 90,7 / 91,0 / 91,0; 0,723 | — | — |
+| P0 | bloqueado 2005-2020 | 90,0 / 91,9 / 89,4 | 90,1 / 92,4 / 90,4 | 89,9 / 92,1 / 89,3 | 90,2 / 92,5 / 90,5 |
+| P1 | LOCO | 90,4 / 90,3 / **89,5** | 90,7 / 90,9 / **90,7** | 90,5 / 90,5 / 89,6 | 90,7 / 91,1 / 90,7 |
+| P1 | temporal (< 1950 → 1950-2004) | 90,3 / 90,5 / 89,1 | 90,4 / 91,0 / 90,3 | 90,3 / 90,8 / 89,1 | 90,5 / 91,0 / 90,2 |
+| P1 | bloqueado | 90,0 / 89,9 / 90,3 | 90,2 / 91,0 / 91,2 | 90,1 / 90,6 / 90,4 | 90,2 / 91,2 / 91,2 |
+| P2 (época) | LOCO | 90,6 / 90,5 / 89,6; 0,817 | **91,9** / 92,1 / 91,8; 0,869 | — | — |
+| P2 | temporal | **82,1** / 83,0 / 81,4 | 82,3 / 83,4 / 83,0 | 82,1 | 82,3 |
+| P2 | bloqueado | **86,9** / 85,5 / 86,4; 0,822 | **88,3** / 87,2 / 88,5; 0,872 | 88,1 | 87,1 |
+
+Lectura: (1) en un mundo estacionario v3 **sobrecubre algo** (90,7 % en LOCO frente a 90,4 % de v2; raros 91 %), por el
+c mayor: la dirección deseada para "rangos fiables", y la anchura solo sube ≈ 1 %. (2) Con error de medida (P1), la
+pertenencia suave **arregla la cobertura cerca del umbral** (89,5 → 90,7 %), como vio el validador. (3) Con un cambio de
+época (P2), **ningún motor** se salva en el diseño temporal de desarrollo (82 %: la semivida no puede ver lo que no hay
+en el entrenamiento), pero en el bloqueado v3 recupera 1,4 pp (86,9 → 88,3 %), de los que ≈ 1 pp es la semivida (sin
+época 87,1 %) y el resto el c mayor. El precio: en LOCO de desarrollo bajo P2 v3 llega al 91,9 % (banda hasta 92,5 %),
+de ahí el techo de 0,93 de la puerta propuesta. (4) **La curtosis por país no cambia nada en el sintético** (P0-P2:
+±0,1 pp; filas `v3_curt_agrupada` del JSON): los procesos sintéticos no reproducen la diferencia de curtosis del panel
+real (agrupada 16,8 frente a 4,1 por país). Su efecto solo se ha visto en el diagnóstico real del validador (factor de
+DEU 1,08 → 1,40); se mantiene porque corrige un error de especificación, no por potencia.
+
+### 5.2 Brier de "inflación > 5 %" (BSS frente a la frecuencia histórica; potencia DM unilateral α = 0,05)
+| proceso | diseño | v2: BSS / Brier cerca / potencia | v3: BSS / Brier cerca / potencia |
+|---|---|---|---|
+| P0 | LOCO | 27,4 % / 0,226 / 1,00 | 29,7 % / **0,185** / 1,00 |
+| P0 | bloqueado | 28,2 % / 0,219 / **0,62** | 30,7 % / **0,178** / **0,69** |
+| P1 | LOCO | 26,5 % / 0,223 / 1,00 | 28,7 % / **0,184** / 1,00 |
+| P1 | bloqueado | 28,2 % / 0,215 / **0,61** | 30,8 % / **0,175** / **0,71** |
+| P2 | bloqueado | 26,9 % / 0,221 / 0,62 | 29,8 % / 0,181 / **0,76** |
+
+La pertenencia suave baja el Brier cerca del umbral un **17-19 %** y sube el BSS global ≈ 2,5 puntos; la potencia de K2
+en el bloqueado pasa de ≈ 0,62 a 0,69-0,76. Todo viene de la parte suave (v3 sin suave = v2: 0,63). Sigue el sesgo de
+nivel cerca del umbral (p media 0,28 frente a frecuencia 0,20-0,23).
+
+### 5.3 Potencia de la puerta de calibración en el bloqueado (detección = S5 fuera de la banda nula 2,5-97,5)
+| proceso | motor | banda nula de S5 | falsa alarma | detecta ≈ 86 % | detecta ≈ 82 % |
+|---|---|---|---|---|---|
+| P1 | v2 | [85,0; 93,6] | 0,06 | 0,32 | 0,80 |
+| P1 | v3 | [85,4; 94,1] | 0,04 | 0,35 | **0,83** |
+| P0 | v3 | [85,2; 94,4] | 0,06 | 0,35 | 0,88 |
+
+Como en v2: el bloqueado detecta una infracobertura seria (≈ 80 %), no una leve. K1 sigue siendo "solo S5 contra su
+banda".
 
 ## 6. Riesgos y lo que v3 NO arregla
 - Sesgo de nivel de P(inflación > 5 %) cerca del umbral (§2.2).

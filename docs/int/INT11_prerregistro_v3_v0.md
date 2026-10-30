@@ -47,7 +47,8 @@ y brecha continuas + error de medida 0,25 pp / 0,5 pp), con la estructura de hue
 percentil 10 de S5, S_a y S_raros.
 
 ## 4. Puerta D (LOCO; todas) — propuesta (decisión D5)
-1. **S5 ≥ percentil 2,5 de su banda nula** y S5 ≤ 0,92 (no se admite la tolerancia ±1,5 pp de v2, que es ≈ 3 veces la
+1. **S5 ≥ percentil 2,5 de su banda nula** y S5 ≤ 0,93 (techo: con cambio de época v3 llega al 91,9 % en LOCO
+   sintético, banda hasta 92,5 %; la puerta busca infracobertura). No se admite la tolerancia ±1,5 pp de v2, que es ≈ 3 veces la
    banda: hallazgo 2 de la validación).
 2. Cada activo: |S_a − 0,90| ≤ 0,03 (como v2).
 3. S_raros ≥ percentil 10 de su distribución nula (v2 usaba el 2,5, poco exigente).
@@ -72,8 +73,10 @@ C1 (DM del CRPS frente a M0) solo informativo; PIT; κ y borde; factores por pa�
 - **Descriptivos de C:** caída ≥ 20 %, cobertura por régimen/país, PIT, eventos (si INT-14 los ha establecido antes).
 
 ## 7. Potencia (sintética; diseño §5)
-Resumen en docs/int/INT11_v3_diseno.md §5 (calibración v2 frente a v3 en P0-P2; potencia de la puerta y del Brier en el
-bloqueado).
+Detalle en docs/int/INT11_v3_diseno.md §5. En corto: v3 cubre 90,7 % en LOCO sintético (v2 90,4 %), 90,7 % cerca del
+umbral con error de medida (v2 89,5 %); con cambio de época, bloqueado 88,3 % (v2 86,9 %). K1 detecta una cobertura
+real ≈ 82 % con 0,83 (v2 0,80). K2 (inflación > 5 %, bloqueado JST): potencia 0,69-0,76 (v2 0,61-0,62); con OCDE mensual
+2005-2024 será mayor (más orígenes). La curtosis por país no mueve el sintético (su efecto está en el dato real).
 
 ## 8. Salida "hoy" v3 y registro en vivo
 - "Hoy" v3 (descriptiva; script futuro `scripts/int11_v3_hoy.py`, después de la fase D): `simular_suave` con el estado
@@ -92,7 +95,7 @@ bloqueado).
 | D2 | constante de ensanchamiento | 4 (v2) / **5,25** (regla) | **5,25** (la regla fijada antes del experimento) |
 | D3 | no estacionariedad | apagada / semivida 75 / **50** / 30 años | **50 años** (ver potencia §5: ayuda algo en el bloqueado si el cambio ya empezó, coste pequeño si no) |
 | D4 | curtosis del factor de país | agrupada (v2) / **por país, n0 = 50** | **por país, n0 = 50** |
-| D5 | puerta D | ±1,5 pp (v2) / **banda nula unilateral + techo 0,92** | **banda nula** (la tolerancia de v2 era 3 veces la banda) |
+| D5 | puerta D | ±1,5 pp (v2) / **banda nula unilateral + techo 0,93** | **banda nula** (la tolerancia de v2 era 3 veces la banda) |
 | D6 | eventos | **interfaz apagada** hasta INT-14 / activar ya con condiciona | **apagada**; activar por prerregistro propio solo los eventos que INT-14 establezca |
 | D7 | qué motor va a la confirmación final | **v3 si pasa D, si no v2** / los dos | **uno solo** (evita duplicar la familia de Holm) |
 | D8 | registro en vivo | empezar ya la serie v2 (launchd, con permiso) / esperar a v3 | **empezar ya v2** (la evidencia que crece sola); serie v3 nueva al congelar |

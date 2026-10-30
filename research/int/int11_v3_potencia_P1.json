@@ -1,0 +1,968 @@
+{
+ "procedencia": {
+  "commit": "8c6d5c50a2fccab2437e9bdb59ca87985be47a81",
+  "arbol_limpio": true,
+  "hora_utc": "2026-10-30T17:57:29+00:00"
+ },
+ "proceso": "P1",
+ "def_proceso": {
+  "ruido": [
+   0.0025,
+   0.005
+  ],
+  "epoca": null
+ },
+ "R": 100,
+ "semilla": 20261103,
+ "medicion_brecha": {
+  "sd_robusta": 0.07771712193994501,
+  "sd": 0.09998807082129571,
+  "frecuencia_negativa": 0.056338028169014086,
+  "n": 1562
+ },
+ "configs": {
+  "v2": "Config(activos=('bolsa', 'bonos', 'letras', 'vivienda', 'oro'), modo='bootstrap', k_pais=40.0, bloque_medio=3.0, n_min_celda=25, contagio=False, incertidumbre=True, nu_t=5.0, n0_cov=30.0, anio_max=2004, escala_pais=True, min_paises_año=3, k_mezcla=0.0, c_suavizado=4.0, nu_suavizado=5.0, rejilla_kappa=(0.0, 6.0, 121), curtosis_escala='agrupada', n0_curtosis=50.0, semivida_epoca=0.0, anio_ref_epoca=None, sigma_infl=0.0, sigma_brecha=0.0, eventos=(), evento_condiciona=False, recuentos_evento={}, n_min_evento=5)",
+  "v3": "Config(activos=('bolsa', 'bonos', 'letras', 'vivienda', 'oro'), modo='bootstrap', k_pais=40.0, bloque_medio=3.0, n_min_celda=25, contagio=False, incertidumbre=True, nu_t=5.0, n0_cov=30.0, anio_max=2004, escala_pais=True, min_paises_año=3, k_mezcla=0.0, c_suavizado=5.25, nu_suavizado=5.0, rejilla_kappa=(0.0, 6.0, 121), curtosis_escala='pais', n0_curtosis=50.0, semivida_epoca=50.0, anio_ref_epoca=None, sigma_infl=0.005, sigma_brecha=0.01, eventos=(), evento_condiciona=False, recuentos_evento={}, n_min_evento=5)",
+  "v3_duro": "Config(activos=('bolsa', 'bonos', 'letras', 'vivienda', 'oro'), modo='bootstrap', k_pais=40.0, bloque_medio=3.0, n_min_celda=25, contagio=False, incertidumbre=True, nu_t=5.0, n0_cov=30.0, anio_max=2004, escala_pais=True, min_paises_año=3, k_mezcla=0.0, c_suavizado=5.25, nu_suavizado=5.0, rejilla_kappa=(0.0, 6.0, 121), curtosis_escala='pais', n0_curtosis=50.0, semivida_epoca=50.0, anio_ref_epoca=None, sigma_infl=0.0, sigma_brecha=0.0, eventos=(), evento_condiciona=False, recuentos_evento={}, n_min_evento=5)",
+  "v3_sin_epoca": "Config(activos=('bolsa', 'bonos', 'letras', 'vivienda', 'oro'), modo='bootstrap', k_pais=40.0, bloque_medio=3.0, n_min_celda=25, contagio=False, incertidumbre=True, nu_t=5.0, n0_cov=30.0, anio_max=2004, escala_pais=True, min_paises_año=3, k_mezcla=0.0, c_suavizado=5.25, nu_suavizado=5.0, rejilla_kappa=(0.0, 6.0, 121), curtosis_escala='pais', n0_curtosis=50.0, semivida_epoca=0.0, anio_ref_epoca=None, sigma_infl=0.005, sigma_brecha=0.01, eventos=(), evento_condiciona=False, recuentos_evento={}, n_min_evento=5)",
+  "v3_curt_agrupada": "Config(activos=('bolsa', 'bonos', 'letras', 'vivienda', 'oro'), modo='bootstrap', k_pais=40.0, bloque_medio=3.0, n_min_celda=25, contagio=False, incertidumbre=True, nu_t=5.0, n0_cov=30.0, anio_max=2004, escala_pais=True, min_paises_año=3, k_mezcla=0.0, c_suavizado=5.25, nu_suavizado=5.0, rejilla_kappa=(0.0, 6.0, 121), curtosis_escala='agrupada', n0_curtosis=50.0, semivida_epoca=50.0, anio_ref_epoca=None, sigma_infl=0.005, sigma_brecha=0.01, eventos=(), evento_condiciona=False, recuentos_evento={}, n_min_evento=5)"
+ },
+ "res": {
+  "v2|dev_loco": {
+   "R": 100,
+   "S5": {
+    "media": 0.9041,
+    "banda_2.5_97.5": [
+     0.8991,
+     0.9078
+    ]
+   },
+   "Sb": {
+    "media": 0.904,
+    "banda_2.5_97.5": [
+     0.8962,
+     0.9117
+    ]
+   },
+   "S_raros": {
+    "media": 0.9031,
+    "banda_2.5_97.5": [
+     0.8711,
+     0.9309
+    ]
+   },
+   "S5_cerca": {
+    "media": 0.8948,
+    "banda_2.5_97.5": [
+     0.8675,
+     0.9214
+    ]
+   },
+   "ancho_bolsa": {
+    "media": 0.7198,
+    "banda_2.5_97.5": [
+     0.6668,
+     0.7801
+    ]
+   },
+   "S_activo_media": [
+    0.904,
+    0.9044,
+    0.9014,
+    0.9064,
+    0.9047
+   ],
+   "infl5": {
+    "bss_media": 0.2646,
+    "bss_banda": [
+     0.182,
+     0.3539
+    ],
+    "potencia_p05": 1.0,
+    "brier": 0.1358,
+    "brier_cerca": 0.2232,
+    "p_media_cerca": 0.2743,
+    "frec_cerca": 0.2263
+   }
+  },
+  "v2|dev_temporal": {
+   "R": 100,
+   "S5": {
+    "media": 0.903,
+    "banda_2.5_97.5": [
+     0.8787,
+     0.928
+    ]
+   },
+   "Sb": {
+    "media": 0.9024,
+    "banda_2.5_97.5": [
+     0.8688,
+     0.9422
+    ]
+   },
+   "S_raros": {
+    "media": 0.905,
+    "banda_2.5_97.5": [
+     0.8242,
+     0.9934
+    ]
+   },
+   "S5_cerca": {
+    "media": 0.8913,
+    "banda_2.5_97.5": [
+     0.8371,
+     0.9382
+    ]
+   },
+   "ancho_bolsa": {
+    "media": 0.722,
+    "banda_2.5_97.5": [
+     0.6543,
+     0.8101
+    ]
+   },
+   "S_activo_media": [
+    0.9024,
+    0.9001,
+    0.9028,
+    0.9066,
+    NaN
+   ],
+   "infl5": {
+    "bss_media": 0.2638,
+    "bss_banda": [
+     0.1309,
+     0.4325
+    ],
+    "potencia_p05": 0.95,
+    "brier": 0.1438,
+    "brier_cerca": 0.2233,
+    "p_media_cerca": 0.272,
+    "frec_cerca": 0.2294
+   }
+  },
+  "v2|bloqueado": {
+   "R": 100,
+   "S5": {
+    "media": 0.9003,
+    "banda_2.5_97.5": [
+     0.8497,
+     0.9362
+    ]
+   },
+   "Sb": {
+    "media": 0.9045,
+    "banda_2.5_97.5": [
+     0.828,
+     0.9532
+    ]
+   },
+   "S_raros": {
+    "media": 0.8992,
+    "banda_2.5_97.5": [
+     0.7533,
+     1.0
+    ]
+   },
+   "S5_cerca": {
+    "media": 0.903,
+    "banda_2.5_97.5": [
+     0.8206,
+     1.0
+    ]
+   },
+   "ancho_bolsa": {
+    "media": 0.7217,
+    "banda_2.5_97.5": [
+     0.6596,
+     0.8004
+    ]
+   },
+   "S_activo_media": [
+    0.9045,
+    0.9029,
+    0.9095,
+    0.9066,
+    0.8782
+   ],
+   "infl5": {
+    "bss_media": 0.2819,
+    "bss_banda": [
+     -0.0344,
+     0.6513
+    ],
+    "potencia_p05": 0.61,
+    "brier": 0.1381,
+    "brier_cerca": 0.2154,
+    "p_media_cerca": 0.2716,
+    "frec_cerca": 0.2025
+   },
+   "puerta": {
+    "banda_nula_S5": [
+     0.8497,
+     0.9362
+    ],
+    "S5_k_media": [
+     0.9003,
+     0.8611,
+     0.8209
+    ],
+    "deteccion": {
+     "k=1.0": 0.06,
+     "k=0.875": 0.32,
+     "k=0.78": 0.8
+    }
+   }
+  },
+  "v3|dev_loco": {
+   "R": 100,
+   "S5": {
+    "media": 0.9069,
+    "banda_2.5_97.5": [
+     0.8993,
+     0.9147
+    ]
+   },
+   "Sb": {
+    "media": 0.9065,
+    "banda_2.5_97.5": [
+     0.8962,
+     0.9164
+    ]
+   },
+   "S_raros": {
+    "media": 0.9092,
+    "banda_2.5_97.5": [
+     0.8715,
+     0.9348
+    ]
+   },
+   "S5_cerca": {
+    "media": 0.907,
+    "banda_2.5_97.5": [
+     0.8804,
+     0.9383
+    ]
+   },
+   "ancho_bolsa": {
+    "media": 0.7272,
+    "banda_2.5_97.5": [
+     0.6695,
+     0.7978
+    ]
+   },
+   "S_activo_media": [
+    0.9065,
+    0.9068,
+    0.9061,
+    0.908,
+    0.9085
+   ],
+   "infl5": {
+    "bss_media": 0.2868,
+    "bss_banda": [
+     0.1944,
+     0.3812
+    ],
+    "potencia_p05": 1.0,
+    "brier": 0.1317,
+    "brier_cerca": 0.1838,
+    "p_media_cerca": 0.2838,
+    "frec_cerca": 0.2263
+   }
+  },
+  "v3|dev_temporal": {
+   "R": 100,
+   "S5": {
+    "media": 0.9043,
+    "banda_2.5_97.5": [
+     0.8813,
+     0.9286
+    ]
+   },
+   "Sb": {
+    "media": 0.9025,
+    "banda_2.5_97.5": [
+     0.863,
+     0.9396
+    ]
+   },
+   "S_raros": {
+    "media": 0.9101,
+    "banda_2.5_97.5": [
+     0.8355,
+     1.0
+    ]
+   },
+   "S5_cerca": {
+    "media": 0.9028,
+    "banda_2.5_97.5": [
+     0.8371,
+     0.9464
+    ]
+   },
+   "ancho_bolsa": {
+    "media": 0.7218,
+    "banda_2.5_97.5": [
+     0.6582,
+     0.7952
+    ]
+   },
+   "S_activo_media": [
+    0.9025,
+    0.9028,
+    0.9053,
+    0.9067,
+    NaN
+   ],
+   "infl5": {
+    "bss_media": 0.2841,
+    "bss_banda": [
+     0.1585,
+     0.4539
+    ],
+    "potencia_p05": 0.98,
+    "brier": 0.1399,
+    "brier_cerca": 0.1871,
+    "p_media_cerca": 0.2794,
+    "frec_cerca": 0.2294
+   }
+  },
+  "v3|bloqueado": {
+   "R": 100,
+   "S5": {
+    "media": 0.9024,
+    "banda_2.5_97.5": [
+     0.854,
+     0.9411
+    ]
+   },
+   "Sb": {
+    "media": 0.9063,
+    "banda_2.5_97.5": [
+     0.8369,
+     0.9509
+    ]
+   },
+   "S_raros": {
+    "media": 0.91,
+    "banda_2.5_97.5": [
+     0.8,
+     1.0
+    ]
+   },
+   "S5_cerca": {
+    "media": 0.9123,
+    "banda_2.5_97.5": [
+     0.8238,
+     1.0
+    ]
+   },
+   "ancho_bolsa": {
+    "media": 0.7282,
+    "banda_2.5_97.5": [
+     0.6591,
+     0.7948
+    ]
+   },
+   "S_activo_media": [
+    0.9063,
+    0.9044,
+    0.9121,
+    0.9072,
+    0.8819
+   ],
+   "infl5": {
+    "bss_media": 0.3077,
+    "bss_banda": [
+     -0.0116,
+     0.6574
+    ],
+    "potencia_p05": 0.71,
+    "brier": 0.1335,
+    "brier_cerca": 0.1752,
+    "p_media_cerca": 0.2825,
+    "frec_cerca": 0.2025
+   },
+   "puerta": {
+    "banda_nula_S5": [
+     0.854,
+     0.9411
+    ],
+    "S5_k_media": [
+     0.9024,
+     0.8625,
+     0.8228
+    ],
+    "deteccion": {
+     "k=1.0": 0.04,
+     "k=0.875": 0.35,
+     "k=0.78": 0.83
+    }
+   }
+  },
+  "v3_duro|dev_loco": {
+   "R": 100,
+   "S5": {
+    "media": 0.9054,
+    "banda_2.5_97.5": [
+     0.8969,
+     0.9135
+    ]
+   },
+   "Sb": {
+    "media": 0.9059,
+    "banda_2.5_97.5": [
+     0.8948,
+     0.9167
+    ]
+   },
+   "S_raros": {
+    "media": 0.9055,
+    "banda_2.5_97.5": [
+     0.8713,
+     0.9328
+    ]
+   },
+   "S5_cerca": {
+    "media": 0.8956,
+    "banda_2.5_97.5": [
+     0.8701,
+     0.9224
+    ]
+   },
+   "ancho_bolsa": {
+    "media": 0.7265,
+    "banda_2.5_97.5": [
+     0.6675,
+     0.7979
+    ]
+   },
+   "S_activo_media": [
+    0.9059,
+    0.9052,
+    0.9029,
+    0.9076,
+    0.9071
+   ],
+   "infl5": {
+    "bss_media": 0.2638,
+    "bss_banda": [
+     0.1791,
+     0.3535
+    ],
+    "potencia_p05": 1.0,
+    "brier": 0.136,
+    "brier_cerca": 0.2235,
+    "p_media_cerca": 0.2748,
+    "frec_cerca": 0.2263
+   }
+  },
+  "v3_duro|dev_temporal": {
+   "R": 100,
+   "S5": {
+    "media": 0.903,
+    "banda_2.5_97.5": [
+     0.8813,
+     0.9268
+    ]
+   },
+   "Sb": {
+    "media": 0.9021,
+    "banda_2.5_97.5": [
+     0.8635,
+     0.9396
+    ]
+   },
+   "S_raros": {
+    "media": 0.9081,
+    "banda_2.5_97.5": [
+     0.8266,
+     1.0
+    ]
+   },
+   "S5_cerca": {
+    "media": 0.8911,
+    "banda_2.5_97.5": [
+     0.8327,
+     0.9382
+    ]
+   },
+   "ancho_bolsa": {
+    "media": 0.7212,
+    "banda_2.5_97.5": [
+     0.6571,
+     0.7951
+    ]
+   },
+   "S_activo_media": [
+    0.9021,
+    0.9015,
+    0.9023,
+    0.9061,
+    NaN
+   ],
+   "infl5": {
+    "bss_media": 0.2633,
+    "bss_banda": [
+     0.133,
+     0.4328
+    ],
+    "potencia_p05": 0.95,
+    "brier": 0.1439,
+    "brier_cerca": 0.223,
+    "p_media_cerca": 0.2718,
+    "frec_cerca": 0.2294
+   }
+  },
+  "v3_duro|bloqueado": {
+   "R": 100,
+   "S5": {
+    "media": 0.901,
+    "banda_2.5_97.5": [
+     0.8526,
+     0.9389
+    ]
+   },
+   "Sb": {
+    "media": 0.906,
+    "banda_2.5_97.5": [
+     0.8391,
+     0.9464
+    ]
+   },
+   "S_raros": {
+    "media": 0.9059,
+    "banda_2.5_97.5": [
+     0.8,
+     1.0
+    ]
+   },
+   "S5_cerca": {
+    "media": 0.9037,
+    "banda_2.5_97.5": [
+     0.8,
+     1.0
+    ]
+   },
+   "ancho_bolsa": {
+    "media": 0.7276,
+    "banda_2.5_97.5": [
+     0.6584,
+     0.7955
+    ]
+   },
+   "S_activo_media": [
+    0.906,
+    0.9025,
+    0.9089,
+    0.9073,
+    0.8804
+   ],
+   "infl5": {
+    "bss_media": 0.2823,
+    "bss_banda": [
+     -0.0612,
+     0.6475
+    ],
+    "potencia_p05": 0.63,
+    "brier": 0.1378,
+    "brier_cerca": 0.2143,
+    "p_media_cerca": 0.2716,
+    "frec_cerca": 0.2025
+   },
+   "puerta": {
+    "banda_nula_S5": [
+     0.8526,
+     0.9389
+    ],
+    "S5_k_media": [
+     0.901,
+     0.8611,
+     0.8213
+    ],
+    "deteccion": {
+     "k=1.0": 0.06,
+     "k=0.875": 0.33,
+     "k=0.78": 0.83
+    }
+   }
+  },
+  "v3_sin_epoca|dev_loco": {
+   "R": 100,
+   "S5": {
+    "media": 0.907,
+    "banda_2.5_97.5": [
+     0.9022,
+     0.911
+    ]
+   },
+   "Sb": {
+    "media": 0.9059,
+    "banda_2.5_97.5": [
+     0.8975,
+     0.9139
+    ]
+   },
+   "S_raros": {
+    "media": 0.9108,
+    "banda_2.5_97.5": [
+     0.8808,
+     0.933
+    ]
+   },
+   "S5_cerca": {
+    "media": 0.9067,
+    "banda_2.5_97.5": [
+     0.8787,
+     0.935
+    ]
+   },
+   "ancho_bolsa": {
+    "media": 0.7246,
+    "banda_2.5_97.5": [
+     0.6711,
+     0.7836
+    ]
+   },
+   "S_activo_media": [
+    0.9059,
+    0.9074,
+    0.9061,
+    0.9081,
+    0.9086
+   ],
+   "infl5": {
+    "bss_media": 0.2875,
+    "bss_banda": [
+     0.1966,
+     0.3841
+    ],
+    "potencia_p05": 1.0,
+    "brier": 0.1315,
+    "brier_cerca": 0.1835,
+    "p_media_cerca": 0.2834,
+    "frec_cerca": 0.2263
+   }
+  },
+  "v3_sin_epoca|dev_temporal": {
+   "R": 100,
+   "S5": {
+    "media": 0.9047,
+    "banda_2.5_97.5": [
+     0.8816,
+     0.9299
+    ]
+   },
+   "Sb": {
+    "media": 0.9035,
+    "banda_2.5_97.5": [
+     0.8688,
+     0.9423
+    ]
+   },
+   "S_raros": {
+    "media": 0.9101,
+    "banda_2.5_97.5": [
+     0.8349,
+     1.0
+    ]
+   },
+   "S5_cerca": {
+    "media": 0.9019,
+    "banda_2.5_97.5": [
+     0.8371,
+     0.9454
+    ]
+   },
+   "ancho_bolsa": {
+    "media": 0.7251,
+    "banda_2.5_97.5": [
+     0.6568,
+     0.814
+    ]
+   },
+   "S_activo_media": [
+    0.9035,
+    0.9026,
+    0.9055,
+    0.9072,
+    NaN
+   ],
+   "infl5": {
+    "bss_media": 0.2848,
+    "bss_banda": [
+     0.157,
+     0.4534
+    ],
+    "potencia_p05": 0.98,
+    "brier": 0.1397,
+    "brier_cerca": 0.1872,
+    "p_media_cerca": 0.2796,
+    "frec_cerca": 0.2294
+   }
+  },
+  "v3_sin_epoca|bloqueado": {
+   "R": 100,
+   "S5": {
+    "media": 0.9023,
+    "banda_2.5_97.5": [
+     0.85,
+     0.9398
+    ]
+   },
+   "Sb": {
+    "media": 0.9055,
+    "banda_2.5_97.5": [
+     0.8259,
+     0.9509
+    ]
+   },
+   "S_raros": {
+    "media": 0.9121,
+    "banda_2.5_97.5": [
+     0.8,
+     1.0
+    ]
+   },
+   "S5_cerca": {
+    "media": 0.9122,
+    "banda_2.5_97.5": [
+     0.8141,
+     1.0
+    ]
+   },
+   "ancho_bolsa": {
+    "media": 0.7242,
+    "banda_2.5_97.5": [
+     0.6618,
+     0.8004
+    ]
+   },
+   "S_activo_media": [
+    0.9055,
+    0.9055,
+    0.9117,
+    0.907,
+    0.8816
+   ],
+   "infl5": {
+    "bss_media": 0.3075,
+    "bss_banda": [
+     0.0091,
+     0.6621
+    ],
+    "potencia_p05": 0.74,
+    "brier": 0.1338,
+    "brier_cerca": 0.1755,
+    "p_media_cerca": 0.2824,
+    "frec_cerca": 0.2025
+   },
+   "puerta": {
+    "banda_nula_S5": [
+     0.85,
+     0.9398
+    ],
+    "S5_k_media": [
+     0.9023,
+     0.8635,
+     0.8236
+    ],
+    "deteccion": {
+     "k=1.0": 0.06,
+     "k=0.875": 0.27,
+     "k=0.78": 0.79
+    }
+   }
+  },
+  "v3_curt_agrupada|dev_loco": {
+   "R": 100,
+   "S5": {
+    "media": 0.906,
+    "banda_2.5_97.5": [
+     0.8991,
+     0.9138
+    ]
+   },
+   "Sb": {
+    "media": 0.9057,
+    "banda_2.5_97.5": [
+     0.8956,
+     0.9156
+    ]
+   },
+   "S_raros": {
+    "media": 0.9082,
+    "banda_2.5_97.5": [
+     0.8757,
+     0.9333
+    ]
+   },
+   "S5_cerca": {
+    "media": 0.9061,
+    "banda_2.5_97.5": [
+     0.8775,
+     0.9385
+    ]
+   },
+   "ancho_bolsa": {
+    "media": 0.725,
+    "banda_2.5_97.5": [
+     0.6673,
+     0.7885
+    ]
+   },
+   "S_activo_media": [
+    0.9057,
+    0.9059,
+    0.9051,
+    0.9071,
+    0.9082
+   ],
+   "infl5": {
+    "bss_media": 0.2868,
+    "bss_banda": [
+     0.1944,
+     0.3812
+    ],
+    "potencia_p05": 1.0,
+    "brier": 0.1317,
+    "brier_cerca": 0.1838,
+    "p_media_cerca": 0.2838,
+    "frec_cerca": 0.2263
+   }
+  },
+  "v3_curt_agrupada|dev_temporal": {
+   "R": 100,
+   "S5": {
+    "media": 0.9046,
+    "banda_2.5_97.5": [
+     0.8816,
+     0.9302
+    ]
+   },
+   "Sb": {
+    "media": 0.9028,
+    "banda_2.5_97.5": [
+     0.8617,
+     0.9403
+    ]
+   },
+   "S_raros": {
+    "media": 0.9105,
+    "banda_2.5_97.5": [
+     0.8399,
+     1.0
+    ]
+   },
+   "S5_cerca": {
+    "media": 0.9032,
+    "banda_2.5_97.5": [
+     0.8416,
+     0.9479
+    ]
+   },
+   "ancho_bolsa": {
+    "media": 0.7217,
+    "banda_2.5_97.5": [
+     0.6589,
+     0.7976
+    ]
+   },
+   "S_activo_media": [
+    0.9028,
+    0.9027,
+    0.9059,
+    0.9071,
+    NaN
+   ],
+   "infl5": {
+    "bss_media": 0.2841,
+    "bss_banda": [
+     0.1585,
+     0.4539
+    ],
+    "potencia_p05": 0.98,
+    "brier": 0.1399,
+    "brier_cerca": 0.1871,
+    "p_media_cerca": 0.2794,
+    "frec_cerca": 0.2294
+   }
+  },
+  "v3_curt_agrupada|bloqueado": {
+   "R": 100,
+   "S5": {
+    "media": 0.9026,
+    "banda_2.5_97.5": [
+     0.8558,
+     0.9393
+    ]
+   },
+   "Sb": {
+    "media": 0.9067,
+    "banda_2.5_97.5": [
+     0.8393,
+     0.9509
+    ]
+   },
+   "S_raros": {
+    "media": 0.9102,
+    "banda_2.5_97.5": [
+     0.8,
+     1.0
+    ]
+   },
+   "S5_cerca": {
+    "media": 0.9139,
+    "banda_2.5_97.5": [
+     0.8276,
+     1.0
+    ]
+   },
+   "ancho_bolsa": {
+    "media": 0.7281,
+    "banda_2.5_97.5": [
+     0.6582,
+     0.7981
+    ]
+   },
+   "S_activo_media": [
+    0.9067,
+    0.9044,
+    0.9128,
+    0.9073,
+    0.882
+   ],
+   "infl5": {
+    "bss_media": 0.3077,
+    "bss_banda": [
+     -0.0116,
+     0.6574
+    ],
+    "potencia_p05": 0.71,
+    "brier": 0.1335,
+    "brier_cerca": 0.1752,
+    "p_media_cerca": 0.2825,
+    "frec_cerca": 0.2025
+   },
+   "puerta": {
+    "banda_nula_S5": [
+     0.8558,
+     0.9393
+    ],
+    "S5_k_media": [
+     0.9026,
+     0.863,
+     0.8232
+    ],
+    "deteccion": {
+     "k=1.0": 0.05,
+     "k=0.875": 0.35,
+     "k=0.78": 0.85
+    }
+   }
+  }
+ },
+ "segundos": 1211
+}
