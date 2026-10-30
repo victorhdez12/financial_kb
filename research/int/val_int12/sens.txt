@@ -1,0 +1,26 @@
+B1 escala oráculo c=1.045 qlike=0.4166 vs B1 0.4176 HAR 0.2742 -> C1 gan 0.342
+HAR+cred               gan vs HAR(mismo entreno) -0.082%  t -0.06
+HAR+curva              gan vs HAR(mismo entreno) -0.445%  t -0.22
+HAR+corto              gan vs HAR(mismo entreno) +0.230%  t +0.10
+HAR+reg                gan vs HAR(mismo entreno) -1.265%  t -0.76
+HAR-X todo             gan vs HAR(mismo entreno) -4.674%  t -1.73
+1950-01 [-6.388  0.145  0.222  0.159  0.151  0.736  0.665 -0.24  -0.304]
+2004-01 [-3.307  0.123  0.277  0.284  0.174 -0.016  0.009 -0.054  0.06 ]
+credito medio 1934-49 / 1950-04: 1.4114659685863873 0.9244461305007587
+peores 5 meses de C2 (pérdida HAR-X - HAR):
+mes
+1969-06    0.793015
+1966-04    1.013473
+1970-04    1.111549
+1950-05    1.352919
+1987-09    3.719175
+Freq: M, dtype: float64
+C2 sin el peor 1%: 0.007206470568015599
+               rv        b1       har      harx        gb
+mes                                                      
+1987-09  0.053665  0.001759  0.001317  0.001204  0.000847
+1987-10  0.005404  0.006945  0.015298  0.010278  0.003592
+b1 har sin 1987-09: 0.4192
+har harx sin 1987-09: -0.0327
+harx gb sin 1987-09: -0.1563
+GB multi vs 1 hilo, max |dif|: 0.0
