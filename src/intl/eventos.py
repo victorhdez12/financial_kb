@@ -333,6 +333,25 @@ def ic_bloques(ef: Efecto, bloque: int, n_boot: int = 2000, nivel: float = 0.90,
     return float(lo), float(hi)
 
 
+def _efecto_idx(a: np.ndarray, pos: np.ndarray, h: int) -> float:
+    """Núcleo rápido de `efecto_eventos` sobre el array de acumuladas `a` y posiciones `pos` (todas con dato)."""
+    marca = np.zeros(len(a), float)
+    marca[pos] = 1.0
+    cerca = np.convolve(marca, np.ones(h))[:len(a)] > 0          # algún evento en (t − h, t]
+    base = a[(~cerca) & np.isfinite(a)]
+    return float(a[pos].mean() - base.mean())
+
+
+def _elegir_separados(rng, validos: np.ndarray, n: int, separacion: int) -> np.ndarray | None:
+    elegidos = np.empty(0, int)
+    for i in rng.permutation(validos):
+        if not len(elegidos) or np.abs(elegidos - i).min() >= separacion:
+            elegidos = np.append(elegidos, i)
+            if len(elegidos) == n:
+                return elegidos
+    return None
+
+
 def placebo(r: pd.Series, n_eventos: int, h: int, retraso: int, separacion: int, n_rep: int = 1000,
             semilla: int = 0, candidatos: pd.Index | None = None, excluir: list | None = None) -> np.ndarray:
     """Distribución del efecto con FECHAS FALSAS: n_eventos fechas al azar entre los orígenes válidos (o `candidatos`),
@@ -340,26 +359,21 @@ def placebo(r: pd.Series, n_eventos: int, h: int, retraso: int, separacion: int,
     `efecto_eventos`. El valor p bilateral = proporción de |placebo| ≥ |efecto|."""
     rng = np.random.default_rng(semilla)
     acc = acumulada_futura(r, h, retraso)
-    validos = np.flatnonzero(np.isfinite(acc.to_numpy()))
+    a = acc.to_numpy()
+    validos = np.flatnonzero(np.isfinite(a))
     if candidatos is not None:
         validos = np.intersect1d(validos, acc.index.get_indexer(candidatos))
     if excluir:
         pe = acc.index.get_indexer([f for f in excluir if f in acc.index])
         lejos = np.ones(len(acc), bool)
-        for p in pe:
+        for p in pe[pe >= 0]:
             lejos[max(0, p - h):p + h + 1] = False
         validos = validos[lejos[validos]]
     out = np.full(n_rep, np.nan)
     for k in range(n_rep):
-        elegidos = []
-        for i in rng.permutation(validos):
-            if all(abs(i - j) >= separacion for j in elegidos):
-                elegidos.append(i)
-                if len(elegidos) == n_eventos:
-                    break
-        if len(elegidos) < n_eventos:
-            continue
-        out[k] = efecto_eventos(r, list(acc.index[elegidos]), h, retraso).efecto
+        el = _elegir_separados(rng, validos, n_eventos, separacion)
+        if el is not None:
+            out[k] = _efecto_idx(a, el, h)
     return out
 
 
@@ -368,13 +382,18 @@ def p_placebo(efecto: float, dist: np.ndarray) -> float:
     return float((1 + (np.abs(d) >= abs(efecto)).sum()) / (1 + len(d)))
 
 
-def efecto_panel(r: pd.DataFrame, eventos: pd.DataFrame, H: int, comun: bool = False) -> dict:
+def acumulada_panel(r: pd.DataFrame, H: int, desde: int = 1) -> pd.DataFrame:
+    """Acumulada log por país de t+desde a t+desde+H−1 (desde = 1: t+1..t+H; desde = 0: el año del evento y siguientes)."""
+    lr = np.log1p(r.astype(float))
+    return lr[::-1].rolling(H, min_periods=H).sum()[::-1].shift(-desde)
+
+
+def efecto_panel(r: pd.DataFrame, eventos: pd.DataFrame, H: int, comun: bool = False, desde: int = 1) -> dict:
     """Panel anual país-año. r: años × países (rentabilidad real simple). eventos: columnas pais, año (país-evento) o,
     con comun=True, solo 'año' (evento global: afecta a todos los países). Resultado: para cada evento (país, año) la
-    acumulada log de t+1 a t+H menos la media incondicional del país (años sin evento en (t − H, t]); efecto = media.
-    Conglomerado = año del evento (eventos del mismo año comparten choque)."""
-    lr = np.log1p(r.astype(float))
-    acc = lr[::-1].rolling(H, min_periods=H).sum()[::-1].shift(-1)       # t+1..t+H
+    acumulada log de t+desde a t+desde+H−1 menos la media incondicional del país (años sin evento en (t − H, t]);
+    efecto = media. `detalle` lleva acc (diferencia) y abs (acumulada sin restar)."""
+    acc = acumulada_panel(r, H, desde)
     marca = pd.DataFrame(False, index=r.index, columns=r.columns)
     pares = ([(c, int(a)) for a in eventos["año"] for c in r.columns] if comun
              else [(c, int(a)) for c, a in zip(eventos["pais"], eventos["año"]) if c in r.columns])
@@ -383,10 +402,65 @@ def efecto_panel(r: pd.DataFrame, eventos: pd.DataFrame, H: int, comun: bool = F
             marca.loc[a, c] = True
     cerca = marca.astype(float).rolling(H, min_periods=1).max().astype(bool)
     base = acc.where(~cerca).mean()
-    filas = [{"pais": c, "año": a, "acc": float(acc.loc[a, c]) - float(base[c])}
+    filas = [{"pais": c, "año": a, "acc": float(acc.loc[a, c]) - float(base[c]), "abs": float(acc.loc[a, c])}
              for c, a in pares if a in acc.index and np.isfinite(acc.loc[a, c]) and np.isfinite(base[c])]
-    d = pd.DataFrame(filas, columns=["pais", "año", "acc"])
-    return {"H": H, "n": int(len(d)), "efecto": float(d["acc"].mean()) if len(d) else np.nan, "detalle": d}
+    d = pd.DataFrame(filas, columns=["pais", "año", "acc", "abs"])
+    return {"H": H, "desde": desde, "n": int(len(d)), "efecto": float(d["acc"].mean()) if len(d) else np.nan,
+            "media_abs": float(d["abs"].mean()) if len(d) else np.nan,
+            "prop_pos": float((d["abs"] > 0).mean()) if len(d) else np.nan, "detalle": d}
+
+
+def placebo_panel(r: pd.DataFrame, eventos: pd.DataFrame, H: int, comun: bool, separacion: int, n_rep: int = 1000,
+                  semilla: int = 0, excluir_años: frozenset = frozenset(), desde: int = 1,
+                  solo_con_dato: bool = False) -> np.ndarray:
+    """Placebo de fechas para el panel. comun=False (eventos por país): para cada evento verdadero (país, año), un año
+    falso del MISMO país entre sus años válidos (acumulada definida, no en `excluir_años`, a > H de cualquier evento
+    verdadero del país), con separación ≥ `separacion` entre los falsos del país. comun=True: tantos años falsos
+    globales como años verdaderos, válidos (no excluidos, a > H de los verdaderos) y separados ≥ `separacion`."""
+    rng = np.random.default_rng(semilla)
+    acc = acumulada_panel(r, H, desde)
+    años = acc.index.to_numpy()
+    out = np.full(n_rep, np.nan)
+    if solo_con_dato:
+        # Corrección declarada (P-DEV-INT14, resultado §0): solo se sortea un año falso por cada evento que ENTRA en la
+        # estimación (acumulada definida). v1.0 exigía un falso también para eventos sin dato (p. ej. CAN 1907 sin
+        # rentabilidad JST, oro antes de 1969): imposible → 0 placebos válidos → p = 1 por construcción.
+        usados = efecto_panel(r, eventos, H, comun=comun, desde=desde)["detalle"]
+        eventos = (pd.DataFrame({"año": sorted(usados["año"].unique())}) if comun
+                   else usados[["pais", "año"]].reset_index(drop=True))
+        if not len(eventos):
+            return out
+    if comun:
+        verd = np.array(sorted({int(a) for a in eventos["año"]}))
+        ok = acc.notna().any(axis=1).to_numpy() & ~np.isin(años, list(excluir_años))
+        lejos = np.array([np.abs(verd - a).min() > H if len(verd) else True for a in años])
+        validos = np.flatnonzero(ok & lejos)
+        for k in range(n_rep):
+            el = _elegir_separados(rng, validos, len(verd), separacion)
+            if el is not None:
+                out[k] = efecto_panel(r, pd.DataFrame({"año": años[el]}), H, comun=True, desde=desde)["efecto"]
+        return out
+    por_pais = eventos.groupby("pais")["año"].apply(lambda x: np.array(sorted(int(v) for v in x))).to_dict()
+    validos = {}
+    for c, verd in por_pais.items():
+        if c not in acc.columns:
+            continue
+        ok = acc[c].notna().to_numpy() & ~np.isin(años, list(excluir_años))
+        lejos = np.array([np.abs(verd - a).min() > H for a in años])
+        validos[c] = np.flatnonzero(ok & lejos)
+    for k in range(n_rep):
+        filas, fallo = [], False
+        for c, verd in por_pais.items():
+            if c not in validos:
+                continue
+            el = _elegir_separados(rng, validos[c], len(verd), separacion)
+            if el is None:
+                fallo = True
+                break
+            filas += [(c, int(años[i])) for i in el]
+        if not fallo:
+            out[k] = efecto_panel(r, pd.DataFrame(filas, columns=["pais", "año"]), H, desde=desde)["efecto"]
+    return out
 
 
 def ic_panel(d: pd.DataFrame, n_boot: int = 2000, nivel: float = 0.90, semilla: int = 0,

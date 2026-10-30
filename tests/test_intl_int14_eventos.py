@@ -151,3 +151,32 @@ def test_potencia_clasificacion_monotona():
     assert p0["potencia_auc"] <= 0.15
     assert p1["potencia_auc"] > p0["potencia_auc"] and p1["delta_auc_medio"] > 0.05
     assert E.mde_media(1.0, 25) == pytest.approx((1.959964 + 0.841621) / 5, rel=1e-4)
+
+
+def test_placebo_panel_y_rapido_coinciden_con_lento():
+    rng = np.random.default_rng(5)
+    r = _m(rng.normal(0.005, 0.04, 300), "1950-01")
+    fechas = list(r.index[[20, 80, 150, 220]])
+    ef = E.efecto_eventos(r, fechas, h=6)
+    a = E.acumulada_futura(r, 6).to_numpy()
+    assert E._efecto_idx(a, r.index.get_indexer(fechas), 6) == pytest.approx(ef.efecto)
+    años = range(1900, 1960)
+    p = pd.DataFrame(rng.normal(0.03, 0.1, (60, 4)), index=años, columns=list("ABCD"))
+    ev = pd.DataFrame({"pais": ["A", "B", "A"], "año": [1910, 1930, 1940]})
+    pl = E.placebo_panel(p, ev, 2, comun=False, separacion=5, n_rep=50)
+    assert np.isfinite(pl).mean() > 0.9 and abs(np.nanmean(pl)) < 0.1
+    pg = E.placebo_panel(p, pd.DataFrame({"año": [1910, 1930]}), 1, comun=True, separacion=2, n_rep=50,
+                         excluir_años=frozenset(range(1914, 1919)))
+    assert np.isfinite(pg).all()
+    h0 = E.efecto_panel(p, ev, 1, desde=0)
+    assert h0["detalle"]["abs"].iloc[0] == pytest.approx(np.log1p(p.loc[1910, "A"]))
+
+
+def test_placebo_panel_evento_sin_dato():
+    """Defecto de v1.0: un país con evento pero sin rentabilidades dejaba 0 placebos; con solo_con_dato no."""
+    rng = np.random.default_rng(7)
+    p = pd.DataFrame(rng.normal(0.03, 0.1, (60, 3)), index=range(1900, 1960), columns=list("ABC"))
+    p["C"] = np.nan
+    ev = pd.DataFrame({"pais": ["A", "C"], "año": [1910, 1930]})
+    assert np.isnan(E.placebo_panel(p, ev, 1, False, 5, n_rep=10)).all()
+    assert np.isfinite(E.placebo_panel(p, ev, 1, False, 5, n_rep=10, solo_con_dato=True)).all()
