@@ -61,17 +61,47 @@ def _poblacion(con, lc: str, corte) -> pd.Series | None:
     return pd.Series(df["value"].astype(float).values, index=pd.to_datetime(df["date"]).dt.year)
 
 
-def estado_actual_movil(con, fecha, per_capita: bool = True) -> dict:
+# v3 (registro en vivo): series con vintages (ALFRED) para emitir "tal como se sabía" en una fecha pasada
+VINTAGES = {"USA": {"ipc": "CPIAUCSL", "pib": "GDPC1"}}
+
+
+def serie_asof(con, sid: str, fecha) -> pd.Series:
+    """Serie tal como estaba publicada en `fecha` (vista `vintages`: realtime_start ≤ fecha ≤ realtime_end)."""
+    f = pd.Timestamp(fecha).date()
+    df = con.execute("select date, value from vintages where series_id = ? and value is not null and date <= ? "
+                     "and realtime_start <= ? and (realtime_end is null or realtime_end >= ?) order by date",
+                     [sid, f, f, f]).df()
+    s = pd.Series(df["value"].astype(float).values, index=pd.to_datetime(df["date"]), name=sid)
+    if s.index.duplicated().any():
+        raise ValueError(f"{sid}: varias vintages vigentes en {f}")
+    return s
+
+
+def estado_actual_movil(con, fecha, per_capita: bool = True, vintage: bool = False, entradas: bool = False) -> dict:
     """v2 (docs/int/INT11_v2_diseno.md §4): estado con ventanas MÓVILES de 12 meses hasta el último dato publicado y
     horizonte del abanico = los 12 meses siguientes al corte (no el año natural). Per cápita con la población de
-    Maddison (anual, termina antes que el PIB: se extrapola con su crecimiento de los últimos 10 años; declarado)."""
+    Maddison (anual, termina antes que el PIB: se extrapola con su crecimiento de los últimos 10 años; declarado).
+    v3: `vintage` → IPC y PIB tal como se publicaron en `fecha` (solo países de VINTAGES; el resto queda sin estado);
+    `entradas` → devuelve también las series exactas usadas (huella del registro en vivo)."""
     corte = TV.fin_de_mes(fecha)
-    out = {}
+    out, series = {}, {}
     for c in NUCLEO:
         lc = c.lower()
         pob = _poblacion(con, lc, corte) if per_capita else None
-        out[c] = E.estado_movil(TV._serie(con, f"oecd_cpi_{lc}_idx", corte), TV._serie(con, f"oecd_gdpq_{lc}", corte),
-                                pob)
+        if vintage:
+            if c not in VINTAGES:
+                out[c] = {"regimen": None, "motivo": "sin vintages: no se emite con fecha atrasada"}
+                continue
+            ipc, pib = serie_asof(con, VINTAGES[c]["ipc"], fecha), serie_asof(con, VINTAGES[c]["pib"], fecha)
+        else:
+            ipc, pib = TV._serie(con, f"oecd_cpi_{lc}_idx", corte), TV._serie(con, f"oecd_gdpq_{lc}", corte)
+        out[c] = E.estado_movil(ipc, pib, pob)
+        series[f"{c}_ipc"], series[f"{c}_pib"] = ipc.iloc[-30:], pib.iloc[-48:]
     # el abanico empieza el mes SIGUIENTE a la fecha de emisión (no al corte de datos): sin solapar meses ya vividos
-    return {"corte": str(corte.date()), "emision": str(pd.Timestamp(fecha).date()),
-            "ventana_objetivo": E.ventana_objetivo(fecha), "paises": out}
+    res = {"corte": str(corte.date()), "emision": str(pd.Timestamp(fecha).date()),
+           "ventana_objetivo": E.ventana_objetivo(fecha), "paises": out}
+    if vintage:
+        res["vintage"] = True
+    if entradas:
+        res["_series"] = series
+    return res

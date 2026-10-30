@@ -241,3 +241,75 @@ def test_evaluar_suave_con_sigma_cero_es_el_duro():
     lejos = np.abs(duro["infl_prev"] - 0.03) > 0.03
     assert np.allclose(duro["p_infl_m1"][lejos], suave["p_infl_m1"][lejos], atol=0.02)
     assert not np.allclose(duro["p_infl_m1"], suave["p_infl_m1"])
+
+
+# ------------------------------------------------------------------ registro en vivo (arreglos de la validación v2)
+def test_registro_rechaza_fechas_atrasadas_y_futuras():
+    from src.report import registro_vivo as RV
+    RV.comprobar_fecha("2026-10-20", hoy="2026-10-22")
+    with pytest.raises(SystemExit):
+        RV.comprobar_fecha("2026-06-20", hoy="2026-10-30")                       # atrasada: fuga
+    RV.comprobar_fecha("2026-06-20", hoy="2026-10-30", vintage=True)             # permitida solo con vintages
+    with pytest.raises(SystemExit):
+        RV.comprobar_fecha("2026-11-20", hoy="2026-10-30")
+
+
+def test_registro_tolera_solo_cambios_en_su_carpeta():
+    from src.report import registro_vivo as RV
+    carpeta = RV.REPO / "research/int/int11_vivo"
+    p = RV.procedencia_registro(carpeta, sucios=["research/int/int11_vivo/2026-10.json",
+                                                 "research/int/int11_vivo/indice.csv"])
+    assert not p["arbol_limpio"] and len(p["pendientes_en_registro"]) == 2
+    with pytest.raises(SystemExit):
+        RV.procedencia_registro(carpeta, sucios=["research/int/int11_v2_hoy.json"])
+    with pytest.raises(SystemExit):
+        RV.procedencia_registro(carpeta, sucios=["research/int/int11_vivo_otro/x.json"])
+    assert RV.procedencia_registro(carpeta, sucios=[])["arbol_limpio"]
+
+
+def test_registro_huella_de_entradas_y_segunda_emision(tmp_path):
+    import hashlib
+    import json
+    import pandas as pd
+    from src.report import registro_vivo as RV
+    s = pd.Series([100.0, 101.0], index=pd.to_datetime(["2026-08-01", "2026-09-01"]))
+    h1 = RV.huella_entradas({"USA_ipc": s, "ESP_ipc": s * 2})
+    h2 = RV.huella_entradas({"ESP_ipc": s * 2, "USA_ipc": s})
+    assert h1 == h2 and h1["series"]["USA_ipc"]["2026-09-01"] == 101.0
+    assert RV.huella_entradas({"USA_ipc": s + 1e-6})["sha256"] != h1["sha256"]
+    base = {"procedencia": {"commit": "abc"}, "ventana_objetivo": {"desde": "2026-11-01", "hasta": "2027-10-31"},
+            "entradas": h1}
+    r1 = RV.registrar({**base, "emision": "2026-10-20"}, tmp_path)
+    r2 = RV.registrar({**base, "emision": "2026-11-20"}, tmp_path)                # el mes siguiente no aborta
+    lin = (tmp_path / "indice.csv").read_text().splitlines()
+    assert len(lin) == 3 and lin[0].endswith("sha256_entradas") and lin[2].split(",")[-1] == h1["sha256"]
+    assert lin[2].split(",")[2] == hashlib.sha256(r2.read_text().encode()).hexdigest()
+    assert json.loads(r1.read_text())["entradas"]["sha256"] == h1["sha256"]
+    with pytest.raises(SystemExit):
+        RV.registrar({**base, "emision": "2026-11-21"}, tmp_path)
+
+
+def test_serie_asof_usa_la_vintage_vigente():
+    import duckdb
+    from src.report import escenarios_vivo as V
+    con = duckdb.connect()
+    con.execute("create table vintages (date date, value double, series_id varchar, realtime_start date, "
+                "realtime_end date)")
+    con.execute("insert into vintages values ('2025-01-01', 1.0, 'X', '2025-04-30', '2025-05-28'), "
+                "('2025-01-01', 2.0, 'X', '2025-05-29', null), ('2025-04-01', 3.0, 'X', '2025-07-30', null)")
+    a = V.serie_asof(con, "X", "2025-05-15")
+    assert a.tolist() == [1.0]
+    b = V.serie_asof(con, "X", "2025-08-01")
+    assert b.tolist() == [2.0, 3.0]
+
+
+def test_hoy_v2_registro_no_reescribe_la_salida_hoy(monkeypatch, tmp_path):
+    from scripts import int11_v2_hoy as H
+    llamadas = {}
+    monkeypatch.setattr(H, "emitir", lambda fecha, registro, vintage: llamadas.update(r=registro) or {"x": 1})
+    monkeypatch.setattr(H, "markdown", lambda o: "md")
+    monkeypatch.setattr(H, "registrar", lambda o: tmp_path / "r.json")
+    monkeypatch.setattr(H, "SALIDA", tmp_path / "hoy.json")
+    monkeypatch.setattr("sys.argv", ["x", "2026-10-30", "--registro"])
+    H.main()
+    assert llamadas["r"] and not (tmp_path / "hoy.json").exists()
