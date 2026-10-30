@@ -1,0 +1,27 @@
+{
+ "procedencia": {
+  "commit": "d80951e8e978dafb7bfc5620de3156eebff57b04",
+  "arbol_limpio": true,
+  "hora_utc": "2026-10-30T14:07:52+00:00"
+ },
+ "modo": "iid2",
+ "res": {
+  "n=20|c=0|bayes": 0.8544,
+  "n=20|c=0|simple": 0.8564,
+  "n=20|c=4|bayes": 0.892,
+  "n=20|c=4|simple": 0.8942,
+  "n=20|c=6|bayes": 0.906,
+  "n=20|c=6|simple": 0.9034,
+  "n=20|c=8|bayes": 0.9126,
+  "n=20|c=8|simple": 0.9103,
+  "n=34|c=0|bayes": 0.8707,
+  "n=34|c=0|simple": 0.8848,
+  "n=34|c=4|bayes": 0.8988,
+  "n=34|c=4|simple": 0.8964,
+  "n=34|c=6|bayes": 0.9058,
+  "n=34|c=6|simple": 0.9006,
+  "n=34|c=8|bayes": 0.9071,
+  "n=34|c=8|simple": 0.9091
+ },
+ "segundos": 76
+}
