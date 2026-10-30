@@ -348,7 +348,7 @@ def test_hoy_v3_markdown_etiqueta_acierto_y_aviso_del_umbral():
 
 def test_ic_de_parametros_con_pertenencia_suave_no_colapsa(filas):
     g = E.Generador(E.Config.v3()).ajustar(filas)
-    e = g.simular_suave("P01", 0.03, 0.05, horizonte=1, n_lotes=40, por_lote=100, semilla=2)
+    e = g.simular_suave("P01", 0.03, 0.05, horizonte=1, n_lotes=200, por_lote=100, semilla=2)
     lo, hi = e.prob_inflacion(0.05)["ic90"]
-    d = g.simular("P01", 1, horizonte=1, n_lotes=40, por_lote=100, semilla=2).prob_inflacion(0.05)["ic90"]
+    d = g.simular("P01", 1, horizonte=1, n_lotes=200, por_lote=100, semilla=2).prob_inflacion(0.05)["ic90"]
     assert hi - lo > 0.2 * (d[1] - d[0]) > 0                   # antes: la mezcla determinista anulaba el IC
