@@ -30,7 +30,7 @@ from scipy import special, stats
 
 from src.intl.data import DEV_END, FactorCutoffError
 
-VERSION = "0.1-esqueleto"
+VERSION = "0.2"
 REGIMENES = ("expansion", "sobrecalentamiento", "estanflacion", "crecimiento_bajo")
 K = len(REGIMENES)
 ACTIVOS = ("bolsa", "bonos", "letras", "vivienda", "oro")
@@ -38,7 +38,10 @@ MACRO = ("inflacion", "crecimiento")
 UMBRAL_INFL = 0.03            # Atlas §8: inflación observada > 3 %
 VENTANA_BRECHA = 10           # brecha = log PIB pc − media de los 10 años anteriores (P3 de INT-4)
 GUERRAS = frozenset(range(1914, 1919)) | frozenset(range(1939, 1946))
-REJILLA_KAPPA = np.logspace(0, 3.5, 71)
+REJILLA_KAPPA = np.logspace(0, 3.5, 71)          # v1 (κ salió en el borde, 10^3,5: validación 30-oct, hallazgo 5)
+REJILLA_KAPPA_V2 = (0.0, 6.0, 121)                # v2: log10 κ ∈ [0, 6]; κ = 10^6 ≈ "todos los países = panel"
+C_SUAVIZADO_V2 = 4.0                              # v2: inflado de varianza de la celda 1 + c/n (fijado en sintético iid t)
+K_MEZCLA_V2 = 0.0                                 # v2: mezcla con el incondicional k/(n + k); 0 recomendado (potencia v2: no aporta cobertura, resta en raros); opción D3
 
 
 # ============================================================================ régimen operable
@@ -74,6 +77,80 @@ def estados_operables(df: pd.DataFrame, eje: str = "p3") -> pd.DataFrame:
         raise ValueError(eje)
     d["regimen"] = codigo_regimen(d["inflacion"], d["brecha"])
     return d
+
+
+def _mensual_completa(s: pd.Series, n: int, max_huecos: int = 1) -> pd.Series | None:
+    """Últimos n meses consecutivos (índice de inicio de mes) que terminan en el último dato; se interpola en log hasta
+    `max_huecos` meses que falten DENTRO de la ventana (p. ej. un IPC no publicado). Si faltan más, se retrocede."""
+    s = s.dropna().astype(float)
+    if s.empty:
+        return None
+    s.index = pd.DatetimeIndex(s.index).to_period("M").to_timestamp()
+    s = s[~s.index.duplicated(keep="last")].sort_index()
+    for fin in s.index[::-1]:
+        meses = pd.date_range(end=fin, periods=n, freq="MS")
+        w = s.reindex(meses)
+        if w.iloc[0] != w.iloc[0] or w.isna().sum() > max_huecos:       # primer mes ausente o demasiados huecos
+            continue
+        return np.exp(np.log(w).interpolate(limit_area="inside"))
+    return None
+
+
+def estado_movil(ipc_m: pd.Series, pib_q: pd.Series, poblacion_a: pd.Series | None = None) -> dict:
+    """Estado operable con VENTANAS MÓVILES de 12 meses que terminan en el último dato publicado (puente JST anual ↔
+    mensual; docs/int/INT11_v2_diseno.md §4). Con el último mes = diciembre y el último trimestre = T4 coincide EXACTAMENTE
+    con el estado anual (`src/report/escenarios_vivo.estado_pais`, JST: media anual del IPC, PIB del año).
+      inflación = log(media IPC de los 12 últimos meses / media de los 12 anteriores)
+      brecha    = log PIB de los 4 últimos trimestres − media de log PIB de las 10 ventanas de 4 trimestres anteriores
+                  (sin solape, cada una 4 trimestres antes); per cápita si se da la población anual (interpolada en log
+                  al centro de cada ventana; extrapolada con el crecimiento de los 10 últimos años con dato).
+    pib_q: índice = inicio del trimestre (o cualquier fecha dentro). Devuelve también el mes y trimestre usados."""
+    ipc = _mensual_completa(ipc_m, 24)
+    q = pib_q.dropna().astype(float)
+    if ipc is None or q.empty:
+        return {"regimen": None}
+    q.index = pd.DatetimeIndex(q.index).to_period("Q").to_timestamp()
+    q = q[~q.index.duplicated(keep="last")].sort_index()
+    trimestres = pd.date_range(end=q.index[-1], periods=44, freq="QS")
+    w = q.reindex(trimestres)
+    if w.isna().any():
+        return {"regimen": None, "motivo": "faltan trimestres de PIB en los 11 años previos"}
+    infl = float(np.log(ipc.iloc[12:].mean() / ipc.iloc[:12].mean()))
+    sumas, centros = [], []
+    for k in range(11):                                   # k = 0: últimos 4 trimestres; k = 1..10: ventanas anteriores
+        bloque = w.iloc[len(w) - 4 * (k + 1): len(w) - 4 * k]
+        sumas.append(float(bloque.sum()))
+        ini, fin = bloque.index[0], bloque.index[-1] + pd.offsets.QuarterEnd(0)
+        centros.append(ini.year + (ini.dayofyear + (fin - ini).days / 2) / 365.25)
+    lp = np.log(sumas)
+    per_capita = poblacion_a is not None and len(poblacion_a.dropna()) >= 2
+    if per_capita:
+        pop = poblacion_a.dropna().astype(float)
+        años_p = np.array([d.year if hasattr(d, "year") else int(d) for d in pop.index], float) + 0.5
+        lpop = np.log(pop.to_numpy())
+        o = np.argsort(años_p)
+        años_p, lpop = años_p[o], lpop[o]
+        ult = años_p >= años_p[-1] - 10
+        crec = (lpop[-1] - lpop[ult][0]) / max(años_p[-1] - años_p[ult][0], 1)
+        lp_c = np.array([np.interp(c, años_p, lpop) if c <= años_p[-1] else lpop[-1] + crec * (c - años_p[-1])
+                         for c in centros])
+        lp = lp - lp_c
+    brecha = float(lp[0] - lp[1:].mean())
+    r = int(codigo_regimen([infl], [brecha])[0])
+    originales = set(pd.DatetimeIndex(ipc_m.dropna().index).to_period("M").to_timestamp())
+    huecos = int(sum(m not in originales for m in ipc.index))
+    mes = ipc.index[-1]
+    return {"mes_ipc": str(mes.date()), "trimestre_pib": str(w.index[-1].date()), "inflacion": infl,
+            "brecha": brecha, "per_capita": bool(per_capita), "huecos_ipc_interpolados": huecos, "regimen": REGIMENES[r], "codigo": r}
+
+
+def ventana_objetivo(corte) -> dict:
+    """Horizonte MÓVIL de 12 meses: el abanico describe los 12 meses que siguen al corte de información (fin de mes).
+    Rótulo obligatorio de la salida "hoy" v2 (no "el próximo año natural")."""
+    c = pd.Timestamp(corte) + pd.offsets.MonthEnd(0)
+    ini = (c + pd.offsets.MonthBegin(1)).normalize()
+    fin = ini + pd.DateOffset(months=12) - pd.Timedelta(days=1)
+    return {"desde": str(ini.date()), "hasta": str(fin.date()), "meses": 12}
 
 
 def _comprobar_corte(años, anio_max: int) -> None:
@@ -184,6 +261,26 @@ class Config:
     nu_t: float = 5.0                  # grados de libertad del modo "t"
     n0_cov: float = 30.0               # modo "t": encogimiento de la covarianza de la celda hacia la del pool
     anio_max: int = DEV_END.year
+    # ---- v2 (docs/int/INT11_v2_diseno.md). Los valores por defecto reproducen v1 BIT A BIT; Config.v2() los activa.
+    escala_pais: bool = False          # dispersión propia de cada país (frente al año), encogida hacia el panel (EB)
+    min_paises_año: int = 3            # media del año (choque común) solo con ≥ 3 países con dato
+    k_mezcla: float = 0.0              # con prob. k/(n_celda + k) la fila sale del "incondicional" del mismo lado de
+    #                                    la inflación simulada (respeta la coherencia de la inflación); 0 = v1
+    c_suavizado: float = 0.0           # bootstrap suavizado: ruido t de varianza (c/n_celda)·var_celda → la varianza
+    #                                    predictiva de la celda pasa a ser (1 + c/n)·var: ensancha donde hay pocas filas
+    nu_suavizado: float = 5.0          # grados de libertad del ruido de suavizado (colas)
+    rejilla_kappa: tuple = (0.0, 3.5, 71)   # log10 κ mín, máx, puntos (v1: borde en 10^3,5)
+
+    @classmethod
+    def v2(cls, **cambios) -> "Config":
+        """Configuración v2 propuesta (borrador de prerregistro docs/int/INT11_prerregistro_v2_v0.md)."""
+        base = dict(escala_pais=True, k_mezcla=K_MEZCLA_V2, c_suavizado=C_SUAVIZADO_V2, rejilla_kappa=REJILLA_KAPPA_V2)
+        base.update(cambios)
+        return cls(**base)
+
+    @property
+    def es_v2(self) -> bool:
+        return bool(self.escala_pais or self.k_mezcla > 0 or self.c_suavizado > 0)
 
 
 @dataclass
@@ -306,7 +403,9 @@ class Generador:
         # Markov: panel → país (Bayes empírico)
         n0 = recuentos(self.filas, self.paises, False)
         self.p_panel = (n0.sum(0) + 1) / (n0.sum(0) + 1).sum(-1, keepdims=True)
-        self.kappa = kappa_eb(n0, self.p_panel[None])
+        rej = np.logspace(*cfg.rejilla_kappa[:2], int(cfg.rejilla_kappa[2]))
+        self.kappa = kappa_eb(n0, self.p_panel[None], rej)
+        self.kappa_en_borde = bool(self.kappa >= rej[-1] * (1 - 1e-9) or self.kappa <= rej[0] * (1 + 1e-9))
         self.n_pais = n0
         if cfg.contagio:
             n1 = recuentos(self.filas, self.paises, True)
@@ -342,7 +441,86 @@ class Generador:
                 if len(d) < 5:
                     d = np.flatnonzero(fin)
                 self.donantes[(c, v)] = d
+        if cfg.es_v2:
+            self._ajustar_v2(alta)
         return self
+
+    # ------------------------------------------------------------ v2: escala por país, mezcla, suavizado
+    def _ajustar_v2(self, alta: np.ndarray) -> None:
+        """Piezas de v2 (docs/int/INT11_v2_diseno.md §2). Todo en log(1 + r) para los activos.
+        (a) ESCALA POR PAÍS (Bayes jerárquico): dev = y − media del año (choque común); f_c = dt(dev del país)/dt(dev
+            del panel) por activo; log f̂_c ~ N(log f_c, se²) con se² = (curtosis + 2)/(4 n_c); log f_c ~ N(m, τ²) entre
+            países (τ² por momentos). Posterior por país; país fuera del pool → predictiva N(m, τ²). La fila (c', t)
+            se reescala para el país objetivo c: y* = media_t + g_c · dev / f̂_c' con g_c sorteado POR LOTE.
+        (b) MEZCLA: padre de la celda (·, j) = filas con s del mismo lado de la inflación que j.
+        (c) SUAVIZADO: dt (log) de cada celda y de cada padre y n con dato, por activo."""
+        cfg = self.cfg
+        A = len(cfg.activos)
+        self.L = np.log1p(self.V[:, :A])
+        self.padres = {lado: np.flatnonzero(alta == bool(lado)) for lado in (0, 1)}
+        self.devn = np.full_like(self.L, np.nan)
+        self.ybar = np.full_like(self.L, np.nan)
+        self.escala_post = {}                                         # país → (media, var) de log f por activo
+        self.escala_pred = (np.zeros(A), np.zeros(A))                 # (m, τ²) para un país fuera del pool
+        if cfg.escala_pais:
+            ok = np.isfinite(self.L)
+            cnt = np.zeros((len(self.años_u), A))
+            sm = np.zeros((len(self.años_u), A))
+            np.add.at(cnt, self.año_idx, ok)
+            np.add.at(sm, self.año_idx, np.where(ok, self.L, 0.0))
+            media = np.where(cnt >= cfg.min_paises_año, sm / np.maximum(cnt, 1), np.nan)
+            self.ybar = media[self.año_idx]
+            dev = self.L - self.ybar
+            # corrección de grados de libertad: la media del año incluye la propia fila
+            dev = dev * np.sqrt(np.where(cnt[self.año_idx] > 1, cnt[self.año_idx] / np.maximum(cnt[self.año_idx] - 1, 1),
+                                         np.nan))
+            rms = np.sqrt(np.nanmean(dev ** 2, 0))
+            z = dev / rms
+            kurt = np.array([np.nanmean(z[:, a] ** 4) / np.nanmean(z[:, a] ** 2) ** 2 - 3 if np.isfinite(z[:, a]).any()
+                             else 0.0 for a in range(A)])
+            lf, se2, nc = [], [], []
+            for c in self.paises:
+                mc = self.pais == c
+                n_c = np.isfinite(dev[mc]).sum(0)
+                sd_c = np.sqrt(np.nanmean(dev[mc] ** 2, 0)) / rms if mc.any() else np.full(A, np.nan)
+                lf.append(np.where(n_c >= 5, np.log(np.maximum(sd_c, 1e-6)), np.nan))
+                se2.append((np.maximum(kurt, 0) + 2) / (4 * np.maximum(n_c, 1)))
+                nc.append(n_c)
+            lf, se2 = np.array(lf), np.array(se2)                       # (C, A)
+            m = np.nanmean(lf, 0)
+            tau2 = np.maximum(np.nanvar(lf, 0, ddof=1) - np.nanmean(np.where(np.isfinite(lf), se2, np.nan), 0), 0.0)
+            m, tau2 = np.nan_to_num(m), np.nan_to_num(tau2)
+            B = np.where(np.isfinite(lf), tau2 / np.maximum(tau2 + se2, 1e-12), 0.0)
+            post_m = m + B * (np.nan_to_num(lf) - m)
+            post_v = np.where(np.isfinite(lf), B * se2, tau2)
+            for k, c in enumerate(self.paises):
+                self.escala_post[c] = (post_m[k], post_v[k])
+            self.escala_pred = (m, tau2)
+            fila_m = post_m[np.searchsorted(self.paises, self.pais)]
+            self.devn = dev / np.exp(fila_m)
+            self.escala_resumen = {"m": m.round(4).tolist(), "tau": np.sqrt(tau2).round(4).tolist(),
+                                   "curtosis": kurt.round(2).tolist(),
+                                   "factor_pais": {c: np.exp(self.escala_post[c][0]).round(3).tolist()
+                                                   for c in self.paises}}
+        # dispersión y n con dato por celda y por padre (suavizado)
+        def _sd_n(idx):
+            x = self.L[idx]
+            n = np.isfinite(x).sum(0)
+            with np.errstate(all="ignore"):
+                sd = np.array([np.nanstd(x[:, a], ddof=1) if n[a] >= 2 else 0.0 for a in range(A)])
+            return np.nan_to_num(sd), n
+        self.sd_celda = {c: _sd_n(idx) for c, idx in self.celdas.items()}
+        self.sd_padre = {lado: _sd_n(idx) for lado, idx in self.padres.items()}
+
+    def _factor_lote(self, pais: str, rng) -> np.ndarray:
+        """g_c (A,) del lote: sorteo del posterior (país en el pool) o de la predictiva (país nuevo / dejado fuera)."""
+        A = len(self.cfg.activos)
+        if not self.cfg.escala_pais:
+            return np.ones(A)
+        m, v = self.escala_post.get(pais, self.escala_pred)
+        if not self.cfg.incertidumbre:
+            return np.exp(m)
+        return np.exp(m + np.sqrt(v) * rng.standard_normal(A))
 
     def posterior_transicion(self, pais: str) -> np.ndarray:
         """α del posterior Dirichlet de la fila de transición del país: (K, K) o (K, K_w, K) con contagio."""
@@ -361,6 +539,11 @@ class Generador:
             n_p = int(propio[idx].sum())
             a = n_p / (n_p + self.cfg.k_pais) if n_p else 0.0
             out[c] = (1 - a) / len(idx) + np.where(propio[idx], a / max(n_p, 1), 0.0)
+        if self.cfg.k_mezcla > 0:
+            for lado, idx in self.padres.items():
+                n_p = int(propio[idx].sum())
+                a = n_p / (n_p + self.cfg.k_pais) if n_p else 0.0
+                out[("padre", lado)] = (1 - a) / max(len(idx), 1) + np.where(propio[idx], a / max(n_p, 1), 0.0)
         return out
 
     def _nucleo(self, inclinacion: dict | None) -> np.ndarray:
@@ -400,7 +583,8 @@ class Generador:
                 T = alpha / alpha.sum(-1, keepdims=True)
                 gy = np.ones(len(self.años_u))
                 Tw = (self.n_mundo + 1) / (self.n_mundo + 1).sum(-1, keepdims=True) if cfg.contagio else None
-            Xb, Sb, Wb = self._lote(T, Tw, base, gy[self.año_idx], nuc, s0, w0, por_lote, H, rng)
+            g = self._factor_lote(pais, rng) if cfg.es_v2 else None
+            Xb, Sb, Wb = self._lote(T, Tw, base, gy[self.año_idx], nuc, s0, w0, por_lote, H, rng, g)
             X[sl], S[sl] = Xb, Sb
             if cfg.contagio:
                 W[sl] = Wb
@@ -408,7 +592,7 @@ class Generador:
         meta = {"version": VERSION, "pais": pais, "estado_inicial": REGIMENES[s0],
                 "mundo_inicial": REGIMENES[w0] if cfg.contagio else None, "horizonte": H, "n_lotes": n_lotes,
                 "por_lote": por_lote, "semilla": semilla, "config": asdict(self.cfg), "inclinacion": inclinacion,
-                "kappa": self.kappa, "años_pool": [int(self.años_u.min()), int(self.años_u.max())],
+                "kappa": self.kappa, "kappa_en_borde": self.kappa_en_borde, "años_pool": [int(self.años_u.min()), int(self.años_u.max())],
                 "filas_pool": int(len(self.filas)), "unidades": "rentabilidad real simple anual (fracción)"}
         return Escenarios(rent=X[:, :, :A], inflacion=X[:, :, A], crecimiento=X[:, :, A + 1], regimen=S, mundo=W,
                           lote=np.repeat(np.arange(n_lotes), por_lote), activos=tuple(cfg.activos), meta=meta)
@@ -441,7 +625,7 @@ class Generador:
                     r[i, j] = nuc[c].mean() / mi
         return r
 
-    def _lote(self, T, Tw, base, peso_año, nuc, s0, w0, n, H, rng):
+    def _lote(self, T, Tw, base, peso_año, nuc, s0, w0, n, H, rng, g=None):
         cfg = self.cfg
         X = np.full((n, H, len(self.vars)), np.nan)
         S = np.zeros((n, H), int)
@@ -464,10 +648,21 @@ class Generador:
                 for (i, j), idx in self.celdas.items():
                     m = (~cont) & (s == i) & (s_new == j)
                     if m.any():
-                        cw = np.cumsum(base[(i, j)] * peso_año[idx] * (nuc[idx] if h == 0 else 1.0))
-                        r[m] = idx[np.searchsorted(cw, rng.random(m.sum()) * cw[-1], side="right").clip(0, len(idx) - 1)]
-                X[:, h] = self.V[r]
-                self._imputar(X[:, h], s, s_new, rng)
+                        if cfg.k_mezcla > 0:                                # v2: mezcla con el incondicional
+                            lado = int(j in (1, 2))
+                            mez = rng.random(m.sum()) < cfg.k_mezcla / (len(idx) + cfg.k_mezcla)
+                            mm = np.flatnonzero(m)
+                            r[mm[~mez]] = self._sortear(idx, base[(i, j)], peso_año, nuc, h, (~mez).sum(), rng)
+                            pidx = self.padres[lado]
+                            r[mm[mez]] = self._sortear(pidx, base[("padre", lado)], peso_año, nuc, h, mez.sum(), rng)
+                        else:
+                            cw = np.cumsum(base[(i, j)] * peso_año[idx] * (nuc[idx] if h == 0 else 1.0))
+                            r[m] = idx[np.searchsorted(cw, rng.random(m.sum()) * cw[-1], side="right").clip(0, len(idx) - 1)]
+                if cfg.es_v2:
+                    X[:, h] = self._valores_v2(r, s, s_new, g, rng)
+                else:
+                    X[:, h] = self.V[r]
+                    self._imputar(X[:, h], s, s_new, rng)
                 r_prev = r
             else:
                 for (i, j) in self.celdas:
@@ -479,6 +674,49 @@ class Generador:
                 W[:, h] = w_new
             s, w = s_new, (w_new if w_new is not None else w)
         return X, S, (W if cfg.contagio else None)
+
+    def _sortear(self, idx, b, peso_año, nuc, h, m, rng):
+        if m == 0:
+            return np.zeros(0, int)
+        cw = np.cumsum(b * peso_año[idx] * (nuc[idx] if h == 0 else 1.0))
+        return idx[np.searchsorted(cw, rng.random(m) * cw[-1], side="right").clip(0, len(idx) - 1)]
+
+    def _valores_v2(self, r, s, s_new, g, rng) -> np.ndarray:
+        """Valores del año para las filas r (v2): huecos → donante (por variable), reescala por país y suavizado."""
+        cfg = self.cfg
+        A = len(cfg.activos)
+        RI = np.repeat(r[:, None], len(self.vars), 1)
+        for v in range(len(self.vars)):
+            falta = ~np.isfinite(self.V[r, v])
+            if not falta.any():
+                continue
+            for (i, j) in self.celdas:
+                m = falta & (s == i) & (s_new == j)
+                if m.any():
+                    d = self.donantes[((i, j), v)]
+                    if len(d):
+                        RI[m, v] = rng.choice(d, m.sum())
+        X = self.V[RI, np.arange(len(self.vars))[None, :]]
+        cols = np.arange(A)[None, :]
+        L = self.L[RI[:, :A], cols]
+        if cfg.escala_pais:
+            dn = self.devn[RI[:, :A], cols]
+            yb = self.ybar[RI[:, :A], cols]
+            esc = np.isfinite(dn) & np.isfinite(yb)
+            L = np.where(esc, yb + g[None, :] * dn, L)
+        if cfg.c_suavizado > 0:
+            nu = cfg.nu_suavizado
+            ruido = rng.standard_t(nu, size=L.shape) * np.sqrt((nu - 2) / nu)
+            sd = np.zeros_like(L)
+            for (i, j) in self.celdas:
+                m = (s == i) & (s_new == j)
+                if m.any():
+                    sdc, nc = self.sd_celda[(i, j)]
+                    # n efectivo de la celda con la mezcla: n + k (el padre aporta k "pseudofilas")
+                    sd[m] = sdc * np.sqrt(cfg.c_suavizado / np.maximum(nc + cfg.k_mezcla, 1))
+            L = L + sd * ruido
+        X[:, :A] = np.where(np.isfinite(L), np.expm1(L), X[:, :A])
+        return X
 
     def _imputar(self, Xh, s, s_new, rng):
         """Huecos (p. ej. oro antes de su inicio, vivienda): donante al azar de la misma celda con dato."""
@@ -504,6 +742,8 @@ class Generador:
             mu, cov, n = _cov_ponderada(Y[idx], base[c] * peso_año[idx])
             mu = np.where(np.isfinite(mu), mu, todo[0])
             cov = (n * np.nan_to_num(cov) + self.cfg.n0_cov * todo[1]) / (n + self.cfg.n0_cov)
+            if self.cfg.c_suavizado > 0:                      # v2: predictiva de muestra finita (1 + c/n)
+                cov = cov * (1 + self.cfg.c_suavizado / max(n, 1.0))
             out[c] = (mu, _chol_psd(cov))
         return out
 

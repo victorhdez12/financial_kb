@@ -43,13 +43,24 @@ def latente(N: int, T: int, a: float, rho: float, rng) -> np.ndarray:
     return z
 
 
-def dgp_regimenes(N: int, T: int, par: dict, rng) -> np.ndarray:
-    """par: q_i (frecuencia de inflación > 3 %), q_g (frecuencia de brecha < 0), a_i, rho_i, a_g, rho_g."""
+def dgp_regimenes(N: int, T: int, par: dict, rng, latentes: bool = False):
+    """par: q_i (frecuencia de inflación > 3 %), q_g (frecuencia de brecha < 0), a_i, rho_i, a_g, rho_g.
+    latentes=True → (reg, zi, zg) para construir una inflación continua coherente (v2, Brier de inflación > 5 %)."""
     zi = latente(N, T, par["a_i"], par["rho_i"], rng)
     zg = latente(N, T, par["a_g"], par["rho_g"], rng)
     alta = zi > stats.norm.ppf(1 - par["q_i"])
     baja = zg < stats.norm.ppf(par["q_g"])
-    return np.where(baja, np.where(alta, 2, 3), np.where(alta, 1, 0))
+    reg = np.where(baja, np.where(alta, 2, 3), np.where(alta, 1, 0))
+    return (reg, zi, zg) if latentes else reg
+
+
+def inflacion_desde_latente(zi: np.ndarray, q_alta: float, q_5: float, desplaz: float = 0.0) -> np.ndarray:
+    """Inflación simple (fracción) lineal en el latente: > 3 % ⇔ zi > Φ⁻¹(1 − q_alta) (coherente con el régimen) y
+    P(> 5 %) = q_5 en el estado estacionario. `desplaz` (en dt del latente) mueve todo hacia abajo (escenario
+    "tranquilo": menos inflación alta; hipotético, no medido)."""
+    u3, u5 = stats.norm.ppf(1 - q_alta), stats.norm.ppf(1 - q_5)
+    sd = 0.02 / (u5 - u3)
+    return 0.03 + sd * (zi - desplaz - u3)
 
 
 def indicador_props(x: np.ndarray) -> dict:
@@ -92,12 +103,20 @@ def t_multi(n: int, R: np.ndarray, nu: float, rng) -> np.ndarray:
 
 
 def dgp_rent(reg: np.ndarray, efectos: np.ndarray, mu: np.ndarray, sd_comun: np.ndarray, sd_propio: np.ndarray,
-             R: np.ndarray, nu: float, rng) -> np.ndarray:
-    """(N, T, A) rentabilidad real (log) del año t; el efecto depende del régimen CONOCIDO s_{t−1} (t ≥ 1)."""
+             R: np.ndarray, nu: float, rng, fac_pais: np.ndarray | None = None,
+             fac_raro: float = 1.0) -> np.ndarray:
+    """(N, T, A) rentabilidad real (log) del año t; el efecto depende del régimen CONOCIDO s_{t−1} (t ≥ 1).
+    v2: fac_pais (N, A) multiplica el choque PROPIO de cada país (heterogeneidad entre países, nulo heterogéneo);
+    fac_raro multiplica el choque propio cuando s_{t−1} es raro (estanflación o crecimiento bajo; sensibilidad)."""
     N, T = reg.shape
     A = len(mu)
     u = t_multi(T, R, nu, rng) * sd_comun                         # (T, A) choque común de año
     e = t_multi(N * T, R, nu, rng).reshape(N, T, A) * sd_propio
+    if fac_pais is not None:
+        e = e * fac_pais[:, None, :]
+    if fac_raro != 1.0:
+        prev0 = np.concatenate([np.full((N, 1), 0), reg[:, :-1]], axis=1)
+        e = e * np.where(np.isin(prev0, (2, 3)), fac_raro, 1.0)[:, :, None]
     y = mu + u[None] + e
     prev = np.concatenate([np.full((N, 1), 0), reg[:, :-1]], axis=1)
     y = y + efectos.T[prev]                                          # (N, T, A)
@@ -189,7 +208,8 @@ def cobertura_sim(Y: np.ndarray, reg: np.ndarray, k: float, lo: float, hi: float
 
 # ============================================================================ corrida de desarrollo (P-DEV-INT11 v1.0)
 def filas_sinteticas(reg: np.ndarray, Ylog: np.ndarray, paises: list[str], años: np.ndarray,
-                     existe: np.ndarray | None = None, activo_ok: np.ndarray | None = None):
+                     existe: np.ndarray | None = None, activo_ok: np.ndarray | None = None,
+                     infl: np.ndarray | None = None):
     """Filas del motor desde un panel sintético. reg (N, T), Ylog (N, T, A) log-rentabilidades; la fila (c, t) usa
     s_prev = reg[c, t − 1] (t ≥ 1). existe (N, T) y activo_ok (N, T, A): estructura de huecos del panel real (§5 del
     prerregistro). inflación = 5 % con inflación alta y 1 % si no (solo para la coherencia del sorteo)."""
@@ -205,7 +225,8 @@ def filas_sinteticas(reg: np.ndarray, Ylog: np.ndarray, paises: list[str], años
                       "w": -1})
     for j, a in enumerate(ACTIVOS):
         d[a] = R[:, j]
-    d["inflacion"] = np.where(np.isin(s, (1, 2)), 0.05, 0.01)
+    # inflación = Δlog IPC (como el panel). v1: 5 % / 1 % según el régimen; v2: continua (N, T) en fracción simple
+    d["inflacion"] = (np.where(np.isin(s, (1, 2)), 0.05, 0.01) if infl is None else np.log1p(infl[c, t]))
     d["crecimiento"] = 0.02
     d = d.sort_values(["pais", "año"]).reset_index(drop=True)
     sig = d.groupby("pais")["año"].shift(-1)
@@ -229,7 +250,7 @@ def _acumulada_5(V: np.ndarray, suc: np.ndarray, idx: np.ndarray) -> np.ndarray:
 
 
 def evaluar_motor(filas, diseño: str, n_lotes: int, por_lote: int, semilla: int, H: int = 1, corte: int = 1950,
-                  cfg=None, n_min_pool: int = 30) -> dict:
+                  cfg=None, n_min_pool: int = 30, k_anchura: tuple = ()) -> dict:
     """Evalúa M1 (motor) y M0 (incondicional del entrenamiento) fila a fila (prerregistro v1.0 §2-§4, §7).
     Devuelve arrays por fila de prueba: pais, año, s_prev, y (m, A), crps0/crps1, dentro90 (p5-p95), dentro80 (p10-p90),
     pit, eventos (Brier) y, si H ≥ 5, lo mismo para la acumulada a 5 años en las filas de inicio de ventana."""
@@ -250,6 +271,9 @@ def evaluar_motor(filas, diseño: str, n_lotes: int, por_lote: int, semilla: int
     m, A = len(filas), len(acts)
     out = {k: np.full((m, A), np.nan) for k in ("crps0", "crps1", "dentro90", "dentro80", "pit", "dentro90_m0")}
     out.update({k: np.full(m, np.nan) for k in ("p_caida_m1", "p_caida_m0", "p_infl_m1", "p_infl_m0")})
+    # v2 (potencia de la puerta): cobertura de intervalos p5-p95 ESCALADOS por k alrededor de la mediana (k < 1 →
+    # infracobertura conocida), con los mismos sorteos
+    dk = np.full((m, A, len(k_anchura)), np.nan)
     prueba = np.zeros(m, bool)
     h5 = {k: np.full((m, A), np.nan) for k in ("y5", "crps0_5", "crps1_5", "dentro90_5")}
     rng_pit = np.random.default_rng(semilla)
@@ -291,6 +315,10 @@ def evaluar_motor(filas, diseño: str, n_lotes: int, por_lote: int, semilla: int
                 q0 = np.quantile(p0[j], [0.05, 0.95])
                 out["dentro90_m0"][ii, j] = (y[ok] >= q0[0]) & (y[ok] <= q0[1])
                 out["pit"][ii, j] = E.pit(x1, y[ok], rng_pit)
+                if k_anchura:
+                    med = np.median(x1)
+                    for kk, fk in enumerate(k_anchura):
+                        dk[ii, j, kk] = ((y[ok] >= med - fk * (med - q[0])) & (y[ok] <= med + fk * (q[3] - med)))
             if H >= 5:
                 ini = idx[(filas["año"].to_numpy()[idx] % 5) == 1]
                 if len(ini):
@@ -311,6 +339,8 @@ def evaluar_motor(filas, diseño: str, n_lotes: int, por_lote: int, semilla: int
     res = {k: v[sel] for k, v in out.items()}
     res.update({"pais": filas["pais"].to_numpy()[sel], "año": filas["año"].to_numpy()[sel],
                 "s_prev": filas["s_prev"].to_numpy()[sel], "y": V[sel], "infl": infl[sel]})
+    if k_anchura:
+        res["dentro_k"] = dk[sel]
     if H >= 5:
         res.update({k: v[sel] for k, v in h5.items()})
     return res
