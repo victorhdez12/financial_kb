@@ -297,3 +297,36 @@ def test_corrida_v2_estadisticos_auxiliares():
     pp = C.por_pais(ev)
     assert pp["A"]["filas"] == 2 and pp["B"]["bolsa"] == 1.0
     assert C.por_regimen_activo(ev)["estanflacion"]["bolsa"] == 0.0
+
+
+# ------------------------------------------------------------------ "hoy" v2 y registro en vivo (sin datos)
+def _emision_falsa():
+    q = {a: [float(x) for x in np.linspace(-0.3, 0.4, 99)] for a in E.ACTIVOS}
+    pais = {"estado": {"regimen": "expansion", "mes_ipc": "2026-09-01", "inflacion": 0.02, "brecha": 0.03, "codigo": 0},
+            "cuantiles_1_99": q, "p_caida_bolsa_20": {"p": 0.06, "ic90": (0.03, 0.09)},
+            "p_inflacion_5": {"p": 0.08, "ic90": (0.05, 0.11)}, "factor_dispersion": [1, 1, 1, 1, 1]}
+    ac = {"activo": {a: 0.9 for a in E.ACTIVOS}, "global": 0.9, "puerta_D": True,
+          "regimen": {"expansion": {a: 0.91 for a in E.ACTIVOS}}, "pais": {"ESP": {"S5": 0.9, "bolsa": 0.88}}}
+    return {"procedencia": {"commit": "abc"}, "emision": "2026-10-30", "corte_datos": "2026-09-30",
+            "ventana_objetivo": E.ventana_objetivo("2026-10-30"), "kappa": 1e5, "kappa_en_borde": False,
+            "acierto_medido_fase_D": ac, "paises": {"ESP": pais, "USA": {"estado": {}, "aviso": "sin datos"}},
+            "aviso": "x"}
+
+
+def test_hoy_v2_markdown_etiqueta_el_acierto():
+    from scripts import int11_v2_hoy as H
+    md = H.markdown(_emision_falsa())
+    assert "2026-11-01" in md and "acertó 88 % país / 91 % régimen" in md and "| USA | — |" in md
+
+
+def test_registro_vivo_inmutable_con_hash(tmp_path):
+    import hashlib
+    from scripts import int11_v2_hoy as H
+    o = _emision_falsa()
+    ruta = H.registrar(o, tmp_path)
+    assert ruta.name == "2026-10.json"
+    lineas = (tmp_path / "indice.csv").read_text().splitlines()
+    assert lineas[0].startswith("mes,archivo,sha256") and lineas[1].split(",")[2] == \
+        hashlib.sha256(ruta.read_text().encode()).hexdigest()
+    with pytest.raises(SystemExit):
+        H.registrar(o, tmp_path)
