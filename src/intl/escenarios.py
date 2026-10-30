@@ -41,7 +41,7 @@ GUERRAS = frozenset(range(1914, 1919)) | frozenset(range(1939, 1946))
 REJILLA_KAPPA = np.logspace(0, 3.5, 71)          # v1 (κ salió en el borde, 10^3,5: validación 30-oct, hallazgo 5)
 REJILLA_KAPPA_V2 = (0.0, 6.0, 121)                # v2: log10 κ ∈ [0, 6]; κ = 10^6 ≈ "todos los países = panel"
 C_SUAVIZADO_V2 = 4.0                              # v2: inflado de varianza de la celda 1 + c/n (fijado en sintético iid t)
-K_MEZCLA_V2 = 10.0                                # v2: peso del "incondicional" (mismo lado de inflación) k/(n + k)
+K_MEZCLA_V2 = 0.0                                 # v2: mezcla con el incondicional k/(n + k); 0 recomendado (potencia v2: no aporta cobertura, resta en raros); opción D3
 
 
 # ============================================================================ régimen operable

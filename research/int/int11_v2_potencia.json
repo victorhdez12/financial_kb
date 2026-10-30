@@ -1,0 +1,1977 @@
+{
+ "procedencia": {
+  "commit": "12e1b3ad2d6210efa58f5bc71e4a4a53b3bc5e70",
+  "arbol_limpio": true,
+  "hora_utc": "2026-10-30T12:05:16+00:00"
+ },
+ "semilla": 20261031,
+ "R_s1": 100,
+ "R_s2": 200,
+ "k_anchura": [
+  1.0,
+  0.875,
+  0.78
+ ],
+ "fac_raro": 1.5,
+ "configs": {
+  "v1": "Config(activos=('bolsa', 'bonos', 'letras', 'vivienda', 'oro'), modo='bootstrap', k_pais=40.0, bloque_medio=3.0, n_min_celda=25, contagio=False, incertidumbre=True, nu_t=5.0, n0_cov=30.0, anio_max=2004, escala_pais=False, min_paises_año=3, k_mezcla=0.0, c_suavizado=0.0, nu_suavizado=5.0, rejilla_kappa=(0.0, 3.5, 71))",
+  "v2": "Config(activos=('bolsa', 'bonos', 'letras', 'vivienda', 'oro'), modo='bootstrap', k_pais=40.0, bloque_medio=3.0, n_min_celda=25, contagio=False, incertidumbre=True, nu_t=5.0, n0_cov=30.0, anio_max=2004, escala_pais=True, min_paises_año=3, k_mezcla=10.0, c_suavizado=4.0, nu_suavizado=5.0, rejilla_kappa=(0.0, 6.0, 121))",
+  "v2_sin_mezcla": "Config(activos=('bolsa', 'bonos', 'letras', 'vivienda', 'oro'), modo='bootstrap', k_pais=40.0, bloque_medio=3.0, n_min_celda=25, contagio=False, incertidumbre=True, nu_t=5.0, n0_cov=30.0, anio_max=2004, escala_pais=True, min_paises_año=3, k_mezcla=0.0, c_suavizado=4.0, nu_suavizado=5.0, rejilla_kappa=(0.0, 6.0, 121))",
+  "v2_sin_suavizado": "Config(activos=('bolsa', 'bonos', 'letras', 'vivienda', 'oro'), modo='bootstrap', k_pais=40.0, bloque_medio=3.0, n_min_celda=25, contagio=False, incertidumbre=True, nu_t=5.0, n0_cov=30.0, anio_max=2004, escala_pais=True, min_paises_año=3, k_mezcla=10.0, c_suavizado=0.0, nu_suavizado=5.0, rejilla_kappa=(0.0, 6.0, 121))"
+ },
+ "medicion_v2": {
+  "factor_pais": {
+   "BEL": [
+    0.821,
+    0.903,
+    1.627,
+    1.232,
+    0.657
+   ],
+   "DEU": [
+    1.572,
+    0.729,
+    0.631,
+    0.958,
+    0.73
+   ],
+   "DNK": [
+    0.772,
+    1.046,
+    0.854,
+    0.773,
+    0.552
+   ],
+   "ESP": [
+    0.97,
+    0.963,
+    0.942,
+    1.267,
+    0.935
+   ],
+   "FIN": [
+    1.146,
+    1.324,
+    1.292,
+    1.482,
+    0.801
+   ],
+   "FRA": [
+    0.805,
+    0.973,
+    1.048,
+    0.895,
+    0.59
+   ],
+   "GBR": [
+    0.83,
+    0.982,
+    0.551,
+    0.947,
+    1.292
+   ],
+   "ITA": [
+    0.952,
+    1.088,
+    0.662,
+    1.02,
+    0.95
+   ],
+   "JPN": [
+    1.276,
+    1.08,
+    1.479,
+    0.799,
+    1.667
+   ],
+   "NLD": [
+    0.778,
+    0.753,
+    0.559,
+    0.952,
+    0.671
+   ],
+   "NOR": [
+    0.829,
+    0.632,
+    0.759,
+    0.871,
+    0.767
+   ],
+   "PRT": [
+    1.327,
+    1.587,
+    1.393,
+    0.966,
+    0.897
+   ],
+   "SWE": [
+    0.699,
+    0.741,
+    0.647,
+    0.856,
+    0.938
+   ],
+   "USA": [
+    0.839,
+    0.784,
+    0.622,
+    0.908,
+    1.671
+   ]
+  },
+  "tau_log_factor": [
+   0.243,
+   0.25,
+   0.382,
+   0.184,
+   0.349
+  ],
+  "frecuencia_infl_5": 0.2618483412322275,
+  "frecuencia_infl_3": 0.4052132701421801,
+  "filas_inflacion": 1688
+ },
+ "s1_calibracion": {
+  "homogeneo": {
+   "v1|loco": {
+    "S5": {
+     "media": 0.8968,
+     "banda_2.5_97.5": [
+      0.8933,
+      0.9001
+     ]
+    },
+    "Sb": {
+     "media": 0.8967,
+     "banda_2.5_97.5": [
+      0.892,
+      0.9028
+     ]
+    },
+    "S_raros": {
+     "media": 0.8801,
+     "banda_2.5_97.5": [
+      0.8585,
+      0.9091
+     ]
+    },
+    "crpss_medio": {
+     "media": 0.0266,
+     "banda_2.5_97.5": [
+      0.0148,
+      0.0387
+     ]
+    },
+    "S_activo_media": [
+     0.8967,
+     0.8972,
+     0.8969,
+     0.8972,
+     0.894
+    ],
+    "infl5": {
+     "bss_media": 0.2757,
+     "bss_banda": [
+      0.1713,
+      0.3726
+     ],
+     "potencia_p05": 1.0,
+     "frecuencia": 0.2646,
+     "eventos_medios": 477.9
+    },
+    "caida20": {
+     "bss_media": 0.0016,
+     "bss_banda": [
+      -0.0037,
+      0.0136
+     ],
+     "potencia_p05": 0.02,
+     "frecuencia": 0.091,
+     "eventos_medios": 164.3
+    }
+   },
+   "v1|temporal": {
+    "S5": {
+     "media": 0.8913,
+     "banda_2.5_97.5": [
+      0.8637,
+      0.9147
+     ]
+    },
+    "Sb": {
+     "media": 0.8917,
+     "banda_2.5_97.5": [
+      0.85,
+      0.9307
+     ]
+    },
+    "S_raros": {
+     "media": 0.8736,
+     "banda_2.5_97.5": [
+      0.7562,
+      0.9678
+     ]
+    },
+    "crpss_medio": {
+     "media": 0.0254,
+     "banda_2.5_97.5": [
+      0.0033,
+      0.0435
+     ]
+    },
+    "S_activo_media": [
+     0.8917,
+     0.8912,
+     0.891,
+     0.8915,
+     NaN
+    ],
+    "infl5": {
+     "bss_media": 0.2828,
+     "bss_banda": [
+      0.1318,
+      0.468
+     ],
+     "potencia_p05": 0.98,
+     "frecuencia": 0.2547,
+     "eventos_medios": 196.1
+    },
+    "caida20": {
+     "bss_media": -0.0061,
+     "bss_banda": [
+      -0.027,
+      0.0082
+     ],
+     "potencia_p05": 0.01,
+     "frecuencia": 0.0901,
+     "eventos_medios": 69.3
+    }
+   },
+   "v2|loco": {
+    "S5": {
+     "media": 0.907,
+     "banda_2.5_97.5": [
+      0.9034,
+      0.9099
+     ]
+    },
+    "Sb": {
+     "media": 0.9065,
+     "banda_2.5_97.5": [
+      0.9009,
+      0.9109
+     ]
+    },
+    "S_raros": {
+     "media": 0.9056,
+     "banda_2.5_97.5": [
+      0.8771,
+      0.9281
+     ]
+    },
+    "crpss_medio": {
+     "media": 0.027,
+     "banda_2.5_97.5": [
+      0.0151,
+      0.0378
+     ]
+    },
+    "S_activo_media": [
+     0.9065,
+     0.906,
+     0.9081,
+     0.9083,
+     0.9032
+    ],
+    "infl5": {
+     "bss_media": 0.2764,
+     "bss_banda": [
+      0.1722,
+      0.3727
+     ],
+     "potencia_p05": 1.0,
+     "frecuencia": 0.2646,
+     "eventos_medios": 477.9
+    },
+    "caida20": {
+     "bss_media": 0.002,
+     "bss_banda": [
+      -0.0038,
+      0.0137
+     ],
+     "potencia_p05": 0.02,
+     "frecuencia": 0.091,
+     "eventos_medios": 164.3
+    }
+   },
+   "v2|temporal": {
+    "S5": {
+     "media": 0.9032,
+     "banda_2.5_97.5": [
+      0.8779,
+      0.9239
+     ]
+    },
+    "Sb": {
+     "media": 0.9021,
+     "banda_2.5_97.5": [
+      0.8604,
+      0.9386
+     ]
+    },
+    "S_raros": {
+     "media": 0.9005,
+     "banda_2.5_97.5": [
+      0.8116,
+      0.9678
+     ]
+    },
+    "crpss_medio": {
+     "media": 0.0263,
+     "banda_2.5_97.5": [
+      0.0058,
+      0.0441
+     ]
+    },
+    "S_activo_media": [
+     0.9021,
+     0.9027,
+     0.9036,
+     0.9042,
+     NaN
+    ],
+    "infl5": {
+     "bss_media": 0.2825,
+     "bss_banda": [
+      0.1333,
+      0.4625
+     ],
+     "potencia_p05": 0.98,
+     "frecuencia": 0.2547,
+     "eventos_medios": 196.1
+    },
+    "caida20": {
+     "bss_media": -0.0065,
+     "bss_banda": [
+      -0.0323,
+      0.0075
+     ],
+     "potencia_p05": 0.0,
+     "frecuencia": 0.0901,
+     "eventos_medios": 69.3
+    }
+   },
+   "v2_sin_mezcla|loco": {
+    "S5": {
+     "media": 0.9069,
+     "banda_2.5_97.5": [
+      0.9036,
+      0.91
+     ]
+    },
+    "Sb": {
+     "media": 0.9068,
+     "banda_2.5_97.5": [
+      0.9017,
+      0.9109
+     ]
+    },
+    "S_raros": {
+     "media": 0.9028,
+     "banda_2.5_97.5": [
+      0.8799,
+      0.9229
+     ]
+    },
+    "crpss_medio": {
+     "media": 0.0268,
+     "banda_2.5_97.5": [
+      0.0151,
+      0.0388
+     ]
+    },
+    "S_activo_media": [
+     0.9068,
+     0.9055,
+     0.9065,
+     0.9092,
+     0.9058
+    ],
+    "infl5": {
+     "bss_media": 0.2758,
+     "bss_banda": [
+      0.1724,
+      0.3727
+     ],
+     "potencia_p05": 1.0,
+     "frecuencia": 0.2646,
+     "eventos_medios": 477.9
+    },
+    "caida20": {
+     "bss_media": 0.0013,
+     "bss_banda": [
+      -0.0049,
+      0.0141
+     ],
+     "potencia_p05": 0.0,
+     "frecuencia": 0.091,
+     "eventos_medios": 164.3
+    }
+   },
+   "v2_sin_mezcla|temporal": {
+    "S5": {
+     "media": 0.9019,
+     "banda_2.5_97.5": [
+      0.8779,
+      0.9226
+     ]
+    },
+    "Sb": {
+     "media": 0.9016,
+     "banda_2.5_97.5": [
+      0.859,
+      0.9397
+     ]
+    },
+    "S_raros": {
+     "media": 0.8982,
+     "banda_2.5_97.5": [
+      0.8059,
+      0.9678
+     ]
+    },
+    "crpss_medio": {
+     "media": 0.0256,
+     "banda_2.5_97.5": [
+      0.0033,
+      0.0448
+     ]
+    },
+    "S_activo_media": [
+     0.9016,
+     0.9011,
+     0.9009,
+     0.9039,
+     NaN
+    ],
+    "infl5": {
+     "bss_media": 0.2828,
+     "bss_banda": [
+      0.1318,
+      0.4678
+     ],
+     "potencia_p05": 0.98,
+     "frecuencia": 0.2547,
+     "eventos_medios": 196.1
+    },
+    "caida20": {
+     "bss_media": -0.0076,
+     "bss_banda": [
+      -0.0394,
+      0.0086
+     ],
+     "potencia_p05": 0.01,
+     "frecuencia": 0.0901,
+     "eventos_medios": 69.3
+    }
+   },
+   "v2_sin_suavizado|loco": {
+    "S5": {
+     "media": 0.9048,
+     "banda_2.5_97.5": [
+      0.9014,
+      0.9076
+     ]
+    },
+    "Sb": {
+     "media": 0.9044,
+     "banda_2.5_97.5": [
+      0.8998,
+      0.9086
+     ]
+    },
+    "S_raros": {
+     "media": 0.8942,
+     "banda_2.5_97.5": [
+      0.8726,
+      0.9182
+     ]
+    },
+    "crpss_medio": {
+     "media": 0.0268,
+     "banda_2.5_97.5": [
+      0.0152,
+      0.0383
+     ]
+    },
+    "S_activo_media": [
+     0.9044,
+     0.9043,
+     0.9061,
+     0.9066,
+     0.896
+    ],
+    "infl5": {
+     "bss_media": 0.2766,
+     "bss_banda": [
+      0.1717,
+      0.3732
+     ],
+     "potencia_p05": 1.0,
+     "frecuencia": 0.2646,
+     "eventos_medios": 477.9
+    },
+    "caida20": {
+     "bss_media": 0.0017,
+     "bss_banda": [
+      -0.0042,
+      0.0138
+     ],
+     "potencia_p05": 0.02,
+     "frecuencia": 0.091,
+     "eventos_medios": 164.3
+    }
+   },
+   "v2_sin_suavizado|temporal": {
+    "S5": {
+     "media": 0.9002,
+     "banda_2.5_97.5": [
+      0.8748,
+      0.9195
+     ]
+    },
+    "Sb": {
+     "media": 0.8989,
+     "banda_2.5_97.5": [
+      0.8584,
+      0.9339
+     ]
+    },
+    "S_raros": {
+     "media": 0.8896,
+     "banda_2.5_97.5": [
+      0.7935,
+      0.9678
+     ]
+    },
+    "crpss_medio": {
+     "media": 0.0258,
+     "banda_2.5_97.5": [
+      0.0045,
+      0.0439
+     ]
+    },
+    "S_activo_media": [
+     0.8989,
+     0.8998,
+     0.9014,
+     0.9008,
+     NaN
+    ],
+    "infl5": {
+     "bss_media": 0.2828,
+     "bss_banda": [
+      0.1319,
+      0.4653
+     ],
+     "potencia_p05": 0.98,
+     "frecuencia": 0.2547,
+     "eventos_medios": 196.1
+    },
+    "caida20": {
+     "bss_media": -0.0065,
+     "bss_banda": [
+      -0.0349,
+      0.0064
+     ],
+     "potencia_p05": 0.0,
+     "frecuencia": 0.0901,
+     "eventos_medios": 69.3
+    }
+   }
+  },
+  "heterogeneo": {
+   "v1|loco": {
+    "S5": {
+     "media": 0.8954,
+     "banda_2.5_97.5": [
+      0.8919,
+      0.8984
+     ]
+    },
+    "Sb": {
+     "media": 0.8957,
+     "banda_2.5_97.5": [
+      0.8895,
+      0.9009
+     ]
+    },
+    "S_raros": {
+     "media": 0.8775,
+     "banda_2.5_97.5": [
+      0.8418,
+      0.9352
+     ]
+    },
+    "crpss_medio": {
+     "media": 0.0287,
+     "banda_2.5_97.5": [
+      0.0178,
+      0.0398
+     ]
+    },
+    "S_activo_media": [
+     0.8957,
+     0.8962,
+     0.8942,
+     0.8957,
+     0.8941
+    ],
+    "infl5": {
+     "bss_media": 0.2723,
+     "bss_banda": [
+      0.1508,
+      0.3761
+     ],
+     "potencia_p05": 1.0,
+     "frecuencia": 0.2663,
+     "eventos_medios": 480.9
+    },
+    "caida20": {
+     "bss_media": 0.0017,
+     "bss_banda": [
+      -0.0048,
+      0.0141
+     ],
+     "potencia_p05": 0.03,
+     "frecuencia": 0.0869,
+     "eventos_medios": 156.9
+    }
+   },
+   "v1|temporal": {
+    "S5": {
+     "media": 0.8941,
+     "banda_2.5_97.5": [
+      0.87,
+      0.9244
+     ]
+    },
+    "Sb": {
+     "media": 0.8903,
+     "banda_2.5_97.5": [
+      0.8454,
+      0.9288
+     ]
+    },
+    "S_raros": {
+     "media": 0.8805,
+     "banda_2.5_97.5": [
+      0.7613,
+      1.0
+     ]
+    },
+    "crpss_medio": {
+     "media": 0.0353,
+     "banda_2.5_97.5": [
+      0.0061,
+      0.0608
+     ]
+    },
+    "S_activo_media": [
+     0.8903,
+     0.8944,
+     0.8958,
+     0.8959,
+     NaN
+    ],
+    "infl5": {
+     "bss_media": 0.2869,
+     "bss_banda": [
+      0.1174,
+      0.47
+     ],
+     "potencia_p05": 0.98,
+     "frecuencia": 0.2695,
+     "eventos_medios": 207.5
+    },
+    "caida20": {
+     "bss_media": 0.0022,
+     "bss_banda": [
+      -0.0193,
+      0.02
+     ],
+     "potencia_p05": 0.08,
+     "frecuencia": 0.0884,
+     "eventos_medios": 68.1
+    }
+   },
+   "v2|loco": {
+    "S5": {
+     "media": 0.9039,
+     "banda_2.5_97.5": [
+      0.9003,
+      0.9091
+     ]
+    },
+    "Sb": {
+     "media": 0.9033,
+     "banda_2.5_97.5": [
+      0.8945,
+      0.9117
+     ]
+    },
+    "S_raros": {
+     "media": 0.9044,
+     "banda_2.5_97.5": [
+      0.8591,
+      0.9597
+     ]
+    },
+    "crpss_medio": {
+     "media": 0.029,
+     "banda_2.5_97.5": [
+      0.0179,
+      0.0402
+     ]
+    },
+    "S_activo_media": [
+     0.9033,
+     0.9039,
+     0.9024,
+     0.9062,
+     0.9036
+    ],
+    "infl5": {
+     "bss_media": 0.2729,
+     "bss_banda": [
+      0.1478,
+      0.376
+     ],
+     "potencia_p05": 1.0,
+     "frecuencia": 0.2663,
+     "eventos_medios": 480.9
+    },
+    "caida20": {
+     "bss_media": 0.0014,
+     "bss_banda": [
+      -0.007,
+      0.0135
+     ],
+     "potencia_p05": 0.02,
+     "frecuencia": 0.0869,
+     "eventos_medios": 156.9
+    }
+   },
+   "v2|temporal": {
+    "S5": {
+     "media": 0.9036,
+     "banda_2.5_97.5": [
+      0.882,
+      0.9352
+     ]
+    },
+    "Sb": {
+     "media": 0.8991,
+     "banda_2.5_97.5": [
+      0.8506,
+      0.9359
+     ]
+    },
+    "S_raros": {
+     "media": 0.8993,
+     "banda_2.5_97.5": [
+      0.7869,
+      1.0
+     ]
+    },
+    "crpss_medio": {
+     "media": 0.0378,
+     "banda_2.5_97.5": [
+      0.0103,
+      0.063
+     ]
+    },
+    "S_activo_media": [
+     0.8991,
+     0.9031,
+     0.9061,
+     0.9062,
+     NaN
+    ],
+    "infl5": {
+     "bss_media": 0.2863,
+     "bss_banda": [
+      0.1156,
+      0.4698
+     ],
+     "potencia_p05": 0.99,
+     "frecuencia": 0.2695,
+     "eventos_medios": 207.5
+    },
+    "caida20": {
+     "bss_media": 0.0051,
+     "bss_banda": [
+      -0.0223,
+      0.0292
+     ],
+     "potencia_p05": 0.18,
+     "frecuencia": 0.0884,
+     "eventos_medios": 68.1
+    }
+   },
+   "v2_sin_mezcla|loco": {
+    "S5": {
+     "media": 0.9033,
+     "banda_2.5_97.5": [
+      0.8991,
+      0.9076
+     ]
+    },
+    "Sb": {
+     "media": 0.9034,
+     "banda_2.5_97.5": [
+      0.8964,
+      0.9103
+     ]
+    },
+    "S_raros": {
+     "media": 0.9002,
+     "banda_2.5_97.5": [
+      0.8608,
+      0.9507
+     ]
+    },
+    "crpss_medio": {
+     "media": 0.0287,
+     "banda_2.5_97.5": [
+      0.0175,
+      0.0401
+     ]
+    },
+    "S_activo_media": [
+     0.9034,
+     0.9032,
+     0.9004,
+     0.9057,
+     0.906
+    ],
+    "infl5": {
+     "bss_media": 0.2725,
+     "bss_banda": [
+      0.1501,
+      0.3755
+     ],
+     "potencia_p05": 1.0,
+     "frecuencia": 0.2663,
+     "eventos_medios": 480.9
+    },
+    "caida20": {
+     "bss_media": 0.0011,
+     "bss_banda": [
+      -0.0074,
+      0.0136
+     ],
+     "potencia_p05": 0.02,
+     "frecuencia": 0.0869,
+     "eventos_medios": 156.9
+    }
+   },
+   "v2_sin_mezcla|temporal": {
+    "S5": {
+     "media": 0.9025,
+     "banda_2.5_97.5": [
+      0.8809,
+      0.9333
+     ]
+    },
+    "Sb": {
+     "media": 0.8988,
+     "banda_2.5_97.5": [
+      0.8603,
+      0.9338
+     ]
+    },
+    "S_raros": {
+     "media": 0.8977,
+     "banda_2.5_97.5": [
+      0.7925,
+      1.0
+     ]
+    },
+    "crpss_medio": {
+     "media": 0.0372,
+     "banda_2.5_97.5": [
+      0.0081,
+      0.0639
+     ]
+    },
+    "S_activo_media": [
+     0.8988,
+     0.9019,
+     0.9032,
+     0.9062,
+     NaN
+    ],
+    "infl5": {
+     "bss_media": 0.2867,
+     "bss_banda": [
+      0.119,
+      0.4692
+     ],
+     "potencia_p05": 0.98,
+     "frecuencia": 0.2695,
+     "eventos_medios": 207.5
+    },
+    "caida20": {
+     "bss_media": 0.0046,
+     "bss_banda": [
+      -0.0207,
+      0.0269
+     ],
+     "potencia_p05": 0.12,
+     "frecuencia": 0.0884,
+     "eventos_medios": 68.1
+    }
+   },
+   "v2_sin_suavizado|loco": {
+    "S5": {
+     "media": 0.9015,
+     "banda_2.5_97.5": [
+      0.8978,
+      0.9056
+     ]
+    },
+    "Sb": {
+     "media": 0.9014,
+     "banda_2.5_97.5": [
+      0.8937,
+      0.9086
+     ]
+    },
+    "S_raros": {
+     "media": 0.8927,
+     "banda_2.5_97.5": [
+      0.8595,
+      0.9425
+     ]
+    },
+    "crpss_medio": {
+     "media": 0.0289,
+     "banda_2.5_97.5": [
+      0.0174,
+      0.0409
+     ]
+    },
+    "S_activo_media": [
+     0.9014,
+     0.902,
+     0.9001,
+     0.904,
+     0.8951
+    ],
+    "infl5": {
+     "bss_media": 0.273,
+     "bss_banda": [
+      0.1499,
+      0.3769
+     ],
+     "potencia_p05": 1.0,
+     "frecuencia": 0.2663,
+     "eventos_medios": 480.9
+    },
+    "caida20": {
+     "bss_media": 0.0022,
+     "bss_banda": [
+      -0.0061,
+      0.0128
+     ],
+     "potencia_p05": 0.03,
+     "frecuencia": 0.0869,
+     "eventos_medios": 156.9
+    }
+   },
+   "v2_sin_suavizado|temporal": {
+    "S5": {
+     "media": 0.9005,
+     "banda_2.5_97.5": [
+      0.8781,
+      0.9318
+     ]
+    },
+    "Sb": {
+     "media": 0.8957,
+     "banda_2.5_97.5": [
+      0.853,
+      0.9359
+     ]
+    },
+    "S_raros": {
+     "media": 0.8918,
+     "banda_2.5_97.5": [
+      0.7857,
+      1.0
+     ]
+    },
+    "crpss_medio": {
+     "media": 0.0374,
+     "banda_2.5_97.5": [
+      0.0093,
+      0.0623
+     ]
+    },
+    "S_activo_media": [
+     0.8957,
+     0.9004,
+     0.9025,
+     0.9035,
+     NaN
+    ],
+    "infl5": {
+     "bss_media": 0.2861,
+     "bss_banda": [
+      0.1192,
+      0.4663
+     ],
+     "potencia_p05": 0.99,
+     "frecuencia": 0.2695,
+     "eventos_medios": 207.5
+    },
+    "caida20": {
+     "bss_media": 0.0054,
+     "bss_banda": [
+      -0.0162,
+      0.0276
+     ],
+     "potencia_p05": 0.15,
+     "frecuencia": 0.0884,
+     "eventos_medios": 68.1
+    }
+   }
+  },
+  "heterogeneo_raros_x1.5": {
+   "v1|loco": {
+    "S5": {
+     "media": 0.8953,
+     "banda_2.5_97.5": [
+      0.892,
+      0.8987
+     ]
+    },
+    "Sb": {
+     "media": 0.8959,
+     "banda_2.5_97.5": [
+      0.8901,
+      0.9017
+     ]
+    },
+    "S_raros": {
+     "media": 0.8591,
+     "banda_2.5_97.5": [
+      0.7356,
+      0.8964
+     ]
+    },
+    "crpss_medio": {
+     "media": 0.0282,
+     "banda_2.5_97.5": [
+      0.0185,
+      0.0382
+     ]
+    },
+    "S_activo_media": [
+     0.8959,
+     0.8959,
+     0.8945,
+     0.8952,
+     0.8934
+    ],
+    "infl5": {
+     "bss_media": 0.2754,
+     "bss_banda": [
+      0.1828,
+      0.3712
+     ],
+     "potencia_p05": 1.0,
+     "frecuencia": 0.2557,
+     "eventos_medios": 461.8
+    },
+    "caida20": {
+     "bss_media": 0.0072,
+     "bss_banda": [
+      -0.0072,
+      0.0322
+     ],
+     "potencia_p05": 0.1,
+     "frecuencia": 0.0904,
+     "eventos_medios": 163.3
+    }
+   },
+   "v1|temporal": {
+    "S5": {
+     "media": 0.8904,
+     "banda_2.5_97.5": [
+      0.8577,
+      0.9187
+     ]
+    },
+    "Sb": {
+     "media": 0.8906,
+     "banda_2.5_97.5": [
+      0.8386,
+      0.9338
+     ]
+    },
+    "S_raros": {
+     "media": 0.8347,
+     "banda_2.5_97.5": [
+      0.6623,
+      0.9503
+     ]
+    },
+    "crpss_medio": {
+     "media": 0.0346,
+     "banda_2.5_97.5": [
+      0.0095,
+      0.0632
+     ]
+    },
+    "S_activo_media": [
+     0.8906,
+     0.8916,
+     0.8915,
+     0.8879,
+     NaN
+    ],
+    "infl5": {
+     "bss_media": 0.2811,
+     "bss_banda": [
+      0.1122,
+      0.4605
+     ],
+     "potencia_p05": 0.92,
+     "frecuencia": 0.2571,
+     "eventos_medios": 198.0
+    },
+    "caida20": {
+     "bss_media": 0.0042,
+     "bss_banda": [
+      -0.0192,
+      0.036
+     ],
+     "potencia_p05": 0.15,
+     "frecuencia": 0.0894,
+     "eventos_medios": 68.8
+    }
+   },
+   "v2|loco": {
+    "S5": {
+     "media": 0.9035,
+     "banda_2.5_97.5": [
+      0.8985,
+      0.9074
+     ]
+    },
+    "Sb": {
+     "media": 0.9032,
+     "banda_2.5_97.5": [
+      0.8951,
+      0.9103
+     ]
+    },
+    "S_raros": {
+     "media": 0.8726,
+     "banda_2.5_97.5": [
+      0.7371,
+      0.9066
+     ]
+    },
+    "crpss_medio": {
+     "media": 0.0287,
+     "banda_2.5_97.5": [
+      0.0192,
+      0.0389
+     ]
+    },
+    "S_activo_media": [
+     0.9032,
+     0.9034,
+     0.9019,
+     0.9059,
+     0.9017
+    ],
+    "infl5": {
+     "bss_media": 0.2765,
+     "bss_banda": [
+      0.1854,
+      0.3713
+     ],
+     "potencia_p05": 1.0,
+     "frecuencia": 0.2557,
+     "eventos_medios": 461.8
+    },
+    "caida20": {
+     "bss_media": 0.0072,
+     "bss_banda": [
+      -0.0068,
+      0.0313
+     ],
+     "potencia_p05": 0.15,
+     "frecuencia": 0.0904,
+     "eventos_medios": 163.3
+    }
+   },
+   "v2|temporal": {
+    "S5": {
+     "media": 0.9007,
+     "banda_2.5_97.5": [
+      0.8685,
+      0.9266
+     ]
+    },
+    "Sb": {
+     "media": 0.9002,
+     "banda_2.5_97.5": [
+      0.853,
+      0.9411
+     ]
+    },
+    "S_raros": {
+     "media": 0.8473,
+     "banda_2.5_97.5": [
+      0.6822,
+      0.9751
+     ]
+    },
+    "crpss_medio": {
+     "media": 0.0372,
+     "banda_2.5_97.5": [
+      0.0142,
+      0.064
+     ]
+    },
+    "S_activo_media": [
+     0.9002,
+     0.9012,
+     0.9013,
+     0.9003,
+     NaN
+    ],
+    "infl5": {
+     "bss_media": 0.2812,
+     "bss_banda": [
+      0.1206,
+      0.4584
+     ],
+     "potencia_p05": 0.94,
+     "frecuencia": 0.2571,
+     "eventos_medios": 198.0
+    },
+    "caida20": {
+     "bss_media": 0.0072,
+     "bss_banda": [
+      -0.0212,
+      0.0389
+     ],
+     "potencia_p05": 0.17,
+     "frecuencia": 0.0894,
+     "eventos_medios": 68.8
+    }
+   },
+   "v2_sin_mezcla|loco": {
+    "S5": {
+     "media": 0.9034,
+     "banda_2.5_97.5": [
+      0.8984,
+      0.9074
+     ]
+    },
+    "Sb": {
+     "media": 0.9036,
+     "banda_2.5_97.5": [
+      0.8948,
+      0.9117
+     ]
+    },
+    "S_raros": {
+     "media": 0.8798,
+     "banda_2.5_97.5": [
+      0.7281,
+      0.9112
+     ]
+    },
+    "crpss_medio": {
+     "media": 0.0283,
+     "banda_2.5_97.5": [
+      0.0192,
+      0.0383
+     ]
+    },
+    "S_activo_media": [
+     0.9036,
+     0.9034,
+     0.9003,
+     0.9063,
+     0.9038
+    ],
+    "infl5": {
+     "bss_media": 0.2753,
+     "bss_banda": [
+      0.1824,
+      0.3705
+     ],
+     "potencia_p05": 1.0,
+     "frecuencia": 0.2557,
+     "eventos_medios": 461.8
+    },
+    "caida20": {
+     "bss_media": 0.0065,
+     "bss_banda": [
+      -0.0062,
+      0.0318
+     ],
+     "potencia_p05": 0.11,
+     "frecuencia": 0.0904,
+     "eventos_medios": 163.3
+    }
+   },
+   "v2_sin_mezcla|temporal": {
+    "S5": {
+     "media": 0.9001,
+     "banda_2.5_97.5": [
+      0.8687,
+      0.9262
+     ]
+    },
+    "Sb": {
+     "media": 0.9004,
+     "banda_2.5_97.5": [
+      0.8563,
+      0.9396
+     ]
+    },
+    "S_raros": {
+     "media": 0.8487,
+     "banda_2.5_97.5": [
+      0.6964,
+      0.9627
+     ]
+    },
+    "crpss_medio": {
+     "media": 0.0369,
+     "banda_2.5_97.5": [
+      0.0129,
+      0.0651
+     ]
+    },
+    "S_activo_media": [
+     0.9004,
+     0.9001,
+     0.8999,
+     0.9001,
+     NaN
+    ],
+    "infl5": {
+     "bss_media": 0.2808,
+     "bss_banda": [
+      0.1194,
+      0.4662
+     ],
+     "potencia_p05": 0.92,
+     "frecuencia": 0.2571,
+     "eventos_medios": 198.0
+    },
+    "caida20": {
+     "bss_media": 0.0062,
+     "bss_banda": [
+      -0.0282,
+      0.0393
+     ],
+     "potencia_p05": 0.17,
+     "frecuencia": 0.0894,
+     "eventos_medios": 68.8
+    }
+   },
+   "v2_sin_suavizado|loco": {
+    "S5": {
+     "media": 0.9013,
+     "banda_2.5_97.5": [
+      0.8962,
+      0.9052
+     ]
+    },
+    "Sb": {
+     "media": 0.9013,
+     "banda_2.5_97.5": [
+      0.8934,
+      0.9095
+     ]
+    },
+    "S_raros": {
+     "media": 0.8628,
+     "banda_2.5_97.5": [
+      0.7608,
+      0.8993
+     ]
+    },
+    "crpss_medio": {
+     "media": 0.0286,
+     "banda_2.5_97.5": [
+      0.0189,
+      0.0385
+     ]
+    },
+    "S_activo_media": [
+     0.9013,
+     0.9017,
+     0.8996,
+     0.9039,
+     0.8951
+    ],
+    "infl5": {
+     "bss_media": 0.2764,
+     "bss_banda": [
+      0.1836,
+      0.3703
+     ],
+     "potencia_p05": 1.0,
+     "frecuencia": 0.2557,
+     "eventos_medios": 461.8
+    },
+    "caida20": {
+     "bss_media": 0.0071,
+     "bss_banda": [
+      -0.0051,
+      0.0302
+     ],
+     "potencia_p05": 0.16,
+     "frecuencia": 0.0904,
+     "eventos_medios": 163.3
+    }
+   },
+   "v2_sin_suavizado|temporal": {
+    "S5": {
+     "media": 0.8977,
+     "banda_2.5_97.5": [
+      0.8641,
+      0.9237
+     ]
+    },
+    "Sb": {
+     "media": 0.8968,
+     "banda_2.5_97.5": [
+      0.8497,
+      0.9351
+     ]
+    },
+    "S_raros": {
+     "media": 0.8389,
+     "banda_2.5_97.5": [
+      0.7053,
+      0.952
+     ]
+    },
+    "crpss_medio": {
+     "media": 0.0371,
+     "banda_2.5_97.5": [
+      0.0154,
+      0.0642
+     ]
+    },
+    "S_activo_media": [
+     0.8968,
+     0.8988,
+     0.8979,
+     0.8973,
+     NaN
+    ],
+    "infl5": {
+     "bss_media": 0.2806,
+     "bss_banda": [
+      0.1198,
+      0.458
+     ],
+     "potencia_p05": 0.93,
+     "frecuencia": 0.2571,
+     "eventos_medios": 198.0
+    },
+    "caida20": {
+     "bss_media": 0.0083,
+     "bss_banda": [
+      -0.0144,
+      0.0404
+     ],
+     "potencia_p05": 0.19,
+     "frecuencia": 0.0894,
+     "eventos_medios": 68.8
+    }
+   }
+  }
+ },
+ "s2_s3_puerta_y_brier": {
+  "estacionario": {
+   "dev_loco": {
+    "R": 200,
+    "banda_nula_S5": [
+     0.8996,
+     0.9091
+    ],
+    "S5_k_media": [
+     0.9045,
+     0.8661,
+     0.8275
+    ],
+    "deteccion_banda": {
+     "k=1.0": 0.045,
+     "k=0.875": 1.0,
+     "k=0.78": 1.0
+    },
+    "algun_activo_fuera_de_tolerancia": {
+     "k=1.0|tol_3pp": 0.0,
+     "k=1.0|tol_5pp": 0.0,
+     "k=0.875|tol_3pp": 1.0,
+     "k=0.875|tol_5pp": 0.39,
+     "k=0.78|tol_3pp": 1.0,
+     "k=0.78|tol_5pp": 1.0
+    },
+    "S_raros_media": 0.9059,
+    "infl5": {
+     "bss_media": 0.2843,
+     "bss_banda": [
+      0.1716,
+      0.3976
+     ],
+     "potencia_p05": 1.0,
+     "frecuencia": 0.267,
+     "eventos_medios": 482.1
+    },
+    "caida20": {
+     "bss_media": 0.0027,
+     "bss_banda": [
+      -0.0061,
+      0.0196
+     ],
+     "potencia_p05": 0.055,
+     "frecuencia": 0.0895,
+     "eventos_medios": 161.6
+    }
+   },
+   "dev_temporal": {
+    "R": 200,
+    "banda_nula_S5": [
+     0.8766,
+     0.9292
+    ],
+    "S5_k_media": [
+     0.903,
+     0.8634,
+     0.823
+    ],
+    "deteccion_banda": {
+     "k=1.0": 0.045,
+     "k=0.875": 0.8,
+     "k=0.78": 1.0
+    },
+    "algun_activo_fuera_de_tolerancia": {
+     "k=1.0|tol_3pp": 0.48,
+     "k=1.0|tol_5pp": 0.085,
+     "k=0.875|tol_3pp": 0.94,
+     "k=0.875|tol_5pp": 0.67,
+     "k=0.78|tol_3pp": 1.0,
+     "k=0.78|tol_5pp": 0.99
+    },
+    "S_raros_media": 0.9021,
+    "infl5": {
+     "bss_media": 0.2813,
+     "bss_banda": [
+      0.0764,
+      0.5
+     ],
+     "potencia_p05": 0.925,
+     "frecuencia": 0.2587,
+     "eventos_medios": 199.2
+    },
+    "caida20": {
+     "bss_media": 0.0063,
+     "bss_banda": [
+      -0.0233,
+      0.0287
+     ],
+     "potencia_p05": 0.175,
+     "frecuencia": 0.0904,
+     "eventos_medios": 69.6
+    }
+   },
+   "bloqueado_2005_2020": {
+    "R": 200,
+    "banda_nula_S5": [
+     0.8464,
+     0.934
+    ],
+    "S5_k_media": [
+     0.8967,
+     0.8572,
+     0.8165
+    ],
+    "deteccion_banda": {
+     "k=1.0": 0.05,
+     "k=0.875": 0.35,
+     "k=0.78": 0.795
+    },
+    "algun_activo_fuera_de_tolerancia": {
+     "k=1.0|tol_3pp": 0.92,
+     "k=1.0|tol_5pp": 0.685,
+     "k=0.875|tol_3pp": 0.98,
+     "k=0.875|tol_5pp": 0.87,
+     "k=0.78|tol_3pp": 1.0,
+     "k=0.78|tol_5pp": 1.0
+    },
+    "S_raros_media": 0.885,
+    "infl5": {
+     "bss_media": 0.2999,
+     "bss_banda": [
+      -0.0306,
+      0.6861
+     ],
+     "potencia_p05": 0.665,
+     "frecuencia": 0.2631,
+     "eventos_medios": 58.9
+    },
+    "caida20": {
+     "bss_media": 0.0054,
+     "bss_banda": [
+      -0.0436,
+      0.0442
+     ],
+     "potencia_p05": 0.095,
+     "frecuencia": 0.0866,
+     "eventos_medios": 19.4
+    }
+   },
+   "vivo_5": {
+    "R": 200,
+    "banda_nula_S5": [
+     0.7971,
+     0.96
+    ],
+    "S5_k_media": [
+     0.895,
+     0.856,
+     0.8151
+    ],
+    "deteccion_banda": {
+     "k=1.0": 0.05,
+     "k=0.875": 0.12,
+     "k=0.78": 0.275
+    },
+    "algun_activo_fuera_de_tolerancia": {
+     "k=1.0|tol_3pp": 0.985,
+     "k=1.0|tol_5pp": 0.945,
+     "k=0.875|tol_3pp": 0.995,
+     "k=0.875|tol_5pp": 0.96,
+     "k=0.78|tol_3pp": 0.995,
+     "k=0.78|tol_5pp": 0.985
+    },
+    "S_raros_media": 0.8867,
+    "infl5": {
+     "bss_media": 0.3262,
+     "bss_banda": [
+      -0.1549,
+      0.9387
+     ],
+     "potencia_p05": 0.48,
+     "frecuencia": 0.263,
+     "eventos_medios": 18.4
+    },
+    "caida20": {
+     "bss_media": -0.0046,
+     "bss_banda": [
+      -0.1765,
+      0.1101
+     ],
+     "potencia_p05": 0.135,
+     "frecuencia": 0.0848,
+     "eventos_medios": 5.9
+    }
+   },
+   "vivo_10": {
+    "R": 200,
+    "banda_nula_S5": [
+     0.8271,
+     0.9501
+    ],
+    "S5_k_media": [
+     0.895,
+     0.8556,
+     0.8145
+    ],
+    "deteccion_banda": {
+     "k=1.0": 0.045,
+     "k=0.875": 0.215,
+     "k=0.78": 0.59
+    },
+    "algun_activo_fuera_de_tolerancia": {
+     "k=1.0|tol_3pp": 0.96,
+     "k=1.0|tol_5pp": 0.85,
+     "k=0.875|tol_3pp": 0.99,
+     "k=0.875|tol_5pp": 0.95,
+     "k=0.78|tol_3pp": 1.0,
+     "k=0.78|tol_5pp": 1.0
+    },
+    "S_raros_media": 0.8923,
+    "infl5": {
+     "bss_media": 0.314,
+     "bss_banda": [
+      -0.0442,
+      0.8332
+     ],
+     "potencia_p05": 0.56,
+     "frecuencia": 0.2615,
+     "eventos_medios": 36.6
+    },
+    "caida20": {
+     "bss_media": 0.004,
+     "bss_banda": [
+      -0.0706,
+      0.0579
+     ],
+     "potencia_p05": 0.125,
+     "frecuencia": 0.0844,
+     "eventos_medios": 11.8
+    }
+   },
+   "vivo_20": {
+    "R": 200,
+    "banda_nula_S5": [
+     0.8513,
+     0.9315
+    ],
+    "S5_k_media": [
+     0.8963,
+     0.8567,
+     0.816
+    ],
+    "deteccion_banda": {
+     "k=1.0": 0.05,
+     "k=0.875": 0.41,
+     "k=0.78": 0.905
+    },
+    "algun_activo_fuera_de_tolerancia": {
+     "k=1.0|tol_3pp": 0.89,
+     "k=1.0|tol_5pp": 0.645,
+     "k=0.875|tol_3pp": 0.985,
+     "k=0.875|tol_5pp": 0.865,
+     "k=0.78|tol_3pp": 1.0,
+     "k=0.78|tol_5pp": 1.0
+    },
+    "S_raros_media": 0.8884,
+    "infl5": {
+     "bss_media": 0.3003,
+     "bss_banda": [
+      -0.0477,
+      0.6
+     ],
+     "potencia_p05": 0.76,
+     "frecuencia": 0.2641,
+     "eventos_medios": 73.9
+    },
+    "caida20": {
+     "bss_media": 0.0054,
+     "bss_banda": [
+      -0.0369,
+      0.0398
+     ],
+     "potencia_p05": 0.125,
+     "frecuencia": 0.087,
+     "eventos_medios": 24.4
+    }
+   }
+  },
+  "tranquilo": {
+   "bloqueado_2005_2020": {
+    "R": 200,
+    "banda_nula_S5": [
+     0.841,
+     0.9366
+    ],
+    "S5_k_media": [
+     0.8974,
+     0.857,
+     0.816
+    ],
+    "deteccion_banda": {
+     "k=1.0": 0.05,
+     "k=0.875": 0.26,
+     "k=0.78": 0.805
+    },
+    "algun_activo_fuera_de_tolerancia": {
+     "k=1.0|tol_3pp": 0.94,
+     "k=1.0|tol_5pp": 0.725,
+     "k=0.875|tol_3pp": 0.965,
+     "k=0.875|tol_5pp": 0.86,
+     "k=0.78|tol_3pp": 1.0,
+     "k=0.78|tol_5pp": 0.995
+    },
+    "S_raros_media": 0.892,
+    "infl5": {
+     "bss_media": 0.4405,
+     "bss_banda": [
+      0.0308,
+      0.9183
+     ],
+     "potencia_p05": 0.76,
+     "frecuencia": 0.0814,
+     "eventos_medios": 18.2
+    },
+    "caida20": {
+     "bss_media": 0.0048,
+     "bss_banda": [
+      -0.0359,
+      0.0526
+     ],
+     "potencia_p05": 0.135,
+     "frecuencia": 0.0821,
+     "eventos_medios": 18.4
+    }
+   },
+   "vivo_5": {
+    "R": 200,
+    "banda_nula_S5": [
+     0.7654,
+     0.9571
+    ],
+    "S5_k_media": [
+     0.8949,
+     0.8542,
+     0.8137
+    ],
+    "deteccion_banda": {
+     "k=1.0": 0.04,
+     "k=0.875": 0.065,
+     "k=0.78": 0.17
+    },
+    "algun_activo_fuera_de_tolerancia": {
+     "k=1.0|tol_3pp": 1.0,
+     "k=1.0|tol_5pp": 0.935,
+     "k=0.875|tol_3pp": 0.985,
+     "k=0.875|tol_5pp": 0.96,
+     "k=0.78|tol_3pp": 1.0,
+     "k=0.78|tol_5pp": 1.0
+    },
+    "S_raros_media": 0.8834,
+    "infl5": {
+     "bss_media": 0.378,
+     "bss_banda": [
+      -0.4986,
+      0.9356
+     ],
+     "potencia_p05": 0.51,
+     "frecuencia": 0.0843,
+     "eventos_medios": 5.9
+    },
+    "caida20": {
+     "bss_media": 0.0021,
+     "bss_banda": [
+      -0.1069,
+      0.1038
+     ],
+     "potencia_p05": 0.125,
+     "frecuencia": 0.0847,
+     "eventos_medios": 5.9
+    }
+   },
+   "vivo_10": {
+    "R": 200,
+    "banda_nula_S5": [
+     0.8185,
+     0.9472
+    ],
+    "S5_k_media": [
+     0.8948,
+     0.854,
+     0.8127
+    ],
+    "deteccion_banda": {
+     "k=1.0": 0.05,
+     "k=0.875": 0.18,
+     "k=0.78": 0.515
+    },
+    "algun_activo_fuera_de_tolerancia": {
+     "k=1.0|tol_3pp": 0.975,
+     "k=1.0|tol_5pp": 0.79,
+     "k=0.875|tol_3pp": 0.965,
+     "k=0.875|tol_5pp": 0.91,
+     "k=0.78|tol_3pp": 1.0,
+     "k=0.78|tol_5pp": 0.995
+    },
+    "S_raros_media": 0.891,
+    "infl5": {
+     "bss_media": 0.4254,
+     "bss_banda": [
+      -0.1062,
+      0.9202
+     ],
+     "potencia_p05": 0.6,
+     "frecuencia": 0.0872,
+     "eventos_medios": 12.2
+    },
+    "caida20": {
+     "bss_media": 0.0036,
+     "bss_banda": [
+      -0.0586,
+      0.0623
+     ],
+     "potencia_p05": 0.12,
+     "frecuencia": 0.0847,
+     "eventos_medios": 11.9
+    }
+   },
+   "vivo_20": {
+    "R": 200,
+    "banda_nula_S5": [
+     0.8435,
+     0.935
+    ],
+    "S5_k_media": [
+     0.8976,
+     0.857,
+     0.8164
+    ],
+    "deteccion_banda": {
+     "k=1.0": 0.05,
+     "k=0.875": 0.285,
+     "k=0.78": 0.83
+    },
+    "algun_activo_fuera_de_tolerancia": {
+     "k=1.0|tol_3pp": 0.955,
+     "k=1.0|tol_5pp": 0.645,
+     "k=0.875|tol_3pp": 0.965,
+     "k=0.875|tol_5pp": 0.875,
+     "k=0.78|tol_3pp": 1.0,
+     "k=0.78|tol_5pp": 0.995
+    },
+    "S_raros_media": 0.8884,
+    "infl5": {
+     "bss_media": 0.4403,
+     "bss_banda": [
+      0.0163,
+      0.9027
+     ],
+     "potencia_p05": 0.815,
+     "frecuencia": 0.0771,
+     "eventos_medios": 21.6
+    },
+    "caida20": {
+     "bss_media": 0.0058,
+     "bss_banda": [
+      -0.03,
+      0.0509
+     ],
+     "potencia_p05": 0.14,
+     "frecuencia": 0.0818,
+     "eventos_medios": 22.9
+    }
+   }
+  }
+ },
+ "segundos": 1291
+}
