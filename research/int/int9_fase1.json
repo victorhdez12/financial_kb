@@ -1,0 +1,3551 @@
+{
+ "procedencia": {
+  "commit": "55075f6445791c9585f09d75b411017a8901dd6c",
+  "arbol_limpio": true,
+  "hora_utc": "2026-10-30T06:43:23+00:00"
+ },
+ "semilla": 20261030,
+ "indicadores": [
+  "pib_real_g",
+  "inflacion",
+  "d_credito_pib",
+  "curva",
+  "tipo_real",
+  "d_ltrate",
+  "eq_tr_real",
+  "housing_tr_real"
+ ],
+ "paises": [
+  "BEL",
+  "DEU",
+  "DNK",
+  "ESP",
+  "FIN",
+  "FRA",
+  "GBR",
+  "ITA",
+  "JPN",
+  "NLD",
+  "NOR",
+  "PRT",
+  "SWE",
+  "USA"
+ ],
+ "R": 3,
+ "k_paises": 4,
+ "k_indicadores": 3,
+ "anual": {
+  "filas_años": 123,
+  "columnas": 112,
+  "celdas_obs": 0.9263,
+  "bai_ng": {
+   "V": [
+    0.9912,
+    0.8261,
+    0.7342,
+    0.6765,
+    0.6267,
+    0.5837,
+    0.5484,
+    0.5144,
+    0.4832
+   ],
+   "IC_p1": 5,
+   "IC_p2": 3,
+   "IC_p3": 8
+  },
+  "paralelo": {
+   "retenidos": 10,
+   "autovalores_10": [
+    17.801,
+    10.427,
+    6.901,
+    5.301,
+    5.15,
+    3.724,
+    3.637,
+    3.399,
+    3.174,
+    3.033
+   ],
+   "umbral95_10": [
+    4.184,
+    3.857,
+    3.683,
+    3.527,
+    3.377,
+    3.258,
+    3.153,
+    3.039,
+    2.95,
+    2.866
+   ]
+  },
+  "global": {
+   "cuota_autovalores": [
+    0.1589,
+    0.0931,
+    0.0616,
+    0.0473,
+    0.046,
+    0.0333
+   ],
+   "r2_obs": {
+    "F1..F1": 0.1656,
+    "F1..F2": 0.2586,
+    "F1..F3": 0.3175
+   },
+   "carga_media_por_indicador": {
+    "F1": {
+     "curva": 0.17,
+     "d_credito_pib": -0.136,
+     "d_ltrate": 0.351,
+     "eq_tr_real": -0.201,
+     "housing_tr_real": -0.127,
+     "inflacion": 0.73,
+     "pib_real_g": 0.288,
+     "tipo_real": -0.695
+    },
+    "F2": {
+     "curva": 0.313,
+     "d_credito_pib": 0.019,
+     "d_ltrate": -0.456,
+     "eq_tr_real": 0.458,
+     "housing_tr_real": 0.037,
+     "inflacion": 0.049,
+     "pib_real_g": 0.171,
+     "tipo_real": -0.151
+    },
+    "F3": {
+     "curva": 0.226,
+     "d_credito_pib": 0.144,
+     "d_ltrate": 0.214,
+     "eq_tr_real": 0.007,
+     "housing_tr_real": 0.264,
+     "inflacion": -0.203,
+     "pib_real_g": 0.306,
+     "tipo_real": 0.018
+    }
+   },
+   "carga_media_por_pais": {
+    "F1": {
+     "BEL": 0.078,
+     "DEU": 0.076,
+     "DNK": 0.032,
+     "ESP": 0.004,
+     "FIN": 0.076,
+     "FRA": 0.065,
+     "GBR": 0.035,
+     "ITA": 0.065,
+     "JPN": 0.058,
+     "NLD": 0.121,
+     "NOR": 0.018,
+     "PRT": -0.017,
+     "SWE": 0.041,
+     "USA": 0.015
+    },
+    "F2": {
+     "BEL": 0.036,
+     "DEU": 0.055,
+     "DNK": 0.044,
+     "ESP": 0.023,
+     "FIN": 0.088,
+     "FRA": 0.058,
+     "GBR": 0.12,
+     "ITA": -0.013,
+     "JPN": 0.038,
+     "NLD": 0.119,
+     "NOR": 0.095,
+     "PRT": -0.003,
+     "SWE": 0.032,
+     "USA": 0.079
+    },
+    "F3": {
+     "BEL": 0.195,
+     "DEU": 0.147,
+     "DNK": 0.114,
+     "ESP": 0.088,
+     "FIN": 0.189,
+     "FRA": 0.185,
+     "GBR": 0.069,
+     "ITA": 0.137,
+     "JPN": 0.199,
+     "NLD": 0.088,
+     "NOR": 0.077,
+     "PRT": 0.098,
+     "SWE": 0.091,
+     "USA": 0.031
+    }
+   },
+   "r2_F1_por_indicador": {
+    "curva": 0.057,
+    "d_credito_pib": 0.039,
+    "d_ltrate": 0.118,
+    "eq_tr_real": 0.045,
+    "housing_tr_real": 0.031,
+    "inflacion": 0.47,
+    "pib_real_g": 0.095,
+    "tipo_real": 0.419
+   },
+   "r2_F1_por_pais": {
+    "BEL": 0.108,
+    "DEU": 0.139,
+    "DNK": 0.218,
+    "ESP": 0.179,
+    "FIN": 0.088,
+    "FRA": 0.134,
+    "GBR": 0.193,
+    "ITA": 0.164,
+    "JPN": 0.098,
+    "NLD": 0.182,
+    "NOR": 0.22,
+    "PRT": 0.116,
+    "SWE": 0.219,
+    "USA": 0.17
+   }
+  },
+  "pc1_por_indicador": {
+   "pib_real_g": {
+    "todo": 0.3084,
+    "1871_1949": 0.267,
+    "1950_2004": 0.426
+   },
+   "inflacion": {
+    "todo": 0.5601,
+    "1871_1949": 0.4331,
+    "1950_2004": 0.6919
+   },
+   "d_credito_pib": {
+    "todo": 0.2309,
+    "1871_1949": 0.2561,
+    "1950_2004": 0.2261
+   },
+   "curva": {
+    "todo": 0.361,
+    "1871_1949": 0.4222,
+    "1950_2004": 0.2719
+   },
+   "tipo_real": {
+    "todo": 0.5047,
+    "1871_1949": 0.4475,
+    "1950_2004": 0.6006
+   },
+   "d_ltrate": {
+    "todo": 0.4684,
+    "1871_1949": 0.3251,
+    "1950_2004": 0.5187
+   },
+   "eq_tr_real": {
+    "todo": 0.4114,
+    "1871_1949": 0.3706,
+    "1950_2004": 0.4505
+   },
+   "housing_tr_real": {
+    "todo": 0.1635,
+    "1871_1949": 0.1671,
+    "1950_2004": 0.222
+   }
+  },
+  "indicadores_dentro_pais": {
+   "corr": {
+    "pib_real_g": {
+     "pib_real_g": 1.0,
+     "inflacion": 0.13,
+     "d_credito_pib": -0.144,
+     "curva": 0.097,
+     "tipo_real": -0.153,
+     "d_ltrate": 0.052,
+     "eq_tr_real": 0.124,
+     "housing_tr_real": 0.16
+    },
+    "inflacion": {
+     "pib_real_g": 0.13,
+     "inflacion": 1.0,
+     "d_credito_pib": -0.172,
+     "curva": 0.011,
+     "tipo_real": -0.816,
+     "d_ltrate": 0.199,
+     "eq_tr_real": -0.206,
+     "housing_tr_real": -0.243
+    },
+    "d_credito_pib": {
+     "pib_real_g": -0.144,
+     "inflacion": -0.172,
+     "d_credito_pib": 1.0,
+     "curva": -0.062,
+     "tipo_real": 0.195,
+     "d_ltrate": -0.05,
+     "eq_tr_real": 0.035,
+     "housing_tr_real": 0.188
+    },
+    "curva": {
+     "pib_real_g": 0.097,
+     "inflacion": 0.011,
+     "d_credito_pib": -0.062,
+     "curva": 1.0,
+     "tipo_real": -0.231,
+     "d_ltrate": -0.085,
+     "eq_tr_real": 0.145,
+     "housing_tr_real": 0.052
+    },
+    "tipo_real": {
+     "pib_real_g": -0.153,
+     "inflacion": -0.816,
+     "d_credito_pib": 0.195,
+     "curva": -0.231,
+     "tipo_real": 1.0,
+     "d_ltrate": -0.109,
+     "eq_tr_real": 0.17,
+     "housing_tr_real": 0.195
+    },
+    "d_ltrate": {
+     "pib_real_g": 0.052,
+     "inflacion": 0.199,
+     "d_credito_pib": -0.05,
+     "curva": -0.085,
+     "tipo_real": -0.109,
+     "d_ltrate": 1.0,
+     "eq_tr_real": -0.366,
+     "housing_tr_real": -0.0
+    },
+    "eq_tr_real": {
+     "pib_real_g": 0.124,
+     "inflacion": -0.206,
+     "d_credito_pib": 0.035,
+     "curva": 0.145,
+     "tipo_real": 0.17,
+     "d_ltrate": -0.366,
+     "eq_tr_real": 1.0,
+     "housing_tr_real": 0.109
+    },
+    "housing_tr_real": {
+     "pib_real_g": 0.16,
+     "inflacion": -0.243,
+     "d_credito_pib": 0.188,
+     "curva": 0.052,
+     "tipo_real": 0.195,
+     "d_ltrate": -0.0,
+     "eq_tr_real": 0.109,
+     "housing_tr_real": 1.0
+    }
+   },
+   "cargas": {
+    "P1": {
+     "pib_real_g": -0.186,
+     "inflacion": -0.885,
+     "d_credito_pib": 0.388,
+     "curva": -0.12,
+     "tipo_real": 0.872,
+     "d_ltrate": -0.367,
+     "eq_tr_real": 0.403,
+     "housing_tr_real": 0.391
+    },
+    "P2": {
+     "pib_real_g": 0.503,
+     "inflacion": 0.067,
+     "d_credito_pib": -0.199,
+     "curva": 0.607,
+     "tipo_real": -0.248,
+     "d_ltrate": -0.493,
+     "eq_tr_real": 0.658,
+     "housing_tr_real": 0.187
+    },
+    "P3": {
+     "pib_real_g": 0.563,
+     "inflacion": -0.018,
+     "d_credito_pib": 0.164,
+     "curva": 0.017,
+     "tipo_real": 0.026,
+     "d_ltrate": 0.527,
+     "eq_tr_real": -0.19,
+     "housing_tr_real": 0.705
+    }
+   },
+   "cuota": [
+    0.274,
+    0.18,
+    0.145,
+    0.122,
+    0.108
+   ]
+  },
+  "clusters_indicadores": {
+   "1": [
+    "pib_real_g",
+    "inflacion",
+    "d_credito_pib",
+    "tipo_real",
+    "housing_tr_real"
+   ],
+   "2": [
+    "d_ltrate",
+    "eq_tr_real"
+   ],
+   "3": [
+    "curva"
+   ]
+  },
+  "por_pais": {
+   "BEL": {
+    "cuota_pc1": 0.2996,
+    "congruencia_con_comun": [
+     0.926,
+     0.943,
+     0.889
+    ]
+   },
+   "DEU": {
+    "cuota_pc1": 0.2803,
+    "congruencia_con_comun": [
+     0.77,
+     0.694,
+     0.796
+    ]
+   },
+   "DNK": {
+    "cuota_pc1": 0.3195,
+    "congruencia_con_comun": [
+     0.966,
+     0.979,
+     0.595
+    ]
+   },
+   "ESP": {
+    "cuota_pc1": 0.2941,
+    "congruencia_con_comun": [
+     0.909,
+     0.614,
+     0.796
+    ]
+   },
+   "FIN": {
+    "cuota_pc1": 0.2845,
+    "congruencia_con_comun": [
+     0.872,
+     0.712,
+     0.662
+    ]
+   },
+   "FRA": {
+    "cuota_pc1": 0.3143,
+    "congruencia_con_comun": [
+     0.971,
+     0.683,
+     0.522
+    ]
+   },
+   "GBR": {
+    "cuota_pc1": 0.2985,
+    "congruencia_con_comun": [
+     0.89,
+     0.867,
+     0.678
+    ]
+   },
+   "ITA": {
+    "cuota_pc1": 0.3193,
+    "congruencia_con_comun": [
+     0.762,
+     0.806,
+     0.761
+    ]
+   },
+   "JPN": {
+    "cuota_pc1": 0.2756,
+    "congruencia_con_comun": [
+     0.922,
+     0.076,
+     0.742
+    ]
+   },
+   "NLD": {
+    "cuota_pc1": 0.2578,
+    "congruencia_con_comun": [
+     0.964,
+     0.81,
+     0.927
+    ]
+   },
+   "NOR": {
+    "cuota_pc1": 0.3119,
+    "congruencia_con_comun": [
+     0.975,
+     0.941,
+     0.91
+    ]
+   },
+   "PRT": {
+    "cuota_pc1": 0.3282,
+    "congruencia_con_comun": [
+     0.947,
+     0.578,
+     0.583
+    ]
+   },
+   "SWE": {
+    "cuota_pc1": 0.3071,
+    "congruencia_con_comun": [
+     0.953,
+     0.882,
+     0.816
+    ]
+   },
+   "USA": {
+    "cuota_pc1": 0.258,
+    "congruencia_con_comun": [
+     0.953,
+     0.924,
+     0.113
+    ]
+   }
+  },
+  "clusters_paises": {
+   "1": [
+    "ESP",
+    "PRT"
+   ],
+   "2": [
+    "BEL",
+    "DEU",
+    "DNK",
+    "FRA",
+    "GBR",
+    "ITA",
+    "NLD",
+    "NOR",
+    "SWE",
+    "USA"
+   ],
+   "3": [
+    "FIN"
+   ],
+   "4": [
+    "JPN"
+   ]
+  },
+  "corr_paises_media": 0.3111,
+  "clusters_paises_residuo": {
+   "1": [
+    "ESP",
+    "PRT"
+   ],
+   "2": [
+    "BEL",
+    "DEU",
+    "FRA",
+    "GBR",
+    "ITA",
+    "NLD",
+    "USA"
+   ],
+   "3": [
+    "DNK",
+    "FIN",
+    "NOR",
+    "SWE"
+   ],
+   "4": [
+    "JPN"
+   ]
+  },
+  "regional": {
+   "1": {
+    "paises": [
+     "ESP",
+     "PRT"
+    ],
+    "cuota_pc1": 0.1711,
+    "azar_media": 0.1621,
+    "azar_p95": 0.1898,
+    "p_azar": 0.2736
+   },
+   "2": {
+    "paises": [
+     "BEL",
+     "DEU",
+     "FRA",
+     "GBR",
+     "ITA",
+     "NLD",
+     "USA"
+    ],
+    "cuota_pc1": 0.0998,
+    "azar_media": 0.0877,
+    "azar_p95": 0.0971,
+    "p_azar": 0.0149
+   },
+   "3": {
+    "paises": [
+     "DNK",
+     "FIN",
+     "NOR",
+     "SWE"
+    ],
+    "cuota_pc1": 0.1086,
+    "azar_media": 0.1105,
+    "azar_p95": 0.1252,
+    "p_azar": 0.5672
+   },
+   "4": {
+    "paises": [
+     "JPN"
+    ],
+    "cuota_pc1": null,
+    "azar_media": null,
+    "azar_p95": null,
+    "p_azar": null
+   }
+  },
+  "mitades": {
+   "1871_1949": {
+    "años": 67,
+    "cuota_autovalores": [
+     0.169,
+     0.095,
+     0.072,
+     0.063
+    ],
+    "congruencia_global_con_todo": [
+     0.901,
+     0.739,
+     0.363
+    ],
+    "carga_media_por_indicador": {
+     "F1": {
+      "curva": 0.042,
+      "d_credito_pib": -0.211,
+      "d_ltrate": 0.368,
+      "eq_tr_real": -0.267,
+      "housing_tr_real": -0.192,
+      "inflacion": 0.641,
+      "pib_real_g": 0.284,
+      "tipo_real": -0.68
+     },
+     "F2": {
+      "curva": 0.462,
+      "d_credito_pib": -0.147,
+      "d_ltrate": -0.251,
+      "eq_tr_real": 0.317,
+      "housing_tr_real": 0.019,
+      "inflacion": -0.033,
+      "pib_real_g": 0.184,
+      "tipo_real": -0.053
+     },
+     "F3": {
+      "curva": 0.156,
+      "d_credito_pib": 0.137,
+      "d_ltrate": 0.082,
+      "eq_tr_real": -0.352,
+      "housing_tr_real": 0.047,
+      "inflacion": -0.117,
+      "pib_real_g": -0.062,
+      "tipo_real": 0.154
+     }
+    },
+    "bai_ng": {
+     "V": [
+      0.9835,
+      0.7994,
+      0.7084,
+      0.6402,
+      0.577,
+      0.5247,
+      0.477
+     ],
+     "IC_p1": 6,
+     "IC_p2": 4,
+     "IC_p3": 6
+    },
+    "cargas_indicadores": {
+     "0": {
+      "pib_real_g": -0.192,
+      "inflacion": -0.927,
+      "d_credito_pib": 0.368,
+      "curva": 0.075,
+      "tipo_real": 0.895,
+      "d_ltrate": -0.38,
+      "eq_tr_real": 0.529,
+      "housing_tr_real": 0.521
+     },
+     "1": {
+      "pib_real_g": 0.673,
+      "inflacion": 0.014,
+      "d_credito_pib": -0.605,
+      "curva": 0.571,
+      "tipo_real": -0.138,
+      "d_ltrate": -0.31,
+      "eq_tr_real": 0.482,
+      "housing_tr_real": 0.142
+     },
+     "2": {
+      "pib_real_g": 0.322,
+      "inflacion": -0.13,
+      "d_credito_pib": -0.234,
+      "curva": -0.161,
+      "tipo_real": 0.187,
+      "d_ltrate": 0.729,
+      "eq_tr_real": -0.159,
+      "housing_tr_real": 0.448
+     }
+    },
+    "congruencia_indicadores_con_todo": [
+     0.987,
+     0.907,
+     0.819
+    ],
+    "clusters_paises": {
+     "1": [
+      "ESP"
+     ],
+     "2": [
+      "PRT"
+     ],
+     "3": [
+      "BEL",
+      "DEU",
+      "DNK",
+      "FIN",
+      "FRA",
+      "GBR",
+      "ITA",
+      "NLD",
+      "NOR",
+      "SWE",
+      "USA"
+     ],
+     "4": [
+      "JPN"
+     ]
+    },
+    "clusters_indicadores": {
+     "1": [
+      "inflacion",
+      "tipo_real",
+      "d_ltrate",
+      "eq_tr_real",
+      "housing_tr_real"
+     ],
+     "2": [
+      "pib_real_g",
+      "d_credito_pib"
+     ],
+     "3": [
+      "curva"
+     ]
+    }
+   },
+   "1950_2004": {
+    "años": 55,
+    "cuota_autovalores": [
+     0.182,
+     0.119,
+     0.096,
+     0.06
+    ],
+    "congruencia_global_con_todo": [
+     0.832,
+     0.754,
+     0.81
+    ],
+    "carga_media_por_indicador": {
+     "F1": {
+      "curva": 0.106,
+      "d_credito_pib": 0.174,
+      "d_ltrate": -0.476,
+      "eq_tr_real": 0.392,
+      "housing_tr_real": 0.179,
+      "inflacion": -0.727,
+      "pib_real_g": 0.03,
+      "tipo_real": 0.457
+     },
+     "F2": {
+      "curva": 0.268,
+      "d_credito_pib": 0.112,
+      "d_ltrate": 0.24,
+      "eq_tr_real": -0.044,
+      "housing_tr_real": 0.269,
+      "inflacion": -0.249,
+      "pib_real_g": 0.515,
+      "tipo_real": -0.355
+     },
+     "F3": {
+      "curva": -0.262,
+      "d_credito_pib": 0.031,
+      "d_ltrate": 0.363,
+      "eq_tr_real": -0.25,
+      "housing_tr_real": 0.1,
+      "inflacion": -0.162,
+      "pib_real_g": 0.041,
+      "tipo_real": 0.437
+     }
+    },
+    "bai_ng": {
+     "V": [
+      0.9817,
+      0.8021,
+      0.6853,
+      0.5911,
+      0.532,
+      0.4765,
+      0.4346
+     ],
+     "IC_p1": 5,
+     "IC_p2": 3,
+     "IC_p3": 6
+    },
+    "cargas_indicadores": {
+     "0": {
+      "pib_real_g": 0.325,
+      "inflacion": -0.811,
+      "d_credito_pib": 0.465,
+      "curva": 0.145,
+      "tipo_real": 0.56,
+      "d_ltrate": -0.511,
+      "eq_tr_real": 0.535,
+      "housing_tr_real": 0.439
+     },
+     "1": {
+      "pib_real_g": 0.663,
+      "inflacion": 0.043,
+      "d_credito_pib": 0.181,
+      "curva": 0.375,
+      "tipo_real": -0.42,
+      "d_ltrate": 0.431,
+      "eq_tr_real": -0.254,
+      "housing_tr_real": 0.618
+     },
+     "2": {
+      "pib_real_g": 0.077,
+      "inflacion": -0.072,
+      "d_credito_pib": 0.231,
+      "curva": -0.741,
+      "tipo_real": 0.571,
+      "d_ltrate": 0.46,
+      "eq_tr_real": -0.463,
+      "housing_tr_real": 0.181
+     }
+    },
+    "congruencia_indicadores_con_todo": [
+     0.887,
+     0.776,
+     0.865
+    ],
+    "clusters_paises": {
+     "1": [
+      "ESP",
+      "FIN",
+      "PRT"
+     ],
+     "2": [
+      "BEL",
+      "DEU",
+      "DNK",
+      "FRA",
+      "GBR",
+      "ITA",
+      "NLD",
+      "SWE",
+      "USA"
+     ],
+     "3": [
+      "NOR"
+     ],
+     "4": [
+      "JPN"
+     ]
+    },
+    "clusters_indicadores": {
+     "1": [
+      "inflacion",
+      "curva",
+      "tipo_real",
+      "d_ltrate",
+      "eq_tr_real"
+     ],
+     "2": [
+      "pib_real_g",
+      "housing_tr_real"
+     ],
+     "3": [
+      "d_credito_pib"
+     ]
+    }
+   },
+   "ari_paises_entre_mitades": 0.5305,
+   "ari_indicadores_entre_mitades": 0.2513,
+   "ari_paises_mitad_vs_todo": [
+    0.7577,
+    0.7586
+   ]
+  },
+  "bootstrap": {
+   "B": 300,
+   "bloque_años": 10,
+   "congruencia_mediana": [
+    0.938,
+    0.9,
+    0.627
+   ],
+   "congruencia_p10": [
+    0.797,
+    0.77,
+    0.236
+   ],
+   "frac_congruencia_ge_0.85": [
+    0.82,
+    0.693,
+    0.11
+   ],
+   "cuota_mediana": [
+    0.173,
+    0.099,
+    0.076
+   ],
+   "cuota_ic90": [
+    [
+     0.149,
+     0.085,
+     0.063
+    ],
+    [
+     0.198,
+     0.117,
+     0.092
+    ]
+   ],
+   "bai_ng_ICp2_frecuencias": {
+    "3": 7,
+    "4": 47,
+    "5": 88,
+    "6": 158
+   },
+   "coasignacion_paises": {
+    "BEL": {
+     "BEL": 1.0,
+     "DEU": 0.73,
+     "DNK": 0.82,
+     "ESP": 0.0,
+     "FIN": 0.18,
+     "FRA": 0.98,
+     "GBR": 0.87,
+     "ITA": 0.79,
+     "JPN": 0.02,
+     "NLD": 0.88,
+     "NOR": 0.82,
+     "PRT": 0.0,
+     "SWE": 0.82,
+     "USA": 0.87
+    },
+    "DEU": {
+     "BEL": 0.73,
+     "DEU": 1.0,
+     "DNK": 0.68,
+     "ESP": 0.0,
+     "FIN": 0.38,
+     "FRA": 0.7,
+     "GBR": 0.76,
+     "ITA": 0.88,
+     "JPN": 0.05,
+     "NLD": 0.73,
+     "NOR": 0.68,
+     "PRT": 0.0,
+     "SWE": 0.68,
+     "USA": 0.77
+    },
+    "DNK": {
+     "BEL": 0.82,
+     "DEU": 0.68,
+     "DNK": 1.0,
+     "ESP": 0.0,
+     "FIN": 0.19,
+     "FRA": 0.84,
+     "GBR": 0.92,
+     "ITA": 0.67,
+     "JPN": 0.04,
+     "NLD": 0.94,
+     "NOR": 1.0,
+     "PRT": 0.0,
+     "SWE": 1.0,
+     "USA": 0.87
+    },
+    "ESP": {
+     "BEL": 0.0,
+     "DEU": 0.0,
+     "DNK": 0.0,
+     "ESP": 1.0,
+     "FIN": 0.0,
+     "FRA": 0.0,
+     "GBR": 0.0,
+     "ITA": 0.03,
+     "JPN": 0.0,
+     "NLD": 0.0,
+     "NOR": 0.0,
+     "PRT": 0.86,
+     "SWE": 0.0,
+     "USA": 0.0
+    },
+    "FIN": {
+     "BEL": 0.18,
+     "DEU": 0.38,
+     "DNK": 0.19,
+     "ESP": 0.0,
+     "FIN": 1.0,
+     "FRA": 0.16,
+     "GBR": 0.2,
+     "ITA": 0.32,
+     "JPN": 0.08,
+     "NLD": 0.18,
+     "NOR": 0.2,
+     "PRT": 0.0,
+     "SWE": 0.19,
+     "USA": 0.19
+    },
+    "FRA": {
+     "BEL": 0.98,
+     "DEU": 0.7,
+     "DNK": 0.84,
+     "ESP": 0.0,
+     "FIN": 0.16,
+     "FRA": 1.0,
+     "GBR": 0.87,
+     "ITA": 0.77,
+     "JPN": 0.02,
+     "NLD": 0.9,
+     "NOR": 0.84,
+     "PRT": 0.0,
+     "SWE": 0.84,
+     "USA": 0.87
+    },
+    "GBR": {
+     "BEL": 0.87,
+     "DEU": 0.76,
+     "DNK": 0.92,
+     "ESP": 0.0,
+     "FIN": 0.2,
+     "FRA": 0.87,
+     "GBR": 1.0,
+     "ITA": 0.72,
+     "JPN": 0.05,
+     "NLD": 0.96,
+     "NOR": 0.91,
+     "PRT": 0.0,
+     "SWE": 0.92,
+     "USA": 0.94
+    },
+    "ITA": {
+     "BEL": 0.79,
+     "DEU": 0.88,
+     "DNK": 0.67,
+     "ESP": 0.03,
+     "FIN": 0.32,
+     "FRA": 0.77,
+     "GBR": 0.72,
+     "ITA": 1.0,
+     "JPN": 0.04,
+     "NLD": 0.73,
+     "NOR": 0.67,
+     "PRT": 0.03,
+     "SWE": 0.67,
+     "USA": 0.74
+    },
+    "JPN": {
+     "BEL": 0.02,
+     "DEU": 0.05,
+     "DNK": 0.04,
+     "ESP": 0.0,
+     "FIN": 0.08,
+     "FRA": 0.02,
+     "GBR": 0.05,
+     "ITA": 0.04,
+     "JPN": 1.0,
+     "NLD": 0.04,
+     "NOR": 0.04,
+     "PRT": 0.0,
+     "SWE": 0.04,
+     "USA": 0.05
+    },
+    "NLD": {
+     "BEL": 0.88,
+     "DEU": 0.73,
+     "DNK": 0.94,
+     "ESP": 0.0,
+     "FIN": 0.18,
+     "FRA": 0.9,
+     "GBR": 0.96,
+     "ITA": 0.73,
+     "JPN": 0.04,
+     "NLD": 1.0,
+     "NOR": 0.93,
+     "PRT": 0.0,
+     "SWE": 0.94,
+     "USA": 0.92
+    },
+    "NOR": {
+     "BEL": 0.82,
+     "DEU": 0.68,
+     "DNK": 1.0,
+     "ESP": 0.0,
+     "FIN": 0.2,
+     "FRA": 0.84,
+     "GBR": 0.91,
+     "ITA": 0.67,
+     "JPN": 0.04,
+     "NLD": 0.93,
+     "NOR": 1.0,
+     "PRT": 0.0,
+     "SWE": 1.0,
+     "USA": 0.86
+    },
+    "PRT": {
+     "BEL": 0.0,
+     "DEU": 0.0,
+     "DNK": 0.0,
+     "ESP": 0.86,
+     "FIN": 0.0,
+     "FRA": 0.0,
+     "GBR": 0.0,
+     "ITA": 0.03,
+     "JPN": 0.0,
+     "NLD": 0.0,
+     "NOR": 0.0,
+     "PRT": 1.0,
+     "SWE": 0.0,
+     "USA": 0.0
+    },
+    "SWE": {
+     "BEL": 0.82,
+     "DEU": 0.68,
+     "DNK": 1.0,
+     "ESP": 0.0,
+     "FIN": 0.19,
+     "FRA": 0.84,
+     "GBR": 0.92,
+     "ITA": 0.67,
+     "JPN": 0.04,
+     "NLD": 0.94,
+     "NOR": 1.0,
+     "PRT": 0.0,
+     "SWE": 1.0,
+     "USA": 0.87
+    },
+    "USA": {
+     "BEL": 0.87,
+     "DEU": 0.77,
+     "DNK": 0.87,
+     "ESP": 0.0,
+     "FIN": 0.19,
+     "FRA": 0.87,
+     "GBR": 0.94,
+     "ITA": 0.74,
+     "JPN": 0.05,
+     "NLD": 0.92,
+     "NOR": 0.86,
+     "PRT": 0.0,
+     "SWE": 0.87,
+     "USA": 1.0
+    }
+   },
+   "coasignacion_media_dentro_cluster_principal": 0.8351,
+   "coasignacion_media_entre_clusters": 0.0601
+  }
+ },
+ "anual_solo_macro": {
+  "filas_años": 123,
+  "columnas": 84,
+  "celdas_obs": 0.9542,
+  "bai_ng": {
+   "V": [
+    0.9915,
+    0.7872,
+    0.6994,
+    0.6363,
+    0.5833,
+    0.5412,
+    0.5019,
+    0.4671,
+    0.4336
+   ],
+   "IC_p1": 4,
+   "IC_p2": 3,
+   "IC_p3": 8
+  },
+  "paralelo": {
+   "retenidos": 8,
+   "autovalores_10": [
+    16.962,
+    7.396,
+    5.249,
+    4.417,
+    3.547,
+    3.185,
+    3.057,
+    2.783,
+    2.381,
+    2.175
+   ],
+   "umbral95_10": [
+    3.488,
+    3.217,
+    3.061,
+    2.913,
+    2.799,
+    2.684,
+    2.59,
+    2.494,
+    2.42,
+    2.345
+   ]
+  },
+  "global": {
+   "cuota_autovalores": [
+    0.2019,
+    0.088,
+    0.0625,
+    0.0526,
+    0.0422,
+    0.0379
+   ],
+   "r2_obs": {
+    "F1..F1": 0.2054,
+    "F1..F2": 0.2939,
+    "F1..F3": 0.3583
+   },
+   "carga_media_por_indicador": {
+    "F1": {
+     "curva": 0.225,
+     "d_credito_pib": -0.115,
+     "d_ltrate": 0.312,
+     "inflacion": 0.702,
+     "pib_real_g": 0.328,
+     "tipo_real": -0.689
+    },
+    "F2": {
+     "curva": -0.331,
+     "d_credito_pib": -0.027,
+     "d_ltrate": 0.523,
+     "inflacion": 0.042,
+     "pib_real_g": -0.091,
+     "tipo_real": 0.106
+    },
+    "F3": {
+     "curva": 0.197,
+     "d_credito_pib": 0.047,
+     "d_ltrate": 0.188,
+     "inflacion": -0.276,
+     "pib_real_g": 0.259,
+     "tipo_real": 0.017
+    }
+   },
+   "carga_media_por_pais": {
+    "F1": {
+     "BEL": 0.194,
+     "DEU": 0.174,
+     "DNK": 0.114,
+     "ESP": 0.067,
+     "FIN": 0.125,
+     "FRA": 0.18,
+     "GBR": 0.13,
+     "ITA": 0.088,
+     "JPN": 0.109,
+     "NLD": 0.172,
+     "NOR": 0.111,
+     "PRT": 0.096,
+     "SWE": 0.124,
+     "USA": 0.097
+    },
+    "F2": {
+     "BEL": 0.065,
+     "DEU": 0.032,
+     "DNK": 0.073,
+     "ESP": 0.069,
+     "FIN": 0.033,
+     "FRA": 0.052,
+     "GBR": -0.005,
+     "ITA": 0.054,
+     "JPN": -0.018,
+     "NLD": 0.013,
+     "NOR": -0.032,
+     "PRT": 0.06,
+     "SWE": 0.096,
+     "USA": 0.023
+    },
+    "F3": {
+     "BEL": 0.134,
+     "DEU": 0.176,
+     "DNK": 0.029,
+     "ESP": 0.002,
+     "FIN": 0.161,
+     "FRA": 0.166,
+     "GBR": 0.005,
+     "ITA": 0.13,
+     "JPN": 0.082,
+     "NLD": 0.076,
+     "NOR": 0.026,
+     "PRT": 0.027,
+     "SWE": -0.004,
+     "USA": 0.002
+    }
+   },
+   "r2_F1_por_indicador": {
+    "curva": 0.075,
+    "d_credito_pib": 0.039,
+    "d_ltrate": 0.093,
+    "inflacion": 0.459,
+    "pib_real_g": 0.116,
+    "tipo_real": 0.431
+   },
+   "r2_F1_por_pais": {
+    "BEL": 0.131,
+    "DEU": 0.195,
+    "DNK": 0.278,
+    "ESP": 0.222,
+    "FIN": 0.119,
+    "FRA": 0.157,
+    "GBR": 0.236,
+    "ITA": 0.191,
+    "JPN": 0.144,
+    "NLD": 0.249,
+    "NOR": 0.276,
+    "PRT": 0.136,
+    "SWE": 0.285,
+    "USA": 0.213
+   }
+  },
+  "pc1_por_indicador": {
+   "pib_real_g": {
+    "todo": 0.3084,
+    "1871_1949": 0.267,
+    "1950_2004": 0.426
+   },
+   "inflacion": {
+    "todo": 0.5601,
+    "1871_1949": 0.4331,
+    "1950_2004": 0.6919
+   },
+   "d_credito_pib": {
+    "todo": 0.2309,
+    "1871_1949": 0.2561,
+    "1950_2004": 0.2261
+   },
+   "curva": {
+    "todo": 0.361,
+    "1871_1949": 0.4222,
+    "1950_2004": 0.2719
+   },
+   "tipo_real": {
+    "todo": 0.5047,
+    "1871_1949": 0.4475,
+    "1950_2004": 0.6006
+   },
+   "d_ltrate": {
+    "todo": 0.4684,
+    "1871_1949": 0.3251,
+    "1950_2004": 0.5187
+   }
+  },
+  "indicadores_dentro_pais": {
+   "corr": {
+    "pib_real_g": {
+     "pib_real_g": 1.0,
+     "inflacion": 0.13,
+     "d_credito_pib": -0.144,
+     "curva": 0.097,
+     "tipo_real": -0.153,
+     "d_ltrate": 0.052
+    },
+    "inflacion": {
+     "pib_real_g": 0.13,
+     "inflacion": 1.0,
+     "d_credito_pib": -0.172,
+     "curva": 0.011,
+     "tipo_real": -0.816,
+     "d_ltrate": 0.199
+    },
+    "d_credito_pib": {
+     "pib_real_g": -0.144,
+     "inflacion": -0.172,
+     "d_credito_pib": 1.0,
+     "curva": -0.062,
+     "tipo_real": 0.195,
+     "d_ltrate": -0.05
+    },
+    "curva": {
+     "pib_real_g": 0.097,
+     "inflacion": 0.011,
+     "d_credito_pib": -0.062,
+     "curva": 1.0,
+     "tipo_real": -0.231,
+     "d_ltrate": -0.085
+    },
+    "tipo_real": {
+     "pib_real_g": -0.153,
+     "inflacion": -0.816,
+     "d_credito_pib": 0.195,
+     "curva": -0.231,
+     "tipo_real": 1.0,
+     "d_ltrate": -0.109
+    },
+    "d_ltrate": {
+     "pib_real_g": 0.052,
+     "inflacion": 0.199,
+     "d_credito_pib": -0.05,
+     "curva": -0.085,
+     "tipo_real": -0.109,
+     "d_ltrate": 1.0
+    }
+   },
+   "cargas": {
+    "P1": {
+     "pib_real_g": 0.34,
+     "inflacion": 0.887,
+     "d_credito_pib": -0.396,
+     "curva": 0.246,
+     "tipo_real": -0.912,
+     "d_ltrate": 0.283
+    },
+    "P2": {
+     "pib_real_g": -0.309,
+     "inflacion": 0.227,
+     "d_credito_pib": 0.187,
+     "curva": -0.745,
+     "tipo_real": 0.018,
+     "d_ltrate": 0.627
+    },
+    "P3": {
+     "pib_real_g": 0.651,
+     "inflacion": -0.234,
+     "d_credito_pib": -0.543,
+     "curva": -0.207,
+     "tipo_real": 0.291,
+     "d_ltrate": 0.313
+    }
+   },
+   "cuota": [
+    0.339,
+    0.188,
+    0.166,
+    0.145,
+    0.136
+   ]
+  },
+  "clusters_indicadores": {
+   "1": [
+    "pib_real_g",
+    "inflacion",
+    "d_credito_pib",
+    "tipo_real"
+   ],
+   "2": [
+    "d_ltrate"
+   ],
+   "3": [
+    "curva"
+   ]
+  },
+  "por_pais": {
+   "BEL": {
+    "cuota_pc1": 0.3321,
+    "congruencia_con_comun": [
+     0.955,
+     0.859,
+     0.391
+    ]
+   },
+   "DEU": {
+    "cuota_pc1": 0.3718,
+    "congruencia_con_comun": [
+     0.935,
+     0.848,
+     0.151
+    ]
+   },
+   "DNK": {
+    "cuota_pc1": 0.3823,
+    "congruencia_con_comun": [
+     0.981,
+     0.648,
+     0.734
+    ]
+   },
+   "ESP": {
+    "cuota_pc1": 0.3405,
+    "congruencia_con_comun": [
+     0.865,
+     0.5,
+     0.703
+    ]
+   },
+   "FIN": {
+    "cuota_pc1": 0.3291,
+    "congruencia_con_comun": [
+     0.898,
+     0.503,
+     0.648
+    ]
+   },
+   "FRA": {
+    "cuota_pc1": 0.3654,
+    "congruencia_con_comun": [
+     0.987,
+     0.715,
+     0.352
+    ]
+   },
+   "GBR": {
+    "cuota_pc1": 0.3423,
+    "congruencia_con_comun": [
+     0.893,
+     0.906,
+     0.065
+    ]
+   },
+   "ITA": {
+    "cuota_pc1": 0.3637,
+    "congruencia_con_comun": [
+     0.939,
+     0.82,
+     0.129
+    ]
+   },
+   "JPN": {
+    "cuota_pc1": 0.3572,
+    "congruencia_con_comun": [
+     0.989,
+     0.749,
+     0.469
+    ]
+   },
+   "NLD": {
+    "cuota_pc1": 0.3409,
+    "congruencia_con_comun": [
+     0.977,
+     0.693,
+     0.681
+    ]
+   },
+   "NOR": {
+    "cuota_pc1": 0.3974,
+    "congruencia_con_comun": [
+     0.979,
+     0.969,
+     0.95
+    ]
+   },
+   "PRT": {
+    "cuota_pc1": 0.3512,
+    "congruencia_con_comun": [
+     0.96,
+     0.599,
+     0.118
+    ]
+   },
+   "SWE": {
+    "cuota_pc1": 0.3817,
+    "congruencia_con_comun": [
+     0.979,
+     0.651,
+     0.799
+    ]
+   },
+   "USA": {
+    "cuota_pc1": 0.3193,
+    "congruencia_con_comun": [
+     0.988,
+     0.903,
+     0.924
+    ]
+   }
+  },
+  "clusters_paises": {
+   "1": [
+    "ESP",
+    "PRT"
+   ],
+   "2": [
+    "BEL",
+    "DEU",
+    "DNK",
+    "FRA",
+    "GBR",
+    "ITA",
+    "NLD",
+    "NOR",
+    "SWE",
+    "USA"
+   ],
+   "3": [
+    "FIN"
+   ],
+   "4": [
+    "JPN"
+   ]
+  },
+  "corr_paises_media": 0.3326,
+  "clusters_paises_residuo": {
+   "1": [
+    "ESP",
+    "PRT"
+   ],
+   "2": [
+    "BEL",
+    "DEU",
+    "DNK",
+    "FRA",
+    "GBR",
+    "ITA",
+    "NLD",
+    "NOR",
+    "SWE",
+    "USA"
+   ],
+   "3": [
+    "FIN"
+   ],
+   "4": [
+    "JPN"
+   ]
+  },
+  "regional": {
+   "1": {
+    "paises": [
+     "ESP",
+     "PRT"
+    ],
+    "cuota_pc1": 0.1967,
+    "azar_media": 0.1951,
+    "azar_p95": 0.2162,
+    "p_azar": 0.4378
+   },
+   "2": {
+    "paises": [
+     "BEL",
+     "DEU",
+     "DNK",
+     "FRA",
+     "GBR",
+     "ITA",
+     "NLD",
+     "NOR",
+     "SWE",
+     "USA"
+    ],
+    "cuota_pc1": 0.0967,
+    "azar_media": 0.0853,
+    "azar_p95": 0.0947,
+    "p_azar": 0.0249
+   },
+   "3": {
+    "paises": [
+     "FIN"
+    ],
+    "cuota_pc1": null,
+    "azar_media": null,
+    "azar_p95": null,
+    "p_azar": null
+   },
+   "4": {
+    "paises": [
+     "JPN"
+    ],
+    "cuota_pc1": null,
+    "azar_media": null,
+    "azar_p95": null,
+    "p_azar": null
+   }
+  },
+  "mitades": {
+   "1871_1949": {
+    "años": 67,
+    "cuota_autovalores": [
+     0.199,
+     0.103,
+     0.066,
+     0.062
+    ],
+    "congruencia_global_con_todo": [
+     0.77,
+     0.452,
+     0.397
+    ],
+    "carga_media_por_indicador": {
+     "F1": {
+      "curva": -0.086,
+      "d_credito_pib": -0.176,
+      "d_ltrate": 0.286,
+      "inflacion": 0.619,
+      "pib_real_g": 0.308,
+      "tipo_real": -0.726
+     },
+     "F2": {
+      "curva": 0.371,
+      "d_credito_pib": 0.003,
+      "d_ltrate": -0.215,
+      "inflacion": -0.188,
+      "pib_real_g": 0.093,
+      "tipo_real": 0.123
+     },
+     "F3": {
+      "curva": -0.332,
+      "d_credito_pib": 0.247,
+      "d_ltrate": 0.12,
+      "inflacion": -0.154,
+      "pib_real_g": -0.079,
+      "tipo_real": 0.21
+     }
+    },
+    "bai_ng": {
+     "V": [
+      0.984,
+      0.7714,
+      0.6711,
+      0.6058,
+      0.5453,
+      0.4891,
+      0.4428
+     ],
+     "IC_p1": 6,
+     "IC_p2": 2,
+     "IC_p3": 6
+    },
+    "cargas_indicadores": {
+     "0": {
+      "pib_real_g": 0.361,
+      "inflacion": 0.93,
+      "d_credito_pib": -0.468,
+      "curva": 0.037,
+      "tipo_real": -0.934,
+      "d_ltrate": 0.333
+     },
+     "1": {
+      "pib_real_g": 0.574,
+      "inflacion": -0.264,
+      "d_credito_pib": -0.591,
+      "curva": 0.648,
+      "tipo_real": 0.145,
+      "d_ltrate": -0.382
+     },
+     "2": {
+      "pib_real_g": 0.438,
+      "inflacion": -0.199,
+      "d_credito_pib": -0.286,
+      "curva": -0.46,
+      "tipo_real": 0.3,
+      "d_ltrate": 0.572
+     }
+    },
+    "congruencia_indicadores_con_todo": [
+     0.988,
+     0.869,
+     0.875
+    ],
+    "clusters_paises": {
+     "1": [
+      "BEL",
+      "DEU",
+      "DNK",
+      "FIN",
+      "FRA",
+      "GBR",
+      "JPN",
+      "NLD",
+      "NOR",
+      "SWE",
+      "USA"
+     ],
+     "2": [
+      "ITA"
+     ],
+     "3": [
+      "ESP"
+     ],
+     "4": [
+      "PRT"
+     ]
+    },
+    "clusters_indicadores": {
+     "1": [
+      "pib_real_g",
+      "d_credito_pib"
+     ],
+     "2": [
+      "inflacion",
+      "tipo_real",
+      "d_ltrate"
+     ],
+     "3": [
+      "curva"
+     ]
+    }
+   },
+   "1950_2004": {
+    "años": 55,
+    "cuota_autovalores": [
+     0.21,
+     0.139,
+     0.104,
+     0.06
+    ],
+    "congruencia_global_con_todo": [
+     0.848,
+     0.776,
+     0.755
+    ],
+    "carga_media_por_indicador": {
+     "F1": {
+      "curva": -0.054,
+      "d_credito_pib": -0.156,
+      "d_ltrate": 0.435,
+      "inflacion": 0.745,
+      "pib_real_g": 0.018,
+      "tipo_real": -0.526
+     },
+     "F2": {
+      "curva": 0.327,
+      "d_credito_pib": 0.107,
+      "d_ltrate": 0.13,
+      "inflacion": -0.287,
+      "pib_real_g": 0.481,
+      "tipo_real": -0.399
+     },
+     "F3": {
+      "curva": -0.202,
+      "d_credito_pib": 0.032,
+      "d_ltrate": 0.476,
+      "inflacion": -0.089,
+      "pib_real_g": 0.177,
+      "tipo_real": 0.328
+     }
+    },
+    "bai_ng": {
+     "V": [
+      0.9818,
+      0.7753,
+      0.6382,
+      0.536,
+      0.4772,
+      0.4256,
+      0.3847
+     ],
+     "IC_p1": 5,
+     "IC_p2": 3,
+     "IC_p3": 6
+    },
+    "cargas_indicadores": {
+     "0": {
+      "pib_real_g": 0.169,
+      "inflacion": -0.849,
+      "d_credito_pib": 0.504,
+      "curva": -0.06,
+      "tipo_real": 0.746,
+      "d_ltrate": -0.451
+     },
+     "1": {
+      "pib_real_g": 0.318,
+      "inflacion": -0.231,
+      "d_credito_pib": 0.119,
+      "curva": 0.899,
+      "tipo_real": -0.51,
+      "d_ltrate": -0.279
+     },
+     "2": {
+      "pib_real_g": 0.779,
+      "inflacion": -0.016,
+      "d_credito_pib": 0.26,
+      "curva": -0.102,
+      "tipo_real": 0.016,
+      "d_ltrate": 0.652
+     }
+    },
+    "congruencia_indicadores_con_todo": [
+     0.907,
+     0.806,
+     0.569
+    ],
+    "clusters_paises": {
+     "1": [
+      "ESP",
+      "PRT"
+     ],
+     "2": [
+      "BEL",
+      "DNK",
+      "FIN",
+      "FRA",
+      "GBR",
+      "ITA",
+      "NLD",
+      "NOR",
+      "SWE",
+      "USA"
+     ],
+     "3": [
+      "DEU"
+     ],
+     "4": [
+      "JPN"
+     ]
+    },
+    "clusters_indicadores": {
+     "1": [
+      "inflacion",
+      "curva",
+      "tipo_real",
+      "d_ltrate"
+     ],
+     "2": [
+      "d_credito_pib"
+     ],
+     "3": [
+      "pib_real_g"
+     ]
+    }
+   },
+   "ari_paises_entre_mitades": 0.3612,
+   "ari_indicadores_entre_mitades": 0.4118,
+   "ari_paises_mitad_vs_todo": [
+    0.3612,
+    0.6043
+   ]
+  },
+  "bootstrap": {
+   "B": 100,
+   "bloque_años": 10,
+   "congruencia_mediana": [
+    0.958,
+    0.88,
+    0.652
+   ],
+   "congruencia_p10": [
+    0.804,
+    0.708,
+    0.292
+   ],
+   "frac_congruencia_ge_0.85": [
+    0.85,
+    0.62,
+    0.16
+   ],
+   "cuota_mediana": [
+    0.212,
+    0.099,
+    0.073
+   ],
+   "cuota_ic90": [
+    [
+     0.188,
+     0.085,
+     0.063
+    ],
+    [
+     0.248,
+     0.118,
+     0.094
+    ]
+   ],
+   "bai_ng_ICp2_frecuencias": {
+    "3": 3,
+    "4": 20,
+    "5": 20,
+    "6": 57
+   },
+   "coasignacion_paises": {
+    "BEL": {
+     "BEL": 1.0,
+     "DEU": 0.77,
+     "DNK": 0.79,
+     "ESP": 0.0,
+     "FIN": 0.23,
+     "FRA": 0.99,
+     "GBR": 0.83,
+     "ITA": 0.86,
+     "JPN": 0.02,
+     "NLD": 0.83,
+     "NOR": 0.79,
+     "PRT": 0.0,
+     "SWE": 0.79,
+     "USA": 0.84
+    },
+    "DEU": {
+     "BEL": 0.77,
+     "DEU": 1.0,
+     "DNK": 0.83,
+     "ESP": 0.0,
+     "FIN": 0.36,
+     "FRA": 0.76,
+     "GBR": 0.87,
+     "ITA": 0.8,
+     "JPN": 0.06,
+     "NLD": 0.87,
+     "NOR": 0.83,
+     "PRT": 0.0,
+     "SWE": 0.83,
+     "USA": 0.9
+    },
+    "DNK": {
+     "BEL": 0.79,
+     "DEU": 0.83,
+     "DNK": 1.0,
+     "ESP": 0.0,
+     "FIN": 0.27,
+     "FRA": 0.8,
+     "GBR": 0.96,
+     "ITA": 0.7,
+     "JPN": 0.07,
+     "NLD": 0.96,
+     "NOR": 1.0,
+     "PRT": 0.0,
+     "SWE": 1.0,
+     "USA": 0.91
+    },
+    "ESP": {
+     "BEL": 0.0,
+     "DEU": 0.0,
+     "DNK": 0.0,
+     "ESP": 1.0,
+     "FIN": 0.0,
+     "FRA": 0.0,
+     "GBR": 0.0,
+     "ITA": 0.02,
+     "JPN": 0.0,
+     "NLD": 0.0,
+     "NOR": 0.0,
+     "PRT": 0.82,
+     "SWE": 0.0,
+     "USA": 0.0
+    },
+    "FIN": {
+     "BEL": 0.23,
+     "DEU": 0.36,
+     "DNK": 0.27,
+     "ESP": 0.0,
+     "FIN": 1.0,
+     "FRA": 0.22,
+     "GBR": 0.27,
+     "ITA": 0.29,
+     "JPN": 0.06,
+     "NLD": 0.27,
+     "NOR": 0.27,
+     "PRT": 0.0,
+     "SWE": 0.27,
+     "USA": 0.27
+    },
+    "FRA": {
+     "BEL": 0.99,
+     "DEU": 0.76,
+     "DNK": 0.8,
+     "ESP": 0.0,
+     "FIN": 0.22,
+     "FRA": 1.0,
+     "GBR": 0.84,
+     "ITA": 0.85,
+     "JPN": 0.02,
+     "NLD": 0.84,
+     "NOR": 0.8,
+     "PRT": 0.0,
+     "SWE": 0.8,
+     "USA": 0.83
+    },
+    "GBR": {
+     "BEL": 0.83,
+     "DEU": 0.87,
+     "DNK": 0.96,
+     "ESP": 0.0,
+     "FIN": 0.27,
+     "FRA": 0.84,
+     "GBR": 1.0,
+     "ITA": 0.74,
+     "JPN": 0.07,
+     "NLD": 1.0,
+     "NOR": 0.96,
+     "PRT": 0.0,
+     "SWE": 0.96,
+     "USA": 0.95
+    },
+    "ITA": {
+     "BEL": 0.86,
+     "DEU": 0.8,
+     "DNK": 0.7,
+     "ESP": 0.02,
+     "FIN": 0.29,
+     "FRA": 0.85,
+     "GBR": 0.74,
+     "ITA": 1.0,
+     "JPN": 0.0,
+     "NLD": 0.74,
+     "NOR": 0.7,
+     "PRT": 0.02,
+     "SWE": 0.7,
+     "USA": 0.75
+    },
+    "JPN": {
+     "BEL": 0.02,
+     "DEU": 0.06,
+     "DNK": 0.07,
+     "ESP": 0.0,
+     "FIN": 0.06,
+     "FRA": 0.02,
+     "GBR": 0.07,
+     "ITA": 0.0,
+     "JPN": 1.0,
+     "NLD": 0.07,
+     "NOR": 0.07,
+     "PRT": 0.01,
+     "SWE": 0.07,
+     "USA": 0.07
+    },
+    "NLD": {
+     "BEL": 0.83,
+     "DEU": 0.87,
+     "DNK": 0.96,
+     "ESP": 0.0,
+     "FIN": 0.27,
+     "FRA": 0.84,
+     "GBR": 1.0,
+     "ITA": 0.74,
+     "JPN": 0.07,
+     "NLD": 1.0,
+     "NOR": 0.96,
+     "PRT": 0.0,
+     "SWE": 0.96,
+     "USA": 0.95
+    },
+    "NOR": {
+     "BEL": 0.79,
+     "DEU": 0.83,
+     "DNK": 1.0,
+     "ESP": 0.0,
+     "FIN": 0.27,
+     "FRA": 0.8,
+     "GBR": 0.96,
+     "ITA": 0.7,
+     "JPN": 0.07,
+     "NLD": 0.96,
+     "NOR": 1.0,
+     "PRT": 0.0,
+     "SWE": 1.0,
+     "USA": 0.91
+    },
+    "PRT": {
+     "BEL": 0.0,
+     "DEU": 0.0,
+     "DNK": 0.0,
+     "ESP": 0.82,
+     "FIN": 0.0,
+     "FRA": 0.0,
+     "GBR": 0.0,
+     "ITA": 0.02,
+     "JPN": 0.01,
+     "NLD": 0.0,
+     "NOR": 0.0,
+     "PRT": 1.0,
+     "SWE": 0.0,
+     "USA": 0.0
+    },
+    "SWE": {
+     "BEL": 0.79,
+     "DEU": 0.83,
+     "DNK": 1.0,
+     "ESP": 0.0,
+     "FIN": 0.27,
+     "FRA": 0.8,
+     "GBR": 0.96,
+     "ITA": 0.7,
+     "JPN": 0.07,
+     "NLD": 0.96,
+     "NOR": 1.0,
+     "PRT": 0.0,
+     "SWE": 1.0,
+     "USA": 0.91
+    },
+    "USA": {
+     "BEL": 0.84,
+     "DEU": 0.9,
+     "DNK": 0.91,
+     "ESP": 0.0,
+     "FIN": 0.27,
+     "FRA": 0.83,
+     "GBR": 0.95,
+     "ITA": 0.75,
+     "JPN": 0.07,
+     "NLD": 0.95,
+     "NOR": 0.91,
+     "PRT": 0.0,
+     "SWE": 0.91,
+     "USA": 1.0
+    }
+   },
+   "coasignacion_media_dentro_cluster_principal": 0.8583,
+   "coasignacion_media_entre_clusters": 0.0744
+  }
+ },
+ "anual_con_guerras": {
+  "bai_ng": {
+   "V": [
+    0.9919,
+    0.814,
+    0.7254,
+    0.655,
+    0.6084,
+    0.568,
+    0.531,
+    0.4974,
+    0.4706
+   ],
+   "IC_p1": 6,
+   "IC_p2": 3,
+   "IC_p3": 8
+  },
+  "paralelo": {
+   "retenidos": 10,
+   "autovalores_10": [
+    18.851,
+    10.016,
+    7.916,
+    5.103,
+    4.755,
+    4.071,
+    3.454,
+    3.168,
+    3.046,
+    2.943
+   ],
+   "umbral95_10": [
+    4.062,
+    3.797,
+    3.61,
+    3.422,
+    3.302,
+    3.164,
+    3.066,
+    2.975,
+    2.882,
+    2.787
+   ]
+  },
+  "global": {
+   "cuota_autovalores": [
+    0.1683,
+    0.0894,
+    0.0707,
+    0.0456,
+    0.0425,
+    0.0363
+   ],
+   "r2_obs": {
+    "F1..F1": 0.1763,
+    "F1..F2": 0.2651,
+    "F1..F3": 0.3397
+   },
+   "carga_media_por_indicador": {
+    "F1": {
+     "curva": -0.062,
+     "d_credito_pib": 0.25,
+     "d_ltrate": -0.284,
+     "eq_tr_real": 0.268,
+     "housing_tr_real": 0.313,
+     "inflacion": -0.851,
+     "pib_real_g": 0.025,
+     "tipo_real": 0.849
+    },
+    "F2": {
+     "curva": -0.181,
+     "d_credito_pib": 0.04,
+     "d_ltrate": 0.544,
+     "eq_tr_real": -0.397,
+     "housing_tr_real": 0.077,
+     "inflacion": -0.058,
+     "pib_real_g": 0.062,
+     "tipo_real": 0.133
+    },
+    "F3": {
+     "curva": 0.377,
+     "d_credito_pib": 0.067,
+     "d_ltrate": 0.112,
+     "eq_tr_real": 0.182,
+     "housing_tr_real": 0.23,
+     "inflacion": 0.034,
+     "pib_real_g": 0.466,
+     "tipo_real": -0.089
+    }
+   },
+   "carga_media_por_pais": {
+    "F1": {
+     "BEL": 0.114,
+     "DEU": 0.034,
+     "DNK": 0.088,
+     "ESP": 0.061,
+     "FIN": 0.11,
+     "FRA": 0.083,
+     "GBR": 0.047,
+     "ITA": 0.048,
+     "JPN": -0.012,
+     "NLD": -0.025,
+     "NOR": 0.072,
+     "PRT": 0.137,
+     "SWE": 0.088,
+     "USA": 0.046
+    },
+    "F2": {
+     "BEL": 0.095,
+     "DEU": 0.021,
+     "DNK": 0.048,
+     "ESP": 0.025,
+     "FIN": 0.039,
+     "FRA": 0.051,
+     "GBR": -0.049,
+     "ITA": 0.088,
+     "JPN": 0.039,
+     "NLD": -0.024,
+     "NOR": -0.026,
+     "PRT": 0.066,
+     "SWE": 0.047,
+     "USA": -0.034
+    },
+    "F3": {
+     "BEL": 0.262,
+     "DEU": 0.187,
+     "DNK": 0.161,
+     "ESP": 0.102,
+     "FIN": 0.267,
+     "FRA": 0.213,
+     "GBR": 0.149,
+     "ITA": 0.17,
+     "JPN": 0.185,
+     "NLD": 0.182,
+     "NOR": 0.132,
+     "PRT": 0.128,
+     "SWE": 0.173,
+     "USA": 0.101
+    }
+   },
+   "r2_F1_por_indicador": {
+    "curva": 0.029,
+    "d_credito_pib": 0.064,
+    "d_ltrate": 0.07,
+    "eq_tr_real": 0.06,
+    "housing_tr_real": 0.078,
+    "inflacion": 0.535,
+    "pib_real_g": 0.017,
+    "tipo_real": 0.499
+   },
+   "r2_F1_por_pais": {
+    "BEL": 0.098,
+    "DEU": 0.157,
+    "DNK": 0.234,
+    "ESP": 0.198,
+    "FIN": 0.111,
+    "FRA": 0.142,
+    "GBR": 0.236,
+    "ITA": 0.176,
+    "JPN": 0.081,
+    "NLD": 0.168,
+    "NOR": 0.228,
+    "PRT": 0.108,
+    "SWE": 0.246,
+    "USA": 0.184
+   }
+  },
+  "indicadores_dentro_pais": {
+   "corr": {
+    "pib_real_g": {
+     "pib_real_g": 1.0,
+     "inflacion": -0.002,
+     "d_credito_pib": -0.162,
+     "curva": 0.089,
+     "tipo_real": -0.007,
+     "d_ltrate": 0.038,
+     "eq_tr_real": 0.131,
+     "housing_tr_real": 0.201
+    },
+    "inflacion": {
+     "pib_real_g": -0.002,
+     "inflacion": 1.0,
+     "d_credito_pib": -0.215,
+     "curva": 0.003,
+     "tipo_real": -0.861,
+     "d_ltrate": 0.187,
+     "eq_tr_real": -0.234,
+     "housing_tr_real": -0.311
+    },
+    "d_credito_pib": {
+     "pib_real_g": -0.162,
+     "inflacion": -0.215,
+     "d_credito_pib": 1.0,
+     "curva": -0.064,
+     "tipo_real": 0.245,
+     "d_ltrate": -0.064,
+     "eq_tr_real": 0.037,
+     "housing_tr_real": 0.175
+    },
+    "curva": {
+     "pib_real_g": 0.089,
+     "inflacion": 0.003,
+     "d_credito_pib": -0.064,
+     "curva": 1.0,
+     "tipo_real": -0.187,
+     "d_ltrate": -0.083,
+     "eq_tr_real": 0.141,
+     "housing_tr_real": 0.053
+    },
+    "tipo_real": {
+     "pib_real_g": -0.007,
+     "inflacion": -0.861,
+     "d_credito_pib": 0.245,
+     "curva": -0.187,
+     "tipo_real": 1.0,
+     "d_ltrate": -0.105,
+     "eq_tr_real": 0.195,
+     "housing_tr_real": 0.263
+    },
+    "d_ltrate": {
+     "pib_real_g": 0.038,
+     "inflacion": 0.187,
+     "d_credito_pib": -0.064,
+     "curva": -0.083,
+     "tipo_real": -0.105,
+     "d_ltrate": 1.0,
+     "eq_tr_real": -0.358,
+     "housing_tr_real": -0.011
+    },
+    "eq_tr_real": {
+     "pib_real_g": 0.131,
+     "inflacion": -0.234,
+     "d_credito_pib": 0.037,
+     "curva": 0.141,
+     "tipo_real": 0.195,
+     "d_ltrate": -0.358,
+     "eq_tr_real": 1.0,
+     "housing_tr_real": 0.136
+    },
+    "housing_tr_real": {
+     "pib_real_g": 0.201,
+     "inflacion": -0.311,
+     "d_credito_pib": 0.175,
+     "curva": 0.053,
+     "tipo_real": 0.263,
+     "d_ltrate": -0.011,
+     "eq_tr_real": 0.136,
+     "housing_tr_real": 1.0
+    }
+   },
+   "cargas": {
+    "P1": {
+     "pib_real_g": 0.055,
+     "inflacion": -0.894,
+     "d_credito_pib": 0.405,
+     "curva": -0.052,
+     "tipo_real": 0.872,
+     "d_ltrate": -0.342,
+     "eq_tr_real": 0.45,
+     "housing_tr_real": 0.502
+    },
+    "P2": {
+     "pib_real_g": 0.504,
+     "inflacion": 0.114,
+     "d_credito_pib": -0.348,
+     "curva": 0.615,
+     "tipo_real": -0.268,
+     "d_ltrate": -0.437,
+     "eq_tr_real": 0.591,
+     "housing_tr_real": 0.131
+    },
+    "P3": {
+     "pib_real_g": 0.66,
+     "inflacion": -0.051,
+     "d_credito_pib": -0.197,
+     "curva": -0.029,
+     "tipo_real": 0.08,
+     "d_ltrate": 0.611,
+     "eq_tr_real": -0.262,
+     "housing_tr_real": 0.505
+    }
+   },
+   "cuota": [
+    0.288,
+    0.175,
+    0.148,
+    0.119,
+    0.103
+   ]
+  }
+ },
+ "mensual_ocde": {
+  "pc1_ip_yoy": {
+   "1961_2004": 0.4226,
+   "1961_1982": 0.4715,
+   "1983_2004": 0.3732
+  },
+  "pc1_ipc_yoy": {
+   "1961_2004": 0.7326,
+   "1961_1982": 0.6674,
+   "1983_2004": 0.6294
+  },
+  "pc1_curva": {
+   "1961_2004": 0.5317,
+   "1961_1982": 0.1844,
+   "1983_2004": 0.5427
+  },
+  "pc1_bolsa_12m": {
+   "1961_2004": 0.6323,
+   "1961_1982": 0.2657,
+   "1983_2004": 0.6827
+  },
+  "meses": 528,
+  "columnas": 55,
+  "bai_ng": {
+   "V": [
+    0.9977,
+    0.721,
+    0.5719,
+    0.4433,
+    0.3728,
+    0.3318,
+    0.2978
+   ],
+   "IC_p1": 6,
+   "IC_p2": 6,
+   "IC_p3": 6
+  },
+  "cuota_autovalores": [
+   0.256,
+   0.168,
+   0.12,
+   0.103
+  ],
+  "carga_media_por_indicador": {
+   "F1": {
+    "bolsa_12m": 0.089,
+    "curva": 1.184,
+    "ip_yoy": 0.171,
+    "ipc_yoy": -0.831
+   },
+   "F2": {
+    "bolsa_12m": -0.478,
+    "curva": 0.013,
+    "ip_yoy": 0.44,
+    "ipc_yoy": 0.072
+   },
+   "F3": {
+    "bolsa_12m": 0.538,
+    "curva": 0.034,
+    "ip_yoy": 0.408,
+    "ipc_yoy": 0.053
+   }
+  },
+  "corr_media_anual_mensual_vs_F_anual": {
+   "F1~F1": -0.7091,
+   "F1~F2": 0.3743,
+   "F1~F3": 0.5318,
+   "F2~F1": 0.5089,
+   "F2~F2": -0.5295,
+   "F2~F3": 0.5146,
+   "F3~F1": 0.1311,
+   "F3~F2": 0.0869,
+   "F3~F3": 0.4074
+  },
+  "años_comunes": 44
+ },
+ "factores_anuales": {
+  "1870": [
+   -3.663,
+   -0.201,
+   1.896
+  ],
+  "1871": [
+   -0.343,
+   0.769,
+   -0.93
+  ],
+  "1872": [
+   0.305,
+   0.151,
+   0.013
+  ],
+  "1873": [
+   0.257,
+   -0.99,
+   -1.554
+  ],
+  "1874": [
+   -0.633,
+   -0.171,
+   0.168
+  ],
+  "1875": [
+   -1.633,
+   -0.411,
+   0.383
+  ],
+  "1876": [
+   -0.665,
+   -0.619,
+   -0.487
+  ],
+  "1877": [
+   -0.617,
+   -0.592,
+   -0.487
+  ],
+  "1878": [
+   -1.697,
+   -0.71,
+   0.077
+  ],
+  "1879": [
+   -1.204,
+   0.03,
+   -0.085
+  ],
+  "1880": [
+   0.175,
+   0.334,
+   -0.444
+  ],
+  "1881": [
+   -0.564,
+   -0.184,
+   -0.599
+  ],
+  "1882": [
+   -0.646,
+   -0.8,
+   0.002
+  ],
+  "1883": [
+   -1.102,
+   -0.615,
+   0.281
+  ],
+  "1884": [
+   -1.355,
+   -0.748,
+   -0.03
+  ],
+  "1885": [
+   -1.146,
+   -0.485,
+   0.216
+  ],
+  "1886": [
+   -1.146,
+   -0.253,
+   0.492
+  ],
+  "1887": [
+   -0.537,
+   -0.438,
+   -0.118
+  ],
+  "1888": [
+   -0.276,
+   -0.065,
+   -0.831
+  ],
+  "1889": [
+   0.076,
+   0.043,
+   -0.786
+  ],
+  "1890": [
+   0.094,
+   -0.742,
+   -0.795
+  ],
+  "1891": [
+   -0.031,
+   -0.887,
+   -1.117
+  ],
+  "1892": [
+   -0.661,
+   -0.501,
+   0.032
+  ],
+  "1893": [
+   -1.119,
+   -0.85,
+   0.268
+  ],
+  "1894": [
+   -0.919,
+   -0.021,
+   0.111
+  ],
+  "1895": [
+   -0.487,
+   0.246,
+   0.121
+  ],
+  "1896": [
+   -0.497,
+   -0.328,
+   0.062
+  ],
+  "1897": [
+   -0.076,
+   -0.228,
+   -0.546
+  ],
+  "1898": [
+   0.103,
+   -0.422,
+   -0.536
+  ],
+  "1899": [
+   -0.463,
+   -0.959,
+   -0.775
+  ],
+  "1900": [
+   0.15,
+   -1.029,
+   -1.062
+  ],
+  "1901": [
+   -0.622,
+   -0.876,
+   -0.488
+  ],
+  "1902": [
+   -0.681,
+   -0.567,
+   -0.646
+  ],
+  "1903": [
+   -0.211,
+   -0.463,
+   -0.248
+  ],
+  "1904": [
+   -0.582,
+   -0.428,
+   -0.075
+  ],
+  "1905": [
+   -0.357,
+   -0.311,
+   -0.967
+  ],
+  "1906": [
+   -0.071,
+   -0.4,
+   -0.367
+  ],
+  "1907": [
+   0.043,
+   -1.44,
+   -0.816
+  ],
+  "1908": [
+   -0.647,
+   -0.814,
+   -0.807
+  ],
+  "1909": [
+   -0.616,
+   0.025,
+   -0.081
+  ],
+  "1910": [
+   -0.155,
+   -0.479,
+   -0.363
+  ],
+  "1911": [
+   0.123,
+   -0.354,
+   -0.465
+  ],
+  "1912": [
+   0.238,
+   -0.769,
+   -0.914
+  ],
+  "1913": [
+   -0.164,
+   -0.846,
+   -0.315
+  ],
+  "1919": [
+   1.893,
+   0.046,
+   2.369
+  ],
+  "1920": [
+   2.556,
+   -1.754,
+   0.189
+  ],
+  "1921": [
+   -2.918,
+   -1.34,
+   0.225
+  ],
+  "1922": [
+   -2.461,
+   0.466,
+   2.368
+  ],
+  "1923": [
+   -0.374,
+   0.08,
+   0.698
+  ],
+  "1924": [
+   0.698,
+   0.033,
+   -0.816
+  ],
+  "1925": [
+   0.019,
+   0.02,
+   -0.344
+  ],
+  "1926": [
+   -1.079,
+   0.053,
+   -0.149
+  ],
+  "1927": [
+   -0.749,
+   0.471,
+   0.015
+  ],
+  "1928": [
+   -0.771,
+   0.187,
+   0.513
+  ],
+  "1929": [
+   -0.414,
+   -0.934,
+   0.264
+  ],
+  "1930": [
+   -1.284,
+   -0.879,
+   0.044
+  ],
+  "1931": [
+   -2.109,
+   -2.294,
+   0.433
+  ],
+  "1932": [
+   -1.597,
+   -0.674,
+   -0.265
+  ],
+  "1933": [
+   -0.708,
+   1.017,
+   0.448
+  ],
+  "1934": [
+   -0.049,
+   1.04,
+   -0.319
+  ],
+  "1935": [
+   -0.054,
+   0.783,
+   -0.359
+  ],
+  "1936": [
+   0.163,
+   1.042,
+   -0.68
+  ],
+  "1937": [
+   1.392,
+   0.208,
+   -0.484
+  ],
+  "1938": [
+   0.458,
+   0.109,
+   -0.676
+  ],
+  "1946": [
+   1.117,
+   0.289,
+   3.011
+  ],
+  "1947": [
+   1.628,
+   0.377,
+   1.279
+  ],
+  "1948": [
+   1.378,
+   -0.165,
+   0.401
+  ],
+  "1949": [
+   0.747,
+   0.885,
+   1.038
+  ],
+  "1950": [
+   0.77,
+   0.434,
+   0.955
+  ],
+  "1951": [
+   2.348,
+   1.03,
+   -0.283
+  ],
+  "1952": [
+   0.646,
+   0.289,
+   0.494
+  ],
+  "1953": [
+   -0.059,
+   0.711,
+   1.212
+  ],
+  "1954": [
+   0.096,
+   1.801,
+   0.573
+  ],
+  "1955": [
+   0.316,
+   0.647,
+   1.69
+  ],
+  "1956": [
+   0.752,
+   -0.109,
+   1.336
+  ],
+  "1957": [
+   0.765,
+   -0.431,
+   1.351
+  ],
+  "1958": [
+   0.306,
+   0.853,
+   -0.398
+  ],
+  "1959": [
+   0.041,
+   1.577,
+   1.297
+  ],
+  "1960": [
+   0.164,
+   0.325,
+   2.006
+  ],
+  "1961": [
+   0.452,
+   0.408,
+   2.044
+  ],
+  "1962": [
+   0.72,
+   0.192,
+   1.061
+  ],
+  "1963": [
+   0.601,
+   0.572,
+   0.748
+  ],
+  "1964": [
+   0.861,
+   0.101,
+   1.494
+  ],
+  "1965": [
+   0.798,
+   -0.031,
+   1.022
+  ],
+  "1966": [
+   0.8,
+   -0.581,
+   0.829
+  ],
+  "1967": [
+   0.616,
+   0.545,
+   0.568
+  ],
+  "1968": [
+   0.496,
+   0.722,
+   0.81
+  ],
+  "1969": [
+   0.537,
+   -0.449,
+   1.595
+  ],
+  "1970": [
+   0.974,
+   -1.059,
+   0.754
+  ],
+  "1971": [
+   0.814,
+   0.877,
+   -0.085
+  ],
+  "1972": [
+   0.902,
+   1.88,
+   0.97
+  ],
+  "1973": [
+   1.365,
+   -0.364,
+   1.248
+  ],
+  "1974": [
+   2.545,
+   -3.009,
+   -1.007
+  ],
+  "1975": [
+   1.826,
+   1.519,
+   -2.447
+  ],
+  "1976": [
+   1.838,
+   0.048,
+   -0.94
+  ],
+  "1977": [
+   1.479,
+   0.351,
+   -1.959
+  ],
+  "1978": [
+   1.057,
+   0.215,
+   -1.138
+  ],
+  "1979": [
+   1.145,
+   -0.687,
+   -0.031
+  ],
+  "1980": [
+   1.653,
+   -2.218,
+   -0.464
+  ],
+  "1981": [
+   1.342,
+   -2.031,
+   -0.644
+  ],
+  "1982": [
+   0.655,
+   0.193,
+   -2.044
+  ],
+  "1983": [
+   -0.071,
+   2.619,
+   -2.124
+  ],
+  "1984": [
+   0.268,
+   0.548,
+   -0.804
+  ],
+  "1985": [
+   -0.543,
+   1.731,
+   -1.313
+  ],
+  "1986": [
+   -1.072,
+   2.255,
+   -1.205
+  ],
+  "1987": [
+   -0.061,
+   -0.647,
+   0.547
+  ],
+  "1988": [
+   -0.188,
+   0.867,
+   0.299
+  ],
+  "1989": [
+   -0.114,
+   -0.277,
+   -0.029
+  ],
+  "1990": [
+   0.412,
+   -2.666,
+   0.379
+  ],
+  "1991": [
+   -0.272,
+   0.164,
+   -1.957
+  ],
+  "1992": [
+   -0.538,
+   -0.515,
+   -2.199
+  ],
+  "1993": [
+   -0.996,
+   2.264,
+   -2.666
+  ],
+  "1994": [
+   0.39,
+   0.085,
+   0.402
+  ],
+  "1995": [
+   0.196,
+   0.462,
+   0.116
+  ],
+  "1996": [
+   -0.286,
+   2.481,
+   -0.102
+  ],
+  "1997": [
+   -0.347,
+   2.557,
+   0.342
+  ],
+  "1998": [
+   -0.623,
+   1.753,
+   -0.258
+  ],
+  "1999": [
+   -0.089,
+   1.275,
+   0.672
+  ],
+  "2000": [
+   0.429,
+   -0.591,
+   1.241
+  ],
+  "2001": [
+   0.103,
+   -0.371,
+   -0.376
+  ],
+  "2002": [
+   0.326,
+   -0.761,
+   0.114
+  ],
+  "2003": [
+   -0.162,
+   1.659,
+   -0.265
+  ],
+  "2004": [
+   0.158,
+   1.119,
+   0.977
+  ]
+ },
+ "potencia": {
+  "alfa": 0.0167,
+  "nsim": 400,
+  "recesion": {
+   "filas": 1314,
+   "eventos": 220,
+   "tasa": 0.1674,
+   "sobredispersion_por_año": 2.4921,
+   "sigma_u_calibrada": 1.2,
+   "F1_global": {
+    "critico_d_auc": 0.0889,
+    "nula_media": 0.0146,
+    "rejilla": [
+     {
+      "beta": 0.1,
+      "odds_ratio_1dt": 1.1052,
+      "potencia": 0.0375,
+      "d_auc_media": 0.0276
+     },
+     {
+      "beta": 0.2,
+      "odds_ratio_1dt": 1.2214,
+      "potencia": 0.145,
+      "d_auc_media": 0.0472
+     },
+     {
+      "beta": 0.3,
+      "odds_ratio_1dt": 1.3499,
+      "potencia": 0.2775,
+      "d_auc_media": 0.0679
+     },
+     {
+      "beta": 0.4,
+      "odds_ratio_1dt": 1.4918,
+      "potencia": 0.5625,
+      "d_auc_media": 0.093
+     },
+     {
+      "beta": 0.5,
+      "odds_ratio_1dt": 1.6487,
+      "potencia": 0.7675,
+      "d_auc_media": 0.1139
+     },
+     {
+      "beta": 0.6,
+      "odds_ratio_1dt": 1.8221,
+      "potencia": 0.915,
+      "d_auc_media": 0.1346
+     },
+     {
+      "beta": 0.8,
+      "odds_ratio_1dt": 2.2255,
+      "potencia": 1.0,
+      "d_auc_media": 0.1756
+     },
+     {
+      "beta": 1.0,
+      "odds_ratio_1dt": 2.7183,
+      "potencia": 1.0,
+      "d_auc_media": 0.2117
+     }
+    ],
+    "mde80": {
+     "beta": 0.6,
+     "odds_ratio_1dt": 1.8221,
+     "potencia": 0.915,
+     "d_auc_media": 0.1346
+    },
+    "filas": 1314
+   },
+   "F2_global": {
+    "critico_d_auc": 0.0811,
+    "nula_media": 0.0181,
+    "rejilla": [
+     {
+      "beta": 0.1,
+      "odds_ratio_1dt": 1.1052,
+      "potencia": 0.03,
+      "d_auc_media": 0.0252
+     },
+     {
+      "beta": 0.2,
+      "odds_ratio_1dt": 1.2214,
+      "potencia": 0.155,
+      "d_auc_media": 0.0463
+     },
+     {
+      "beta": 0.3,
+      "odds_ratio_1dt": 1.3499,
+      "potencia": 0.385,
+      "d_auc_media": 0.0701
+     },
+     {
+      "beta": 0.4,
+      "odds_ratio_1dt": 1.4918,
+      "potencia": 0.6275,
+      "d_auc_media": 0.0924
+     },
+     {
+      "beta": 0.5,
+      "odds_ratio_1dt": 1.6487,
+      "potencia": 0.8,
+      "d_auc_media": 0.1119
+     },
+     {
+      "beta": 0.6,
+      "odds_ratio_1dt": 1.8221,
+      "potencia": 0.9325,
+      "d_auc_media": 0.1349
+     },
+     {
+      "beta": 0.8,
+      "odds_ratio_1dt": 2.2255,
+      "potencia": 1.0,
+      "d_auc_media": 0.1718
+     },
+     {
+      "beta": 1.0,
+      "odds_ratio_1dt": 2.7183,
+      "potencia": 1.0,
+      "d_auc_media": 0.2096
+     }
+    ],
+    "mde80": {
+     "beta": 0.5,
+     "odds_ratio_1dt": 1.6487,
+     "potencia": 0.8,
+     "d_auc_media": 0.1119
+    },
+    "filas": 1314
+   },
+   "P1_propio": {
+    "critico_d_auc": 0.0626,
+    "nula_media": 0.0072,
+    "rejilla": [
+     {
+      "beta": 0.1,
+      "odds_ratio_1dt": 1.1052,
+      "potencia": 0.0925,
+      "d_auc_media": 0.0226
+     },
+     {
+      "beta": 0.2,
+      "odds_ratio_1dt": 1.2214,
+      "potencia": 0.2475,
+      "d_auc_media": 0.0431
+     },
+     {
+      "beta": 0.3,
+      "odds_ratio_1dt": 1.3499,
+      "potencia": 0.585,
+      "d_auc_media": 0.0685
+     },
+     {
+      "beta": 0.4,
+      "odds_ratio_1dt": 1.4918,
+      "potencia": 0.8375,
+      "d_auc_media": 0.0873
+     },
+     {
+      "beta": 0.5,
+      "odds_ratio_1dt": 1.6487,
+      "potencia": 0.96,
+      "d_auc_media": 0.1085
+     },
+     {
+      "beta": 0.6,
+      "odds_ratio_1dt": 1.8221,
+      "potencia": 0.9925,
+      "d_auc_media": 0.1266
+     },
+     {
+      "beta": 0.8,
+      "odds_ratio_1dt": 2.2255,
+      "potencia": 1.0,
+      "d_auc_media": 0.1624
+     },
+     {
+      "beta": 1.0,
+      "odds_ratio_1dt": 2.7183,
+      "potencia": 1.0,
+      "d_auc_media": 0.1952
+     }
+    ],
+    "mde80": {
+     "beta": 0.4,
+     "odds_ratio_1dt": 1.4918,
+     "potencia": 0.8375,
+     "d_auc_media": 0.0873
+    },
+    "filas": 1303
+   },
+   "F1_global_sobre_S4": {
+    "critico_d_auc": 0.0157,
+    "nula_media": 0.0014,
+    "rejilla": [
+     {
+      "beta": 0.1,
+      "odds_ratio_1dt": 1.1052,
+      "potencia": 0.0575,
+      "d_auc_media": 0.003
+     },
+     {
+      "beta": 0.2,
+      "odds_ratio_1dt": 1.2214,
+      "potencia": 0.1975,
+      "d_auc_media": 0.0082
+     },
+     {
+      "beta": 0.3,
+      "odds_ratio_1dt": 1.3499,
+      "potencia": 0.37,
+      "d_auc_media": 0.0146
+     },
+     {
+      "beta": 0.4,
+      "odds_ratio_1dt": 1.4918,
+      "potencia": 0.645,
+      "d_auc_media": 0.0249
+     },
+     {
+      "beta": 0.5,
+      "odds_ratio_1dt": 1.6487,
+      "potencia": 0.785,
+      "d_auc_media": 0.0349
+     },
+     {
+      "beta": 0.6,
+      "odds_ratio_1dt": 1.8221,
+      "potencia": 0.935,
+      "d_auc_media": 0.0525
+     },
+     {
+      "beta": 0.8,
+      "odds_ratio_1dt": 2.2255,
+      "potencia": 0.9975,
+      "d_auc_media": 0.0874
+     },
+     {
+      "beta": 1.0,
+      "odds_ratio_1dt": 2.7183,
+      "potencia": 1.0,
+      "d_auc_media": 0.1277
+     }
+    ],
+    "mde80": {
+     "beta": 0.6,
+     "odds_ratio_1dt": 1.8221,
+     "potencia": 0.935,
+     "d_auc_media": 0.0525
+    },
+    "filas": 1314,
+    "gamma_S4_supuesta": 0.75,
+    "corr_F1_S4": -0.367
+   },
+   "corr_entre_candidatos": {
+    "F1_global~F2_global": -0.0966,
+    "F1_global~P1_propio": -0.6798,
+    "F2_global~P1_propio": 0.1347
+   },
+   "corr_con_S4": {
+    "F1_global": -0.367,
+    "F2_global": -0.2674,
+    "P1_propio": 0.1695
+   }
+  },
+  "bolsa": {
+   "filas": 1862,
+   "dt_comun_entre_años": 0.1302,
+   "dt_propia_dentro_del_año": 0.1767,
+   "F1_global": {
+    "critico_t": 2.7804,
+    "rejilla": [
+     {
+      "beta": 0.01,
+      "potencia": 0.04
+     },
+     {
+      "beta": 0.02,
+      "potencia": 0.1725
+     },
+     {
+      "beta": 0.03,
+      "potencia": 0.4125
+     },
+     {
+      "beta": 0.04,
+      "potencia": 0.7275
+     },
+     {
+      "beta": 0.05,
+      "potencia": 0.915
+     },
+     {
+      "beta": 0.06,
+      "potencia": 0.9775
+     },
+     {
+      "beta": 0.08,
+      "potencia": 1.0
+     }
+    ],
+    "mde80": {
+     "beta": 0.05,
+     "potencia": 0.915
+    },
+    "filas": 1694
+   },
+   "F2_global": {
+    "critico_t": 2.8456,
+    "rejilla": [
+     {
+      "beta": 0.01,
+      "potencia": 0.0425
+     },
+     {
+      "beta": 0.02,
+      "potencia": 0.18
+     },
+     {
+      "beta": 0.03,
+      "potencia": 0.43
+     },
+     {
+      "beta": 0.04,
+      "potencia": 0.6575
+     },
+     {
+      "beta": 0.05,
+      "potencia": 0.88
+     },
+     {
+      "beta": 0.06,
+      "potencia": 0.97
+     },
+     {
+      "beta": 0.08,
+      "potencia": 0.9975
+     }
+    ],
+    "mde80": {
+     "beta": 0.05,
+     "potencia": 0.88
+    },
+    "filas": 1694
+   },
+   "P1_propio": {
+    "critico_t": 2.6066,
+    "rejilla": [
+     {
+      "beta": 0.01,
+      "potencia": 0.0875
+     },
+     {
+      "beta": 0.02,
+      "potencia": 0.3725
+     },
+     {
+      "beta": 0.03,
+      "potencia": 0.7525
+     },
+     {
+      "beta": 0.04,
+      "potencia": 0.9525
+     },
+     {
+      "beta": 0.05,
+      "potencia": 0.99
+     },
+     {
+      "beta": 0.06,
+      "potencia": 1.0
+     },
+     {
+      "beta": 0.08,
+      "potencia": 1.0
+     }
+    ],
+    "mde80": {
+     "beta": 0.04,
+     "potencia": 0.9525
+    },
+    "filas": 1660
+   }
+  }
+ }
+}
