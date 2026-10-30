@@ -79,8 +79,8 @@ def figura(res: dict, pib: dict, usrec: pd.Series) -> None:
         for s in ("top", "right"):
             a.spines[s].set_visible(False)
         a.tick_params(colors=sec)
-    fig.suptitle("INT-8b nowcast descriptivo 1960-2004 — ILUSTRACIÓN CONTAMINADA (indicadores elegidos sabiendo qué "
-                 "funcionó en estos episodios); no es una prueba", fontsize=10.5, color=tinta, x=0.01, ha="left")
+    fig.suptitle("INT-8b nowcast descriptivo 1960-2004 — ILUSTRACIÓN CONTAMINADA\n(indicadores elegidos sabiendo "
+                 "qué funcionó en estos episodios; no es una prueba; el agregado exige ≥ 10 de 14 países: desde 1982)", fontsize=10.5, color=tinta, x=0.01, ha="left")
     fig.tight_layout()
     FIGURA.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(FIGURA, dpi=130)
