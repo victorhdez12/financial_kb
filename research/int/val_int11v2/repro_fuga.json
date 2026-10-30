@@ -1,0 +1,39 @@
+{
+ "procedencia": {
+  "commit": "17a27993bf20d3c57806b3bf004d2f8251eae878",
+  "arbol_limpio": true,
+  "hora_utc": "2026-10-30T14:04:33+00:00"
+ },
+ "modo": "fuga",
+ "res": {
+  "ESP": {
+   "identico_bit_a_bit": true,
+   "pais_en_pool": false,
+   "escala_usada": "predictiva N(m, tau2)",
+   "kappa": 1000000.0,
+   "fila_transicion_igual_kappa_p_panel": true,
+   "factor_con_pais_dentro": [
+    0.947,
+    0.948,
+    0.937,
+    1.109,
+    0.923
+   ]
+  },
+  "FIN": {
+   "identico_bit_a_bit": true,
+   "pais_en_pool": false,
+   "escala_usada": "predictiva N(m, tau2)",
+   "kappa": 1000000.0,
+   "fila_transicion_igual_kappa_p_panel": true,
+   "factor_con_pais_dentro": [
+    0.985,
+    1.214,
+    1.117,
+    1.176,
+    0.818
+   ]
+  }
+ },
+ "segundos": 1
+}
