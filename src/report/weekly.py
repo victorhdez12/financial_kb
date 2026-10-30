@@ -13,6 +13,7 @@ import pandas as pd
 
 from src.regime.credit import THRESHOLDS
 from src.report.analogs import find_analogs
+from src.report import nowcast_vivo as NV
 from src.report import termometro_vivo as TV
 from src.report.narrative import reading
 from src.warehouse import db
@@ -207,6 +208,16 @@ def md_termometro(s: dict) -> str:
     return "## 5b. Termómetro de recesión (informativo)\n\n" + TV.markdown(tv).split("\n", 1)[-1].lstrip()
 
 
+def md_nowcast(s: dict) -> str:
+    nc = s.get("nowcast")
+    tit = "## 5c. Nowcast de recesión (informativo)"
+    if nc is None:
+        return f"{tit}\n\n_No disponible esta semana._"
+    if "error" in nc:
+        return f"{tit}\n\n_No disponible esta semana: {nc['error']}._"
+    return NV.markdown(nc, tit)
+
+
 def markdown(s: dict, lectura: str, origin: str) -> str:
     r_ = dict(s["regime"])
     r_["G_state"] = "G" + ARROW.get(r_["G_state"], "?")
@@ -268,6 +279,8 @@ M2 a/a − PIB nominal a/a: {lq['m2_minus_gdp']} pp · Liquidez neta Fed: {lq['n
 
 {md_termometro(s)}
 
+{md_nowcast(s)}
+
 ## 6. Lectura
 
 _Origen: {origin}._
@@ -293,6 +306,11 @@ def main(today: date | None = None) -> None:
         signal["termometro"] = TV.termometro(con, today or date.today())
     except Exception as e:  # noqa: BLE001
         signal["termometro"] = {"error": f"{type(e).__name__}: {e}"}
+    # Nowcast descriptivo INT-8b (docs/int/INT8b_nowcast.md): igual, después de la lectura y sin tumbar el reporte.
+    try:
+        signal["nowcast"] = NV.nowcast(con, today or date.today())
+    except Exception as e:  # noqa: BLE001
+        signal["nowcast"] = {"error": f"{type(e).__name__}: {e}"}
     finally:
         con.close()
     stamp = (today or date.today()).isoformat()
