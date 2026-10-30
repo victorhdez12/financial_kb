@@ -1,0 +1,8440 @@
+{
+ "documento": "INT-13 (exploratorio)",
+ "plan": "docs/int/INT13_plan_exploratorio.md (d315777)",
+ "procedencia": {
+  "commit": "3bfd43a8babfc846b6e1e91724487a71a83d8e89",
+  "arbol_limpio": true,
+  "hora_utc": "2026-10-30T14:16:17+00:00"
+ },
+ "xgboost": "2.1.1",
+ "aviso": "exploratorio: cualquier hallazgo necesita prerregistro y confirmación en vivo o en el bloqueado",
+ "segundos": 75,
+ "objetivos": {
+  "E1_6": {
+   "filas": 5292,
+   "eventos": 152,
+   "paises": [
+    "AUS",
+    "BEL",
+    "CAN",
+    "CHE",
+    "DEU",
+    "DNK",
+    "ESP",
+    "FIN",
+    "FRA",
+    "GBR",
+    "IRL",
+    "ITA",
+    "JPN",
+    "NLD",
+    "NOR",
+    "PRT",
+    "SWE",
+    "USA"
+   ],
+   "meses_con_evento": 86,
+   "desde": "1960-01-31",
+   "hasta": "2004-06-30",
+   "V1_loco": {
+    "filas": 5292,
+    "eventos": 152,
+    "meses_con_evento": 86,
+    "metricas": {
+     "clima": {
+      "logloss": 0.130469,
+      "logloss_ic95": [
+       0.076314,
+       0.201873
+      ],
+      "brier": 0.027909,
+      "brier_ic95": [
+       0.013427,
+       0.047015
+      ],
+      "auc": 0.40821,
+      "auc_ic95": [
+       0.330937,
+       0.485687
+      ],
+      "calibracion": {
+       "intercepto": -57.439028,
+       "pendiente": -15.307702,
+       "fiabilidad": [
+        {
+         "p_media": 0.027846,
+         "frecuencia": 0.046512,
+         "n": 516
+        },
+        {
+         "p_media": 0.02807,
+         "frecuencia": 0.035794,
+         "n": 447
+        },
+        {
+         "p_media": 0.028283,
+         "frecuencia": 0.0399,
+         "n": 401
+        },
+        {
+         "p_media": 0.028329,
+         "frecuencia": 0.035026,
+         "n": 571
+        },
+        {
+         "p_media": 0.028785,
+         "frecuencia": 0.027668,
+         "n": 1012
+        },
+        {
+         "p_media": 0.028893,
+         "frecuencia": 0.022472,
+         "n": 534
+        },
+        {
+         "p_media": 0.029057,
+         "frecuencia": 0.023739,
+         "n": 674
+        },
+        {
+         "p_media": 0.029203,
+         "frecuencia": 0.017857,
+         "n": 224
+        },
+        {
+         "p_media": 0.029786,
+         "frecuencia": 0.017525,
+         "n": 913
+        }
+       ]
+      }
+     },
+     "base": {
+      "logloss": 0.128246,
+      "logloss_ic95": [
+       0.075029,
+       0.199334
+      ],
+      "brier": 0.028143,
+      "brier_ic95": [
+       0.013551,
+       0.047314
+      ],
+      "auc": 0.66061,
+      "auc_ic95": [
+       0.567326,
+       0.739997
+      ],
+      "calibracion": {
+       "intercepto": -1.126639,
+       "pendiente": 0.678958,
+       "fiabilidad": [
+        {
+         "p_media": 0.01447,
+         "frecuencia": 0.022642,
+         "n": 530
+        },
+        {
+         "p_media": 0.0184,
+         "frecuencia": 0.015123,
+         "n": 529
+        },
+        {
+         "p_media": 0.020633,
+         "frecuencia": 0.003781,
+         "n": 529
+        },
+        {
+         "p_media": 0.022771,
+         "frecuencia": 0.020794,
+         "n": 529
+        },
+        {
+         "p_media": 0.02482,
+         "frecuencia": 0.01518,
+         "n": 527
+        },
+        {
+         "p_media": 0.026951,
+         "frecuencia": 0.026365,
+         "n": 531
+        },
+        {
+         "p_media": 0.029313,
+         "frecuencia": 0.030246,
+         "n": 529
+        },
+        {
+         "p_media": 0.032441,
+         "frecuencia": 0.034026,
+         "n": 529
+        },
+        {
+         "p_media": 0.037599,
+         "frecuencia": 0.034026,
+         "n": 529
+        },
+        {
+         "p_media": 0.065593,
+         "frecuencia": 0.084906,
+         "n": 530
+        }
+       ]
+      }
+     },
+     "P1_curva_tipos": {
+      "logloss": 0.120888,
+      "logloss_ic95": [
+       0.070128,
+       0.190528
+      ],
+      "brier": 0.027773,
+      "brier_ic95": [
+       0.013582,
+       0.046426
+      ],
+      "auc": 0.765843,
+      "auc_ic95": [
+       0.686421,
+       0.824357
+      ],
+      "calibracion": {
+       "intercepto": -0.990235,
+       "pendiente": 0.692563,
+       "fiabilidad": [
+        {
+         "p_media": 0.003219,
+         "frecuencia": 0.007547,
+         "n": 530
+        },
+        {
+         "p_media": 0.005308,
+         "frecuencia": 0.009452,
+         "n": 529
+        },
+        {
+         "p_media": 0.007055,
+         "frecuencia": 0.0,
+         "n": 529
+        },
+        {
+         "p_media": 0.009068,
+         "frecuencia": 0.005671,
+         "n": 529
+        },
+        {
+         "p_media": 0.011467,
+         "frecuencia": 0.005671,
+         "n": 529
+        },
+        {
+         "p_media": 0.014778,
+         "frecuencia": 0.022684,
+         "n": 529
+        },
+        {
+         "p_media": 0.019871,
+         "frecuencia": 0.032136,
+         "n": 529
+        },
+        {
+         "p_media": 0.030227,
+         "frecuencia": 0.047259,
+         "n": 529
+        },
+        {
+         "p_media": 0.059194,
+         "frecuencia": 0.064272,
+         "n": 529
+        },
+        {
+         "p_media": 0.145074,
+         "frecuencia": 0.092453,
+         "n": 530
+        }
+       ]
+      }
+     },
+     "P2_credito": {
+      "logloss": 0.130892,
+      "logloss_ic95": [
+       0.074809,
+       0.203757
+      ],
+      "brier": 0.02853,
+      "brier_ic95": [
+       0.013895,
+       0.047939
+      ],
+      "auc": 0.638231,
+      "auc_ic95": [
+       0.529746,
+       0.751518
+      ],
+      "calibracion": {
+       "intercepto": -1.762555,
+       "pendiente": 0.482149,
+       "fiabilidad": [
+        {
+         "p_media": 0.005249,
+         "frecuencia": 0.030189,
+         "n": 530
+        },
+        {
+         "p_media": 0.009722,
+         "frecuencia": 0.020794,
+         "n": 529
+        },
+        {
+         "p_media": 0.013098,
+         "frecuencia": 0.007561,
+         "n": 529
+        },
+        {
+         "p_media": 0.016509,
+         "frecuencia": 0.007561,
+         "n": 529
+        },
+        {
+         "p_media": 0.019993,
+         "frecuencia": 0.024575,
+         "n": 529
+        },
+        {
+         "p_media": 0.023759,
+         "frecuencia": 0.020794,
+         "n": 529
+        },
+        {
+         "p_media": 0.028344,
+         "frecuencia": 0.015123,
+         "n": 529
+        },
+        {
+         "p_media": 0.035459,
+         "frecuencia": 0.039698,
+         "n": 529
+        },
+        {
+         "p_media": 0.046856,
+         "frecuencia": 0.05482,
+         "n": 529
+        },
+        {
+         "p_media": 0.099364,
+         "frecuencia": 0.066038,
+         "n": 530
+        }
+       ]
+      }
+     },
+     "P3_actividad": {
+      "logloss": 0.103323,
+      "logloss_ic95": [
+       0.059733,
+       0.160995
+      ],
+      "brier": 0.025535,
+      "brier_ic95": [
+       0.012854,
+       0.041941
+      ],
+      "auc": 0.858084,
+      "auc_ic95": [
+       0.783903,
+       0.912026
+      ],
+      "calibracion": {
+       "intercepto": -0.542468,
+       "pendiente": 0.8154,
+       "fiabilidad": [
+        {
+         "p_media": 0.001601,
+         "frecuencia": 0.001887,
+         "n": 530
+        },
+        {
+         "p_media": 0.002604,
+         "frecuencia": 0.0,
+         "n": 529
+        },
+        {
+         "p_media": 0.003739,
+         "frecuencia": 0.005671,
+         "n": 529
+        },
+        {
+         "p_media": 0.005303,
+         "frecuencia": 0.013233,
+         "n": 529
+        },
+        {
+         "p_media": 0.006858,
+         "frecuencia": 0.005671,
+         "n": 529
+        },
+        {
+         "p_media": 0.009099,
+         "frecuencia": 0.00189,
+         "n": 529
+        },
+        {
+         "p_media": 0.012877,
+         "frecuencia": 0.020794,
+         "n": 529
+        },
+        {
+         "p_media": 0.02149,
+         "frecuencia": 0.018904,
+         "n": 529
+        },
+        {
+         "p_media": 0.042311,
+         "frecuencia": 0.058601,
+         "n": 529
+        },
+        {
+         "p_media": 0.196366,
+         "frecuencia": 0.160377,
+         "n": 530
+        }
+       ]
+      }
+     },
+     "P4_precios": {
+      "logloss": 0.116337,
+      "logloss_ic95": [
+       0.065845,
+       0.182679
+      ],
+      "brier": 0.026922,
+      "brier_ic95": [
+       0.012997,
+       0.045002
+      ],
+      "auc": 0.763016,
+      "auc_ic95": [
+       0.65771,
+       0.843948
+      ],
+      "calibracion": {
+       "intercepto": -0.622233,
+       "pendiente": 0.793299,
+       "fiabilidad": [
+        {
+         "p_media": 0.003314,
+         "frecuencia": 0.013208,
+         "n": 530
+        },
+        {
+         "p_media": 0.005071,
+         "frecuencia": 0.007561,
+         "n": 529
+        },
+        {
+         "p_media": 0.00665,
+         "frecuencia": 0.009452,
+         "n": 529
+        },
+        {
+         "p_media": 0.008494,
+         "frecuencia": 0.017013,
+         "n": 529
+        },
+        {
+         "p_media": 0.01094,
+         "frecuencia": 0.007561,
+         "n": 529
+        },
+        {
+         "p_media": 0.014046,
+         "frecuencia": 0.005671,
+         "n": 529
+        },
+        {
+         "p_media": 0.019199,
+         "frecuencia": 0.022684,
+         "n": 529
+        },
+        {
+         "p_media": 0.028359,
+         "frecuencia": 0.024575,
+         "n": 529
+        },
+        {
+         "p_media": 0.04948,
+         "frecuencia": 0.056711,
+         "n": 529
+        },
+        {
+         "p_media": 0.143363,
+         "frecuencia": 0.122642,
+         "n": 530
+        }
+       ]
+      }
+     },
+     "P5_mercados": {
+      "logloss": 0.115609,
+      "logloss_ic95": [
+       0.067649,
+       0.176729
+      ],
+      "brier": 0.027451,
+      "brier_ic95": [
+       0.013885,
+       0.045484
+      ],
+      "auc": 0.797239,
+      "auc_ic95": [
+       0.725659,
+       0.850407
+      ],
+      "calibracion": {
+       "intercepto": -0.762911,
+       "pendiente": 0.780151,
+       "fiabilidad": [
+        {
+         "p_media": 0.002075,
+         "frecuencia": 0.001887,
+         "n": 530
+        },
+        {
+         "p_media": 0.002988,
+         "frecuencia": 0.003781,
+         "n": 529
+        },
+        {
+         "p_media": 0.003808,
+         "frecuencia": 0.003781,
+         "n": 529
+        },
+        {
+         "p_media": 0.00495,
+         "frecuencia": 0.00189,
+         "n": 529
+        },
+        {
+         "p_media": 0.008485,
+         "frecuencia": 0.009452,
+         "n": 529
+        },
+        {
+         "p_media": 0.019888,
+         "frecuencia": 0.028355,
+         "n": 529
+        },
+        {
+         "p_media": 0.032842,
+         "frecuencia": 0.045369,
+         "n": 529
+        },
+        {
+         "p_media": 0.045463,
+         "frecuencia": 0.020794,
+         "n": 529
+        },
+        {
+         "p_media": 0.063621,
+         "frecuencia": 0.05104,
+         "n": 529
+        },
+        {
+         "p_media": 0.141961,
+         "frecuencia": 0.120755,
+         "n": 530
+        }
+       ]
+      }
+     },
+     "P6_global": {
+      "logloss": 0.105299,
+      "logloss_ic95": [
+       0.058708,
+       0.16282
+      ],
+      "brier": 0.025482,
+      "brier_ic95": [
+       0.012218,
+       0.042278
+      ],
+      "auc": 0.835974,
+      "auc_ic95": [
+       0.728442,
+       0.899423
+      ],
+      "calibracion": {
+       "intercepto": -0.342383,
+       "pendiente": 0.88639,
+       "fiabilidad": [
+        {
+         "p_media": 0.001891,
+         "frecuencia": 0.001887,
+         "n": 530
+        },
+        {
+         "p_media": 0.003054,
+         "frecuencia": 0.005671,
+         "n": 529
+        },
+        {
+         "p_media": 0.004128,
+         "frecuencia": 0.007561,
+         "n": 529
+        },
+        {
+         "p_media": 0.005578,
+         "frecuencia": 0.015123,
+         "n": 529
+        },
+        {
+         "p_media": 0.008117,
+         "frecuencia": 0.009452,
+         "n": 529
+        },
+        {
+         "p_media": 0.011567,
+         "frecuencia": 0.015123,
+         "n": 529
+        },
+        {
+         "p_media": 0.015934,
+         "frecuencia": 0.00189,
+         "n": 529
+        },
+        {
+         "p_media": 0.024575,
+         "frecuencia": 0.015123,
+         "n": 529
+        },
+        {
+         "p_media": 0.051654,
+         "frecuencia": 0.030246,
+         "n": 529
+        },
+        {
+         "p_media": 0.169261,
+         "frecuencia": 0.184906,
+         "n": 530
+        }
+       ]
+      }
+     },
+     "combinacion": {
+      "logloss": 0.104671,
+      "logloss_ic95": [
+       0.058742,
+       0.164817
+      ],
+      "brier": 0.026199,
+      "brier_ic95": [
+       0.012516,
+       0.044298
+      ],
+      "auc": 0.885923,
+      "auc_ic95": [
+       0.82131,
+       0.927991
+      ],
+      "calibracion": {
+       "intercepto": 1.987033,
+       "pendiente": 1.503662,
+       "fiabilidad": [
+        {
+         "p_media": 0.004544,
+         "frecuencia": 0.0,
+         "n": 530
+        },
+        {
+         "p_media": 0.006366,
+         "frecuencia": 0.0,
+         "n": 529
+        },
+        {
+         "p_media": 0.007797,
+         "frecuencia": 0.0,
+         "n": 529
+        },
+        {
+         "p_media": 0.009383,
+         "frecuencia": 0.003781,
+         "n": 529
+        },
+        {
+         "p_media": 0.011126,
+         "frecuencia": 0.017013,
+         "n": 529
+        },
+        {
+         "p_media": 0.013566,
+         "frecuencia": 0.013233,
+         "n": 529
+        },
+        {
+         "p_media": 0.017215,
+         "frecuencia": 0.011342,
+         "n": 529
+        },
+        {
+         "p_media": 0.023288,
+         "frecuencia": 0.005671,
+         "n": 529
+        },
+        {
+         "p_media": 0.034048,
+         "frecuencia": 0.043478,
+         "n": 529
+        },
+        {
+         "p_media": 0.085619,
+         "frecuencia": 0.192453,
+         "n": 530
+        }
+       ]
+      }
+     }
+    },
+    "comparaciones": {
+     "base_vs_clima": {
+      "dlogloss": {
+       "est": -0.002223,
+       "ic95": [
+        -0.006649,
+        0.001428
+       ],
+       "dt_boot": 0.001987,
+       "p_mejora": 0.13166
+      },
+      "dbrier": {
+       "est": 0.000234,
+       "ic95": [
+        -0.000401,
+        0.000995
+       ],
+       "dt_boot": 0.000353,
+       "p_mejora": 0.746458
+      },
+      "dauc": {
+       "est": 0.252401,
+       "ic95": [
+        0.154534,
+        0.346005
+       ],
+       "dt_boot": 0.047537,
+       "p_mejora": 0.0
+      }
+     },
+     "P1_curva_tipos_vs_base": {
+      "dlogloss": {
+       "est": -0.007358,
+       "ic95": [
+        -0.016131,
+        0.001036
+       ],
+       "dt_boot": 0.004451,
+       "p_mejora": 0.049153
+      },
+      "dbrier": {
+       "est": -0.00037,
+       "ic95": [
+        -0.001561,
+        0.000702
+       ],
+       "dt_boot": 0.000572,
+       "p_mejora": 0.258946
+      },
+      "dauc": {
+       "est": 0.105233,
+       "ic95": [
+        0.018039,
+        0.187101
+       ],
+       "dt_boot": 0.045374,
+       "p_mejora": 0.010192
+      }
+     },
+     "P2_credito_vs_base": {
+      "dlogloss": {
+       "est": 0.002646,
+       "ic95": [
+        -0.003984,
+        0.009264
+       ],
+       "dt_boot": 0.003447,
+       "p_mejora": 0.778639
+      },
+      "dbrier": {
+       "est": 0.000387,
+       "ic95": [
+        -0.000174,
+        0.000881
+       ],
+       "dt_boot": 0.000262,
+       "p_mejora": 0.930249
+      },
+      "dauc": {
+       "est": -0.022379,
+       "ic95": [
+        -0.10343,
+        0.075451
+       ],
+       "dt_boot": 0.045495,
+       "p_mejora": 0.688603
+      }
+     },
+     "P3_actividad_vs_base": {
+      "dlogloss": {
+       "est": -0.024923,
+       "ic95": [
+        -0.045617,
+        -0.010003
+       ],
+       "dt_boot": 0.009143,
+       "p_mejora": 0.003207
+      },
+      "dbrier": {
+       "est": -0.002608,
+       "ic95": [
+        -0.006417,
+        -3e-05
+       ],
+       "dt_boot": 0.001649,
+       "p_mejora": 0.056846
+      },
+      "dauc": {
+       "est": 0.197473,
+       "ic95": [
+        0.110615,
+        0.284876
+       ],
+       "dt_boot": 0.043796,
+       "p_mejora": 3e-06
+      }
+     },
+     "P4_precios_vs_base": {
+      "dlogloss": {
+       "est": -0.01191,
+       "ic95": [
+        -0.025469,
+        -0.001676
+       ],
+       "dt_boot": 0.006198,
+       "p_mejora": 0.027332
+      },
+      "dbrier": {
+       "est": -0.001221,
+       "ic95": [
+        -0.002972,
+        0.000132
+       ],
+       "dt_boot": 0.000814,
+       "p_mejora": 0.066866
+      },
+      "dauc": {
+       "est": 0.102406,
+       "ic95": [
+        -0.009742,
+        0.203384
+       ],
+       "dt_boot": 0.054007,
+       "p_mejora": 0.028969
+      }
+     },
+     "P5_mercados_vs_base": {
+      "dlogloss": {
+       "est": -0.012637,
+       "ic95": [
+        -0.02748,
+        -0.000969
+       ],
+       "dt_boot": 0.006718,
+       "p_mejora": 0.029976
+      },
+      "dbrier": {
+       "est": -0.000692,
+       "ic95": [
+        -0.002551,
+        0.000798
+       ],
+       "dt_boot": 0.000838,
+       "p_mejora": 0.204681
+      },
+      "dauc": {
+       "est": 0.136628,
+       "ic95": [
+        0.033669,
+        0.241633
+       ],
+       "dt_boot": 0.053067,
+       "p_mejora": 0.005017
+      }
+     },
+     "P6_global_vs_base": {
+      "dlogloss": {
+       "est": -0.022947,
+       "ic95": [
+        -0.043483,
+        -0.01006
+       ],
+       "dt_boot": 0.008655,
+       "p_mejora": 0.004009
+      },
+      "dbrier": {
+       "est": -0.002661,
+       "ic95": [
+        -0.005849,
+        -0.000641
+       ],
+       "dt_boot": 0.001344,
+       "p_mejora": 0.023865
+      },
+      "dauc": {
+       "est": 0.175364,
+       "ic95": [
+        0.091743,
+        0.259025
+       ],
+       "dt_boot": 0.04393,
+       "p_mejora": 3.3e-05
+      }
+     },
+     "combinacion_vs_base": {
+      "dlogloss": {
+       "est": -0.023575,
+       "ic95": [
+        -0.036659,
+        -0.014228
+       ],
+       "dt_boot": 0.005666,
+       "p_mejora": 1.6e-05
+      },
+      "dbrier": {
+       "est": -0.001944,
+       "ic95": [
+        -0.003343,
+        -0.000881
+       ],
+       "dt_boot": 0.000642,
+       "p_mejora": 0.001232
+      },
+      "dauc": {
+       "est": 0.225313,
+       "ic95": [
+        0.158071,
+        0.300671
+       ],
+       "dt_boot": 0.037779,
+       "p_mejora": 0.0
+      }
+     }
+    }
+   },
+   "V2_temporal": {
+    "filas": 2284,
+    "eventos": 64,
+    "meses_con_evento": 32,
+    "metricas": {
+     "clima": {
+      "logloss": 0.127807,
+      "logloss_ic95": [
+       0.041231,
+       0.200288
+      ],
+      "brier": 0.027237,
+      "brier_ic95": [
+       0.004037,
+       0.046659
+      ],
+      "auc": 0.5,
+      "auc_ic95": [
+       0.5,
+       0.5
+      ],
+      "calibracion": {
+       "intercepto": -3.599337,
+       "pendiente": -0.01506,
+       "fiabilidad": [
+        {
+         "p_media": 0.028846,
+         "frecuencia": 0.028021,
+         "n": 2284
+        }
+       ]
+      }
+     },
+     "base": {
+      "logloss": 0.122444,
+      "logloss_ic95": [
+       0.03831,
+       0.194209
+      ],
+      "brier": 0.027284,
+      "brier_ic95": [
+       0.004016,
+       0.0468
+      ],
+      "auc": 0.72892,
+      "auc_ic95": [
+       0.418892,
+       0.818935
+      ],
+      "calibracion": {
+       "intercepto": 0.840195,
+       "pendiente": 1.263557,
+       "fiabilidad": [
+        {
+         "p_media": 0.015659,
+         "frecuencia": 0.0,
+         "n": 229
+        },
+        {
+         "p_media": 0.018804,
+         "frecuencia": 0.0,
+         "n": 228
+        },
+        {
+         "p_media": 0.020937,
+         "frecuencia": 0.008772,
+         "n": 228
+        },
+        {
+         "p_media": 0.02311,
+         "frecuencia": 0.017467,
+         "n": 229
+        },
+        {
+         "p_media": 0.025236,
+         "frecuencia": 0.04386,
+         "n": 228
+        },
+        {
+         "p_media": 0.027862,
+         "frecuencia": 0.026316,
+         "n": 228
+        },
+        {
+         "p_media": 0.030673,
+         "frecuencia": 0.034934,
+         "n": 229
+        },
+        {
+         "p_media": 0.034186,
+         "frecuencia": 0.008772,
+         "n": 228
+        },
+        {
+         "p_media": 0.039183,
+         "frecuencia": 0.017621,
+         "n": 227
+        },
+        {
+         "p_media": 0.059966,
+         "frecuencia": 0.121739,
+         "n": 230
+        }
+       ]
+      }
+     },
+     "P1_curva_tipos": {
+      "logloss": 0.11885,
+      "logloss_ic95": [
+       0.023616,
+       0.203374
+      ],
+      "brier": 0.026803,
+      "brier_ic95": [
+       0.003396,
+       0.046655
+      ],
+      "auc": 0.810677,
+      "auc_ic95": [
+       0.525162,
+       0.893865
+      ],
+      "calibracion": {
+       "intercepto": 1.837006,
+       "pendiente": 1.224921,
+       "fiabilidad": [
+        {
+         "p_media": 0.003962,
+         "frecuencia": 0.0,
+         "n": 229
+        },
+        {
+         "p_media": 0.0047,
+         "frecuencia": 0.008772,
+         "n": 228
+        },
+        {
+         "p_media": 0.005346,
+         "frecuencia": 0.008772,
+         "n": 228
+        },
+        {
+         "p_media": 0.006123,
+         "frecuencia": 0.0131,
+         "n": 229
+        },
+        {
+         "p_media": 0.006953,
+         "frecuencia": 0.0,
+         "n": 228
+        },
+        {
+         "p_media": 0.007928,
+         "frecuencia": 0.026316,
+         "n": 228
+        },
+        {
+         "p_media": 0.00921,
+         "frecuencia": 0.004367,
+         "n": 229
+        },
+        {
+         "p_media": 0.011657,
+         "frecuencia": 0.035088,
+         "n": 228
+        },
+        {
+         "p_media": 0.016304,
+         "frecuencia": 0.04386,
+         "n": 228
+        },
+        {
+         "p_media": 0.046873,
+         "frecuencia": 0.139738,
+         "n": 229
+        }
+       ]
+      }
+     },
+     "P2_credito": {
+      "logloss": 0.119387,
+      "logloss_ic95": [
+       0.041189,
+       0.191137
+      ],
+      "brier": 0.026845,
+      "brier_ic95": [
+       0.004321,
+       0.046016
+      ],
+      "auc": 0.739006,
+      "auc_ic95": [
+       0.401179,
+       0.855492
+      ],
+      "calibracion": {
+       "intercepto": -0.127184,
+       "pendiente": 1.08548,
+       "fiabilidad": [
+        {
+         "p_media": 0.010941,
+         "frecuencia": 0.0,
+         "n": 229
+        },
+        {
+         "p_media": 0.015457,
+         "frecuencia": 0.017544,
+         "n": 228
+        },
+        {
+         "p_media": 0.018116,
+         "frecuencia": 0.030702,
+         "n": 228
+        },
+        {
+         "p_media": 0.021166,
+         "frecuencia": 0.004367,
+         "n": 229
+        },
+        {
+         "p_media": 0.025034,
+         "frecuencia": 0.0,
+         "n": 228
+        },
+        {
+         "p_media": 0.030832,
+         "frecuencia": 0.02193,
+         "n": 228
+        },
+        {
+         "p_media": 0.03823,
+         "frecuencia": 0.026201,
+         "n": 229
+        },
+        {
+         "p_media": 0.050627,
+         "frecuencia": 0.030702,
+         "n": 228
+        },
+        {
+         "p_media": 0.069427,
+         "frecuencia": 0.030702,
+         "n": 228
+        },
+        {
+         "p_media": 0.117468,
+         "frecuencia": 0.117904,
+         "n": 229
+        }
+       ]
+      }
+     },
+     "P3_actividad": {
+      "logloss": 0.105244,
+      "logloss_ic95": [
+       0.036873,
+       0.15667
+      ],
+      "brier": 0.026965,
+      "brier_ic95": [
+       0.007328,
+       0.042861
+      ],
+      "auc": 0.877309,
+      "auc_ic95": [
+       0.730585,
+       0.95536
+      ],
+      "calibracion": {
+       "intercepto": -1.057679,
+       "pendiente": 0.703068,
+       "fiabilidad": [
+        {
+         "p_media": 0.00162,
+         "frecuencia": 0.0,
+         "n": 229
+        },
+        {
+         "p_media": 0.002269,
+         "frecuencia": 0.0,
+         "n": 228
+        },
+        {
+         "p_media": 0.002967,
+         "frecuencia": 0.0,
+         "n": 228
+        },
+        {
+         "p_media": 0.003921,
+         "frecuencia": 0.0,
+         "n": 229
+        },
+        {
+         "p_media": 0.005254,
+         "frecuencia": 0.008772,
+         "n": 228
+        },
+        {
+         "p_media": 0.00805,
+         "frecuencia": 0.013158,
+         "n": 228
+        },
+        {
+         "p_media": 0.013752,
+         "frecuencia": 0.030568,
+         "n": 229
+        },
+        {
+         "p_media": 0.024296,
+         "frecuencia": 0.008772,
+         "n": 228
+        },
+        {
+         "p_media": 0.046111,
+         "frecuencia": 0.061404,
+         "n": 228
+        },
+        {
+         "p_media": 0.268674,
+         "frecuencia": 0.157205,
+         "n": 229
+        }
+       ]
+      }
+     },
+     "P4_precios": {
+      "logloss": 0.124812,
+      "logloss_ic95": [
+       0.02367,
+       0.210104
+      ],
+      "brier": 0.026709,
+      "brier_ic95": [
+       0.003565,
+       0.046097
+      ],
+      "auc": 0.762451,
+      "auc_ic95": [
+       0.501987,
+       0.88428
+      ],
+      "calibracion": {
+       "intercepto": 0.286097,
+       "pendiente": 0.835995,
+       "fiabilidad": [
+        {
+         "p_media": 0.002128,
+         "frecuencia": 0.004367,
+         "n": 229
+        },
+        {
+         "p_media": 0.002806,
+         "frecuencia": 0.004386,
+         "n": 228
+        },
+        {
+         "p_media": 0.003408,
+         "frecuencia": 0.008772,
+         "n": 228
+        },
+        {
+         "p_media": 0.004059,
+         "frecuencia": 0.021834,
+         "n": 229
+        },
+        {
+         "p_media": 0.004978,
+         "frecuencia": 0.008772,
+         "n": 228
+        },
+        {
+         "p_media": 0.0062,
+         "frecuencia": 0.004386,
+         "n": 228
+        },
+        {
+         "p_media": 0.007892,
+         "frecuencia": 0.008734,
+         "n": 229
+        },
+        {
+         "p_media": 0.011383,
+         "frecuencia": 0.061404,
+         "n": 228
+        },
+        {
+         "p_media": 0.018765,
+         "frecuencia": 0.083333,
+         "n": 228
+        },
+        {
+         "p_media": 0.054925,
+         "frecuencia": 0.074236,
+         "n": 229
+        }
+       ]
+      }
+     },
+     "P5_mercados": {
+      "logloss": 0.113002,
+      "logloss_ic95": [
+       0.031894,
+       0.185437
+      ],
+      "brier": 0.028183,
+      "brier_ic95": [
+       0.005442,
+       0.047918
+      ],
+      "auc": 0.850823,
+      "auc_ic95": [
+       0.74498,
+       0.933978
+      ],
+      "calibracion": {
+       "intercepto": -0.855696,
+       "pendiente": 0.752257,
+       "fiabilidad": [
+        {
+         "p_media": 0.003692,
+         "frecuencia": 0.0,
+         "n": 229
+        },
+        {
+         "p_media": 0.00505,
+         "frecuencia": 0.0,
+         "n": 228
+        },
+        {
+         "p_media": 0.006039,
+         "frecuencia": 0.0,
+         "n": 228
+        },
+        {
+         "p_media": 0.007234,
+         "frecuencia": 0.0,
+         "n": 229
+        },
+        {
+         "p_media": 0.008826,
+         "frecuencia": 0.004386,
+         "n": 228
+        },
+        {
+         "p_media": 0.011432,
+         "frecuencia": 0.013158,
+         "n": 228
+        },
+        {
+         "p_media": 0.018771,
+         "frecuencia": 0.004367,
+         "n": 229
+        },
+        {
+         "p_media": 0.026988,
+         "frecuencia": 0.074561,
+         "n": 228
+        },
+        {
+         "p_media": 0.05002,
+         "frecuencia": 0.074561,
+         "n": 228
+        },
+        {
+         "p_media": 0.191337,
+         "frecuencia": 0.10917,
+         "n": 229
+        }
+       ]
+      }
+     },
+     "P6_global": {
+      "logloss": 0.122356,
+      "logloss_ic95": [
+       0.023326,
+       0.203979
+      ],
+      "brier": 0.027246,
+      "brier_ic95": [
+       0.003468,
+       0.047325
+      ],
+      "auc": 0.782172,
+      "auc_ic95": [
+       0.477701,
+       0.901523
+      ],
+      "calibracion": {
+       "intercepto": 0.35949,
+       "pendiente": 0.8773,
+       "fiabilidad": [
+        {
+         "p_media": 0.001606,
+         "frecuencia": 0.0,
+         "n": 229
+        },
+        {
+         "p_media": 0.002095,
+         "frecuencia": 0.004386,
+         "n": 228
+        },
+        {
+         "p_media": 0.002635,
+         "frecuencia": 0.013158,
+         "n": 228
+        },
+        {
+         "p_media": 0.003238,
+         "frecuencia": 0.004367,
+         "n": 229
+        },
+        {
+         "p_media": 0.004392,
+         "frecuencia": 0.02193,
+         "n": 228
+        },
+        {
+         "p_media": 0.007653,
+         "frecuencia": 0.0,
+         "n": 228
+        },
+        {
+         "p_media": 0.012454,
+         "frecuencia": 0.039301,
+         "n": 229
+        },
+        {
+         "p_media": 0.018372,
+         "frecuencia": 0.035088,
+         "n": 228
+        },
+        {
+         "p_media": 0.026666,
+         "frecuencia": 0.039474,
+         "n": 228
+        },
+        {
+         "p_media": 0.048069,
+         "frecuencia": 0.122271,
+         "n": 229
+        }
+       ]
+      }
+     },
+     "combinacion": {
+      "logloss": 0.105736,
+      "logloss_ic95": [
+       0.023211,
+       0.172949
+      ],
+      "brier": 0.026196,
+      "brier_ic95": [
+       0.003466,
+       0.045086
+      ],
+      "auc": 0.900619,
+      "auc_ic95": [
+       0.728588,
+       0.959622
+      ],
+      "calibracion": {
+       "intercepto": 3.665126,
+       "pendiente": 1.829664,
+       "fiabilidad": [
+        {
+         "p_media": 0.003989,
+         "frecuencia": 0.0,
+         "n": 229
+        },
+        {
+         "p_media": 0.0052,
+         "frecuencia": 0.0,
+         "n": 228
+        },
+        {
+         "p_media": 0.006153,
+         "frecuencia": 0.0,
+         "n": 228
+        },
+        {
+         "p_media": 0.007345,
+         "frecuencia": 0.0,
+         "n": 229
+        },
+        {
+         "p_media": 0.008725,
+         "frecuencia": 0.0,
+         "n": 228
+        },
+        {
+         "p_media": 0.010449,
+         "frecuencia": 0.013158,
+         "n": 228
+        },
+        {
+         "p_media": 0.013312,
+         "frecuencia": 0.030568,
+         "n": 229
+        },
+        {
+         "p_media": 0.018515,
+         "frecuencia": 0.026316,
+         "n": 228
+        },
+        {
+         "p_media": 0.024974,
+         "frecuencia": 0.013158,
+         "n": 228
+        },
+        {
+         "p_media": 0.056107,
+         "frecuencia": 0.196507,
+         "n": 229
+        }
+       ]
+      }
+     }
+    },
+    "comparaciones": {
+     "base_vs_clima": {
+      "dlogloss": {
+       "est": -0.005363,
+       "ic95": [
+        -0.009542,
+        0.000702
+       ],
+       "dt_boot": 0.002666,
+       "p_mejora": 0.022142
+      },
+      "dbrier": {
+       "est": 4.7e-05,
+       "ic95": [
+        -0.000506,
+        0.001193
+       ],
+       "dt_boot": 0.000438,
+       "p_mejora": 0.543013
+      },
+      "dauc": {
+       "est": 0.22892,
+       "ic95": [
+        -0.081108,
+        0.318935
+       ],
+       "dt_boot": 0.098533,
+       "p_mejora": 0.010082
+      }
+     },
+     "P1_curva_tipos_vs_base": {
+      "dlogloss": {
+       "est": -0.003593,
+       "ic95": [
+        -0.015716,
+        0.010934
+       ],
+       "dt_boot": 0.006757,
+       "p_mejora": 0.297429
+      },
+      "dbrier": {
+       "est": -0.000481,
+       "ic95": [
+        -0.001001,
+        0.000118
+       ],
+       "dt_boot": 0.00029,
+       "p_mejora": 0.04891
+      },
+      "dauc": {
+       "est": 0.081757,
+       "ic95": [
+        -0.001622,
+        0.267132
+       ],
+       "dt_boot": 0.064143,
+       "p_mejora": 0.101224
+      }
+     },
+     "P2_credito_vs_base": {
+      "dlogloss": {
+       "est": -0.003056,
+       "ic95": [
+        -0.014606,
+        0.006779
+       ],
+       "dt_boot": 0.005407,
+       "p_mejora": 0.285968
+      },
+      "dbrier": {
+       "est": -0.000439,
+       "ic95": [
+        -0.001942,
+        0.000612
+       ],
+       "dt_boot": 0.00066,
+       "p_mejora": 0.253137
+      },
+      "dauc": {
+       "est": 0.010086,
+       "ic95": [
+        -0.139551,
+        0.137208
+       ],
+       "dt_boot": 0.072764,
+       "p_mejora": 0.444879
+      }
+     },
+     "P3_actividad_vs_base": {
+      "dlogloss": {
+       "est": -0.017199,
+       "ic95": [
+        -0.046761,
+        0.00502
+       ],
+       "dt_boot": 0.013783,
+       "p_mejora": 0.106035
+      },
+      "dbrier": {
+       "est": -0.000319,
+       "ic95": [
+        -0.006962,
+        0.005548
+       ],
+       "dt_boot": 0.003275,
+       "p_mejora": 0.461163
+      },
+      "dauc": {
+       "est": 0.148388,
+       "ic95": [
+        0.080789,
+        0.368438
+       ],
+       "dt_boot": 0.067321,
+       "p_mejora": 0.013756
+      }
+     },
+     "P4_precios_vs_base": {
+      "dlogloss": {
+       "est": 0.002369,
+       "ic95": [
+        -0.014865,
+        0.020675
+       ],
+       "dt_boot": 0.008999,
+       "p_mejora": 0.603812
+      },
+      "dbrier": {
+       "est": -0.000575,
+       "ic95": [
+        -0.001412,
+        4.3e-05
+       ],
+       "dt_boot": 0.000372,
+       "p_mejora": 0.061073
+      },
+      "dauc": {
+       "est": 0.03353,
+       "ic95": [
+        -0.027513,
+        0.199023
+       ],
+       "dt_boot": 0.056985,
+       "p_mejora": 0.278129
+      }
+     },
+     "P5_mercados_vs_base": {
+      "dlogloss": {
+       "est": -0.009442,
+       "ic95": [
+        -0.0192,
+        0.008353
+       ],
+       "dt_boot": 0.007026,
+       "p_mejora": 0.089516
+      },
+      "dbrier": {
+       "est": 0.000899,
+       "ic95": [
+        -0.001281,
+        0.004604
+       ],
+       "dt_boot": 0.001538,
+       "p_mejora": 0.720559
+      },
+      "dauc": {
+       "est": 0.121903,
+       "ic95": [
+        0.047468,
+        0.449177
+       ],
+       "dt_boot": 0.101635,
+       "p_mejora": 0.115181
+      }
+     },
+     "P6_global_vs_base": {
+      "dlogloss": {
+       "est": -8.7e-05,
+       "ic95": [
+        -0.015625,
+        0.01207
+       ],
+       "dt_boot": 0.007449,
+       "p_mejora": 0.495325
+      },
+      "dbrier": {
+       "est": -3.7e-05,
+       "ic95": [
+        -0.000601,
+        0.000447
+       ],
+       "dt_boot": 0.000281,
+       "p_mejora": 0.447128
+      },
+      "dauc": {
+       "est": 0.053252,
+       "ic95": [
+        -0.015246,
+        0.157954
+       ],
+       "dt_boot": 0.046045,
+       "p_mejora": 0.123733
+      }
+     },
+     "combinacion_vs_base": {
+      "dlogloss": {
+       "est": -0.016707,
+       "ic95": [
+        -0.023914,
+        -0.009976
+       ],
+       "dt_boot": 0.003719,
+       "p_mejora": 4e-06
+      },
+      "dbrier": {
+       "est": -0.001088,
+       "ic95": [
+        -0.001845,
+        -0.000424
+       ],
+       "dt_boot": 0.00039,
+       "p_mejora": 0.002674
+      },
+      "dauc": {
+       "est": 0.171699,
+       "ic95": [
+        0.131903,
+        0.360651
+       ],
+       "dt_boot": 0.054122,
+       "p_mejora": 0.000756
+      }
+     }
+    }
+   },
+   "importancias_descriptivas": {
+    "P1_curva_tipos": {
+     "curva": {
+      "ganancia": 4.796383,
+      "shap_abs_medio": 0.087501
+     },
+     "corto": {
+      "ganancia": 9.572885,
+      "shap_abs_medio": 0.656855
+     },
+     "d12_corto": {
+      "ganancia": 3.882356,
+      "shap_abs_medio": 0.009821
+     },
+     "tipo_10a": {
+      "ganancia": 11.090695,
+      "shap_abs_medio": 0.264693
+     },
+     "d12_10a": {
+      "ganancia": 5.213144,
+      "shap_abs_medio": 0.143203
+     },
+     "tipo_real": {
+      "ganancia": 9.40302,
+      "shap_abs_medio": 0.571294
+     }
+    },
+    "P2_credito": {
+     "cred_d4": {
+      "ganancia": 4.94241,
+      "shap_abs_medio": 0.421424
+     },
+     "cred_d20": {
+      "ganancia": 8.625982,
+      "shap_abs_medio": 0.402328
+     },
+     "cred_jst_d1": {
+      "ganancia": 4.731566,
+      "shap_abs_medio": 0.144185
+     }
+    },
+    "P3_actividad": {
+     "ip_yoy": {
+      "ganancia": 16.54166,
+      "shap_abs_medio": 0.4585
+     },
+     "d6_ip_yoy": {
+      "ganancia": 4.929827,
+      "shap_abs_medio": 0.070369
+     },
+     "ventas_yoy": {
+      "ganancia": 11.72328,
+      "shap_abs_medio": 0.365512
+     },
+     "paro_d12": {
+      "ganancia": 10.302999,
+      "shap_abs_medio": 0.185786
+     },
+     "sahm": {
+      "ganancia": 6.998417,
+      "shap_abs_medio": 0.052309
+     },
+     "confianza_emp": {
+      "ganancia": 34.565273,
+      "shap_abs_medio": 0.50989
+     },
+     "d6_confianza": {
+      "ganancia": 14.266606,
+      "shap_abs_medio": 0.460626
+     }
+    },
+    "P4_precios": {
+     "ipc_yoy": {
+      "ganancia": 24.096056,
+      "shap_abs_medio": 0.530612
+     },
+     "acel_ipc": {
+      "ganancia": 7.940891,
+      "shap_abs_medio": 0.229732
+     },
+     "sub_yoy": {
+      "ganancia": 8.750346,
+      "shap_abs_medio": 0.267367
+     },
+     "d12_ipc": {
+      "ganancia": 6.903627,
+      "shap_abs_medio": 0.155979
+     },
+     "mp_12m": {
+      "ganancia": 4.431839,
+      "shap_abs_medio": 0.056324
+     },
+     "mp_3m": {
+      "ganancia": 7.921076,
+      "shap_abs_medio": 0.329768
+     }
+    },
+    "P5_mercados": {
+     "bolsa_real_12m": {
+      "ganancia": 13.61922,
+      "shap_abs_medio": 0.958776
+     },
+     "bolsa_3m": {
+      "ganancia": 3.072893,
+      "shap_abs_medio": 0.089775
+     },
+     "vol_12m": {
+      "ganancia": 3.414549,
+      "shap_abs_medio": 0.075577
+     },
+     "caida_24m": {
+      "ganancia": 8.553463,
+      "shap_abs_medio": 0.380088
+     }
+    },
+    "P6_global": {
+     "dif_curva_inv": {
+      "ganancia": 14.316065,
+      "shap_abs_medio": 0.572024
+     },
+     "dif_ip_neg": {
+      "ganancia": 6.919111,
+      "shap_abs_medio": 0.212184
+     },
+     "glob_d12_corto": {
+      "ganancia": 10.493897,
+      "shap_abs_medio": 0.310676
+     },
+     "glob_ipc": {
+      "ganancia": 31.007271,
+      "shap_abs_medio": 0.331864
+     },
+     "glob_d12_ipc": {
+      "ganancia": 10.299858,
+      "shap_abs_medio": 0.208135
+     },
+     "usa_curva": {
+      "ganancia": 5.323894,
+      "shap_abs_medio": 0.045012
+     },
+     "usa_d12_corto": {
+      "ganancia": 12.639203,
+      "shap_abs_medio": 0.440422
+     }
+    }
+   }
+  },
+  "E1_12": {
+   "filas": 5232,
+   "eventos": 380,
+   "paises": [
+    "AUS",
+    "BEL",
+    "CAN",
+    "CHE",
+    "DEU",
+    "DNK",
+    "ESP",
+    "FIN",
+    "FRA",
+    "GBR",
+    "IRL",
+    "ITA",
+    "JPN",
+    "NLD",
+    "NOR",
+    "PRT",
+    "SWE",
+    "USA"
+   ],
+   "meses_con_evento": 157,
+   "desde": "1960-01-31",
+   "hasta": "2003-12-31",
+   "V1_loco": {
+    "filas": 5232,
+    "eventos": 380,
+    "meses_con_evento": 157,
+    "metricas": {
+     "clima": {
+      "logloss": 0.260904,
+      "logloss_ic95": [
+       0.164166,
+       0.380131
+      ],
+      "brier": 0.067424,
+      "brier_ic95": [
+       0.034982,
+       0.107405
+      ],
+      "auc": 0.405826,
+      "auc_ic95": [
+       0.345639,
+       0.471933
+      ],
+      "calibracion": {
+       "intercepto": -41.365091,
+       "pendiente": -15.234258,
+       "fiabilidad": [
+        {
+         "p_media": 0.070472,
+         "frecuencia": 0.116279,
+         "n": 516
+        },
+        {
+         "p_media": 0.070966,
+         "frecuencia": 0.090703,
+         "n": 441
+        },
+        {
+         "p_media": 0.071414,
+         "frecuencia": 0.104712,
+         "n": 191
+        },
+        {
+         "p_media": 0.071822,
+         "frecuencia": 0.086862,
+         "n": 921
+        },
+        {
+         "p_media": 0.072841,
+         "frecuencia": 0.070258,
+         "n": 854
+        },
+        {
+         "p_media": 0.073023,
+         "frecuencia": 0.057471,
+         "n": 522
+        },
+        {
+         "p_media": 0.073453,
+         "frecuencia": 0.060423,
+         "n": 662
+        },
+        {
+         "p_media": 0.073793,
+         "frecuencia": 0.045872,
+         "n": 218
+        },
+        {
+         "p_media": 0.075349,
+         "frecuencia": 0.044101,
+         "n": 907
+        }
+       ]
+      }
+     },
+     "base": {
+      "logloss": 0.252003,
+      "logloss_ic95": [
+       0.158417,
+       0.366139
+      ],
+      "brier": 0.06599,
+      "brier_ic95": [
+       0.035122,
+       0.104712
+      ],
+      "auc": 0.660705,
+      "auc_ic95": [
+       0.577355,
+       0.731542
+      ],
+      "calibracion": {
+       "intercepto": -0.530844,
+       "pendiente": 0.786934,
+       "fiabilidad": [
+        {
+         "p_media": 0.030164,
+         "frecuencia": 0.040076,
+         "n": 524
+        },
+        {
+         "p_media": 0.03983,
+         "frecuencia": 0.051625,
+         "n": 523
+        },
+        {
+         "p_media": 0.046684,
+         "frecuencia": 0.042065,
+         "n": 523
+        },
+        {
+         "p_media": 0.053148,
+         "frecuencia": 0.059273,
+         "n": 523
+        },
+        {
+         "p_media": 0.058716,
+         "frecuencia": 0.040153,
+         "n": 523
+        },
+        {
+         "p_media": 0.065343,
+         "frecuencia": 0.055449,
+         "n": 523
+        },
+        {
+         "p_media": 0.073259,
+         "frecuencia": 0.055449,
+         "n": 523
+        },
+        {
+         "p_media": 0.083227,
+         "frecuencia": 0.049713,
+         "n": 523
+        },
+        {
+         "p_media": 0.099612,
+         "frecuencia": 0.101338,
+         "n": 523
+        },
+        {
+         "p_media": 0.183456,
+         "frecuencia": 0.230916,
+         "n": 524
+        }
+       ]
+      }
+     },
+     "P1_curva_tipos": {
+      "logloss": 0.245493,
+      "logloss_ic95": [
+       0.152916,
+       0.360084
+      ],
+      "brier": 0.066098,
+      "brier_ic95": [
+       0.036492,
+       0.103143
+      ],
+      "auc": 0.739323,
+      "auc_ic95": [
+       0.662341,
+       0.804531
+      ],
+      "calibracion": {
+       "intercepto": -0.895415,
+       "pendiente": 0.611349,
+       "fiabilidad": [
+        {
+         "p_media": 0.007674,
+         "frecuencia": 0.019084,
+         "n": 524
+        },
+        {
+         "p_media": 0.013338,
+         "frecuencia": 0.021033,
+         "n": 523
+        },
+        {
+         "p_media": 0.018061,
+         "frecuencia": 0.051625,
+         "n": 523
+        },
+        {
+         "p_media": 0.023003,
+         "frecuencia": 0.011472,
+         "n": 523
+        },
+        {
+         "p_media": 0.028668,
+         "frecuencia": 0.026769,
+         "n": 523
+        },
+        {
+         "p_media": 0.040009,
+         "frecuencia": 0.068834,
+         "n": 523
+        },
+        {
+         "p_media": 0.056828,
+         "frecuencia": 0.053537,
+         "n": 523
+        },
+        {
+         "p_media": 0.083809,
+         "frecuencia": 0.099426,
+         "n": 523
+        },
+        {
+         "p_media": 0.144126,
+         "frecuencia": 0.133843,
+         "n": 523
+        },
+        {
+         "p_media": 0.35965,
+         "frecuencia": 0.240458,
+         "n": 524
+        }
+       ]
+      }
+     },
+     "P2_credito": {
+      "logloss": 0.257951,
+      "logloss_ic95": [
+       0.15784,
+       0.377914
+      ],
+      "brier": 0.066944,
+      "brier_ic95": [
+       0.035633,
+       0.105861
+      ],
+      "auc": 0.655585,
+      "auc_ic95": [
+       0.542231,
+       0.758757
+      ],
+      "calibracion": {
+       "intercepto": -1.148524,
+       "pendiente": 0.517674,
+       "fiabilidad": [
+        {
+         "p_media": 0.009141,
+         "frecuencia": 0.032443,
+         "n": 524
+        },
+        {
+         "p_media": 0.022393,
+         "frecuencia": 0.082218,
+         "n": 523
+        },
+        {
+         "p_media": 0.030746,
+         "frecuencia": 0.043977,
+         "n": 523
+        },
+        {
+         "p_media": 0.039207,
+         "frecuencia": 0.042065,
+         "n": 523
+        },
+        {
+         "p_media": 0.047867,
+         "frecuencia": 0.01912,
+         "n": 523
+        },
+        {
+         "p_media": 0.057947,
+         "frecuencia": 0.034417,
+         "n": 523
+        },
+        {
+         "p_media": 0.071317,
+         "frecuencia": 0.063098,
+         "n": 523
+        },
+        {
+         "p_media": 0.088147,
+         "frecuencia": 0.086042,
+         "n": 523
+        },
+        {
+         "p_media": 0.117622,
+         "frecuencia": 0.137667,
+         "n": 523
+        },
+        {
+         "p_media": 0.244946,
+         "frecuencia": 0.185115,
+         "n": 524
+        }
+       ]
+      }
+     },
+     "P3_actividad": {
+      "logloss": 0.21484,
+      "logloss_ic95": [
+       0.133096,
+       0.316377
+      ],
+      "brier": 0.058937,
+      "brier_ic95": [
+       0.031951,
+       0.093053
+      ],
+      "auc": 0.827557,
+      "auc_ic95": [
+       0.753382,
+       0.886982
+      ],
+      "calibracion": {
+       "intercepto": -0.294206,
+       "pendiente": 0.868822,
+       "fiabilidad": [
+        {
+         "p_media": 0.005247,
+         "frecuencia": 0.015267,
+         "n": 524
+        },
+        {
+         "p_media": 0.010055,
+         "frecuencia": 0.007648,
+         "n": 523
+        },
+        {
+         "p_media": 0.016125,
+         "frecuencia": 0.013384,
+         "n": 523
+        },
+        {
+         "p_media": 0.022907,
+         "frecuencia": 0.017208,
+         "n": 523
+        },
+        {
+         "p_media": 0.030053,
+         "frecuencia": 0.021033,
+         "n": 523
+        },
+        {
+         "p_media": 0.040335,
+         "frecuencia": 0.024857,
+         "n": 523
+        },
+        {
+         "p_media": 0.055285,
+         "frecuencia": 0.053537,
+         "n": 523
+        },
+        {
+         "p_media": 0.081236,
+         "frecuencia": 0.089866,
+         "n": 523
+        },
+        {
+         "p_media": 0.135185,
+         "frecuencia": 0.160612,
+         "n": 523
+        },
+        {
+         "p_media": 0.345714,
+         "frecuencia": 0.322519,
+         "n": 524
+        }
+       ]
+      }
+     },
+     "P4_precios": {
+      "logloss": 0.230927,
+      "logloss_ic95": [
+       0.144839,
+       0.329137
+      ],
+      "brier": 0.06061,
+      "brier_ic95": [
+       0.033449,
+       0.093492
+      ],
+      "auc": 0.75274,
+      "auc_ic95": [
+       0.654567,
+       0.830583
+      ],
+      "calibracion": {
+       "intercepto": -0.556636,
+       "pendiente": 0.729492,
+       "fiabilidad": [
+        {
+         "p_media": 0.007584,
+         "frecuencia": 0.064885,
+         "n": 524
+        },
+        {
+         "p_media": 0.012125,
+         "frecuencia": 0.036329,
+         "n": 523
+        },
+        {
+         "p_media": 0.016469,
+         "frecuencia": 0.017208,
+         "n": 523
+        },
+        {
+         "p_media": 0.021312,
+         "frecuencia": 0.007648,
+         "n": 523
+        },
+        {
+         "p_media": 0.026987,
+         "frecuencia": 0.007648,
+         "n": 523
+        },
+        {
+         "p_media": 0.0343,
+         "frecuencia": 0.017208,
+         "n": 523
+        },
+        {
+         "p_media": 0.045736,
+         "frecuencia": 0.053537,
+         "n": 523
+        },
+        {
+         "p_media": 0.071438,
+         "frecuencia": 0.06501,
+         "n": 523
+        },
+        {
+         "p_media": 0.137598,
+         "frecuencia": 0.1587,
+         "n": 523
+        },
+        {
+         "p_media": 0.343716,
+         "frecuencia": 0.29771,
+         "n": 524
+        }
+       ]
+      }
+     },
+     "P5_mercados": {
+      "logloss": 0.226512,
+      "logloss_ic95": [
+       0.145218,
+       0.322603
+      ],
+      "brier": 0.063295,
+      "brier_ic95": [
+       0.035551,
+       0.095954
+      ],
+      "auc": 0.794106,
+      "auc_ic95": [
+       0.732725,
+       0.848642
+      ],
+      "calibracion": {
+       "intercepto": -0.542145,
+       "pendiente": 0.781015,
+       "fiabilidad": [
+        {
+         "p_media": 0.003482,
+         "frecuencia": 0.01145,
+         "n": 524
+        },
+        {
+         "p_media": 0.005535,
+         "frecuencia": 0.0,
+         "n": 523
+        },
+        {
+         "p_media": 0.008337,
+         "frecuencia": 0.001912,
+         "n": 523
+        },
+        {
+         "p_media": 0.016533,
+         "frecuencia": 0.00956,
+         "n": 523
+        },
+        {
+         "p_media": 0.036737,
+         "frecuencia": 0.026769,
+         "n": 523
+        },
+        {
+         "p_media": 0.059766,
+         "frecuencia": 0.097514,
+         "n": 523
+        },
+        {
+         "p_media": 0.084633,
+         "frecuencia": 0.105163,
+         "n": 523
+        },
+        {
+         "p_media": 0.115505,
+         "frecuencia": 0.070746,
+         "n": 523
+        },
+        {
+         "p_media": 0.160264,
+         "frecuencia": 0.14914,
+         "n": 523
+        },
+        {
+         "p_media": 0.307996,
+         "frecuencia": 0.253817,
+         "n": 524
+        }
+       ]
+      }
+     },
+     "P6_global": {
+      "logloss": 0.205229,
+      "logloss_ic95": [
+       0.123989,
+       0.294499
+      ],
+      "brier": 0.055292,
+      "brier_ic95": [
+       0.02914,
+       0.085782
+      ],
+      "auc": 0.825025,
+      "auc_ic95": [
+       0.711223,
+       0.902353
+      ],
+      "calibracion": {
+       "intercepto": -0.286534,
+       "pendiente": 0.856479,
+       "fiabilidad": [
+        {
+         "p_media": 0.004884,
+         "frecuencia": 0.017176,
+         "n": 524
+        },
+        {
+         "p_media": 0.008144,
+         "frecuencia": 0.026769,
+         "n": 523
+        },
+        {
+         "p_media": 0.011678,
+         "frecuencia": 0.026769,
+         "n": 523
+        },
+        {
+         "p_media": 0.016308,
+         "frecuencia": 0.036329,
+         "n": 523
+        },
+        {
+         "p_media": 0.023439,
+         "frecuencia": 0.011472,
+         "n": 523
+        },
+        {
+         "p_media": 0.031462,
+         "frecuencia": 0.015296,
+         "n": 523
+        },
+        {
+         "p_media": 0.041933,
+         "frecuencia": 0.007648,
+         "n": 523
+        },
+        {
+         "p_media": 0.063771,
+         "frecuencia": 0.01912,
+         "n": 523
+        },
+        {
+         "p_media": 0.139099,
+         "frecuencia": 0.166348,
+         "n": 523
+        },
+        {
+         "p_media": 0.392241,
+         "frecuencia": 0.398855,
+         "n": 524
+        }
+       ]
+      }
+     },
+     "combinacion": {
+      "logloss": 0.207515,
+      "logloss_ic95": [
+       0.125941,
+       0.303582
+      ],
+      "brier": 0.058113,
+      "brier_ic95": [
+       0.030857,
+       0.09224
+      ],
+      "auc": 0.854961,
+      "auc_ic95": [
+       0.768783,
+       0.909254
+      ],
+      "calibracion": {
+       "intercepto": 0.952506,
+       "pendiente": 1.298077,
+       "fiabilidad": [
+        {
+         "p_media": 0.011409,
+         "frecuencia": 0.007634,
+         "n": 524
+        },
+        {
+         "p_media": 0.016593,
+         "frecuencia": 0.00956,
+         "n": 523
+        },
+        {
+         "p_media": 0.020368,
+         "frecuencia": 0.017208,
+         "n": 523
+        },
+        {
+         "p_media": 0.024394,
+         "frecuencia": 0.013384,
+         "n": 523
+        },
+        {
+         "p_media": 0.029643,
+         "frecuencia": 0.026769,
+         "n": 523
+        },
+        {
+         "p_media": 0.037173,
+         "frecuencia": 0.034417,
+         "n": 523
+        },
+        {
+         "p_media": 0.048819,
+         "frecuencia": 0.015296,
+         "n": 523
+        },
+        {
+         "p_media": 0.066329,
+         "frecuencia": 0.034417,
+         "n": 523
+        },
+        {
+         "p_media": 0.100687,
+         "frecuencia": 0.175908,
+         "n": 523
+        },
+        {
+         "p_media": 0.233597,
+         "frecuencia": 0.391221,
+         "n": 524
+        }
+       ]
+      }
+     }
+    },
+    "comparaciones": {
+     "base_vs_clima": {
+      "dlogloss": {
+       "est": -0.008901,
+       "ic95": [
+        -0.020581,
+        0.000605
+       ],
+       "dt_boot": 0.005525,
+       "p_mejora": 0.053604
+      },
+      "dbrier": {
+       "est": -0.001434,
+       "ic95": [
+        -0.004319,
+        0.000821
+       ],
+       "dt_boot": 0.001376,
+       "p_mejora": 0.148735
+      },
+      "dauc": {
+       "est": 0.254879,
+       "ic95": [
+        0.157893,
+        0.343823
+       ],
+       "dt_boot": 0.047868,
+       "p_mejora": 0.0
+      }
+     },
+     "P1_curva_tipos_vs_base": {
+      "dlogloss": {
+       "est": -0.00651,
+       "ic95": [
+        -0.026955,
+        0.010814
+       ],
+       "dt_boot": 0.009754,
+       "p_mejora": 0.252262
+      },
+      "dbrier": {
+       "est": 0.000107,
+       "ic95": [
+        -0.005131,
+        0.004652
+       ],
+       "dt_boot": 0.00252,
+       "p_mejora": 0.517001
+      },
+      "dauc": {
+       "est": 0.078618,
+       "ic95": [
+        0.002474,
+        0.158901
+       ],
+       "dt_boot": 0.039388,
+       "p_mejora": 0.022968
+      }
+     },
+     "P2_credito_vs_base": {
+      "dlogloss": {
+       "est": 0.005948,
+       "ic95": [
+        -0.009711,
+        0.023927
+       ],
+       "dt_boot": 0.008369,
+       "p_mejora": 0.761352
+      },
+      "dbrier": {
+       "est": 0.000953,
+       "ic95": [
+        -0.001597,
+        0.003252
+       ],
+       "dt_boot": 0.00121,
+       "p_mejora": 0.784728
+      },
+      "dauc": {
+       "est": -0.00512,
+       "ic95": [
+        -0.087476,
+        0.078998
+       ],
+       "dt_boot": 0.043107,
+       "p_mejora": 0.547275
+      }
+     },
+     "P3_actividad_vs_base": {
+      "dlogloss": {
+       "est": -0.037163,
+       "ic95": [
+        -0.064522,
+        -0.014506
+       ],
+       "dt_boot": 0.012932,
+       "p_mejora": 0.002028
+      },
+      "dbrier": {
+       "est": -0.007053,
+       "ic95": [
+        -0.015085,
+        -0.001231
+       ],
+       "dt_boot": 0.003727,
+       "p_mejora": 0.029234
+      },
+      "dauc": {
+       "est": 0.166852,
+       "ic95": [
+        0.100145,
+        0.2256
+       ],
+       "dt_boot": 0.033385,
+       "p_mejora": 0.0
+      }
+     },
+     "P4_precios_vs_base": {
+      "dlogloss": {
+       "est": -0.021077,
+       "ic95": [
+        -0.048786,
+        -0.004169
+       ],
+       "dt_boot": 0.011676,
+       "p_mejora": 0.035533
+      },
+      "dbrier": {
+       "est": -0.00538,
+       "ic95": [
+        -0.011681,
+        -0.000667
+       ],
+       "dt_boot": 0.002854,
+       "p_mejora": 0.029683
+      },
+      "dauc": {
+       "est": 0.092035,
+       "ic95": [
+        0.010284,
+        0.169975
+       ],
+       "dt_boot": 0.041832,
+       "p_mejora": 0.0139
+      }
+     },
+     "P5_mercados_vs_base": {
+      "dlogloss": {
+       "est": -0.025491,
+       "ic95": [
+        -0.05287,
+        -0.004596
+       ],
+       "dt_boot": 0.012495,
+       "p_mejora": 0.020667
+      },
+      "dbrier": {
+       "est": -0.002695,
+       "ic95": [
+        -0.009172,
+        0.002075
+       ],
+       "dt_boot": 0.002908,
+       "p_mejora": 0.177006
+      },
+      "dauc": {
+       "est": 0.133401,
+       "ic95": [
+        0.065923,
+        0.213122
+       ],
+       "dt_boot": 0.038158,
+       "p_mejora": 0.000236
+      }
+     },
+     "P6_global_vs_base": {
+      "dlogloss": {
+       "est": -0.046774,
+       "ic95": [
+        -0.089932,
+        -0.019846
+       ],
+       "dt_boot": 0.018418,
+       "p_mejora": 0.005549
+      },
+      "dbrier": {
+       "est": -0.010698,
+       "ic95": [
+        -0.021337,
+        -0.003735
+       ],
+       "dt_boot": 0.004706,
+       "p_mejora": 0.011505
+      },
+      "dauc": {
+       "est": 0.16432,
+       "ic95": [
+        0.085302,
+        0.235125
+       ],
+       "dt_boot": 0.037208,
+       "p_mejora": 5e-06
+      }
+     },
+     "combinacion_vs_base": {
+      "dlogloss": {
+       "est": -0.044488,
+       "ic95": [
+        -0.066918,
+        -0.028994
+       ],
+       "dt_boot": 0.009915,
+       "p_mejora": 4e-06
+      },
+      "dbrier": {
+       "est": -0.007877,
+       "ic95": [
+        -0.012801,
+        -0.004256
+       ],
+       "dt_boot": 0.002204,
+       "p_mejora": 0.000176
+      },
+      "dauc": {
+       "est": 0.194256,
+       "ic95": [
+        0.14017,
+        0.250122
+       ],
+       "dt_boot": 0.028303,
+       "p_mejora": 0.0
+      }
+     }
+    }
+   },
+   "V2_temporal": {
+    "filas": 2224,
+    "eventos": 158,
+    "meses_con_evento": 57,
+    "metricas": {
+     "clima": {
+      "logloss": 0.256411,
+      "logloss_ic95": [
+       0.096564,
+       0.375862
+      ],
+      "brier": 0.066007,
+      "brier_ic95": [
+       0.012037,
+       0.106338
+      ],
+      "auc": 0.5,
+      "auc_ic95": [
+       0.5,
+       0.5
+      ],
+      "calibracion": {
+       "intercepto": -2.39118,
+       "pendiente": 0.071235,
+       "fiabilidad": [
+        {
+         "p_media": 0.074389,
+         "frecuencia": 0.071043,
+         "n": 2224
+        }
+       ]
+      }
+     },
+     "base": {
+      "logloss": 0.251384,
+      "logloss_ic95": [
+       0.075637,
+       0.390315
+      ],
+      "brier": 0.065419,
+      "brier_ic95": [
+       0.010122,
+       0.108414
+      ],
+      "auc": 0.662815,
+      "auc_ic95": [
+       0.325667,
+       0.764943
+      ],
+      "calibracion": {
+       "intercepto": -0.63309,
+       "pendiente": 0.693174,
+       "fiabilidad": [
+        {
+         "p_media": 0.021803,
+         "frecuencia": 0.03139,
+         "n": 223
+        },
+        {
+         "p_media": 0.032287,
+         "frecuencia": 0.054054,
+         "n": 222
+        },
+        {
+         "p_media": 0.037706,
+         "frecuencia": 0.031532,
+         "n": 222
+        },
+        {
+         "p_media": 0.042231,
+         "frecuencia": 0.035874,
+         "n": 223
+        },
+        {
+         "p_media": 0.048191,
+         "frecuencia": 0.067568,
+         "n": 222
+        },
+        {
+         "p_media": 0.054532,
+         "frecuencia": 0.067568,
+         "n": 222
+        },
+        {
+         "p_media": 0.062065,
+         "frecuencia": 0.035874,
+         "n": 223
+        },
+        {
+         "p_media": 0.07187,
+         "frecuencia": 0.099099,
+         "n": 222
+        },
+        {
+         "p_media": 0.086084,
+         "frecuencia": 0.112613,
+         "n": 222
+        },
+        {
+         "p_media": 0.142136,
+         "frecuencia": 0.174888,
+         "n": 223
+        }
+       ]
+      }
+     },
+     "P1_curva_tipos": {
+      "logloss": 0.267781,
+      "logloss_ic95": [
+       0.052867,
+       0.437214
+      ],
+      "brier": 0.064391,
+      "brier_ic95": [
+       0.008031,
+       0.108012
+      ],
+      "auc": 0.719085,
+      "auc_ic95": [
+       0.276456,
+       0.794962
+      ],
+      "calibracion": {
+       "intercepto": 0.032675,
+       "pendiente": 0.665232,
+       "fiabilidad": [
+        {
+         "p_media": 0.00308,
+         "frecuencia": 0.03139,
+         "n": 223
+        },
+        {
+         "p_media": 0.004338,
+         "frecuencia": 0.054054,
+         "n": 222
+        },
+        {
+         "p_media": 0.005316,
+         "frecuencia": 0.036036,
+         "n": 222
+        },
+        {
+         "p_media": 0.006376,
+         "frecuencia": 0.013453,
+         "n": 223
+        },
+        {
+         "p_media": 0.00804,
+         "frecuencia": 0.009009,
+         "n": 222
+        },
+        {
+         "p_media": 0.011554,
+         "frecuencia": 0.085586,
+         "n": 222
+        },
+        {
+         "p_media": 0.018251,
+         "frecuencia": 0.040359,
+         "n": 223
+        },
+        {
+         "p_media": 0.031699,
+         "frecuencia": 0.054054,
+         "n": 222
+        },
+        {
+         "p_media": 0.053926,
+         "frecuencia": 0.135135,
+         "n": 222
+        },
+        {
+         "p_media": 0.120584,
+         "frecuencia": 0.251121,
+         "n": 223
+        }
+       ]
+      }
+     },
+     "P2_credito": {
+      "logloss": 0.252609,
+      "logloss_ic95": [
+       0.091083,
+       0.393102
+      ],
+      "brier": 0.067262,
+      "brier_ic95": [
+       0.013062,
+       0.111141
+      ],
+      "auc": 0.708683,
+      "auc_ic95": [
+       0.162464,
+       0.798751
+      ],
+      "calibracion": {
+       "intercepto": -1.173767,
+       "pendiente": 0.577846,
+       "fiabilidad": [
+        {
+         "p_media": 0.016376,
+         "frecuencia": 0.044843,
+         "n": 223
+        },
+        {
+         "p_media": 0.027341,
+         "frecuencia": 0.036036,
+         "n": 222
+        },
+        {
+         "p_media": 0.035597,
+         "frecuencia": 0.022523,
+         "n": 222
+        },
+        {
+         "p_media": 0.043642,
+         "frecuencia": 0.008969,
+         "n": 223
+        },
+        {
+         "p_media": 0.052151,
+         "frecuencia": 0.045045,
+         "n": 222
+        },
+        {
+         "p_media": 0.064254,
+         "frecuencia": 0.054054,
+         "n": 222
+        },
+        {
+         "p_media": 0.078697,
+         "frecuencia": 0.049327,
+         "n": 223
+        },
+        {
+         "p_media": 0.096993,
+         "frecuencia": 0.09009,
+         "n": 222
+        },
+        {
+         "p_media": 0.150177,
+         "frecuencia": 0.171171,
+         "n": 222
+        },
+        {
+         "p_media": 0.355912,
+         "frecuencia": 0.188341,
+         "n": 223
+        }
+       ]
+      }
+     },
+     "P3_actividad": {
+      "logloss": 0.222679,
+      "logloss_ic95": [
+       0.082277,
+       0.317163
+      ],
+      "brier": 0.060974,
+      "brier_ic95": [
+       0.0169,
+       0.090993
+      ],
+      "auc": 0.818269,
+      "auc_ic95": [
+       0.571816,
+       0.921748
+      ],
+      "calibracion": {
+       "intercepto": -0.78281,
+       "pendiente": 0.684986,
+       "fiabilidad": [
+        {
+         "p_media": 0.005124,
+         "frecuencia": 0.013453,
+         "n": 223
+        },
+        {
+         "p_media": 0.007889,
+         "frecuencia": 0.009009,
+         "n": 222
+        },
+        {
+         "p_media": 0.010392,
+         "frecuencia": 0.004505,
+         "n": 222
+        },
+        {
+         "p_media": 0.014767,
+         "frecuencia": 0.013453,
+         "n": 223
+        },
+        {
+         "p_media": 0.021721,
+         "frecuencia": 0.013514,
+         "n": 222
+        },
+        {
+         "p_media": 0.034495,
+         "frecuencia": 0.04955,
+         "n": 222
+        },
+        {
+         "p_media": 0.055906,
+         "frecuencia": 0.071749,
+         "n": 223
+        },
+        {
+         "p_media": 0.092641,
+         "frecuencia": 0.085586,
+         "n": 222
+        },
+        {
+         "p_media": 0.161458,
+         "frecuencia": 0.166667,
+         "n": 222
+        },
+        {
+         "p_media": 0.421223,
+         "frecuencia": 0.282511,
+         "n": 223
+        }
+       ]
+      }
+     },
+     "P4_precios": {
+      "logloss": 0.280112,
+      "logloss_ic95": [
+       0.051532,
+       0.472627
+      ],
+      "brier": 0.065285,
+      "brier_ic95": [
+       0.008159,
+       0.110109
+      ],
+      "auc": 0.713891,
+      "auc_ic95": [
+       0.274935,
+       0.827532
+      ],
+      "calibracion": {
+       "intercepto": 0.269068,
+       "pendiente": 0.687651,
+       "fiabilidad": [
+        {
+         "p_media": 0.003071,
+         "frecuencia": 0.022422,
+         "n": 223
+        },
+        {
+         "p_media": 0.00435,
+         "frecuencia": 0.04955,
+         "n": 222
+        },
+        {
+         "p_media": 0.005236,
+         "frecuencia": 0.031532,
+         "n": 222
+        },
+        {
+         "p_media": 0.006505,
+         "frecuencia": 0.044843,
+         "n": 223
+        },
+        {
+         "p_media": 0.008386,
+         "frecuencia": 0.040541,
+         "n": 222
+        },
+        {
+         "p_media": 0.010947,
+         "frecuencia": 0.022523,
+         "n": 222
+        },
+        {
+         "p_media": 0.014013,
+         "frecuencia": 0.035874,
+         "n": 223
+        },
+        {
+         "p_media": 0.019036,
+         "frecuencia": 0.108108,
+         "n": 222
+        },
+        {
+         "p_media": 0.034649,
+         "frecuencia": 0.108108,
+         "n": 222
+        },
+        {
+         "p_media": 0.106718,
+         "frecuencia": 0.246637,
+         "n": 223
+        }
+       ]
+      }
+     },
+     "P5_mercados": {
+      "logloss": 0.243179,
+      "logloss_ic95": [
+       0.05832,
+       0.380397
+      ],
+      "brier": 0.067772,
+      "brier_ic95": [
+       0.012465,
+       0.108974
+      ],
+      "auc": 0.796179,
+      "auc_ic95": [
+       0.679929,
+       0.915115
+      ],
+      "calibracion": {
+       "intercepto": -0.823111,
+       "pendiente": 0.571045,
+       "fiabilidad": [
+        {
+         "p_media": 0.004643,
+         "frecuencia": 0.0,
+         "n": 223
+        },
+        {
+         "p_media": 0.007197,
+         "frecuencia": 0.0,
+         "n": 222
+        },
+        {
+         "p_media": 0.009357,
+         "frecuencia": 0.004505,
+         "n": 222
+        },
+        {
+         "p_media": 0.012511,
+         "frecuencia": 0.022422,
+         "n": 223
+        },
+        {
+         "p_media": 0.017992,
+         "frecuencia": 0.031532,
+         "n": 222
+        },
+        {
+         "p_media": 0.027202,
+         "frecuencia": 0.04955,
+         "n": 222
+        },
+        {
+         "p_media": 0.039925,
+         "frecuencia": 0.071749,
+         "n": 223
+        },
+        {
+         "p_media": 0.059938,
+         "frecuencia": 0.18018,
+         "n": 222
+        },
+        {
+         "p_media": 0.101064,
+         "frecuencia": 0.157658,
+         "n": 222
+        },
+        {
+         "p_media": 0.35327,
+         "frecuencia": 0.192825,
+         "n": 223
+        }
+       ]
+      }
+     },
+     "P6_global": {
+      "logloss": 0.272892,
+      "logloss_ic95": [
+       0.046102,
+       0.443149
+      ],
+      "brier": 0.066972,
+      "brier_ic95": [
+       0.007946,
+       0.111989
+      ],
+      "auc": 0.748196,
+      "auc_ic95": [
+       0.361597,
+       0.873263
+      ],
+      "calibracion": {
+       "intercepto": 0.535562,
+       "pendiente": 0.782944,
+       "fiabilidad": [
+        {
+         "p_media": 0.003401,
+         "frecuencia": 0.004484,
+         "n": 223
+        },
+        {
+         "p_media": 0.004682,
+         "frecuencia": 0.018018,
+         "n": 222
+        },
+        {
+         "p_media": 0.005712,
+         "frecuencia": 0.04955,
+         "n": 222
+        },
+        {
+         "p_media": 0.007073,
+         "frecuencia": 0.040359,
+         "n": 223
+        },
+        {
+         "p_media": 0.009006,
+         "frecuencia": 0.018018,
+         "n": 222
+        },
+        {
+         "p_media": 0.013213,
+         "frecuencia": 0.04955,
+         "n": 222
+        },
+        {
+         "p_media": 0.020093,
+         "frecuencia": 0.067265,
+         "n": 223
+        },
+        {
+         "p_media": 0.031286,
+         "frecuencia": 0.121622,
+         "n": 222
+        },
+        {
+         "p_media": 0.043418,
+         "frecuencia": 0.09009,
+         "n": 222
+        },
+        {
+         "p_media": 0.084118,
+         "frecuencia": 0.251121,
+         "n": 223
+        }
+       ]
+      }
+     },
+     "combinacion": {
+      "logloss": 0.232287,
+      "logloss_ic95": [
+       0.049597,
+       0.371369
+      ],
+      "brier": 0.062407,
+      "brier_ic95": [
+       0.008087,
+       0.104229
+      ],
+      "auc": 0.820723,
+      "auc_ic95": [
+       0.442055,
+       0.913949
+      ],
+      "calibracion": {
+       "intercepto": 1.508855,
+       "pendiente": 1.21245,
+       "fiabilidad": [
+        {
+         "p_media": 0.006376,
+         "frecuencia": 0.0,
+         "n": 223
+        },
+        {
+         "p_media": 0.009199,
+         "frecuencia": 0.013514,
+         "n": 222
+        },
+        {
+         "p_media": 0.011573,
+         "frecuencia": 0.013514,
+         "n": 222
+        },
+        {
+         "p_media": 0.014046,
+         "frecuencia": 0.022422,
+         "n": 223
+        },
+        {
+         "p_media": 0.017354,
+         "frecuencia": 0.045045,
+         "n": 222
+        },
+        {
+         "p_media": 0.02281,
+         "frecuencia": 0.063063,
+         "n": 222
+        },
+        {
+         "p_media": 0.029686,
+         "frecuencia": 0.058296,
+         "n": 223
+        },
+        {
+         "p_media": 0.04146,
+         "frecuencia": 0.036036,
+         "n": 222
+        },
+        {
+         "p_media": 0.05575,
+         "frecuencia": 0.072072,
+         "n": 222
+        },
+        {
+         "p_media": 0.128789,
+         "frecuencia": 0.38565,
+         "n": 223
+        }
+       ]
+      }
+     }
+    },
+    "comparaciones": {
+     "base_vs_clima": {
+      "dlogloss": {
+       "est": -0.005027,
+       "ic95": [
+        -0.020272,
+        0.018198
+       ],
+       "dt_boot": 0.009949,
+       "p_mejora": 0.306661
+      },
+      "dbrier": {
+       "est": -0.000588,
+       "ic95": [
+        -0.002241,
+        0.003801
+       ],
+       "dt_boot": 0.001553,
+       "p_mejora": 0.352541
+      },
+      "dauc": {
+       "est": 0.162815,
+       "ic95": [
+        -0.174333,
+        0.264943
+       ],
+       "dt_boot": 0.108736,
+       "p_mejora": 0.067152
+      }
+     },
+     "P1_curva_tipos_vs_base": {
+      "dlogloss": {
+       "est": 0.016397,
+       "ic95": [
+        -0.027968,
+        0.053522
+       ],
+       "dt_boot": 0.020378,
+       "p_mejora": 0.789478
+      },
+      "dbrier": {
+       "est": -0.001029,
+       "ic95": [
+        -0.003322,
+        0.000862
+       ],
+       "dt_boot": 0.001096,
+       "p_mejora": 0.174032
+      },
+      "dauc": {
+       "est": 0.05627,
+       "ic95": [
+        -0.099086,
+        0.160513
+       ],
+       "dt_boot": 0.068637,
+       "p_mejora": 0.206162
+      }
+     },
+     "P2_credito_vs_base": {
+      "dlogloss": {
+       "est": 0.001225,
+       "ic95": [
+        -0.017574,
+        0.031435
+       ],
+       "dt_boot": 0.012205,
+       "p_mejora": 0.539978
+      },
+      "dbrier": {
+       "est": 0.001842,
+       "ic95": [
+        -0.001346,
+        0.0076
+       ],
+       "dt_boot": 0.002216,
+       "p_mejora": 0.797162
+      },
+      "dauc": {
+       "est": 0.045868,
+       "ic95": [
+        -0.391137,
+        0.144529
+       ],
+       "dt_boot": 0.110449,
+       "p_mejora": 0.338967
+      }
+     },
+     "P3_actividad_vs_base": {
+      "dlogloss": {
+       "est": -0.028705,
+       "ic95": [
+        -0.084972,
+        0.017836
+       ],
+       "dt_boot": 0.026588,
+       "p_mejora": 0.140157
+      },
+      "dbrier": {
+       "est": -0.004446,
+       "ic95": [
+        -0.022397,
+        0.009689
+       ],
+       "dt_boot": 0.008215,
+       "p_mejora": 0.294196
+      },
+      "dauc": {
+       "est": 0.155454,
+       "ic95": [
+        0.094689,
+        0.302883
+       ],
+       "dt_boot": 0.051795,
+       "p_mejora": 0.001344
+      }
+     },
+     "P4_precios_vs_base": {
+      "dlogloss": {
+       "est": 0.028728,
+       "ic95": [
+        -0.026668,
+        0.086714
+       ],
+       "dt_boot": 0.02845,
+       "p_mejora": 0.843696
+      },
+      "dbrier": {
+       "est": -0.000134,
+       "ic95": [
+        -0.002611,
+        0.003138
+       ],
+       "dt_boot": 0.001514,
+       "p_mejora": 0.464719
+      },
+      "dauc": {
+       "est": 0.051076,
+       "ic95": [
+        -0.090862,
+        0.159039
+       ],
+       "dt_boot": 0.069806,
+       "p_mejora": 0.232182
+      }
+     },
+     "P5_mercados_vs_base": {
+      "dlogloss": {
+       "est": -0.008205,
+       "ic95": [
+        -0.02811,
+        0.016047
+       ],
+       "dt_boot": 0.01146,
+       "p_mejora": 0.237005
+      },
+      "dbrier": {
+       "est": 0.002353,
+       "ic95": [
+        -0.004649,
+        0.012769
+       ],
+       "dt_boot": 0.004299,
+       "p_mejora": 0.707895
+      },
+      "dauc": {
+       "est": 0.133363,
+       "ic95": [
+        0.073183,
+        0.458893
+       ],
+       "dt_boot": 0.101216,
+       "p_mejora": 0.093816
+      }
+     },
+     "P6_global_vs_base": {
+      "dlogloss": {
+       "est": 0.021508,
+       "ic95": [
+        -0.030536,
+        0.053141
+       ],
+       "dt_boot": 0.021022,
+       "p_mejora": 0.846882
+      },
+      "dbrier": {
+       "est": 0.001552,
+       "ic95": [
+        -0.002947,
+        0.003539
+       ],
+       "dt_boot": 0.001667,
+       "p_mejora": 0.824025
+      },
+      "dauc": {
+       "est": 0.08538,
+       "ic95": [
+        0.003497,
+        0.135264
+       ],
+       "dt_boot": 0.035976,
+       "p_mejora": 0.008816
+      }
+     },
+     "combinacion_vs_base": {
+      "dlogloss": {
+       "est": -0.019097,
+       "ic95": [
+        -0.033131,
+        -0.002815
+       ],
+       "dt_boot": 0.007836,
+       "p_mejora": 0.007402
+      },
+      "dbrier": {
+       "est": -0.003012,
+       "ic95": [
+        -0.004881,
+        -0.001213
+       ],
+       "dt_boot": 0.000944,
+       "p_mejora": 0.000713
+      },
+      "dauc": {
+       "est": 0.157908,
+       "ic95": [
+        0.076554,
+        0.225419
+       ],
+       "dt_boot": 0.036649,
+       "p_mejora": 8e-06
+      }
+     }
+    }
+   },
+   "importancias_descriptivas": {
+    "P1_curva_tipos": {
+     "curva": {
+      "ganancia": 10.323965,
+      "shap_abs_medio": 0.06194
+     },
+     "corto": {
+      "ganancia": 15.482705,
+      "shap_abs_medio": 0.524429
+     },
+     "d12_corto": {
+      "ganancia": 0.0,
+      "shap_abs_medio": 0.0
+     },
+     "tipo_10a": {
+      "ganancia": 23.789457,
+      "shap_abs_medio": 0.31189
+     },
+     "d12_10a": {
+      "ganancia": 10.578131,
+      "shap_abs_medio": 0.141162
+     },
+     "tipo_real": {
+      "ganancia": 17.121191,
+      "shap_abs_medio": 0.518653
+     }
+    },
+    "P2_credito": {
+     "cred_d4": {
+      "ganancia": 10.110677,
+      "shap_abs_medio": 0.43661
+     },
+     "cred_d20": {
+      "ganancia": 17.235807,
+      "shap_abs_medio": 0.375118
+     },
+     "cred_jst_d1": {
+      "ganancia": 8.924883,
+      "shap_abs_medio": 0.18703
+     }
+    },
+    "P3_actividad": {
+     "ip_yoy": {
+      "ganancia": 17.973352,
+      "shap_abs_medio": 0.253618
+     },
+     "d6_ip_yoy": {
+      "ganancia": 6.385243,
+      "shap_abs_medio": 0.063032
+     },
+     "ventas_yoy": {
+      "ganancia": 19.097292,
+      "shap_abs_medio": 0.296602
+     },
+     "paro_d12": {
+      "ganancia": 18.787434,
+      "shap_abs_medio": 0.15677
+     },
+     "sahm": {
+      "ganancia": 10.310388,
+      "shap_abs_medio": 0.054525
+     },
+     "confianza_emp": {
+      "ganancia": 42.132687,
+      "shap_abs_medio": 0.436758
+     },
+     "d6_confianza": {
+      "ganancia": 18.610334,
+      "shap_abs_medio": 0.4385
+     }
+    },
+    "P4_precios": {
+     "ipc_yoy": {
+      "ganancia": 29.026606,
+      "shap_abs_medio": 0.617483
+     },
+     "acel_ipc": {
+      "ganancia": 4.654885,
+      "shap_abs_medio": 0.036592
+     },
+     "sub_yoy": {
+      "ganancia": 20.125105,
+      "shap_abs_medio": 0.269133
+     },
+     "d12_ipc": {
+      "ganancia": 12.660007,
+      "shap_abs_medio": 0.118447
+     },
+     "mp_12m": {
+      "ganancia": 10.467525,
+      "shap_abs_medio": 0.161822
+     },
+     "mp_3m": {
+      "ganancia": 8.887849,
+      "shap_abs_medio": 0.126836
+     }
+    },
+    "P5_mercados": {
+     "bolsa_real_12m": {
+      "ganancia": 21.476027,
+      "shap_abs_medio": 1.073289
+     },
+     "bolsa_3m": {
+      "ganancia": 4.044648,
+      "shap_abs_medio": 0.081645
+     },
+     "vol_12m": {
+      "ganancia": 2.663692,
+      "shap_abs_medio": 0.010013
+     },
+     "caida_24m": {
+      "ganancia": 6.888896,
+      "shap_abs_medio": 0.151526
+     }
+    },
+    "P6_global": {
+     "dif_curva_inv": {
+      "ganancia": 25.405176,
+      "shap_abs_medio": 0.574412
+     },
+     "dif_ip_neg": {
+      "ganancia": 4.908327,
+      "shap_abs_medio": 0.035274
+     },
+     "glob_d12_corto": {
+      "ganancia": 14.447022,
+      "shap_abs_medio": 0.318042
+     },
+     "glob_ipc": {
+      "ganancia": 37.235603,
+      "shap_abs_medio": 0.412727
+     },
+     "glob_d12_ipc": {
+      "ganancia": 11.830112,
+      "shap_abs_medio": 0.034853
+     },
+     "usa_curva": {
+      "ganancia": 13.728927,
+      "shap_abs_medio": 0.099978
+     },
+     "usa_d12_corto": {
+      "ganancia": 27.811522,
+      "shap_abs_medio": 0.482997
+     }
+    }
+   }
+  },
+  "E2": {
+   "filas": 8635,
+   "eventos": 1215,
+   "paises": [
+    "BEL",
+    "CAN",
+    "CHE",
+    "DEU",
+    "DNK",
+    "ESP",
+    "FIN",
+    "FRA",
+    "GBR",
+    "IRL",
+    "ITA",
+    "JPN",
+    "NLD",
+    "NOR",
+    "PRT",
+    "SWE",
+    "USA"
+   ],
+   "meses_con_evento": 357,
+   "desde": "1960-01-31",
+   "hasta": "2003-12-31",
+   "V1_loco": {
+    "filas": 8635,
+    "eventos": 1215,
+    "meses_con_evento": 357,
+    "metricas": {
+     "clima": {
+      "logloss": 0.407591,
+      "logloss_ic95": [
+       0.310236,
+       0.522033
+      ],
+      "brier": 0.121233,
+      "brier_ic95": [
+       0.082608,
+       0.166585
+      ],
+      "auc": 0.384341,
+      "auc_ic95": [
+       0.336379,
+       0.424189
+      ],
+      "calibracion": {
+       "intercepto": -29.77498,
+       "pendiente": -15.419329,
+       "fiabilidad": [
+        {
+         "p_media": 0.134205,
+         "frecuencia": 0.24053,
+         "n": 528
+        },
+        {
+         "p_media": 0.13698,
+         "frecuencia": 0.197917,
+         "n": 1056
+        },
+        {
+         "p_media": 0.138522,
+         "frecuencia": 0.174242,
+         "n": 528
+        },
+        {
+         "p_media": 0.138707,
+         "frecuencia": 0.171402,
+         "n": 1056
+        },
+        {
+         "p_media": 0.139571,
+         "frecuencia": 0.158144,
+         "n": 1056
+        },
+        {
+         "p_media": 0.141212,
+         "frecuencia": 0.13172,
+         "n": 744
+        },
+        {
+         "p_media": 0.142161,
+         "frecuencia": 0.118371,
+         "n": 1056
+        },
+        {
+         "p_media": 0.142945,
+         "frecuencia": 0.104208,
+         "n": 499
+        },
+        {
+         "p_media": 0.144135,
+         "frecuencia": 0.088068,
+         "n": 1056
+        },
+        {
+         "p_media": 0.145492,
+         "frecuencia": 0.067235,
+         "n": 1056
+        }
+       ]
+      }
+     },
+     "base": {
+      "logloss": 0.403559,
+      "logloss_ic95": [
+       0.305789,
+       0.517268
+      ],
+      "brier": 0.120237,
+      "brier_ic95": [
+       0.082004,
+       0.165332
+      ],
+      "auc": 0.562593,
+      "auc_ic95": [
+       0.489522,
+       0.635491
+      ],
+      "calibracion": {
+       "intercepto": -0.321506,
+       "pendiente": 0.819669,
+       "fiabilidad": [
+        {
+         "p_media": 0.105043,
+         "frecuencia": 0.12037,
+         "n": 864
+        },
+        {
+         "p_media": 0.115414,
+         "frecuencia": 0.098494,
+         "n": 863
+        },
+        {
+         "p_media": 0.12048,
+         "frecuencia": 0.114583,
+         "n": 864
+        },
+        {
+         "p_media": 0.124788,
+         "frecuencia": 0.112399,
+         "n": 863
+        },
+        {
+         "p_media": 0.129038,
+         "frecuencia": 0.12051,
+         "n": 863
+        },
+        {
+         "p_media": 0.134005,
+         "frecuencia": 0.165509,
+         "n": 864
+        },
+        {
+         "p_media": 0.140345,
+         "frecuencia": 0.17613,
+         "n": 863
+        },
+        {
+         "p_media": 0.149871,
+         "frecuencia": 0.161066,
+         "n": 863
+        },
+        {
+         "p_media": 0.166904,
+         "frecuencia": 0.153935,
+         "n": 864
+        },
+        {
+         "p_media": 0.218943,
+         "frecuencia": 0.184028,
+         "n": 864
+        }
+       ]
+      }
+     },
+     "P1_curva_tipos": {
+      "logloss": 0.373315,
+      "logloss_ic95": [
+       0.283581,
+       0.472956
+      ],
+      "brier": 0.112162,
+      "brier_ic95": [
+       0.078068,
+       0.150509
+      ],
+      "auc": 0.707778,
+      "auc_ic95": [
+       0.637688,
+       0.760413
+      ],
+      "calibracion": {
+       "intercepto": -0.139214,
+       "pendiente": 0.900264,
+       "fiabilidad": [
+        {
+         "p_media": 0.033566,
+         "frecuencia": 0.065972,
+         "n": 864
+        },
+        {
+         "p_media": 0.046147,
+         "frecuencia": 0.047509,
+         "n": 863
+        },
+        {
+         "p_media": 0.057377,
+         "frecuencia": 0.034722,
+         "n": 864
+        },
+        {
+         "p_media": 0.071916,
+         "frecuencia": 0.067207,
+         "n": 863
+        },
+        {
+         "p_media": 0.092316,
+         "frecuencia": 0.12978,
+         "n": 863
+        },
+        {
+         "p_media": 0.117805,
+         "frecuencia": 0.12051,
+         "n": 863
+        },
+        {
+         "p_media": 0.149998,
+         "frecuencia": 0.122685,
+         "n": 864
+        },
+        {
+         "p_media": 0.199724,
+         "frecuencia": 0.222222,
+         "n": 864
+        },
+        {
+         "p_media": 0.268073,
+         "frecuencia": 0.286211,
+         "n": 863
+        },
+        {
+         "p_media": 0.34527,
+         "frecuencia": 0.310185,
+         "n": 864
+        }
+       ]
+      }
+     },
+     "P2_credito": {
+      "logloss": 0.396691,
+      "logloss_ic95": [
+       0.294545,
+       0.519402
+      ],
+      "brier": 0.118916,
+      "brier_ic95": [
+       0.080031,
+       0.164988
+      ],
+      "auc": 0.619531,
+      "auc_ic95": [
+       0.546872,
+       0.680529
+      ],
+      "calibracion": {
+       "intercepto": -0.448519,
+       "pendiente": 0.737811,
+       "fiabilidad": [
+        {
+         "p_media": 0.051877,
+         "frecuencia": 0.06713,
+         "n": 864
+        },
+        {
+         "p_media": 0.076533,
+         "frecuencia": 0.08343,
+         "n": 863
+        },
+        {
+         "p_media": 0.090175,
+         "frecuencia": 0.109954,
+         "n": 864
+        },
+        {
+         "p_media": 0.10168,
+         "frecuencia": 0.114849,
+         "n": 862
+        },
+        {
+         "p_media": 0.113719,
+         "frecuencia": 0.12037,
+         "n": 864
+        },
+        {
+         "p_media": 0.129505,
+         "frecuencia": 0.140046,
+         "n": 864
+        },
+        {
+         "p_media": 0.150978,
+         "frecuencia": 0.140209,
+         "n": 863
+        },
+        {
+         "p_media": 0.179042,
+         "frecuencia": 0.185185,
+         "n": 864
+        },
+        {
+         "p_media": 0.217788,
+         "frecuencia": 0.220162,
+         "n": 863
+        },
+        {
+         "p_media": 0.28924,
+         "frecuencia": 0.225694,
+         "n": 864
+        }
+       ]
+      }
+     },
+     "P3_actividad": {
+      "logloss": 0.359976,
+      "logloss_ic95": [
+       0.271198,
+       0.459307
+      ],
+      "brier": 0.110555,
+      "brier_ic95": [
+       0.076963,
+       0.14847
+      ],
+      "auc": 0.746269,
+      "auc_ic95": [
+       0.69084,
+       0.788861
+      ],
+      "calibracion": {
+       "intercepto": -0.06934,
+       "pendiente": 0.93657,
+       "fiabilidad": [
+        {
+         "p_media": 0.015887,
+         "frecuencia": 0.019676,
+         "n": 864
+        },
+        {
+         "p_media": 0.027901,
+         "frecuencia": 0.028969,
+         "n": 863
+        },
+        {
+         "p_media": 0.041984,
+         "frecuencia": 0.039352,
+         "n": 864
+        },
+        {
+         "p_media": 0.062476,
+         "frecuencia": 0.057937,
+         "n": 863
+        },
+        {
+         "p_media": 0.091504,
+         "frecuencia": 0.0927,
+         "n": 863
+        },
+        {
+         "p_media": 0.131301,
+         "frecuencia": 0.158565,
+         "n": 864
+        },
+        {
+         "p_media": 0.172358,
+         "frecuencia": 0.177289,
+         "n": 863
+        },
+        {
+         "p_media": 0.212399,
+         "frecuencia": 0.203704,
+         "n": 864
+        },
+        {
+         "p_media": 0.263607,
+         "frecuencia": 0.308227,
+         "n": 863
+        },
+        {
+         "p_media": 0.357172,
+         "frecuencia": 0.320602,
+         "n": 864
+        }
+       ]
+      }
+     },
+     "P4_precios": {
+      "logloss": 0.364491,
+      "logloss_ic95": [
+       0.280066,
+       0.451215
+      ],
+      "brier": 0.108481,
+      "brier_ic95": [
+       0.076071,
+       0.142554
+      ],
+      "auc": 0.716523,
+      "auc_ic95": [
+       0.629227,
+       0.782848
+      ],
+      "calibracion": {
+       "intercepto": 0.026732,
+       "pendiente": 1.01017,
+       "fiabilidad": [
+        {
+         "p_media": 0.047448,
+         "frecuencia": 0.063657,
+         "n": 864
+        },
+        {
+         "p_media": 0.059595,
+         "frecuencia": 0.067207,
+         "n": 863
+        },
+        {
+         "p_media": 0.070556,
+         "frecuencia": 0.070602,
+         "n": 864
+        },
+        {
+         "p_media": 0.082006,
+         "frecuencia": 0.075319,
+         "n": 863
+        },
+        {
+         "p_media": 0.094117,
+         "frecuencia": 0.06489,
+         "n": 863
+        },
+        {
+         "p_media": 0.109462,
+         "frecuencia": 0.097222,
+         "n": 864
+        },
+        {
+         "p_media": 0.131076,
+         "frecuencia": 0.143685,
+         "n": 863
+        },
+        {
+         "p_media": 0.166172,
+         "frecuencia": 0.152778,
+         "n": 864
+        },
+        {
+         "p_media": 0.227193,
+         "frecuencia": 0.232908,
+         "n": 863
+        },
+        {
+         "p_media": 0.408408,
+         "frecuencia": 0.438657,
+         "n": 864
+        }
+       ]
+      }
+     },
+     "P5_mercados": {
+      "logloss": 0.403167,
+      "logloss_ic95": [
+       0.306886,
+       0.515307
+      ],
+      "brier": 0.119998,
+      "brier_ic95": [
+       0.082802,
+       0.1639
+      ],
+      "auc": 0.587767,
+      "auc_ic95": [
+       0.534913,
+       0.627413
+      ],
+      "calibracion": {
+       "intercepto": -0.715284,
+       "pendiente": 0.594481,
+       "fiabilidad": [
+        {
+         "p_media": 0.050482,
+         "frecuencia": 0.081019,
+         "n": 864
+        },
+        {
+         "p_media": 0.081383,
+         "frecuencia": 0.110081,
+         "n": 863
+        },
+        {
+         "p_media": 0.102542,
+         "frecuencia": 0.086806,
+         "n": 864
+        },
+        {
+         "p_media": 0.117762,
+         "frecuencia": 0.150637,
+         "n": 863
+        },
+        {
+         "p_media": 0.130944,
+         "frecuencia": 0.123986,
+         "n": 863
+        },
+        {
+         "p_media": 0.143954,
+         "frecuencia": 0.138889,
+         "n": 864
+        },
+        {
+         "p_media": 0.157275,
+         "frecuencia": 0.169177,
+         "n": 863
+        },
+        {
+         "p_media": 0.174832,
+         "frecuencia": 0.144676,
+         "n": 864
+        },
+        {
+         "p_media": 0.196615,
+         "frecuencia": 0.195829,
+         "n": 863
+        },
+        {
+         "p_media": 0.256033,
+         "frecuencia": 0.206019,
+         "n": 864
+        }
+       ]
+      }
+     },
+     "P6_global": {
+      "logloss": 0.350334,
+      "logloss_ic95": [
+       0.272638,
+       0.435411
+      ],
+      "brier": 0.104551,
+      "brier_ic95": [
+       0.074935,
+       0.137247
+      ],
+      "auc": 0.758501,
+      "auc_ic95": [
+       0.667226,
+       0.81042
+      ],
+      "calibracion": {
+       "intercepto": 0.166979,
+       "pendiente": 1.102586,
+       "fiabilidad": [
+        {
+         "p_media": 0.032649,
+         "frecuencia": 0.049769,
+         "n": 864
+        },
+        {
+         "p_media": 0.051246,
+         "frecuencia": 0.033604,
+         "n": 863
+        },
+        {
+         "p_media": 0.065827,
+         "frecuencia": 0.038194,
+         "n": 864
+        },
+        {
+         "p_media": 0.081289,
+         "frecuencia": 0.052144,
+         "n": 863
+        },
+        {
+         "p_media": 0.098336,
+         "frecuencia": 0.079954,
+         "n": 863
+        },
+        {
+         "p_media": 0.118299,
+         "frecuencia": 0.122685,
+         "n": 864
+        },
+        {
+         "p_media": 0.141641,
+         "frecuencia": 0.143685,
+         "n": 863
+        },
+        {
+         "p_media": 0.169659,
+         "frecuencia": 0.193287,
+         "n": 864
+        },
+        {
+         "p_media": 0.214438,
+         "frecuencia": 0.237543,
+         "n": 863
+        },
+        {
+         "p_media": 0.430125,
+         "frecuencia": 0.456019,
+         "n": 864
+        }
+       ]
+      }
+     },
+     "combinacion": {
+      "logloss": 0.355366,
+      "logloss_ic95": [
+       0.269839,
+       0.451164
+      ],
+      "brier": 0.108021,
+      "brier_ic95": [
+       0.074081,
+       0.145997
+      ],
+      "auc": 0.792669,
+      "auc_ic95": [
+       0.728548,
+       0.835786
+      ],
+      "calibracion": {
+       "intercepto": 2.052296,
+       "pendiente": 2.107412,
+       "fiabilidad": [
+        {
+         "p_media": 0.053382,
+         "frecuencia": 0.028935,
+         "n": 864
+        },
+        {
+         "p_media": 0.066607,
+         "frecuencia": 0.024334,
+         "n": 863
+        },
+        {
+         "p_media": 0.078913,
+         "frecuencia": 0.032407,
+         "n": 864
+        },
+        {
+         "p_media": 0.091032,
+         "frecuencia": 0.041715,
+         "n": 863
+        },
+        {
+         "p_media": 0.104395,
+         "frecuencia": 0.075319,
+         "n": 863
+        },
+        {
+         "p_media": 0.119232,
+         "frecuencia": 0.100694,
+         "n": 864
+        },
+        {
+         "p_media": 0.138422,
+         "frecuencia": 0.140209,
+         "n": 863
+        },
+        {
+         "p_media": 0.160593,
+         "frecuencia": 0.203704,
+         "n": 864
+        },
+        {
+         "p_media": 0.192329,
+         "frecuencia": 0.310545,
+         "n": 863
+        },
+        {
+         "p_media": 0.264921,
+         "frecuencia": 0.449074,
+         "n": 864
+        }
+       ]
+      }
+     }
+    },
+    "comparaciones": {
+     "base_vs_clima": {
+      "dlogloss": {
+       "est": -0.004032,
+       "ic95": [
+        -0.010357,
+        0.00273
+       ],
+       "dt_boot": 0.003377,
+       "p_mejora": 0.116228
+      },
+      "dbrier": {
+       "est": -0.000997,
+       "ic95": [
+        -0.002649,
+        0.000805
+       ],
+       "dt_boot": 0.000899,
+       "p_mejora": 0.133724
+      },
+      "dauc": {
+       "est": 0.178252,
+       "ic95": [
+        0.114394,
+        0.253372
+       ],
+       "dt_boot": 0.035921,
+       "p_mejora": 0.0
+      }
+     },
+     "P1_curva_tipos_vs_base": {
+      "dlogloss": {
+       "est": -0.030244,
+       "ic95": [
+        -0.055506,
+        -0.007612
+       ],
+       "dt_boot": 0.012175,
+       "p_mejora": 0.006493
+      },
+      "dbrier": {
+       "est": -0.008075,
+       "ic95": [
+        -0.016357,
+        -0.001712
+       ],
+       "dt_boot": 0.003752,
+       "p_mejora": 0.01569
+      },
+      "dauc": {
+       "est": 0.145186,
+       "ic95": [
+        0.051833,
+        0.22237
+       ],
+       "dt_boot": 0.043235,
+       "p_mejora": 0.000392
+      }
+     },
+     "P2_credito_vs_base": {
+      "dlogloss": {
+       "est": -0.006868,
+       "ic95": [
+        -0.023141,
+        0.012376
+       ],
+       "dt_boot": 0.008864,
+       "p_mejora": 0.219234
+      },
+      "dbrier": {
+       "est": -0.001321,
+       "ic95": [
+        -0.005608,
+        0.003068
+       ],
+       "dt_boot": 0.002225,
+       "p_mejora": 0.276377
+      },
+      "dauc": {
+       "est": 0.056938,
+       "ic95": [
+        -0.048392,
+        0.161157
+       ],
+       "dt_boot": 0.055085,
+       "p_mejora": 0.150652
+      }
+     },
+     "P3_actividad_vs_base": {
+      "dlogloss": {
+       "est": -0.043583,
+       "ic95": [
+        -0.070377,
+        -0.020161
+       ],
+       "dt_boot": 0.012724,
+       "p_mejora": 0.000307
+      },
+      "dbrier": {
+       "est": -0.009681,
+       "ic95": [
+        -0.018554,
+        -0.002835
+       ],
+       "dt_boot": 0.004122,
+       "p_mejora": 0.009418
+      },
+      "dauc": {
+       "est": 0.183676,
+       "ic95": [
+        0.093254,
+        0.271854
+       ],
+       "dt_boot": 0.044577,
+       "p_mejora": 1.9e-05
+      }
+     },
+     "P4_precios_vs_base": {
+      "dlogloss": {
+       "est": -0.039069,
+       "ic95": [
+        -0.082779,
+        -0.010394
+       ],
+       "dt_boot": 0.019438,
+       "p_mejora": 0.022217
+      },
+      "dbrier": {
+       "est": -0.011756,
+       "ic95": [
+        -0.027958,
+        -0.002055
+       ],
+       "dt_boot": 0.006877,
+       "p_mejora": 0.043672
+      },
+      "dauc": {
+       "est": 0.153931,
+       "ic95": [
+        0.047886,
+        0.248707
+       ],
+       "dt_boot": 0.052346,
+       "p_mejora": 0.001638
+      }
+     },
+     "P5_mercados_vs_base": {
+      "dlogloss": {
+       "est": -0.000393,
+       "ic95": [
+        -0.004843,
+        0.005494
+       ],
+       "dt_boot": 0.002613,
+       "p_mejora": 0.440272
+      },
+      "dbrier": {
+       "est": -0.000239,
+       "ic95": [
+        -0.001447,
+        0.00117
+       ],
+       "dt_boot": 0.000687,
+       "p_mejora": 0.364078
+      },
+      "dauc": {
+       "est": 0.025175,
+       "ic95": [
+        -0.02416,
+        0.065798
+       ],
+       "dt_boot": 0.02241,
+       "p_mejora": 0.130643
+      }
+     },
+     "P6_global_vs_base": {
+      "dlogloss": {
+       "est": -0.053225,
+       "ic95": [
+        -0.101478,
+        -0.018861
+       ],
+       "dt_boot": 0.021257,
+       "p_mejora": 0.006141
+      },
+      "dbrier": {
+       "est": -0.015686,
+       "ic95": [
+        -0.032659,
+        -0.00384
+       ],
+       "dt_boot": 0.007804,
+       "p_mejora": 0.022209
+      },
+      "dauc": {
+       "est": 0.195908,
+       "ic95": [
+        0.087216,
+        0.276156
+       ],
+       "dt_boot": 0.048158,
+       "p_mejora": 2.4e-05
+      }
+     },
+     "combinacion_vs_base": {
+      "dlogloss": {
+       "est": -0.048194,
+       "ic95": [
+        -0.074161,
+        -0.028477
+       ],
+       "dt_boot": 0.012122,
+       "p_mejora": 3.5e-05
+      },
+      "dbrier": {
+       "est": -0.012216,
+       "ic95": [
+        -0.020872,
+        -0.006461
+       ],
+       "dt_boot": 0.003863,
+       "p_mejora": 0.000782
+      },
+      "dauc": {
+       "est": 0.230077,
+       "ic95": [
+        0.13736,
+        0.308799
+       ],
+       "dt_boot": 0.04413,
+       "p_mejora": 0.0
+      }
+     }
+    }
+   },
+   "V2_temporal": {
+    "filas": 2856,
+    "eventos": 74,
+    "meses_con_evento": 59,
+    "metricas": {
+     "clima": {
+      "logloss": 0.258088,
+      "logloss_ic95": [
+       0.244442,
+       0.281481
+      ],
+      "brier": 0.055235,
+      "brier_ic95": [
+       0.049335,
+       0.065349
+      ],
+      "auc": 0.5,
+      "auc_ic95": [
+       0.5,
+       0.5
+      ],
+      "calibracion": {
+       "intercepto": -3.61643,
+       "pendiente": 0.007494,
+       "fiabilidad": [
+        {
+         "p_media": 0.199103,
+         "frecuencia": 0.02591,
+         "n": 2856
+        }
+       ]
+      }
+     },
+     "base": {
+      "logloss": 0.270862,
+      "logloss_ic95": [
+       0.260899,
+       0.293512
+      ],
+      "brier": 0.059498,
+      "brier_ic95": [
+       0.054826,
+       0.069451
+      ],
+      "auc": 0.734942,
+      "auc_ic95": [
+       0.685119,
+       0.851158
+      ],
+      "calibracion": {
+       "intercepto": 10.272151,
+       "pendiente": 10.919968,
+       "fiabilidad": [
+        {
+         "p_media": 0.185065,
+         "frecuencia": 0.006993,
+         "n": 286
+        },
+        {
+         "p_media": 0.199684,
+         "frecuencia": 0.003509,
+         "n": 285
+        },
+        {
+         "p_media": 0.204782,
+         "frecuencia": 0.003509,
+         "n": 285
+        },
+        {
+         "p_media": 0.208455,
+         "frecuencia": 0.024476,
+         "n": 286
+        },
+        {
+         "p_media": 0.211517,
+         "frecuencia": 0.017483,
+         "n": 286
+        },
+        {
+         "p_media": 0.214607,
+         "frecuencia": 0.021053,
+         "n": 285
+        },
+        {
+         "p_media": 0.217641,
+         "frecuencia": 0.027972,
+         "n": 286
+        },
+        {
+         "p_media": 0.221054,
+         "frecuencia": 0.02807,
+         "n": 285
+        },
+        {
+         "p_media": 0.225599,
+         "frecuencia": 0.027972,
+         "n": 286
+        },
+        {
+         "p_media": 0.237758,
+         "frecuencia": 0.097902,
+         "n": 286
+        }
+       ]
+      }
+     },
+     "P1_curva_tipos": {
+      "logloss": 0.204408,
+      "logloss_ic95": [
+       0.165606,
+       0.254599
+      ],
+      "brier": 0.042259,
+      "brier_ic95": [
+       0.030243,
+       0.058516
+      ],
+      "auc": 0.559334,
+      "auc_ic95": [
+       0.430097,
+       0.689924
+      ],
+      "calibracion": {
+       "intercepto": -2.772557,
+       "pendiente": 0.47333,
+       "fiabilidad": [
+        {
+         "p_media": 0.065548,
+         "frecuencia": 0.020979,
+         "n": 286
+        },
+        {
+         "p_media": 0.08361,
+         "frecuencia": 0.021053,
+         "n": 285
+        },
+        {
+         "p_media": 0.097458,
+         "frecuencia": 0.024561,
+         "n": 285
+        },
+        {
+         "p_media": 0.111706,
+         "frecuencia": 0.024476,
+         "n": 286
+        },
+        {
+         "p_media": 0.125652,
+         "frecuencia": 0.027972,
+         "n": 286
+        },
+        {
+         "p_media": 0.139079,
+         "frecuencia": 0.010526,
+         "n": 285
+        },
+        {
+         "p_media": 0.155677,
+         "frecuencia": 0.013986,
+         "n": 286
+        },
+        {
+         "p_media": 0.188027,
+         "frecuencia": 0.059649,
+         "n": 285
+        },
+        {
+         "p_media": 0.22297,
+         "frecuencia": 0.006993,
+         "n": 286
+        },
+        {
+         "p_media": 0.259004,
+         "frecuencia": 0.048951,
+         "n": 286
+        }
+       ]
+      }
+     },
+     "P2_credito": {
+      "logloss": 0.259101,
+      "logloss_ic95": [
+       0.237394,
+       0.2896
+      ],
+      "brier": 0.057627,
+      "brier_ic95": [
+       0.049346,
+       0.069718
+      ],
+      "auc": 0.585613,
+      "auc_ic95": [
+       0.363846,
+       0.709086
+      ],
+      "calibracion": {
+       "intercepto": -2.466777,
+       "pendiente": 0.842399,
+       "fiabilidad": [
+        {
+         "p_media": 0.122596,
+         "frecuencia": 0.024476,
+         "n": 286
+        },
+        {
+         "p_media": 0.141864,
+         "frecuencia": 0.024561,
+         "n": 285
+        },
+        {
+         "p_media": 0.15446,
+         "frecuencia": 0.01049,
+         "n": 286
+        },
+        {
+         "p_media": 0.168813,
+         "frecuencia": 0.010526,
+         "n": 285
+        },
+        {
+         "p_media": 0.184074,
+         "frecuencia": 0.020979,
+         "n": 286
+        },
+        {
+         "p_media": 0.198952,
+         "frecuencia": 0.014035,
+         "n": 285
+        },
+        {
+         "p_media": 0.211244,
+         "frecuencia": 0.031469,
+         "n": 286
+        },
+        {
+         "p_media": 0.230569,
+         "frecuencia": 0.05614,
+         "n": 285
+        },
+        {
+         "p_media": 0.258189,
+         "frecuencia": 0.024476,
+         "n": 286
+        },
+        {
+         "p_media": 0.320959,
+         "frecuencia": 0.041958,
+         "n": 286
+        }
+       ]
+      }
+     },
+     "P3_actividad": {
+      "logloss": 0.187841,
+      "logloss_ic95": [
+       0.156222,
+       0.244302
+      ],
+      "brier": 0.043525,
+      "brier_ic95": [
+       0.033972,
+       0.061755
+      ],
+      "auc": 0.688363,
+      "auc_ic95": [
+       0.52882,
+       0.779238
+      ],
+      "calibracion": {
+       "intercepto": -2.264551,
+       "pendiente": 0.707613,
+       "fiabilidad": [
+        {
+         "p_media": 0.023723,
+         "frecuencia": 0.006993,
+         "n": 286
+        },
+        {
+         "p_media": 0.035748,
+         "frecuencia": 0.007018,
+         "n": 285
+        },
+        {
+         "p_media": 0.04435,
+         "frecuencia": 0.017483,
+         "n": 286
+        },
+        {
+         "p_media": 0.055533,
+         "frecuencia": 0.017544,
+         "n": 285
+        },
+        {
+         "p_media": 0.074193,
+         "frecuencia": 0.013986,
+         "n": 286
+        },
+        {
+         "p_media": 0.10105,
+         "frecuencia": 0.020979,
+         "n": 286
+        },
+        {
+         "p_media": 0.144041,
+         "frecuencia": 0.021053,
+         "n": 285
+        },
+        {
+         "p_media": 0.190299,
+         "frecuencia": 0.045614,
+         "n": 285
+        },
+        {
+         "p_media": 0.241804,
+         "frecuencia": 0.045455,
+         "n": 286
+        },
+        {
+         "p_media": 0.373503,
+         "frecuencia": 0.062937,
+         "n": 286
+        }
+       ]
+      }
+     },
+     "P4_precios": {
+      "logloss": 0.250257,
+      "logloss_ic95": [
+       0.209585,
+       0.2904
+      ],
+      "brier": 0.057686,
+      "brier_ic95": [
+       0.043161,
+       0.072296
+      ],
+      "auc": 0.56391,
+      "auc_ic95": [
+       0.479234,
+       0.727744
+      ],
+      "calibracion": {
+       "intercepto": -3.115879,
+       "pendiente": 0.333207,
+       "fiabilidad": [
+        {
+         "p_media": 0.071872,
+         "frecuencia": 0.034965,
+         "n": 286
+        },
+        {
+         "p_media": 0.086506,
+         "frecuencia": 0.010526,
+         "n": 285
+        },
+        {
+         "p_media": 0.103923,
+         "frecuencia": 0.034965,
+         "n": 286
+        },
+        {
+         "p_media": 0.125965,
+         "frecuencia": 0.02807,
+         "n": 285
+        },
+        {
+         "p_media": 0.161335,
+         "frecuencia": 0.003497,
+         "n": 286
+        },
+        {
+         "p_media": 0.202294,
+         "frecuencia": 0.010526,
+         "n": 285
+        },
+        {
+         "p_media": 0.228867,
+         "frecuencia": 0.024476,
+         "n": 286
+        },
+        {
+         "p_media": 0.249938,
+         "frecuencia": 0.017544,
+         "n": 285
+        },
+        {
+         "p_media": 0.273401,
+         "frecuencia": 0.034965,
+         "n": 286
+        },
+        {
+         "p_media": 0.353488,
+         "frecuencia": 0.059441,
+         "n": 286
+        }
+       ]
+      }
+     },
+     "P5_mercados": {
+      "logloss": 0.261667,
+      "logloss_ic95": [
+       0.251381,
+       0.288268
+      ],
+      "brier": 0.058737,
+      "brier_ic95": [
+       0.054055,
+       0.069285
+      ],
+      "auc": 0.449234,
+      "auc_ic95": [
+       0.342729,
+       0.569227
+      ],
+      "calibracion": {
+       "intercepto": -4.039949,
+       "pendiente": -0.276385,
+       "fiabilidad": [
+        {
+         "p_media": 0.082159,
+         "frecuencia": 0.041958,
+         "n": 286
+        },
+        {
+         "p_media": 0.120147,
+         "frecuencia": 0.024561,
+         "n": 285
+        },
+        {
+         "p_media": 0.14824,
+         "frecuencia": 0.045455,
+         "n": 286
+        },
+        {
+         "p_media": 0.177087,
+         "frecuencia": 0.024561,
+         "n": 285
+        },
+        {
+         "p_media": 0.20177,
+         "frecuencia": 0.027972,
+         "n": 286
+        },
+        {
+         "p_media": 0.22027,
+         "frecuencia": 0.017544,
+         "n": 285
+        },
+        {
+         "p_media": 0.233587,
+         "frecuencia": 0.01049,
+         "n": 286
+        },
+        {
+         "p_media": 0.245159,
+         "frecuencia": 0.010526,
+         "n": 285
+        },
+        {
+         "p_media": 0.257509,
+         "frecuencia": 0.017483,
+         "n": 286
+        },
+        {
+         "p_media": 0.282632,
+         "frecuencia": 0.038462,
+         "n": 286
+        }
+       ]
+      }
+     },
+     "P6_global": {
+      "logloss": 0.259257,
+      "logloss_ic95": [
+       0.204794,
+       0.318072
+      ],
+      "brier": 0.06193,
+      "brier_ic95": [
+       0.045888,
+       0.082035
+      ],
+      "auc": 0.548483,
+      "auc_ic95": [
+       0.458048,
+       0.700904
+      ],
+      "calibracion": {
+       "intercepto": -3.270252,
+       "pendiente": 0.234871,
+       "fiabilidad": [
+        {
+         "p_media": 0.065453,
+         "frecuencia": 0.006993,
+         "n": 286
+        },
+        {
+         "p_media": 0.086773,
+         "frecuencia": 0.035088,
+         "n": 285
+        },
+        {
+         "p_media": 0.106527,
+         "frecuencia": 0.020979,
+         "n": 286
+        },
+        {
+         "p_media": 0.137226,
+         "frecuencia": 0.021053,
+         "n": 285
+        },
+        {
+         "p_media": 0.171377,
+         "frecuencia": 0.027972,
+         "n": 286
+        },
+        {
+         "p_media": 0.192872,
+         "frecuencia": 0.013986,
+         "n": 286
+        },
+        {
+         "p_media": 0.211351,
+         "frecuencia": 0.038596,
+         "n": 285
+        },
+        {
+         "p_media": 0.244736,
+         "frecuencia": 0.045614,
+         "n": 285
+        },
+        {
+         "p_media": 0.316406,
+         "frecuencia": 0.020979,
+         "n": 286
+        },
+        {
+         "p_media": 0.38775,
+         "frecuencia": 0.027972,
+         "n": 286
+        }
+       ]
+      }
+     },
+     "combinacion": {
+      "logloss": 0.214996,
+      "logloss_ic95": [
+       0.19262,
+       0.254891
+      ],
+      "brier": 0.043704,
+      "brier_ic95": [
+       0.036739,
+       0.057698
+      ],
+      "auc": 0.626907,
+      "auc_ic95": [
+       0.465429,
+       0.753023
+      ],
+      "calibracion": {
+       "intercepto": -0.828819,
+       "pendiente": 1.74061,
+       "fiabilidad": [
+        {
+         "p_media": 0.093601,
+         "frecuencia": 0.013986,
+         "n": 286
+        },
+        {
+         "p_media": 0.113942,
+         "frecuencia": 0.021053,
+         "n": 285
+        },
+        {
+         "p_media": 0.126907,
+         "frecuencia": 0.020979,
+         "n": 286
+        },
+        {
+         "p_media": 0.139041,
+         "frecuencia": 0.02807,
+         "n": 285
+        },
+        {
+         "p_media": 0.150169,
+         "frecuencia": 0.01049,
+         "n": 286
+        },
+        {
+         "p_media": 0.161509,
+         "frecuencia": 0.024561,
+         "n": 285
+        },
+        {
+         "p_media": 0.173321,
+         "frecuencia": 0.01049,
+         "n": 286
+        },
+        {
+         "p_media": 0.188363,
+         "frecuencia": 0.014035,
+         "n": 285
+        },
+        {
+         "p_media": 0.208915,
+         "frecuencia": 0.048951,
+         "n": 286
+        },
+        {
+         "p_media": 0.243503,
+         "frecuencia": 0.066434,
+         "n": 286
+        }
+       ]
+      }
+     }
+    },
+    "comparaciones": {
+     "base_vs_clima": {
+      "dlogloss": {
+       "est": 0.012774,
+       "ic95": [
+        0.008305,
+        0.017687
+       ],
+       "dt_boot": 0.002374,
+       "p_mejora": 1.0
+      },
+      "dbrier": {
+       "est": 0.004263,
+       "ic95": [
+        0.002765,
+        0.005862
+       ],
+       "dt_boot": 0.000783,
+       "p_mejora": 1.0
+      },
+      "dauc": {
+       "est": 0.234942,
+       "ic95": [
+        0.185119,
+        0.351158
+       ],
+       "dt_boot": 0.041639,
+       "p_mejora": 0.0
+      }
+     },
+     "P1_curva_tipos_vs_base": {
+      "dlogloss": {
+       "est": -0.066453,
+       "ic95": [
+        -0.098085,
+        -0.032888
+       ],
+       "dt_boot": 0.017177,
+       "p_mejora": 5.5e-05
+      },
+      "dbrier": {
+       "est": -0.017239,
+       "ic95": [
+        -0.025604,
+        -0.008632
+       ],
+       "dt_boot": 0.004517,
+       "p_mejora": 6.8e-05
+      },
+      "dauc": {
+       "est": -0.175608,
+       "ic95": [
+        -0.376814,
+        -0.040773
+       ],
+       "dt_boot": 0.086096,
+       "p_mejora": 0.979309
+      }
+     },
+     "P2_credito_vs_base": {
+      "dlogloss": {
+       "est": -0.011761,
+       "ic95": [
+        -0.027068,
+        0.002563
+       ],
+       "dt_boot": 0.007761,
+       "p_mejora": 0.064831
+      },
+      "dbrier": {
+       "est": -0.001871,
+       "ic95": [
+        -0.006749,
+        0.002832
+       ],
+       "dt_boot": 0.002512,
+       "p_mejora": 0.228219
+      },
+      "dauc": {
+       "est": -0.149329,
+       "ic95": [
+        -0.45604,
+        -0.016648
+       ],
+       "dt_boot": 0.115944,
+       "p_mejora": 0.901116
+      }
+     },
+     "P3_actividad_vs_base": {
+      "dlogloss": {
+       "est": -0.083021,
+       "ic95": [
+        -0.113896,
+        -0.041741
+       ],
+       "dt_boot": 0.018809,
+       "p_mejora": 5e-06
+      },
+      "dbrier": {
+       "est": -0.015972,
+       "ic95": [
+        -0.024933,
+        -0.004414
+       ],
+       "dt_boot": 0.005374,
+       "p_mejora": 0.001478
+      },
+      "dauc": {
+       "est": -0.046578,
+       "ic95": [
+        -0.265461,
+        0.030065
+       ],
+       "dt_boot": 0.073849,
+       "p_mejora": 0.735891
+      }
+     },
+     "P4_precios_vs_base": {
+      "dlogloss": {
+       "est": -0.020605,
+       "ic95": [
+        -0.062983,
+        0.006856
+       ],
+       "dt_boot": 0.018791,
+       "p_mejora": 0.136425
+      },
+      "dbrier": {
+       "est": -0.001812,
+       "ic95": [
+        -0.015557,
+        0.007007
+       ],
+       "dt_boot": 0.005955,
+       "p_mejora": 0.380456
+      },
+      "dauc": {
+       "est": -0.171032,
+       "ic95": [
+        -0.317526,
+        -0.030658
+       ],
+       "dt_boot": 0.070827,
+       "p_mejora": 0.992128
+      }
+     },
+     "P5_mercados_vs_base": {
+      "dlogloss": {
+       "est": -0.009195,
+       "ic95": [
+        -0.015621,
+        0.000156
+       ],
+       "dt_boot": 0.004169,
+       "p_mejora": 0.0137
+      },
+      "dbrier": {
+       "est": -0.000761,
+       "ic95": [
+        -0.002876,
+        0.001838
+       ],
+       "dt_boot": 0.001213,
+       "p_mejora": 0.265073
+      },
+      "dauc": {
+       "est": -0.285707,
+       "ic95": [
+        -0.447158,
+        -0.189864
+       ],
+       "dt_boot": 0.063496,
+       "p_mejora": 0.999997
+      }
+     },
+     "P6_global_vs_base": {
+      "dlogloss": {
+       "est": -0.011604,
+       "ic95": [
+        -0.065335,
+        0.036785
+       ],
+       "dt_boot": 0.02614,
+       "p_mejora": 0.328544
+      },
+      "dbrier": {
+       "est": 0.002432,
+       "ic95": [
+        -0.013671,
+        0.018015
+       ],
+       "dt_boot": 0.00819,
+       "p_mejora": 0.616757
+      },
+      "dauc": {
+       "est": -0.186459,
+       "ic95": [
+        -0.30189,
+        -0.100378
+       ],
+       "dt_boot": 0.050389,
+       "p_mejora": 0.999892
+      }
+     },
+     "combinacion_vs_base": {
+      "dlogloss": {
+       "est": -0.055866,
+       "ic95": [
+        -0.075827,
+        -0.036458
+       ],
+       "dt_boot": 0.010038,
+       "p_mejora": 0.0
+      },
+      "dbrier": {
+       "est": -0.015794,
+       "ic95": [
+        -0.020864,
+        -0.010625
+       ],
+       "dt_boot": 0.002613,
+       "p_mejora": 0.0
+      },
+      "dauc": {
+       "est": -0.108035,
+       "ic95": [
+        -0.334143,
+        -0.006329
+       ],
+       "dt_boot": 0.082192,
+       "p_mejora": 0.905649
+      }
+     }
+    }
+   },
+   "importancias_descriptivas": {
+    "P1_curva_tipos": {
+     "curva": {
+      "ganancia": 10.349581,
+      "shap_abs_medio": 0.085466
+     },
+     "corto": {
+      "ganancia": 26.237753,
+      "shap_abs_medio": 0.284911
+     },
+     "d12_corto": {
+      "ganancia": 22.319017,
+      "shap_abs_medio": 0.208258
+     },
+     "tipo_10a": {
+      "ganancia": 15.311394,
+      "shap_abs_medio": 0.141367
+     },
+     "d12_10a": {
+      "ganancia": 54.941319,
+      "shap_abs_medio": 0.402662
+     },
+     "tipo_real": {
+      "ganancia": 9.998363,
+      "shap_abs_medio": 0.051426
+     }
+    },
+    "P2_credito": {
+     "cred_d4": {
+      "ganancia": 13.13926,
+      "shap_abs_medio": 0.102381
+     },
+     "cred_d20": {
+      "ganancia": 21.046453,
+      "shap_abs_medio": 0.280152
+     },
+     "cred_jst_d1": {
+      "ganancia": 16.213091,
+      "shap_abs_medio": 0.257004
+     }
+    },
+    "P3_actividad": {
+     "ip_yoy": {
+      "ganancia": 37.170963,
+      "shap_abs_medio": 0.259243
+     },
+     "d6_ip_yoy": {
+      "ganancia": 7.350516,
+      "shap_abs_medio": 0.022706
+     },
+     "ventas_yoy": {
+      "ganancia": 15.418192,
+      "shap_abs_medio": 0.180039
+     },
+     "paro_d12": {
+      "ganancia": 19.914246,
+      "shap_abs_medio": 0.062006
+     },
+     "sahm": {
+      "ganancia": 12.541021,
+      "shap_abs_medio": 0.085468
+     },
+     "confianza_emp": {
+      "ganancia": 64.342392,
+      "shap_abs_medio": 0.675546
+     },
+     "d6_confianza": {
+      "ganancia": 12.265926,
+      "shap_abs_medio": 0.124349
+     }
+    },
+    "P4_precios": {
+     "ipc_yoy": {
+      "ganancia": 13.057113,
+      "shap_abs_medio": 0.128053
+     },
+     "acel_ipc": {
+      "ganancia": 9.74391,
+      "shap_abs_medio": 0.039315
+     },
+     "sub_yoy": {
+      "ganancia": 25.388777,
+      "shap_abs_medio": 0.271285
+     },
+     "d12_ipc": {
+      "ganancia": 10.651326,
+      "shap_abs_medio": 0.098231
+     },
+     "mp_12m": {
+      "ganancia": 55.492867,
+      "shap_abs_medio": 0.422296
+     },
+     "mp_3m": {
+      "ganancia": 28.826805,
+      "shap_abs_medio": 0.080392
+     }
+    },
+    "P5_mercados": {
+     "bolsa_real_12m": {
+      "ganancia": 6.154243,
+      "shap_abs_medio": 0.107478
+     },
+     "bolsa_3m": {
+      "ganancia": 5.698,
+      "shap_abs_medio": 0.08258
+     },
+     "vol_12m": {
+      "ganancia": 8.301726,
+      "shap_abs_medio": 0.09694
+     },
+     "caida_24m": {
+      "ganancia": 11.19897,
+      "shap_abs_medio": 0.172815
+     }
+    },
+    "P6_global": {
+     "dif_curva_inv": {
+      "ganancia": 23.722589,
+      "shap_abs_medio": 0.231104
+     },
+     "dif_ip_neg": {
+      "ganancia": 38.636971,
+      "shap_abs_medio": 0.339982
+     },
+     "glob_d12_corto": {
+      "ganancia": 11.974568,
+      "shap_abs_medio": 0.047465
+     },
+     "glob_ipc": {
+      "ganancia": 26.701759,
+      "shap_abs_medio": 0.185035
+     },
+     "glob_d12_ipc": {
+      "ganancia": 12.219423,
+      "shap_abs_medio": 0.04075
+     },
+     "usa_curva": {
+      "ganancia": 28.003326,
+      "shap_abs_medio": 0.118027
+     },
+     "usa_d12_corto": {
+      "ganancia": 68.45211,
+      "shap_abs_medio": 0.234955
+     }
+    }
+   }
+  },
+  "E3": {
+   "filas": 6640,
+   "eventos": 1635,
+   "paises": [
+    "BEL",
+    "CAN",
+    "DEU",
+    "DNK",
+    "ESP",
+    "FIN",
+    "FRA",
+    "GBR",
+    "IRL",
+    "ITA",
+    "JPN",
+    "NLD",
+    "NOR",
+    "PRT",
+    "SWE",
+    "USA"
+   ],
+   "meses_con_evento": 408,
+   "desde": "1960-01-31",
+   "hasta": "2003-12-31",
+   "V1_loco": {
+    "filas": 6640,
+    "eventos": 1635,
+    "meses_con_evento": 408,
+    "metricas": {
+     "clima": {
+      "logloss": 0.55988,
+      "logloss_ic95": [
+       0.476429,
+       0.657381
+      ],
+      "brier": 0.186241,
+      "brier_ic95": [
+       0.148473,
+       0.230397
+      ],
+      "auc": 0.400075,
+      "auc_ic95": [
+       0.354777,
+       0.448334
+      ],
+      "calibracion": {
+       "intercepto": -16.970779,
+       "pendiente": -14.103502,
+       "fiabilidad": [
+        {
+         "p_media": 0.237729,
+         "frecuencia": 0.344697,
+         "n": 528
+        },
+        {
+         "p_media": 0.23929,
+         "frecuencia": 0.331337,
+         "n": 501
+        },
+        {
+         "p_media": 0.241571,
+         "frecuencia": 0.313466,
+         "n": 906
+        },
+        {
+         "p_media": 0.243128,
+         "frecuencia": 0.282197,
+         "n": 528
+        },
+        {
+         "p_media": 0.244987,
+         "frecuencia": 0.263158,
+         "n": 456
+        },
+        {
+         "p_media": 0.246998,
+         "frecuencia": 0.235754,
+         "n": 895
+        },
+        {
+         "p_media": 0.247413,
+         "frecuencia": 0.230263,
+         "n": 456
+        },
+        {
+         "p_media": 0.248166,
+         "frecuencia": 0.203786,
+         "n": 898
+        },
+        {
+         "p_media": 0.249724,
+         "frecuencia": 0.166667,
+         "n": 558
+        },
+        {
+         "p_media": 0.252958,
+         "frecuencia": 0.155361,
+         "n": 914
+        }
+       ]
+      }
+     },
+     "base": {
+      "logloss": 0.54585,
+      "logloss_ic95": [
+       0.462274,
+       0.645816
+      ],
+      "brier": 0.180869,
+      "brier_ic95": [
+       0.144307,
+       0.225073
+      ],
+      "auc": 0.590666,
+      "auc_ic95": [
+       0.496697,
+       0.683387
+      ],
+      "calibracion": {
+       "intercepto": -0.181171,
+       "pendiente": 0.835306,
+       "fiabilidad": [
+        {
+         "p_media": 0.147382,
+         "frecuencia": 0.152108,
+         "n": 664
+        },
+        {
+         "p_media": 0.178058,
+         "frecuencia": 0.173193,
+         "n": 664
+        },
+        {
+         "p_media": 0.194416,
+         "frecuencia": 0.236446,
+         "n": 664
+        },
+        {
+         "p_media": 0.208824,
+         "frecuencia": 0.207831,
+         "n": 664
+        },
+        {
+         "p_media": 0.221681,
+         "frecuencia": 0.204819,
+         "n": 664
+        },
+        {
+         "p_media": 0.236053,
+         "frecuencia": 0.274096,
+         "n": 664
+        },
+        {
+         "p_media": 0.254484,
+         "frecuencia": 0.25753,
+         "n": 664
+        },
+        {
+         "p_media": 0.278404,
+         "frecuencia": 0.308735,
+         "n": 664
+        },
+        {
+         "p_media": 0.311601,
+         "frecuencia": 0.26506,
+         "n": 664
+        },
+        {
+         "p_media": 0.433838,
+         "frecuencia": 0.38253,
+         "n": 664
+        }
+       ]
+      }
+     },
+     "P1_curva_tipos": {
+      "logloss": 0.540568,
+      "logloss_ic95": [
+       0.461134,
+       0.633907
+      ],
+      "brier": 0.179292,
+      "brier_ic95": [
+       0.145565,
+       0.220192
+      ],
+      "auc": 0.62311,
+      "auc_ic95": [
+       0.552029,
+       0.687579
+      ],
+      "calibracion": {
+       "intercepto": -0.289949,
+       "pendiente": 0.744273,
+       "fiabilidad": [
+        {
+         "p_media": 0.098551,
+         "frecuencia": 0.108434,
+         "n": 664
+        },
+        {
+         "p_media": 0.139239,
+         "frecuencia": 0.168675,
+         "n": 664
+        },
+        {
+         "p_media": 0.166991,
+         "frecuencia": 0.180723,
+         "n": 664
+        },
+        {
+         "p_media": 0.19441,
+         "frecuencia": 0.251506,
+         "n": 664
+        },
+        {
+         "p_media": 0.218781,
+         "frecuencia": 0.231928,
+         "n": 664
+        },
+        {
+         "p_media": 0.242846,
+         "frecuencia": 0.213855,
+         "n": 664
+        },
+        {
+         "p_media": 0.275383,
+         "frecuencia": 0.268072,
+         "n": 664
+        },
+        {
+         "p_media": 0.31303,
+         "frecuencia": 0.284639,
+         "n": 664
+        },
+        {
+         "p_media": 0.362745,
+         "frecuencia": 0.346386,
+         "n": 664
+        },
+        {
+         "p_media": 0.494285,
+         "frecuencia": 0.408133,
+         "n": 664
+        }
+       ]
+      }
+     },
+     "P2_credito": {
+      "logloss": 0.54337,
+      "logloss_ic95": [
+       0.465714,
+       0.642134
+      ],
+      "brier": 0.179178,
+      "brier_ic95": [
+       0.144723,
+       0.222292
+      ],
+      "auc": 0.615942,
+      "auc_ic95": [
+       0.543776,
+       0.671163
+      ],
+      "calibracion": {
+       "intercepto": -0.310463,
+       "pendiente": 0.702339,
+       "fiabilidad": [
+        {
+         "p_media": 0.08819,
+         "frecuencia": 0.168675,
+         "n": 664
+        },
+        {
+         "p_media": 0.134056,
+         "frecuencia": 0.164157,
+         "n": 664
+        },
+        {
+         "p_media": 0.167642,
+         "frecuencia": 0.153614,
+         "n": 664
+        },
+        {
+         "p_media": 0.195415,
+         "frecuencia": 0.230422,
+         "n": 664
+        },
+        {
+         "p_media": 0.221217,
+         "frecuencia": 0.218373,
+         "n": 664
+        },
+        {
+         "p_media": 0.24507,
+         "frecuencia": 0.200301,
+         "n": 664
+        },
+        {
+         "p_media": 0.26956,
+         "frecuencia": 0.274096,
+         "n": 664
+        },
+        {
+         "p_media": 0.301964,
+         "frecuencia": 0.305723,
+         "n": 664
+        },
+        {
+         "p_media": 0.349382,
+         "frecuencia": 0.350904,
+         "n": 664
+        },
+        {
+         "p_media": 0.475579,
+         "frecuencia": 0.396084,
+         "n": 664
+        }
+       ]
+      }
+     },
+     "P3_actividad": {
+      "logloss": 0.528807,
+      "logloss_ic95": [
+       0.452692,
+       0.626367
+      ],
+      "brier": 0.17484,
+      "brier_ic95": [
+       0.142994,
+       0.215009
+      ],
+      "auc": 0.661511,
+      "auc_ic95": [
+       0.60515,
+       0.71427
+      ],
+      "calibracion": {
+       "intercepto": -0.245169,
+       "pendiente": 0.732842,
+       "fiabilidad": [
+        {
+         "p_media": 0.060327,
+         "frecuencia": 0.061747,
+         "n": 664
+        },
+        {
+         "p_media": 0.095815,
+         "frecuencia": 0.129518,
+         "n": 664
+        },
+        {
+         "p_media": 0.126748,
+         "frecuencia": 0.174699,
+         "n": 664
+        },
+        {
+         "p_media": 0.157187,
+         "frecuencia": 0.212349,
+         "n": 664
+        },
+        {
+         "p_media": 0.193995,
+         "frecuencia": 0.25753,
+         "n": 664
+        },
+        {
+         "p_media": 0.234092,
+         "frecuencia": 0.225904,
+         "n": 664
+        },
+        {
+         "p_media": 0.277723,
+         "frecuencia": 0.289157,
+         "n": 664
+        },
+        {
+         "p_media": 0.325552,
+         "frecuencia": 0.331325,
+         "n": 664
+        },
+        {
+         "p_media": 0.395528,
+         "frecuencia": 0.319277,
+         "n": 664
+        },
+        {
+         "p_media": 0.53866,
+         "frecuencia": 0.460843,
+         "n": 664
+        }
+       ]
+      }
+     },
+     "P4_precios": {
+      "logloss": 0.514821,
+      "logloss_ic95": [
+       0.438603,
+       0.598551
+      ],
+      "brier": 0.168852,
+      "brier_ic95": [
+       0.136355,
+       0.205394
+      ],
+      "auc": 0.687409,
+      "auc_ic95": [
+       0.617239,
+       0.751181
+      ],
+      "calibracion": {
+       "intercepto": -0.068918,
+       "pendiente": 0.933338,
+       "fiabilidad": [
+        {
+         "p_media": 0.090794,
+         "frecuencia": 0.100904,
+         "n": 664
+        },
+        {
+         "p_media": 0.123176,
+         "frecuencia": 0.11747,
+         "n": 664
+        },
+        {
+         "p_media": 0.146196,
+         "frecuencia": 0.138554,
+         "n": 664
+        },
+        {
+         "p_media": 0.167896,
+         "frecuencia": 0.185241,
+         "n": 664
+        },
+        {
+         "p_media": 0.191344,
+         "frecuencia": 0.213855,
+         "n": 664
+        },
+        {
+         "p_media": 0.219264,
+         "frecuencia": 0.216867,
+         "n": 664
+        },
+        {
+         "p_media": 0.257197,
+         "frecuencia": 0.260542,
+         "n": 664
+        },
+        {
+         "p_media": 0.313578,
+         "frecuencia": 0.314759,
+         "n": 664
+        },
+        {
+         "p_media": 0.394937,
+         "frecuencia": 0.387048,
+         "n": 664
+        },
+        {
+         "p_media": 0.558679,
+         "frecuencia": 0.527108,
+         "n": 664
+        }
+       ]
+      }
+     },
+     "P5_mercados": {
+      "logloss": 0.522503,
+      "logloss_ic95": [
+       0.448974,
+       0.613391
+      ],
+      "brier": 0.17241,
+      "brier_ic95": [
+       0.140822,
+       0.21158
+      ],
+      "auc": 0.669173,
+      "auc_ic95": [
+       0.62117,
+       0.722965
+      ],
+      "calibracion": {
+       "intercepto": -0.029595,
+       "pendiente": 0.975536,
+       "fiabilidad": [
+        {
+         "p_media": 0.068574,
+         "frecuencia": 0.072289,
+         "n": 664
+        },
+        {
+         "p_media": 0.137255,
+         "frecuencia": 0.168675,
+         "n": 664
+        },
+        {
+         "p_media": 0.172926,
+         "frecuencia": 0.186747,
+         "n": 664
+        },
+        {
+         "p_media": 0.199306,
+         "frecuencia": 0.191265,
+         "n": 664
+        },
+        {
+         "p_media": 0.223693,
+         "frecuencia": 0.192771,
+         "n": 664
+        },
+        {
+         "p_media": 0.246298,
+         "frecuencia": 0.203313,
+         "n": 664
+        },
+        {
+         "p_media": 0.272373,
+         "frecuencia": 0.263554,
+         "n": 664
+        },
+        {
+         "p_media": 0.304047,
+         "frecuencia": 0.311747,
+         "n": 664
+        },
+        {
+         "p_media": 0.355005,
+         "frecuencia": 0.362952,
+         "n": 664
+        },
+        {
+         "p_media": 0.490635,
+         "frecuencia": 0.509036,
+         "n": 664
+        }
+       ]
+      }
+     },
+     "P6_global": {
+      "logloss": 0.489483,
+      "logloss_ic95": [
+       0.426532,
+       0.562715
+      ],
+      "brier": 0.158808,
+      "brier_ic95": [
+       0.132828,
+       0.190543
+      ],
+      "auc": 0.735068,
+      "auc_ic95": [
+       0.655679,
+       0.78319
+      ],
+      "calibracion": {
+       "intercepto": 0.013861,
+       "pendiente": 1.016993,
+       "fiabilidad": [
+        {
+         "p_media": 0.074273,
+         "frecuencia": 0.090361,
+         "n": 664
+        },
+        {
+         "p_media": 0.102172,
+         "frecuencia": 0.090361,
+         "n": 664
+        },
+        {
+         "p_media": 0.123446,
+         "frecuencia": 0.125,
+         "n": 664
+        },
+        {
+         "p_media": 0.147435,
+         "frecuencia": 0.123494,
+         "n": 664
+        },
+        {
+         "p_media": 0.178146,
+         "frecuencia": 0.179217,
+         "n": 664
+        },
+        {
+         "p_media": 0.218085,
+         "frecuencia": 0.212349,
+         "n": 664
+        },
+        {
+         "p_media": 0.265115,
+         "frecuencia": 0.248494,
+         "n": 664
+        },
+        {
+         "p_media": 0.330429,
+         "frecuencia": 0.350904,
+         "n": 664
+        },
+        {
+         "p_media": 0.421114,
+         "frecuencia": 0.441265,
+         "n": 664
+        },
+        {
+         "p_media": 0.606756,
+         "frecuencia": 0.600904,
+         "n": 664
+        }
+       ]
+      }
+     },
+     "combinacion": {
+      "logloss": 0.500966,
+      "logloss_ic95": [
+       0.43112,
+       0.585612
+      ],
+      "brier": 0.163852,
+      "brier_ic95": [
+       0.133281,
+       0.201744
+      ],
+      "auc": 0.736798,
+      "auc_ic95": [
+       0.674432,
+       0.78897
+      ],
+      "calibracion": {
+       "intercepto": 0.847385,
+       "pendiente": 1.716393,
+       "fiabilidad": [
+        {
+         "p_media": 0.108435,
+         "frecuencia": 0.069277,
+         "n": 664
+        },
+        {
+         "p_media": 0.144612,
+         "frecuencia": 0.097892,
+         "n": 664
+        },
+        {
+         "p_media": 0.16715,
+         "frecuencia": 0.115964,
+         "n": 664
+        },
+        {
+         "p_media": 0.187861,
+         "frecuencia": 0.158133,
+         "n": 664
+        },
+        {
+         "p_media": 0.2092,
+         "frecuencia": 0.161145,
+         "n": 664
+        },
+        {
+         "p_media": 0.23036,
+         "frecuencia": 0.215361,
+         "n": 664
+        },
+        {
+         "p_media": 0.253184,
+         "frecuencia": 0.25753,
+         "n": 664
+        },
+        {
+         "p_media": 0.281616,
+         "frecuencia": 0.328313,
+         "n": 664
+        },
+        {
+         "p_media": 0.324737,
+         "frecuencia": 0.460843,
+         "n": 664
+        },
+        {
+         "p_media": 0.451846,
+         "frecuencia": 0.597892,
+         "n": 664
+        }
+       ]
+      }
+     }
+    },
+    "comparaciones": {
+     "base_vs_clima": {
+      "dlogloss": {
+       "est": -0.01403,
+       "ic95": [
+        -0.036867,
+        0.008189
+       ],
+       "dt_boot": 0.011729,
+       "p_mejora": 0.115814
+      },
+      "dbrier": {
+       "est": -0.005371,
+       "ic95": [
+        -0.014858,
+        0.003001
+       ],
+       "dt_boot": 0.004553,
+       "p_mejora": 0.119038
+      },
+      "dauc": {
+       "est": 0.190592,
+       "ic95": [
+        0.075456,
+        0.290699
+       ],
+       "dt_boot": 0.052832,
+       "p_mejora": 0.000155
+      }
+     },
+     "P1_curva_tipos_vs_base": {
+      "dlogloss": {
+       "est": -0.005282,
+       "ic95": [
+        -0.018591,
+        0.009341
+       ],
+       "dt_boot": 0.007369,
+       "p_mejora": 0.236739
+      },
+      "dbrier": {
+       "est": -0.001577,
+       "ic95": [
+        -0.007829,
+        0.004956
+       ],
+       "dt_boot": 0.003263,
+       "p_mejora": 0.314375
+      },
+      "dauc": {
+       "est": 0.032444,
+       "ic95": [
+        -0.019101,
+        0.07784
+       ],
+       "dt_boot": 0.024684,
+       "p_mejora": 0.094359
+      }
+     },
+     "P2_credito_vs_base": {
+      "dlogloss": {
+       "est": -0.00248,
+       "ic95": [
+        -0.015371,
+        0.012631
+       ],
+       "dt_boot": 0.007288,
+       "p_mejora": 0.366825
+      },
+      "dbrier": {
+       "est": -0.001691,
+       "ic95": [
+        -0.006227,
+        0.003392
+       ],
+       "dt_boot": 0.002507,
+       "p_mejora": 0.249996
+      },
+      "dauc": {
+       "est": 0.025275,
+       "ic95": [
+        -0.041687,
+        0.082748
+       ],
+       "dt_boot": 0.030849,
+       "p_mejora": 0.206299
+      }
+     },
+     "P3_actividad_vs_base": {
+      "dlogloss": {
+       "est": -0.017043,
+       "ic95": [
+        -0.041715,
+        0.005207
+       ],
+       "dt_boot": 0.011857,
+       "p_mejora": 0.075302
+      },
+      "dbrier": {
+       "est": -0.006029,
+       "ic95": [
+        -0.016321,
+        0.002627
+       ],
+       "dt_boot": 0.004898,
+       "p_mejora": 0.109161
+      },
+      "dauc": {
+       "est": 0.070844,
+       "ic95": [
+        0.002816,
+        0.15246
+       ],
+       "dt_boot": 0.03884,
+       "p_mejora": 0.034077
+      }
+     },
+     "P4_precios_vs_base": {
+      "dlogloss": {
+       "est": -0.031029,
+       "ic95": [
+        -0.062351,
+        -0.007137
+       ],
+       "dt_boot": 0.014064,
+       "p_mejora": 0.013682
+      },
+      "dbrier": {
+       "est": -0.012018,
+       "ic95": [
+        -0.025545,
+        -0.001888
+       ],
+       "dt_boot": 0.006127,
+       "p_mejora": 0.024912
+      },
+      "dauc": {
+       "est": 0.096743,
+       "ic95": [
+        0.026779,
+        0.167011
+       ],
+       "dt_boot": 0.037391,
+       "p_mejora": 0.004836
+      }
+     },
+     "P5_mercados_vs_base": {
+      "dlogloss": {
+       "est": -0.023347,
+       "ic95": [
+        -0.045136,
+        -0.0032
+       ],
+       "dt_boot": 0.010587,
+       "p_mejora": 0.01372
+      },
+      "dbrier": {
+       "est": -0.008459,
+       "ic95": [
+        -0.017133,
+        -0.000298
+       ],
+       "dt_boot": 0.004258,
+       "p_mejora": 0.023481
+      },
+      "dauc": {
+       "est": 0.078507,
+       "ic95": [
+        0.001414,
+        0.159865
+       ],
+       "dt_boot": 0.040738,
+       "p_mejora": 0.026983
+      }
+     },
+     "P6_global_vs_base": {
+      "dlogloss": {
+       "est": -0.056367,
+       "ic95": [
+        -0.097242,
+        -0.021645
+       ],
+       "dt_boot": 0.01938,
+       "p_mejora": 0.001816
+      },
+      "dbrier": {
+       "est": -0.022061,
+       "ic95": [
+        -0.039958,
+        -0.007048
+       ],
+       "dt_boot": 0.008354,
+       "p_mejora": 0.004135
+      },
+      "dauc": {
+       "est": 0.144402,
+       "ic95": [
+        0.05051,
+        0.226336
+       ],
+       "dt_boot": 0.045962,
+       "p_mejora": 0.00084
+      }
+     },
+     "combinacion_vs_base": {
+      "dlogloss": {
+       "est": -0.044884,
+       "ic95": [
+        -0.064269,
+        -0.027601
+       ],
+       "dt_boot": 0.009627,
+       "p_mejora": 2e-06
+      },
+      "dbrier": {
+       "est": -0.017017,
+       "ic95": [
+        -0.025135,
+        -0.009955
+       ],
+       "dt_boot": 0.003956,
+       "p_mejora": 8e-06
+      },
+      "dauc": {
+       "est": 0.146132,
+       "ic95": [
+        0.072421,
+        0.215307
+       ],
+       "dt_boot": 0.037166,
+       "p_mejora": 4.2e-05
+      }
+     }
+    }
+   },
+   "V2_temporal": {
+    "filas": 2114,
+    "eventos": 255,
+    "meses_con_evento": 102,
+    "metricas": {
+     "clima": {
+      "logloss": 0.454933,
+      "logloss_ic95": [
+       0.415334,
+       0.513093
+      ],
+      "brier": 0.136599,
+      "brier_ic95": [
+       0.11796,
+       0.163976
+      ],
+      "auc": 0.5,
+      "auc_ic95": [
+       0.5,
+       0.5
+      ],
+      "calibracion": {
+       "intercepto": -2.017016,
+       "pendiente": -0.035058,
+       "fiabilidad": [
+        {
+         "p_media": 0.295339,
+         "frecuencia": 0.120624,
+         "n": 2114
+        }
+       ]
+      }
+     },
+     "base": {
+      "logloss": 0.41225,
+      "logloss_ic95": [
+       0.367345,
+       0.483238
+      ],
+      "brier": 0.120491,
+      "brier_ic95": [
+       0.100112,
+       0.152354
+      ],
+      "auc": 0.59869,
+      "auc_ic95": [
+       0.485734,
+       0.718986
+      ],
+      "calibracion": {
+       "intercepto": -0.332722,
+       "pendiente": 1.483339,
+       "fiabilidad": [
+        {
+         "p_media": 0.174103,
+         "frecuencia": 0.084906,
+         "n": 212
+        },
+        {
+         "p_media": 0.202959,
+         "frecuencia": 0.061611,
+         "n": 211
+        },
+        {
+         "p_media": 0.218604,
+         "frecuencia": 0.109005,
+         "n": 211
+        },
+        {
+         "p_media": 0.231592,
+         "frecuencia": 0.056604,
+         "n": 212
+        },
+        {
+         "p_media": 0.243734,
+         "frecuencia": 0.109005,
+         "n": 211
+        },
+        {
+         "p_media": 0.253255,
+         "frecuencia": 0.146919,
+         "n": 211
+        },
+        {
+         "p_media": 0.260725,
+         "frecuencia": 0.132075,
+         "n": 212
+        },
+        {
+         "p_media": 0.269278,
+         "frecuencia": 0.165877,
+         "n": 211
+        },
+        {
+         "p_media": 0.279846,
+         "frecuencia": 0.180095,
+         "n": 211
+        },
+        {
+         "p_media": 0.310167,
+         "frecuencia": 0.160377,
+         "n": 212
+        }
+       ]
+      }
+     },
+     "P1_curva_tipos": {
+      "logloss": 0.434469,
+      "logloss_ic95": [
+       0.388392,
+       0.515311
+      ],
+      "brier": 0.130584,
+      "brier_ic95": [
+       0.110191,
+       0.165305
+      ],
+      "auc": 0.543126,
+      "auc_ic95": [
+       0.417488,
+       0.649602
+      ],
+      "calibracion": {
+       "intercepto": -1.650382,
+       "pendiente": 0.319174,
+       "fiabilidad": [
+        {
+         "p_media": 0.141791,
+         "frecuencia": 0.103774,
+         "n": 212
+        },
+        {
+         "p_media": 0.18254,
+         "frecuencia": 0.090047,
+         "n": 211
+        },
+        {
+         "p_media": 0.204538,
+         "frecuencia": 0.094787,
+         "n": 211
+        },
+        {
+         "p_media": 0.224435,
+         "frecuencia": 0.122642,
+         "n": 212
+        },
+        {
+         "p_media": 0.24258,
+         "frecuencia": 0.113744,
+         "n": 211
+        },
+        {
+         "p_media": 0.261729,
+         "frecuencia": 0.123223,
+         "n": 211
+        },
+        {
+         "p_media": 0.281796,
+         "frecuencia": 0.127358,
+         "n": 212
+        },
+        {
+         "p_media": 0.309373,
+         "frecuencia": 0.165877,
+         "n": 211
+        },
+        {
+         "p_media": 0.345103,
+         "frecuencia": 0.137441,
+         "n": 211
+        },
+        {
+         "p_media": 0.430229,
+         "frecuencia": 0.127358,
+         "n": 212
+        }
+       ]
+      }
+     },
+     "P2_credito": {
+      "logloss": 0.455024,
+      "logloss_ic95": [
+       0.392118,
+       0.52141
+      ],
+      "brier": 0.139804,
+      "brier_ic95": [
+       0.114795,
+       0.166927
+      ],
+      "auc": 0.532513,
+      "auc_ic95": [
+       0.401145,
+       0.679414
+      ],
+      "calibracion": {
+       "intercepto": -1.843601,
+       "pendiente": 0.127885,
+       "fiabilidad": [
+        {
+         "p_media": 0.076838,
+         "frecuencia": 0.160377,
+         "n": 212
+        },
+        {
+         "p_media": 0.117319,
+         "frecuencia": 0.109005,
+         "n": 211
+        },
+        {
+         "p_media": 0.154338,
+         "frecuencia": 0.066351,
+         "n": 211
+        },
+        {
+         "p_media": 0.198955,
+         "frecuencia": 0.103774,
+         "n": 212
+        },
+        {
+         "p_media": 0.236737,
+         "frecuencia": 0.137441,
+         "n": 211
+        },
+        {
+         "p_media": 0.275069,
+         "frecuencia": 0.109005,
+         "n": 211
+        },
+        {
+         "p_media": 0.323972,
+         "frecuencia": 0.080189,
+         "n": 212
+        },
+        {
+         "p_media": 0.371841,
+         "frecuencia": 0.090047,
+         "n": 211
+        },
+        {
+         "p_media": 0.417949,
+         "frecuencia": 0.21327,
+         "n": 211
+        },
+        {
+         "p_media": 0.481446,
+         "frecuencia": 0.136792,
+         "n": 212
+        }
+       ]
+      }
+     },
+     "P3_actividad": {
+      "logloss": 0.428855,
+      "logloss_ic95": [
+       0.358557,
+       0.537165
+      ],
+      "brier": 0.133666,
+      "brier_ic95": [
+       0.104567,
+       0.180956
+      ],
+      "auc": 0.662148,
+      "auc_ic95": [
+       0.598577,
+       0.742156
+      ],
+      "calibracion": {
+       "intercepto": -1.391527,
+       "pendiente": 0.58194,
+       "fiabilidad": [
+        {
+         "p_media": 0.089516,
+         "frecuencia": 0.042453,
+         "n": 212
+        },
+        {
+         "p_media": 0.115207,
+         "frecuencia": 0.066351,
+         "n": 211
+        },
+        {
+         "p_media": 0.136144,
+         "frecuencia": 0.061611,
+         "n": 211
+        },
+        {
+         "p_media": 0.160206,
+         "frecuencia": 0.09434,
+         "n": 212
+        },
+        {
+         "p_media": 0.187509,
+         "frecuencia": 0.094787,
+         "n": 211
+        },
+        {
+         "p_media": 0.215704,
+         "frecuencia": 0.113744,
+         "n": 211
+        },
+        {
+         "p_media": 0.257125,
+         "frecuencia": 0.127358,
+         "n": 212
+        },
+        {
+         "p_media": 0.331507,
+         "frecuencia": 0.132701,
+         "n": 211
+        },
+        {
+         "p_media": 0.470779,
+         "frecuencia": 0.236967,
+         "n": 211
+        },
+        {
+         "p_media": 0.631875,
+         "frecuencia": 0.235849,
+         "n": 212
+        }
+       ]
+      }
+     },
+     "P4_precios": {
+      "logloss": 0.430871,
+      "logloss_ic95": [
+       0.362017,
+       0.500732
+      ],
+      "brier": 0.133174,
+      "brier_ic95": [
+       0.104607,
+       0.163979
+      ],
+      "auc": 0.602637,
+      "auc_ic95": [
+       0.526295,
+       0.710968
+      ],
+      "calibracion": {
+       "intercepto": -1.507949,
+       "pendiente": 0.426628,
+       "fiabilidad": [
+        {
+         "p_media": 0.099016,
+         "frecuencia": 0.084906,
+         "n": 212
+        },
+        {
+         "p_media": 0.131363,
+         "frecuencia": 0.052133,
+         "n": 211
+        },
+        {
+         "p_media": 0.151515,
+         "frecuencia": 0.094787,
+         "n": 211
+        },
+        {
+         "p_media": 0.17131,
+         "frecuencia": 0.070755,
+         "n": 212
+        },
+        {
+         "p_media": 0.193077,
+         "frecuencia": 0.099526,
+         "n": 211
+        },
+        {
+         "p_media": 0.219044,
+         "frecuencia": 0.137441,
+         "n": 211
+        },
+        {
+         "p_media": 0.253769,
+         "frecuencia": 0.216981,
+         "n": 212
+        },
+        {
+         "p_media": 0.315466,
+         "frecuencia": 0.123223,
+         "n": 211
+        },
+        {
+         "p_media": 0.4265,
+         "frecuencia": 0.137441,
+         "n": 211
+        },
+        {
+         "p_media": 0.550031,
+         "frecuencia": 0.188679,
+         "n": 212
+        }
+       ]
+      }
+     },
+     "P5_mercados": {
+      "logloss": 0.440395,
+      "logloss_ic95": [
+       0.391219,
+       0.515963
+      ],
+      "brier": 0.135646,
+      "brier_ic95": [
+       0.116617,
+       0.167416
+      ],
+      "auc": 0.619397,
+      "auc_ic95": [
+       0.557255,
+       0.733979
+      ],
+      "calibracion": {
+       "intercepto": -1.427192,
+       "pendiente": 0.577693,
+       "fiabilidad": [
+        {
+         "p_media": 0.054863,
+         "frecuencia": 0.033019,
+         "n": 212
+        },
+        {
+         "p_media": 0.113964,
+         "frecuencia": 0.146919,
+         "n": 211
+        },
+        {
+         "p_media": 0.174528,
+         "frecuencia": 0.104265,
+         "n": 211
+        },
+        {
+         "p_media": 0.211722,
+         "frecuencia": 0.09434,
+         "n": 212
+        },
+        {
+         "p_media": 0.267339,
+         "frecuencia": 0.090047,
+         "n": 211
+        },
+        {
+         "p_media": 0.305679,
+         "frecuencia": 0.056872,
+         "n": 211
+        },
+        {
+         "p_media": 0.334887,
+         "frecuencia": 0.108491,
+         "n": 212
+        },
+        {
+         "p_media": 0.364244,
+         "frecuencia": 0.104265,
+         "n": 211
+        },
+        {
+         "p_media": 0.418103,
+         "frecuencia": 0.21327,
+         "n": 211
+        },
+        {
+         "p_media": 0.524365,
+         "frecuencia": 0.254717,
+         "n": 212
+        }
+       ]
+      }
+     },
+     "P6_global": {
+      "logloss": 0.375173,
+      "logloss_ic95": [
+       0.290363,
+       0.494979
+      ],
+      "brier": 0.108697,
+      "brier_ic95": [
+       0.077166,
+       0.155956
+      ],
+      "auc": 0.548718,
+      "auc_ic95": [
+       0.418892,
+       0.686641
+      ],
+      "calibracion": {
+       "intercepto": -1.582695,
+       "pendiente": 0.207994,
+       "fiabilidad": [
+        {
+         "p_media": 0.060287,
+         "frecuencia": 0.103774,
+         "n": 212
+        },
+        {
+         "p_media": 0.081987,
+         "frecuencia": 0.061611,
+         "n": 211
+        },
+        {
+         "p_media": 0.094918,
+         "frecuencia": 0.099526,
+         "n": 211
+        },
+        {
+         "p_media": 0.106748,
+         "frecuencia": 0.09434,
+         "n": 212
+        },
+        {
+         "p_media": 0.118888,
+         "frecuencia": 0.137441,
+         "n": 211
+        },
+        {
+         "p_media": 0.130977,
+         "frecuencia": 0.14218,
+         "n": 211
+        },
+        {
+         "p_media": 0.144041,
+         "frecuencia": 0.136792,
+         "n": 212
+        },
+        {
+         "p_media": 0.157267,
+         "frecuencia": 0.175355,
+         "n": 211
+        },
+        {
+         "p_media": 0.177598,
+         "frecuencia": 0.184834,
+         "n": 211
+        },
+        {
+         "p_media": 0.247748,
+         "frecuencia": 0.070755,
+         "n": 212
+        }
+       ]
+      }
+     },
+     "combinacion": {
+      "logloss": 0.391819,
+      "logloss_ic95": [
+       0.338272,
+       0.468069
+      ],
+      "brier": 0.113854,
+      "brier_ic95": [
+       0.090593,
+       0.146731
+      ],
+      "auc": 0.648257,
+      "auc_ic95": [
+       0.556324,
+       0.752858
+      ],
+      "calibracion": {
+       "intercepto": -0.430893,
+       "pendiente": 1.295294,
+       "fiabilidad": [
+        {
+         "p_media": 0.117167,
+         "frecuencia": 0.099057,
+         "n": 212
+        },
+        {
+         "p_media": 0.15136,
+         "frecuencia": 0.080569,
+         "n": 211
+        },
+        {
+         "p_media": 0.174572,
+         "frecuencia": 0.052133,
+         "n": 211
+        },
+        {
+         "p_media": 0.194253,
+         "frecuencia": 0.066038,
+         "n": 212
+        },
+        {
+         "p_media": 0.210647,
+         "frecuencia": 0.061611,
+         "n": 211
+        },
+        {
+         "p_media": 0.227516,
+         "frecuencia": 0.066351,
+         "n": 211
+        },
+        {
+         "p_media": 0.247168,
+         "frecuencia": 0.15566,
+         "n": 212
+        },
+        {
+         "p_media": 0.271841,
+         "frecuencia": 0.189573,
+         "n": 211
+        },
+        {
+         "p_media": 0.298542,
+         "frecuencia": 0.165877,
+         "n": 211
+        },
+        {
+         "p_media": 0.358486,
+         "frecuencia": 0.268868,
+         "n": 212
+        }
+       ]
+      }
+     }
+    },
+    "comparaciones": {
+     "base_vs_clima": {
+      "dlogloss": {
+       "est": -0.042682,
+       "ic95": [
+        -0.058487,
+        -0.024921
+       ],
+       "dt_boot": 0.008444,
+       "p_mejora": 0.0
+      },
+      "dbrier": {
+       "est": -0.016109,
+       "ic95": [
+        -0.021863,
+        -0.009572
+       ],
+       "dt_boot": 0.003079,
+       "p_mejora": 0.0
+      },
+      "dauc": {
+       "est": 0.09869,
+       "ic95": [
+        -0.014266,
+        0.218986
+       ],
+       "dt_boot": 0.061079,
+       "p_mejora": 0.053071
+      }
+     },
+     "P1_curva_tipos_vs_base": {
+      "dlogloss": {
+       "est": 0.022218,
+       "ic95": [
+        0.002749,
+        0.052673
+       ],
+       "dt_boot": 0.012698,
+       "p_mejora": 0.959914
+      },
+      "dbrier": {
+       "est": 0.010093,
+       "ic95": [
+        0.002149,
+        0.023136
+       ],
+       "dt_boot": 0.005296,
+       "p_mejora": 0.971655
+      },
+      "dauc": {
+       "est": -0.055564,
+       "ic95": [
+        -0.228511,
+        0.06937
+       ],
+       "dt_boot": 0.079114,
+       "p_mejora": 0.758765
+      }
+     },
+     "P2_credito_vs_base": {
+      "dlogloss": {
+       "est": 0.042774,
+       "ic95": [
+        0.004059,
+        0.069113
+       ],
+       "dt_boot": 0.01595,
+       "p_mejora": 0.996338
+      },
+      "dbrier": {
+       "est": 0.019313,
+       "ic95": [
+        0.004669,
+        0.029008
+       ],
+       "dt_boot": 0.005957,
+       "p_mejora": 0.999406
+      },
+      "dauc": {
+       "est": -0.066177,
+       "ic95": [
+        -0.224137,
+        0.053811
+       ],
+       "dt_boot": 0.076448,
+       "p_mejora": 0.806659
+      }
+     },
+     "P3_actividad_vs_base": {
+      "dlogloss": {
+       "est": 0.016604,
+       "ic95": [
+        -0.023178,
+        0.070726
+       ],
+       "dt_boot": 0.024439,
+       "p_mejora": 0.751564
+      },
+      "dbrier": {
+       "est": 0.013175,
+       "ic95": [
+        -0.0046,
+        0.037233
+       ],
+       "dt_boot": 0.010682,
+       "p_mejora": 0.891291
+      },
+      "dauc": {
+       "est": 0.063458,
+       "ic95": [
+        -0.034626,
+        0.164492
+       ],
+       "dt_boot": 0.052676,
+       "p_mejora": 0.11416
+      }
+     },
+     "P4_precios_vs_base": {
+      "dlogloss": {
+       "est": 0.01862,
+       "ic95": [
+        -0.031495,
+        0.045382
+       ],
+       "dt_boot": 0.020481,
+       "p_mejora": 0.818366
+      },
+      "dbrier": {
+       "est": 0.012684,
+       "ic95": [
+        -0.008869,
+        0.024823
+       ],
+       "dt_boot": 0.009041,
+       "p_mejora": 0.919679
+      },
+      "dauc": {
+       "est": 0.003947,
+       "ic95": [
+        -0.059706,
+        0.063996
+       ],
+       "dt_boot": 0.031994,
+       "p_mejora": 0.45091
+      }
+     },
+     "P5_mercados_vs_base": {
+      "dlogloss": {
+       "est": 0.028144,
+       "ic95": [
+        0.006941,
+        0.04907
+       ],
+       "dt_boot": 0.011155,
+       "p_mejora": 0.994181
+      },
+      "dbrier": {
+       "est": 0.015155,
+       "ic95": [
+        0.007138,
+        0.024602
+       ],
+       "dt_boot": 0.004415,
+       "p_mejora": 0.999701
+      },
+      "dauc": {
+       "est": 0.020707,
+       "ic95": [
+        -0.064282,
+        0.11847
+       ],
+       "dt_boot": 0.046246,
+       "p_mejora": 0.327166
+      }
+     },
+     "P6_global_vs_base": {
+      "dlogloss": {
+       "est": -0.037078,
+       "ic95": [
+        -0.081111,
+        0.014016
+       ],
+       "dt_boot": 0.023832,
+       "p_mejora": 0.059879
+      },
+      "dbrier": {
+       "est": -0.011793,
+       "ic95": [
+        -0.025248,
+        0.0045
+       ],
+       "dt_boot": 0.007508,
+       "p_mejora": 0.058128
+      },
+      "dauc": {
+       "est": -0.049972,
+       "ic95": [
+        -0.192884,
+        0.049476
+       ],
+       "dt_boot": 0.061726,
+       "p_mejora": 0.79091
+      }
+     },
+     "combinacion_vs_base": {
+      "dlogloss": {
+       "est": -0.020431,
+       "ic95": [
+        -0.036013,
+        -0.007035
+       ],
+       "dt_boot": 0.007464,
+       "p_mejora": 0.003097
+      },
+      "dbrier": {
+       "est": -0.006637,
+       "ic95": [
+        -0.012099,
+        -0.001753
+       ],
+       "dt_boot": 0.002665,
+       "p_mejora": 0.006383
+      },
+      "dauc": {
+       "est": 0.049567,
+       "ic95": [
+        -0.010223,
+        0.115335
+       ],
+       "dt_boot": 0.033273,
+       "p_mejora": 0.068151
+      }
+     }
+    }
+   },
+   "importancias_descriptivas": {
+    "P1_curva_tipos": {
+     "curva": {
+      "ganancia": 17.425797,
+      "shap_abs_medio": 0.205473
+     },
+     "corto": {
+      "ganancia": 14.291785,
+      "shap_abs_medio": 0.078647
+     },
+     "d12_corto": {
+      "ganancia": 11.422767,
+      "shap_abs_medio": 0.079044
+     },
+     "tipo_10a": {
+      "ganancia": 19.504751,
+      "shap_abs_medio": 0.243109
+     },
+     "d12_10a": {
+      "ganancia": 15.088251,
+      "shap_abs_medio": 0.162311
+     },
+     "tipo_real": {
+      "ganancia": 12.986653,
+      "shap_abs_medio": 0.046235
+     }
+    },
+    "P2_credito": {
+     "cred_d4": {
+      "ganancia": 12.429794,
+      "shap_abs_medio": 0.143531
+     },
+     "cred_d20": {
+      "ganancia": 17.802601,
+      "shap_abs_medio": 0.252412
+     },
+     "cred_jst_d1": {
+      "ganancia": 14.016937,
+      "shap_abs_medio": 0.272326
+     }
+    },
+    "P3_actividad": {
+     "ip_yoy": {
+      "ganancia": 0.0,
+      "shap_abs_medio": 0.0
+     },
+     "d6_ip_yoy": {
+      "ganancia": 10.624964,
+      "shap_abs_medio": 0.100813
+     },
+     "ventas_yoy": {
+      "ganancia": 11.333936,
+      "shap_abs_medio": 0.106701
+     },
+     "paro_d12": {
+      "ganancia": 10.568831,
+      "shap_abs_medio": 0.03411
+     },
+     "sahm": {
+      "ganancia": 13.140733,
+      "shap_abs_medio": 0.026157
+     },
+     "confianza_emp": {
+      "ganancia": 30.398438,
+      "shap_abs_medio": 0.294738
+     },
+     "d6_confianza": {
+      "ganancia": 30.556627,
+      "shap_abs_medio": 0.271945
+     }
+    },
+    "P4_precios": {
+     "ipc_yoy": {
+      "ganancia": 14.146609,
+      "shap_abs_medio": 0.012294
+     },
+     "acel_ipc": {
+      "ganancia": 11.421294,
+      "shap_abs_medio": 0.040459
+     },
+     "sub_yoy": {
+      "ganancia": 14.096757,
+      "shap_abs_medio": 0.091035
+     },
+     "d12_ipc": {
+      "ganancia": 14.147519,
+      "shap_abs_medio": 0.148317
+     },
+     "mp_12m": {
+      "ganancia": 32.092903,
+      "shap_abs_medio": 0.334991
+     },
+     "mp_3m": {
+      "ganancia": 21.170208,
+      "shap_abs_medio": 0.19525
+     }
+    },
+    "P5_mercados": {
+     "bolsa_real_12m": {
+      "ganancia": 23.008717,
+      "shap_abs_medio": 0.305258
+     },
+     "bolsa_3m": {
+      "ganancia": 5.924405,
+      "shap_abs_medio": 0.03471
+     },
+     "vol_12m": {
+      "ganancia": 16.3678,
+      "shap_abs_medio": 0.258198
+     },
+     "caida_24m": {
+      "ganancia": 17.451708,
+      "shap_abs_medio": 0.169351
+     }
+    },
+    "P6_global": {
+     "dif_curva_inv": {
+      "ganancia": 33.137642,
+      "shap_abs_medio": 0.08947
+     },
+     "dif_ip_neg": {
+      "ganancia": 15.505804,
+      "shap_abs_medio": 0.018938
+     },
+     "glob_d12_corto": {
+      "ganancia": 10.831779,
+      "shap_abs_medio": 0.02816
+     },
+     "glob_ipc": {
+      "ganancia": 26.721495,
+      "shap_abs_medio": 0.287128
+     },
+     "glob_d12_ipc": {
+      "ganancia": 19.012043,
+      "shap_abs_medio": 0.148185
+     },
+     "usa_curva": {
+      "ganancia": 21.12422,
+      "shap_abs_medio": 0.064288
+     },
+     "usa_d12_corto": {
+      "ganancia": 59.883709,
+      "shap_abs_medio": 0.438712
+     }
+    }
+   }
+  }
+ },
+ "decision": {
+  "n_pruebas": 32,
+  "familia": "Holm sobre Δlog-loss en V1 (dejar un país fuera)",
+  "tabla": [
+   {
+    "objetivo": "E3",
+    "comparacion": "combinacion_vs_base",
+    "dlogloss_V1": -0.044884,
+    "ic95_V1": [
+     -0.064269,
+     -0.027601
+    ],
+    "p_V1": 2e-06,
+    "p_holm": 5e-05,
+    "rechaza_holm": true,
+    "dlogloss_V2": -0.020431,
+    "ic95_V2": [
+     -0.036013,
+     -0.007035
+    ],
+    "pendiente_cal_V1": 1.716393,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.928298,
+    "potencia_bloqueado_20a_mitad": 0.463822
+   },
+   {
+    "objetivo": "E1_12",
+    "comparacion": "combinacion_vs_base",
+    "dlogloss_V1": -0.044488,
+    "ic95_V1": [
+     -0.066918,
+     -0.028994
+    ],
+    "p_V1": 4e-06,
+    "p_holm": 0.000112,
+    "rechaza_holm": true,
+    "dlogloss_V2": -0.019097,
+    "ic95_V2": [
+     -0.033131,
+     -0.002815
+    ],
+    "pendiente_cal_V1": 1.298077,
+    "candidato": true,
+    "potencia_bloqueado_20a": 0.910944,
+    "potencia_bloqueado_20a_mitad": 0.440725
+   },
+   {
+    "objetivo": "E1_6",
+    "comparacion": "combinacion_vs_base",
+    "dlogloss_V1": -0.023575,
+    "ic95_V1": [
+     -0.036659,
+     -0.014228
+    ],
+    "p_V1": 1.6e-05,
+    "p_holm": 0.000475,
+    "rechaza_holm": true,
+    "dlogloss_V2": -0.016707,
+    "ic95_V2": [
+     -0.023914,
+     -0.009976
+    ],
+    "pendiente_cal_V1": 1.503662,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.870609,
+    "potencia_bloqueado_20a_mitad": 0.398285
+   },
+   {
+    "objetivo": "E2",
+    "comparacion": "combinacion_vs_base",
+    "dlogloss_V1": -0.048194,
+    "ic95_V1": [
+     -0.074161,
+     -0.028477
+    ],
+    "p_V1": 3.5e-05,
+    "p_holm": 0.001018,
+    "rechaza_holm": true,
+    "dlogloss_V2": -0.055866,
+    "ic95_V2": [
+     -0.075827,
+     -0.036458
+    ],
+    "pendiente_cal_V1": 2.107412,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.842693,
+    "potencia_bloqueado_20a_mitad": 0.374624
+   },
+   {
+    "objetivo": "E2",
+    "comparacion": "P3_actividad_vs_base",
+    "dlogloss_V1": -0.043583,
+    "ic95_V1": [
+     -0.070377,
+     -0.020161
+    ],
+    "p_V1": 0.000307,
+    "p_holm": 0.008597,
+    "rechaza_holm": true,
+    "dlogloss_V2": -0.083021,
+    "ic95_V2": [
+     -0.113896,
+     -0.041741
+    ],
+    "pendiente_cal_V1": 0.93657,
+    "candidato": true,
+    "potencia_bloqueado_20a": 0.738487,
+    "potencia_bloqueado_20a_mitad": 0.307453
+   },
+   {
+    "objetivo": "E3",
+    "comparacion": "P6_global_vs_base",
+    "dlogloss_V1": -0.056367,
+    "ic95_V1": [
+     -0.097242,
+     -0.021645
+    ],
+    "p_V1": 0.001816,
+    "p_holm": 0.049022,
+    "rechaza_holm": true,
+    "dlogloss_V2": -0.037078,
+    "ic95_V2": [
+     -0.081111,
+     0.014016
+    ],
+    "pendiente_cal_V1": 1.016993,
+    "candidato": true,
+    "potencia_bloqueado_20a": 0.615686,
+    "potencia_bloqueado_20a_mitad": 0.249729
+   },
+   {
+    "objetivo": "E1_12",
+    "comparacion": "P3_actividad_vs_base",
+    "dlogloss_V1": -0.037163,
+    "ic95_V1": [
+     -0.064522,
+     -0.014506
+    ],
+    "p_V1": 0.002028,
+    "p_holm": 0.052727,
+    "rechaza_holm": false,
+    "dlogloss_V2": -0.028705,
+    "ic95_V2": [
+     -0.084972,
+     0.017836
+    ],
+    "pendiente_cal_V1": 0.868822,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.606804,
+    "potencia_bloqueado_20a_mitad": 0.246064
+   },
+   {
+    "objetivo": "E1_6",
+    "comparacion": "P3_actividad_vs_base",
+    "dlogloss_V1": -0.024923,
+    "ic95_V1": [
+     -0.045617,
+     -0.010003
+    ],
+    "p_V1": 0.003207,
+    "p_holm": 0.080169,
+    "rechaza_holm": false,
+    "dlogloss_V2": -0.017199,
+    "ic95_V2": [
+     -0.046761,
+     0.00502
+    ],
+    "pendiente_cal_V1": 0.8154,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.568432,
+    "potencia_bloqueado_20a_mitad": 0.230794
+   },
+   {
+    "objetivo": "E1_6",
+    "comparacion": "P6_global_vs_base",
+    "dlogloss_V1": -0.022947,
+    "ic95_V1": [
+     -0.043483,
+     -0.01006
+    ],
+    "p_V1": 0.004009,
+    "p_holm": 0.096212,
+    "rechaza_holm": false,
+    "dlogloss_V2": -8.7e-05,
+    "ic95_V2": [
+     -0.015625,
+     0.01207
+    ],
+    "pendiente_cal_V1": 0.88639,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.548826,
+    "potencia_bloqueado_20a_mitad": 0.223305
+   },
+   {
+    "objetivo": "E1_12",
+    "comparacion": "P6_global_vs_base",
+    "dlogloss_V1": -0.046774,
+    "ic95_V1": [
+     -0.089932,
+     -0.019846
+    ],
+    "p_V1": 0.005549,
+    "p_holm": 0.12763,
+    "rechaza_holm": false,
+    "dlogloss_V2": 0.021508,
+    "ic95_V2": [
+     -0.030536,
+     0.053141
+    ],
+    "pendiente_cal_V1": 0.856479,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.519224,
+    "potencia_bloqueado_20a_mitad": 0.212341
+   },
+   {
+    "objetivo": "E2",
+    "comparacion": "P6_global_vs_base",
+    "dlogloss_V1": -0.053225,
+    "ic95_V1": [
+     -0.101478,
+     -0.018861
+    ],
+    "p_V1": 0.006141,
+    "p_holm": 0.135107,
+    "rechaza_holm": false,
+    "dlogloss_V2": -0.011604,
+    "ic95_V2": [
+     -0.065335,
+     0.036785
+    ],
+    "pendiente_cal_V1": 1.102586,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.509745,
+    "potencia_bloqueado_20a_mitad": 0.208909
+   },
+   {
+    "objetivo": "E2",
+    "comparacion": "P1_curva_tipos_vs_base",
+    "dlogloss_V1": -0.030244,
+    "ic95_V1": [
+     -0.055506,
+     -0.007612
+    ],
+    "p_V1": 0.006493,
+    "p_holm": 0.136348,
+    "rechaza_holm": false,
+    "dlogloss_V2": -0.066453,
+    "ic95_V2": [
+     -0.098085,
+     -0.032888
+    ],
+    "pendiente_cal_V1": 0.900264,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.504491,
+    "potencia_bloqueado_20a_mitad": 0.207022
+   },
+   {
+    "objetivo": "E3",
+    "comparacion": "P4_precios_vs_base",
+    "dlogloss_V1": -0.031029,
+    "ic95_V1": [
+     -0.062351,
+     -0.007137
+    ],
+    "p_V1": 0.013682,
+    "p_holm": 0.273642,
+    "rechaza_holm": false,
+    "dlogloss_V2": 0.01862,
+    "ic95_V2": [
+     -0.031495,
+     0.045382
+    ],
+    "pendiente_cal_V1": 0.933338,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.430933,
+    "potencia_bloqueado_20a_mitad": 0.181563
+   },
+   {
+    "objetivo": "E3",
+    "comparacion": "P5_mercados_vs_base",
+    "dlogloss_V1": -0.023347,
+    "ic95_V1": [
+     -0.045136,
+     -0.0032
+    ],
+    "p_V1": 0.01372,
+    "p_holm": 0.273642,
+    "rechaza_holm": false,
+    "dlogloss_V2": 0.028144,
+    "ic95_V2": [
+     0.006941,
+     0.04907
+    ],
+    "pendiente_cal_V1": 0.975536,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.430646,
+    "potencia_bloqueado_20a_mitad": 0.181466
+   },
+   {
+    "objetivo": "E1_12",
+    "comparacion": "P5_mercados_vs_base",
+    "dlogloss_V1": -0.025491,
+    "ic95_V1": [
+     -0.05287,
+     -0.004596
+    ],
+    "p_V1": 0.020667,
+    "p_holm": 0.371999,
+    "rechaza_holm": false,
+    "dlogloss_V2": -0.008205,
+    "ic95_V2": [
+     -0.02811,
+     0.016047
+    ],
+    "pendiente_cal_V1": 0.781015,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.387922,
+    "potencia_bloqueado_20a_mitad": 0.167323
+   },
+   {
+    "objetivo": "E2",
+    "comparacion": "P4_precios_vs_base",
+    "dlogloss_V1": -0.039069,
+    "ic95_V1": [
+     -0.082779,
+     -0.010394
+    ],
+    "p_V1": 0.022217,
+    "p_holm": 0.377696,
+    "rechaza_holm": false,
+    "dlogloss_V2": -0.020605,
+    "ic95_V2": [
+     -0.062983,
+     0.006856
+    ],
+    "pendiente_cal_V1": 1.01017,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.38023,
+    "potencia_bloqueado_20a_mitad": 0.164814
+   },
+   {
+    "objetivo": "E1_6",
+    "comparacion": "P4_precios_vs_base",
+    "dlogloss_V1": -0.01191,
+    "ic95_V1": [
+     -0.025469,
+     -0.001676
+    ],
+    "p_V1": 0.027332,
+    "p_holm": 0.437307,
+    "rechaza_holm": false,
+    "dlogloss_V2": 0.002369,
+    "ic95_V2": [
+     -0.014865,
+     0.020675
+    ],
+    "pendiente_cal_V1": 0.793299,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.357994,
+    "potencia_bloqueado_20a_mitad": 0.157608
+   },
+   {
+    "objetivo": "E1_6",
+    "comparacion": "P5_mercados_vs_base",
+    "dlogloss_V1": -0.012637,
+    "ic95_V1": [
+     -0.02748,
+     -0.000969
+    ],
+    "p_V1": 0.029976,
+    "p_holm": 0.449644,
+    "rechaza_holm": false,
+    "dlogloss_V2": -0.009442,
+    "ic95_V2": [
+     -0.0192,
+     0.008353
+    ],
+    "pendiente_cal_V1": 0.780151,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.347988,
+    "potencia_bloqueado_20a_mitad": 0.154385
+   },
+   {
+    "objetivo": "E1_12",
+    "comparacion": "P4_precios_vs_base",
+    "dlogloss_V1": -0.021077,
+    "ic95_V1": [
+     -0.048786,
+     -0.004169
+    ],
+    "p_V1": 0.035533,
+    "p_holm": 0.497464,
+    "rechaza_holm": false,
+    "dlogloss_V2": 0.028728,
+    "ic95_V2": [
+     -0.026668,
+     0.086714
+    ],
+    "pendiente_cal_V1": 0.729492,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.329431,
+    "potencia_bloqueado_20a_mitad": 0.148435
+   },
+   {
+    "objetivo": "E1_6",
+    "comparacion": "P1_curva_tipos_vs_base",
+    "dlogloss_V1": -0.007358,
+    "ic95_V1": [
+     -0.016131,
+     0.001036
+    ],
+    "p_V1": 0.049153,
+    "p_holm": 0.638992,
+    "rechaza_holm": false,
+    "dlogloss_V2": -0.003593,
+    "ic95_V2": [
+     -0.015716,
+     0.010934
+    ],
+    "pendiente_cal_V1": 0.692563,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.293643,
+    "potencia_bloqueado_20a_mitad": 0.137018
+   },
+   {
+    "objetivo": "E1_12",
+    "comparacion": "base_vs_clima",
+    "dlogloss_V1": -0.008901,
+    "ic95_V1": [
+     -0.020581,
+     0.000605
+    ],
+    "p_V1": 0.053604,
+    "p_holm": 0.643254,
+    "rechaza_holm": false,
+    "dlogloss_V2": -0.005027,
+    "ic95_V2": [
+     -0.020272,
+     0.018198
+    ],
+    "pendiente_cal_V1": 0.786934,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.284019,
+    "potencia_bloqueado_20a_mitad": 0.133953
+   },
+   {
+    "objetivo": "E3",
+    "comparacion": "P3_actividad_vs_base",
+    "dlogloss_V1": -0.017043,
+    "ic95_V1": [
+     -0.041715,
+     0.005207
+    ],
+    "p_V1": 0.075302,
+    "p_holm": 0.828321,
+    "rechaza_holm": false,
+    "dlogloss_V2": 0.016604,
+    "ic95_V2": [
+     -0.023178,
+     0.070726
+    ],
+    "pendiente_cal_V1": 0.732842,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.246172,
+    "potencia_bloqueado_20a_mitad": 0.121864
+   },
+   {
+    "objetivo": "E3",
+    "comparacion": "base_vs_clima",
+    "dlogloss_V1": -0.01403,
+    "ic95_V1": [
+     -0.036867,
+     0.008189
+    ],
+    "p_V1": 0.115814,
+    "p_holm": 1.0,
+    "rechaza_holm": false,
+    "dlogloss_V2": -0.042682,
+    "ic95_V2": [
+     -0.058487,
+     -0.024921
+    ],
+    "pendiente_cal_V1": 0.835306,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.198385,
+    "potencia_bloqueado_20a_mitad": 0.106358
+   },
+   {
+    "objetivo": "E2",
+    "comparacion": "base_vs_clima",
+    "dlogloss_V1": -0.004032,
+    "ic95_V1": [
+     -0.010357,
+     0.00273
+    ],
+    "p_V1": 0.116228,
+    "p_holm": 1.0,
+    "rechaza_holm": false,
+    "dlogloss_V2": 0.012774,
+    "ic95_V2": [
+     0.008305,
+     0.017687
+    ],
+    "pendiente_cal_V1": 0.819669,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.197992,
+    "potencia_bloqueado_20a_mitad": 0.106229
+   },
+   {
+    "objetivo": "E1_6",
+    "comparacion": "base_vs_clima",
+    "dlogloss_V1": -0.002223,
+    "ic95_V1": [
+     -0.006649,
+     0.001428
+    ],
+    "p_V1": 0.13166,
+    "p_holm": 1.0,
+    "rechaza_holm": false,
+    "dlogloss_V2": -0.005363,
+    "ic95_V2": [
+     -0.009542,
+     0.000702
+    ],
+    "pendiente_cal_V1": 0.678958,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.18429,
+    "potencia_bloqueado_20a_mitad": 0.101688
+   },
+   {
+    "objetivo": "E2",
+    "comparacion": "P2_credito_vs_base",
+    "dlogloss_V1": -0.006868,
+    "ic95_V1": [
+     -0.023141,
+     0.012376
+    ],
+    "p_V1": 0.219234,
+    "p_holm": 1.0,
+    "rechaza_holm": false,
+    "dlogloss_V2": -0.011761,
+    "ic95_V2": [
+     -0.027068,
+     0.002563
+    ],
+    "pendiente_cal_V1": 0.737811,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.12959,
+    "potencia_bloqueado_20a_mitad": 0.082783
+   },
+   {
+    "objetivo": "E3",
+    "comparacion": "P1_curva_tipos_vs_base",
+    "dlogloss_V1": -0.005282,
+    "ic95_V1": [
+     -0.018591,
+     0.009341
+    ],
+    "p_V1": 0.236739,
+    "p_holm": 1.0,
+    "rechaza_holm": false,
+    "dlogloss_V2": 0.022218,
+    "ic95_V2": [
+     0.002749,
+     0.052673
+    ],
+    "pendiente_cal_V1": 0.744273,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.121612,
+    "potencia_bloqueado_20a_mitad": 0.079875
+   },
+   {
+    "objetivo": "E1_12",
+    "comparacion": "P1_curva_tipos_vs_base",
+    "dlogloss_V1": -0.00651,
+    "ic95_V1": [
+     -0.026955,
+     0.010814
+    ],
+    "p_V1": 0.252262,
+    "p_holm": 1.0,
+    "rechaza_holm": false,
+    "dlogloss_V2": 0.016397,
+    "ic95_V2": [
+     -0.027968,
+     0.053522
+    ],
+    "pendiente_cal_V1": 0.611349,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.115084,
+    "potencia_bloqueado_20a_mitad": 0.077456
+   },
+   {
+    "objetivo": "E3",
+    "comparacion": "P2_credito_vs_base",
+    "dlogloss_V1": -0.00248,
+    "ic95_V1": [
+     -0.015371,
+     0.012631
+    ],
+    "p_V1": 0.366825,
+    "p_holm": 1.0,
+    "rechaza_holm": false,
+    "dlogloss_V2": 0.042774,
+    "ic95_V2": [
+     0.004059,
+     0.069113
+    ],
+    "pendiente_cal_V1": 0.702339,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.078095,
+    "potencia_bloqueado_20a_mitad": 0.062832
+   },
+   {
+    "objetivo": "E2",
+    "comparacion": "P5_mercados_vs_base",
+    "dlogloss_V1": -0.000393,
+    "ic95_V1": [
+     -0.004843,
+     0.005494
+    ],
+    "p_V1": 0.440272,
+    "p_holm": 1.0,
+    "rechaza_holm": false,
+    "dlogloss_V2": -0.009195,
+    "ic95_V2": [
+     -0.015621,
+     0.000156
+    ],
+    "pendiente_cal_V1": 0.594481,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.061213,
+    "potencia_bloqueado_20a_mitad": 0.055383
+   },
+   {
+    "objetivo": "E1_12",
+    "comparacion": "P2_credito_vs_base",
+    "dlogloss_V1": 0.005948,
+    "ic95_V1": [
+     -0.009711,
+     0.023927
+    ],
+    "p_V1": 0.761352,
+    "p_holm": 1.0,
+    "rechaza_holm": false,
+    "dlogloss_V2": 0.001225,
+    "ic95_V2": [
+     -0.017574,
+     0.031435
+    ],
+    "pendiente_cal_V1": 0.517674,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.120783,
+    "potencia_bloqueado_20a_mitad": 0.07957
+   },
+   {
+    "objetivo": "E1_6",
+    "comparacion": "P2_credito_vs_base",
+    "dlogloss_V1": 0.002646,
+    "ic95_V1": [
+     -0.003984,
+     0.009264
+    ],
+    "p_V1": 0.778639,
+    "p_holm": 1.0,
+    "rechaza_holm": false,
+    "dlogloss_V2": -0.003056,
+    "ic95_V2": [
+     -0.014606,
+     0.006779
+    ],
+    "pendiente_cal_V1": 0.482149,
+    "candidato": false,
+    "potencia_bloqueado_20a": 0.128583,
+    "potencia_bloqueado_20a_mitad": 0.082419
+   }
+  ],
+  "candidatos": [
+   {
+    "objetivo": "E1_12",
+    "comparacion": "combinacion_vs_base",
+    "dlogloss_V1": -0.044488,
+    "ic95_V1": [
+     -0.066918,
+     -0.028994
+    ],
+    "p_V1": 4e-06,
+    "p_holm": 0.000112,
+    "rechaza_holm": true,
+    "dlogloss_V2": -0.019097,
+    "ic95_V2": [
+     -0.033131,
+     -0.002815
+    ],
+    "pendiente_cal_V1": 1.298077,
+    "candidato": true,
+    "potencia_bloqueado_20a": 0.910944,
+    "potencia_bloqueado_20a_mitad": 0.440725
+   },
+   {
+    "objetivo": "E2",
+    "comparacion": "P3_actividad_vs_base",
+    "dlogloss_V1": -0.043583,
+    "ic95_V1": [
+     -0.070377,
+     -0.020161
+    ],
+    "p_V1": 0.000307,
+    "p_holm": 0.008597,
+    "rechaza_holm": true,
+    "dlogloss_V2": -0.083021,
+    "ic95_V2": [
+     -0.113896,
+     -0.041741
+    ],
+    "pendiente_cal_V1": 0.93657,
+    "candidato": true,
+    "potencia_bloqueado_20a": 0.738487,
+    "potencia_bloqueado_20a_mitad": 0.307453
+   },
+   {
+    "objetivo": "E3",
+    "comparacion": "P6_global_vs_base",
+    "dlogloss_V1": -0.056367,
+    "ic95_V1": [
+     -0.097242,
+     -0.021645
+    ],
+    "p_V1": 0.001816,
+    "p_holm": 0.049022,
+    "rechaza_holm": true,
+    "dlogloss_V2": -0.037078,
+    "ic95_V2": [
+     -0.081111,
+     0.014016
+    ],
+    "pendiente_cal_V1": 1.016993,
+    "candidato": true,
+    "potencia_bloqueado_20a": 0.615686,
+    "potencia_bloqueado_20a_mitad": 0.249729
+   }
+  ]
+ }
+}
