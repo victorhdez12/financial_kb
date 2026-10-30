@@ -185,3 +185,153 @@ def cobertura_sim(Y: np.ndarray, reg: np.ndarray, k: float, lo: float, hi: float
         valido = np.isfinite(y) & np.isfinite(a_lo) & np.isfinite(a_hi)        # sin pool de entrenamiento → hueco
         dentro[mi] = np.where(valido, (y >= a_lo) & (y <= a_hi), np.nan)
     return {"dentro": dentro, "año": Tt[te]}
+
+
+# ============================================================================ corrida de desarrollo (P-DEV-INT11 v1.0)
+def filas_sinteticas(reg: np.ndarray, Ylog: np.ndarray, paises: list[str], años: np.ndarray,
+                     existe: np.ndarray | None = None, activo_ok: np.ndarray | None = None):
+    """Filas del motor desde un panel sintético. reg (N, T), Ylog (N, T, A) log-rentabilidades; la fila (c, t) usa
+    s_prev = reg[c, t − 1] (t ≥ 1). existe (N, T) y activo_ok (N, T, A): estructura de huecos del panel real (§5 del
+    prerregistro). inflación = 5 % con inflación alta y 1 % si no (solo para la coherencia del sorteo)."""
+    import pandas as pd
+    N, T, A = Ylog.shape
+    existe = np.ones((N, T), bool) if existe is None else existe
+    activo_ok = np.ones((N, T, A), bool) if activo_ok is None else activo_ok
+    c, t = np.nonzero(existe[:, 1:])
+    t = t + 1
+    R = np.where(activo_ok[c, t], np.expm1(Ylog[c, t]), np.nan)
+    s = reg[c, t]
+    d = pd.DataFrame({"pais": np.asarray(paises)[c], "año": años[t], "s_prev": reg[c, t - 1], "s": s, "w_prev": -1,
+                      "w": -1})
+    for j, a in enumerate(ACTIVOS):
+        d[a] = R[:, j]
+    d["inflacion"] = np.where(np.isin(s, (1, 2)), 0.05, 0.01)
+    d["crecimiento"] = 0.02
+    d = d.sort_values(["pais", "año"]).reset_index(drop=True)
+    sig = d.groupby("pais")["año"].shift(-1)
+    d["sucesor"] = np.where(sig == d["año"] + 1, d.index + 1, -1)
+    return d
+
+
+def _acumulada_5(V: np.ndarray, suc: np.ndarray, idx: np.ndarray) -> np.ndarray:
+    """Rentabilidad simple acumulada de 5 filas consecutivas (cadena de sucesores) desde cada idx; NaN si se corta."""
+    out = np.full((len(idx), V.shape[1]), np.nan)
+    for k, i in enumerate(idx):
+        cad, j = [i], i
+        for _ in range(4):
+            j = suc[j]
+            if j < 0:
+                break
+            cad.append(j)
+        if len(cad) == 5:
+            out[k] = np.prod(1 + V[cad], axis=0) - 1
+    return out
+
+
+def evaluar_motor(filas, diseño: str, n_lotes: int, por_lote: int, semilla: int, H: int = 1, corte: int = 1950,
+                  cfg=None, n_min_pool: int = 30) -> dict:
+    """Evalúa M1 (motor) y M0 (incondicional del entrenamiento) fila a fila (prerregistro v1.0 §2-§4, §7).
+    Devuelve arrays por fila de prueba: pais, año, s_prev, y (m, A), crps0/crps1, dentro90 (p5-p95), dentro80 (p10-p90),
+    pit, eventos (Brier) y, si H ≥ 5, lo mismo para la acumulada a 5 años en las filas de inicio de ventana."""
+    import pandas as pd
+    filas = E.recalcular_sucesor(filas)
+    acts = list(ACTIVOS)
+    V = filas[acts].to_numpy(float)
+    infl = np.expm1(filas["inflacion"].to_numpy(float))
+    suc = filas["sucesor"].to_numpy(int)
+    paises = sorted(filas["pais"].unique())
+    if diseño == "loco":
+        pliegues = [(k, filas["pais"].to_numpy() != c, filas["pais"].to_numpy() == c) for k, c in enumerate(paises)]
+    elif diseño == "temporal":
+        a = filas["año"].to_numpy()
+        pliegues = [(0, a < corte, a >= corte)]
+    else:
+        raise ValueError(diseño)
+    m, A = len(filas), len(acts)
+    out = {k: np.full((m, A), np.nan) for k in ("crps0", "crps1", "dentro90", "dentro80", "pit", "dentro90_m0")}
+    out.update({k: np.full(m, np.nan) for k in ("p_caida_m1", "p_caida_m0", "p_infl_m1", "p_infl_m0")})
+    prueba = np.zeros(m, bool)
+    h5 = {k: np.full((m, A), np.nan) for k in ("y5", "crps0_5", "crps1_5", "dentro90_5")}
+    rng_pit = np.random.default_rng(semilla)
+    for k, tr, te in pliegues:
+        ftr = E.recalcular_sucesor(filas[tr])
+        gen = E.Generador(cfg or E.Config()).ajustar(ftr)
+        Vtr = V[tr]
+        p0 = [Vtr[np.isfinite(Vtr[:, j]), j] for j in range(A)]
+        if H >= 5:
+            suc_tr = ftr["sucesor"].to_numpy(int)
+            pool5 = _acumulada_5(Vtr, suc_tr, np.arange(len(ftr)))
+            p05 = [pool5[np.isfinite(pool5[:, j]), j] for j in range(A)]
+        infl_tr = infl[tr]
+        caida_m0 = float(np.mean(Vtr[np.isfinite(Vtr[:, 0]), 0] <= -0.20))
+        infl_m0 = float(np.mean(infl_tr[np.isfinite(infl_tr)] > 0.05))
+        te_idx = np.flatnonzero(te)
+        prueba[te_idx] = True
+        grupos = filas.iloc[te_idx].groupby(["pais", "s_prev"]).indices
+        for (c, s0), pos in grupos.items():
+            idx = te_idx[pos]
+            esc = gen.simular(c, int(s0), horizonte=H, n_lotes=n_lotes, por_lote=por_lote,
+                              semilla=semilla + 1000 * k + 10 * paises.index(c) + int(s0))
+            R1 = esc.rent[:, 0, :]
+            out["p_caida_m1"][idx] = np.mean(R1[:, 0] <= -0.20)
+            out["p_infl_m1"][idx] = np.mean(np.expm1(esc.inflacion[:, 0]) > 0.05)
+            out["p_caida_m0"][idx], out["p_infl_m0"][idx] = caida_m0, infl_m0
+            for j in range(A):
+                y = V[idx, j]
+                ok = np.isfinite(y)
+                x1 = R1[np.isfinite(R1[:, j]), j]
+                if not ok.any() or len(p0[j]) < n_min_pool or len(x1) < n_min_pool:
+                    continue
+                ii = idx[ok]
+                out["crps0"][ii, j] = E.crps_muestra(p0[j], y[ok])
+                out["crps1"][ii, j] = E.crps_muestra(x1, y[ok])
+                q = np.quantile(x1, [0.05, 0.10, 0.90, 0.95])
+                out["dentro90"][ii, j] = (y[ok] >= q[0]) & (y[ok] <= q[3])
+                out["dentro80"][ii, j] = (y[ok] >= q[1]) & (y[ok] <= q[2])
+                q0 = np.quantile(p0[j], [0.05, 0.95])
+                out["dentro90_m0"][ii, j] = (y[ok] >= q0[0]) & (y[ok] <= q0[1])
+                out["pit"][ii, j] = E.pit(x1, y[ok], rng_pit)
+            if H >= 5:
+                ini = idx[(filas["año"].to_numpy()[idx] % 5) == 1]
+                if len(ini):
+                    y5 = _acumulada_5(V, suc, ini)
+                    X5 = esc.acumulada()[:, 4, :]
+                    for j in range(A):
+                        ok = np.isfinite(y5[:, j])
+                        x1 = X5[np.isfinite(X5[:, j]), j]
+                        if not ok.any() or len(p05[j]) < n_min_pool or len(x1) < n_min_pool:
+                            continue
+                        ii = ini[ok]
+                        h5["y5"][ii, j] = y5[ok, j]
+                        h5["crps0_5"][ii, j] = E.crps_muestra(p05[j], y5[ok, j])
+                        h5["crps1_5"][ii, j] = E.crps_muestra(x1, y5[ok, j])
+                        q = np.quantile(x1, [0.05, 0.95])
+                        h5["dentro90_5"][ii, j] = (y5[ok, j] >= q[0]) & (y5[ok, j] <= q[1])
+    sel = prueba
+    res = {k: v[sel] for k, v in out.items()}
+    res.update({"pais": filas["pais"].to_numpy()[sel], "año": filas["año"].to_numpy()[sel],
+                "s_prev": filas["s_prev"].to_numpy()[sel], "y": V[sel], "infl": infl[sel]})
+    if H >= 5:
+        res.update({k: v[sel] for k, v in h5.items()})
+    return res
+
+
+def resumen_motor(ev: dict) -> dict:
+    """Estadísticos del prerregistro: d (fila), C1 (DM por años), CRPSS, S5, Sb, S_a, cobertura p10-p90."""
+    c0, c1 = ev["crps0"], ev["crps1"]
+    usa = np.isfinite(c0).any(1)
+    escala = np.nanmean(c0[usa], 0)
+    d = np.nanmean((c0[usa] - c1[usa]) / escala, 1)
+    crpss = 1 - np.nanmean(c1[usa], 0) / escala
+    dm = E.dm_conglomerado(d, ev["año"][usa], lags=2)
+    dn = ev["dentro90"]
+    fila = np.isfinite(dn).any(1)
+    S5 = float(np.mean(np.nanmean(dn[fila], 1)))
+    Sa = np.nanmean(dn, 0)
+    return {"filas": int(usa.sum()), "años": dm["años"], "d_media": dm["media"], "dm": dm,
+            "crpss_%": dict(zip(ACTIVOS, np.round(100 * crpss, 3).tolist())),
+            "crpss_medio_%": round(100 * float(np.nanmean(crpss)), 3),
+            "S5": S5, "Sb": float(Sa[0]), "S_activo": dict(zip(ACTIVOS, np.round(Sa, 4).tolist())),
+            "cobertura_80_activo": dict(zip(ACTIVOS, np.round(np.nanmean(ev["dentro80"], 0), 4).tolist())),
+            "cobertura_90_m0_activo": dict(zip(ACTIVOS, np.round(np.nanmean(ev["dentro90_m0"], 0), 4).tolist())),
+            "n_activo": dict(zip(ACTIVOS, np.isfinite(dn).sum(0).astype(int).tolist()))}

@@ -313,3 +313,63 @@ def test_cobertura_sim_k():
     ancho = np.nanmean(Q.cobertura_sim(Y, reg, 1.0, 0.05, 0.95, corte=120, prueba=(120, 200))["dentro"])
     estrecho = np.nanmean(Q.cobertura_sim(Y, reg, 0.6, 0.05, 0.95, corte=120, prueba=(120, 200))["dentro"])
     assert 0.83 < ancho < 0.95 and estrecho < ancho - 0.1
+
+
+# ============================================================================ corrida de desarrollo (sintética)
+def test_recalcular_sucesor_tras_subconjunto(filas):
+    sub = filas[filas["pais"] != "P00"]
+    g = E.Generador(E.Config()).ajustar(sub)
+    f = g.filas
+    i = np.flatnonzero(f["sucesor"].to_numpy() >= 0)
+    j = f["sucesor"].to_numpy()[i]
+    assert (f["pais"].to_numpy()[j] == f["pais"].to_numpy()[i]).all()
+    assert (f["año"].to_numpy()[j] == f["año"].to_numpy()[i] + 1).all()
+
+
+def test_filas_sinteticas_y_huecos():
+    rng = np.random.default_rng(30)
+    reg, Y = _sim(1.0, rng, T=60)
+    existe = np.ones((14, 60), bool)
+    existe[0, 30] = False
+    ok = np.ones((14, 60, 5), bool)
+    ok[:, :40, 4] = False
+    f = Q.filas_sinteticas(reg, Y, [f"C{i:02d}" for i in range(14)], np.arange(1900, 1960), existe, ok)
+    assert len(f) == 14 * 59 - 1
+    assert f.loc[f["año"] < 1940, "oro"].isna().all() and f.loc[f["año"] >= 1940, "oro"].notna().all()
+    c0 = f[f.pais == "C00"]
+    assert (c0.loc[c0["año"] == 1929, "sucesor"] == -1).all()
+    assert set(np.unique(f["inflacion"])) <= {0.01, 0.05}
+
+
+def test_evaluar_motor_calibrado_en_proceso_conocido():
+    rng = np.random.default_rng(31)
+    reg, Y = _sim(1.0, rng, T=130)
+    f = Q.filas_sinteticas(reg, Y, [f"C{i:02d}" for i in range(14)], np.arange(1875, 2005))
+    ev = Q.evaluar_motor(f, "loco", 20, 100, 1, H=5)
+    r = Q.resumen_motor(ev)
+    assert abs(r["S5"] - 0.90) < 0.03 and abs(r["Sb"] - 0.90) < 0.04
+    assert r["crpss_%"]["letras"] > 2 and r["dm"]["p_unilateral"] < 0.05
+    assert np.isfinite(ev["crps1_5"]).sum() > 100
+    et = Q.evaluar_motor(f, "temporal", 20, 100, 1, H=1, corte=1950)
+    assert et["año"].min() >= 1950
+    with pytest.raises(ValueError):
+        Q.evaluar_motor(f, "otro", 2, 10, 1)
+
+
+def test_corrida_se_niega_a_repetir(tmp_path, monkeypatch):
+    from scripts import int11_corrida as C
+    falso = tmp_path / "int11_resultado.json"
+    falso.write_text("{}")
+    monkeypatch.setattr(C, "SALIDA", falso)
+    monkeypatch.setattr("sys.argv", ["int11_corrida"])
+    with pytest.raises(SystemExit):
+        C.main()
+
+
+def test_puerta_criterios():
+    from scripts import int11_corrida as C
+    banda = {"S5": {"banda_2.5_97.5": [0.88, 0.92]}, "Sb": {"banda_2.5_97.5": [0.87, 0.93]}}
+    res = {"S5": 0.90, "Sb": 0.90, "S_activo": {"bolsa": 0.9, "bonos": 0.86, "oro": np.nan}}
+    assert C.puerta(res, banda)["pasa"]
+    res["S_activo"]["bonos"] = 0.84
+    assert not C.puerta(res, banda)["pasa"]

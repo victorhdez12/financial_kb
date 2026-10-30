@@ -122,6 +122,14 @@ def preparar_filas(df: pd.DataFrame, activos=ACTIVOS, covariables=(), excluir=No
     return d
 
 
+def recalcular_sucesor(filas: pd.DataFrame) -> pd.DataFrame:
+    """Ordena por (pais, año), reinicia el índice y recalcula `sucesor` (fila del mismo país en t + 1, o −1)."""
+    d = filas.sort_values(["pais", "año"]).reset_index(drop=True)
+    sig = d.groupby("pais")["año"].shift(-1)
+    d["sucesor"] = np.where(sig == d["año"] + 1, d.index + 1, -1)
+    return d
+
+
 # ============================================================================ Markov jerárquico
 def dm_loglik(n: np.ndarray, alpha: np.ndarray) -> float:
     """Log-verosimilitud Dirichlet-multinomial (sin el coeficiente multinomial, constante en α); última dimensión =
@@ -284,7 +292,8 @@ class Generador:
     def ajustar(self, filas: pd.DataFrame) -> "Generador":
         cfg = self.cfg
         _comprobar_corte(filas["año"].to_numpy(), cfg.anio_max)
-        self.filas = filas.reset_index(drop=True)
+        # el sucesor se RECALCULA aquí: un subconjunto de filas (dejar un país fuera, corte temporal) cambia los índices
+        self.filas = recalcular_sucesor(filas)
         self.vars = list(cfg.activos) + list(MACRO)
         self.V = self.filas[self.vars].to_numpy(float)
         self.s_prev = self.filas["s_prev"].to_numpy(int)
