@@ -1,0 +1,2199 @@
+{
+ "procedencia": {
+  "commit": "a7bb5478669a999ca76cde4e70d38657e14c8795",
+  "arbol_limpio": true,
+  "hora_utc": "2026-10-30T17:38:42+00:00"
+ },
+ "borrador": false,
+ "reps": {
+  "mensual": 2000,
+  "panel": 300,
+  "B": 200
+ },
+ "inventario": {
+  "petroleo": {
+   "nber_m04079": {
+    "desde": "1890-01-01",
+    "ultimo_le_2004": "1941-06-01",
+    "obs_le_2004": 618
+   },
+   "WPU0561": {
+    "desde": "1947-01-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 696
+   },
+   "wb_crude_oil_average": {
+    "desde": "1960-01-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 540
+   },
+   "MCOILWTICO": {
+    "desde": "1986-01-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 228
+   },
+   "boe_uk_oil_price_usd_a": {
+    "desde": "1861-01-01",
+    "ultimo_le_2004": "2004-01-01",
+    "obs_le_2004": 144
+   },
+   "eia_wti_fut_c1": {
+    "desde": "1983-04-04",
+    "ultimo_le_2004": "2004-12-30",
+    "obs_le_2004": 5377
+   }
+  },
+  "dolar": {
+   "TWEXMMTH": {
+    "desde": "1973-01-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 384
+   },
+   "TWEXBMTH": {
+    "desde": "1973-01-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 384
+   },
+   "DTWEXBGS": {
+    "desde": "2006-01-02",
+    "ultimo_le_2004": null,
+    "obs_le_2004": 0
+   },
+   "jst_usa_xrusd": {
+    "desde": "1870-01-01",
+    "ultimo_le_2004": "2004-01-01",
+    "obs_le_2004": 135
+   },
+   "jst_deu_xrusd": {
+    "desde": "1870-01-01",
+    "ultimo_le_2004": "2004-01-01",
+    "obs_le_2004": 134
+   },
+   "bundesbank_usd_dem_d": {
+    "desde": "1948-06-21",
+    "ultimo_le_2004": "1998-12-30",
+    "obs_le_2004": 13050
+   }
+  },
+  "volatilidad": {
+   "aqr_mkt_usa_d": {
+    "desde": "1926-07-01",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 21048
+   },
+   "ffx_us_mkt_rf_d": {
+    "desde": "1926-07-01",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 20868
+   },
+   "VIXCLS": {
+    "desde": "1990-01-02",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 3782
+   }
+  },
+  "crisis": {
+   "jst_usa_crisisjst": {
+    "desde": "1870-01-01",
+    "ultimo_le_2004": "2004-01-01",
+    "obs_le_2004": 135
+   },
+   "jst_gbr_crisisjst": {
+    "desde": "1870-01-01",
+    "ultimo_le_2004": "2004-01-01",
+    "obs_le_2004": 135
+   },
+   "jst_irl_crisisjst": {
+    "desde": "1920-01-01",
+    "ultimo_le_2004": "2004-01-01",
+    "obs_le_2004": 85
+   }
+  },
+  "resultado_mensual": {
+   "ffx_us_rf_d": {
+    "desde": "1926-07-01",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 20868
+   },
+   "shiller_gs10": {
+    "desde": "1871-01-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 1608
+   },
+   "gold_usd_monthly": {
+    "desde": "1791-01-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 2568
+   },
+   "aqr_clr_ew_xret_m": {
+    "desde": "1877-02-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 1535
+   },
+   "aqr_cfp_commodities_market_m": {
+    "desde": "1926-07-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 942
+   },
+   "wb_idx_energy": {
+    "desde": "1960-01-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 540
+   },
+   "wb_idx_base_metals_ex_iron_ore": {
+    "desde": "1960-01-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 540
+   },
+   "wb_idx_precious_metals": {
+    "desde": "1960-01-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 540
+   }
+  },
+  "resultado_anual": {
+   "jst_usa_eq_tr": {
+    "desde": "1872-01-01",
+    "ultimo_le_2004": "2004-01-01",
+    "obs_le_2004": 133
+   },
+   "jst_usa_bond_tr": {
+    "desde": "1871-01-01",
+    "ultimo_le_2004": "2004-01-01",
+    "obs_le_2004": 134
+   },
+   "jst_usa_bill_rate": {
+    "desde": "1870-01-01",
+    "ultimo_le_2004": "2004-01-01",
+    "obs_le_2004": 135
+   },
+   "jst_usa_housing_tr": {
+    "desde": "1891-01-01",
+    "ultimo_le_2004": "2004-01-01",
+    "obs_le_2004": 114
+   },
+   "jst_usa_cpi": {
+    "desde": "1870-01-01",
+    "ultimo_le_2004": "2004-01-01",
+    "obs_le_2004": 135
+   },
+   "damodaran_gold_ret": {
+    "desde": "1928-01-01",
+    "ultimo_le_2004": "2004-01-01",
+    "obs_le_2004": 77
+   }
+  }
+ },
+ "eventos": {
+  "petroleo": {
+   "n": 13,
+   "fechas": [
+    "1895-01",
+    "1899-09",
+    "1903-12",
+    "1913-01",
+    "1917-09",
+    "1920-01",
+    "1971-01",
+    "1973-04",
+    "1979-01",
+    "1990-08",
+    "1996-10",
+    "2000-06",
+    "2004-08"
+   ],
+   "n_desde_1926_07": 7,
+   "n_con_24m_completos_le_2004": 12,
+   "intensidad": [
+    0.216,
+    0.207,
+    0.211,
+    0.223,
+    0.297,
+    0.236,
+    0.208,
+    0.288,
+    0.321,
+    0.298,
+    0.238,
+    0.227,
+    0.247
+   ]
+  },
+  "petroleo_sens_u10": {
+   "n": 15,
+   "fechas": [
+    "1894-06",
+    "1899-09",
+    "1903-11",
+    "1912-12",
+    "1917-01",
+    "1919-11",
+    "1929-01",
+    "1937-06",
+    "1953-06",
+    "1971-01",
+    "1978-12",
+    "1990-08",
+    "1996-04",
+    "2000-02",
+    "2004-05"
+   ],
+   "n_desde_1926_07": 9,
+   "n_con_24m_completos_le_2004": 14,
+   "intensidad": [
+    0.131,
+    0.207,
+    0.159,
+    0.172,
+    0.131,
+    0.104,
+    0.104,
+    0.122,
+    0.108,
+    0.208,
+    0.133,
+    0.298,
+    0.107,
+    0.142,
+    0.134
+   ]
+  },
+  "petroleo_sens_u30": {
+   "n": 9,
+   "fechas": [
+    "1895-04",
+    "1899-12",
+    "1913-02",
+    "1920-02",
+    "1973-07",
+    "1979-01",
+    "1990-09",
+    "2000-09",
+    "2004-10"
+   ],
+   "n_desde_1926_07": 5,
+   "n_con_24m_completos_le_2004": 8,
+   "intensidad": [
+    0.754,
+    0.34,
+    0.405,
+    0.321,
+    0.351,
+    0.321,
+    0.512,
+    0.308,
+    0.355
+   ]
+  },
+  "petroleo_sens_domestico": {
+   "n": 12,
+   "fechas": [
+    "1895-01",
+    "1899-09",
+    "1903-12",
+    "1913-01",
+    "1917-09",
+    "1920-01",
+    "1973-12",
+    "1979-07",
+    "1990-08",
+    "1996-10",
+    "2000-06",
+    "2004-08"
+   ],
+   "n_desde_1926_07": 6,
+   "n_con_24m_completos_le_2004": 11,
+   "intensidad": [
+    0.216,
+    0.207,
+    0.211,
+    0.223,
+    0.297,
+    0.236,
+    0.243,
+    0.204,
+    0.208,
+    0.218,
+    0.218,
+    0.226
+   ]
+  },
+  "vol": {
+   "n": 16,
+   "fechas": [
+    "1931-09",
+    "1933-03",
+    "1937-10",
+    "1940-05",
+    "1946-09",
+    "1962-05",
+    "1970-05",
+    "1973-12",
+    "1980-03",
+    "1982-08",
+    "1987-10",
+    "1990-08",
+    "1997-10",
+    "1999-10",
+    "2000-10",
+    "2002-07"
+   ],
+   "n_desde_1926_07": 16,
+   "n_con_24m_completos_le_2004": 16
+  },
+  "vol_sens_p95": {
+   "n": 8,
+   "fechas": [
+    "1931-09",
+    "1933-03",
+    "1937-10",
+    "1987-10",
+    "1998-08",
+    "2000-04",
+    "2001-04",
+    "2002-07"
+   ],
+   "n_desde_1926_07": 8,
+   "n_con_24m_completos_le_2004": 8
+  },
+  "vol_sens_sep6": {
+   "n": 21,
+   "fechas": [
+    "1931-09",
+    "1932-05",
+    "1933-03",
+    "1937-10",
+    "1940-05",
+    "1946-09",
+    "1962-05",
+    "1970-05",
+    "1973-12",
+    "1974-09",
+    "1980-03",
+    "1982-08",
+    "1987-10",
+    "1990-08",
+    "1997-10",
+    "1998-08",
+    "1999-10",
+    "2000-10",
+    "2001-09",
+    "2002-07",
+    "2003-03"
+   ],
+   "n_desde_1926_07": 21,
+   "n_con_24m_completos_le_2004": 20
+  },
+  "vol_sens_racha": {
+   "n": 12,
+   "fechas": [
+    "1931-09",
+    "1937-10",
+    "1940-05",
+    "1946-09",
+    "1962-05",
+    "1970-05",
+    "1973-12",
+    "1980-03",
+    "1982-08",
+    "1987-10",
+    "1990-08",
+    "1997-10"
+   ],
+   "n_desde_1926_07": 12,
+   "n_con_24m_completos_le_2004": 12
+  },
+  "vix_1990": {
+   "n": 5,
+   "fechas": [
+    "1997-08",
+    "1998-08",
+    "2000-04",
+    "2001-09",
+    "2003-02"
+   ],
+   "n_desde_1926_07": 5,
+   "n_con_24m_completos_le_2004": 4
+  },
+  "rv_1990_mismo_metodo": {
+   "n": 6,
+   "fechas": [
+    "1996-07",
+    "1997-10",
+    "1998-12",
+    "2000-01",
+    "2001-03",
+    "2002-07"
+   ],
+   "n_desde_1926_07": 6,
+   "n_con_24m_completos_le_2004": 6
+  },
+  "dolar": {
+   "n": 3,
+   "fechas": [
+    "1981-06",
+    "1984-10",
+    "2000-10"
+   ],
+   "n_desde_1926_07": 3,
+   "n_con_24m_completos_le_2004": 3
+  },
+  "dolar_sens_u05": {
+   "n": 8,
+   "fechas": [
+    "1974-08",
+    "1981-05",
+    "1983-05",
+    "1989-04",
+    "1992-12",
+    "1996-04",
+    "1998-05",
+    "2000-08"
+   ],
+   "n_desde_1926_07": 8,
+   "n_con_24m_completos_le_2004": 8
+  },
+  "dolar_sens_u15": {
+   "n": 2,
+   "fechas": [
+    "1981-07",
+    "1985-03"
+   ],
+   "n_desde_1926_07": 2,
+   "n_con_24m_completos_le_2004": 2
+  },
+  "crisis_jst": {
+   "n_pais_evento": 72,
+   "descartadas_por_separacion_5a": 3,
+   "por_pais": {
+    "AUS": [
+     1893,
+     1989
+    ],
+    "BEL": [
+     1870,
+     1876,
+     1885,
+     1925,
+     1931,
+     1939
+    ],
+    "CAN": [
+     1907
+    ],
+    "CHE": [
+     1870,
+     1910,
+     1931,
+     1991
+    ],
+    "DEU": [
+     1873,
+     1891,
+     1901,
+     1931
+    ],
+    "DNK": [
+     1877,
+     1885,
+     1908,
+     1921,
+     1987
+    ],
+    "ESP": [
+     1883,
+     1890,
+     1913,
+     1920,
+     1931,
+     1977
+    ],
+    "FIN": [
+     1877,
+     1900,
+     1921,
+     1931,
+     1991
+    ],
+    "FRA": [
+     1882,
+     1889,
+     1930
+    ],
+    "GBR": [
+     1890,
+     1974,
+     1991
+    ],
+    "ITA": [
+     1873,
+     1887,
+     1893,
+     1907,
+     1921,
+     1930,
+     1935,
+     1990
+    ],
+    "JPN": [
+     1871,
+     1890,
+     1901,
+     1907,
+     1920,
+     1927,
+     1997
+    ],
+    "NLD": [
+     1921
+    ],
+    "NOR": [
+     1899,
+     1922,
+     1931,
+     1988
+    ],
+    "PRT": [
+     1890,
+     1920,
+     1931
+    ],
+    "SWE": [
+     1878,
+     1907,
+     1922,
+     1931,
+     1991
+    ],
+    "USA": [
+     1873,
+     1893,
+     1907,
+     1930,
+     1984
+    ]
+   },
+   "años_distintos": 39,
+   "episodios_globales_hueco1": 23,
+   "episodios_globales": [
+    {
+     "inicio": 1870,
+     "fin": 1871,
+     "n": 3
+    },
+    {
+     "inicio": 1873,
+     "fin": 1873,
+     "n": 3
+    },
+    {
+     "inicio": 1876,
+     "fin": 1878,
+     "n": 4
+    },
+    {
+     "inicio": 1882,
+     "fin": 1883,
+     "n": 2
+    },
+    {
+     "inicio": 1885,
+     "fin": 1885,
+     "n": 2
+    },
+    {
+     "inicio": 1887,
+     "fin": 1887,
+     "n": 1
+    },
+    {
+     "inicio": 1889,
+     "fin": 1891,
+     "n": 6
+    },
+    {
+     "inicio": 1893,
+     "fin": 1893,
+     "n": 3
+    },
+    {
+     "inicio": 1899,
+     "fin": 1901,
+     "n": 4
+    },
+    {
+     "inicio": 1907,
+     "fin": 1908,
+     "n": 6
+    },
+    {
+     "inicio": 1910,
+     "fin": 1910,
+     "n": 1
+    },
+    {
+     "inicio": 1913,
+     "fin": 1913,
+     "n": 1
+    },
+    {
+     "inicio": 1920,
+     "fin": 1922,
+     "n": 9
+    },
+    {
+     "inicio": 1925,
+     "fin": 1925,
+     "n": 1
+    },
+    {
+     "inicio": 1927,
+     "fin": 1927,
+     "n": 1
+    },
+    {
+     "inicio": 1930,
+     "fin": 1931,
+     "n": 11
+    },
+    {
+     "inicio": 1935,
+     "fin": 1935,
+     "n": 1
+    },
+    {
+     "inicio": 1939,
+     "fin": 1939,
+     "n": 1
+    },
+    {
+     "inicio": 1974,
+     "fin": 1974,
+     "n": 1
+    },
+    {
+     "inicio": 1977,
+     "fin": 1977,
+     "n": 1
+    },
+    {
+     "inicio": 1984,
+     "fin": 1984,
+     "n": 1
+    },
+    {
+     "inicio": 1987,
+     "fin": 1991,
+     "n": 8
+    },
+    {
+     "inicio": 1997,
+     "fin": 1997,
+     "n": 1
+    }
+   ],
+   "por_periodo": {
+    "1870-1913": {
+     "n": 36,
+     "episodios": 12
+    },
+    "1914-1945": {
+     "n": 24,
+     "episodios": 6
+    },
+    "1946-2004": {
+     "n": 12,
+     "episodios": 5
+    },
+    "1973-2004": {
+     "n": 12,
+     "episodios": 5
+    }
+   },
+   "en_guerras": 1
+  },
+  "anual": {
+   "petroleo_anual_<1890_boe": [
+    1864,
+    1871,
+    1876,
+    1894,
+    1913,
+    1916,
+    1920,
+    1926,
+    1934,
+    1947,
+    1953,
+    1971,
+    1976,
+    1979,
+    1990,
+    1996,
+    2000,
+    2004
+   ],
+   "dolar_anual_jst_todas": [
+    1919,
+    1923,
+    1931,
+    1937,
+    1942,
+    1945,
+    1981,
+    1992,
+    1997
+   ],
+   "dolar_anual_jst_sin_guerras": [
+    1919,
+    1923,
+    1931,
+    1937,
+    1946,
+    1981,
+    1992,
+    1997
+   ]
+  }
+ },
+ "solapes_12m": {
+  "petroleo~vol": [
+   [
+    "1971-01",
+    "1970-05"
+   ],
+   [
+    "1973-04",
+    "1973-12"
+   ],
+   [
+    "1990-08",
+    "1990-08"
+   ],
+   [
+    "1996-10",
+    "1997-10"
+   ],
+   [
+    "2000-06",
+    "1999-10"
+   ],
+   [
+    "2000-06",
+    "2000-10"
+   ]
+  ],
+  "petroleo~dolar": [
+   [
+    "2000-06",
+    "2000-10"
+   ]
+  ],
+  "petroleo~crisis_EEUU": [],
+  "vol~dolar": [
+   [
+    "1999-10",
+    "2000-10"
+   ],
+   [
+    "2000-10",
+    "2000-10"
+   ]
+  ],
+  "vol~crisis_EEUU": [],
+  "dolar~crisis_EEUU": [
+   [
+    "1984-10",
+    "1984-07"
+   ]
+  ]
+ },
+ "correspondencia_vix_rv_1990_2004": {
+  "meses": 180,
+  "desde": "1990-01",
+  "hasta": "2004-12",
+  "corr_niveles": 0.8390931528238584,
+  "corr_logs": 0.8652632922287291,
+  "media_vix_pct": 19.924671327656718,
+  "media_rv_pct": 14.085234725363085,
+  "prima_media_vix_menos_rv_pct": 5.839436602293634,
+  "rv_p90": 25.193308524132227,
+  "vix_p90": 28.175021739130436,
+  "acuerdo_meses_altos": 0.9,
+  "kappa_cohen": 0.44444444444444436,
+  "sens_rv_dado_vix_alto": 0.5
+ },
+ "marginales": {
+  "mensual": {
+   "bolsa": {
+    "desde": "1926-07",
+    "meses": 942,
+    "sd_mensual_log": 0.0542,
+    "sd_12m_log_solapada": 0.205,
+    "media_mensual_log": 0.0078
+   },
+   "letras": {
+    "desde": "1926-07",
+    "meses": 942,
+    "sd_mensual_log": 0.0027,
+    "sd_12m_log_solapada": 0.0309,
+    "media_mensual_log": 0.0029
+   },
+   "bonos_aprox": {
+    "desde": "1871-02",
+    "meses": 1607,
+    "sd_mensual_log": 0.0116,
+    "sd_12m_log_solapada": 0.0541,
+    "media_mensual_log": 0.004
+   },
+   "oro_desde_1968": {
+    "desde": "1968-04",
+    "meses": 441,
+    "sd_mensual_log": 0.051,
+    "sd_12m_log_solapada": 0.2399,
+    "media_mensual_log": 0.0056
+   },
+   "materias_clr_exceso": {
+    "desde": "1877-02",
+    "meses": 1535,
+    "sd_mensual_log": 0.0508,
+    "sd_12m_log_solapada": 0.2086,
+    "media_mensual_log": 0.0028
+   },
+   "materias_cfp": {
+    "desde": "1926-07",
+    "meses": 942,
+    "sd_mensual_log": 0.0457,
+    "sd_12m_log_solapada": 0.1976,
+    "media_mensual_log": 0.0035
+   },
+   "petroleo_precio": {
+    "desde": "1890-02",
+    "meses": 1312,
+    "sd_mensual_log": 0.0965,
+    "sd_12m_log_solapada": 0.3815,
+    "media_mensual_log": 0.0027
+   },
+   "energia_wb": {
+    "desde": "1960-02",
+    "meses": 539,
+    "sd_mensual_log": 0.0743,
+    "sd_12m_log_solapada": 0.2967,
+    "media_mensual_log": 0.0061
+   },
+   "metales_base_wb": {
+    "desde": "1960-02",
+    "meses": 539,
+    "sd_mensual_log": 0.0431,
+    "sd_12m_log_solapada": 0.2019,
+    "media_mensual_log": 0.0027
+   },
+   "metales_preciosos_wb": {
+    "desde": "1960-02",
+    "meses": 539,
+    "sd_mensual_log": 0.0502,
+    "sd_12m_log_solapada": 0.2247,
+    "media_mensual_log": 0.0045
+   }
+  },
+  "panel": {
+   "bolsa": {
+    "filas": 2002,
+    "sd_anual_log_pool_bruta": 0.2147,
+    "sd_anual_log_pool": 0.1934,
+    "nota_sd": "sin años de guerra y winsorizada 1-99 % (hiperinflaciones); el ruido t5 devuelve colas gruesas",
+    "corr_contemporanea_media": 0.3304
+   },
+   "bonos": {
+    "filas": 2030,
+    "sd_anual_log_pool_bruta": 0.497,
+    "sd_anual_log_pool": 0.1115,
+    "nota_sd": "sin años de guerra y winsorizada 1-99 % (hiperinflaciones); el ruido t5 devuelve colas gruesas",
+    "corr_contemporanea_media": 0.3848
+   },
+   "letras": {
+    "filas": 2083,
+    "sd_anual_log_pool_bruta": 0.099,
+    "sd_anual_log_pool": 0.0563,
+    "nota_sd": "sin años de guerra y winsorizada 1-99 % (hiperinflaciones); el ruido t5 devuelve colas gruesas",
+    "corr_contemporanea_media": 0.3964
+   },
+   "vivienda": {
+    "filas": 1653,
+    "sd_anual_log_pool_bruta": 0.0898,
+    "sd_anual_log_pool": 0.0822,
+    "nota_sd": "sin años de guerra y winsorizada 1-99 % (hiperinflaciones); el ruido t5 devuelve colas gruesas",
+    "corr_contemporanea_media": 0.0914
+   }
+  }
+ },
+ "potencia_A_mensual": {
+  "petroleo->bolsa": {
+   "h1": {
+    "n_eventos": 7,
+    "sd_nula_log": 0.02077,
+    "mde_pp_a5": 5.82,
+    "mde_pp_holm_1de4": 6.94
+   },
+   "h3": {
+    "n_eventos": 7,
+    "sd_nula_log": 0.03617,
+    "mde_pp_a5": 10.13,
+    "mde_pp_holm_1de4": 12.08
+   },
+   "h6": {
+    "n_eventos": 6,
+    "sd_nula_log": 0.053,
+    "mde_pp_a5": 14.85,
+    "mde_pp_holm_1de4": 17.7
+   },
+   "h12": {
+    "n_eventos": 6,
+    "sd_nula_log": 0.07608,
+    "mde_pp_a5": 21.31,
+    "mde_pp_holm_1de4": 25.41
+   },
+   "h24": {
+    "n_eventos": 6,
+    "sd_nula_log": 0.11093,
+    "mde_pp_a5": 31.08,
+    "mde_pp_holm_1de4": 37.04
+   }
+  },
+  "petroleo->bonos_aprox": {
+   "h1": {
+    "n_eventos": 13,
+    "sd_nula_log": 0.00324,
+    "mde_pp_a5": 0.91,
+    "mde_pp_holm_1de4": 1.08
+   },
+   "h3": {
+    "n_eventos": 13,
+    "sd_nula_log": 0.00562,
+    "mde_pp_a5": 1.58,
+    "mde_pp_holm_1de4": 1.88
+   },
+   "h6": {
+    "n_eventos": 12,
+    "sd_nula_log": 0.00849,
+    "mde_pp_a5": 2.38,
+    "mde_pp_holm_1de4": 2.84
+   },
+   "h12": {
+    "n_eventos": 12,
+    "sd_nula_log": 0.01179,
+    "mde_pp_a5": 3.3,
+    "mde_pp_holm_1de4": 3.94
+   },
+   "h24": {
+    "n_eventos": 12,
+    "sd_nula_log": 0.0165,
+    "mde_pp_a5": 4.62,
+    "mde_pp_holm_1de4": 5.51
+   }
+  },
+  "petroleo->oro_desde_1968": {
+   "h1": {
+    "n_eventos": 7,
+    "sd_nula_log": 0.01934,
+    "mde_pp_a5": 5.42,
+    "mde_pp_holm_1de4": 6.46
+   },
+   "h3": {
+    "n_eventos": 7,
+    "sd_nula_log": 0.03296,
+    "mde_pp_a5": 9.23,
+    "mde_pp_holm_1de4": 11.01
+   },
+   "h6": {
+    "n_eventos": 6,
+    "sd_nula_log": 0.05018,
+    "mde_pp_a5": 14.06,
+    "mde_pp_holm_1de4": 16.76
+   },
+   "h12": {
+    "n_eventos": 6,
+    "sd_nula_log": 0.07383,
+    "mde_pp_a5": 20.68,
+    "mde_pp_holm_1de4": 24.66
+   },
+   "h24": {
+    "n_eventos": 6,
+    "sd_nula_log": 0.10296,
+    "mde_pp_a5": 28.84,
+    "mde_pp_holm_1de4": 34.38
+   }
+  },
+  "petroleo->materias_cfp": {
+   "h1": {
+    "n_eventos": 7,
+    "sd_nula_log": 0.01761,
+    "mde_pp_a5": 4.93,
+    "mde_pp_holm_1de4": 5.88
+   },
+   "h3": {
+    "n_eventos": 7,
+    "sd_nula_log": 0.03,
+    "mde_pp_a5": 8.41,
+    "mde_pp_holm_1de4": 10.02
+   },
+   "h6": {
+    "n_eventos": 6,
+    "sd_nula_log": 0.04483,
+    "mde_pp_a5": 12.56,
+    "mde_pp_holm_1de4": 14.97
+   },
+   "h12": {
+    "n_eventos": 6,
+    "sd_nula_log": 0.06433,
+    "mde_pp_a5": 18.02,
+    "mde_pp_holm_1de4": 21.48
+   },
+   "h24": {
+    "n_eventos": 6,
+    "sd_nula_log": 0.09051,
+    "mde_pp_a5": 25.36,
+    "mde_pp_holm_1de4": 30.22
+   }
+  },
+  "petroleo->materias_clr_exceso": {
+   "h1": {
+    "n_eventos": 13,
+    "sd_nula_log": 0.01376,
+    "mde_pp_a5": 3.85,
+    "mde_pp_holm_1de4": 4.59
+   },
+   "h3": {
+    "n_eventos": 13,
+    "sd_nula_log": 0.02483,
+    "mde_pp_a5": 6.96,
+    "mde_pp_holm_1de4": 8.29
+   },
+   "h6": {
+    "n_eventos": 12,
+    "sd_nula_log": 0.03622,
+    "mde_pp_a5": 10.15,
+    "mde_pp_holm_1de4": 12.1
+   },
+   "h12": {
+    "n_eventos": 12,
+    "sd_nula_log": 0.05238,
+    "mde_pp_a5": 14.68,
+    "mde_pp_holm_1de4": 17.49
+   },
+   "h24": {
+    "n_eventos": 12,
+    "sd_nula_log": 0.0715,
+    "mde_pp_a5": 20.03,
+    "mde_pp_holm_1de4": 23.87
+   }
+  },
+  "petroleo->metales_base_wb": {
+   "h1": {
+    "n_eventos": 7,
+    "sd_nula_log": 0.01668,
+    "mde_pp_a5": 4.67,
+    "mde_pp_holm_1de4": 5.57
+   },
+   "h3": {
+    "n_eventos": 7,
+    "sd_nula_log": 0.02755,
+    "mde_pp_a5": 7.72,
+    "mde_pp_holm_1de4": 9.2
+   },
+   "h6": {
+    "n_eventos": 6,
+    "sd_nula_log": 0.04385,
+    "mde_pp_a5": 12.29,
+    "mde_pp_holm_1de4": 14.64
+   },
+   "h12": {
+    "n_eventos": 6,
+    "sd_nula_log": 0.0617,
+    "mde_pp_a5": 17.29,
+    "mde_pp_holm_1de4": 20.6
+   },
+   "h24": {
+    "n_eventos": 6,
+    "sd_nula_log": 0.0866,
+    "mde_pp_a5": 24.26,
+    "mde_pp_holm_1de4": 28.92
+   }
+  },
+  "vol->bolsa": {
+   "h1": {
+    "n_eventos": 16,
+    "sd_nula_log": 0.01365,
+    "mde_pp_a5": 3.82,
+    "mde_pp_holm_1de4": 4.56
+   },
+   "h3": {
+    "n_eventos": 16,
+    "sd_nula_log": 0.02395,
+    "mde_pp_a5": 6.71,
+    "mde_pp_holm_1de4": 8.0
+   },
+   "h6": {
+    "n_eventos": 16,
+    "sd_nula_log": 0.03338,
+    "mde_pp_a5": 9.35,
+    "mde_pp_holm_1de4": 11.15
+   },
+   "h12": {
+    "n_eventos": 16,
+    "sd_nula_log": 0.04654,
+    "mde_pp_a5": 13.04,
+    "mde_pp_holm_1de4": 15.54
+   },
+   "h24": {
+    "n_eventos": 16,
+    "sd_nula_log": 0.07502,
+    "mde_pp_a5": 21.02,
+    "mde_pp_holm_1de4": 25.05
+   }
+  },
+  "vol->bolsa_volpost_x1.5": {
+   "h1": {
+    "n_eventos": 16,
+    "sd_nula_log": 0.02327,
+    "mde_pp_a5": 6.52,
+    "mde_pp_holm_1de4": 7.77
+   },
+   "h3": {
+    "n_eventos": 16,
+    "sd_nula_log": 0.03964,
+    "mde_pp_a5": 11.1,
+    "mde_pp_holm_1de4": 13.24
+   },
+   "h6": {
+    "n_eventos": 16,
+    "sd_nula_log": 0.05396,
+    "mde_pp_a5": 15.12,
+    "mde_pp_holm_1de4": 18.02
+   },
+   "h12": {
+    "n_eventos": 16,
+    "sd_nula_log": 0.07184,
+    "mde_pp_a5": 20.13,
+    "mde_pp_holm_1de4": 23.99
+   },
+   "h24": {
+    "n_eventos": 16,
+    "sd_nula_log": 0.1099,
+    "mde_pp_a5": 30.79,
+    "mde_pp_holm_1de4": 36.7
+   }
+  },
+  "vol->bonos_aprox": {
+   "h1": {
+    "n_eventos": 16,
+    "sd_nula_log": 0.00294,
+    "mde_pp_a5": 0.82,
+    "mde_pp_holm_1de4": 0.98
+   },
+   "h3": {
+    "n_eventos": 16,
+    "sd_nula_log": 0.00498,
+    "mde_pp_a5": 1.39,
+    "mde_pp_holm_1de4": 1.66
+   },
+   "h6": {
+    "n_eventos": 16,
+    "sd_nula_log": 0.00722,
+    "mde_pp_a5": 2.02,
+    "mde_pp_holm_1de4": 2.41
+   },
+   "h12": {
+    "n_eventos": 16,
+    "sd_nula_log": 0.01011,
+    "mde_pp_a5": 2.83,
+    "mde_pp_holm_1de4": 3.37
+   },
+   "h24": {
+    "n_eventos": 16,
+    "sd_nula_log": 0.01587,
+    "mde_pp_a5": 4.45,
+    "mde_pp_holm_1de4": 5.3
+   }
+  },
+  "vol->letras": {
+   "h1": {
+    "n_eventos": 16,
+    "sd_nula_log": 0.0007,
+    "mde_pp_a5": 0.2,
+    "mde_pp_holm_1de4": 0.23
+   },
+   "h3": {
+    "n_eventos": 16,
+    "sd_nula_log": 0.00116,
+    "mde_pp_a5": 0.32,
+    "mde_pp_holm_1de4": 0.39
+   },
+   "h6": {
+    "n_eventos": 16,
+    "sd_nula_log": 0.00163,
+    "mde_pp_a5": 0.46,
+    "mde_pp_holm_1de4": 0.55
+   },
+   "h12": {
+    "n_eventos": 16,
+    "sd_nula_log": 0.00238,
+    "mde_pp_a5": 0.67,
+    "mde_pp_holm_1de4": 0.79
+   },
+   "h24": {
+    "n_eventos": 16,
+    "sd_nula_log": 0.00364,
+    "mde_pp_a5": 1.02,
+    "mde_pp_holm_1de4": 1.22
+   }
+  },
+  "vol->oro_desde_1968": {
+   "h1": {
+    "n_eventos": 10,
+    "sd_nula_log": 0.01626,
+    "mde_pp_a5": 4.55,
+    "mde_pp_holm_1de4": 5.43
+   },
+   "h3": {
+    "n_eventos": 10,
+    "sd_nula_log": 0.02816,
+    "mde_pp_a5": 7.89,
+    "mde_pp_holm_1de4": 9.4
+   },
+   "h6": {
+    "n_eventos": 10,
+    "sd_nula_log": 0.03914,
+    "mde_pp_a5": 10.97,
+    "mde_pp_holm_1de4": 13.07
+   },
+   "h12": {
+    "n_eventos": 10,
+    "sd_nula_log": 0.05746,
+    "mde_pp_a5": 16.1,
+    "mde_pp_holm_1de4": 19.19
+   },
+   "h24": {
+    "n_eventos": 10,
+    "sd_nula_log": 0.09269,
+    "mde_pp_a5": 25.97,
+    "mde_pp_holm_1de4": 30.95
+   }
+  },
+  "vol->materias_cfp": {
+   "h1": {
+    "n_eventos": 16,
+    "sd_nula_log": 0.01163,
+    "mde_pp_a5": 3.26,
+    "mde_pp_holm_1de4": 3.89
+   },
+   "h3": {
+    "n_eventos": 16,
+    "sd_nula_log": 0.01993,
+    "mde_pp_a5": 5.58,
+    "mde_pp_holm_1de4": 6.65
+   },
+   "h6": {
+    "n_eventos": 16,
+    "sd_nula_log": 0.02766,
+    "mde_pp_a5": 7.75,
+    "mde_pp_holm_1de4": 9.24
+   },
+   "h12": {
+    "n_eventos": 16,
+    "sd_nula_log": 0.03989,
+    "mde_pp_a5": 11.18,
+    "mde_pp_holm_1de4": 13.32
+   },
+   "h24": {
+    "n_eventos": 16,
+    "sd_nula_log": 0.06312,
+    "mde_pp_a5": 17.68,
+    "mde_pp_holm_1de4": 21.08
+   }
+  },
+  "dolar->bolsa": {
+   "h1": {
+    "n_eventos": 3,
+    "sd_nula_log": 0.03165,
+    "mde_pp_a5": 8.87,
+    "mde_pp_holm_1de4": 10.57
+   },
+   "h3": {
+    "n_eventos": 3,
+    "sd_nula_log": 0.05456,
+    "mde_pp_a5": 15.28,
+    "mde_pp_holm_1de4": 18.22
+   },
+   "h6": {
+    "n_eventos": 3,
+    "sd_nula_log": 0.08035,
+    "mde_pp_a5": 22.51,
+    "mde_pp_holm_1de4": 26.83
+   },
+   "h12": {
+    "n_eventos": 3,
+    "sd_nula_log": 0.11014,
+    "mde_pp_a5": 30.86,
+    "mde_pp_holm_1de4": 36.78
+   },
+   "h24": {
+    "n_eventos": 3,
+    "sd_nula_log": 0.15702,
+    "mde_pp_a5": 43.99,
+    "mde_pp_holm_1de4": 52.43
+   }
+  },
+  "dolar->oro_desde_1968": {
+   "h1": {
+    "n_eventos": 3,
+    "sd_nula_log": 0.0292,
+    "mde_pp_a5": 8.18,
+    "mde_pp_holm_1de4": 9.75
+   },
+   "h3": {
+    "n_eventos": 3,
+    "sd_nula_log": 0.05134,
+    "mde_pp_a5": 14.38,
+    "mde_pp_holm_1de4": 17.14
+   },
+   "h6": {
+    "n_eventos": 3,
+    "sd_nula_log": 0.07243,
+    "mde_pp_a5": 20.29,
+    "mde_pp_holm_1de4": 24.19
+   },
+   "h12": {
+    "n_eventos": 3,
+    "sd_nula_log": 0.10203,
+    "mde_pp_a5": 28.59,
+    "mde_pp_holm_1de4": 34.07
+   },
+   "h24": {
+    "n_eventos": 3,
+    "sd_nula_log": 0.14423,
+    "mde_pp_a5": 40.41,
+    "mde_pp_holm_1de4": 48.16
+   }
+  },
+  "dolar->materias_cfp": {
+   "h1": {
+    "n_eventos": 3,
+    "sd_nula_log": 0.02616,
+    "mde_pp_a5": 7.33,
+    "mde_pp_holm_1de4": 8.73
+   },
+   "h3": {
+    "n_eventos": 3,
+    "sd_nula_log": 0.04458,
+    "mde_pp_a5": 12.49,
+    "mde_pp_holm_1de4": 14.89
+   },
+   "h6": {
+    "n_eventos": 3,
+    "sd_nula_log": 0.06653,
+    "mde_pp_a5": 18.64,
+    "mde_pp_holm_1de4": 22.22
+   },
+   "h12": {
+    "n_eventos": 3,
+    "sd_nula_log": 0.09163,
+    "mde_pp_a5": 25.67,
+    "mde_pp_holm_1de4": 30.6
+   },
+   "h24": {
+    "n_eventos": 3,
+    "sd_nula_log": 0.13055,
+    "mde_pp_a5": 36.57,
+    "mde_pp_holm_1de4": 43.59
+   }
+  },
+  "dolar->petroleo_precio": {
+   "h1": {
+    "n_eventos": 3,
+    "sd_nula_log": 0.05617,
+    "mde_pp_a5": 15.74,
+    "mde_pp_holm_1de4": 18.76
+   },
+   "h3": {
+    "n_eventos": 3,
+    "sd_nula_log": 0.09754,
+    "mde_pp_a5": 27.33,
+    "mde_pp_holm_1de4": 32.57
+   },
+   "h6": {
+    "n_eventos": 3,
+    "sd_nula_log": 0.13962,
+    "mde_pp_a5": 39.11,
+    "mde_pp_holm_1de4": 46.62
+   },
+   "h12": {
+    "n_eventos": 3,
+    "sd_nula_log": 0.19603,
+    "mde_pp_a5": 54.92,
+    "mde_pp_holm_1de4": 65.46
+   },
+   "h24": {
+    "n_eventos": 3,
+    "sd_nula_log": 0.27581,
+    "mde_pp_a5": 77.27,
+    "mde_pp_holm_1de4": 92.1
+   }
+  },
+  "dolar->metales_base_wb": {
+   "h1": {
+    "n_eventos": 3,
+    "sd_nula_log": 0.02555,
+    "mde_pp_a5": 7.16,
+    "mde_pp_holm_1de4": 8.53
+   },
+   "h3": {
+    "n_eventos": 3,
+    "sd_nula_log": 0.04362,
+    "mde_pp_a5": 12.22,
+    "mde_pp_holm_1de4": 14.57
+   },
+   "h6": {
+    "n_eventos": 3,
+    "sd_nula_log": 0.06066,
+    "mde_pp_a5": 17.0,
+    "mde_pp_holm_1de4": 20.26
+   },
+   "h12": {
+    "n_eventos": 3,
+    "sd_nula_log": 0.08475,
+    "mde_pp_a5": 23.74,
+    "mde_pp_holm_1de4": 28.3
+   },
+   "h24": {
+    "n_eventos": 3,
+    "sd_nula_log": 0.12015,
+    "mde_pp_a5": 33.66,
+    "mde_pp_holm_1de4": 40.12
+   }
+  },
+  "vix_1990->bolsa": {
+   "h1": {
+    "n_eventos": 5,
+    "sd_nula_log": 0.02431,
+    "mde_pp_a5": 6.81,
+    "mde_pp_holm_1de4": 8.12
+   },
+   "h3": {
+    "n_eventos": 5,
+    "sd_nula_log": 0.04177,
+    "mde_pp_a5": 11.7,
+    "mde_pp_holm_1de4": 13.95
+   },
+   "h6": {
+    "n_eventos": 5,
+    "sd_nula_log": 0.06182,
+    "mde_pp_a5": 17.32,
+    "mde_pp_holm_1de4": 20.64
+   },
+   "h12": {
+    "n_eventos": 5,
+    "sd_nula_log": 0.08536,
+    "mde_pp_a5": 23.91,
+    "mde_pp_holm_1de4": 28.5
+   },
+   "h24": {
+    "n_eventos": 4,
+    "sd_nula_log": 0.16486,
+    "mde_pp_a5": 46.19,
+    "mde_pp_holm_1de4": 55.05
+   }
+  }
+ },
+ "potencia_A_panel": {
+  "crisis->bolsa": {
+   "H1": {
+    "n_pais_evento": 64,
+    "sd_nula_log": 0.03,
+    "mde_pp_a5": 8.4,
+    "mde_pp_holm_1de4": 10.02
+   },
+   "H2": {
+    "n_pais_evento": 64,
+    "sd_nula_log": 0.04553,
+    "mde_pp_a5": 12.76,
+    "mde_pp_holm_1de4": 15.2
+   },
+   "H3": {
+    "n_pais_evento": 64,
+    "sd_nula_log": 0.0576,
+    "mde_pp_a5": 16.14,
+    "mde_pp_holm_1de4": 19.24
+   }
+  },
+  "crisis->bonos": {
+   "H1": {
+    "n_pais_evento": 64,
+    "sd_nula_log": 0.01707,
+    "mde_pp_a5": 4.78,
+    "mde_pp_holm_1de4": 5.7
+   },
+   "H2": {
+    "n_pais_evento": 64,
+    "sd_nula_log": 0.02751,
+    "mde_pp_a5": 7.71,
+    "mde_pp_holm_1de4": 9.19
+   },
+   "H3": {
+    "n_pais_evento": 64,
+    "sd_nula_log": 0.03771,
+    "mde_pp_a5": 10.57,
+    "mde_pp_holm_1de4": 12.59
+   }
+  },
+  "crisis->letras": {
+   "H1": {
+    "n_pais_evento": 66,
+    "sd_nula_log": 0.00922,
+    "mde_pp_a5": 2.58,
+    "mde_pp_holm_1de4": 3.08
+   },
+   "H2": {
+    "n_pais_evento": 66,
+    "sd_nula_log": 0.01463,
+    "mde_pp_a5": 4.1,
+    "mde_pp_holm_1de4": 4.88
+   },
+   "H3": {
+    "n_pais_evento": 66,
+    "sd_nula_log": 0.01706,
+    "mde_pp_a5": 4.78,
+    "mde_pp_holm_1de4": 5.7
+   }
+  },
+  "crisis->vivienda": {
+   "H1": {
+    "n_pais_evento": 44,
+    "sd_nula_log": 0.01371,
+    "mde_pp_a5": 3.84,
+    "mde_pp_holm_1de4": 4.58
+   },
+   "H2": {
+    "n_pais_evento": 44,
+    "sd_nula_log": 0.01945,
+    "mde_pp_a5": 5.45,
+    "mde_pp_holm_1de4": 6.49
+   },
+   "H3": {
+    "n_pais_evento": 44,
+    "sd_nula_log": 0.0246,
+    "mde_pp_a5": 6.89,
+    "mde_pp_holm_1de4": 8.21
+   }
+  },
+  "crisis_1946_2004->bolsa": {
+   "H1": {
+    "n_pais_evento": 12,
+    "sd_nula_log": 0.06156,
+    "mde_pp_a5": 17.25,
+    "mde_pp_holm_1de4": 20.56
+   },
+   "H2": {
+    "n_pais_evento": 12,
+    "sd_nula_log": 0.08935,
+    "mde_pp_a5": 25.03,
+    "mde_pp_holm_1de4": 29.84
+   },
+   "H3": {
+    "n_pais_evento": 12,
+    "sd_nula_log": 0.11446,
+    "mde_pp_a5": 32.07,
+    "mde_pp_holm_1de4": 38.22
+   }
+  },
+  "crisis_1946_2004->bonos": {
+   "H1": {
+    "n_pais_evento": 12,
+    "sd_nula_log": 0.03911,
+    "mde_pp_a5": 10.96,
+    "mde_pp_holm_1de4": 13.06
+   },
+   "H2": {
+    "n_pais_evento": 12,
+    "sd_nula_log": 0.05661,
+    "mde_pp_a5": 15.86,
+    "mde_pp_holm_1de4": 18.9
+   },
+   "H3": {
+    "n_pais_evento": 12,
+    "sd_nula_log": 0.0716,
+    "mde_pp_a5": 20.06,
+    "mde_pp_holm_1de4": 23.91
+   }
+  },
+  "crisis_1946_2004->letras": {
+   "H1": {
+    "n_pais_evento": 12,
+    "sd_nula_log": 0.01971,
+    "mde_pp_a5": 5.52,
+    "mde_pp_holm_1de4": 6.58
+   },
+   "H2": {
+    "n_pais_evento": 12,
+    "sd_nula_log": 0.02913,
+    "mde_pp_a5": 8.16,
+    "mde_pp_holm_1de4": 9.73
+   },
+   "H3": {
+    "n_pais_evento": 12,
+    "sd_nula_log": 0.03765,
+    "mde_pp_a5": 10.55,
+    "mde_pp_holm_1de4": 12.57
+   }
+  },
+  "crisis_1946_2004->vivienda": {
+   "H1": {
+    "n_pais_evento": 12,
+    "sd_nula_log": 0.02666,
+    "mde_pp_a5": 7.47,
+    "mde_pp_holm_1de4": 8.9
+   },
+   "H2": {
+    "n_pais_evento": 12,
+    "sd_nula_log": 0.03503,
+    "mde_pp_a5": 9.81,
+    "mde_pp_holm_1de4": 11.7
+   },
+   "H3": {
+    "n_pais_evento": 12,
+    "sd_nula_log": 0.04609,
+    "mde_pp_a5": 12.91,
+    "mde_pp_holm_1de4": 15.39
+   }
+  },
+  "petroleo_global->bolsa": {
+   "H1": {
+    "n_pais_evento": 173,
+    "sd_nula_log": 0.0377,
+    "mde_pp_a5": 10.56,
+    "mde_pp_holm_1de4": 12.59
+   },
+   "H2": {
+    "n_pais_evento": 173,
+    "sd_nula_log": 0.05485,
+    "mde_pp_a5": 15.37,
+    "mde_pp_holm_1de4": 18.32
+   },
+   "H3": {
+    "n_pais_evento": 173,
+    "sd_nula_log": 0.06614,
+    "mde_pp_a5": 18.53,
+    "mde_pp_holm_1de4": 22.09
+   }
+  },
+  "petroleo_global->bonos": {
+   "H1": {
+    "n_pais_evento": 172,
+    "sd_nula_log": 0.02188,
+    "mde_pp_a5": 6.13,
+    "mde_pp_holm_1de4": 7.31
+   },
+   "H2": {
+    "n_pais_evento": 170,
+    "sd_nula_log": 0.02833,
+    "mde_pp_a5": 7.94,
+    "mde_pp_holm_1de4": 9.46
+   },
+   "H3": {
+    "n_pais_evento": 170,
+    "sd_nula_log": 0.04302,
+    "mde_pp_a5": 12.05,
+    "mde_pp_holm_1de4": 14.37
+   }
+  },
+  "petroleo_global->letras": {
+   "H1": {
+    "n_pais_evento": 174,
+    "sd_nula_log": 0.01125,
+    "mde_pp_a5": 3.15,
+    "mde_pp_holm_1de4": 3.76
+   },
+   "H2": {
+    "n_pais_evento": 171,
+    "sd_nula_log": 0.0168,
+    "mde_pp_a5": 4.71,
+    "mde_pp_holm_1de4": 5.61
+   },
+   "H3": {
+    "n_pais_evento": 170,
+    "sd_nula_log": 0.02163,
+    "mde_pp_a5": 6.06,
+    "mde_pp_holm_1de4": 7.22
+   }
+  },
+  "petroleo_global->vivienda": {
+   "H1": {
+    "n_pais_evento": 148,
+    "sd_nula_log": 0.01044,
+    "mde_pp_a5": 2.93,
+    "mde_pp_holm_1de4": 3.49
+   },
+   "H2": {
+    "n_pais_evento": 147,
+    "sd_nula_log": 0.01355,
+    "mde_pp_a5": 3.8,
+    "mde_pp_holm_1de4": 4.52
+   },
+   "H3": {
+    "n_pais_evento": 147,
+    "sd_nula_log": 0.01916,
+    "mde_pp_a5": 5.37,
+    "mde_pp_holm_1de4": 6.4
+   }
+  },
+  "vol_global->bolsa": {
+   "H1": {
+    "n_pais_evento": 239,
+    "sd_nula_log": 0.03016,
+    "mde_pp_a5": 8.45,
+    "mde_pp_holm_1de4": 10.07
+   },
+   "H2": {
+    "n_pais_evento": 239,
+    "sd_nula_log": 0.04685,
+    "mde_pp_a5": 13.12,
+    "mde_pp_holm_1de4": 15.64
+   },
+   "H3": {
+    "n_pais_evento": 223,
+    "sd_nula_log": 0.06031,
+    "mde_pp_a5": 16.9,
+    "mde_pp_holm_1de4": 20.14
+   }
+  },
+  "vol_global->bonos": {
+   "H1": {
+    "n_pais_evento": 238,
+    "sd_nula_log": 0.01908,
+    "mde_pp_a5": 5.35,
+    "mde_pp_holm_1de4": 6.37
+   },
+   "H2": {
+    "n_pais_evento": 238,
+    "sd_nula_log": 0.0283,
+    "mde_pp_a5": 7.93,
+    "mde_pp_holm_1de4": 9.45
+   },
+   "H3": {
+    "n_pais_evento": 222,
+    "sd_nula_log": 0.03996,
+    "mde_pp_a5": 11.19,
+    "mde_pp_holm_1de4": 13.34
+   }
+  },
+  "vol_global->letras": {
+   "H1": {
+    "n_pais_evento": 237,
+    "sd_nula_log": 0.01002,
+    "mde_pp_a5": 2.81,
+    "mde_pp_holm_1de4": 3.35
+   },
+   "H2": {
+    "n_pais_evento": 237,
+    "sd_nula_log": 0.01391,
+    "mde_pp_a5": 3.9,
+    "mde_pp_holm_1de4": 4.65
+   },
+   "H3": {
+    "n_pais_evento": 220,
+    "sd_nula_log": 0.02103,
+    "mde_pp_a5": 5.89,
+    "mde_pp_holm_1de4": 7.02
+   }
+  },
+  "vol_global->vivienda": {
+   "H1": {
+    "n_pais_evento": 232,
+    "sd_nula_log": 0.00807,
+    "mde_pp_a5": 2.26,
+    "mde_pp_holm_1de4": 2.7
+   },
+   "H2": {
+    "n_pais_evento": 230,
+    "sd_nula_log": 0.01252,
+    "mde_pp_a5": 3.51,
+    "mde_pp_holm_1de4": 4.18
+   },
+   "H3": {
+    "n_pais_evento": 212,
+    "sd_nula_log": 0.01942,
+    "mde_pp_a5": 5.44,
+    "mde_pp_holm_1de4": 6.49
+   }
+  },
+  "dolar_global->bolsa": {
+   "H1": {
+    "n_pais_evento": 48,
+    "sd_nula_log": 0.07154,
+    "mde_pp_a5": 20.04,
+    "mde_pp_holm_1de4": 23.89
+   },
+   "H2": {
+    "n_pais_evento": 48,
+    "sd_nula_log": 0.10973,
+    "mde_pp_a5": 30.74,
+    "mde_pp_holm_1de4": 36.64
+   },
+   "H3": {
+    "n_pais_evento": 48,
+    "sd_nula_log": 0.11546,
+    "mde_pp_a5": 32.35,
+    "mde_pp_holm_1de4": 38.56
+   }
+  },
+  "dolar_global->bonos": {
+   "H1": {
+    "n_pais_evento": 48,
+    "sd_nula_log": 0.04529,
+    "mde_pp_a5": 12.69,
+    "mde_pp_holm_1de4": 15.12
+   },
+   "H2": {
+    "n_pais_evento": 48,
+    "sd_nula_log": 0.05969,
+    "mde_pp_a5": 16.72,
+    "mde_pp_holm_1de4": 19.93
+   },
+   "H3": {
+    "n_pais_evento": 48,
+    "sd_nula_log": 0.06902,
+    "mde_pp_a5": 19.34,
+    "mde_pp_holm_1de4": 23.05
+   }
+  },
+  "dolar_global->letras": {
+   "H1": {
+    "n_pais_evento": 48,
+    "sd_nula_log": 0.02236,
+    "mde_pp_a5": 6.26,
+    "mde_pp_holm_1de4": 7.47
+   },
+   "H2": {
+    "n_pais_evento": 48,
+    "sd_nula_log": 0.03137,
+    "mde_pp_a5": 8.79,
+    "mde_pp_holm_1de4": 10.48
+   },
+   "H3": {
+    "n_pais_evento": 48,
+    "sd_nula_log": 0.03767,
+    "mde_pp_a5": 10.55,
+    "mde_pp_holm_1de4": 12.58
+   }
+  },
+  "dolar_global->vivienda": {
+   "H1": {
+    "n_pais_evento": 48,
+    "sd_nula_log": 0.01948,
+    "mde_pp_a5": 5.46,
+    "mde_pp_holm_1de4": 6.5
+   },
+   "H2": {
+    "n_pais_evento": 48,
+    "sd_nula_log": 0.02607,
+    "mde_pp_a5": 7.3,
+    "mde_pp_holm_1de4": 8.71
+   },
+   "H3": {
+    "n_pais_evento": 48,
+    "sd_nula_log": 0.03361,
+    "mde_pp_a5": 9.42,
+    "mde_pp_holm_1de4": 11.22
+   }
+  }
+ },
+ "potencia_B": {
+  "vol_12m_anual_1931_2004": {
+   "n_pos": 16,
+   "n_neg": 58,
+   "rejilla": [
+    {
+     "b_extra": 0.0,
+     "potencia_auc": 0.0,
+     "potencia_brier": 0.0,
+     "delta_auc_medio": 0.0,
+     "delta_bss_medio": 0.0
+    },
+    {
+     "b_extra": 0.25,
+     "potencia_auc": 0.07,
+     "potencia_brier": 0.115,
+     "delta_auc_medio": 0.01,
+     "delta_bss_medio": 0.01
+    },
+    {
+     "b_extra": 0.5,
+     "potencia_auc": 0.21,
+     "potencia_brier": 0.205,
+     "delta_auc_medio": 0.032,
+     "delta_bss_medio": 0.036
+    },
+    {
+     "b_extra": 0.75,
+     "potencia_auc": 0.415,
+     "potencia_brier": 0.4,
+     "delta_auc_medio": 0.072,
+     "delta_bss_medio": 0.082
+    },
+    {
+     "b_extra": 1.0,
+     "potencia_auc": 0.5,
+     "potencia_brier": 0.44,
+     "delta_auc_medio": 0.103,
+     "delta_bss_medio": 0.118
+    },
+    {
+     "b_extra": 1.5,
+     "potencia_auc": 0.805,
+     "potencia_brier": 0.72,
+     "delta_auc_medio": 0.187,
+     "delta_bss_medio": 0.233
+    }
+   ],
+   "mde_delta_auc_80": 0.1856,
+   "mde_delta_bss_80": null
+  },
+  "petroleo_12m_anual_1890_2004": {
+   "n_pos": 13,
+   "n_neg": 96,
+   "rejilla": [
+    {
+     "b_extra": 0.0,
+     "potencia_auc": 0.0,
+     "potencia_brier": 0.0,
+     "delta_auc_medio": 0.0,
+     "delta_bss_medio": 0.0
+    },
+    {
+     "b_extra": 0.25,
+     "potencia_auc": 0.085,
+     "potencia_brier": 0.135,
+     "delta_auc_medio": 0.008,
+     "delta_bss_medio": 0.008
+    },
+    {
+     "b_extra": 0.5,
+     "potencia_auc": 0.215,
+     "potencia_brier": 0.21,
+     "delta_auc_medio": 0.034,
+     "delta_bss_medio": 0.029
+    },
+    {
+     "b_extra": 0.75,
+     "potencia_auc": 0.335,
+     "potencia_brier": 0.305,
+     "delta_auc_medio": 0.07,
+     "delta_bss_medio": 0.061
+    },
+    {
+     "b_extra": 1.0,
+     "potencia_auc": 0.54,
+     "potencia_brier": 0.49,
+     "delta_auc_medio": 0.11,
+     "delta_bss_medio": 0.102
+    },
+    {
+     "b_extra": 1.5,
+     "potencia_auc": 0.82,
+     "potencia_brier": 0.675,
+     "delta_auc_medio": 0.182,
+     "delta_bss_medio": 0.197
+    }
+   ],
+   "mde_delta_auc_80": 0.1769,
+   "mde_delta_bss_80": null
+  },
+  "dolar_12m_anual_1974_2004": {
+   "n_pos": 3,
+   "n_neg": 28,
+   "rejilla": [
+    {
+     "b_extra": 0.0,
+     "potencia_auc": 0.0,
+     "potencia_brier": 0.0,
+     "delta_auc_medio": 0.0,
+     "delta_bss_medio": 0.0
+    },
+    {
+     "b_extra": 0.25,
+     "potencia_auc": 0.05,
+     "potencia_brier": 0.13,
+     "delta_auc_medio": 0.011,
+     "delta_bss_medio": 0.006
+    },
+    {
+     "b_extra": 0.5,
+     "potencia_auc": 0.115,
+     "potencia_brier": 0.185,
+     "delta_auc_medio": 0.045,
+     "delta_bss_medio": 0.029
+    },
+    {
+     "b_extra": 0.75,
+     "potencia_auc": 0.19,
+     "potencia_brier": 0.235,
+     "delta_auc_medio": 0.061,
+     "delta_bss_medio": 0.064
+    },
+    {
+     "b_extra": 1.0,
+     "potencia_auc": 0.25,
+     "potencia_brier": 0.245,
+     "delta_auc_medio": 0.114,
+     "delta_bss_medio": 0.095
+    },
+    {
+     "b_extra": 1.5,
+     "potencia_auc": 0.405,
+     "potencia_brier": 0.37,
+     "delta_auc_medio": 0.172,
+     "delta_bss_medio": 0.173
+    }
+   ],
+   "mde_delta_auc_80": null,
+   "mde_delta_bss_80": null
+  },
+  "crisis_pais_año_n_eventos": {
+   "n_pos": 72,
+   "n_neg": 1900,
+   "rejilla": [
+    {
+     "b_extra": 0.0,
+     "potencia_auc": 0.0,
+     "potencia_brier": 0.0,
+     "delta_auc_medio": 0.0,
+     "delta_bss_medio": 0.0
+    },
+    {
+     "b_extra": 0.25,
+     "potencia_auc": 0.205,
+     "potencia_brier": 0.2,
+     "delta_auc_medio": 0.009,
+     "delta_bss_medio": 0.003
+    },
+    {
+     "b_extra": 0.5,
+     "potencia_auc": 0.6,
+     "potencia_brier": 0.46,
+     "delta_auc_medio": 0.034,
+     "delta_bss_medio": 0.013
+    },
+    {
+     "b_extra": 0.75,
+     "potencia_auc": 0.955,
+     "potencia_brier": 0.81,
+     "delta_auc_medio": 0.07,
+     "delta_bss_medio": 0.034
+    },
+    {
+     "b_extra": 1.0,
+     "potencia_auc": 0.995,
+     "potencia_brier": 0.93,
+     "delta_auc_medio": 0.107,
+     "delta_bss_medio": 0.058
+    },
+    {
+     "b_extra": 1.5,
+     "potencia_auc": 1.0,
+     "potencia_brier": 0.995,
+     "delta_auc_medio": 0.181,
+     "delta_bss_medio": 0.134
+    }
+   ],
+   "mde_delta_auc_80": 0.0543,
+   "mde_delta_bss_80": 0.0334
+  },
+  "crisis_pais_año_n_episodios": {
+   "n_pos": 23,
+   "n_neg": 475,
+   "rejilla": [
+    {
+     "b_extra": 0.0,
+     "potencia_auc": 0.0,
+     "potencia_brier": 0.0,
+     "delta_auc_medio": 0.0,
+     "delta_bss_medio": 0.0
+    },
+    {
+     "b_extra": 0.25,
+     "potencia_auc": 0.14,
+     "potencia_brier": 0.2,
+     "delta_auc_medio": 0.011,
+     "delta_bss_medio": 0.005
+    },
+    {
+     "b_extra": 0.5,
+     "potencia_auc": 0.34,
+     "potencia_brier": 0.27,
+     "delta_auc_medio": 0.035,
+     "delta_bss_medio": 0.015
+    },
+    {
+     "b_extra": 0.75,
+     "potencia_auc": 0.515,
+     "potencia_brier": 0.41,
+     "delta_auc_medio": 0.067,
+     "delta_bss_medio": 0.036
+    },
+    {
+     "b_extra": 1.0,
+     "potencia_auc": 0.73,
+     "potencia_brier": 0.6,
+     "delta_auc_medio": 0.104,
+     "delta_bss_medio": 0.067
+    },
+    {
+     "b_extra": 1.5,
+     "potencia_auc": 0.98,
+     "potencia_brier": 0.835,
+     "delta_auc_medio": 0.179,
+     "delta_bss_medio": 0.145
+    }
+   ],
+   "mde_delta_auc_80": 0.125,
+   "mde_delta_bss_80": 0.1334
+  }
+ },
+ "supuestos": {
+  "horizontes_mensuales": [
+   1,
+   3,
+   6,
+   12,
+   24
+  ],
+  "horizontes_anuales": [
+   1,
+   2,
+   3
+  ],
+  "alfas": {
+   "a5": 0.05,
+   "holm_1de4": 0.0125
+  },
+  "potencia": 0.8,
+  "ruido": "t de 5 g. l. con la sd marginal",
+  "guerras_excluidas_panel": [
+   1914,
+   1915,
+   1916,
+   1917,
+   1918,
+   1939,
+   1940,
+   1941,
+   1942,
+   1943,
+   1944,
+   1945
+  ],
+  "B": "logit; listón b=0,8 (AUC≈0,70); el modelo añade x2 con b_extra; oráculo de calibración; bootstrap pareado estratificado, unilateral 5 %"
+ },
+ "segundos": 237
+}
