@@ -411,7 +411,8 @@ def efecto_panel(r: pd.DataFrame, eventos: pd.DataFrame, H: int, comun: bool = F
 
 
 def placebo_panel(r: pd.DataFrame, eventos: pd.DataFrame, H: int, comun: bool, separacion: int, n_rep: int = 1000,
-                  semilla: int = 0, excluir_años: frozenset = frozenset(), desde: int = 1) -> np.ndarray:
+                  semilla: int = 0, excluir_años: frozenset = frozenset(), desde: int = 1,
+                  solo_con_dato: bool = False) -> np.ndarray:
     """Placebo de fechas para el panel. comun=False (eventos por país): para cada evento verdadero (país, año), un año
     falso del MISMO país entre sus años válidos (acumulada definida, no en `excluir_años`, a > H de cualquier evento
     verdadero del país), con separación ≥ `separacion` entre los falsos del país. comun=True: tantos años falsos
@@ -420,6 +421,15 @@ def placebo_panel(r: pd.DataFrame, eventos: pd.DataFrame, H: int, comun: bool, s
     acc = acumulada_panel(r, H, desde)
     años = acc.index.to_numpy()
     out = np.full(n_rep, np.nan)
+    if solo_con_dato:
+        # Corrección declarada (P-DEV-INT14, resultado §0): solo se sortea un año falso por cada evento que ENTRA en la
+        # estimación (acumulada definida). v1.0 exigía un falso también para eventos sin dato (p. ej. CAN 1907 sin
+        # rentabilidad JST, oro antes de 1969): imposible → 0 placebos válidos → p = 1 por construcción.
+        usados = efecto_panel(r, eventos, H, comun=comun, desde=desde)["detalle"]
+        eventos = (pd.DataFrame({"año": sorted(usados["año"].unique())}) if comun
+                   else usados[["pais", "año"]].reset_index(drop=True))
+        if not len(eventos):
+            return out
     if comun:
         verd = np.array(sorted({int(a) for a in eventos["año"]}))
         ok = acc.notna().any(axis=1).to_numpy() & ~np.isin(años, list(excluir_años))
