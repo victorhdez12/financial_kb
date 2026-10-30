@@ -38,6 +38,8 @@ FAMILIAS: dict[str, str] = {
     r"bis_creditgap_[a-z]{2}_ratio": "BIS crédito total al sector privado no financiero / PIB, trimestral",
     # INT-7 (docs/int/INT7_prerregistro_v1.md §9, decisión 4): Shiller, EE. UU., mensual 1871-
     r"shiller_(cape|real_price|real_earnings|real_dividend|real_stock_tr_ret_m)": "Shiller ie_data (EE. UU., mensual)",
+    # P-DEV-INT12 v1.0 (docs/int/INT12_prerregistro_v1.md §1): mercado de EE. UU. diario, letra y tipo largo de Shiller
+    r"aqr_mkt_usa_d|TB3MS|shiller_gs10": "INT-12: AQR mercado EE. UU. diario (CRSP), FRED TB3MS, Shiller tipo largo",
 }
 _RX = [re.compile(f"^(?:{p})$") for p in FAMILIAS]
 
