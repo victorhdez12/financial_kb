@@ -1,0 +1,7919 @@
+{
+ "procedencia": {
+  "commit": "5e1bc93700d6e8d8db419ba07f55a4a6e3a71b2f",
+  "arbol_limpio": true,
+  "hora_utc": "2026-10-30T12:31:59+00:00"
+ },
+ "borrador": false,
+ "reps": 300,
+ "reps_panel": 100,
+ "inventario": {
+  "rentabilidad_diaria_EEUU": {
+   "aqr_mkt_usa_d": {
+    "frecuencia": "D",
+    "fuente": "aqr",
+    "desde": "1926-07-01",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 21048,
+    "obs_post_2004": 5651,
+    "vintages_distintas": 0
+   }
+  },
+  "rentabilidad_diaria_otros": {
+   "aqr_mkt_global_d": {
+    "frecuencia": "D",
+    "fuente": "aqr",
+    "desde": "1984-01-02",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 5480,
+    "obs_post_2004": 5651,
+    "vintages_distintas": 0
+   },
+   "aqr_mkt_europe_d": {
+    "frecuencia": "D",
+    "fuente": "aqr",
+    "desde": "1986-01-01",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 4958,
+    "obs_post_2004": 5651,
+    "vintages_distintas": 0
+   },
+   "ffx_dev_mkt_rf_d": {
+    "frecuencia": "D",
+    "fuente": "ken_french_intl",
+    "desde": "1990-07-02",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 3785,
+    "obs_post_2004": 5651,
+    "vintages_distintas": 0
+   },
+   "NASDAQCOM": {
+    "frecuencia": "D",
+    "fuente": "fred",
+    "desde": "1971-02-05",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 8560,
+    "obs_post_2004": 5492,
+    "vintages_distintas": 0
+   }
+  },
+  "rentabilidad_mensual_larga": {
+   "shiller_nominal_stock_tr_ret_m": {
+    "frecuencia": "M",
+    "fuente": "shiller",
+    "desde": "1871-02-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 1607,
+    "obs_post_2004": 262,
+    "vintages_distintas": 0
+   },
+   "shiller_sp_price": {
+    "frecuencia": "M",
+    "fuente": "shiller",
+    "desde": "1871-01-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 1608,
+    "obs_post_2004": 262,
+    "vintages_distintas": 0
+   },
+   "ff_mkt_rf_m": {
+    "frecuencia": "M",
+    "fuente": "ken_french",
+    "desde": "1926-07-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 942,
+    "obs_post_2004": 260,
+    "vintages_distintas": 0
+   }
+  },
+  "volatilidad_implicita": {
+   "VIXCLS": {
+    "frecuencia": "D",
+    "fuente": "fred",
+    "desde": "1990-01-02",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 3782,
+    "obs_post_2004": 5523,
+    "vintages_distintas": 0
+   },
+   "VXDCLS": {
+    "frecuencia": "D",
+    "fuente": "fred_us",
+    "desde": "1997-10-07",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 1819,
+    "obs_post_2004": 5489,
+    "vintages_distintas": 0
+   },
+   "VXNCLS": {
+    "frecuencia": "D",
+    "fuente": "fred_us",
+    "desde": "2001-02-02",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 981,
+    "obs_post_2004": 5488,
+    "vintages_distintas": 0
+   },
+   "cboe_skew": {
+    "frecuencia": "D",
+    "fuente": "cboe",
+    "desde": "1990-01-02",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 3773,
+    "obs_post_2004": 5486,
+    "vintages_distintas": 0
+   },
+   "cboe_vx_f1": {
+    "frecuencia": "D",
+    "fuente": "cboe_vx",
+    "desde": "2004-03-26",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 194,
+    "obs_post_2004": 5494,
+    "vintages_distintas": 0
+   }
+  },
+  "credito": {
+   "BAA": {
+    "frecuencia": "M",
+    "fuente": "fred",
+    "desde": "1919-01-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 1032,
+    "obs_post_2004": 261,
+    "vintages_distintas": 0
+   },
+   "AAA": {
+    "frecuencia": "M",
+    "fuente": "fred",
+    "desde": "1919-01-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 1032,
+    "obs_post_2004": 261,
+    "vintages_distintas": 0
+   },
+   "DBAA": {
+    "frecuencia": "D",
+    "fuente": "fred_us",
+    "desde": "1986-01-02",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 4782,
+    "obs_post_2004": 5456,
+    "vintages_distintas": 0
+   },
+   "DAAA": {
+    "frecuencia": "D",
+    "fuente": "fred_us",
+    "desde": "1983-01-03",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 5541,
+    "obs_post_2004": 5456,
+    "vintages_distintas": 0
+   },
+   "BAA10Y": {
+    "frecuencia": "D",
+    "fuente": "fred",
+    "desde": "1986-01-02",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 4751,
+    "obs_post_2004": 5455,
+    "vintages_distintas": 0
+   },
+   "TEDRATE": {
+    "frecuencia": "D",
+    "fuente": "fred",
+    "desde": "1986-01-02",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 4666,
+    "obs_post_2004": 4187,
+    "vintages_distintas": 0
+   },
+   "CPFF": {
+    "frecuencia": "D",
+    "fuente": "fred_us",
+    "desde": "1997-01-02",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 2003,
+    "obs_post_2004": 4753,
+    "vintages_distintas": 0
+   },
+   "NFCI": {
+    "frecuencia": "W",
+    "fuente": "fred",
+    "desde": "1971-01-08",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 1774,
+    "obs_post_2004": 1138,
+    "vintages_distintas": 0
+   },
+   "STLFSI4": {
+    "frecuencia": "W",
+    "fuente": "fred",
+    "desde": "1993-12-31",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 575,
+    "obs_post_2004": 1138,
+    "vintages_distintas": 0
+   }
+  },
+  "tipos_curva": {
+   "TB3MS": {
+    "frecuencia": "M",
+    "fuente": "fred",
+    "desde": "1934-01-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 852,
+    "obs_post_2004": 261,
+    "vintages_distintas": 0
+   },
+   "GS10": {
+    "frecuencia": "M",
+    "fuente": "fred",
+    "desde": "1953-04-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 621,
+    "obs_post_2004": 261,
+    "vintages_distintas": 0
+   },
+   "GS1": {
+    "frecuencia": "M",
+    "fuente": "fred",
+    "desde": "1953-04-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 621,
+    "obs_post_2004": 261,
+    "vintages_distintas": 0
+   },
+   "FEDFUNDS": {
+    "frecuencia": "M",
+    "fuente": "fred",
+    "desde": "1954-07-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 606,
+    "obs_post_2004": 261,
+    "vintages_distintas": 0
+   },
+   "DTB3": {
+    "frecuencia": "D",
+    "fuente": "fred",
+    "desde": "1954-01-04",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 12737,
+    "obs_post_2004": 5460,
+    "vintages_distintas": 0
+   },
+   "DGS10": {
+    "frecuencia": "D",
+    "fuente": "fred",
+    "desde": "1962-01-02",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 10731,
+    "obs_post_2004": 5460,
+    "vintages_distintas": 0
+   },
+   "T10Y3M": {
+    "frecuencia": "D",
+    "fuente": "fred",
+    "desde": "1982-01-04",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 5748,
+    "obs_post_2004": 5461,
+    "vintages_distintas": 0
+   },
+   "T10Y2Y": {
+    "frecuencia": "D",
+    "fuente": "fred",
+    "desde": "1976-06-01",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 7139,
+    "obs_post_2004": 5461,
+    "vintages_distintas": 0
+   }
+  },
+  "estres_incertidumbre": {
+   "ecb_ciss_new_ea_d": {
+    "frecuencia": "D",
+    "fuente": "ecb",
+    "desde": "1980-01-03",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 6522,
+    "obs_post_2004": 5701,
+    "vintages_distintas": 0
+   },
+   "USEPUINDXD": {
+    "frecuencia": "D",
+    "fuente": "fred_us",
+    "desde": "1985-01-01",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 7305,
+    "obs_post_2004": 7965,
+    "vintages_distintas": 0
+   }
+  },
+  "macro_mensual_vintages": {
+   "INDPRO": {
+    "frecuencia": "M",
+    "fuente": "fred",
+    "desde": "1919-01-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 1032,
+    "obs_post_2004": 261,
+    "vintages_distintas": 1224
+   },
+   "PAYEMS": {
+    "frecuencia": "M",
+    "fuente": "fred",
+    "desde": "1939-01-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 792,
+    "obs_post_2004": 261,
+    "vintages_distintas": 860
+   },
+   "CPIAUCSL": {
+    "frecuencia": "M",
+    "fuente": "fred",
+    "desde": "1947-01-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 696,
+    "obs_post_2004": 260,
+    "vintages_distintas": 670
+   },
+   "UNRATE": {
+    "frecuencia": "M",
+    "fuente": "fred",
+    "desde": "1948-01-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 684,
+    "obs_post_2004": 260,
+    "vintages_distintas": 800
+   },
+   "ICSA": {
+    "frecuencia": "W",
+    "fuente": "fred",
+    "desde": "1967-01-07",
+    "ultimo_le_2004": "2004-12-25",
+    "obs_le_2004": 1982,
+    "obs_post_2004": 1139,
+    "vintages_distintas": 903
+   },
+   "UMCSENT": {
+    "frecuencia": "M",
+    "fuente": "fred",
+    "desde": "1952-11-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 416,
+    "obs_post_2004": 261,
+    "vintages_distintas": 0
+   },
+   "USREC": {
+    "frecuencia": "M",
+    "fuente": "fred",
+    "desde": "1854-12-01",
+    "ultimo_le_2004": "2004-12-01",
+    "obs_le_2004": 1801,
+    "obs_post_2004": 261,
+    "vintages_distintas": 0
+   }
+  },
+  "divisa_B1": {
+   "bundesbank_usd_dem_d": {
+    "frecuencia": "D",
+    "fuente": "bundesbank",
+    "desde": "1948-06-21",
+    "ultimo_le_2004": "1998-12-30",
+    "obs_le_2004": 13050,
+    "obs_post_2004": 0,
+    "vintages_distintas": 0
+   },
+   "ecb_eurusd_d": {
+    "frecuencia": "D",
+    "fuente": "ecb",
+    "desde": "1999-01-04",
+    "ultimo_le_2004": "2004-12-31",
+    "obs_le_2004": 1537,
+    "obs_post_2004": 5588,
+    "vintages_distintas": 0
+   },
+   "SP500": {
+    "frecuencia": "D",
+    "fuente": "fred",
+    "desde": "2016-10-07",
+    "ultimo_le_2004": null,
+    "obs_le_2004": 0,
+    "obs_post_2004": 2528,
+    "vintages_distintas": 0
+   }
+  }
+ },
+ "objetivos_marginales_EEUU": {
+  "1926-07-01": {
+   "desde": "1926-07-01",
+   "dias": 21048,
+   "origenes_1m": 941,
+   "origenes_3m": 939,
+   "vol_anual_media_sqrt_media_rv": 0.1666,
+   "sd_log_rv1m": 1.0285,
+   "curtosis_diaria": 20.46,
+   "deriva_diaria": 0.000269,
+   "caidas10_3m": {
+    "origenes": 939,
+    "eventos": 147,
+    "tasa": 0.1565,
+    "episodios_gap3": 39,
+    "años_distintos": 38
+   },
+   "meses_rv_top10pct": 95,
+   "episodios_rv_top10pct_gap3": 29
+  },
+  "1950-01-01": {
+   "desde": "1950-01-01",
+   "dias": 14105,
+   "origenes_1m": 659,
+   "origenes_3m": 657,
+   "vol_anual_media_sqrt_media_rv": 0.1345,
+   "sd_log_rv1m": 0.8856,
+   "curtosis_diaria": 21.57,
+   "deriva_diaria": 0.000277,
+   "caidas10_3m": {
+    "origenes": 657,
+    "eventos": 80,
+    "tasa": 0.1218,
+    "episodios_gap3": 25,
+    "años_distintos": 24
+   },
+   "meses_rv_top10pct": 66,
+   "episodios_rv_top10pct_gap3": 29
+  },
+  "1960-01-01": {
+   "desde": "1960-01-01",
+   "dias": 11507,
+   "origenes_1m": 539,
+   "origenes_3m": 537,
+   "vol_anual_media_sqrt_media_rv": 0.1407,
+   "sd_log_rv1m": 0.907,
+   "curtosis_diaria": 21.23,
+   "deriva_diaria": 0.000205,
+   "caidas10_3m": {
+    "origenes": 537,
+    "eventos": 75,
+    "tasa": 0.1397,
+    "episodios_gap3": 22,
+    "años_distintos": 21
+   },
+   "meses_rv_top10pct": 54,
+   "episodios_rv_top10pct_gap3": 20
+  },
+  "1990-01-01": {
+   "desde": "1990-01-01",
+   "dias": 3915,
+   "origenes_1m": 179,
+   "origenes_3m": 177,
+   "vol_anual_media_sqrt_media_rv": 0.1593,
+   "sd_log_rv1m": 0.9066,
+   "curtosis_diaria": 7.21,
+   "deriva_diaria": 0.000282,
+   "caidas10_3m": {
+    "origenes": 177,
+    "eventos": 24,
+    "tasa": 0.1356,
+    "episodios_gap3": 5,
+    "años_distintos": 5
+   },
+   "meses_rv_top10pct": 18,
+   "episodios_rv_top10pct_gap3": 7
+  }
+ },
+ "panel_corr_contemporanea": {
+  "paises": [
+   "aqr_mkt_aus_d",
+   "aqr_mkt_aut_d",
+   "aqr_mkt_bel_d",
+   "aqr_mkt_can_d",
+   "aqr_mkt_che_d",
+   "aqr_mkt_deu_d",
+   "aqr_mkt_dnk_d",
+   "aqr_mkt_esp_d",
+   "aqr_mkt_fin_d",
+   "aqr_mkt_fra_d",
+   "aqr_mkt_gbr_d",
+   "aqr_mkt_grc_d",
+   "aqr_mkt_hkg_d",
+   "aqr_mkt_irl_d",
+   "aqr_mkt_ita_d",
+   "aqr_mkt_jpn_d",
+   "aqr_mkt_nld_d",
+   "aqr_mkt_nor_d",
+   "aqr_mkt_nzl_d",
+   "aqr_mkt_prt_d",
+   "aqr_mkt_sgp_d",
+   "aqr_mkt_swe_d",
+   "aqr_mkt_usa_d"
+  ],
+  "k": 23,
+  "meses": 168,
+  "corr_media_log_rv1m": 0.5265,
+  "k_efectivo": 1.828
+ },
+ "proceso": {
+  "phi": [
+   0.9985,
+   0.97,
+   0.75
+  ],
+  "sd": [
+   0.45,
+   0.45,
+   0.35
+  ],
+  "rho": [
+   0.0,
+   -0.45,
+   -0.45
+  ],
+  "nu": 6.0,
+  "vol_anual": 0.1345,
+  "deriva_diaria": 0.000277,
+  "escala_sd": 1.1882354736328127,
+  "mu": -9.914200806277751,
+  "nota": "persistencias de la literatura; nivel/dispersión marginales"
+ },
+ "proceso_sensibilidad_dispersion_baja": {
+  "phi": [
+   0.9985,
+   0.97,
+   0.75
+  ],
+  "sd": [
+   0.45,
+   0.45,
+   0.35
+  ],
+  "rho": [
+   0.0,
+   -0.45,
+   -0.45
+  ],
+  "nu": 6.0,
+  "vol_anual": 0.1345,
+  "deriva_diaria": 0.000277,
+  "escala_sd": 0.8621185302734375,
+  "mu": -9.73784300240543
+ },
+ "simulacion": {
+  "A_EEUU_1950-2004": {
+   "h1": {
+    "critico_nula_95": {
+     "qlike": 1.691,
+     "pinball": 1.738,
+     "fz0": 1.715,
+     "brier": 1.076
+    },
+    "tamaño_real_con_1.645": {
+     "qlike": 0.057,
+     "pinball": 0.07,
+     "fz0": 0.067,
+     "brier": 0.003
+    },
+    "n_efectivo_dif_qlike_(w=0.3)": 705.3,
+    "tasa_caida10_sim": 0.0191,
+    "sd_log_rv_sim": 0.8697,
+    "curtosis_diaria_sim": 12.72,
+    "contrastes": {
+     "har_vs_b1_12m": {
+      "qlike": {
+       "ganancia_rel": 0.4773,
+       "fraccion_recorrido_constante_oraculo": 1.0674,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0581,
+       "fraccion_recorrido_constante_oraculo": 0.7242,
+       "potencia": 0.58,
+       "potencia_crit_normal": 0.603
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.7354,
+       "potencia": 0.613,
+       "potencia_crit_normal": 0.64
+      },
+      "brier": {
+       "ganancia_rel": 0.0118,
+       "fraccion_recorrido_constante_oraculo": 0.2844,
+       "potencia": 0.093,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "har_vs_ewma": {
+      "qlike": {
+       "ganancia_rel": 0.188,
+       "fraccion_recorrido_constante_oraculo": 0.2705,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0125,
+       "fraccion_recorrido_constante_oraculo": 0.1487,
+       "potencia": 0.25,
+       "potencia_crit_normal": 0.273
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1203,
+       "potencia": 0.173,
+       "potencia_crit_normal": 0.18
+      },
+      "brier": {
+       "ganancia_rel": 0.0006,
+       "fraccion_recorrido_constante_oraculo": 0.0146,
+       "potencia": 0.083,
+       "potencia_crit_normal": 0.007
+      }
+     },
+     "oraculo_vs_har_(techo)": {
+      "qlike": {
+       "ganancia_rel": 0.3164,
+       "fraccion_recorrido_constante_oraculo": 0.3698,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0343,
+       "fraccion_recorrido_constante_oraculo": 0.4027,
+       "potencia": 0.407,
+       "potencia_crit_normal": 0.467
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3991,
+       "potencia": 0.517,
+       "potencia_crit_normal": 0.543
+      },
+      "brier": {
+       "ganancia_rel": 0.0201,
+       "fraccion_recorrido_constante_oraculo": 0.4782,
+       "potencia": 0.207,
+       "potencia_crit_normal": 0.02
+      }
+     },
+     "ml_w0.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": -0.0055,
+       "fraccion_recorrido_constante_oraculo": -0.0065,
+       "potencia": 0.0,
+       "potencia_crit_normal": 0.003
+      },
+      "pinball": {
+       "ganancia_rel": -0.0008,
+       "fraccion_recorrido_constante_oraculo": -0.0094,
+       "potencia": 0.02,
+       "potencia_crit_normal": 0.03
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": -0.0085,
+       "potencia": 0.027,
+       "potencia_crit_normal": 0.03
+      },
+      "brier": {
+       "ganancia_rel": -0.0002,
+       "fraccion_recorrido_constante_oraculo": -0.0042,
+       "potencia": 0.04,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "ml_w0.05_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0255,
+       "fraccion_recorrido_constante_oraculo": 0.0298,
+       "potencia": 0.963,
+       "potencia_crit_normal": 0.967
+      },
+      "pinball": {
+       "ganancia_rel": 0.0023,
+       "fraccion_recorrido_constante_oraculo": 0.0273,
+       "potencia": 0.14,
+       "potencia_crit_normal": 0.147
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.028,
+       "potencia": 0.183,
+       "potencia_crit_normal": 0.21
+      },
+      "brier": {
+       "ganancia_rel": 0.0013,
+       "fraccion_recorrido_constante_oraculo": 0.0314,
+       "potencia": 0.11,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "ml_w0.1_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0549,
+       "fraccion_recorrido_constante_oraculo": 0.0641,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0053,
+       "fraccion_recorrido_constante_oraculo": 0.0624,
+       "potencia": 0.343,
+       "potencia_crit_normal": 0.36
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0629,
+       "potencia": 0.43,
+       "potencia_crit_normal": 0.463
+      },
+      "brier": {
+       "ganancia_rel": 0.0028,
+       "fraccion_recorrido_constante_oraculo": 0.0672,
+       "potencia": 0.187,
+       "potencia_crit_normal": 0.02
+      }
+     },
+     "ml_w0.15_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0826,
+       "fraccion_recorrido_constante_oraculo": 0.0966,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0081,
+       "fraccion_recorrido_constante_oraculo": 0.0954,
+       "potencia": 0.473,
+       "potencia_crit_normal": 0.517
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.096,
+       "potencia": 0.607,
+       "potencia_crit_normal": 0.633
+      },
+      "brier": {
+       "ganancia_rel": 0.0043,
+       "fraccion_recorrido_constante_oraculo": 0.1031,
+       "potencia": 0.23,
+       "potencia_crit_normal": 0.023
+      }
+     },
+     "ml_w0.2_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.1088,
+       "fraccion_recorrido_constante_oraculo": 0.1272,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0108,
+       "fraccion_recorrido_constante_oraculo": 0.1267,
+       "potencia": 0.58,
+       "potencia_crit_normal": 0.613
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1274,
+       "potencia": 0.683,
+       "potencia_crit_normal": 0.697
+      },
+      "brier": {
+       "ganancia_rel": 0.0058,
+       "fraccion_recorrido_constante_oraculo": 0.1385,
+       "potencia": 0.26,
+       "potencia_crit_normal": 0.03
+      }
+     },
+     "ml_w0.3_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.1564,
+       "fraccion_recorrido_constante_oraculo": 0.1828,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0156,
+       "fraccion_recorrido_constante_oraculo": 0.1836,
+       "potencia": 0.64,
+       "potencia_crit_normal": 0.673
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1849,
+       "potencia": 0.72,
+       "potencia_crit_normal": 0.76
+      },
+      "brier": {
+       "ganancia_rel": 0.0087,
+       "fraccion_recorrido_constante_oraculo": 0.2068,
+       "potencia": 0.27,
+       "potencia_crit_normal": 0.023
+      }
+     },
+     "ml_w0.45_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.216,
+       "fraccion_recorrido_constante_oraculo": 0.2524,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0218,
+       "fraccion_recorrido_constante_oraculo": 0.2565,
+       "potencia": 0.637,
+       "potencia_crit_normal": 0.683
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.258,
+       "potencia": 0.713,
+       "potencia_crit_normal": 0.737
+      },
+      "brier": {
+       "ganancia_rel": 0.0126,
+       "fraccion_recorrido_constante_oraculo": 0.2986,
+       "potencia": 0.257,
+       "potencia_crit_normal": 0.027
+      }
+     },
+     "ml_w0.6_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2613,
+       "fraccion_recorrido_constante_oraculo": 0.3054,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0267,
+       "fraccion_recorrido_constante_oraculo": 0.3141,
+       "potencia": 0.593,
+       "potencia_crit_normal": 0.627
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3154,
+       "potencia": 0.693,
+       "potencia_crit_normal": 0.703
+      },
+      "brier": {
+       "ganancia_rel": 0.0157,
+       "fraccion_recorrido_constante_oraculo": 0.3723,
+       "potencia": 0.25,
+       "potencia_crit_normal": 0.023
+      }
+     },
+     "ml_w0.8_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2992,
+       "fraccion_recorrido_constante_oraculo": 0.3498,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0314,
+       "fraccion_recorrido_constante_oraculo": 0.3684,
+       "potencia": 0.497,
+       "potencia_crit_normal": 0.54
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3677,
+       "potencia": 0.617,
+       "potencia_crit_normal": 0.627
+      },
+      "brier": {
+       "ganancia_rel": 0.0184,
+       "fraccion_recorrido_constante_oraculo": 0.4379,
+       "potencia": 0.227,
+       "potencia_crit_normal": 0.023
+      }
+     },
+     "ml_w1.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.3108,
+       "fraccion_recorrido_constante_oraculo": 0.3632,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0337,
+       "fraccion_recorrido_constante_oraculo": 0.3959,
+       "potencia": 0.38,
+       "potencia_crit_normal": 0.44
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3916,
+       "potencia": 0.487,
+       "potencia_crit_normal": 0.523
+      },
+      "brier": {
+       "ganancia_rel": 0.0198,
+       "fraccion_recorrido_constante_oraculo": 0.4691,
+       "potencia": 0.207,
+       "potencia_crit_normal": 0.02
+      }
+     }
+    },
+    "mde": {
+     "qlike": {
+      "ganancia_qlike_en_w": [
+       -0.0055,
+       0.0255,
+       0.0549,
+       0.0826,
+       0.1088,
+       0.1564,
+       0.216,
+       0.2613,
+       0.2992,
+       0.3108
+      ],
+      "potencia_en_w": [
+       0.0,
+       0.963,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0065,
+       0.0298,
+       0.0641,
+       0.0966,
+       0.1272,
+       0.1828,
+       0.2524,
+       0.3054,
+       0.3498,
+       0.3632
+      ],
+      "mde_ganancia_qlike": 0.0203,
+      "potencia_si_ganancia_0.02": 0.792,
+      "potencia_si_ganancia_0.05": 0.994,
+      "potencia_si_ganancia_0.1": 1.0
+     },
+     "pinball": {
+      "ganancia_qlike_en_w": [
+       -0.0055,
+       0.0255,
+       0.0549,
+       0.0826,
+       0.1088,
+       0.1564,
+       0.216,
+       0.2613,
+       0.2992,
+       0.3108
+      ],
+      "potencia_en_w": [
+       0.02,
+       0.14,
+       0.343,
+       0.473,
+       0.58,
+       0.64,
+       0.637,
+       0.593,
+       0.497,
+       0.38
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0094,
+       0.0273,
+       0.0624,
+       0.0954,
+       0.1267,
+       0.1836,
+       0.2565,
+       0.3141,
+       0.3684,
+       0.3959
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "fz0": {
+      "ganancia_qlike_en_w": [
+       -0.0055,
+       0.0255,
+       0.0549,
+       0.0826,
+       0.1088,
+       0.1564,
+       0.216,
+       0.2613,
+       0.2992,
+       0.3108
+      ],
+      "potencia_en_w": [
+       0.027,
+       0.183,
+       0.43,
+       0.607,
+       0.683,
+       0.72,
+       0.713,
+       0.693,
+       0.617,
+       0.487
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0085,
+       0.028,
+       0.0629,
+       0.096,
+       0.1274,
+       0.1849,
+       0.258,
+       0.3154,
+       0.3677,
+       0.3916
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "brier": {
+      "ganancia_qlike_en_w": [
+       -0.0055,
+       0.0255,
+       0.0549,
+       0.0826,
+       0.1088,
+       0.1564,
+       0.216,
+       0.2613,
+       0.2992,
+       0.3108
+      ],
+      "potencia_en_w": [
+       0.04,
+       0.11,
+       0.187,
+       0.23,
+       0.26,
+       0.27,
+       0.257,
+       0.25,
+       0.227,
+       0.207
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0042,
+       0.0314,
+       0.0672,
+       0.1031,
+       0.1385,
+       0.2068,
+       0.2986,
+       0.3723,
+       0.4379,
+       0.4691
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     }
+    }
+   },
+   "h3": {
+    "critico_nula_95": {
+     "qlike": 1.811,
+     "pinball": 1.721,
+     "fz0": 1.89,
+     "brier": 1.282
+    },
+    "tamaño_real_con_1.645": {
+     "qlike": 0.07,
+     "pinball": 0.067,
+     "fz0": 0.073,
+     "brier": 0.007
+    },
+    "n_efectivo_dif_qlike_(w=0.3)": 352.7,
+    "tasa_caida10_sim": 0.0894,
+    "sd_log_rv_sim": 0.7265,
+    "curtosis_diaria_sim": 12.72,
+    "contrastes": {
+     "har_vs_b1_12m": {
+      "qlike": {
+       "ganancia_rel": 0.5503,
+       "fraccion_recorrido_constante_oraculo": 1.4548,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0453,
+       "fraccion_recorrido_constante_oraculo": 0.8025,
+       "potencia": 0.343,
+       "potencia_crit_normal": 0.363
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.8254,
+       "potencia": 0.247,
+       "potencia_crit_normal": 0.343
+      },
+      "brier": {
+       "ganancia_rel": 0.0129,
+       "fraccion_recorrido_constante_oraculo": 0.2528,
+       "potencia": 0.157,
+       "potencia_crit_normal": 0.023
+      }
+     },
+     "har_vs_ewma": {
+      "qlike": {
+       "ganancia_rel": 0.365,
+       "fraccion_recorrido_constante_oraculo": 0.6836,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0191,
+       "fraccion_recorrido_constante_oraculo": 0.329,
+       "potencia": 0.273,
+       "potencia_crit_normal": 0.297
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.2581,
+       "potencia": 0.18,
+       "potencia_crit_normal": 0.233
+      },
+      "brier": {
+       "ganancia_rel": 0.0002,
+       "fraccion_recorrido_constante_oraculo": 0.0032,
+       "potencia": 0.04,
+       "potencia_crit_normal": 0.007
+      }
+     },
+     "oraculo_vs_har_(techo)": {
+      "qlike": {
+       "ganancia_rel": 0.3251,
+       "fraccion_recorrido_constante_oraculo": 0.3866,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0252,
+       "fraccion_recorrido_constante_oraculo": 0.4264,
+       "potencia": 0.303,
+       "potencia_crit_normal": 0.323
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.4291,
+       "potencia": 0.32,
+       "potencia_crit_normal": 0.42
+      },
+      "brier": {
+       "ganancia_rel": 0.0219,
+       "fraccion_recorrido_constante_oraculo": 0.4228,
+       "potencia": 0.41,
+       "potencia_crit_normal": 0.183
+      }
+     },
+     "ml_w0.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": -0.0082,
+       "fraccion_recorrido_constante_oraculo": -0.0098,
+       "potencia": 0.0,
+       "potencia_crit_normal": 0.003
+      },
+      "pinball": {
+       "ganancia_rel": -0.0007,
+       "fraccion_recorrido_constante_oraculo": -0.0118,
+       "potencia": 0.02,
+       "potencia_crit_normal": 0.023
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": -0.0133,
+       "potencia": 0.017,
+       "potencia_crit_normal": 0.027
+      },
+      "brier": {
+       "ganancia_rel": -0.0005,
+       "fraccion_recorrido_constante_oraculo": -0.0088,
+       "potencia": 0.033,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "ml_w0.05_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0239,
+       "fraccion_recorrido_constante_oraculo": 0.0284,
+       "potencia": 0.733,
+       "potencia_crit_normal": 0.787
+      },
+      "pinball": {
+       "ganancia_rel": 0.0015,
+       "fraccion_recorrido_constante_oraculo": 0.0246,
+       "potencia": 0.073,
+       "potencia_crit_normal": 0.093
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0235,
+       "potencia": 0.08,
+       "potencia_crit_normal": 0.117
+      },
+      "brier": {
+       "ganancia_rel": 0.0014,
+       "fraccion_recorrido_constante_oraculo": 0.0274,
+       "potencia": 0.11,
+       "potencia_crit_normal": 0.043
+      }
+     },
+     "ml_w0.1_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0543,
+       "fraccion_recorrido_constante_oraculo": 0.0645,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0035,
+       "fraccion_recorrido_constante_oraculo": 0.06,
+       "potencia": 0.187,
+       "potencia_crit_normal": 0.217
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0589,
+       "potencia": 0.187,
+       "potencia_crit_normal": 0.25
+      },
+      "brier": {
+       "ganancia_rel": 0.0033,
+       "fraccion_recorrido_constante_oraculo": 0.0631,
+       "potencia": 0.237,
+       "potencia_crit_normal": 0.077
+      }
+     },
+     "ml_w0.15_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.083,
+       "fraccion_recorrido_constante_oraculo": 0.0987,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0056,
+       "fraccion_recorrido_constante_oraculo": 0.0941,
+       "potencia": 0.273,
+       "potencia_crit_normal": 0.3
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0928,
+       "potencia": 0.303,
+       "potencia_crit_normal": 0.403
+      },
+      "brier": {
+       "ganancia_rel": 0.0051,
+       "fraccion_recorrido_constante_oraculo": 0.0981,
+       "potencia": 0.36,
+       "potencia_crit_normal": 0.157
+      }
+     },
+     "ml_w0.2_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.1101,
+       "fraccion_recorrido_constante_oraculo": 0.1309,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0074,
+       "fraccion_recorrido_constante_oraculo": 0.1259,
+       "potencia": 0.343,
+       "potencia_crit_normal": 0.367
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.125,
+       "potencia": 0.4,
+       "potencia_crit_normal": 0.467
+      },
+      "brier": {
+       "ganancia_rel": 0.0068,
+       "fraccion_recorrido_constante_oraculo": 0.1319,
+       "potencia": 0.423,
+       "potencia_crit_normal": 0.187
+      }
+     },
+     "ml_w0.3_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.1593,
+       "fraccion_recorrido_constante_oraculo": 0.1894,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0109,
+       "fraccion_recorrido_constante_oraculo": 0.1846,
+       "potencia": 0.443,
+       "potencia_crit_normal": 0.46
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1844,
+       "potencia": 0.457,
+       "potencia_crit_normal": 0.543
+      },
+      "brier": {
+       "ganancia_rel": 0.0101,
+       "fraccion_recorrido_constante_oraculo": 0.1951,
+       "potencia": 0.463,
+       "potencia_crit_normal": 0.233
+      }
+     },
+     "ml_w0.45_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2207,
+       "fraccion_recorrido_constante_oraculo": 0.2624,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0154,
+       "fraccion_recorrido_constante_oraculo": 0.261,
+       "potencia": 0.447,
+       "potencia_crit_normal": 0.49
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.2616,
+       "potencia": 0.48,
+       "potencia_crit_normal": 0.56
+      },
+      "brier": {
+       "ganancia_rel": 0.0143,
+       "fraccion_recorrido_constante_oraculo": 0.2758,
+       "potencia": 0.483,
+       "potencia_crit_normal": 0.247
+      }
+     },
+     "ml_w0.6_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2672,
+       "fraccion_recorrido_constante_oraculo": 0.3177,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0191,
+       "fraccion_recorrido_constante_oraculo": 0.323,
+       "potencia": 0.417,
+       "potencia_crit_normal": 0.45
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3242,
+       "potencia": 0.433,
+       "potencia_crit_normal": 0.53
+      },
+      "brier": {
+       "ganancia_rel": 0.0174,
+       "fraccion_recorrido_constante_oraculo": 0.3368,
+       "potencia": 0.483,
+       "potencia_crit_normal": 0.217
+      }
+     },
+     "ml_w0.8_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.3058,
+       "fraccion_recorrido_constante_oraculo": 0.3636,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0226,
+       "fraccion_recorrido_constante_oraculo": 0.3828,
+       "potencia": 0.36,
+       "potencia_crit_normal": 0.387
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.384,
+       "potencia": 0.4,
+       "potencia_crit_normal": 0.453
+      },
+      "brier": {
+       "ganancia_rel": 0.0201,
+       "fraccion_recorrido_constante_oraculo": 0.3881,
+       "potencia": 0.44,
+       "potencia_crit_normal": 0.197
+      }
+     },
+     "ml_w1.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.3171,
+       "fraccion_recorrido_constante_oraculo": 0.377,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0244,
+       "fraccion_recorrido_constante_oraculo": 0.4135,
+       "potencia": 0.297,
+       "potencia_crit_normal": 0.32
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.4158,
+       "potencia": 0.31,
+       "potencia_crit_normal": 0.403
+      },
+      "brier": {
+       "ganancia_rel": 0.0213,
+       "fraccion_recorrido_constante_oraculo": 0.4105,
+       "potencia": 0.397,
+       "potencia_crit_normal": 0.167
+      }
+     }
+    },
+    "mde": {
+     "qlike": {
+      "ganancia_qlike_en_w": [
+       -0.0082,
+       0.0239,
+       0.0543,
+       0.083,
+       0.1101,
+       0.1593,
+       0.2207,
+       0.2672,
+       0.3058,
+       0.3171
+      ],
+      "potencia_en_w": [
+       0.0,
+       0.733,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0098,
+       0.0284,
+       0.0645,
+       0.0987,
+       0.1309,
+       0.1894,
+       0.2624,
+       0.3177,
+       0.3636,
+       0.377
+      ],
+      "mde_ganancia_qlike": 0.0315,
+      "potencia_si_ganancia_0.02": 0.644,
+      "potencia_si_ganancia_0.05": 0.962,
+      "potencia_si_ganancia_0.1": 1.0
+     },
+     "pinball": {
+      "ganancia_qlike_en_w": [
+       -0.0082,
+       0.0239,
+       0.0543,
+       0.083,
+       0.1101,
+       0.1593,
+       0.2207,
+       0.2672,
+       0.3058,
+       0.3171
+      ],
+      "potencia_en_w": [
+       0.02,
+       0.073,
+       0.187,
+       0.273,
+       0.343,
+       0.443,
+       0.447,
+       0.417,
+       0.36,
+       0.297
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0118,
+       0.0246,
+       0.06,
+       0.0941,
+       0.1259,
+       0.1846,
+       0.261,
+       0.323,
+       0.3828,
+       0.4135
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "fz0": {
+      "ganancia_qlike_en_w": [
+       -0.0082,
+       0.0239,
+       0.0543,
+       0.083,
+       0.1101,
+       0.1593,
+       0.2207,
+       0.2672,
+       0.3058,
+       0.3171
+      ],
+      "potencia_en_w": [
+       0.017,
+       0.08,
+       0.187,
+       0.303,
+       0.4,
+       0.457,
+       0.48,
+       0.433,
+       0.4,
+       0.31
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0133,
+       0.0235,
+       0.0589,
+       0.0928,
+       0.125,
+       0.1844,
+       0.2616,
+       0.3242,
+       0.384,
+       0.4158
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "brier": {
+      "ganancia_qlike_en_w": [
+       -0.0082,
+       0.0239,
+       0.0543,
+       0.083,
+       0.1101,
+       0.1593,
+       0.2207,
+       0.2672,
+       0.3058,
+       0.3171
+      ],
+      "potencia_en_w": [
+       0.033,
+       0.11,
+       0.237,
+       0.36,
+       0.423,
+       0.463,
+       0.483,
+       0.483,
+       0.44,
+       0.397
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0088,
+       0.0274,
+       0.0631,
+       0.0981,
+       0.1319,
+       0.1951,
+       0.2758,
+       0.3368,
+       0.3881,
+       0.4105
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     }
+    }
+   }
+  },
+  "B_EEUU_1960-2004": {
+   "h1": {
+    "critico_nula_95": {
+     "qlike": 1.414,
+     "pinball": 1.593,
+     "fz0": 1.871,
+     "brier": 0.978
+    },
+    "tamaño_real_con_1.645": {
+     "qlike": 0.037,
+     "pinball": 0.047,
+     "fz0": 0.07,
+     "brier": 0.0
+    },
+    "n_efectivo_dif_qlike_(w=0.3)": 563.9,
+    "tasa_caida10_sim": 0.0199,
+    "sd_log_rv_sim": 0.86,
+    "curtosis_diaria_sim": 11.93,
+    "contrastes": {
+     "har_vs_b1_12m": {
+      "qlike": {
+       "ganancia_rel": 0.465,
+       "fraccion_recorrido_constante_oraculo": 1.0145,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0612,
+       "fraccion_recorrido_constante_oraculo": 0.7584,
+       "potencia": 0.587,
+       "potencia_crit_normal": 0.583
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.7566,
+       "potencia": 0.517,
+       "potencia_crit_normal": 0.607
+      },
+      "brier": {
+       "ganancia_rel": 0.0122,
+       "fraccion_recorrido_constante_oraculo": 0.3146,
+       "potencia": 0.147,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "har_vs_ewma": {
+      "qlike": {
+       "ganancia_rel": 0.1886,
+       "fraccion_recorrido_constante_oraculo": 0.2714,
+       "potencia": 1.0,
+       "potencia_crit_normal": 0.997
+      },
+      "pinball": {
+       "ganancia_rel": 0.0116,
+       "fraccion_recorrido_constante_oraculo": 0.1366,
+       "potencia": 0.217,
+       "potencia_crit_normal": 0.203
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1064,
+       "potencia": 0.117,
+       "potencia_crit_normal": 0.147
+      },
+      "brier": {
+       "ganancia_rel": 0.0012,
+       "fraccion_recorrido_constante_oraculo": 0.0302,
+       "potencia": 0.117,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "oraculo_vs_har_(techo)": {
+      "qlike": {
+       "ganancia_rel": 0.3153,
+       "fraccion_recorrido_constante_oraculo": 0.368,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0369,
+       "fraccion_recorrido_constante_oraculo": 0.4293,
+       "potencia": 0.447,
+       "potencia_crit_normal": 0.44
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.4319,
+       "potencia": 0.473,
+       "potencia_crit_normal": 0.523
+      },
+      "brier": {
+       "ganancia_rel": 0.0183,
+       "fraccion_recorrido_constante_oraculo": 0.4653,
+       "potencia": 0.24,
+       "potencia_crit_normal": 0.01
+      }
+     },
+     "ml_w0.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": -0.0053,
+       "fraccion_recorrido_constante_oraculo": -0.0062,
+       "potencia": 0.03,
+       "potencia_crit_normal": 0.027
+      },
+      "pinball": {
+       "ganancia_rel": -0.0007,
+       "fraccion_recorrido_constante_oraculo": -0.0078,
+       "potencia": 0.033,
+       "potencia_crit_normal": 0.033
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": -0.0079,
+       "potencia": 0.03,
+       "potencia_crit_normal": 0.043
+      },
+      "brier": {
+       "ganancia_rel": -0.0004,
+       "fraccion_recorrido_constante_oraculo": -0.0098,
+       "potencia": 0.027,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "ml_w0.05_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0256,
+       "fraccion_recorrido_constante_oraculo": 0.0299,
+       "potencia": 0.973,
+       "potencia_crit_normal": 0.957
+      },
+      "pinball": {
+       "ganancia_rel": 0.0025,
+       "fraccion_recorrido_constante_oraculo": 0.0285,
+       "potencia": 0.143,
+       "potencia_crit_normal": 0.13
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0288,
+       "potencia": 0.15,
+       "potencia_crit_normal": 0.197
+      },
+      "brier": {
+       "ganancia_rel": 0.001,
+       "fraccion_recorrido_constante_oraculo": 0.0263,
+       "potencia": 0.097,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "ml_w0.1_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0549,
+       "fraccion_recorrido_constante_oraculo": 0.0641,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0054,
+       "fraccion_recorrido_constante_oraculo": 0.0633,
+       "potencia": 0.333,
+       "potencia_crit_normal": 0.327
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0642,
+       "potencia": 0.363,
+       "potencia_crit_normal": 0.443
+      },
+      "brier": {
+       "ganancia_rel": 0.0025,
+       "fraccion_recorrido_constante_oraculo": 0.0624,
+       "potencia": 0.18,
+       "potencia_crit_normal": 0.01
+      }
+     },
+     "ml_w0.15_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0826,
+       "fraccion_recorrido_constante_oraculo": 0.0964,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0083,
+       "fraccion_recorrido_constante_oraculo": 0.0966,
+       "potencia": 0.473,
+       "potencia_crit_normal": 0.463
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0981,
+       "potencia": 0.493,
+       "potencia_crit_normal": 0.607
+      },
+      "brier": {
+       "ganancia_rel": 0.0039,
+       "fraccion_recorrido_constante_oraculo": 0.0982,
+       "potencia": 0.23,
+       "potencia_crit_normal": 0.01
+      }
+     },
+     "ml_w0.2_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.1088,
+       "fraccion_recorrido_constante_oraculo": 0.1269,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.011,
+       "fraccion_recorrido_constante_oraculo": 0.1284,
+       "potencia": 0.583,
+       "potencia_crit_normal": 0.543
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1303,
+       "potencia": 0.6,
+       "potencia_crit_normal": 0.657
+      },
+      "brier": {
+       "ganancia_rel": 0.0052,
+       "fraccion_recorrido_constante_oraculo": 0.1332,
+       "potencia": 0.243,
+       "potencia_crit_normal": 0.017
+      }
+     },
+     "ml_w0.3_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.1563,
+       "fraccion_recorrido_constante_oraculo": 0.1824,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0161,
+       "fraccion_recorrido_constante_oraculo": 0.1877,
+       "potencia": 0.633,
+       "potencia_crit_normal": 0.6
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1903,
+       "potencia": 0.65,
+       "potencia_crit_normal": 0.693
+      },
+      "brier": {
+       "ganancia_rel": 0.0079,
+       "fraccion_recorrido_constante_oraculo": 0.2,
+       "potencia": 0.25,
+       "potencia_crit_normal": 0.02
+      }
+     },
+     "ml_w0.45_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2157,
+       "fraccion_recorrido_constante_oraculo": 0.2517,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0228,
+       "fraccion_recorrido_constante_oraculo": 0.2649,
+       "potencia": 0.63,
+       "potencia_crit_normal": 0.6
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.2681,
+       "potencia": 0.62,
+       "potencia_crit_normal": 0.683
+      },
+      "brier": {
+       "ganancia_rel": 0.0113,
+       "fraccion_recorrido_constante_oraculo": 0.2879,
+       "potencia": 0.263,
+       "potencia_crit_normal": 0.02
+      }
+     },
+     "ml_w0.6_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2609,
+       "fraccion_recorrido_constante_oraculo": 0.3045,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0282,
+       "fraccion_recorrido_constante_oraculo": 0.3276,
+       "potencia": 0.593,
+       "potencia_crit_normal": 0.55
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3312,
+       "potencia": 0.59,
+       "potencia_crit_normal": 0.633
+      },
+      "brier": {
+       "ganancia_rel": 0.014,
+       "fraccion_recorrido_constante_oraculo": 0.3568,
+       "potencia": 0.25,
+       "potencia_crit_normal": 0.023
+      }
+     },
+     "ml_w0.8_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2987,
+       "fraccion_recorrido_constante_oraculo": 0.3487,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0334,
+       "fraccion_recorrido_constante_oraculo": 0.388,
+       "potencia": 0.507,
+       "potencia_crit_normal": 0.483
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3915,
+       "potencia": 0.51,
+       "potencia_crit_normal": 0.59
+      },
+      "brier": {
+       "ganancia_rel": 0.0164,
+       "fraccion_recorrido_constante_oraculo": 0.4177,
+       "potencia": 0.253,
+       "potencia_crit_normal": 0.017
+      }
+     },
+     "ml_w1.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.31,
+       "fraccion_recorrido_constante_oraculo": 0.3618,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0362,
+       "fraccion_recorrido_constante_oraculo": 0.4209,
+       "potencia": 0.433,
+       "potencia_crit_normal": 0.407
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.4234,
+       "potencia": 0.447,
+       "potencia_crit_normal": 0.5
+      },
+      "brier": {
+       "ganancia_rel": 0.0177,
+       "fraccion_recorrido_constante_oraculo": 0.4485,
+       "potencia": 0.237,
+       "potencia_crit_normal": 0.01
+      }
+     }
+    },
+    "mde": {
+     "qlike": {
+      "ganancia_qlike_en_w": [
+       -0.0053,
+       0.0256,
+       0.0549,
+       0.0826,
+       0.1088,
+       0.1563,
+       0.2157,
+       0.2609,
+       0.2987,
+       0.31
+      ],
+      "potencia_en_w": [
+       0.03,
+       0.973,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0062,
+       0.0299,
+       0.0641,
+       0.0964,
+       0.1269,
+       0.1824,
+       0.2517,
+       0.3045,
+       0.3487,
+       0.3618
+      ],
+      "mde_ganancia_qlike": 0.0199,
+      "potencia_si_ganancia_0.02": 0.802,
+      "potencia_si_ganancia_0.05": 0.995,
+      "potencia_si_ganancia_0.1": 1.0
+     },
+     "pinball": {
+      "ganancia_qlike_en_w": [
+       -0.0053,
+       0.0256,
+       0.0549,
+       0.0826,
+       0.1088,
+       0.1563,
+       0.2157,
+       0.2609,
+       0.2987,
+       0.31
+      ],
+      "potencia_en_w": [
+       0.033,
+       0.143,
+       0.333,
+       0.473,
+       0.583,
+       0.633,
+       0.63,
+       0.593,
+       0.507,
+       0.433
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0078,
+       0.0285,
+       0.0633,
+       0.0966,
+       0.1284,
+       0.1877,
+       0.2649,
+       0.3276,
+       0.388,
+       0.4209
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "fz0": {
+      "ganancia_qlike_en_w": [
+       -0.0053,
+       0.0256,
+       0.0549,
+       0.0826,
+       0.1088,
+       0.1563,
+       0.2157,
+       0.2609,
+       0.2987,
+       0.31
+      ],
+      "potencia_en_w": [
+       0.03,
+       0.15,
+       0.363,
+       0.493,
+       0.6,
+       0.65,
+       0.62,
+       0.59,
+       0.51,
+       0.447
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0079,
+       0.0288,
+       0.0642,
+       0.0981,
+       0.1303,
+       0.1903,
+       0.2681,
+       0.3312,
+       0.3915,
+       0.4234
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "brier": {
+      "ganancia_qlike_en_w": [
+       -0.0053,
+       0.0256,
+       0.0549,
+       0.0826,
+       0.1088,
+       0.1563,
+       0.2157,
+       0.2609,
+       0.2987,
+       0.31
+      ],
+      "potencia_en_w": [
+       0.027,
+       0.097,
+       0.18,
+       0.23,
+       0.243,
+       0.25,
+       0.263,
+       0.25,
+       0.253,
+       0.237
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0098,
+       0.0263,
+       0.0624,
+       0.0982,
+       0.1332,
+       0.2,
+       0.2879,
+       0.3568,
+       0.4177,
+       0.4485
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     }
+    }
+   },
+   "h3": {
+    "critico_nula_95": {
+     "qlike": 1.772,
+     "pinball": 1.525,
+     "fz0": 1.703,
+     "brier": 1.174
+    },
+    "tamaño_real_con_1.645": {
+     "qlike": 0.073,
+     "pinball": 0.043,
+     "fz0": 0.06,
+     "brier": 0.0
+    },
+    "n_efectivo_dif_qlike_(w=0.3)": 290.9,
+    "tasa_caida10_sim": 0.0907,
+    "sd_log_rv_sim": 0.7169,
+    "curtosis_diaria_sim": 11.93,
+    "contrastes": {
+     "har_vs_b1_12m": {
+      "qlike": {
+       "ganancia_rel": 0.5363,
+       "fraccion_recorrido_constante_oraculo": 1.3766,
+       "potencia": 0.997,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0483,
+       "fraccion_recorrido_constante_oraculo": 0.8383,
+       "potencia": 0.407,
+       "potencia_crit_normal": 0.37
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.8189,
+       "potencia": 0.323,
+       "potencia_crit_normal": 0.343
+      },
+      "brier": {
+       "ganancia_rel": 0.0124,
+       "fraccion_recorrido_constante_oraculo": 0.2273,
+       "potencia": 0.2,
+       "potencia_crit_normal": 0.027
+      }
+     },
+     "har_vs_ewma": {
+      "qlike": {
+       "ganancia_rel": 0.3652,
+       "fraccion_recorrido_constante_oraculo": 0.6848,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0184,
+       "fraccion_recorrido_constante_oraculo": 0.3105,
+       "potencia": 0.313,
+       "potencia_crit_normal": 0.297
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.2492,
+       "potencia": 0.21,
+       "potencia_crit_normal": 0.23
+      },
+      "brier": {
+       "ganancia_rel": 0.0002,
+       "fraccion_recorrido_constante_oraculo": 0.0041,
+       "potencia": 0.09,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "oraculo_vs_har_(techo)": {
+      "qlike": {
+       "ganancia_rel": 0.3228,
+       "fraccion_recorrido_constante_oraculo": 0.3843,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0276,
+       "fraccion_recorrido_constante_oraculo": 0.4559,
+       "potencia": 0.357,
+       "potencia_crit_normal": 0.31
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.4677,
+       "potencia": 0.37,
+       "potencia_crit_normal": 0.393
+      },
+      "brier": {
+       "ganancia_rel": 0.0242,
+       "fraccion_recorrido_constante_oraculo": 0.4367,
+       "potencia": 0.417,
+       "potencia_crit_normal": 0.117
+      }
+     },
+     "ml_w0.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": -0.0072,
+       "fraccion_recorrido_constante_oraculo": -0.0086,
+       "potencia": 0.01,
+       "potencia_crit_normal": 0.01
+      },
+      "pinball": {
+       "ganancia_rel": -0.0003,
+       "fraccion_recorrido_constante_oraculo": -0.005,
+       "potencia": 0.043,
+       "potencia_crit_normal": 0.033
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": -0.0068,
+       "potencia": 0.047,
+       "potencia_crit_normal": 0.05
+      },
+      "brier": {
+       "ganancia_rel": -0.0003,
+       "fraccion_recorrido_constante_oraculo": -0.006,
+       "potencia": 0.06,
+       "potencia_crit_normal": 0.017
+      }
+     },
+     "ml_w0.05_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0247,
+       "fraccion_recorrido_constante_oraculo": 0.0294,
+       "potencia": 0.747,
+       "potencia_crit_normal": 0.783
+      },
+      "pinball": {
+       "ganancia_rel": 0.002,
+       "fraccion_recorrido_constante_oraculo": 0.0329,
+       "potencia": 0.15,
+       "potencia_crit_normal": 0.12
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.032,
+       "potencia": 0.15,
+       "potencia_crit_normal": 0.153
+      },
+      "brier": {
+       "ganancia_rel": 0.0018,
+       "fraccion_recorrido_constante_oraculo": 0.0316,
+       "potencia": 0.157,
+       "potencia_crit_normal": 0.047
+      }
+     },
+     "ml_w0.1_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.055,
+       "fraccion_recorrido_constante_oraculo": 0.0654,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0042,
+       "fraccion_recorrido_constante_oraculo": 0.0694,
+       "potencia": 0.287,
+       "potencia_crit_normal": 0.253
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0693,
+       "potencia": 0.303,
+       "potencia_crit_normal": 0.31
+      },
+      "brier": {
+       "ganancia_rel": 0.0038,
+       "fraccion_recorrido_constante_oraculo": 0.0686,
+       "potencia": 0.273,
+       "potencia_crit_normal": 0.073
+      }
+     },
+     "ml_w0.15_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0836,
+       "fraccion_recorrido_constante_oraculo": 0.0995,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0063,
+       "fraccion_recorrido_constante_oraculo": 0.104,
+       "potencia": 0.377,
+       "potencia_crit_normal": 0.323
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1049,
+       "potencia": 0.38,
+       "potencia_crit_normal": 0.397
+      },
+      "brier": {
+       "ganancia_rel": 0.0058,
+       "fraccion_recorrido_constante_oraculo": 0.1047,
+       "potencia": 0.393,
+       "potencia_crit_normal": 0.097
+      }
+     },
+     "ml_w0.2_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.1105,
+       "fraccion_recorrido_constante_oraculo": 0.1316,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0083,
+       "fraccion_recorrido_constante_oraculo": 0.1369,
+       "potencia": 0.39,
+       "potencia_crit_normal": 0.36
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1389,
+       "potencia": 0.42,
+       "potencia_crit_normal": 0.453
+      },
+      "brier": {
+       "ganancia_rel": 0.0077,
+       "fraccion_recorrido_constante_oraculo": 0.1396,
+       "potencia": 0.423,
+       "potencia_crit_normal": 0.133
+      }
+     },
+     "ml_w0.3_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.1595,
+       "fraccion_recorrido_constante_oraculo": 0.1899,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0121,
+       "fraccion_recorrido_constante_oraculo": 0.1991,
+       "potencia": 0.427,
+       "potencia_crit_normal": 0.387
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.2023,
+       "potencia": 0.47,
+       "potencia_crit_normal": 0.497
+      },
+      "brier": {
+       "ganancia_rel": 0.0113,
+       "fraccion_recorrido_constante_oraculo": 0.2045,
+       "potencia": 0.487,
+       "potencia_crit_normal": 0.157
+      }
+     },
+     "ml_w0.45_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2206,
+       "fraccion_recorrido_constante_oraculo": 0.2627,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.017,
+       "fraccion_recorrido_constante_oraculo": 0.2804,
+       "potencia": 0.467,
+       "potencia_crit_normal": 0.41
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.2855,
+       "potencia": 0.497,
+       "potencia_crit_normal": 0.507
+      },
+      "brier": {
+       "ganancia_rel": 0.0159,
+       "fraccion_recorrido_constante_oraculo": 0.2869,
+       "potencia": 0.483,
+       "potencia_crit_normal": 0.157
+      }
+     },
+     "ml_w0.6_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2669,
+       "fraccion_recorrido_constante_oraculo": 0.3177,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.021,
+       "fraccion_recorrido_constante_oraculo": 0.3469,
+       "potencia": 0.45,
+       "potencia_crit_normal": 0.4
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.354,
+       "potencia": 0.467,
+       "potencia_crit_normal": 0.48
+      },
+      "brier": {
+       "ganancia_rel": 0.0194,
+       "fraccion_recorrido_constante_oraculo": 0.3495,
+       "potencia": 0.453,
+       "potencia_crit_normal": 0.153
+      }
+     },
+     "ml_w0.8_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.3051,
+       "fraccion_recorrido_constante_oraculo": 0.3632,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0249,
+       "fraccion_recorrido_constante_oraculo": 0.4116,
+       "potencia": 0.387,
+       "potencia_crit_normal": 0.337
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.4207,
+       "potencia": 0.427,
+       "potencia_crit_normal": 0.443
+      },
+      "brier": {
+       "ganancia_rel": 0.0224,
+       "fraccion_recorrido_constante_oraculo": 0.4033,
+       "potencia": 0.417,
+       "potencia_crit_normal": 0.14
+      }
+     },
+     "ml_w1.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.3156,
+       "fraccion_recorrido_constante_oraculo": 0.3757,
+       "potencia": 0.997,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0272,
+       "fraccion_recorrido_constante_oraculo": 0.4499,
+       "potencia": 0.337,
+       "potencia_crit_normal": 0.29
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.4605,
+       "potencia": 0.367,
+       "potencia_crit_normal": 0.387
+      },
+      "brier": {
+       "ganancia_rel": 0.0238,
+       "fraccion_recorrido_constante_oraculo": 0.4288,
+       "potencia": 0.393,
+       "potencia_crit_normal": 0.11
+      }
+     }
+    },
+    "mde": {
+     "qlike": {
+      "ganancia_qlike_en_w": [
+       -0.0072,
+       0.0247,
+       0.055,
+       0.0836,
+       0.1105,
+       0.1595,
+       0.2206,
+       0.2669,
+       0.3051,
+       0.3156
+      ],
+      "potencia_en_w": [
+       0.01,
+       0.747,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       0.997
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0086,
+       0.0294,
+       0.0654,
+       0.0995,
+       0.1316,
+       0.1899,
+       0.2627,
+       0.3177,
+       0.3632,
+       0.3757
+      ],
+      "mde_ganancia_qlike": 0.031,
+      "potencia_si_ganancia_0.02": 0.638,
+      "potencia_si_ganancia_0.05": 0.958,
+      "potencia_si_ganancia_0.1": 1.0
+     },
+     "pinball": {
+      "ganancia_qlike_en_w": [
+       -0.0072,
+       0.0247,
+       0.055,
+       0.0836,
+       0.1105,
+       0.1595,
+       0.2206,
+       0.2669,
+       0.3051,
+       0.3156
+      ],
+      "potencia_en_w": [
+       0.043,
+       0.15,
+       0.287,
+       0.377,
+       0.39,
+       0.427,
+       0.467,
+       0.45,
+       0.387,
+       0.337
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.005,
+       0.0329,
+       0.0694,
+       0.104,
+       0.1369,
+       0.1991,
+       0.2804,
+       0.3469,
+       0.4116,
+       0.4499
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "fz0": {
+      "ganancia_qlike_en_w": [
+       -0.0072,
+       0.0247,
+       0.055,
+       0.0836,
+       0.1105,
+       0.1595,
+       0.2206,
+       0.2669,
+       0.3051,
+       0.3156
+      ],
+      "potencia_en_w": [
+       0.047,
+       0.15,
+       0.303,
+       0.38,
+       0.42,
+       0.47,
+       0.497,
+       0.467,
+       0.427,
+       0.367
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0068,
+       0.032,
+       0.0693,
+       0.1049,
+       0.1389,
+       0.2023,
+       0.2855,
+       0.354,
+       0.4207,
+       0.4605
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "brier": {
+      "ganancia_qlike_en_w": [
+       -0.0072,
+       0.0247,
+       0.055,
+       0.0836,
+       0.1105,
+       0.1595,
+       0.2206,
+       0.2669,
+       0.3051,
+       0.3156
+      ],
+      "potencia_en_w": [
+       0.06,
+       0.157,
+       0.273,
+       0.393,
+       0.423,
+       0.487,
+       0.483,
+       0.453,
+       0.417,
+       0.393
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.006,
+       0.0316,
+       0.0686,
+       0.1047,
+       0.1396,
+       0.2045,
+       0.2869,
+       0.3495,
+       0.4033,
+       0.4288
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     }
+    }
+   }
+  },
+  "C_EEUU_1975-2004": {
+   "h1": {
+    "critico_nula_95": {
+     "qlike": 1.628,
+     "pinball": 1.55,
+     "fz0": 1.561,
+     "brier": 0.898
+    },
+    "tamaño_real_con_1.645": {
+     "qlike": 0.05,
+     "pinball": 0.047,
+     "fz0": 0.047,
+     "brier": 0.0
+    },
+    "n_efectivo_dif_qlike_(w=0.3)": 422.1,
+    "tasa_caida10_sim": 0.0191,
+    "sd_log_rv_sim": 0.8514,
+    "curtosis_diaria_sim": 11.61,
+    "contrastes": {
+     "har_vs_b1_12m": {
+      "qlike": {
+       "ganancia_rel": 0.4647,
+       "fraccion_recorrido_constante_oraculo": 0.9842,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0621,
+       "fraccion_recorrido_constante_oraculo": 0.8373,
+       "potencia": 0.48,
+       "potencia_crit_normal": 0.463
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.8057,
+       "potencia": 0.46,
+       "potencia_crit_normal": 0.437
+      },
+      "brier": {
+       "ganancia_rel": 0.0164,
+       "fraccion_recorrido_constante_oraculo": 0.3657,
+       "potencia": 0.133,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "har_vs_ewma": {
+      "qlike": {
+       "ganancia_rel": 0.1881,
+       "fraccion_recorrido_constante_oraculo": 0.2627,
+       "potencia": 0.973,
+       "potencia_crit_normal": 0.973
+      },
+      "pinball": {
+       "ganancia_rel": 0.0129,
+       "fraccion_recorrido_constante_oraculo": 0.1655,
+       "potencia": 0.203,
+       "potencia_crit_normal": 0.187
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1285,
+       "potencia": 0.15,
+       "potencia_crit_normal": 0.133
+      },
+      "brier": {
+       "ganancia_rel": 0.0008,
+       "fraccion_recorrido_constante_oraculo": 0.0171,
+       "potencia": 0.1,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "oraculo_vs_har_(techo)": {
+      "qlike": {
+       "ganancia_rel": 0.3184,
+       "fraccion_recorrido_constante_oraculo": 0.3611,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.034,
+       "fraccion_recorrido_constante_oraculo": 0.4295,
+       "potencia": 0.33,
+       "potencia_crit_normal": 0.283
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.4392,
+       "potencia": 0.41,
+       "potencia_crit_normal": 0.363
+      },
+      "brier": {
+       "ganancia_rel": 0.0196,
+       "fraccion_recorrido_constante_oraculo": 0.4302,
+       "potencia": 0.183,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "ml_w0.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": -0.0058,
+       "fraccion_recorrido_constante_oraculo": -0.0066,
+       "potencia": 0.003,
+       "potencia_crit_normal": 0.003
+      },
+      "pinball": {
+       "ganancia_rel": -0.0008,
+       "fraccion_recorrido_constante_oraculo": -0.0102,
+       "potencia": 0.02,
+       "potencia_crit_normal": 0.02
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": -0.0084,
+       "potencia": 0.027,
+       "potencia_crit_normal": 0.023
+      },
+      "brier": {
+       "ganancia_rel": -0.0008,
+       "fraccion_recorrido_constante_oraculo": -0.0176,
+       "potencia": 0.05,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "ml_w0.05_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0255,
+       "fraccion_recorrido_constante_oraculo": 0.0289,
+       "potencia": 0.89,
+       "potencia_crit_normal": 0.883
+      },
+      "pinball": {
+       "ganancia_rel": 0.0022,
+       "fraccion_recorrido_constante_oraculo": 0.0272,
+       "potencia": 0.14,
+       "potencia_crit_normal": 0.107
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0297,
+       "potencia": 0.177,
+       "potencia_crit_normal": 0.157
+      },
+      "brier": {
+       "ganancia_rel": 0.0007,
+       "fraccion_recorrido_constante_oraculo": 0.0153,
+       "potencia": 0.107,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "ml_w0.1_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0551,
+       "fraccion_recorrido_constante_oraculo": 0.0625,
+       "potencia": 0.997,
+       "potencia_crit_normal": 0.997
+      },
+      "pinball": {
+       "ganancia_rel": 0.005,
+       "fraccion_recorrido_constante_oraculo": 0.063,
+       "potencia": 0.283,
+       "potencia_crit_normal": 0.247
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0663,
+       "potencia": 0.34,
+       "potencia_crit_normal": 0.297
+      },
+      "brier": {
+       "ganancia_rel": 0.0022,
+       "fraccion_recorrido_constante_oraculo": 0.0481,
+       "potencia": 0.147,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "ml_w0.15_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0831,
+       "fraccion_recorrido_constante_oraculo": 0.0943,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0078,
+       "fraccion_recorrido_constante_oraculo": 0.098,
+       "potencia": 0.357,
+       "potencia_crit_normal": 0.34
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1014,
+       "potencia": 0.48,
+       "potencia_crit_normal": 0.44
+      },
+      "brier": {
+       "ganancia_rel": 0.0037,
+       "fraccion_recorrido_constante_oraculo": 0.0806,
+       "potencia": 0.17,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "ml_w0.2_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.1096,
+       "fraccion_recorrido_constante_oraculo": 0.1242,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0104,
+       "fraccion_recorrido_constante_oraculo": 0.1309,
+       "potencia": 0.42,
+       "potencia_crit_normal": 0.387
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1348,
+       "potencia": 0.56,
+       "potencia_crit_normal": 0.523
+      },
+      "brier": {
+       "ganancia_rel": 0.0051,
+       "fraccion_recorrido_constante_oraculo": 0.1124,
+       "potencia": 0.187,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "ml_w0.3_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.1576,
+       "fraccion_recorrido_constante_oraculo": 0.1787,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0151,
+       "fraccion_recorrido_constante_oraculo": 0.1913,
+       "potencia": 0.453,
+       "potencia_crit_normal": 0.417
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1967,
+       "potencia": 0.597,
+       "potencia_crit_normal": 0.573
+      },
+      "brier": {
+       "ganancia_rel": 0.0079,
+       "fraccion_recorrido_constante_oraculo": 0.1726,
+       "potencia": 0.207,
+       "potencia_crit_normal": 0.007
+      }
+     },
+     "ml_w0.45_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2177,
+       "fraccion_recorrido_constante_oraculo": 0.2469,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0214,
+       "fraccion_recorrido_constante_oraculo": 0.2703,
+       "potencia": 0.467,
+       "potencia_crit_normal": 0.44
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.2771,
+       "potencia": 0.59,
+       "potencia_crit_normal": 0.543
+      },
+      "brier": {
+       "ganancia_rel": 0.0114,
+       "fraccion_recorrido_constante_oraculo": 0.2504,
+       "potencia": 0.207,
+       "potencia_crit_normal": 0.01
+      }
+     },
+     "ml_w0.6_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2635,
+       "fraccion_recorrido_constante_oraculo": 0.2988,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0264,
+       "fraccion_recorrido_constante_oraculo": 0.3335,
+       "potencia": 0.453,
+       "potencia_crit_normal": 0.413
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3415,
+       "potencia": 0.553,
+       "potencia_crit_normal": 0.513
+      },
+      "brier": {
+       "ganancia_rel": 0.0142,
+       "fraccion_recorrido_constante_oraculo": 0.312,
+       "potencia": 0.2,
+       "potencia_crit_normal": 0.01
+      }
+     },
+     "ml_w0.8_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.3018,
+       "fraccion_recorrido_constante_oraculo": 0.3423,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.031,
+       "fraccion_recorrido_constante_oraculo": 0.3913,
+       "potencia": 0.403,
+       "potencia_crit_normal": 0.347
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.4016,
+       "potencia": 0.487,
+       "potencia_crit_normal": 0.45
+      },
+      "brier": {
+       "ganancia_rel": 0.0171,
+       "fraccion_recorrido_constante_oraculo": 0.376,
+       "potencia": 0.197,
+       "potencia_crit_normal": 0.007
+      }
+     },
+     "ml_w1.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.3134,
+       "fraccion_recorrido_constante_oraculo": 0.3553,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0334,
+       "fraccion_recorrido_constante_oraculo": 0.4216,
+       "potencia": 0.317,
+       "potencia_crit_normal": 0.283
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.432,
+       "potencia": 0.383,
+       "potencia_crit_normal": 0.343
+      },
+      "brier": {
+       "ganancia_rel": 0.0185,
+       "fraccion_recorrido_constante_oraculo": 0.4077,
+       "potencia": 0.19,
+       "potencia_crit_normal": 0.007
+      }
+     }
+    },
+    "mde": {
+     "qlike": {
+      "ganancia_qlike_en_w": [
+       -0.0058,
+       0.0255,
+       0.0551,
+       0.0831,
+       0.1096,
+       0.1576,
+       0.2177,
+       0.2635,
+       0.3018,
+       0.3134
+      ],
+      "potencia_en_w": [
+       0.003,
+       0.89,
+       0.997,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0066,
+       0.0289,
+       0.0625,
+       0.0943,
+       0.1242,
+       0.1787,
+       0.2469,
+       0.2988,
+       0.3423,
+       0.3553
+      ],
+      "mde_ganancia_qlike": 0.0223,
+      "potencia_si_ganancia_0.02": 0.734,
+      "potencia_si_ganancia_0.05": 0.979,
+      "potencia_si_ganancia_0.1": 1.0
+     },
+     "pinball": {
+      "ganancia_qlike_en_w": [
+       -0.0058,
+       0.0255,
+       0.0551,
+       0.0831,
+       0.1096,
+       0.1576,
+       0.2177,
+       0.2635,
+       0.3018,
+       0.3134
+      ],
+      "potencia_en_w": [
+       0.02,
+       0.14,
+       0.283,
+       0.357,
+       0.42,
+       0.453,
+       0.467,
+       0.453,
+       0.403,
+       0.317
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0102,
+       0.0272,
+       0.063,
+       0.098,
+       0.1309,
+       0.1913,
+       0.2703,
+       0.3335,
+       0.3913,
+       0.4216
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "fz0": {
+      "ganancia_qlike_en_w": [
+       -0.0058,
+       0.0255,
+       0.0551,
+       0.0831,
+       0.1096,
+       0.1576,
+       0.2177,
+       0.2635,
+       0.3018,
+       0.3134
+      ],
+      "potencia_en_w": [
+       0.027,
+       0.177,
+       0.34,
+       0.48,
+       0.56,
+       0.597,
+       0.59,
+       0.553,
+       0.487,
+       0.383
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0084,
+       0.0297,
+       0.0663,
+       0.1014,
+       0.1348,
+       0.1967,
+       0.2771,
+       0.3415,
+       0.4016,
+       0.432
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "brier": {
+      "ganancia_qlike_en_w": [
+       -0.0058,
+       0.0255,
+       0.0551,
+       0.0831,
+       0.1096,
+       0.1576,
+       0.2177,
+       0.2635,
+       0.3018,
+       0.3134
+      ],
+      "potencia_en_w": [
+       0.05,
+       0.107,
+       0.147,
+       0.17,
+       0.187,
+       0.207,
+       0.207,
+       0.2,
+       0.197,
+       0.19
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0176,
+       0.0153,
+       0.0481,
+       0.0806,
+       0.1124,
+       0.1726,
+       0.2504,
+       0.312,
+       0.376,
+       0.4077
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     }
+    }
+   },
+   "h3": {
+    "critico_nula_95": {
+     "qlike": 1.804,
+     "pinball": 1.694,
+     "fz0": 1.888,
+     "brier": 1.114
+    },
+    "tamaño_real_con_1.645": {
+     "qlike": 0.07,
+     "pinball": 0.053,
+     "fz0": 0.087,
+     "brier": 0.01
+    },
+    "n_efectivo_dif_qlike_(w=0.3)": 212.3,
+    "tasa_caida10_sim": 0.0883,
+    "sd_log_rv_sim": 0.7051,
+    "curtosis_diaria_sim": 11.61,
+    "contrastes": {
+     "har_vs_b1_12m": {
+      "qlike": {
+       "ganancia_rel": 0.5358,
+       "fraccion_recorrido_constante_oraculo": 1.3192,
+       "potencia": 0.98,
+       "potencia_crit_normal": 0.987
+      },
+      "pinball": {
+       "ganancia_rel": 0.0509,
+       "fraccion_recorrido_constante_oraculo": 0.9665,
+       "potencia": 0.323,
+       "potencia_crit_normal": 0.333
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.93,
+       "potencia": 0.21,
+       "potencia_crit_normal": 0.297
+      },
+      "brier": {
+       "ganancia_rel": 0.0121,
+       "fraccion_recorrido_constante_oraculo": 0.2309,
+       "potencia": 0.153,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "har_vs_ewma": {
+      "qlike": {
+       "ganancia_rel": 0.3622,
+       "fraccion_recorrido_constante_oraculo": 0.649,
+       "potencia": 0.993,
+       "potencia_crit_normal": 0.993
+      },
+      "pinball": {
+       "ganancia_rel": 0.019,
+       "fraccion_recorrido_constante_oraculo": 0.3499,
+       "potencia": 0.233,
+       "potencia_crit_normal": 0.26
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.2976,
+       "potencia": 0.123,
+       "potencia_crit_normal": 0.167
+      },
+      "brier": {
+       "ganancia_rel": -0.0006,
+       "fraccion_recorrido_constante_oraculo": -0.0114,
+       "potencia": 0.043,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "oraculo_vs_har_(techo)": {
+      "qlike": {
+       "ganancia_rel": 0.3289,
+       "fraccion_recorrido_constante_oraculo": 0.3758,
+       "potencia": 0.987,
+       "potencia_crit_normal": 0.993
+      },
+      "pinball": {
+       "ganancia_rel": 0.0258,
+       "fraccion_recorrido_constante_oraculo": 0.4647,
+       "potencia": 0.207,
+       "potencia_crit_normal": 0.21
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.479,
+       "potencia": 0.247,
+       "potencia_crit_normal": 0.29
+      },
+      "brier": {
+       "ganancia_rel": 0.0238,
+       "fraccion_recorrido_constante_oraculo": 0.4471,
+       "potencia": 0.273,
+       "potencia_crit_normal": 0.07
+      }
+     },
+     "ml_w0.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": -0.0074,
+       "fraccion_recorrido_constante_oraculo": -0.0084,
+       "potencia": 0.007,
+       "potencia_crit_normal": 0.01
+      },
+      "pinball": {
+       "ganancia_rel": -0.0001,
+       "fraccion_recorrido_constante_oraculo": -0.0014,
+       "potencia": 0.057,
+       "potencia_crit_normal": 0.06
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": -0.0041,
+       "potencia": 0.057,
+       "potencia_crit_normal": 0.063
+      },
+      "brier": {
+       "ganancia_rel": -0.0003,
+       "fraccion_recorrido_constante_oraculo": -0.0063,
+       "potencia": 0.047,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "ml_w0.05_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.025,
+       "fraccion_recorrido_constante_oraculo": 0.0286,
+       "potencia": 0.57,
+       "potencia_crit_normal": 0.65
+      },
+      "pinball": {
+       "ganancia_rel": 0.0021,
+       "fraccion_recorrido_constante_oraculo": 0.0376,
+       "potencia": 0.09,
+       "potencia_crit_normal": 0.093
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0365,
+       "potencia": 0.097,
+       "potencia_crit_normal": 0.123
+      },
+      "brier": {
+       "ganancia_rel": 0.0016,
+       "fraccion_recorrido_constante_oraculo": 0.0295,
+       "potencia": 0.137,
+       "potencia_crit_normal": 0.007
+      }
+     },
+     "ml_w0.1_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0557,
+       "fraccion_recorrido_constante_oraculo": 0.0636,
+       "potencia": 0.953,
+       "potencia_crit_normal": 0.977
+      },
+      "pinball": {
+       "ganancia_rel": 0.0042,
+       "fraccion_recorrido_constante_oraculo": 0.0748,
+       "potencia": 0.147,
+       "potencia_crit_normal": 0.163
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0755,
+       "potencia": 0.15,
+       "potencia_crit_normal": 0.237
+      },
+      "brier": {
+       "ganancia_rel": 0.0035,
+       "fraccion_recorrido_constante_oraculo": 0.0651,
+       "potencia": 0.207,
+       "potencia_crit_normal": 0.023
+      }
+     },
+     "ml_w0.15_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0847,
+       "fraccion_recorrido_constante_oraculo": 0.0968,
+       "potencia": 0.997,
+       "potencia_crit_normal": 0.997
+      },
+      "pinball": {
+       "ganancia_rel": 0.0061,
+       "fraccion_recorrido_constante_oraculo": 0.1104,
+       "potencia": 0.183,
+       "potencia_crit_normal": 0.2
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1128,
+       "potencia": 0.213,
+       "potencia_crit_normal": 0.29
+      },
+      "brier": {
+       "ganancia_rel": 0.0053,
+       "fraccion_recorrido_constante_oraculo": 0.1003,
+       "potencia": 0.25,
+       "potencia_crit_normal": 0.037
+      }
+     },
+     "ml_w0.2_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.112,
+       "fraccion_recorrido_constante_oraculo": 0.128,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.008,
+       "fraccion_recorrido_constante_oraculo": 0.1444,
+       "potencia": 0.217,
+       "potencia_crit_normal": 0.237
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1486,
+       "potencia": 0.253,
+       "potencia_crit_normal": 0.34
+      },
+      "brier": {
+       "ganancia_rel": 0.0072,
+       "fraccion_recorrido_constante_oraculo": 0.1346,
+       "potencia": 0.307,
+       "potencia_crit_normal": 0.053
+      }
+     },
+     "ml_w0.3_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.1616,
+       "fraccion_recorrido_constante_oraculo": 0.1847,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0116,
+       "fraccion_recorrido_constante_oraculo": 0.2082,
+       "potencia": 0.243,
+       "potencia_crit_normal": 0.257
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.215,
+       "potencia": 0.303,
+       "potencia_crit_normal": 0.397
+      },
+      "brier": {
+       "ganancia_rel": 0.0106,
+       "fraccion_recorrido_constante_oraculo": 0.1994,
+       "potencia": 0.337,
+       "potencia_crit_normal": 0.067
+      }
+     },
+     "ml_w0.45_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2236,
+       "fraccion_recorrido_constante_oraculo": 0.2556,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0162,
+       "fraccion_recorrido_constante_oraculo": 0.2915,
+       "potencia": 0.263,
+       "potencia_crit_normal": 0.277
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3013,
+       "potencia": 0.31,
+       "potencia_crit_normal": 0.393
+      },
+      "brier": {
+       "ganancia_rel": 0.0151,
+       "fraccion_recorrido_constante_oraculo": 0.284,
+       "potencia": 0.343,
+       "potencia_crit_normal": 0.07
+      }
+     },
+     "ml_w0.6_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2706,
+       "fraccion_recorrido_constante_oraculo": 0.3093,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.02,
+       "fraccion_recorrido_constante_oraculo": 0.3599,
+       "potencia": 0.26,
+       "potencia_crit_normal": 0.277
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3713,
+       "potencia": 0.29,
+       "potencia_crit_normal": 0.367
+      },
+      "brier": {
+       "ganancia_rel": 0.0186,
+       "fraccion_recorrido_constante_oraculo": 0.3506,
+       "potencia": 0.31,
+       "potencia_crit_normal": 0.067
+      }
+     },
+     "ml_w0.8_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.3096,
+       "fraccion_recorrido_constante_oraculo": 0.3539,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0236,
+       "fraccion_recorrido_constante_oraculo": 0.426,
+       "potencia": 0.22,
+       "potencia_crit_normal": 0.233
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.4386,
+       "potencia": 0.267,
+       "potencia_crit_normal": 0.337
+      },
+      "brier": {
+       "ganancia_rel": 0.0218,
+       "fraccion_recorrido_constante_oraculo": 0.4101,
+       "potencia": 0.293,
+       "potencia_crit_normal": 0.067
+      }
+     },
+     "ml_w1.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.3209,
+       "fraccion_recorrido_constante_oraculo": 0.3667,
+       "potencia": 0.987,
+       "potencia_crit_normal": 0.99
+      },
+      "pinball": {
+       "ganancia_rel": 0.0256,
+       "fraccion_recorrido_constante_oraculo": 0.4608,
+       "potencia": 0.2,
+       "potencia_crit_normal": 0.21
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.4732,
+       "potencia": 0.237,
+       "potencia_crit_normal": 0.297
+      },
+      "brier": {
+       "ganancia_rel": 0.0234,
+       "fraccion_recorrido_constante_oraculo": 0.4399,
+       "potencia": 0.277,
+       "potencia_crit_normal": 0.063
+      }
+     }
+    },
+    "mde": {
+     "qlike": {
+      "ganancia_qlike_en_w": [
+       -0.0074,
+       0.025,
+       0.0557,
+       0.0847,
+       0.112,
+       0.1616,
+       0.2236,
+       0.2706,
+       0.3096,
+       0.3209
+      ],
+      "potencia_en_w": [
+       0.007,
+       0.57,
+       0.953,
+       0.997,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       0.987
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0084,
+       0.0286,
+       0.0636,
+       0.0968,
+       0.128,
+       0.1847,
+       0.2556,
+       0.3093,
+       0.3539,
+       0.3667
+      ],
+      "mde_ganancia_qlike": 0.0434,
+      "potencia_si_ganancia_0.02": 0.483,
+      "potencia_si_ganancia_0.05": 0.882,
+      "potencia_si_ganancia_0.1": 0.999
+     },
+     "pinball": {
+      "ganancia_qlike_en_w": [
+       -0.0074,
+       0.025,
+       0.0557,
+       0.0847,
+       0.112,
+       0.1616,
+       0.2236,
+       0.2706,
+       0.3096,
+       0.3209
+      ],
+      "potencia_en_w": [
+       0.057,
+       0.09,
+       0.147,
+       0.183,
+       0.217,
+       0.243,
+       0.263,
+       0.26,
+       0.22,
+       0.2
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0014,
+       0.0376,
+       0.0748,
+       0.1104,
+       0.1444,
+       0.2082,
+       0.2915,
+       0.3599,
+       0.426,
+       0.4608
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "fz0": {
+      "ganancia_qlike_en_w": [
+       -0.0074,
+       0.025,
+       0.0557,
+       0.0847,
+       0.112,
+       0.1616,
+       0.2236,
+       0.2706,
+       0.3096,
+       0.3209
+      ],
+      "potencia_en_w": [
+       0.057,
+       0.097,
+       0.15,
+       0.213,
+       0.253,
+       0.303,
+       0.31,
+       0.29,
+       0.267,
+       0.237
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0041,
+       0.0365,
+       0.0755,
+       0.1128,
+       0.1486,
+       0.215,
+       0.3013,
+       0.3713,
+       0.4386,
+       0.4732
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "brier": {
+      "ganancia_qlike_en_w": [
+       -0.0074,
+       0.025,
+       0.0557,
+       0.0847,
+       0.112,
+       0.1616,
+       0.2236,
+       0.2706,
+       0.3096,
+       0.3209
+      ],
+      "potencia_en_w": [
+       0.047,
+       0.137,
+       0.207,
+       0.25,
+       0.307,
+       0.337,
+       0.343,
+       0.31,
+       0.293,
+       0.277
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0063,
+       0.0295,
+       0.0651,
+       0.1003,
+       0.1346,
+       0.1994,
+       0.284,
+       0.3506,
+       0.4101,
+       0.4399
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     }
+    }
+   }
+  },
+  "D_con_VIX_1995-2004": {
+   "h1": {
+    "critico_nula_95": {
+     "qlike": 1.528,
+     "pinball": 1.647,
+     "fz0": 1.69,
+     "brier": 0.715
+    },
+    "tamaño_real_con_1.645": {
+     "qlike": 0.037,
+     "pinball": 0.053,
+     "fz0": 0.057,
+     "brier": 0.0
+    },
+    "n_efectivo_dif_qlike_(w=0.3)": 3200000264.3,
+    "tasa_caida10_sim": 0.0186,
+    "sd_log_rv_sim": 0.801,
+    "curtosis_diaria_sim": 10.38,
+    "contrastes": {
+     "har_vs_b1_12m": {
+      "qlike": {
+       "ganancia_rel": 0.4652,
+       "fraccion_recorrido_constante_oraculo": 1.0583,
+       "potencia": 0.907,
+       "potencia_crit_normal": 0.89
+      },
+      "pinball": {
+       "ganancia_rel": 0.0626,
+       "fraccion_recorrido_constante_oraculo": 1.0652,
+       "potencia": 0.26,
+       "potencia_crit_normal": 0.26
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 1.013,
+       "potencia": 0.253,
+       "potencia_crit_normal": 0.267
+      },
+      "brier": {
+       "ganancia_rel": 0.0103,
+       "fraccion_recorrido_constante_oraculo": 0.1901,
+       "potencia": 0.07,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "har_vs_ewma": {
+      "qlike": {
+       "ganancia_rel": 0.1915,
+       "fraccion_recorrido_constante_oraculo": 0.2881,
+       "potencia": 0.75,
+       "potencia_crit_normal": 0.7
+      },
+      "pinball": {
+       "ganancia_rel": 0.0125,
+       "fraccion_recorrido_constante_oraculo": 0.2018,
+       "potencia": 0.163,
+       "potencia_crit_normal": 0.163
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1701,
+       "potencia": 0.103,
+       "potencia_crit_normal": 0.113
+      },
+      "brier": {
+       "ganancia_rel": 0.0033,
+       "fraccion_recorrido_constante_oraculo": 0.0608,
+       "potencia": 0.273,
+       "potencia_crit_normal": 0.197
+      }
+     },
+     "oraculo_vs_har_(techo)": {
+      "qlike": {
+       "ganancia_rel": 0.3193,
+       "fraccion_recorrido_constante_oraculo": 0.3885,
+       "potencia": 0.943,
+       "potencia_crit_normal": 0.93
+      },
+      "pinball": {
+       "ganancia_rel": 0.0303,
+       "fraccion_recorrido_constante_oraculo": 0.4831,
+       "potencia": 0.163,
+       "potencia_crit_normal": 0.167
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.4966,
+       "potencia": 0.237,
+       "potencia_crit_normal": 0.24
+      },
+      "brier": {
+       "ganancia_rel": 0.0286,
+       "fraccion_recorrido_constante_oraculo": 0.5237,
+       "potencia": 0.12,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "ml_w0.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": -0.0053,
+       "fraccion_recorrido_constante_oraculo": -0.0064,
+       "potencia": 0.033,
+       "potencia_crit_normal": 0.027
+      },
+      "pinball": {
+       "ganancia_rel": -0.0005,
+       "fraccion_recorrido_constante_oraculo": -0.0083,
+       "potencia": 0.013,
+       "potencia_crit_normal": 0.013
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": -0.0099,
+       "potencia": 0.027,
+       "potencia_crit_normal": 0.033
+      },
+      "brier": {
+       "ganancia_rel": 0.0008,
+       "fraccion_recorrido_constante_oraculo": 0.0139,
+       "potencia": 0.047,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "ml_w0.05_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.026,
+       "fraccion_recorrido_constante_oraculo": 0.0316,
+       "potencia": 0.58,
+       "potencia_crit_normal": 0.53
+      },
+      "pinball": {
+       "ganancia_rel": 0.0023,
+       "fraccion_recorrido_constante_oraculo": 0.0362,
+       "potencia": 0.047,
+       "potencia_crit_normal": 0.047
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0343,
+       "potencia": 0.07,
+       "potencia_crit_normal": 0.07
+      },
+      "brier": {
+       "ganancia_rel": 0.0022,
+       "fraccion_recorrido_constante_oraculo": 0.0406,
+       "potencia": 0.073,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "ml_w0.1_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0556,
+       "fraccion_recorrido_constante_oraculo": 0.0676,
+       "potencia": 0.95,
+       "potencia_crit_normal": 0.933
+      },
+      "pinball": {
+       "ganancia_rel": 0.0049,
+       "fraccion_recorrido_constante_oraculo": 0.0786,
+       "potencia": 0.11,
+       "potencia_crit_normal": 0.11
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0764,
+       "potencia": 0.14,
+       "potencia_crit_normal": 0.153
+      },
+      "brier": {
+       "ganancia_rel": 0.0025,
+       "fraccion_recorrido_constante_oraculo": 0.0453,
+       "potencia": 0.097,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "ml_w0.15_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0836,
+       "fraccion_recorrido_constante_oraculo": 0.1017,
+       "potencia": 0.99,
+       "potencia_crit_normal": 0.99
+      },
+      "pinball": {
+       "ganancia_rel": 0.0074,
+       "fraccion_recorrido_constante_oraculo": 0.1182,
+       "potencia": 0.143,
+       "potencia_crit_normal": 0.143
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1163,
+       "potencia": 0.173,
+       "potencia_crit_normal": 0.19
+      },
+      "brier": {
+       "ganancia_rel": 0.004,
+       "fraccion_recorrido_constante_oraculo": 0.0736,
+       "potencia": 0.113,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "ml_w0.2_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.1099,
+       "fraccion_recorrido_constante_oraculo": 0.1338,
+       "potencia": 0.993,
+       "potencia_crit_normal": 0.993
+      },
+      "pinball": {
+       "ganancia_rel": 0.0097,
+       "fraccion_recorrido_constante_oraculo": 0.1553,
+       "potencia": 0.16,
+       "potencia_crit_normal": 0.16
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.154,
+       "potencia": 0.213,
+       "potencia_crit_normal": 0.227
+      },
+      "brier": {
+       "ganancia_rel": 0.0059,
+       "fraccion_recorrido_constante_oraculo": 0.1071,
+       "potencia": 0.12,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "ml_w0.3_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.1579,
+       "fraccion_recorrido_constante_oraculo": 0.1921,
+       "potencia": 0.997,
+       "potencia_crit_normal": 0.997
+      },
+      "pinball": {
+       "ganancia_rel": 0.014,
+       "fraccion_recorrido_constante_oraculo": 0.2233,
+       "potencia": 0.19,
+       "potencia_crit_normal": 0.19
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.2231,
+       "potencia": 0.24,
+       "potencia_crit_normal": 0.26
+      },
+      "brier": {
+       "ganancia_rel": 0.0107,
+       "fraccion_recorrido_constante_oraculo": 0.1965,
+       "potencia": 0.127,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "ml_w0.45_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.218,
+       "fraccion_recorrido_constante_oraculo": 0.2652,
+       "potencia": 0.997,
+       "potencia_crit_normal": 0.997
+      },
+      "pinball": {
+       "ganancia_rel": 0.0194,
+       "fraccion_recorrido_constante_oraculo": 0.3085,
+       "potencia": 0.187,
+       "potencia_crit_normal": 0.187
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3115,
+       "potencia": 0.267,
+       "potencia_crit_normal": 0.283
+      },
+      "brier": {
+       "ganancia_rel": 0.0159,
+       "fraccion_recorrido_constante_oraculo": 0.2902,
+       "potencia": 0.12,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "ml_w0.6_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2638,
+       "fraccion_recorrido_constante_oraculo": 0.3209,
+       "potencia": 0.997,
+       "potencia_crit_normal": 0.997
+      },
+      "pinball": {
+       "ganancia_rel": 0.0236,
+       "fraccion_recorrido_constante_oraculo": 0.3767,
+       "potencia": 0.19,
+       "potencia_crit_normal": 0.197
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3825,
+       "potencia": 0.257,
+       "potencia_crit_normal": 0.273
+      },
+      "brier": {
+       "ganancia_rel": 0.0187,
+       "fraccion_recorrido_constante_oraculo": 0.3414,
+       "potencia": 0.13,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "ml_w0.8_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.3022,
+       "fraccion_recorrido_constante_oraculo": 0.3677,
+       "potencia": 0.98,
+       "potencia_crit_normal": 0.98
+      },
+      "pinball": {
+       "ganancia_rel": 0.0278,
+       "fraccion_recorrido_constante_oraculo": 0.4434,
+       "potencia": 0.17,
+       "potencia_crit_normal": 0.173
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.4512,
+       "potencia": 0.25,
+       "potencia_crit_normal": 0.26
+      },
+      "brier": {
+       "ganancia_rel": 0.0245,
+       "fraccion_recorrido_constante_oraculo": 0.448,
+       "potencia": 0.123,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "ml_w1.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.3141,
+       "fraccion_recorrido_constante_oraculo": 0.3821,
+       "potencia": 0.927,
+       "potencia_crit_normal": 0.91
+      },
+      "pinball": {
+       "ganancia_rel": 0.0299,
+       "fraccion_recorrido_constante_oraculo": 0.476,
+       "potencia": 0.153,
+       "potencia_crit_normal": 0.153
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.4856,
+       "potencia": 0.213,
+       "potencia_crit_normal": 0.23
+      },
+      "brier": {
+       "ganancia_rel": 0.028,
+       "fraccion_recorrido_constante_oraculo": 0.5125,
+       "potencia": 0.12,
+       "potencia_crit_normal": 0.0
+      }
+     }
+    },
+    "mde": {
+     "qlike": {
+      "ganancia_qlike_en_w": [
+       -0.0053,
+       0.026,
+       0.0556,
+       0.0836,
+       0.1099,
+       0.1579,
+       0.218,
+       0.2638,
+       0.3022,
+       0.3141
+      ],
+      "potencia_en_w": [
+       0.033,
+       0.58,
+       0.95,
+       0.99,
+       0.993,
+       0.997,
+       0.997,
+       0.997,
+       0.98,
+       0.927
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0064,
+       0.0316,
+       0.0676,
+       0.1017,
+       0.1338,
+       0.1921,
+       0.2652,
+       0.3209,
+       0.3677,
+       0.3821
+      ],
+      "mde_ganancia_qlike": 0.0436,
+      "potencia_si_ganancia_0.02": 0.475,
+      "potencia_si_ganancia_0.05": 0.88,
+      "potencia_si_ganancia_0.1": 0.992
+     },
+     "pinball": {
+      "ganancia_qlike_en_w": [
+       -0.0053,
+       0.026,
+       0.0556,
+       0.0836,
+       0.1099,
+       0.1579,
+       0.218,
+       0.2638,
+       0.3022,
+       0.3141
+      ],
+      "potencia_en_w": [
+       0.013,
+       0.047,
+       0.11,
+       0.143,
+       0.16,
+       0.19,
+       0.187,
+       0.19,
+       0.17,
+       0.153
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0083,
+       0.0362,
+       0.0786,
+       0.1182,
+       0.1553,
+       0.2233,
+       0.3085,
+       0.3767,
+       0.4434,
+       0.476
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "fz0": {
+      "ganancia_qlike_en_w": [
+       -0.0053,
+       0.026,
+       0.0556,
+       0.0836,
+       0.1099,
+       0.1579,
+       0.218,
+       0.2638,
+       0.3022,
+       0.3141
+      ],
+      "potencia_en_w": [
+       0.027,
+       0.07,
+       0.14,
+       0.173,
+       0.213,
+       0.24,
+       0.267,
+       0.257,
+       0.25,
+       0.213
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0099,
+       0.0343,
+       0.0764,
+       0.1163,
+       0.154,
+       0.2231,
+       0.3115,
+       0.3825,
+       0.4512,
+       0.4856
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "brier": {
+      "ganancia_qlike_en_w": [
+       -0.0053,
+       0.026,
+       0.0556,
+       0.0836,
+       0.1099,
+       0.1579,
+       0.218,
+       0.2638,
+       0.3022,
+       0.3141
+      ],
+      "potencia_en_w": [
+       0.047,
+       0.073,
+       0.097,
+       0.113,
+       0.12,
+       0.127,
+       0.12,
+       0.13,
+       0.123,
+       0.12
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       0.0139,
+       0.0406,
+       0.0453,
+       0.0736,
+       0.1071,
+       0.1965,
+       0.2902,
+       0.3414,
+       0.448,
+       0.5125
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     }
+    }
+   },
+   "h3": {
+    "critico_nula_95": {
+     "qlike": 1.817,
+     "pinball": 1.973,
+     "fz0": 2.339,
+     "brier": 0.971
+    },
+    "tamaño_real_con_1.645": {
+     "qlike": 0.077,
+     "pinball": 0.083,
+     "fz0": 0.11,
+     "brier": 0.0
+    },
+    "n_efectivo_dif_qlike_(w=0.3)": 2400001048.3,
+    "tasa_caida10_sim": 0.084,
+    "sd_log_rv_sim": 0.6413,
+    "curtosis_diaria_sim": 10.38,
+    "contrastes": {
+     "har_vs_b1_12m": {
+      "qlike": {
+       "ganancia_rel": 0.5412,
+       "fraccion_recorrido_constante_oraculo": 1.4333,
+       "potencia": 0.687,
+       "potencia_crit_normal": 0.763
+      },
+      "pinball": {
+       "ganancia_rel": 0.0533,
+       "fraccion_recorrido_constante_oraculo": 1.4535,
+       "potencia": 0.147,
+       "potencia_crit_normal": 0.187
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 1.3057,
+       "potencia": 0.1,
+       "potencia_crit_normal": 0.203
+      },
+      "brier": {
+       "ganancia_rel": 0.0116,
+       "fraccion_recorrido_constante_oraculo": 0.2125,
+       "potencia": 0.067,
+       "potencia_crit_normal": 0.007
+      }
+     },
+     "har_vs_ewma": {
+      "qlike": {
+       "ganancia_rel": 0.3608,
+       "fraccion_recorrido_constante_oraculo": 0.6858,
+       "potencia": 0.77,
+       "potencia_crit_normal": 0.82
+      },
+      "pinball": {
+       "ganancia_rel": 0.0233,
+       "fraccion_recorrido_constante_oraculo": 0.6159,
+       "potencia": 0.21,
+       "potencia_crit_normal": 0.253
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.5714,
+       "potencia": 0.067,
+       "potencia_crit_normal": 0.2
+      },
+      "brier": {
+       "ganancia_rel": -0.0002,
+       "fraccion_recorrido_constante_oraculo": -0.0045,
+       "potencia": 0.053,
+       "potencia_crit_normal": 0.027
+      }
+     },
+     "oraculo_vs_har_(techo)": {
+      "qlike": {
+       "ganancia_rel": 0.3316,
+       "fraccion_recorrido_constante_oraculo": 0.4029,
+       "potencia": 0.77,
+       "potencia_crit_normal": 0.813
+      },
+      "pinball": {
+       "ganancia_rel": 0.0222,
+       "fraccion_recorrido_constante_oraculo": 0.573,
+       "potencia": 0.093,
+       "potencia_crit_normal": 0.127
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.5988,
+       "potencia": 0.1,
+       "potencia_crit_normal": 0.183
+      },
+      "brier": {
+       "ganancia_rel": 0.0178,
+       "fraccion_recorrido_constante_oraculo": 0.3208,
+       "potencia": 0.11,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "ml_w0.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": -0.0078,
+       "fraccion_recorrido_constante_oraculo": -0.0094,
+       "potencia": 0.017,
+       "potencia_crit_normal": 0.033
+      },
+      "pinball": {
+       "ganancia_rel": -0.0005,
+       "fraccion_recorrido_constante_oraculo": -0.0139,
+       "potencia": 0.047,
+       "potencia_crit_normal": 0.057
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": -0.0048,
+       "potencia": 0.03,
+       "potencia_crit_normal": 0.097
+      },
+      "brier": {
+       "ganancia_rel": 0.0003,
+       "fraccion_recorrido_constante_oraculo": 0.0051,
+       "potencia": 0.053,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "ml_w0.05_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0252,
+       "fraccion_recorrido_constante_oraculo": 0.0306,
+       "potencia": 0.323,
+       "potencia_crit_normal": 0.373
+      },
+      "pinball": {
+       "ganancia_rel": 0.0014,
+       "fraccion_recorrido_constante_oraculo": 0.0356,
+       "potencia": 0.057,
+       "potencia_crit_normal": 0.083
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0452,
+       "potencia": 0.05,
+       "potencia_crit_normal": 0.133
+      },
+      "brier": {
+       "ganancia_rel": 0.0018,
+       "fraccion_recorrido_constante_oraculo": 0.0333,
+       "potencia": 0.07,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "ml_w0.1_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0563,
+       "fraccion_recorrido_constante_oraculo": 0.0684,
+       "potencia": 0.693,
+       "potencia_crit_normal": 0.743
+      },
+      "pinball": {
+       "ganancia_rel": 0.0032,
+       "fraccion_recorrido_constante_oraculo": 0.0826,
+       "potencia": 0.073,
+       "potencia_crit_normal": 0.12
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0933,
+       "potencia": 0.067,
+       "potencia_crit_normal": 0.167
+      },
+      "brier": {
+       "ganancia_rel": 0.0034,
+       "fraccion_recorrido_constante_oraculo": 0.061,
+       "potencia": 0.077,
+       "potencia_crit_normal": 0.007
+      }
+     },
+     "ml_w0.15_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0858,
+       "fraccion_recorrido_constante_oraculo": 0.1042,
+       "potencia": 0.867,
+       "potencia_crit_normal": 0.907
+      },
+      "pinball": {
+       "ganancia_rel": 0.0049,
+       "fraccion_recorrido_constante_oraculo": 0.1274,
+       "potencia": 0.1,
+       "potencia_crit_normal": 0.117
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1396,
+       "potencia": 0.083,
+       "potencia_crit_normal": 0.177
+      },
+      "brier": {
+       "ganancia_rel": 0.0049,
+       "fraccion_recorrido_constante_oraculo": 0.0878,
+       "potencia": 0.08,
+       "potencia_crit_normal": 0.007
+      }
+     },
+     "ml_w0.2_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.1135,
+       "fraccion_recorrido_constante_oraculo": 0.1379,
+       "potencia": 0.92,
+       "potencia_crit_normal": 0.943
+      },
+      "pinball": {
+       "ganancia_rel": 0.0066,
+       "fraccion_recorrido_constante_oraculo": 0.1697,
+       "potencia": 0.09,
+       "potencia_crit_normal": 0.127
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1839,
+       "potencia": 0.073,
+       "potencia_crit_normal": 0.183
+      },
+      "brier": {
+       "ganancia_rel": 0.0063,
+       "fraccion_recorrido_constante_oraculo": 0.1134,
+       "potencia": 0.087,
+       "potencia_crit_normal": 0.01
+      }
+     },
+     "ml_w0.3_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.1639,
+       "fraccion_recorrido_constante_oraculo": 0.1991,
+       "potencia": 0.943,
+       "potencia_crit_normal": 0.963
+      },
+      "pinball": {
+       "ganancia_rel": 0.0097,
+       "fraccion_recorrido_constante_oraculo": 0.2501,
+       "potencia": 0.093,
+       "potencia_crit_normal": 0.137
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.2668,
+       "potencia": 0.087,
+       "potencia_crit_normal": 0.207
+      },
+      "brier": {
+       "ganancia_rel": 0.0089,
+       "fraccion_recorrido_constante_oraculo": 0.1604,
+       "potencia": 0.107,
+       "potencia_crit_normal": 0.007
+      }
+     },
+     "ml_w0.45_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2266,
+       "fraccion_recorrido_constante_oraculo": 0.2753,
+       "potencia": 0.94,
+       "potencia_crit_normal": 0.957
+      },
+      "pinball": {
+       "ganancia_rel": 0.0137,
+       "fraccion_recorrido_constante_oraculo": 0.3531,
+       "potencia": 0.093,
+       "potencia_crit_normal": 0.157
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3753,
+       "potencia": 0.117,
+       "potencia_crit_normal": 0.207
+      },
+      "brier": {
+       "ganancia_rel": 0.0121,
+       "fraccion_recorrido_constante_oraculo": 0.2186,
+       "potencia": 0.123,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "ml_w0.6_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.274,
+       "fraccion_recorrido_constante_oraculo": 0.3329,
+       "potencia": 0.92,
+       "potencia_crit_normal": 0.943
+      },
+      "pinball": {
+       "ganancia_rel": 0.0168,
+       "fraccion_recorrido_constante_oraculo": 0.4346,
+       "potencia": 0.09,
+       "potencia_crit_normal": 0.137
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.4625,
+       "potencia": 0.103,
+       "potencia_crit_normal": 0.207
+      },
+      "brier": {
+       "ganancia_rel": 0.0145,
+       "fraccion_recorrido_constante_oraculo": 0.2618,
+       "potencia": 0.117,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "ml_w0.8_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.3131,
+       "fraccion_recorrido_constante_oraculo": 0.3804,
+       "potencia": 0.843,
+       "potencia_crit_normal": 0.877
+      },
+      "pinball": {
+       "ganancia_rel": 0.02,
+       "fraccion_recorrido_constante_oraculo": 0.5156,
+       "potencia": 0.087,
+       "potencia_crit_normal": 0.147
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.5465,
+       "potencia": 0.113,
+       "potencia_crit_normal": 0.2
+      },
+      "brier": {
+       "ganancia_rel": 0.0165,
+       "fraccion_recorrido_constante_oraculo": 0.2982,
+       "potencia": 0.11,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "ml_w1.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.3241,
+       "fraccion_recorrido_constante_oraculo": 0.3937,
+       "potencia": 0.763,
+       "potencia_crit_normal": 0.793
+      },
+      "pinball": {
+       "ganancia_rel": 0.0219,
+       "fraccion_recorrido_constante_oraculo": 0.5651,
+       "potencia": 0.087,
+       "potencia_crit_normal": 0.14
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.594,
+       "potencia": 0.103,
+       "potencia_crit_normal": 0.18
+      },
+      "brier": {
+       "ganancia_rel": 0.0174,
+       "fraccion_recorrido_constante_oraculo": 0.3143,
+       "potencia": 0.11,
+       "potencia_crit_normal": 0.003
+      }
+     }
+    },
+    "mde": {
+     "qlike": {
+      "ganancia_qlike_en_w": [
+       -0.0078,
+       0.0252,
+       0.0563,
+       0.0858,
+       0.1135,
+       0.1639,
+       0.2266,
+       0.274,
+       0.3131,
+       0.3241
+      ],
+      "potencia_en_w": [
+       0.017,
+       0.323,
+       0.693,
+       0.867,
+       0.92,
+       0.943,
+       0.94,
+       0.92,
+       0.843,
+       0.763
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0094,
+       0.0306,
+       0.0684,
+       0.1042,
+       0.1379,
+       0.1991,
+       0.2753,
+       0.3329,
+       0.3804,
+       0.3937
+      ],
+      "mde_ganancia_qlike": 0.0744,
+      "potencia_si_ganancia_0.02": 0.275,
+      "potencia_si_ganancia_0.05": 0.618,
+      "potencia_si_ganancia_0.1": 0.894
+     },
+     "pinball": {
+      "ganancia_qlike_en_w": [
+       -0.0078,
+       0.0252,
+       0.0563,
+       0.0858,
+       0.1135,
+       0.1639,
+       0.2266,
+       0.274,
+       0.3131,
+       0.3241
+      ],
+      "potencia_en_w": [
+       0.047,
+       0.057,
+       0.073,
+       0.1,
+       0.09,
+       0.093,
+       0.093,
+       0.09,
+       0.087,
+       0.087
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0139,
+       0.0356,
+       0.0826,
+       0.1274,
+       0.1697,
+       0.2501,
+       0.3531,
+       0.4346,
+       0.5156,
+       0.5651
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "fz0": {
+      "ganancia_qlike_en_w": [
+       -0.0078,
+       0.0252,
+       0.0563,
+       0.0858,
+       0.1135,
+       0.1639,
+       0.2266,
+       0.274,
+       0.3131,
+       0.3241
+      ],
+      "potencia_en_w": [
+       0.03,
+       0.05,
+       0.067,
+       0.083,
+       0.073,
+       0.087,
+       0.117,
+       0.103,
+       0.113,
+       0.103
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0048,
+       0.0452,
+       0.0933,
+       0.1396,
+       0.1839,
+       0.2668,
+       0.3753,
+       0.4625,
+       0.5465,
+       0.594
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "brier": {
+      "ganancia_qlike_en_w": [
+       -0.0078,
+       0.0252,
+       0.0563,
+       0.0858,
+       0.1135,
+       0.1639,
+       0.2266,
+       0.274,
+       0.3131,
+       0.3241
+      ],
+      "potencia_en_w": [
+       0.053,
+       0.07,
+       0.077,
+       0.08,
+       0.087,
+       0.107,
+       0.123,
+       0.117,
+       0.11,
+       0.11
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       0.0051,
+       0.0333,
+       0.061,
+       0.0878,
+       0.1134,
+       0.1604,
+       0.2186,
+       0.2618,
+       0.2982,
+       0.3143
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     }
+    }
+   }
+  },
+  "E_panel16_1991-2004": {
+   "h1": {
+    "critico_nula_95": {
+     "qlike": 1.708,
+     "pinball": 1.727,
+     "fz0": 1.911,
+     "brier": 1.208
+    },
+    "tamaño_real_con_1.645": {
+     "qlike": 0.07,
+     "pinball": 0.07,
+     "fz0": 0.08,
+     "brier": 0.01
+    },
+    "n_efectivo_dif_qlike_(w=0.3)": 234.4,
+    "tasa_caida10_sim": 0.0205,
+    "sd_log_rv_sim": 0.8228,
+    "curtosis_diaria_sim": 10.97,
+    "contrastes": {
+     "har_vs_b1_12m": {
+      "qlike": {
+       "ganancia_rel": 0.4673,
+       "fraccion_recorrido_constante_oraculo": 1.0314,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0645,
+       "fraccion_recorrido_constante_oraculo": 0.8959,
+       "potencia": 0.95,
+       "potencia_crit_normal": 0.97
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.8803,
+       "potencia": 0.95,
+       "potencia_crit_normal": 0.98
+      },
+      "brier": {
+       "ganancia_rel": 0.0167,
+       "fraccion_recorrido_constante_oraculo": 0.299,
+       "potencia": 0.31,
+       "potencia_crit_normal": 0.04
+      }
+     },
+     "har_vs_ewma": {
+      "qlike": {
+       "ganancia_rel": 0.1871,
+       "fraccion_recorrido_constante_oraculo": 0.2707,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0129,
+       "fraccion_recorrido_constante_oraculo": 0.1701,
+       "potencia": 0.38,
+       "potencia_crit_normal": 0.4
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1202,
+       "potencia": 0.21,
+       "potencia_crit_normal": 0.29
+      },
+      "brier": {
+       "ganancia_rel": -0.0002,
+       "fraccion_recorrido_constante_oraculo": -0.0036,
+       "potencia": 0.1,
+       "potencia_crit_normal": 0.01
+      }
+     },
+     "oraculo_vs_har_(techo)": {
+      "qlike": {
+       "ganancia_rel": 0.3208,
+       "fraccion_recorrido_constante_oraculo": 0.3771,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0373,
+       "fraccion_recorrido_constante_oraculo": 0.4845,
+       "potencia": 0.75,
+       "potencia_crit_normal": 0.79
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.4859,
+       "potencia": 0.73,
+       "potencia_crit_normal": 0.83
+      },
+      "brier": {
+       "ganancia_rel": 0.0279,
+       "fraccion_recorrido_constante_oraculo": 0.4921,
+       "potencia": 0.36,
+       "potencia_crit_normal": 0.16
+      }
+     },
+     "ml_w0.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": -0.0048,
+       "fraccion_recorrido_constante_oraculo": -0.0057,
+       "potencia": 0.0,
+       "potencia_crit_normal": 0.0
+      },
+      "pinball": {
+       "ganancia_rel": -0.0006,
+       "fraccion_recorrido_constante_oraculo": -0.0076,
+       "potencia": 0.01,
+       "potencia_crit_normal": 0.01
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": -0.007,
+       "potencia": 0.0,
+       "potencia_crit_normal": 0.01
+      },
+      "brier": {
+       "ganancia_rel": -0.0005,
+       "fraccion_recorrido_constante_oraculo": -0.0092,
+       "potencia": 0.04,
+       "potencia_crit_normal": 0.01
+      }
+     },
+     "ml_w0.05_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0266,
+       "fraccion_recorrido_constante_oraculo": 0.0312,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0026,
+       "fraccion_recorrido_constante_oraculo": 0.034,
+       "potencia": 0.38,
+       "potencia_crit_normal": 0.41
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0345,
+       "potencia": 0.4,
+       "potencia_crit_normal": 0.49
+      },
+      "brier": {
+       "ganancia_rel": 0.0014,
+       "fraccion_recorrido_constante_oraculo": 0.0255,
+       "potencia": 0.1,
+       "potencia_crit_normal": 0.01
+      }
+     },
+     "ml_w0.1_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0563,
+       "fraccion_recorrido_constante_oraculo": 0.0662,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0057,
+       "fraccion_recorrido_constante_oraculo": 0.0738,
+       "potencia": 0.81,
+       "potencia_crit_normal": 0.82
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0743,
+       "potencia": 0.8,
+       "potencia_crit_normal": 0.87
+      },
+      "brier": {
+       "ganancia_rel": 0.0034,
+       "fraccion_recorrido_constante_oraculo": 0.0599,
+       "potencia": 0.3,
+       "potencia_crit_normal": 0.08
+      }
+     },
+     "ml_w0.15_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0844,
+       "fraccion_recorrido_constante_oraculo": 0.0993,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0086,
+       "fraccion_recorrido_constante_oraculo": 0.1119,
+       "potencia": 0.94,
+       "potencia_crit_normal": 0.95
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1123,
+       "potencia": 0.94,
+       "potencia_crit_normal": 0.98
+      },
+      "brier": {
+       "ganancia_rel": 0.0054,
+       "fraccion_recorrido_constante_oraculo": 0.0948,
+       "potencia": 0.38,
+       "potencia_crit_normal": 0.11
+      }
+     },
+     "ml_w0.2_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.1109,
+       "fraccion_recorrido_constante_oraculo": 0.1304,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0114,
+       "fraccion_recorrido_constante_oraculo": 0.148,
+       "potencia": 0.97,
+       "potencia_crit_normal": 1.0
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1486,
+       "potencia": 0.98,
+       "potencia_crit_normal": 0.99
+      },
+      "brier": {
+       "ganancia_rel": 0.0073,
+       "fraccion_recorrido_constante_oraculo": 0.1281,
+       "potencia": 0.44,
+       "potencia_crit_normal": 0.14
+      }
+     },
+     "ml_w0.3_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.1591,
+       "fraccion_recorrido_constante_oraculo": 0.1871,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0165,
+       "fraccion_recorrido_constante_oraculo": 0.215,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.216,
+       "potencia": 0.99,
+       "potencia_crit_normal": 0.99
+      },
+      "brier": {
+       "ganancia_rel": 0.011,
+       "fraccion_recorrido_constante_oraculo": 0.1934,
+       "potencia": 0.44,
+       "potencia_crit_normal": 0.16
+      }
+     },
+     "ml_w0.45_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2195,
+       "fraccion_recorrido_constante_oraculo": 0.258,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0233,
+       "fraccion_recorrido_constante_oraculo": 0.3033,
+       "potencia": 0.98,
+       "potencia_crit_normal": 0.99
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3042,
+       "potencia": 0.98,
+       "potencia_crit_normal": 0.99
+      },
+      "brier": {
+       "ganancia_rel": 0.0162,
+       "fraccion_recorrido_constante_oraculo": 0.286,
+       "potencia": 0.44,
+       "potencia_crit_normal": 0.18
+      }
+     },
+     "ml_w0.6_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2654,
+       "fraccion_recorrido_constante_oraculo": 0.312,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0288,
+       "fraccion_recorrido_constante_oraculo": 0.3742,
+       "potencia": 0.93,
+       "potencia_crit_normal": 0.95
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3752,
+       "potencia": 0.92,
+       "potencia_crit_normal": 0.98
+      },
+      "brier": {
+       "ganancia_rel": 0.0205,
+       "fraccion_recorrido_constante_oraculo": 0.3616,
+       "potencia": 0.44,
+       "potencia_crit_normal": 0.14
+      }
+     },
+     "ml_w0.8_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.3039,
+       "fraccion_recorrido_constante_oraculo": 0.3573,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.034,
+       "fraccion_recorrido_constante_oraculo": 0.4424,
+       "potencia": 0.85,
+       "potencia_crit_normal": 0.9
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.4428,
+       "potencia": 0.85,
+       "potencia_crit_normal": 0.89
+      },
+      "brier": {
+       "ganancia_rel": 0.0251,
+       "fraccion_recorrido_constante_oraculo": 0.4426,
+       "potencia": 0.44,
+       "potencia_crit_normal": 0.16
+      }
+     },
+     "ml_w1.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.3157,
+       "fraccion_recorrido_constante_oraculo": 0.3711,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0368,
+       "fraccion_recorrido_constante_oraculo": 0.4786,
+       "potencia": 0.71,
+       "potencia_crit_normal": 0.79
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.4794,
+       "potencia": 0.73,
+       "potencia_crit_normal": 0.83
+      },
+      "brier": {
+       "ganancia_rel": 0.0276,
+       "fraccion_recorrido_constante_oraculo": 0.4865,
+       "potencia": 0.4,
+       "potencia_crit_normal": 0.16
+      }
+     }
+    },
+    "mde": {
+     "qlike": {
+      "ganancia_qlike_en_w": [
+       -0.0048,
+       0.0266,
+       0.0563,
+       0.0844,
+       0.1109,
+       0.1591,
+       0.2195,
+       0.2654,
+       0.3039,
+       0.3157
+      ],
+      "potencia_en_w": [
+       0.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0057,
+       0.0312,
+       0.0662,
+       0.0993,
+       0.1304,
+       0.1871,
+       0.258,
+       0.312,
+       0.3573,
+       0.3711
+      ],
+      "mde_ganancia_qlike": 0.0203,
+      "potencia_si_ganancia_0.02": 0.79,
+      "potencia_si_ganancia_0.05": 1.0,
+      "potencia_si_ganancia_0.1": 1.0
+     },
+     "pinball": {
+      "ganancia_qlike_en_w": [
+       -0.0048,
+       0.0266,
+       0.0563,
+       0.0844,
+       0.1109,
+       0.1591,
+       0.2195,
+       0.2654,
+       0.3039,
+       0.3157
+      ],
+      "potencia_en_w": [
+       0.01,
+       0.38,
+       0.81,
+       0.94,
+       0.97,
+       1.0,
+       0.98,
+       0.93,
+       0.85,
+       0.71
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0076,
+       0.034,
+       0.0738,
+       0.1119,
+       0.148,
+       0.215,
+       0.3033,
+       0.3742,
+       0.4424,
+       0.4786
+      ],
+      "mde_ganancia_qlike": 0.0556,
+      "potencia_si_ganancia_0.02": 0.302,
+      "potencia_si_ganancia_0.05": 0.719,
+      "potencia_si_ganancia_0.1": 0.958
+     },
+     "fz0": {
+      "ganancia_qlike_en_w": [
+       -0.0048,
+       0.0266,
+       0.0563,
+       0.0844,
+       0.1109,
+       0.1591,
+       0.2195,
+       0.2654,
+       0.3039,
+       0.3157
+      ],
+      "potencia_en_w": [
+       0.0,
+       0.4,
+       0.8,
+       0.94,
+       0.98,
+       0.99,
+       0.98,
+       0.92,
+       0.85,
+       0.73
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.007,
+       0.0345,
+       0.0743,
+       0.1123,
+       0.1486,
+       0.216,
+       0.3042,
+       0.3752,
+       0.4428,
+       0.4794
+      ],
+      "mde_ganancia_qlike": 0.0563,
+      "potencia_si_ganancia_0.02": 0.316,
+      "potencia_si_ganancia_0.05": 0.715,
+      "potencia_si_ganancia_0.1": 0.964
+     },
+     "brier": {
+      "ganancia_qlike_en_w": [
+       -0.0048,
+       0.0266,
+       0.0563,
+       0.0844,
+       0.1109,
+       0.1591,
+       0.2195,
+       0.2654,
+       0.3039,
+       0.3157
+      ],
+      "potencia_en_w": [
+       0.04,
+       0.1,
+       0.3,
+       0.38,
+       0.44,
+       0.44,
+       0.44,
+       0.44,
+       0.44,
+       0.4
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0092,
+       0.0255,
+       0.0599,
+       0.0948,
+       0.1281,
+       0.1934,
+       0.286,
+       0.3616,
+       0.4426,
+       0.4865
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     }
+    }
+   },
+   "h3": {
+    "critico_nula_95": {
+     "qlike": 1.957,
+     "pinball": 1.954,
+     "fz0": 2.148,
+     "brier": 1.348
+    },
+    "tamaño_real_con_1.645": {
+     "qlike": 0.1,
+     "pinball": 0.1,
+     "fz0": 0.14,
+     "brier": 0.02
+    },
+    "n_efectivo_dif_qlike_(w=0.3)": 115.1,
+    "tasa_caida10_sim": 0.0935,
+    "sd_log_rv_sim": 0.6687,
+    "curtosis_diaria_sim": 10.97,
+    "contrastes": {
+     "har_vs_b1_12m": {
+      "qlike": {
+       "ganancia_rel": 0.5366,
+       "fraccion_recorrido_constante_oraculo": 1.3808,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0523,
+       "fraccion_recorrido_constante_oraculo": 1.1316,
+       "potencia": 0.59,
+       "potencia_crit_normal": 0.66
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 1.0429,
+       "potencia": 0.55,
+       "potencia_crit_normal": 0.66
+      },
+      "brier": {
+       "ganancia_rel": 0.0108,
+       "fraccion_recorrido_constante_oraculo": 0.1839,
+       "potencia": 0.18,
+       "potencia_crit_normal": 0.1
+      }
+     },
+     "har_vs_ewma": {
+      "qlike": {
+       "ganancia_rel": 0.3623,
+       "fraccion_recorrido_constante_oraculo": 0.6776,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0221,
+       "fraccion_recorrido_constante_oraculo": 0.4631,
+       "potencia": 0.38,
+       "potencia_crit_normal": 0.49
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3611,
+       "potencia": 0.26,
+       "potencia_crit_normal": 0.37
+      },
+      "brier": {
+       "ganancia_rel": -0.0014,
+       "fraccion_recorrido_constante_oraculo": -0.0244,
+       "potencia": 0.04,
+       "potencia_crit_normal": 0.03
+      }
+     },
+     "oraculo_vs_har_(techo)": {
+      "qlike": {
+       "ganancia_rel": 0.3341,
+       "fraccion_recorrido_constante_oraculo": 0.3985,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.027,
+       "fraccion_recorrido_constante_oraculo": 0.5529,
+       "potencia": 0.44,
+       "potencia_crit_normal": 0.54
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.5781,
+       "potencia": 0.46,
+       "potencia_crit_normal": 0.68
+      },
+      "brier": {
+       "ganancia_rel": 0.0258,
+       "fraccion_recorrido_constante_oraculo": 0.4342,
+       "potencia": 0.51,
+       "potencia_crit_normal": 0.36
+      }
+     },
+     "ml_w0.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": -0.0073,
+       "fraccion_recorrido_constante_oraculo": -0.0087,
+       "potencia": 0.0,
+       "potencia_crit_normal": 0.0
+      },
+      "pinball": {
+       "ganancia_rel": -0.0006,
+       "fraccion_recorrido_constante_oraculo": -0.0117,
+       "potencia": 0.01,
+       "potencia_crit_normal": 0.01
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": -0.0107,
+       "potencia": 0.01,
+       "potencia_crit_normal": 0.02
+      },
+      "brier": {
+       "ganancia_rel": -0.0003,
+       "fraccion_recorrido_constante_oraculo": -0.0044,
+       "potencia": 0.05,
+       "potencia_crit_normal": 0.03
+      }
+     },
+     "ml_w0.05_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0255,
+       "fraccion_recorrido_constante_oraculo": 0.0304,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0017,
+       "fraccion_recorrido_constante_oraculo": 0.0342,
+       "potencia": 0.14,
+       "potencia_crit_normal": 0.19
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0361,
+       "potencia": 0.16,
+       "potencia_crit_normal": 0.27
+      },
+      "brier": {
+       "ganancia_rel": 0.0017,
+       "fraccion_recorrido_constante_oraculo": 0.0294,
+       "potencia": 0.2,
+       "potencia_crit_normal": 0.13
+      }
+     },
+     "ml_w0.1_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0565,
+       "fraccion_recorrido_constante_oraculo": 0.0674,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0038,
+       "fraccion_recorrido_constante_oraculo": 0.0783,
+       "potencia": 0.4,
+       "potencia_crit_normal": 0.49
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0811,
+       "potencia": 0.46,
+       "potencia_crit_normal": 0.61
+      },
+      "brier": {
+       "ganancia_rel": 0.0038,
+       "fraccion_recorrido_constante_oraculo": 0.0631,
+       "potencia": 0.46,
+       "potencia_crit_normal": 0.28
+      }
+     },
+     "ml_w0.15_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0858,
+       "fraccion_recorrido_constante_oraculo": 0.1024,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0059,
+       "fraccion_recorrido_constante_oraculo": 0.1203,
+       "potencia": 0.53,
+       "potencia_crit_normal": 0.6
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1242,
+       "potencia": 0.6,
+       "potencia_crit_normal": 0.75
+      },
+      "brier": {
+       "ganancia_rel": 0.0057,
+       "fraccion_recorrido_constante_oraculo": 0.0964,
+       "potencia": 0.58,
+       "potencia_crit_normal": 0.41
+      }
+     },
+     "ml_w0.2_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.1135,
+       "fraccion_recorrido_constante_oraculo": 0.1354,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0078,
+       "fraccion_recorrido_constante_oraculo": 0.1603,
+       "potencia": 0.57,
+       "potencia_crit_normal": 0.72
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1655,
+       "potencia": 0.68,
+       "potencia_crit_normal": 0.83
+      },
+      "brier": {
+       "ganancia_rel": 0.0077,
+       "fraccion_recorrido_constante_oraculo": 0.129,
+       "potencia": 0.61,
+       "potencia_crit_normal": 0.48
+      }
+     },
+     "ml_w0.3_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.1638,
+       "fraccion_recorrido_constante_oraculo": 0.1954,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0115,
+       "fraccion_recorrido_constante_oraculo": 0.235,
+       "potencia": 0.65,
+       "potencia_crit_normal": 0.79
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.2426,
+       "potencia": 0.73,
+       "potencia_crit_normal": 0.85
+      },
+      "brier": {
+       "ganancia_rel": 0.0113,
+       "fraccion_recorrido_constante_oraculo": 0.191,
+       "potencia": 0.63,
+       "potencia_crit_normal": 0.5
+      }
+     },
+     "ml_w0.45_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2267,
+       "fraccion_recorrido_constante_oraculo": 0.2704,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0162,
+       "fraccion_recorrido_constante_oraculo": 0.3314,
+       "potencia": 0.65,
+       "potencia_crit_normal": 0.76
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3437,
+       "potencia": 0.72,
+       "potencia_crit_normal": 0.85
+      },
+      "brier": {
+       "ganancia_rel": 0.0162,
+       "fraccion_recorrido_constante_oraculo": 0.2727,
+       "potencia": 0.62,
+       "potencia_crit_normal": 0.5
+      }
+     },
+     "ml_w0.6_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2746,
+       "fraccion_recorrido_constante_oraculo": 0.3274,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.02,
+       "fraccion_recorrido_constante_oraculo": 0.4105,
+       "potencia": 0.58,
+       "potencia_crit_normal": 0.73
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.4273,
+       "potencia": 0.69,
+       "potencia_crit_normal": 0.82
+      },
+      "brier": {
+       "ganancia_rel": 0.0201,
+       "fraccion_recorrido_constante_oraculo": 0.3374,
+       "potencia": 0.63,
+       "potencia_crit_normal": 0.49
+      }
+     },
+     "ml_w0.8_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.3146,
+       "fraccion_recorrido_constante_oraculo": 0.3752,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0239,
+       "fraccion_recorrido_constante_oraculo": 0.4906,
+       "potencia": 0.49,
+       "potencia_crit_normal": 0.62
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.5124,
+       "potencia": 0.56,
+       "potencia_crit_normal": 0.76
+      },
+      "brier": {
+       "ganancia_rel": 0.0236,
+       "fraccion_recorrido_constante_oraculo": 0.3968,
+       "potencia": 0.6,
+       "potencia_crit_normal": 0.4
+      }
+     },
+     "ml_w1.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.3268,
+       "fraccion_recorrido_constante_oraculo": 0.3897,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0264,
+       "fraccion_recorrido_constante_oraculo": 0.5405,
+       "potencia": 0.41,
+       "potencia_crit_normal": 0.49
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.5659,
+       "potencia": 0.45,
+       "potencia_crit_normal": 0.67
+      },
+      "brier": {
+       "ganancia_rel": 0.0254,
+       "fraccion_recorrido_constante_oraculo": 0.4269,
+       "potencia": 0.53,
+       "potencia_crit_normal": 0.36
+      }
+     }
+    },
+    "mde": {
+     "qlike": {
+      "ganancia_qlike_en_w": [
+       -0.0073,
+       0.0255,
+       0.0565,
+       0.0858,
+       0.1135,
+       0.1638,
+       0.2267,
+       0.2746,
+       0.3146,
+       0.3268
+      ],
+      "potencia_en_w": [
+       0.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0087,
+       0.0304,
+       0.0674,
+       0.1024,
+       0.1354,
+       0.1954,
+       0.2704,
+       0.3274,
+       0.3752,
+       0.3897
+      ],
+      "mde_ganancia_qlike": 0.0189,
+      "potencia_si_ganancia_0.02": 0.832,
+      "potencia_si_ganancia_0.05": 1.0,
+      "potencia_si_ganancia_0.1": 1.0
+     },
+     "pinball": {
+      "ganancia_qlike_en_w": [
+       -0.0073,
+       0.0255,
+       0.0565,
+       0.0858,
+       0.1135,
+       0.1638,
+       0.2267,
+       0.2746,
+       0.3146,
+       0.3268
+      ],
+      "potencia_en_w": [
+       0.01,
+       0.14,
+       0.4,
+       0.53,
+       0.57,
+       0.65,
+       0.65,
+       0.58,
+       0.49,
+       0.41
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0117,
+       0.0342,
+       0.0783,
+       0.1203,
+       0.1603,
+       0.235,
+       0.3314,
+       0.4105,
+       0.4906,
+       0.5405
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "fz0": {
+      "ganancia_qlike_en_w": [
+       -0.0073,
+       0.0255,
+       0.0565,
+       0.0858,
+       0.1135,
+       0.1638,
+       0.2267,
+       0.2746,
+       0.3146,
+       0.3268
+      ],
+      "potencia_en_w": [
+       0.01,
+       0.16,
+       0.46,
+       0.6,
+       0.68,
+       0.73,
+       0.72,
+       0.69,
+       0.56,
+       0.45
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0107,
+       0.0361,
+       0.0811,
+       0.1242,
+       0.1655,
+       0.2426,
+       0.3437,
+       0.4273,
+       0.5124,
+       0.5659
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "brier": {
+      "ganancia_qlike_en_w": [
+       -0.0073,
+       0.0255,
+       0.0565,
+       0.0858,
+       0.1135,
+       0.1638,
+       0.2267,
+       0.2746,
+       0.3146,
+       0.3268
+      ],
+      "potencia_en_w": [
+       0.05,
+       0.2,
+       0.46,
+       0.58,
+       0.61,
+       0.63,
+       0.62,
+       0.63,
+       0.6,
+       0.53
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0044,
+       0.0294,
+       0.0631,
+       0.0964,
+       0.129,
+       0.191,
+       0.2727,
+       0.3374,
+       0.3968,
+       0.4269
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     }
+    }
+   }
+  },
+  "S1_A_ruido_ML_0.10": {
+   "h1": {
+    "critico_nula_95": {
+     "qlike": 1.591,
+     "pinball": 1.661,
+     "fz0": 1.688,
+     "brier": 1.111
+    },
+    "tamaño_real_con_1.645": {
+     "qlike": 0.047,
+     "pinball": 0.053,
+     "fz0": 0.057,
+     "brier": 0.0
+    },
+    "n_efectivo_dif_qlike_(w=0.3)": 728.0,
+    "tasa_caida10_sim": 0.0193,
+    "sd_log_rv_sim": 0.8663,
+    "curtosis_diaria_sim": 12.0,
+    "contrastes": {
+     "har_vs_b1_12m": {
+      "qlike": {
+       "ganancia_rel": 0.4684,
+       "fraccion_recorrido_constante_oraculo": 1.0143,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0569,
+       "fraccion_recorrido_constante_oraculo": 0.6615,
+       "potencia": 0.623,
+       "potencia_crit_normal": 0.63
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.663,
+       "potencia": 0.61,
+       "potencia_crit_normal": 0.623
+      },
+      "brier": {
+       "ganancia_rel": 0.011,
+       "fraccion_recorrido_constante_oraculo": 0.2558,
+       "potencia": 0.08,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "har_vs_ewma": {
+      "qlike": {
+       "ganancia_rel": 0.1872,
+       "fraccion_recorrido_constante_oraculo": 0.2652,
+       "potencia": 0.997,
+       "potencia_crit_normal": 0.997
+      },
+      "pinball": {
+       "ganancia_rel": 0.0108,
+       "fraccion_recorrido_constante_oraculo": 0.12,
+       "potencia": 0.183,
+       "potencia_crit_normal": 0.19
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0941,
+       "potencia": 0.13,
+       "potencia_crit_normal": 0.133
+      },
+      "brier": {
+       "ganancia_rel": -0.0002,
+       "fraccion_recorrido_constante_oraculo": -0.0037,
+       "potencia": 0.057,
+       "potencia_crit_normal": 0.007
+      }
+     },
+     "oraculo_vs_har_(techo)": {
+      "qlike": {
+       "ganancia_rel": 0.3155,
+       "fraccion_recorrido_constante_oraculo": 0.3632,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0371,
+       "fraccion_recorrido_constante_oraculo": 0.407,
+       "potencia": 0.54,
+       "potencia_crit_normal": 0.553
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.4081,
+       "potencia": 0.58,
+       "potencia_crit_normal": 0.6
+      },
+      "brier": {
+       "ganancia_rel": 0.0207,
+       "fraccion_recorrido_constante_oraculo": 0.4752,
+       "potencia": 0.207,
+       "potencia_crit_normal": 0.033
+      }
+     },
+     "ml_w0.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": -0.0191,
+       "fraccion_recorrido_constante_oraculo": -0.022,
+       "potencia": 0.0,
+       "potencia_crit_normal": 0.0
+      },
+      "pinball": {
+       "ganancia_rel": -0.0015,
+       "fraccion_recorrido_constante_oraculo": -0.016,
+       "potencia": 0.033,
+       "potencia_crit_normal": 0.033
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": -0.0158,
+       "potencia": 0.037,
+       "potencia_crit_normal": 0.04
+      },
+      "brier": {
+       "ganancia_rel": -0.0002,
+       "fraccion_recorrido_constante_oraculo": -0.0049,
+       "potencia": 0.04,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "ml_w0.05_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.012,
+       "fraccion_recorrido_constante_oraculo": 0.0138,
+       "potencia": 0.263,
+       "potencia_crit_normal": 0.247
+      },
+      "pinball": {
+       "ganancia_rel": 0.0018,
+       "fraccion_recorrido_constante_oraculo": 0.0196,
+       "potencia": 0.06,
+       "potencia_crit_normal": 0.067
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0202,
+       "potencia": 0.107,
+       "potencia_crit_normal": 0.117
+      },
+      "brier": {
+       "ganancia_rel": 0.0013,
+       "fraccion_recorrido_constante_oraculo": 0.0305,
+       "potencia": 0.063,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "ml_w0.1_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0415,
+       "fraccion_recorrido_constante_oraculo": 0.0478,
+       "potencia": 0.923,
+       "potencia_crit_normal": 0.92
+      },
+      "pinball": {
+       "ganancia_rel": 0.0049,
+       "fraccion_recorrido_constante_oraculo": 0.0535,
+       "potencia": 0.167,
+       "potencia_crit_normal": 0.17
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0547,
+       "potencia": 0.217,
+       "potencia_crit_normal": 0.233
+      },
+      "brier": {
+       "ganancia_rel": 0.0029,
+       "fraccion_recorrido_constante_oraculo": 0.0659,
+       "potencia": 0.087,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "ml_w0.15_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0693,
+       "fraccion_recorrido_constante_oraculo": 0.0798,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0078,
+       "fraccion_recorrido_constante_oraculo": 0.0856,
+       "potencia": 0.287,
+       "potencia_crit_normal": 0.293
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0876,
+       "potencia": 0.31,
+       "potencia_crit_normal": 0.333
+      },
+      "brier": {
+       "ganancia_rel": 0.0044,
+       "fraccion_recorrido_constante_oraculo": 0.1011,
+       "potencia": 0.123,
+       "potencia_crit_normal": 0.01
+      }
+     },
+     "ml_w0.2_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0956,
+       "fraccion_recorrido_constante_oraculo": 0.11,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0106,
+       "fraccion_recorrido_constante_oraculo": 0.1164,
+       "potencia": 0.387,
+       "potencia_crit_normal": 0.397
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1189,
+       "potencia": 0.457,
+       "potencia_crit_normal": 0.49
+      },
+      "brier": {
+       "ganancia_rel": 0.0059,
+       "fraccion_recorrido_constante_oraculo": 0.1358,
+       "potencia": 0.157,
+       "potencia_crit_normal": 0.017
+      }
+     },
+     "ml_w0.3_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.1432,
+       "fraccion_recorrido_constante_oraculo": 0.1649,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0157,
+       "fraccion_recorrido_constante_oraculo": 0.1726,
+       "potencia": 0.517,
+       "potencia_crit_normal": 0.52
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1766,
+       "potencia": 0.62,
+       "potencia_crit_normal": 0.647
+      },
+      "brier": {
+       "ganancia_rel": 0.0088,
+       "fraccion_recorrido_constante_oraculo": 0.2024,
+       "potencia": 0.2,
+       "potencia_crit_normal": 0.027
+      }
+     },
+     "ml_w0.45_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2027,
+       "fraccion_recorrido_constante_oraculo": 0.2334,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0224,
+       "fraccion_recorrido_constante_oraculo": 0.2452,
+       "potencia": 0.63,
+       "potencia_crit_normal": 0.63
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.2507,
+       "potencia": 0.683,
+       "potencia_crit_normal": 0.703
+      },
+      "brier": {
+       "ganancia_rel": 0.0127,
+       "fraccion_recorrido_constante_oraculo": 0.2914,
+       "potencia": 0.22,
+       "potencia_crit_normal": 0.027
+      }
+     },
+     "ml_w0.6_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2478,
+       "fraccion_recorrido_constante_oraculo": 0.2853,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0277,
+       "fraccion_recorrido_constante_oraculo": 0.3042,
+       "potencia": 0.62,
+       "potencia_crit_normal": 0.62
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3095,
+       "potencia": 0.677,
+       "potencia_crit_normal": 0.693
+      },
+      "brier": {
+       "ganancia_rel": 0.0158,
+       "fraccion_recorrido_constante_oraculo": 0.3634,
+       "potencia": 0.223,
+       "potencia_crit_normal": 0.033
+      }
+     },
+     "ml_w0.8_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2852,
+       "fraccion_recorrido_constante_oraculo": 0.3284,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.033,
+       "fraccion_recorrido_constante_oraculo": 0.3614,
+       "potencia": 0.547,
+       "potencia_crit_normal": 0.547
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3642,
+       "potencia": 0.607,
+       "potencia_crit_normal": 0.613
+      },
+      "brier": {
+       "ganancia_rel": 0.0187,
+       "fraccion_recorrido_constante_oraculo": 0.43,
+       "potencia": 0.213,
+       "potencia_crit_normal": 0.033
+      }
+     },
+     "ml_w1.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2959,
+       "fraccion_recorrido_constante_oraculo": 0.3406,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0355,
+       "fraccion_recorrido_constante_oraculo": 0.3895,
+       "potencia": 0.453,
+       "potencia_crit_normal": 0.47
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3908,
+       "potencia": 0.533,
+       "potencia_crit_normal": 0.543
+      },
+      "brier": {
+       "ganancia_rel": 0.0203,
+       "fraccion_recorrido_constante_oraculo": 0.4652,
+       "potencia": 0.193,
+       "potencia_crit_normal": 0.027
+      }
+     }
+    },
+    "mde": {
+     "qlike": {
+      "ganancia_qlike_en_w": [
+       -0.0191,
+       0.012,
+       0.0415,
+       0.0693,
+       0.0956,
+       0.1432,
+       0.2027,
+       0.2478,
+       0.2852,
+       0.2959
+      ],
+      "potencia_en_w": [
+       0.0,
+       0.263,
+       0.923,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.022,
+       0.0138,
+       0.0478,
+       0.0798,
+       0.11,
+       0.1649,
+       0.2334,
+       0.2853,
+       0.3284,
+       0.3406
+      ],
+      "mde_ganancia_qlike": 0.036,
+      "potencia_si_ganancia_0.02": 0.442,
+      "potencia_si_ganancia_0.05": 0.947,
+      "potencia_si_ganancia_0.1": 1.0
+     },
+     "pinball": {
+      "ganancia_qlike_en_w": [
+       -0.0191,
+       0.012,
+       0.0415,
+       0.0693,
+       0.0956,
+       0.1432,
+       0.2027,
+       0.2478,
+       0.2852,
+       0.2959
+      ],
+      "potencia_en_w": [
+       0.033,
+       0.06,
+       0.167,
+       0.287,
+       0.387,
+       0.517,
+       0.63,
+       0.62,
+       0.547,
+       0.453
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.016,
+       0.0196,
+       0.0535,
+       0.0856,
+       0.1164,
+       0.1726,
+       0.2452,
+       0.3042,
+       0.3614,
+       0.3895
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "fz0": {
+      "ganancia_qlike_en_w": [
+       -0.0191,
+       0.012,
+       0.0415,
+       0.0693,
+       0.0956,
+       0.1432,
+       0.2027,
+       0.2478,
+       0.2852,
+       0.2959
+      ],
+      "potencia_en_w": [
+       0.037,
+       0.107,
+       0.217,
+       0.31,
+       0.457,
+       0.62,
+       0.683,
+       0.677,
+       0.607,
+       0.533
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0158,
+       0.0202,
+       0.0547,
+       0.0876,
+       0.1189,
+       0.1766,
+       0.2507,
+       0.3095,
+       0.3642,
+       0.3908
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "brier": {
+      "ganancia_qlike_en_w": [
+       -0.0191,
+       0.012,
+       0.0415,
+       0.0693,
+       0.0956,
+       0.1432,
+       0.2027,
+       0.2478,
+       0.2852,
+       0.2959
+      ],
+      "potencia_en_w": [
+       0.04,
+       0.063,
+       0.087,
+       0.123,
+       0.157,
+       0.2,
+       0.22,
+       0.223,
+       0.213,
+       0.193
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0049,
+       0.0305,
+       0.0659,
+       0.1011,
+       0.1358,
+       0.2024,
+       0.2914,
+       0.3634,
+       0.43,
+       0.4652
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     }
+    }
+   },
+   "h3": {
+    "critico_nula_95": {
+     "qlike": 1.688,
+     "pinball": 1.661,
+     "fz0": 1.774,
+     "brier": 1.296
+    },
+    "tamaño_real_con_1.645": {
+     "qlike": 0.057,
+     "pinball": 0.053,
+     "fz0": 0.073,
+     "brier": 0.013
+    },
+    "n_efectivo_dif_qlike_(w=0.3)": 365.9,
+    "tasa_caida10_sim": 0.0904,
+    "sd_log_rv_sim": 0.7243,
+    "curtosis_diaria_sim": 12.0,
+    "contrastes": {
+     "har_vs_b1_12m": {
+      "qlike": {
+       "ganancia_rel": 0.5405,
+       "fraccion_recorrido_constante_oraculo": 1.3506,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0428,
+       "fraccion_recorrido_constante_oraculo": 0.7103,
+       "potencia": 0.337,
+       "potencia_crit_normal": 0.343
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.702,
+       "potencia": 0.293,
+       "potencia_crit_normal": 0.343
+      },
+      "brier": {
+       "ganancia_rel": 0.013,
+       "fraccion_recorrido_constante_oraculo": 0.2342,
+       "potencia": 0.167,
+       "potencia_crit_normal": 0.023
+      }
+     },
+     "har_vs_ewma": {
+      "qlike": {
+       "ganancia_rel": 0.3621,
+       "fraccion_recorrido_constante_oraculo": 0.6516,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0152,
+       "fraccion_recorrido_constante_oraculo": 0.2451,
+       "potencia": 0.263,
+       "potencia_crit_normal": 0.263
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1906,
+       "potencia": 0.157,
+       "potencia_crit_normal": 0.187
+      },
+      "brier": {
+       "ganancia_rel": -0.0003,
+       "fraccion_recorrido_constante_oraculo": -0.0052,
+       "potencia": 0.04,
+       "potencia_crit_normal": 0.01
+      }
+     },
+     "oraculo_vs_har_(techo)": {
+      "qlike": {
+       "ganancia_rel": 0.3272,
+       "fraccion_recorrido_constante_oraculo": 0.3757,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0267,
+       "fraccion_recorrido_constante_oraculo": 0.4238,
+       "potencia": 0.32,
+       "potencia_crit_normal": 0.323
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.4342,
+       "potencia": 0.41,
+       "potencia_crit_normal": 0.467
+      },
+      "brier": {
+       "ganancia_rel": 0.0235,
+       "fraccion_recorrido_constante_oraculo": 0.419,
+       "potencia": 0.4,
+       "potencia_crit_normal": 0.19
+      }
+     },
+     "ml_w0.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": -0.0295,
+       "fraccion_recorrido_constante_oraculo": -0.0338,
+       "potencia": 0.0,
+       "potencia_crit_normal": 0.0
+      },
+      "pinball": {
+       "ganancia_rel": -0.0014,
+       "fraccion_recorrido_constante_oraculo": -0.0224,
+       "potencia": 0.02,
+       "potencia_crit_normal": 0.02
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": -0.0218,
+       "potencia": 0.04,
+       "potencia_crit_normal": 0.053
+      },
+      "brier": {
+       "ganancia_rel": -0.0011,
+       "fraccion_recorrido_constante_oraculo": -0.0189,
+       "potencia": 0.04,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "ml_w0.05_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.003,
+       "fraccion_recorrido_constante_oraculo": 0.0034,
+       "potencia": 0.083,
+       "potencia_crit_normal": 0.087
+      },
+      "pinball": {
+       "ganancia_rel": 0.0008,
+       "fraccion_recorrido_constante_oraculo": 0.0131,
+       "potencia": 0.073,
+       "potencia_crit_normal": 0.08
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.014,
+       "potencia": 0.083,
+       "potencia_crit_normal": 0.107
+      },
+      "brier": {
+       "ganancia_rel": 0.001,
+       "fraccion_recorrido_constante_oraculo": 0.017,
+       "potencia": 0.073,
+       "potencia_crit_normal": 0.027
+      }
+     },
+     "ml_w0.1_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0337,
+       "fraccion_recorrido_constante_oraculo": 0.0387,
+       "potencia": 0.547,
+       "potencia_crit_normal": 0.56
+      },
+      "pinball": {
+       "ganancia_rel": 0.003,
+       "fraccion_recorrido_constante_oraculo": 0.0472,
+       "potencia": 0.127,
+       "potencia_crit_normal": 0.127
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0485,
+       "potencia": 0.123,
+       "potencia_crit_normal": 0.14
+      },
+      "brier": {
+       "ganancia_rel": 0.0029,
+       "fraccion_recorrido_constante_oraculo": 0.0523,
+       "potencia": 0.137,
+       "potencia_crit_normal": 0.05
+      }
+     },
+     "ml_w0.15_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0628,
+       "fraccion_recorrido_constante_oraculo": 0.0721,
+       "potencia": 0.88,
+       "potencia_crit_normal": 0.9
+      },
+      "pinball": {
+       "ganancia_rel": 0.005,
+       "fraccion_recorrido_constante_oraculo": 0.0798,
+       "potencia": 0.16,
+       "potencia_crit_normal": 0.16
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0816,
+       "potencia": 0.183,
+       "potencia_crit_normal": 0.21
+      },
+      "brier": {
+       "ganancia_rel": 0.0049,
+       "fraccion_recorrido_constante_oraculo": 0.0869,
+       "potencia": 0.187,
+       "potencia_crit_normal": 0.07
+      }
+     },
+     "ml_w0.2_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0901,
+       "fraccion_recorrido_constante_oraculo": 0.1035,
+       "potencia": 0.983,
+       "potencia_crit_normal": 0.987
+      },
+      "pinball": {
+       "ganancia_rel": 0.007,
+       "fraccion_recorrido_constante_oraculo": 0.1108,
+       "potencia": 0.203,
+       "potencia_crit_normal": 0.21
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1133,
+       "potencia": 0.227,
+       "potencia_crit_normal": 0.26
+      },
+      "brier": {
+       "ganancia_rel": 0.0068,
+       "fraccion_recorrido_constante_oraculo": 0.1202,
+       "potencia": 0.267,
+       "potencia_crit_normal": 0.1
+      }
+     },
+     "ml_w0.3_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.1398,
+       "fraccion_recorrido_constante_oraculo": 0.1605,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0106,
+       "fraccion_recorrido_constante_oraculo": 0.1687,
+       "potencia": 0.287,
+       "potencia_crit_normal": 0.3
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1722,
+       "potencia": 0.343,
+       "potencia_crit_normal": 0.41
+      },
+      "brier": {
+       "ganancia_rel": 0.0103,
+       "fraccion_recorrido_constante_oraculo": 0.1824,
+       "potencia": 0.333,
+       "potencia_crit_normal": 0.15
+      }
+     },
+     "ml_w0.45_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2016,
+       "fraccion_recorrido_constante_oraculo": 0.2315,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0154,
+       "fraccion_recorrido_constante_oraculo": 0.2438,
+       "potencia": 0.357,
+       "potencia_crit_normal": 0.367
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.2495,
+       "potencia": 0.423,
+       "potencia_crit_normal": 0.477
+      },
+      "brier": {
+       "ganancia_rel": 0.0147,
+       "fraccion_recorrido_constante_oraculo": 0.2616,
+       "potencia": 0.373,
+       "potencia_crit_normal": 0.187
+      }
+     },
+     "ml_w0.6_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2484,
+       "fraccion_recorrido_constante_oraculo": 0.2852,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0193,
+       "fraccion_recorrido_constante_oraculo": 0.3061,
+       "potencia": 0.373,
+       "potencia_crit_normal": 0.38
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3131,
+       "potencia": 0.437,
+       "potencia_crit_normal": 0.477
+      },
+      "brier": {
+       "ganancia_rel": 0.0181,
+       "fraccion_recorrido_constante_oraculo": 0.3216,
+       "potencia": 0.4,
+       "potencia_crit_normal": 0.19
+      }
+     },
+     "ml_w0.8_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.287,
+       "fraccion_recorrido_constante_oraculo": 0.3295,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0231,
+       "fraccion_recorrido_constante_oraculo": 0.3664,
+       "potencia": 0.343,
+       "potencia_crit_normal": 0.347
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3754,
+       "potencia": 0.417,
+       "potencia_crit_normal": 0.457
+      },
+      "brier": {
+       "ganancia_rel": 0.021,
+       "fraccion_recorrido_constante_oraculo": 0.373,
+       "potencia": 0.387,
+       "potencia_crit_normal": 0.177
+      }
+     },
+     "ml_w1.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2978,
+       "fraccion_recorrido_constante_oraculo": 0.3419,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0253,
+       "fraccion_recorrido_constante_oraculo": 0.4019,
+       "potencia": 0.293,
+       "potencia_crit_normal": 0.297
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.4118,
+       "potencia": 0.347,
+       "potencia_crit_normal": 0.413
+      },
+      "brier": {
+       "ganancia_rel": 0.0223,
+       "fraccion_recorrido_constante_oraculo": 0.397,
+       "potencia": 0.35,
+       "potencia_crit_normal": 0.153
+      }
+     }
+    },
+    "mde": {
+     "qlike": {
+      "ganancia_qlike_en_w": [
+       -0.0295,
+       0.003,
+       0.0337,
+       0.0628,
+       0.0901,
+       0.1398,
+       0.2016,
+       0.2484,
+       0.287,
+       0.2978
+      ],
+      "potencia_en_w": [
+       0.0,
+       0.083,
+       0.547,
+       0.88,
+       0.983,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0338,
+       0.0034,
+       0.0387,
+       0.0721,
+       0.1035,
+       0.1605,
+       0.2315,
+       0.2852,
+       0.3295,
+       0.3419
+      ],
+      "mde_ganancia_qlike": 0.0558,
+      "potencia_si_ganancia_0.02": 0.34,
+      "potencia_si_ganancia_0.05": 0.734,
+      "potencia_si_ganancia_0.1": 0.986
+     },
+     "pinball": {
+      "ganancia_qlike_en_w": [
+       -0.0295,
+       0.003,
+       0.0337,
+       0.0628,
+       0.0901,
+       0.1398,
+       0.2016,
+       0.2484,
+       0.287,
+       0.2978
+      ],
+      "potencia_en_w": [
+       0.02,
+       0.073,
+       0.127,
+       0.16,
+       0.203,
+       0.287,
+       0.357,
+       0.373,
+       0.343,
+       0.293
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0224,
+       0.0131,
+       0.0472,
+       0.0798,
+       0.1108,
+       0.1687,
+       0.2438,
+       0.3061,
+       0.3664,
+       0.4019
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "fz0": {
+      "ganancia_qlike_en_w": [
+       -0.0295,
+       0.003,
+       0.0337,
+       0.0628,
+       0.0901,
+       0.1398,
+       0.2016,
+       0.2484,
+       0.287,
+       0.2978
+      ],
+      "potencia_en_w": [
+       0.04,
+       0.083,
+       0.123,
+       0.183,
+       0.227,
+       0.343,
+       0.423,
+       0.437,
+       0.417,
+       0.347
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0218,
+       0.014,
+       0.0485,
+       0.0816,
+       0.1133,
+       0.1722,
+       0.2495,
+       0.3131,
+       0.3754,
+       0.4118
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "brier": {
+      "ganancia_qlike_en_w": [
+       -0.0295,
+       0.003,
+       0.0337,
+       0.0628,
+       0.0901,
+       0.1398,
+       0.2016,
+       0.2484,
+       0.287,
+       0.2978
+      ],
+      "potencia_en_w": [
+       0.04,
+       0.073,
+       0.137,
+       0.187,
+       0.267,
+       0.333,
+       0.373,
+       0.4,
+       0.387,
+       0.35
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0189,
+       0.017,
+       0.0523,
+       0.0869,
+       0.1202,
+       0.1824,
+       0.2616,
+       0.3216,
+       0.373,
+       0.397
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     }
+    }
+   }
+  },
+  "S2_A_dispersion_baja": {
+   "h1": {
+    "critico_nula_95": {
+     "qlike": 1.579,
+     "pinball": 1.551,
+     "fz0": 1.628,
+     "brier": 0.969
+    },
+    "tamaño_real_con_1.645": {
+     "qlike": 0.04,
+     "pinball": 0.04,
+     "fz0": 0.05,
+     "brier": 0.0
+    },
+    "n_efectivo_dif_qlike_(w=0.3)": 725.9,
+    "tasa_caida10_sim": 0.0144,
+    "sd_log_rv_sim": 0.6941,
+    "curtosis_diaria_sim": 8.77,
+    "contrastes": {
+     "har_vs_b1_12m": {
+      "qlike": {
+       "ganancia_rel": 0.4758,
+       "fraccion_recorrido_constante_oraculo": 1.4476,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0495,
+       "fraccion_recorrido_constante_oraculo": 0.9578,
+       "potencia": 0.633,
+       "potencia_crit_normal": 0.607
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.9757,
+       "potencia": 0.587,
+       "potencia_crit_normal": 0.573
+      },
+      "brier": {
+       "ganancia_rel": 0.0081,
+       "fraccion_recorrido_constante_oraculo": 0.2909,
+       "potencia": 0.073,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "har_vs_ewma": {
+      "qlike": {
+       "ganancia_rel": 0.2038,
+       "fraccion_recorrido_constante_oraculo": 0.4082,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0123,
+       "fraccion_recorrido_constante_oraculo": 0.2293,
+       "potencia": 0.253,
+       "potencia_crit_normal": 0.23
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1884,
+       "potencia": 0.22,
+       "potencia_crit_normal": 0.213
+      },
+      "brier": {
+       "ganancia_rel": -0.0001,
+       "fraccion_recorrido_constante_oraculo": -0.0025,
+       "potencia": 0.06,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "oraculo_vs_har_(techo)": {
+      "qlike": {
+       "ganancia_rel": 0.284,
+       "fraccion_recorrido_constante_oraculo": 0.4528,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0264,
+       "fraccion_recorrido_constante_oraculo": 0.4859,
+       "potencia": 0.447,
+       "potencia_crit_normal": 0.427
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.4867,
+       "potencia": 0.473,
+       "potencia_crit_normal": 0.47
+      },
+      "brier": {
+       "ganancia_rel": 0.0141,
+       "fraccion_recorrido_constante_oraculo": 0.4988,
+       "potencia": 0.177,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "ml_w0.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": -0.007,
+       "fraccion_recorrido_constante_oraculo": -0.0112,
+       "potencia": 0.007,
+       "potencia_crit_normal": 0.007
+      },
+      "pinball": {
+       "ganancia_rel": -0.0005,
+       "fraccion_recorrido_constante_oraculo": -0.009,
+       "potencia": 0.033,
+       "potencia_crit_normal": 0.033
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": -0.0095,
+       "potencia": 0.033,
+       "potencia_crit_normal": 0.033
+      },
+      "brier": {
+       "ganancia_rel": -0.0003,
+       "fraccion_recorrido_constante_oraculo": -0.011,
+       "potencia": 0.04,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "ml_w0.05_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0207,
+       "fraccion_recorrido_constante_oraculo": 0.033,
+       "potencia": 0.867,
+       "potencia_crit_normal": 0.86
+      },
+      "pinball": {
+       "ganancia_rel": 0.0018,
+       "fraccion_recorrido_constante_oraculo": 0.0329,
+       "potencia": 0.133,
+       "potencia_crit_normal": 0.117
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0327,
+       "potencia": 0.15,
+       "potencia_crit_normal": 0.147
+      },
+      "brier": {
+       "ganancia_rel": 0.0008,
+       "fraccion_recorrido_constante_oraculo": 0.0293,
+       "potencia": 0.107,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "ml_w0.1_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.047,
+       "fraccion_recorrido_constante_oraculo": 0.075,
+       "potencia": 0.997,
+       "potencia_crit_normal": 0.997
+      },
+      "pinball": {
+       "ganancia_rel": 0.004,
+       "fraccion_recorrido_constante_oraculo": 0.0728,
+       "potencia": 0.27,
+       "potencia_crit_normal": 0.237
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0732,
+       "potencia": 0.32,
+       "potencia_crit_normal": 0.32
+      },
+      "brier": {
+       "ganancia_rel": 0.002,
+       "fraccion_recorrido_constante_oraculo": 0.0699,
+       "potencia": 0.123,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "ml_w0.15_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0719,
+       "fraccion_recorrido_constante_oraculo": 0.1146,
+       "potencia": 0.997,
+       "potencia_crit_normal": 0.997
+      },
+      "pinball": {
+       "ganancia_rel": 0.006,
+       "fraccion_recorrido_constante_oraculo": 0.1111,
+       "potencia": 0.4,
+       "potencia_crit_normal": 0.367
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1118,
+       "potencia": 0.463,
+       "potencia_crit_normal": 0.463
+      },
+      "brier": {
+       "ganancia_rel": 0.0031,
+       "fraccion_recorrido_constante_oraculo": 0.1105,
+       "potencia": 0.15,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "ml_w0.2_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0953,
+       "fraccion_recorrido_constante_oraculo": 0.152,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.008,
+       "fraccion_recorrido_constante_oraculo": 0.1475,
+       "potencia": 0.52,
+       "potencia_crit_normal": 0.477
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1484,
+       "potencia": 0.57,
+       "potencia_crit_normal": 0.563
+      },
+      "brier": {
+       "ganancia_rel": 0.0042,
+       "fraccion_recorrido_constante_oraculo": 0.1507,
+       "potencia": 0.183,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "ml_w0.3_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.1379,
+       "fraccion_recorrido_constante_oraculo": 0.22,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0117,
+       "fraccion_recorrido_constante_oraculo": 0.215,
+       "potencia": 0.59,
+       "potencia_crit_normal": 0.55
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.2162,
+       "potencia": 0.643,
+       "potencia_crit_normal": 0.63
+      },
+      "brier": {
+       "ganancia_rel": 0.0064,
+       "fraccion_recorrido_constante_oraculo": 0.2281,
+       "potencia": 0.217,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "ml_w0.45_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.1913,
+       "fraccion_recorrido_constante_oraculo": 0.305,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0164,
+       "fraccion_recorrido_constante_oraculo": 0.3014,
+       "potencia": 0.613,
+       "potencia_crit_normal": 0.563
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3039,
+       "potencia": 0.647,
+       "potencia_crit_normal": 0.643
+      },
+      "brier": {
+       "ganancia_rel": 0.0093,
+       "fraccion_recorrido_constante_oraculo": 0.3315,
+       "potencia": 0.2,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "ml_w0.6_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2319,
+       "fraccion_recorrido_constante_oraculo": 0.3698,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0202,
+       "fraccion_recorrido_constante_oraculo": 0.3717,
+       "potencia": 0.577,
+       "potencia_crit_normal": 0.527
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3743,
+       "potencia": 0.6,
+       "potencia_crit_normal": 0.583
+      },
+      "brier": {
+       "ganancia_rel": 0.0116,
+       "fraccion_recorrido_constante_oraculo": 0.4123,
+       "potencia": 0.217,
+       "potencia_crit_normal": 0.007
+      }
+     },
+     "ml_w0.8_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2661,
+       "fraccion_recorrido_constante_oraculo": 0.4244,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0238,
+       "fraccion_recorrido_constante_oraculo": 0.4377,
+       "potencia": 0.51,
+       "potencia_crit_normal": 0.447
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.4402,
+       "potencia": 0.523,
+       "potencia_crit_normal": 0.517
+      },
+      "brier": {
+       "ganancia_rel": 0.0134,
+       "fraccion_recorrido_constante_oraculo": 0.4772,
+       "potencia": 0.213,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "ml_w1.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2772,
+       "fraccion_recorrido_constante_oraculo": 0.4421,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0256,
+       "fraccion_recorrido_constante_oraculo": 0.4718,
+       "potencia": 0.407,
+       "potencia_crit_normal": 0.363
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.473,
+       "potencia": 0.45,
+       "potencia_crit_normal": 0.437
+      },
+      "brier": {
+       "ganancia_rel": 0.014,
+       "fraccion_recorrido_constante_oraculo": 0.4976,
+       "potencia": 0.19,
+       "potencia_crit_normal": 0.003
+      }
+     }
+    },
+    "mde": {
+     "qlike": {
+      "ganancia_qlike_en_w": [
+       -0.007,
+       0.0207,
+       0.047,
+       0.0719,
+       0.0953,
+       0.1379,
+       0.1913,
+       0.2319,
+       0.2661,
+       0.2772
+      ],
+      "potencia_en_w": [
+       0.007,
+       0.867,
+       0.997,
+       0.997,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0112,
+       0.033,
+       0.075,
+       0.1146,
+       0.152,
+       0.22,
+       0.305,
+       0.3698,
+       0.4244,
+       0.4421
+      ],
+      "mde_ganancia_qlike": 0.0185,
+      "potencia_si_ganancia_0.02": 0.845,
+      "potencia_si_ganancia_0.05": 0.997,
+      "potencia_si_ganancia_0.1": 1.0
+     },
+     "pinball": {
+      "ganancia_qlike_en_w": [
+       -0.007,
+       0.0207,
+       0.047,
+       0.0719,
+       0.0953,
+       0.1379,
+       0.1913,
+       0.2319,
+       0.2661,
+       0.2772
+      ],
+      "potencia_en_w": [
+       0.033,
+       0.133,
+       0.27,
+       0.4,
+       0.52,
+       0.59,
+       0.613,
+       0.577,
+       0.51,
+       0.407
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.009,
+       0.0329,
+       0.0728,
+       0.1111,
+       0.1475,
+       0.215,
+       0.3014,
+       0.3717,
+       0.4377,
+       0.4718
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "fz0": {
+      "ganancia_qlike_en_w": [
+       -0.007,
+       0.0207,
+       0.047,
+       0.0719,
+       0.0953,
+       0.1379,
+       0.1913,
+       0.2319,
+       0.2661,
+       0.2772
+      ],
+      "potencia_en_w": [
+       0.033,
+       0.15,
+       0.32,
+       0.463,
+       0.57,
+       0.643,
+       0.647,
+       0.6,
+       0.523,
+       0.45
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0095,
+       0.0327,
+       0.0732,
+       0.1118,
+       0.1484,
+       0.2162,
+       0.3039,
+       0.3743,
+       0.4402,
+       0.473
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "brier": {
+      "ganancia_qlike_en_w": [
+       -0.007,
+       0.0207,
+       0.047,
+       0.0719,
+       0.0953,
+       0.1379,
+       0.1913,
+       0.2319,
+       0.2661,
+       0.2772
+      ],
+      "potencia_en_w": [
+       0.04,
+       0.107,
+       0.123,
+       0.15,
+       0.183,
+       0.217,
+       0.2,
+       0.217,
+       0.213,
+       0.19
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.011,
+       0.0293,
+       0.0699,
+       0.1105,
+       0.1507,
+       0.2281,
+       0.3315,
+       0.4123,
+       0.4772,
+       0.4976
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     }
+    }
+   },
+   "h3": {
+    "critico_nula_95": {
+     "qlike": 1.67,
+     "pinball": 1.715,
+     "fz0": 1.897,
+     "brier": 1.07
+    },
+    "tamaño_real_con_1.645": {
+     "qlike": 0.057,
+     "pinball": 0.063,
+     "fz0": 0.08,
+     "brier": 0.007
+    },
+    "n_efectivo_dif_qlike_(w=0.3)": 333.1,
+    "tasa_caida10_sim": 0.085,
+    "sd_log_rv_sim": 0.5547,
+    "curtosis_diaria_sim": 8.77,
+    "contrastes": {
+     "har_vs_b1_12m": {
+      "qlike": {
+       "ganancia_rel": 0.5849,
+       "fraccion_recorrido_constante_oraculo": 1.9878,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0391,
+       "fraccion_recorrido_constante_oraculo": 1.0346,
+       "potencia": 0.32,
+       "potencia_crit_normal": 0.343
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 1.0415,
+       "potencia": 0.277,
+       "potencia_crit_normal": 0.363
+      },
+      "brier": {
+       "ganancia_rel": 0.0084,
+       "fraccion_recorrido_constante_oraculo": 0.2364,
+       "potencia": 0.18,
+       "potencia_crit_normal": 0.02
+      }
+     },
+     "har_vs_ewma": {
+      "qlike": {
+       "ganancia_rel": 0.3784,
+       "fraccion_recorrido_constante_oraculo": 0.8588,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.014,
+       "fraccion_recorrido_constante_oraculo": 0.3609,
+       "potencia": 0.247,
+       "potencia_crit_normal": 0.263
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3305,
+       "potencia": 0.137,
+       "potencia_crit_normal": 0.213
+      },
+      "brier": {
+       "ganancia_rel": 0.0001,
+       "fraccion_recorrido_constante_oraculo": 0.004,
+       "potencia": 0.077,
+       "potencia_crit_normal": 0.01
+      }
+     },
+     "oraculo_vs_har_(techo)": {
+      "qlike": {
+       "ganancia_rel": 0.327,
+       "fraccion_recorrido_constante_oraculo": 0.4613,
+       "potencia": 0.997,
+       "potencia_crit_normal": 0.997
+      },
+      "pinball": {
+       "ganancia_rel": 0.0204,
+       "fraccion_recorrido_constante_oraculo": 0.5193,
+       "potencia": 0.257,
+       "potencia_crit_normal": 0.273
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.5241,
+       "potencia": 0.263,
+       "potencia_crit_normal": 0.36
+      },
+      "brier": {
+       "ganancia_rel": 0.0171,
+       "fraccion_recorrido_constante_oraculo": 0.4761,
+       "potencia": 0.41,
+       "potencia_crit_normal": 0.09
+      }
+     },
+     "ml_w0.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": -0.0095,
+       "fraccion_recorrido_constante_oraculo": -0.0134,
+       "potencia": 0.013,
+       "potencia_crit_normal": 0.013
+      },
+      "pinball": {
+       "ganancia_rel": -0.0003,
+       "fraccion_recorrido_constante_oraculo": -0.0076,
+       "potencia": 0.023,
+       "potencia_crit_normal": 0.023
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": -0.0087,
+       "potencia": 0.023,
+       "potencia_crit_normal": 0.043
+      },
+      "brier": {
+       "ganancia_rel": -0.0005,
+       "fraccion_recorrido_constante_oraculo": -0.0145,
+       "potencia": 0.037,
+       "potencia_crit_normal": 0.0
+      }
+     },
+     "ml_w0.05_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0224,
+       "fraccion_recorrido_constante_oraculo": 0.0316,
+       "potencia": 0.62,
+       "potencia_crit_normal": 0.633
+      },
+      "pinball": {
+       "ganancia_rel": 0.0014,
+       "fraccion_recorrido_constante_oraculo": 0.0343,
+       "potencia": 0.067,
+       "potencia_crit_normal": 0.077
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0339,
+       "potencia": 0.07,
+       "potencia_crit_normal": 0.093
+      },
+      "brier": {
+       "ganancia_rel": 0.001,
+       "fraccion_recorrido_constante_oraculo": 0.0267,
+       "potencia": 0.143,
+       "potencia_crit_normal": 0.003
+      }
+     },
+     "ml_w0.1_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0526,
+       "fraccion_recorrido_constante_oraculo": 0.0742,
+       "potencia": 0.983,
+       "potencia_crit_normal": 0.987
+      },
+      "pinball": {
+       "ganancia_rel": 0.0029,
+       "fraccion_recorrido_constante_oraculo": 0.0743,
+       "potencia": 0.123,
+       "potencia_crit_normal": 0.133
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.0747,
+       "potencia": 0.127,
+       "potencia_crit_normal": 0.17
+      },
+      "brier": {
+       "ganancia_rel": 0.0024,
+       "fraccion_recorrido_constante_oraculo": 0.0677,
+       "potencia": 0.227,
+       "potencia_crit_normal": 0.017
+      }
+     },
+     "ml_w0.15_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.0812,
+       "fraccion_recorrido_constante_oraculo": 0.1146,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0044,
+       "fraccion_recorrido_constante_oraculo": 0.1127,
+       "potencia": 0.183,
+       "potencia_crit_normal": 0.213
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1138,
+       "potencia": 0.19,
+       "potencia_crit_normal": 0.273
+      },
+      "brier": {
+       "ganancia_rel": 0.0039,
+       "fraccion_recorrido_constante_oraculo": 0.1083,
+       "potencia": 0.333,
+       "potencia_crit_normal": 0.05
+      }
+     },
+     "ml_w0.2_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.1081,
+       "fraccion_recorrido_constante_oraculo": 0.1526,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0059,
+       "fraccion_recorrido_constante_oraculo": 0.1492,
+       "potencia": 0.247,
+       "potencia_crit_normal": 0.263
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.1511,
+       "potencia": 0.253,
+       "potencia_crit_normal": 0.337
+      },
+      "brier": {
+       "ganancia_rel": 0.0053,
+       "fraccion_recorrido_constante_oraculo": 0.1477,
+       "potencia": 0.373,
+       "potencia_crit_normal": 0.06
+      }
+     },
+     "ml_w0.3_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.1571,
+       "fraccion_recorrido_constante_oraculo": 0.2217,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0086,
+       "fraccion_recorrido_constante_oraculo": 0.2174,
+       "potencia": 0.3,
+       "potencia_crit_normal": 0.317
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.221,
+       "potencia": 0.307,
+       "potencia_crit_normal": 0.38
+      },
+      "brier": {
+       "ganancia_rel": 0.008,
+       "fraccion_recorrido_constante_oraculo": 0.2217,
+       "potencia": 0.42,
+       "potencia_crit_normal": 0.077
+      }
+     },
+     "ml_w0.45_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2184,
+       "fraccion_recorrido_constante_oraculo": 0.3081,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0121,
+       "fraccion_recorrido_constante_oraculo": 0.3081,
+       "potencia": 0.31,
+       "potencia_crit_normal": 0.32
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3131,
+       "potencia": 0.327,
+       "potencia_crit_normal": 0.41
+      },
+      "brier": {
+       "ganancia_rel": 0.0113,
+       "fraccion_recorrido_constante_oraculo": 0.3153,
+       "potencia": 0.487,
+       "potencia_crit_normal": 0.08
+      }
+     },
+     "ml_w0.6_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.2649,
+       "fraccion_recorrido_constante_oraculo": 0.3738,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.0151,
+       "fraccion_recorrido_constante_oraculo": 0.3833,
+       "potencia": 0.297,
+       "potencia_crit_normal": 0.317
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.3889,
+       "potencia": 0.317,
+       "potencia_crit_normal": 0.4
+      },
+      "brier": {
+       "ganancia_rel": 0.0138,
+       "fraccion_recorrido_constante_oraculo": 0.3842,
+       "potencia": 0.47,
+       "potencia_crit_normal": 0.077
+      }
+     },
+     "ml_w0.8_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.3042,
+       "fraccion_recorrido_constante_oraculo": 0.4291,
+       "potencia": 1.0,
+       "potencia_crit_normal": 1.0
+      },
+      "pinball": {
+       "ganancia_rel": 0.018,
+       "fraccion_recorrido_constante_oraculo": 0.4582,
+       "potencia": 0.273,
+       "potencia_crit_normal": 0.29
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.4646,
+       "potencia": 0.29,
+       "potencia_crit_normal": 0.35
+      },
+      "brier": {
+       "ganancia_rel": 0.0157,
+       "fraccion_recorrido_constante_oraculo": 0.4387,
+       "potencia": 0.437,
+       "potencia_crit_normal": 0.073
+      }
+     },
+     "ml_w1.0_vs_har": {
+      "qlike": {
+       "ganancia_rel": 0.3169,
+       "fraccion_recorrido_constante_oraculo": 0.4471,
+       "potencia": 0.997,
+       "potencia_crit_normal": 0.997
+      },
+      "pinball": {
+       "ganancia_rel": 0.02,
+       "fraccion_recorrido_constante_oraculo": 0.5094,
+       "potencia": 0.233,
+       "potencia_crit_normal": 0.257
+      },
+      "fz0": {
+       "ganancia_rel": null,
+       "fraccion_recorrido_constante_oraculo": 0.5136,
+       "potencia": 0.247,
+       "potencia_crit_normal": 0.32
+      },
+      "brier": {
+       "ganancia_rel": 0.0165,
+       "fraccion_recorrido_constante_oraculo": 0.4595,
+       "potencia": 0.4,
+       "potencia_crit_normal": 0.063
+      }
+     }
+    },
+    "mde": {
+     "qlike": {
+      "ganancia_qlike_en_w": [
+       -0.0095,
+       0.0224,
+       0.0526,
+       0.0812,
+       0.1081,
+       0.1571,
+       0.2184,
+       0.2649,
+       0.3042,
+       0.3169
+      ],
+      "potencia_en_w": [
+       0.013,
+       0.62,
+       0.983,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       0.997
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0134,
+       0.0316,
+       0.0742,
+       0.1146,
+       0.1526,
+       0.2217,
+       0.3081,
+       0.3738,
+       0.4291,
+       0.4471
+      ],
+      "mde_ganancia_qlike": 0.0374,
+      "potencia_si_ganancia_0.02": 0.574,
+      "potencia_si_ganancia_0.05": 0.952,
+      "potencia_si_ganancia_0.1": 1.0
+     },
+     "pinball": {
+      "ganancia_qlike_en_w": [
+       -0.0095,
+       0.0224,
+       0.0526,
+       0.0812,
+       0.1081,
+       0.1571,
+       0.2184,
+       0.2649,
+       0.3042,
+       0.3169
+      ],
+      "potencia_en_w": [
+       0.023,
+       0.067,
+       0.123,
+       0.183,
+       0.247,
+       0.3,
+       0.31,
+       0.297,
+       0.273,
+       0.233
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0076,
+       0.0343,
+       0.0743,
+       0.1127,
+       0.1492,
+       0.2174,
+       0.3081,
+       0.3833,
+       0.4582,
+       0.5094
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "fz0": {
+      "ganancia_qlike_en_w": [
+       -0.0095,
+       0.0224,
+       0.0526,
+       0.0812,
+       0.1081,
+       0.1571,
+       0.2184,
+       0.2649,
+       0.3042,
+       0.3169
+      ],
+      "potencia_en_w": [
+       0.023,
+       0.07,
+       0.127,
+       0.19,
+       0.253,
+       0.307,
+       0.327,
+       0.317,
+       0.29,
+       0.247
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0087,
+       0.0339,
+       0.0747,
+       0.1138,
+       0.1511,
+       0.221,
+       0.3131,
+       0.3889,
+       0.4646,
+       0.5136
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     },
+     "brier": {
+      "ganancia_qlike_en_w": [
+       -0.0095,
+       0.0224,
+       0.0526,
+       0.0812,
+       0.1081,
+       0.1571,
+       0.2184,
+       0.2649,
+       0.3042,
+       0.3169
+      ],
+      "potencia_en_w": [
+       0.037,
+       0.143,
+       0.227,
+       0.333,
+       0.373,
+       0.42,
+       0.487,
+       0.47,
+       0.437,
+       0.4
+      ],
+      "fraccion_recorrido_propia_en_w": [
+       -0.0145,
+       0.0267,
+       0.0677,
+       0.1083,
+       0.1477,
+       0.2217,
+       0.3153,
+       0.3842,
+       0.4387,
+       0.4595
+      ],
+      "mde_ganancia_qlike": null,
+      "nota": "ni el oráculo alcanza 80%"
+     }
+    }
+   }
+  }
+ },
+ "supuestos": {
+  "w_rejilla": [
+   0.0,
+   0.05,
+   0.1,
+   0.15,
+   0.2,
+   0.3,
+   0.45,
+   0.6,
+   0.8,
+   1.0
+  ],
+  "sd_nu": 0.05,
+  "phi_nu": 0.5,
+  "sd_nula": 0.1,
+  "phi_nula": 0.5,
+  "realistas_qlike": [
+   0.02,
+   0.05,
+   0.1
+  ],
+  "alfa_var": 0.05,
+  "umbral_caida": -0.1,
+  "dias_mes": 21,
+  "contraste": "DM unilateral 5 %, HAC NW",
+  "escalas_var_es_brier": "calibradas en la propia muestra para todos los modelos (oráculo)"
+ },
+ "segundos": 515
+}
