@@ -2,7 +2,58 @@
 
 Prerregistro: `docs/int/INT14_prerregistro_v1.md` (v1.0). Procedencia: commit `609475c`, árbol limpio, 2026-10-30T17:50:04+00:00. Nada ≥ 2005. Unidades: % acumulado (pp para diferencias); capa mensual nominal en USD; panel JST real por país.
 
-## 1. Contrastes principales (Holm, α = 5 %)
+## 0. Leer primero: veredicto, corrección declarada y lectura
+
+**Corrección declarada (defecto de implementación, detectado tras la corrida única).** En la capa anual, el placebo
+de las crisis (país-evento) exigía un año falso por **cada** crisis verdadera, también por las que no entran en la
+estimación por falta de rentabilidad (CAN 1907 no tiene datos JST de rentabilidad; oro antes de 1969). Era imposible
+→ **0 placebos válidos → p = 1 por construcción**, no por los datos (las tablas de abajo, generadas por la corrida, lo
+muestran con "(1.0)"). La corrección (`placebo_panel(..., solo_con_dato=True)`, commit `cadcba1`, script con puerta
+`scripts/int14_placebo_corregido.py` → `research/int/int14_placebo_corregido.json`) sortea falsos solo para los
+eventos que entran en el efecto, que es lo que dice el prerregistro §4. **No cambia efectos ni IC**, solo valores p.
+Como la corrección se hizo **después** de ver el resultado, todo lo que cambia de veredicto por ella queda marcado y
+pide validación independiente.
+
+| id | pregunta | n | efecto frente a lo normal | IC 90 % | p placebo (corregido) | p Holm | veredicto |
+|---|---|---|---|---|---|---|---|
+| H1 | crisis bancaria → vivienda real, t+1..t+3 | 43 | **−6,7 pp** | [−13,3; −0,5] | 0,011 (v1.0: 1,0, degenerado) | **0,042** | **establecido tras corrección declarada** (antes: no establecido por p degenerado) |
+| H2 | crisis bancaria → bolsa real, t+1 | 63 | −0,6 pp | [−4,2; 3,8] | 0,82 | 1,0 | no establecido |
+| H3 | pico de volatilidad → bolsa EE. UU., 12 m | 16 | +4,0 pp | [−4,6; 12,9] | 0,56 | 1,0 | no establecido |
+| H4 | shock del petróleo → bolsa real, t+1 | 157 (12 años) | −3,7 pp | [−13,7; 4,7] | 0,37 (v1.0: 0,32) | 1,0 | no establecido |
+
+H4 cambia algo porque con la corrección el año 2004 (sin t+1 ≤ 2004) ya no pide un año falso. H1 queda justo en el
+límite (p Holm 0,042) y además el MDE de fase 1 era optimista (autocorrelación de la vivienda): **tómese como
+"probable", no como hecho**; la confirmación es ≥ 2005 (2008 en adelante).
+
+**Lectura por evento (en lenguaje llano; descriptivo salvo H1-H4; n pequeño → IC anchos):**
+- **Crisis bancaria (71 país-evento, 1870-2004).** El golpe a la bolsa llega **el mismo año** (−18 pp frente a lo
+  normal, p corregido 0,003); después **no sigue cayendo** (t+1: −0,6 pp, H2) y a 2-3 años rebota (+9 pp). La
+  **vivienda real sí sigue bajando** 1-3 años (−6,7 pp; −19 pp en las 12 crisis de 1946-2004). Lo que **protege**: los
+  activos seguros en términos reales — **bonos +19 pp y letras +7,6 pp** a 3 años frente a lo normal (inflación baja
+  tras las crisis). Materias primas (CLR) **sufren** (−18 pp a 3 años, 18 episodios globales). Oro: solo 5 episodios
+  con oro libre → no se sabe.
+- **Pico de volatilidad (16, 1931-2004).** La bolsa de EE. UU. a 12 m: +4 pp frente a lo normal, IC [−4,6; 12,9]: **no
+  se puede decir que "comprar en el pánico" rinda más** (con sep. 6: +8,8 pp, IC [1,5; 18,3], p 0,11). Lo que mejor se
+  porta: **bonos del Tesoro 10 a. (+4,4 pp a 12 m, IC [1,4; 7,2], p placebo 0,003 en todos los horizontes)** — el
+  refugio clásico. **Metales base sufren** (−11 pp a 12 m, −18 pp a 24 m). Oro: sin protección clara (−6 pp a 12 m;
+  −21 pp a 24 m, n 10). En el panel (años globales), la bolsa real cae el año del pico (−7 pp) y no se recupera
+  claramente a 3 años.
+- **Shock del petróleo (13; 6-12 con datos mensuales).** Bolsa EE. UU. a 12 m ≈ igual que lo normal (+0,5 pp, IC
+  [−7; 18]); en el panel real −3,7 pp a 1 año y −7 pp a 3 años, sin significación. Suben las **letras** (+3 pp a 12 m:
+  son los años 70, de tipos altos) y, con IC muy anchos, **oro (+18 pp), metales preciosos (+22 pp, p 0,003) y energía
+  (+11 pp)** a 12 m. **Bonos reales a 3 años −16 pp** (p corregido 0,043): la inflación del shock castiga la renta fija.
+  Sensibilidad Hamilton (10 episodios 1947-2002): bolsa −3,2 pp a 12 m, IC [−11; 4].
+- **Subida fuerte del dólar (3: 1981, 1984, 2000).** **n insuficiente**; solo medias: bolsa −11 pp, materias −13 a
+  −23 pp, oro −13 pp a 12 m (lo que dice la teoría: dólar fuerte → materias y oro débiles), sin ninguna prueba.
+
+**Tabla del §2:** la fila de la **bolsa** es la **referencia** de cada evento (su etiqueta "protege" solo dice que su
+media fue > 0). Para el motor INT-11 interesan sobre todo las filas del panel (real, 1-3 años).
+
+**Avisos:** capa mensual nominal (los años 70 inflan letras/oro/materias tras el petróleo); petróleo y volatilidad se
+solapan en 5 de 6 shocks con datos diarios; dos celdas mensuales (oro a 24 m tras volatilidad y dólar u05) y varias
+de oro anual no admiten placebo (fechas falsas imposibles con la separación fijada) → p no calculable.
+
+## 1. Contrastes principales (Holm, α = 5 %) — salida ORIGINAL de la corrida (p de H1-H2 degenerado; ver §0)
 
 | id | pregunta | n | efecto frente a lo normal | IC 90 % | p placebo | p Holm | veredicto |
 |---|---|---|---|---|---|---|---|

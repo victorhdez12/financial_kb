@@ -1,0 +1,744 @@
+{
+ "procedencia": {
+  "commit": "cadcba17324815d64f1f63f8be9e97064bda6126",
+  "arbol_limpio": true,
+  "hora_utc": "2026-10-30T17:54:16+00:00"
+ },
+ "origen": "research/int/int14_resultado.json",
+ "motivo": "Defecto de implementación detectado tras la corrida única: `placebo_panel` exigía un año falso por CADA evento\nverdadero, también por los que no entran en la estimación por falta de rentabilidad (CAN 1907 en JST; oro antes de\n1969). Eso es imposible → 0 placebos válidos → p = 1 por construcción (no por los datos). La corrección hace lo que\ndice el prerregistro v1.0 §4 (\"para cada crisis verdadera\" que entra en el efecto): `solo_con_dato=True`. Mismos\neventos, mismas semillas, mismas réplicas (2.000 en H1, H2, H4; 300 en lo descriptivo). No se recalculan ni efectos ni\nIC (ya están en int14_resultado.json); solo los valores p de placebo de las capas anuales, y Holm.",
+ "capas": {
+  "panel": {
+   "crisis": {
+    "bolsa": {
+     "H0_año_t": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": 0.0033,
+      "placebos_validos": 300
+     },
+     "H1": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": 0.8176,
+      "placebos_validos": 2000
+     },
+     "H2": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": 0.0897,
+      "placebos_validos": 300
+     },
+     "H3": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": 0.093,
+      "placebos_validos": 300
+     }
+    },
+    "bonos": {
+     "H0_año_t": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": 0.7409,
+      "placebos_validos": 300
+     },
+     "H1": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": 0.0365,
+      "placebos_validos": 300
+     },
+     "H2": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": 0.103,
+      "placebos_validos": 300
+     },
+     "H3": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": 0.1595,
+      "placebos_validos": 300
+     }
+    },
+    "letras": {
+     "H0_año_t": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": 0.0664,
+      "placebos_validos": 300
+     },
+     "H1": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": 0.0033,
+      "placebos_validos": 300
+     },
+     "H2": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": 0.0033,
+      "placebos_validos": 300
+     },
+     "H3": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": 0.0332,
+      "placebos_validos": 300
+     }
+    },
+    "vivienda": {
+     "H0_año_t": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": 0.0532,
+      "placebos_validos": 300
+     },
+     "H1": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": 0.0963,
+      "placebos_validos": 300
+     },
+     "H2": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": 0.0133,
+      "placebos_validos": 300
+     },
+     "H3": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": 0.0105,
+      "placebos_validos": 2000
+     }
+    }
+   },
+   "crisis_1946_2004": {
+    "bolsa": {
+     "H0_año_t": {
+      "p_placebo_v1_0": 0.0033,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.0033,
+      "placebos_validos": 300
+     },
+     "H1": {
+      "p_placebo_v1_0": 0.6113,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.6113,
+      "placebos_validos": 300
+     },
+     "H2": {
+      "p_placebo_v1_0": 0.0797,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.0797,
+      "placebos_validos": 300
+     },
+     "H3": {
+      "p_placebo_v1_0": 0.2425,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.2425,
+      "placebos_validos": 300
+     }
+    },
+    "bonos": {
+     "H0_año_t": {
+      "p_placebo_v1_0": 0.7243,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.7243,
+      "placebos_validos": 300
+     },
+     "H1": {
+      "p_placebo_v1_0": 0.0266,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.0266,
+      "placebos_validos": 300
+     },
+     "H2": {
+      "p_placebo_v1_0": 0.0033,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.0033,
+      "placebos_validos": 300
+     },
+     "H3": {
+      "p_placebo_v1_0": 0.0166,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.0166,
+      "placebos_validos": 300
+     }
+    },
+    "letras": {
+     "H0_año_t": {
+      "p_placebo_v1_0": 0.9734,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.9734,
+      "placebos_validos": 300
+     },
+     "H1": {
+      "p_placebo_v1_0": 0.7807,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.7807,
+      "placebos_validos": 300
+     },
+     "H2": {
+      "p_placebo_v1_0": 0.7575,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.7575,
+      "placebos_validos": 300
+     },
+     "H3": {
+      "p_placebo_v1_0": 0.8106,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.8106,
+      "placebos_validos": 300
+     }
+    },
+    "vivienda": {
+     "H0_año_t": {
+      "p_placebo_v1_0": 0.0332,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.0332,
+      "placebos_validos": 300
+     },
+     "H1": {
+      "p_placebo_v1_0": 0.0133,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.0133,
+      "placebos_validos": 300
+     },
+     "H2": {
+      "p_placebo_v1_0": 0.0033,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.0033,
+      "placebos_validos": 300
+     },
+     "H3": {
+      "p_placebo_v1_0": 0.0033,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.0033,
+      "placebos_validos": 300
+     }
+    }
+   },
+   "petroleo_global": {
+    "bolsa": {
+     "H0_año_t": {
+      "p_placebo_v1_0": 0.1561,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.1561,
+      "placebos_validos": 300
+     },
+     "H1": {
+      "p_placebo_v1_0": 0.3183,
+      "placebos_validos_v1_0": 2000,
+      "p_placebo_corregido": 0.3713,
+      "placebos_validos": 2000
+     },
+     "H2": {
+      "p_placebo_v1_0": 0.2658,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.3023,
+      "placebos_validos": 300
+     },
+     "H3": {
+      "p_placebo_v1_0": 0.4319,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.4385,
+      "placebos_validos": 300
+     }
+    },
+    "bonos": {
+     "H0_año_t": {
+      "p_placebo_v1_0": 0.6811,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.6811,
+      "placebos_validos": 300
+     },
+     "H1": {
+      "p_placebo_v1_0": 0.6944,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.7442,
+      "placebos_validos": 300
+     },
+     "H2": {
+      "p_placebo_v1_0": 0.8571,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.8173,
+      "placebos_validos": 300
+     },
+     "H3": {
+      "p_placebo_v1_0": 0.0631,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.0432,
+      "placebos_validos": 300
+     }
+    },
+    "letras": {
+     "H0_año_t": {
+      "p_placebo_v1_0": 0.4684,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.4651,
+      "placebos_validos": 300
+     },
+     "H1": {
+      "p_placebo_v1_0": 0.9568,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.9535,
+      "placebos_validos": 300
+     },
+     "H2": {
+      "p_placebo_v1_0": 0.5648,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.5382,
+      "placebos_validos": 300
+     },
+     "H3": {
+      "p_placebo_v1_0": 0.6246,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.6545,
+      "placebos_validos": 300
+     }
+    },
+    "vivienda": {
+     "H0_año_t": {
+      "p_placebo_v1_0": 0.9037,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.9037,
+      "placebos_validos": 300
+     },
+     "H1": {
+      "p_placebo_v1_0": 0.7708,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.8405,
+      "placebos_validos": 300
+     },
+     "H2": {
+      "p_placebo_v1_0": 0.6977,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.6711,
+      "placebos_validos": 300
+     },
+     "H3": {
+      "p_placebo_v1_0": 0.3721,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.4286,
+      "placebos_validos": 300
+     }
+    }
+   },
+   "vol_global": {
+    "bolsa": {
+     "H0_año_t": {
+      "p_placebo_v1_0": 0.0266,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.0266,
+      "placebos_validos": 300
+     },
+     "H1": {
+      "p_placebo_v1_0": 0.2757,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.2757,
+      "placebos_validos": 300
+     },
+     "H2": {
+      "p_placebo_v1_0": 0.4352,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.3953,
+      "placebos_validos": 300
+     },
+     "H3": {
+      "p_placebo_v1_0": 0.2857,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.2591,
+      "placebos_validos": 300
+     }
+    },
+    "bonos": {
+     "H0_año_t": {
+      "p_placebo_v1_0": 0.9037,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.9037,
+      "placebos_validos": 300
+     },
+     "H1": {
+      "p_placebo_v1_0": 0.5814,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.5814,
+      "placebos_validos": 300
+     },
+     "H2": {
+      "p_placebo_v1_0": 0.8339,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.7674,
+      "placebos_validos": 300
+     },
+     "H3": {
+      "p_placebo_v1_0": 0.7043,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.804,
+      "placebos_validos": 300
+     }
+    },
+    "letras": {
+     "H0_año_t": {
+      "p_placebo_v1_0": 0.7143,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.7143,
+      "placebos_validos": 300
+     },
+     "H1": {
+      "p_placebo_v1_0": 0.3455,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.3455,
+      "placebos_validos": 300
+     },
+     "H2": {
+      "p_placebo_v1_0": 0.2791,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.2724,
+      "placebos_validos": 300
+     },
+     "H3": {
+      "p_placebo_v1_0": 0.412,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.3787,
+      "placebos_validos": 300
+     }
+    },
+    "vivienda": {
+     "H0_año_t": {
+      "p_placebo_v1_0": 0.7409,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.7409,
+      "placebos_validos": 300
+     },
+     "H1": {
+      "p_placebo_v1_0": 0.7043,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.7143,
+      "placebos_validos": 300
+     },
+     "H2": {
+      "p_placebo_v1_0": 0.5282,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.4651,
+      "placebos_validos": 300
+     },
+     "H3": {
+      "p_placebo_v1_0": 0.2027,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.1993,
+      "placebos_validos": 300
+     }
+    }
+   },
+   "dolar_global": {
+    "bolsa": {
+     "H0_año_t": {
+      "nota": "n insuficiente"
+     },
+     "H1": {
+      "nota": "n insuficiente"
+     },
+     "H2": {
+      "nota": "n insuficiente"
+     },
+     "H3": {
+      "nota": "n insuficiente"
+     }
+    },
+    "bonos": {
+     "H0_año_t": {
+      "nota": "n insuficiente"
+     },
+     "H1": {
+      "nota": "n insuficiente"
+     },
+     "H2": {
+      "nota": "n insuficiente"
+     },
+     "H3": {
+      "nota": "n insuficiente"
+     }
+    },
+    "letras": {
+     "H0_año_t": {
+      "nota": "n insuficiente"
+     },
+     "H1": {
+      "nota": "n insuficiente"
+     },
+     "H2": {
+      "nota": "n insuficiente"
+     },
+     "H3": {
+      "nota": "n insuficiente"
+     }
+    },
+    "vivienda": {
+     "H0_año_t": {
+      "nota": "n insuficiente"
+     },
+     "H1": {
+      "nota": "n insuficiente"
+     },
+     "H2": {
+      "nota": "n insuficiente"
+     },
+     "H3": {
+      "nota": "n insuficiente"
+     }
+    }
+   }
+  },
+  "mundial": {
+   "crisis_episodios": {
+    "oro_real_usd": {
+     "H0_año_t": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": 0.7176,
+      "placebos_validos": 300
+     },
+     "H1": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": 0.103,
+      "placebos_validos": 300
+     },
+     "H2": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": 0.9402,
+      "placebos_validos": 300
+     },
+     "H3": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": null,
+      "placebos_validos": 0
+     }
+    },
+    "materias_clr_exceso": {
+     "H0_año_t": {
+      "p_placebo_v1_0": 0.0066,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.0133,
+      "placebos_validos": 300
+     },
+     "H1": {
+      "p_placebo_v1_0": 0.7508,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.6146,
+      "placebos_validos": 300
+     },
+     "H2": {
+      "p_placebo_v1_0": 0.8611,
+      "placebos_validos_v1_0": 35,
+      "p_placebo_corregido": 0.6067,
+      "placebos_validos": 299
+     },
+     "H3": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": 1.0,
+      "placebos_validos": 4
+     }
+    }
+   },
+   "petroleo": {
+    "oro_real_usd": {
+     "H0_año_t": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": 0.2359,
+      "placebos_validos": 300
+     },
+     "H1": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": 0.1362,
+      "placebos_validos": 300
+     },
+     "H2": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": null,
+      "placebos_validos": 0
+     },
+     "H3": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": null,
+      "placebos_validos": 0
+     }
+    },
+    "materias_clr_exceso": {
+     "H0_año_t": {
+      "p_placebo_v1_0": 0.6777,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.6777,
+      "placebos_validos": 300
+     },
+     "H1": {
+      "p_placebo_v1_0": 0.3123,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.3355,
+      "placebos_validos": 300
+     },
+     "H2": {
+      "p_placebo_v1_0": 0.7874,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.7741,
+      "placebos_validos": 300
+     },
+     "H3": {
+      "p_placebo_v1_0": 0.4053,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.4053,
+      "placebos_validos": 300
+     }
+    }
+   },
+   "vol": {
+    "oro_real_usd": {
+     "H0_año_t": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": null,
+      "placebos_validos": 0
+     },
+     "H1": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": null,
+      "placebos_validos": 0
+     },
+     "H2": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": null,
+      "placebos_validos": 0
+     },
+     "H3": {
+      "p_placebo_v1_0": 1.0,
+      "placebos_validos_v1_0": 0,
+      "p_placebo_corregido": null,
+      "placebos_validos": 0
+     }
+    },
+    "materias_clr_exceso": {
+     "H0_año_t": {
+      "p_placebo_v1_0": 0.3522,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.3522,
+      "placebos_validos": 300
+     },
+     "H1": {
+      "p_placebo_v1_0": 0.8173,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.8173,
+      "placebos_validos": 300
+     },
+     "H2": {
+      "p_placebo_v1_0": 0.6179,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.6944,
+      "placebos_validos": 300
+     },
+     "H3": {
+      "p_placebo_v1_0": 0.0432,
+      "placebos_validos_v1_0": 300,
+      "p_placebo_corregido": 0.0598,
+      "placebos_validos": 300
+     }
+    }
+   },
+   "dolar": {
+    "oro_real_usd": {
+     "H0_año_t": {
+      "nota": "n insuficiente"
+     },
+     "H1": {
+      "nota": "n insuficiente"
+     },
+     "H2": {
+      "nota": "n insuficiente"
+     },
+     "H3": {
+      "nota": "n insuficiente"
+     }
+    },
+    "materias_clr_exceso": {
+     "H0_año_t": {
+      "nota": "n insuficiente"
+     },
+     "H1": {
+      "nota": "n insuficiente"
+     },
+     "H2": {
+      "nota": "n insuficiente"
+     },
+     "H3": {
+      "nota": "n insuficiente"
+     }
+    }
+   }
+  }
+ },
+ "principales_corregidos": {
+  "H1": {
+   "pregunta": "crisis bancaria → vivienda real, t+1..t+3 (panel JST)",
+   "n": 43,
+   "efecto_pp": -6.73,
+   "ic90_pp": [
+    -13.34,
+    -0.54
+   ],
+   "p_placebo": 0.0105,
+   "media_abs_pct": 16.25,
+   "p_holm": 0.042,
+   "veredicto": "establecido"
+  },
+  "H2": {
+   "pregunta": "crisis bancaria → bolsa real, t+1 (panel JST)",
+   "n": 63,
+   "efecto_pp": -0.61,
+   "ic90_pp": [
+    -4.21,
+    3.75
+   ],
+   "p_placebo": 0.8176,
+   "media_abs_pct": 4.7,
+   "p_holm": 1.0,
+   "veredicto": "no establecido"
+  },
+  "H3": {
+   "pregunta": "pico de volatilidad → bolsa EE. UU., 12 m",
+   "n": 16,
+   "efecto_pp": 3.99,
+   "ic90_pp": [
+    -4.62,
+    12.94
+   ],
+   "p_placebo": 0.5642,
+   "media_abs_pct": 13.97,
+   "p_holm": 1.0,
+   "veredicto": "no establecido"
+  },
+  "H4": {
+   "pregunta": "shock del petróleo → bolsa real, t+1 (panel JST, años globales)",
+   "n": 157,
+   "efecto_pp": -3.74,
+   "ic90_pp": [
+    -13.7,
+    4.65
+   ],
+   "p_placebo": 0.3713,
+   "media_abs_pct": 1.72,
+   "p_holm": 1.0,
+   "veredicto": "no establecido"
+  }
+ },
+ "segundos": 187
+}
