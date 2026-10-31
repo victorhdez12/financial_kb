@@ -1,0 +1,39 @@
+{
+ "procedencia": {
+  "commit": "1358c193ead2b39d7a4fadeef026e73801ca4959",
+  "arbol_limpio": true,
+  "hora_utc": "2026-10-31T11:03:49+00:00"
+ },
+ "iguales": {
+  "loco": true,
+  "temporal": true,
+  "puerta_D": true
+ },
+ "puerta_D": {
+  "S5_sobre_p2.5_nulo": true,
+  "S5_bajo_techo_0.93": true,
+  "activos_a_3pp": {
+   "bolsa": true,
+   "bonos": true,
+   "letras": true,
+   "vivienda": true,
+   "oro": true
+  },
+  "raros_sobre_p10_nulo": true,
+  "pasa": true
+ },
+ "puerta_D_oficial": {
+  "S5_sobre_p2.5_nulo": true,
+  "S5_bajo_techo_0.93": true,
+  "activos_a_3pp": {
+   "bolsa": true,
+   "bonos": true,
+   "letras": true,
+   "vivienda": true,
+   "oro": true
+  },
+  "raros_sobre_p10_nulo": true,
+  "pasa": true
+ },
+ "segundos": 445
+}
