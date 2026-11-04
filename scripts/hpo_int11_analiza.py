@@ -11,19 +11,20 @@ import warnings
 import numpy as np
 from scipy import stats
 
-from scripts.hpo_int11 import ACTS, B_BOOT, BLOQUE_AÑOS, SALIDA, TOL_ACT, TOL_S5, A
+from scripts.hpo_int11 import ACTS, B_BOOT, BLOQUE_AÑOS, MET_PAR, SALIDA, TOL_ACT, TOL_S5, A
 from scripts.int11_v3_corrida import cargar_real_v3
 from src.intl import data as D
 from src.intl import escenarios as E
 from src.intl.procedencia import procedencia
 
 MET = ("crps", "ls", "pit", "dentro", "ancho")
+TEST = False
 
 
 def cargar(i):
     z = np.load(SALIDA / f"corrida_s{i}.npz")
     meta = json.loads((SALIDA / f"corrida_s{i}.json").read_text())
-    return ({k: z[f"{k}_simple"] for k in MET}, {k: z[f"{k}_par"] for k in MET}, meta)
+    return ({k: z[f"{k}_simple"] for k in MET}, {k: z[f"{k}_par"] for k in MET_PAR}, meta)
 
 
 # ---------------------------------------------------------------- estadísticos (con pesos por fila: bootstrap por años)
@@ -138,7 +139,7 @@ def boot(X, X0, años, rng):
 
 def main() -> None:
     warnings.filterwarnings("ignore", category=RuntimeWarning)
-    proc = procedencia()
+    proc = procedencia(exigir_limpio=not TEST)
     f = cargar_real_v3(D.connect())
     f = E.recalcular_sucesor(f)
     pais, años, sprev = f["pais"].to_numpy(), f["año"].to_numpy(), f["s_prev"].to_numpy()
