@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import itertools
 import json
+import pickle
 import sys
 import time
 import warnings
@@ -53,6 +54,7 @@ N_LOTES, POR_LOTE = 50, 100
 TOL_S5, TOL_ACT = 0.01, 0.03
 BLOQUE_AÑOS, B_BOOT = 5, 2000
 ACTS = list(E.ACTIVOS)
+N_TRAB = 8
 A = len(ACTS)
 
 # espacio (declarado antes de correr). κ: "eb" = rejilla de Bayes empírico de v3 (log10 κ ∈ [0, 6]); si no, log10 κ fijo
@@ -195,9 +197,22 @@ def corre(i_sem: int, prueba: bool = False) -> None:
     cands = candidatos()[:2] if prueba else candidatos()
     n_lotes, por_lote = (5, 100) if prueba else (N_LOTES, POR_LOTE)
     t0 = time.time()
-    with Pool(12 if not prueba else 2, initializer=_init) as pool:
-        res = []
-        for r in pool.imap_unordered(evaluar_config, [(c, semilla, n_lotes, por_lote) for c in cands]):
+    # caché por configuración (reanudable: un trabajador muerto dejaba colgado imap; 4-nov). Mismo resultado: cada
+    # configuración es determinista dada la semilla.
+    cache = SALIDA / f"cache_s{i_sem}"
+    cache.mkdir(parents=True, exist_ok=True)
+    res = []
+    for c in cands:
+        p = cache / f"cfg{c['id']:03d}.pkl"
+        if not prueba and p.exists():
+            res.append(pickle.loads(p.read_bytes()))
+    hechos = {r["id"] for r in res}
+    pend = [(c, semilla, n_lotes, por_lote) for c in cands if c["id"] not in hechos]
+    with Pool(N_TRAB if not prueba else 2, initializer=_init, maxtasksperchild=4) as pool:
+        for r in pool.imap_unordered(evaluar_config, pend):
+            r["procedencia"] = proc
+            if not prueba:
+                (cache / f"cfg{r['id']:03d}.pkl").write_bytes(pickle.dumps(r))
             res.append(r)
             print("config", r["id"], round(r["segundos"]), "s", len(res), "/", len(cands), flush=True)
     res.sort(key=lambda r: r["id"])
@@ -211,7 +226,7 @@ def corre(i_sem: int, prueba: bool = False) -> None:
                         **{f"{k}_par": np.stack([r["par"][k] for r in res]).astype(np.float32) for k in res[0]["par"]})
     f = cargar_real_v3(D.connect())
     meta = {"procedencia": proc, "semilla": semilla, "n_lotes": n_lotes, "por_lote": por_lote,
-            "candidatos": cands, "config_completa": {r["id"]: r["config"] for r in res},
+            "candidatos": cands, "procedencia_por_config": {r["id"]: r.get("procedencia") for r in res}, "config_completa": {r["id"]: r["config"] for r in res},
             "segundos": round(time.time() - t0), "filas": int(len(f)),
             "años": [int(f["año"].min()), int(f["año"].max())]}
     (SALIDA / f"corrida_s{i_sem}.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1, default=str))
