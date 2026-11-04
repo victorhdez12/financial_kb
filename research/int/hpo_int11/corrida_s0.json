@@ -1,0 +1,4630 @@
+{
+ "procedencia": {
+  "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+  "arbol_limpio": true,
+  "hora_utc": "2026-11-04T18:31:58+00:00"
+ },
+ "semilla": 20261104,
+ "n_lotes": 50,
+ "por_lote": 100,
+ "candidatos": [
+  {
+   "id": 0,
+   "nombre": "v3",
+   "params": {}
+  },
+  {
+   "id": 1,
+   "nombre": "hpo001",
+   "params": {
+    "c_suavizado": 7.8605,
+    "nu_suavizado": 7.0,
+    "sigma_infl": 0.01175,
+    "sigma_brecha": 0.01354,
+    "n0_curtosis": 119.65,
+    "semivida_epoca": 150.0,
+    "n_min_celda": 15,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 2,
+   "nombre": "hpo002",
+   "params": {
+    "c_suavizado": 3.07092,
+    "nu_suavizado": 4.0,
+    "sigma_infl": 0.00921,
+    "sigma_brecha": 0.02133,
+    "n0_curtosis": 44.2,
+    "semivida_epoca": 50.0,
+    "n_min_celda": 50,
+    "log10_kappa": 2.378
+   }
+  },
+  {
+   "id": 3,
+   "nombre": "hpo003",
+   "params": {
+    "c_suavizado": 4.26898,
+    "nu_suavizado": 4.0,
+    "sigma_infl": 0.00478,
+    "sigma_brecha": 0.00637,
+    "n0_curtosis": 140.04,
+    "semivida_epoca": 35.0,
+    "n_min_celda": 30,
+    "log10_kappa": 3.419
+   }
+  },
+  {
+   "id": 4,
+   "nombre": "hpo004",
+   "params": {
+    "c_suavizado": 1.20279,
+    "nu_suavizado": 10.0,
+    "sigma_infl": 0.00609,
+    "sigma_brecha": 0.01755,
+    "n0_curtosis": 5.31,
+    "semivida_epoca": 50.0,
+    "n_min_celda": 50,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 5,
+   "nombre": "hpo005",
+   "params": {
+    "c_suavizado": 4.56534,
+    "nu_suavizado": 10.0,
+    "sigma_infl": 0.00166,
+    "sigma_brecha": 0.01814,
+    "n0_curtosis": 53.64,
+    "semivida_epoca": 35.0,
+    "n_min_celda": 40,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 6,
+   "nombre": "hpo006",
+   "params": {
+    "c_suavizado": 8.81566,
+    "nu_suavizado": 5.0,
+    "sigma_infl": 0.00516,
+    "sigma_brecha": 0.00927,
+    "n0_curtosis": 154.65,
+    "semivida_epoca": 100.0,
+    "n_min_celda": 50,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 7,
+   "nombre": "hpo007",
+   "params": {
+    "c_suavizado": 2.82801,
+    "nu_suavizado": 4.0,
+    "sigma_infl": 0.01071,
+    "sigma_brecha": 0.00227,
+    "n0_curtosis": 294.05,
+    "semivida_epoca": 100.0,
+    "n_min_celda": 20,
+    "log10_kappa": 0.315
+   }
+  },
+  {
+   "id": 8,
+   "nombre": "hpo008",
+   "params": {
+    "c_suavizado": 6.37138,
+    "nu_suavizado": 30.0,
+    "sigma_infl": 0.00952,
+    "sigma_brecha": 0.01249,
+    "n0_curtosis": 15.89,
+    "semivida_epoca": 50.0,
+    "n_min_celda": 15,
+    "log10_kappa": 1.384
+   }
+  },
+  {
+   "id": 9,
+   "nombre": "hpo009",
+   "params": {
+    "c_suavizado": 4.00815,
+    "nu_suavizado": 10.0,
+    "sigma_infl": 0.00548,
+    "sigma_brecha": 0.00826,
+    "n0_curtosis": 15.15,
+    "semivida_epoca": 150.0,
+    "n_min_celda": 20,
+    "log10_kappa": 1.379
+   }
+  },
+  {
+   "id": 10,
+   "nombre": "hpo010",
+   "params": {
+    "c_suavizado": 5.84227,
+    "nu_suavizado": 10.0,
+    "sigma_infl": 0.00293,
+    "sigma_brecha": 0.00012,
+    "n0_curtosis": 526.63,
+    "semivida_epoca": 50.0,
+    "n_min_celda": 15,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 11,
+   "nombre": "hpo011",
+   "params": {
+    "c_suavizado": 3.10253,
+    "nu_suavizado": 30.0,
+    "sigma_infl": 0.00826,
+    "sigma_brecha": 0.01119,
+    "n0_curtosis": 14.26,
+    "semivida_epoca": 50.0,
+    "n_min_celda": 40,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 12,
+   "nombre": "hpo012",
+   "params": {
+    "c_suavizado": 7.31889,
+    "nu_suavizado": 10.0,
+    "sigma_infl": 0.01074,
+    "sigma_brecha": 0.01223,
+    "n0_curtosis": 122.58,
+    "semivida_epoca": 50.0,
+    "n_min_celda": 15,
+    "log10_kappa": 2.873
+   }
+  },
+  {
+   "id": 13,
+   "nombre": "hpo013",
+   "params": {
+    "c_suavizado": 2.17472,
+    "nu_suavizado": 5.0,
+    "sigma_infl": 0.00127,
+    "sigma_brecha": 0.01586,
+    "n0_curtosis": 575.49,
+    "semivida_epoca": 150.0,
+    "n_min_celda": 30,
+    "log10_kappa": 0.018
+   }
+  },
+  {
+   "id": 14,
+   "nombre": "hpo014",
+   "params": {
+    "c_suavizado": 9.97194,
+    "nu_suavizado": 5.0,
+    "sigma_infl": 0.00435,
+    "sigma_brecha": 0.01894,
+    "n0_curtosis": 804.18,
+    "semivida_epoca": 0.0,
+    "n_min_celda": 50,
+    "log10_kappa": 3.566
+   }
+  },
+  {
+   "id": 15,
+   "nombre": "hpo015",
+   "params": {
+    "c_suavizado": 1.15834,
+    "nu_suavizado": 7.0,
+    "sigma_infl": 0.00622,
+    "sigma_brecha": 0.01272,
+    "n0_curtosis": 84.18,
+    "semivida_epoca": 50.0,
+    "n_min_celda": 20,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 16,
+   "nombre": "hpo016",
+   "params": {
+    "c_suavizado": 9.60775,
+    "nu_suavizado": 30.0,
+    "sigma_infl": 0.00828,
+    "sigma_brecha": 0.0172,
+    "n0_curtosis": 17.51,
+    "semivida_epoca": 100.0,
+    "n_min_celda": 50,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 17,
+   "nombre": "hpo017",
+   "params": {
+    "c_suavizado": 2.01768,
+    "nu_suavizado": 5.0,
+    "sigma_infl": 0.00244,
+    "sigma_brecha": 0.00348,
+    "n0_curtosis": 94.83,
+    "semivida_epoca": 100.0,
+    "n_min_celda": 20,
+    "log10_kappa": 3.662
+   }
+  },
+  {
+   "id": 18,
+   "nombre": "hpo018",
+   "params": {
+    "c_suavizado": 7.50056,
+    "nu_suavizado": 30.0,
+    "sigma_infl": 0.00337,
+    "sigma_brecha": 0.0175,
+    "n0_curtosis": 231.38,
+    "semivida_epoca": 0.0,
+    "n_min_celda": 15,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 19,
+   "nombre": "hpo019",
+   "params": {
+    "c_suavizado": 2.76004,
+    "nu_suavizado": 5.0,
+    "sigma_infl": 0.00315,
+    "sigma_brecha": 0.0113,
+    "n0_curtosis": 111.34,
+    "semivida_epoca": 150.0,
+    "n_min_celda": 15,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 20,
+   "nombre": "hpo020",
+   "params": {
+    "c_suavizado": 8.85124,
+    "nu_suavizado": 3.0,
+    "sigma_infl": 0.01128,
+    "sigma_brecha": 0.02327,
+    "n0_curtosis": 540.14,
+    "semivida_epoca": 25.0,
+    "n_min_celda": 50,
+    "log10_kappa": 2.791
+   }
+  },
+  {
+   "id": 21,
+   "nombre": "hpo021",
+   "params": {
+    "c_suavizado": 3.69859,
+    "nu_suavizado": 5.0,
+    "sigma_infl": 0.01204,
+    "sigma_brecha": 0.01484,
+    "n0_curtosis": 76.83,
+    "semivida_epoca": 100.0,
+    "n_min_celda": 30,
+    "log10_kappa": 0.204
+   }
+  },
+  {
+   "id": 22,
+   "nombre": "hpo022",
+   "params": {
+    "c_suavizado": 5.48358,
+    "nu_suavizado": 5.0,
+    "sigma_infl": 0.00962,
+    "sigma_brecha": 0.01521,
+    "n0_curtosis": 297.6,
+    "semivida_epoca": 35.0,
+    "n_min_celda": 15,
+    "log10_kappa": 3.743
+   }
+  },
+  {
+   "id": 23,
+   "nombre": "hpo023",
+   "params": {
+    "c_suavizado": 1.33607,
+    "nu_suavizado": 5.0,
+    "sigma_infl": 0.0057,
+    "sigma_brecha": 0.01527,
+    "n0_curtosis": 304.04,
+    "semivida_epoca": 50.0,
+    "n_min_celda": 30,
+    "log10_kappa": 0.699
+   }
+  },
+  {
+   "id": 24,
+   "nombre": "hpo024",
+   "params": {
+    "c_suavizado": 5.50836,
+    "nu_suavizado": 3.0,
+    "sigma_infl": 0.00388,
+    "sigma_brecha": 0.02313,
+    "n0_curtosis": 236.39,
+    "semivida_epoca": 100.0,
+    "n_min_celda": 30,
+    "log10_kappa": 2.903
+   }
+  },
+  {
+   "id": 25,
+   "nombre": "hpo025",
+   "params": {
+    "c_suavizado": 4.96248,
+    "nu_suavizado": 30.0,
+    "sigma_infl": 0.00086,
+    "sigma_brecha": 0.00382,
+    "n0_curtosis": 6.31,
+    "semivida_epoca": 0.0,
+    "n_min_celda": 15,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 26,
+   "nombre": "hpo026",
+   "params": {
+    "c_suavizado": 5.01136,
+    "nu_suavizado": 3.0,
+    "sigma_infl": 0.00076,
+    "sigma_brecha": 0.00656,
+    "n0_curtosis": 156.38,
+    "semivida_epoca": 0.0,
+    "n_min_celda": 15,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 27,
+   "nombre": "hpo027",
+   "params": {
+    "c_suavizado": 7.50421,
+    "nu_suavizado": 30.0,
+    "sigma_infl": 0.00843,
+    "sigma_brecha": 0.01118,
+    "n0_curtosis": 9.49,
+    "semivida_epoca": 0.0,
+    "n_min_celda": 50,
+    "log10_kappa": 1.551
+   }
+  },
+  {
+   "id": 28,
+   "nombre": "hpo028",
+   "params": {
+    "c_suavizado": 9.04464,
+    "nu_suavizado": 4.0,
+    "sigma_infl": 0.01064,
+    "sigma_brecha": 0.02003,
+    "n0_curtosis": 16.45,
+    "semivida_epoca": 35.0,
+    "n_min_celda": 50,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 29,
+   "nombre": "hpo029",
+   "params": {
+    "c_suavizado": 8.68698,
+    "nu_suavizado": 4.0,
+    "sigma_infl": 0.00078,
+    "sigma_brecha": 0.01803,
+    "n0_curtosis": 75.3,
+    "semivida_epoca": 75.0,
+    "n_min_celda": 25,
+    "log10_kappa": 1.164
+   }
+  },
+  {
+   "id": 30,
+   "nombre": "hpo030",
+   "params": {
+    "c_suavizado": 3.41743,
+    "nu_suavizado": 10.0,
+    "sigma_infl": 1e-05,
+    "sigma_brecha": 0.00594,
+    "n0_curtosis": 12.01,
+    "semivida_epoca": 75.0,
+    "n_min_celda": 30,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 31,
+   "nombre": "hpo031",
+   "params": {
+    "c_suavizado": 2.72095,
+    "nu_suavizado": 10.0,
+    "sigma_infl": 0.00369,
+    "sigma_brecha": 0.01001,
+    "n0_curtosis": 26.22,
+    "semivida_epoca": 150.0,
+    "n_min_celda": 50,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 32,
+   "nombre": "hpo032",
+   "params": {
+    "c_suavizado": 2.07549,
+    "nu_suavizado": 10.0,
+    "sigma_infl": 0.00987,
+    "sigma_brecha": 0.00236,
+    "n0_curtosis": 20.32,
+    "semivida_epoca": 35.0,
+    "n_min_celda": 50,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 33,
+   "nombre": "hpo033",
+   "params": {
+    "c_suavizado": 9.66671,
+    "nu_suavizado": 10.0,
+    "sigma_infl": 0.00717,
+    "sigma_brecha": 0.00119,
+    "n0_curtosis": 940.86,
+    "semivida_epoca": 150.0,
+    "n_min_celda": 25,
+    "log10_kappa": 3.108
+   }
+  },
+  {
+   "id": 34,
+   "nombre": "hpo034",
+   "params": {
+    "c_suavizado": 5.163,
+    "nu_suavizado": 4.0,
+    "sigma_infl": 0.01248,
+    "sigma_brecha": 0.01239,
+    "n0_curtosis": 9.49,
+    "semivida_epoca": 75.0,
+    "n_min_celda": 15,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 35,
+   "nombre": "hpo035",
+   "params": {
+    "c_suavizado": 6.98045,
+    "nu_suavizado": 3.0,
+    "sigma_infl": 0.00514,
+    "sigma_brecha": 0.00852,
+    "n0_curtosis": 964.05,
+    "semivida_epoca": 0.0,
+    "n_min_celda": 25,
+    "log10_kappa": 0.205
+   }
+  },
+  {
+   "id": 36,
+   "nombre": "hpo036",
+   "params": {
+    "c_suavizado": 4.63848,
+    "nu_suavizado": 3.0,
+    "sigma_infl": 0.00464,
+    "sigma_brecha": 0.02424,
+    "n0_curtosis": 21.45,
+    "semivida_epoca": 35.0,
+    "n_min_celda": 20,
+    "log10_kappa": 1.027
+   }
+  },
+  {
+   "id": 37,
+   "nombre": "hpo037",
+   "params": {
+    "c_suavizado": 2.11856,
+    "nu_suavizado": 3.0,
+    "sigma_infl": 0.00836,
+    "sigma_brecha": 0.01685,
+    "n0_curtosis": 45.18,
+    "semivida_epoca": 50.0,
+    "n_min_celda": 25,
+    "log10_kappa": 2.906
+   }
+  },
+  {
+   "id": 38,
+   "nombre": "hpo038",
+   "params": {
+    "c_suavizado": 2.20405,
+    "nu_suavizado": 30.0,
+    "sigma_infl": 0.00642,
+    "sigma_brecha": 0.02359,
+    "n0_curtosis": 899.39,
+    "semivida_epoca": 150.0,
+    "n_min_celda": 50,
+    "log10_kappa": 1.318
+   }
+  },
+  {
+   "id": 39,
+   "nombre": "hpo039",
+   "params": {
+    "c_suavizado": 8.83336,
+    "nu_suavizado": 10.0,
+    "sigma_infl": 0.00088,
+    "sigma_brecha": 0.01892,
+    "n0_curtosis": 165.84,
+    "semivida_epoca": 25.0,
+    "n_min_celda": 50,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 40,
+   "nombre": "hpo040",
+   "params": {
+    "c_suavizado": 8.54253,
+    "nu_suavizado": 10.0,
+    "sigma_infl": 0.01213,
+    "sigma_brecha": 0.01178,
+    "n0_curtosis": 17.4,
+    "semivida_epoca": 100.0,
+    "n_min_celda": 15,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 41,
+   "nombre": "hpo041",
+   "params": {
+    "c_suavizado": 3.17036,
+    "nu_suavizado": 30.0,
+    "sigma_infl": 0.00618,
+    "sigma_brecha": 0.01155,
+    "n0_curtosis": 18.58,
+    "semivida_epoca": 100.0,
+    "n_min_celda": 40,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 42,
+   "nombre": "hpo042",
+   "params": {
+    "c_suavizado": 8.66542,
+    "nu_suavizado": 3.0,
+    "sigma_infl": 0.00088,
+    "sigma_brecha": 0.00745,
+    "n0_curtosis": 22.16,
+    "semivida_epoca": 25.0,
+    "n_min_celda": 30,
+    "log10_kappa": 0.008
+   }
+  },
+  {
+   "id": 43,
+   "nombre": "hpo043",
+   "params": {
+    "c_suavizado": 1.82143,
+    "nu_suavizado": 3.0,
+    "sigma_infl": 0.00802,
+    "sigma_brecha": 0.01784,
+    "n0_curtosis": 263.96,
+    "semivida_epoca": 50.0,
+    "n_min_celda": 50,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 44,
+   "nombre": "hpo044",
+   "params": {
+    "c_suavizado": 7.05174,
+    "nu_suavizado": 4.0,
+    "sigma_infl": 0.00563,
+    "sigma_brecha": 0.01235,
+    "n0_curtosis": 12.79,
+    "semivida_epoca": 75.0,
+    "n_min_celda": 15,
+    "log10_kappa": 2.87
+   }
+  },
+  {
+   "id": 45,
+   "nombre": "hpo045",
+   "params": {
+    "c_suavizado": 5.65072,
+    "nu_suavizado": 3.0,
+    "sigma_infl": 0.00488,
+    "sigma_brecha": 0.02453,
+    "n0_curtosis": 95.21,
+    "semivida_epoca": 35.0,
+    "n_min_celda": 30,
+    "log10_kappa": 0.069
+   }
+  },
+  {
+   "id": 46,
+   "nombre": "hpo046",
+   "params": {
+    "c_suavizado": 8.55589,
+    "nu_suavizado": 4.0,
+    "sigma_infl": 0.00117,
+    "sigma_brecha": 0.01702,
+    "n0_curtosis": 54.97,
+    "semivida_epoca": 50.0,
+    "n_min_celda": 50,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 47,
+   "nombre": "hpo047",
+   "params": {
+    "c_suavizado": 6.0366,
+    "nu_suavizado": 4.0,
+    "sigma_infl": 0.00812,
+    "sigma_brecha": 0.00768,
+    "n0_curtosis": 234.86,
+    "semivida_epoca": 35.0,
+    "n_min_celda": 25,
+    "log10_kappa": 2.999
+   }
+  },
+  {
+   "id": 48,
+   "nombre": "hpo048",
+   "params": {
+    "c_suavizado": 2.8877,
+    "nu_suavizado": 3.0,
+    "sigma_infl": 0.01145,
+    "sigma_brecha": 0.02282,
+    "n0_curtosis": 71.24,
+    "semivida_epoca": 100.0,
+    "n_min_celda": 20,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 49,
+   "nombre": "hpo049",
+   "params": {
+    "c_suavizado": 1.30178,
+    "nu_suavizado": 3.0,
+    "sigma_infl": 0.01231,
+    "sigma_brecha": 0.00194,
+    "n0_curtosis": 253.4,
+    "semivida_epoca": 25.0,
+    "n_min_celda": 20,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 50,
+   "nombre": "hpo050",
+   "params": {
+    "c_suavizado": 9.99541,
+    "nu_suavizado": 30.0,
+    "sigma_infl": 0.00623,
+    "sigma_brecha": 0.02404,
+    "n0_curtosis": 572.79,
+    "semivida_epoca": 150.0,
+    "n_min_celda": 50,
+    "log10_kappa": 2.99
+   }
+  },
+  {
+   "id": 51,
+   "nombre": "hpo051",
+   "params": {
+    "c_suavizado": 2.89099,
+    "nu_suavizado": 4.0,
+    "sigma_infl": 0.011,
+    "sigma_brecha": 0.003,
+    "n0_curtosis": 13.23,
+    "semivida_epoca": 75.0,
+    "n_min_celda": 20,
+    "log10_kappa": 3.777
+   }
+  },
+  {
+   "id": 52,
+   "nombre": "hpo052",
+   "params": {
+    "c_suavizado": 9.50688,
+    "nu_suavizado": 3.0,
+    "sigma_infl": 0.01171,
+    "sigma_brecha": 0.00527,
+    "n0_curtosis": 53.1,
+    "semivida_epoca": 150.0,
+    "n_min_celda": 15,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 53,
+   "nombre": "hpo053",
+   "params": {
+    "c_suavizado": 6.9249,
+    "nu_suavizado": 7.0,
+    "sigma_infl": 0.00298,
+    "sigma_brecha": 0.01078,
+    "n0_curtosis": 202.65,
+    "semivida_epoca": 75.0,
+    "n_min_celda": 25,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 54,
+   "nombre": "hpo054",
+   "params": {
+    "c_suavizado": 6.7173,
+    "nu_suavizado": 7.0,
+    "sigma_infl": 0.00357,
+    "sigma_brecha": 0.00369,
+    "n0_curtosis": 303.71,
+    "semivida_epoca": 0.0,
+    "n_min_celda": 30,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 55,
+   "nombre": "hpo055",
+   "params": {
+    "c_suavizado": 2.99908,
+    "nu_suavizado": 3.0,
+    "sigma_infl": 0.00957,
+    "sigma_brecha": 0.01736,
+    "n0_curtosis": 8.46,
+    "semivida_epoca": 150.0,
+    "n_min_celda": 30,
+    "log10_kappa": 0.725
+   }
+  },
+  {
+   "id": 56,
+   "nombre": "hpo056",
+   "params": {
+    "c_suavizado": 9.6543,
+    "nu_suavizado": 3.0,
+    "sigma_infl": 0.00256,
+    "sigma_brecha": 0.00158,
+    "n0_curtosis": 140.97,
+    "semivida_epoca": 75.0,
+    "n_min_celda": 15,
+    "log10_kappa": 3.945
+   }
+  },
+  {
+   "id": 57,
+   "nombre": "hpo057",
+   "params": {
+    "c_suavizado": 8.14331,
+    "nu_suavizado": 7.0,
+    "sigma_infl": 0.00664,
+    "sigma_brecha": 0.00072,
+    "n0_curtosis": 266.46,
+    "semivida_epoca": 50.0,
+    "n_min_celda": 30,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 58,
+   "nombre": "hpo058",
+   "params": {
+    "c_suavizado": 4.52723,
+    "nu_suavizado": 30.0,
+    "sigma_infl": 0.00487,
+    "sigma_brecha": 0.0017,
+    "n0_curtosis": 55.48,
+    "semivida_epoca": 25.0,
+    "n_min_celda": 40,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 59,
+   "nombre": "hpo059",
+   "params": {
+    "c_suavizado": 2.01337,
+    "nu_suavizado": 3.0,
+    "sigma_infl": 0.00375,
+    "sigma_brecha": 0.02019,
+    "n0_curtosis": 13.31,
+    "semivida_epoca": 35.0,
+    "n_min_celda": 25,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 60,
+   "nombre": "hpo060",
+   "params": {
+    "c_suavizado": 8.45835,
+    "nu_suavizado": 30.0,
+    "sigma_infl": 0.00769,
+    "sigma_brecha": 0.02224,
+    "n0_curtosis": 44.47,
+    "semivida_epoca": 25.0,
+    "n_min_celda": 20,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 61,
+   "nombre": "hpo061",
+   "params": {
+    "c_suavizado": 7.49336,
+    "nu_suavizado": 30.0,
+    "sigma_infl": 0.00545,
+    "sigma_brecha": 0.0041,
+    "n0_curtosis": 29.42,
+    "semivida_epoca": 25.0,
+    "n_min_celda": 20,
+    "log10_kappa": 1.106
+   }
+  },
+  {
+   "id": 62,
+   "nombre": "hpo062",
+   "params": {
+    "c_suavizado": 9.10023,
+    "nu_suavizado": 3.0,
+    "sigma_infl": 0.00121,
+    "sigma_brecha": 0.02252,
+    "n0_curtosis": 492.29,
+    "semivida_epoca": 150.0,
+    "n_min_celda": 40,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 63,
+   "nombre": "hpo063",
+   "params": {
+    "c_suavizado": 1.95573,
+    "nu_suavizado": 3.0,
+    "sigma_infl": 0.00734,
+    "sigma_brecha": 0.01468,
+    "n0_curtosis": 151.73,
+    "semivida_epoca": 75.0,
+    "n_min_celda": 40,
+    "log10_kappa": 2.419
+   }
+  },
+  {
+   "id": 64,
+   "nombre": "hpo064",
+   "params": {
+    "c_suavizado": 2.50763,
+    "nu_suavizado": 7.0,
+    "sigma_infl": 0.01207,
+    "sigma_brecha": 0.0204,
+    "n0_curtosis": 169.79,
+    "semivida_epoca": 0.0,
+    "n_min_celda": 40,
+    "log10_kappa": 3.218
+   }
+  },
+  {
+   "id": 65,
+   "nombre": "hpo065",
+   "params": {
+    "c_suavizado": 6.59984,
+    "nu_suavizado": 5.0,
+    "sigma_infl": 0.0118,
+    "sigma_brecha": 0.01882,
+    "n0_curtosis": 116.74,
+    "semivida_epoca": 100.0,
+    "n_min_celda": 50,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 66,
+   "nombre": "hpo066",
+   "params": {
+    "c_suavizado": 9.73353,
+    "nu_suavizado": 4.0,
+    "sigma_infl": 0.00058,
+    "sigma_brecha": 0.01798,
+    "n0_curtosis": 791.3,
+    "semivida_epoca": 50.0,
+    "n_min_celda": 20,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 67,
+   "nombre": "hpo067",
+   "params": {
+    "c_suavizado": 1.81272,
+    "nu_suavizado": 10.0,
+    "sigma_infl": 0.00656,
+    "sigma_brecha": 0.01861,
+    "n0_curtosis": 47.85,
+    "semivida_epoca": 100.0,
+    "n_min_celda": 30,
+    "log10_kappa": 0.308
+   }
+  },
+  {
+   "id": 68,
+   "nombre": "hpo068",
+   "params": {
+    "c_suavizado": 4.39229,
+    "nu_suavizado": 3.0,
+    "sigma_infl": 0.01084,
+    "sigma_brecha": 0.01795,
+    "n0_curtosis": 488.3,
+    "semivida_epoca": 50.0,
+    "n_min_celda": 25,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 69,
+   "nombre": "hpo069",
+   "params": {
+    "c_suavizado": 8.00844,
+    "nu_suavizado": 4.0,
+    "sigma_infl": 0.00202,
+    "sigma_brecha": 0.00913,
+    "n0_curtosis": 68.8,
+    "semivida_epoca": 150.0,
+    "n_min_celda": 40,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 70,
+   "nombre": "hpo070",
+   "params": {
+    "c_suavizado": 6.25373,
+    "nu_suavizado": 5.0,
+    "sigma_infl": 0.00012,
+    "sigma_brecha": 0.00265,
+    "n0_curtosis": 86.08,
+    "semivida_epoca": 150.0,
+    "n_min_celda": 40,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 71,
+   "nombre": "hpo071",
+   "params": {
+    "c_suavizado": 5.80763,
+    "nu_suavizado": 3.0,
+    "sigma_infl": 0.01179,
+    "sigma_brecha": 0.00082,
+    "n0_curtosis": 753.47,
+    "semivida_epoca": 35.0,
+    "n_min_celda": 50,
+    "log10_kappa": 3.281
+   }
+  },
+  {
+   "id": 72,
+   "nombre": "hpo072",
+   "params": {
+    "c_suavizado": 9.14481,
+    "nu_suavizado": 10.0,
+    "sigma_infl": 0.00647,
+    "sigma_brecha": 0.00157,
+    "n0_curtosis": 176.16,
+    "semivida_epoca": 50.0,
+    "n_min_celda": 25,
+    "log10_kappa": 2.115
+   }
+  },
+  {
+   "id": 73,
+   "nombre": "hpo073",
+   "params": {
+    "c_suavizado": 4.21602,
+    "nu_suavizado": 10.0,
+    "sigma_infl": 0.0022,
+    "sigma_brecha": 0.00396,
+    "n0_curtosis": 108.79,
+    "semivida_epoca": 35.0,
+    "n_min_celda": 20,
+    "log10_kappa": 0.907
+   }
+  },
+  {
+   "id": 74,
+   "nombre": "hpo074",
+   "params": {
+    "c_suavizado": 3.72972,
+    "nu_suavizado": 10.0,
+    "sigma_infl": 0.00619,
+    "sigma_brecha": 0.02472,
+    "n0_curtosis": 36.17,
+    "semivida_epoca": 0.0,
+    "n_min_celda": 20,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 75,
+   "nombre": "hpo075",
+   "params": {
+    "c_suavizado": 3.46111,
+    "nu_suavizado": 30.0,
+    "sigma_infl": 0.00273,
+    "sigma_brecha": 0.01733,
+    "n0_curtosis": 147.43,
+    "semivida_epoca": 150.0,
+    "n_min_celda": 50,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 76,
+   "nombre": "hpo076",
+   "params": {
+    "c_suavizado": 8.89069,
+    "nu_suavizado": 4.0,
+    "sigma_infl": 0.0008,
+    "sigma_brecha": 0.0045,
+    "n0_curtosis": 229.1,
+    "semivida_epoca": 35.0,
+    "n_min_celda": 25,
+    "log10_kappa": 0.119
+   }
+  },
+  {
+   "id": 77,
+   "nombre": "hpo077",
+   "params": {
+    "c_suavizado": 8.51876,
+    "nu_suavizado": 5.0,
+    "sigma_infl": 0.0107,
+    "sigma_brecha": 0.02413,
+    "n0_curtosis": 831.55,
+    "semivida_epoca": 35.0,
+    "n_min_celda": 15,
+    "log10_kappa": 2.885
+   }
+  },
+  {
+   "id": 78,
+   "nombre": "hpo078",
+   "params": {
+    "c_suavizado": 3.95541,
+    "nu_suavizado": 5.0,
+    "sigma_infl": 0.00583,
+    "sigma_brecha": 0.00667,
+    "n0_curtosis": 54.27,
+    "semivida_epoca": 25.0,
+    "n_min_celda": 40,
+    "log10_kappa": 0.681
+   }
+  },
+  {
+   "id": 79,
+   "nombre": "hpo079",
+   "params": {
+    "c_suavizado": 9.05079,
+    "nu_suavizado": 7.0,
+    "sigma_infl": 0.00802,
+    "sigma_brecha": 0.01786,
+    "n0_curtosis": 221.17,
+    "semivida_epoca": 100.0,
+    "n_min_celda": 40,
+    "log10_kappa": "eb"
+   }
+  },
+  {
+   "id": 80,
+   "nombre": "hpo080",
+   "params": {
+    "c_suavizado": 4.93023,
+    "nu_suavizado": 4.0,
+    "sigma_infl": 0.01141,
+    "sigma_brecha": 0.00551,
+    "n0_curtosis": 277.58,
+    "semivida_epoca": 0.0,
+    "n_min_celda": 50,
+    "log10_kappa": 3.289
+   }
+  }
+ ],
+ "procedencia_por_config": {
+  "0": {
+   "commit": "c341c205aa1f2b2b3d171030c222a1730b92f8ad",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:03:13+00:00"
+  },
+  "1": {
+   "commit": "c341c205aa1f2b2b3d171030c222a1730b92f8ad",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:03:13+00:00"
+  },
+  "2": {
+   "commit": "c341c205aa1f2b2b3d171030c222a1730b92f8ad",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:03:13+00:00"
+  },
+  "3": {
+   "commit": "c341c205aa1f2b2b3d171030c222a1730b92f8ad",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:03:13+00:00"
+  },
+  "4": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "5": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "6": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "7": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "8": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "9": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "10": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "11": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "12": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "13": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "14": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "15": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "16": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "17": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "18": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "19": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "20": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "21": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "22": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "23": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "24": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "25": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "26": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "27": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "28": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "29": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "30": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "31": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "32": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "33": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "34": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "35": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "36": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "37": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "38": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "39": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "40": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "41": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "42": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "43": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "44": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "45": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "46": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "47": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "48": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "49": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "50": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "51": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "52": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "53": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "54": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "55": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "56": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "57": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "58": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "59": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "60": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "61": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "62": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "63": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "64": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "65": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "66": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "67": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "68": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "69": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "70": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "71": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "72": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "73": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "74": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "75": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "76": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "77": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "78": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "79": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  },
+  "80": {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T16:20:34+00:00"
+  }
+ },
+ "config_completa": {
+  "0": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 25,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 5.25,
+   "nu_suavizado": 5.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 50.0,
+   "semivida_epoca": 50.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.005,
+   "sigma_brecha": 0.01,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "1": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 15,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 7.8605,
+   "nu_suavizado": 7.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 119.65,
+   "semivida_epoca": 150.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.01175,
+   "sigma_brecha": 0.01354,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "2": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 50,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 3.07092,
+   "nu_suavizado": 4.0,
+   "rejilla_kappa": [
+    2.378,
+    2.378,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 44.2,
+   "semivida_epoca": 50.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00921,
+   "sigma_brecha": 0.02133,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "3": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 30,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 4.26898,
+   "nu_suavizado": 4.0,
+   "rejilla_kappa": [
+    3.419,
+    3.419,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 140.04,
+   "semivida_epoca": 35.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00478,
+   "sigma_brecha": 0.00637,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "4": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 50,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 1.20279,
+   "nu_suavizado": 10.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 5.31,
+   "semivida_epoca": 50.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00609,
+   "sigma_brecha": 0.01755,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "5": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 40,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 4.56534,
+   "nu_suavizado": 10.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 53.64,
+   "semivida_epoca": 35.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00166,
+   "sigma_brecha": 0.01814,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "6": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 50,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 8.81566,
+   "nu_suavizado": 5.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 154.65,
+   "semivida_epoca": 100.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00516,
+   "sigma_brecha": 0.00927,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "7": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 20,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 2.82801,
+   "nu_suavizado": 4.0,
+   "rejilla_kappa": [
+    0.315,
+    0.315,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 294.05,
+   "semivida_epoca": 100.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.01071,
+   "sigma_brecha": 0.00227,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "8": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 15,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 6.37138,
+   "nu_suavizado": 30.0,
+   "rejilla_kappa": [
+    1.384,
+    1.384,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 15.89,
+   "semivida_epoca": 50.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00952,
+   "sigma_brecha": 0.01249,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "9": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 20,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 4.00815,
+   "nu_suavizado": 10.0,
+   "rejilla_kappa": [
+    1.379,
+    1.379,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 15.15,
+   "semivida_epoca": 150.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00548,
+   "sigma_brecha": 0.00826,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "10": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 15,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 5.84227,
+   "nu_suavizado": 10.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 526.63,
+   "semivida_epoca": 50.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00293,
+   "sigma_brecha": 0.00012,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "11": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 40,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 3.10253,
+   "nu_suavizado": 30.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 14.26,
+   "semivida_epoca": 50.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00826,
+   "sigma_brecha": 0.01119,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "12": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 15,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 7.31889,
+   "nu_suavizado": 10.0,
+   "rejilla_kappa": [
+    2.873,
+    2.873,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 122.58,
+   "semivida_epoca": 50.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.01074,
+   "sigma_brecha": 0.01223,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "13": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 30,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 2.17472,
+   "nu_suavizado": 5.0,
+   "rejilla_kappa": [
+    0.018,
+    0.018,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 575.49,
+   "semivida_epoca": 150.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00127,
+   "sigma_brecha": 0.01586,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "14": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 50,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 9.97194,
+   "nu_suavizado": 5.0,
+   "rejilla_kappa": [
+    3.566,
+    3.566,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 804.18,
+   "semivida_epoca": 0.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00435,
+   "sigma_brecha": 0.01894,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "15": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 20,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 1.15834,
+   "nu_suavizado": 7.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 84.18,
+   "semivida_epoca": 50.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00622,
+   "sigma_brecha": 0.01272,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "16": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 50,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 9.60775,
+   "nu_suavizado": 30.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 17.51,
+   "semivida_epoca": 100.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00828,
+   "sigma_brecha": 0.0172,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "17": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 20,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 2.01768,
+   "nu_suavizado": 5.0,
+   "rejilla_kappa": [
+    3.662,
+    3.662,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 94.83,
+   "semivida_epoca": 100.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00244,
+   "sigma_brecha": 0.00348,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "18": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 15,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 7.50056,
+   "nu_suavizado": 30.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 231.38,
+   "semivida_epoca": 0.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00337,
+   "sigma_brecha": 0.0175,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "19": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 15,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 2.76004,
+   "nu_suavizado": 5.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 111.34,
+   "semivida_epoca": 150.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00315,
+   "sigma_brecha": 0.0113,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "20": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 50,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 8.85124,
+   "nu_suavizado": 3.0,
+   "rejilla_kappa": [
+    2.791,
+    2.791,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 540.14,
+   "semivida_epoca": 25.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.01128,
+   "sigma_brecha": 0.02327,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "21": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 30,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 3.69859,
+   "nu_suavizado": 5.0,
+   "rejilla_kappa": [
+    0.204,
+    0.204,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 76.83,
+   "semivida_epoca": 100.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.01204,
+   "sigma_brecha": 0.01484,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "22": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 15,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 5.48358,
+   "nu_suavizado": 5.0,
+   "rejilla_kappa": [
+    3.743,
+    3.743,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 297.6,
+   "semivida_epoca": 35.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00962,
+   "sigma_brecha": 0.01521,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "23": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 30,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 1.33607,
+   "nu_suavizado": 5.0,
+   "rejilla_kappa": [
+    0.699,
+    0.699,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 304.04,
+   "semivida_epoca": 50.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.0057,
+   "sigma_brecha": 0.01527,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "24": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 30,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 5.50836,
+   "nu_suavizado": 3.0,
+   "rejilla_kappa": [
+    2.903,
+    2.903,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 236.39,
+   "semivida_epoca": 100.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00388,
+   "sigma_brecha": 0.02313,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "25": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 15,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 4.96248,
+   "nu_suavizado": 30.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 6.31,
+   "semivida_epoca": 0.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00086,
+   "sigma_brecha": 0.00382,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "26": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 15,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 5.01136,
+   "nu_suavizado": 3.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 156.38,
+   "semivida_epoca": 0.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00076,
+   "sigma_brecha": 0.00656,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "27": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 50,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 7.50421,
+   "nu_suavizado": 30.0,
+   "rejilla_kappa": [
+    1.551,
+    1.551,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 9.49,
+   "semivida_epoca": 0.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00843,
+   "sigma_brecha": 0.01118,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "28": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 50,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 9.04464,
+   "nu_suavizado": 4.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 16.45,
+   "semivida_epoca": 35.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.01064,
+   "sigma_brecha": 0.02003,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "29": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 25,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 8.68698,
+   "nu_suavizado": 4.0,
+   "rejilla_kappa": [
+    1.164,
+    1.164,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 75.3,
+   "semivida_epoca": 75.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00078,
+   "sigma_brecha": 0.01803,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "30": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 30,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 3.41743,
+   "nu_suavizado": 10.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 12.01,
+   "semivida_epoca": 75.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 1e-05,
+   "sigma_brecha": 0.00594,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "31": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 50,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 2.72095,
+   "nu_suavizado": 10.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 26.22,
+   "semivida_epoca": 150.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00369,
+   "sigma_brecha": 0.01001,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "32": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 50,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 2.07549,
+   "nu_suavizado": 10.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 20.32,
+   "semivida_epoca": 35.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00987,
+   "sigma_brecha": 0.00236,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "33": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 25,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 9.66671,
+   "nu_suavizado": 10.0,
+   "rejilla_kappa": [
+    3.108,
+    3.108,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 940.86,
+   "semivida_epoca": 150.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00717,
+   "sigma_brecha": 0.00119,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "34": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 15,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 5.163,
+   "nu_suavizado": 4.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 9.49,
+   "semivida_epoca": 75.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.01248,
+   "sigma_brecha": 0.01239,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "35": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 25,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 6.98045,
+   "nu_suavizado": 3.0,
+   "rejilla_kappa": [
+    0.205,
+    0.205,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 964.05,
+   "semivida_epoca": 0.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00514,
+   "sigma_brecha": 0.00852,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "36": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 20,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 4.63848,
+   "nu_suavizado": 3.0,
+   "rejilla_kappa": [
+    1.027,
+    1.027,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 21.45,
+   "semivida_epoca": 35.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00464,
+   "sigma_brecha": 0.02424,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "37": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 25,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 2.11856,
+   "nu_suavizado": 3.0,
+   "rejilla_kappa": [
+    2.906,
+    2.906,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 45.18,
+   "semivida_epoca": 50.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00836,
+   "sigma_brecha": 0.01685,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "38": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 50,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 2.20405,
+   "nu_suavizado": 30.0,
+   "rejilla_kappa": [
+    1.318,
+    1.318,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 899.39,
+   "semivida_epoca": 150.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00642,
+   "sigma_brecha": 0.02359,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "39": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 50,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 8.83336,
+   "nu_suavizado": 10.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 165.84,
+   "semivida_epoca": 25.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00088,
+   "sigma_brecha": 0.01892,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "40": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 15,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 8.54253,
+   "nu_suavizado": 10.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 17.4,
+   "semivida_epoca": 100.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.01213,
+   "sigma_brecha": 0.01178,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "41": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 40,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 3.17036,
+   "nu_suavizado": 30.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 18.58,
+   "semivida_epoca": 100.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00618,
+   "sigma_brecha": 0.01155,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "42": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 30,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 8.66542,
+   "nu_suavizado": 3.0,
+   "rejilla_kappa": [
+    0.008,
+    0.008,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 22.16,
+   "semivida_epoca": 25.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00088,
+   "sigma_brecha": 0.00745,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "43": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 50,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 1.82143,
+   "nu_suavizado": 3.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 263.96,
+   "semivida_epoca": 50.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00802,
+   "sigma_brecha": 0.01784,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "44": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 15,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 7.05174,
+   "nu_suavizado": 4.0,
+   "rejilla_kappa": [
+    2.87,
+    2.87,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 12.79,
+   "semivida_epoca": 75.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00563,
+   "sigma_brecha": 0.01235,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "45": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 30,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 5.65072,
+   "nu_suavizado": 3.0,
+   "rejilla_kappa": [
+    0.069,
+    0.069,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 95.21,
+   "semivida_epoca": 35.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00488,
+   "sigma_brecha": 0.02453,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "46": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 50,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 8.55589,
+   "nu_suavizado": 4.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 54.97,
+   "semivida_epoca": 50.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00117,
+   "sigma_brecha": 0.01702,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "47": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 25,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 6.0366,
+   "nu_suavizado": 4.0,
+   "rejilla_kappa": [
+    2.999,
+    2.999,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 234.86,
+   "semivida_epoca": 35.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00812,
+   "sigma_brecha": 0.00768,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "48": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 20,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 2.8877,
+   "nu_suavizado": 3.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 71.24,
+   "semivida_epoca": 100.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.01145,
+   "sigma_brecha": 0.02282,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "49": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 20,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 1.30178,
+   "nu_suavizado": 3.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 253.4,
+   "semivida_epoca": 25.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.01231,
+   "sigma_brecha": 0.00194,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "50": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 50,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 9.99541,
+   "nu_suavizado": 30.0,
+   "rejilla_kappa": [
+    2.99,
+    2.99,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 572.79,
+   "semivida_epoca": 150.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00623,
+   "sigma_brecha": 0.02404,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "51": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 20,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 2.89099,
+   "nu_suavizado": 4.0,
+   "rejilla_kappa": [
+    3.777,
+    3.777,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 13.23,
+   "semivida_epoca": 75.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.011,
+   "sigma_brecha": 0.003,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "52": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 15,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 9.50688,
+   "nu_suavizado": 3.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 53.1,
+   "semivida_epoca": 150.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.01171,
+   "sigma_brecha": 0.00527,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "53": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 25,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 6.9249,
+   "nu_suavizado": 7.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 202.65,
+   "semivida_epoca": 75.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00298,
+   "sigma_brecha": 0.01078,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "54": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 30,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 6.7173,
+   "nu_suavizado": 7.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 303.71,
+   "semivida_epoca": 0.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00357,
+   "sigma_brecha": 0.00369,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "55": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 30,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 2.99908,
+   "nu_suavizado": 3.0,
+   "rejilla_kappa": [
+    0.725,
+    0.725,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 8.46,
+   "semivida_epoca": 150.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00957,
+   "sigma_brecha": 0.01736,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "56": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 15,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 9.6543,
+   "nu_suavizado": 3.0,
+   "rejilla_kappa": [
+    3.945,
+    3.945,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 140.97,
+   "semivida_epoca": 75.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00256,
+   "sigma_brecha": 0.00158,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "57": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 30,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 8.14331,
+   "nu_suavizado": 7.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 266.46,
+   "semivida_epoca": 50.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00664,
+   "sigma_brecha": 0.00072,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "58": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 40,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 4.52723,
+   "nu_suavizado": 30.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 55.48,
+   "semivida_epoca": 25.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00487,
+   "sigma_brecha": 0.0017,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "59": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 25,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 2.01337,
+   "nu_suavizado": 3.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 13.31,
+   "semivida_epoca": 35.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00375,
+   "sigma_brecha": 0.02019,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "60": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 20,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 8.45835,
+   "nu_suavizado": 30.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 44.47,
+   "semivida_epoca": 25.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00769,
+   "sigma_brecha": 0.02224,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "61": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 20,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 7.49336,
+   "nu_suavizado": 30.0,
+   "rejilla_kappa": [
+    1.106,
+    1.106,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 29.42,
+   "semivida_epoca": 25.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00545,
+   "sigma_brecha": 0.0041,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "62": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 40,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 9.10023,
+   "nu_suavizado": 3.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 492.29,
+   "semivida_epoca": 150.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00121,
+   "sigma_brecha": 0.02252,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "63": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 40,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 1.95573,
+   "nu_suavizado": 3.0,
+   "rejilla_kappa": [
+    2.419,
+    2.419,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 151.73,
+   "semivida_epoca": 75.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00734,
+   "sigma_brecha": 0.01468,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "64": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 40,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 2.50763,
+   "nu_suavizado": 7.0,
+   "rejilla_kappa": [
+    3.218,
+    3.218,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 169.79,
+   "semivida_epoca": 0.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.01207,
+   "sigma_brecha": 0.0204,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "65": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 50,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 6.59984,
+   "nu_suavizado": 5.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 116.74,
+   "semivida_epoca": 100.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.0118,
+   "sigma_brecha": 0.01882,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "66": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 20,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 9.73353,
+   "nu_suavizado": 4.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 791.3,
+   "semivida_epoca": 50.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00058,
+   "sigma_brecha": 0.01798,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "67": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 30,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 1.81272,
+   "nu_suavizado": 10.0,
+   "rejilla_kappa": [
+    0.308,
+    0.308,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 47.85,
+   "semivida_epoca": 100.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00656,
+   "sigma_brecha": 0.01861,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "68": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 25,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 4.39229,
+   "nu_suavizado": 3.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 488.3,
+   "semivida_epoca": 50.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.01084,
+   "sigma_brecha": 0.01795,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "69": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 40,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 8.00844,
+   "nu_suavizado": 4.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 68.8,
+   "semivida_epoca": 150.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00202,
+   "sigma_brecha": 0.00913,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "70": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 40,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 6.25373,
+   "nu_suavizado": 5.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 86.08,
+   "semivida_epoca": 150.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00012,
+   "sigma_brecha": 0.00265,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "71": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 50,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 5.80763,
+   "nu_suavizado": 3.0,
+   "rejilla_kappa": [
+    3.281,
+    3.281,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 753.47,
+   "semivida_epoca": 35.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.01179,
+   "sigma_brecha": 0.00082,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "72": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 25,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 9.14481,
+   "nu_suavizado": 10.0,
+   "rejilla_kappa": [
+    2.115,
+    2.115,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 176.16,
+   "semivida_epoca": 50.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00647,
+   "sigma_brecha": 0.00157,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "73": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 20,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 4.21602,
+   "nu_suavizado": 10.0,
+   "rejilla_kappa": [
+    0.907,
+    0.907,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 108.79,
+   "semivida_epoca": 35.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.0022,
+   "sigma_brecha": 0.00396,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "74": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 20,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 3.72972,
+   "nu_suavizado": 10.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 36.17,
+   "semivida_epoca": 0.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00619,
+   "sigma_brecha": 0.02472,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "75": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 50,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 3.46111,
+   "nu_suavizado": 30.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 147.43,
+   "semivida_epoca": 150.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00273,
+   "sigma_brecha": 0.01733,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "76": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 25,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 8.89069,
+   "nu_suavizado": 4.0,
+   "rejilla_kappa": [
+    0.119,
+    0.119,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 229.1,
+   "semivida_epoca": 35.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.0008,
+   "sigma_brecha": 0.0045,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "77": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 15,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 8.51876,
+   "nu_suavizado": 5.0,
+   "rejilla_kappa": [
+    2.885,
+    2.885,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 831.55,
+   "semivida_epoca": 35.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.0107,
+   "sigma_brecha": 0.02413,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "78": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 40,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 3.95541,
+   "nu_suavizado": 5.0,
+   "rejilla_kappa": [
+    0.681,
+    0.681,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 54.27,
+   "semivida_epoca": 25.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00583,
+   "sigma_brecha": 0.00667,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "79": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 40,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 9.05079,
+   "nu_suavizado": 7.0,
+   "rejilla_kappa": [
+    0.0,
+    6.0,
+    121
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 221.17,
+   "semivida_epoca": 100.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.00802,
+   "sigma_brecha": 0.01786,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  },
+  "80": {
+   "activos": [
+    "bolsa",
+    "bonos",
+    "letras",
+    "vivienda",
+    "oro"
+   ],
+   "modo": "bootstrap",
+   "k_pais": 40.0,
+   "bloque_medio": 3.0,
+   "n_min_celda": 50,
+   "contagio": false,
+   "incertidumbre": true,
+   "nu_t": 5.0,
+   "n0_cov": 30.0,
+   "anio_max": 2004,
+   "escala_pais": true,
+   "min_paises_año": 3,
+   "k_mezcla": 0.0,
+   "c_suavizado": 4.93023,
+   "nu_suavizado": 4.0,
+   "rejilla_kappa": [
+    3.289,
+    3.289,
+    1
+   ],
+   "curtosis_escala": "pais",
+   "n0_curtosis": 277.58,
+   "semivida_epoca": 0.0,
+   "anio_ref_epoca": null,
+   "sigma_infl": 0.01141,
+   "sigma_brecha": 0.00551,
+   "eventos": [],
+   "evento_condiciona": false,
+   "recuentos_evento": {},
+   "n_min_evento": 5
+  }
+ },
+ "segundos": 4,
+ "filas": 1548,
+ "años": [
+  1881,
+  2004
+ ]
+}

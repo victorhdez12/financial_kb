@@ -32,3 +32,7 @@ research/trials/full/
 .venv/
 obsidian.zip
 obsidian/Proyecto/Actualizaciones.md
+
+# HPO INT-11: matrices por fila (grandes; reproducibles con scripts/hpo_int11.py y las semillas)
+research/int/hpo_int11/*.npz
+research/int/hpo_int11/cache_*/
