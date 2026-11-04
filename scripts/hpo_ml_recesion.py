@@ -23,7 +23,8 @@ from __future__ import annotations
 
 import os
 
-os.environ.setdefault("OMP_NUM_THREADS", "1")
+for _v in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS", "VECLIB_MAXIMUM_THREADS"):
+    os.environ[_v] = "1"     # máquina compartida: un hilo por proceso (no cambia el resultado)
 
 import datetime as dt  # noqa: E402
 import itertools  # noqa: E402
@@ -62,6 +63,7 @@ PRESUPUESTO = 20                      # configuraciones por candidato (igual par
 N_PLACEBO = 30                        # réplicas del placebo (objetivo permutado por bloques dentro de país)
 BLOQUE = {"T1": 5, "T2": 3}           # longitud de bloque del placebo (filas consecutivas del país)
 B_BOOT = 2000
+N_JOBS = 5                            # procesos en paralelo (máquina compartida; no cambia el resultado)
 MDE = {"T1": (0.05, 0.07), "T2": (0.05, 0.07)}   # INT-4-ML §4 (r 0,8-0,9, Holm-4); INT-10: T1 0,040 (un contraste)
 ESPACIO = {
     "GB": {"max_depth": [1, 2, 3, 4], "learning_rate": loguniform(0.01, 0.2), "max_iter": [50, 100, 200, 400],
@@ -254,13 +256,13 @@ def main() -> None:
         X, y, g, t, nb, cols = d["X"], d["y"], d["g"], d["t"], d["n_b1"], d["cols"]
         t0 = time.time()
         # observado: paraleliza por configuración (cada tarea hace el anidado de UNA configuración)
-        partes = Parallel(n_jobs=-1)(delayed(una_config)(X, y, g, c, giro, nb, cols) for c in cfgs)
+        partes = Parallel(n_jobs=N_JOBS)(delayed(una_config)(X, y, g, c, giro, nb, cols) for c in cfgs)
         p_ext, S = np.vstack([a for a, _ in partes]), np.column_stack([b for _, b in partes])
         p_log = ML.loco(ML.Logit, X, y, g)
         sel, elig = seleccionar(p_ext, S, cfgs, y, g)
         t_obs = time.time() - t0
         t0 = time.time()
-        pl = Parallel(n_jobs=-1)(delayed(placebo_rep)(r, X, y, g, t, cfgs, giro, nb, cols) for r in range(n_pl))
+        pl = Parallel(n_jobs=N_JOBS)(delayed(placebo_rep)(r, X, y, g, t, cfgs, giro, nb, cols) for r in range(n_pl))
         t_pl = time.time() - t0
         a_log = auc_estrat(y, p_log, g)
         G = {"filas": int(len(y)), "eventos": int(y.sum()), "indicadores": cols, "auc_estrat_logit": a_log,
