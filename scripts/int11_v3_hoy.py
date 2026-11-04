@@ -37,6 +37,9 @@ def _p(x):
     return f"{100 * x:.0f} %"
 
 
+POR_LOTE = 1000  # Validador 31-oct: con 100/lote el IC de parámetros de "hoy" no es estimable
+
+
 def acierto_medido(res: dict) -> dict:
     return {"activo": dict(zip(E.ACTIVOS, res["loco"]["S_activo"])), "regimen": res["cobertura_por_regimen_loco"],
             "pais": res["cobertura_por_pais_loco"], "global": res["loco"]["S5"], "puerta_D": res["puerta_D"]["pasa"],
@@ -45,9 +48,9 @@ def acierto_medido(res: dict) -> dict:
 
 def pais_escenario(gen: E.Generador, c: str, e: dict, semilla: int) -> dict:
     w = E.pesos_estado(e["inflacion"], e["brecha"], gen.cfg.sigma_infl, gen.cfg.sigma_brecha)
-    esc = gen.simular_suave(c, e["inflacion"], e["brecha"], horizonte=1, n_lotes=200, por_lote=100, semilla=semilla)
+    esc = gen.simular_suave(c, e["inflacion"], e["brecha"], horizonte=1, n_lotes=200, por_lote=POR_LOTE, semilla=semilla)
     R = esc.rent[:, 0, :]
-    duro = gen.simular(c, e["codigo"], horizonte=1, n_lotes=200, por_lote=100, semilla=semilla)
+    duro = gen.simular(c, e["codigo"], horizonte=1, n_lotes=200, por_lote=POR_LOTE, semilla=semilla)
     return {"pesos_regimen": dict(zip(E.REGIMENES, np.round(w, 4).tolist())),
             "regimen_dominante": E.REGIMENES[int(np.argmax(w))],
             "cuantiles_1_99": {a: np.nanpercentile(R[:, j], REJILLA_Q).round(5).tolist() for j, a in enumerate(esc.activos)},
@@ -85,6 +88,12 @@ def emitir(fecha: str) -> dict:
                      "moneda local. No es una recomendación."}
 
 
+def _ic(d: dict) -> str:
+    if not d.get("ic_estimable", True):
+        return "[IC no estimable]"
+    return f"[{_p(max(d['ic90'][0], 0))}-{_p(min(d['ic90'][1], 1))}]"
+
+
 def _q(r: dict, a: str, p: int) -> float:
     return r["cuantiles_1_99"][a][p - 1]
 
@@ -107,8 +116,7 @@ def markdown(o: dict) -> str:
             f"{_p(_q(r, 'bolsa', 5))} … {_p(_q(r, 'bolsa', 50))} … {_p(_q(r, 'bolsa', 95))} "
             f"(acertó {_p(ac['pais'][c]['bolsa'])} país / {_p(acb) if acb is not None else '—'} régimen) | "
             f"{_p(_q(r, 'bonos', 5))} … {_p(_q(r, 'bonos', 95))} | {_p(_q(r, 'vivienda', 5))} … {_p(_q(r, 'vivienda', 95))} | "
-            f"{_p(pc['p'])} [{_p(max(pc['ic90'][0], 0))}-{_p(pc['ic90'][1])}] | "
-            f"{_p(pi['p'])} [{_p(max(pi['ic90'][0], 0))}-{_p(min(pi['ic90'][1], 1))}] |")
+            f"{_p(pc['p'])} {_ic(pc)} | {_p(pi['p'])} {_ic(pi)} |")
         if r["cerca_umbral"]:
             cerca.append(f"{c} (inflación {r['distancia_umbral_pp']:+.2f} pp del 3 %, brecha {100 * e['brecha']:+.1f} %: "
                          f"P(inflación > 5 %) {_p(pi['p'])} suave frente a {_p(r['p_inflacion_5_regimen_duro'])} con la "

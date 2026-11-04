@@ -434,7 +434,8 @@ def _media_e_ic_estratos(x, lote, estrato, z):
         var_mc.append(v)
     var_par = max(float(np.var(medias, ddof=1) - np.mean(var_mc)), 0.0)
     s = np.sqrt(var_par)
-    return {"p": m, "ic90": (m - z * s, m + z * s)}
+    # var_par = 0 ⇒ el ruido MC tapa la duda de parámetros: el IC no es "anchura 0", es NO ESTIMABLE (Validador 31-oct)
+    return {"p": m, "ic90": (m - z * s, m + z * s), "ic_estimable": var_par > 0}
 
 
 def _media_e_ic(x: np.ndarray, lote: np.ndarray, z: float = 1.645, estrato: np.ndarray | None = None) -> dict:
@@ -454,7 +455,8 @@ def _media_e_ic(x: np.ndarray, lote: np.ndarray, z: float = 1.645, estrato: np.n
     var_dentro = np.bincount(inv, weights=(x - medias[inv]) ** 2) / np.maximum(n_b - 1, 1)
     var_par = max(float(np.var(medias, ddof=1) - np.mean(var_dentro / n_b)), 0.0)
     s = np.sqrt(var_par)
-    return {"p": m, "ic90": (m - z * s, m + z * s)}
+    # var_par = 0 ⇒ el ruido MC tapa la duda de parámetros: el IC no es "anchura 0", es NO ESTIMABLE (Validador 31-oct)
+    return {"p": m, "ic90": (m - z * s, m + z * s), "ic_estimable": var_par > 0}
 
 
 # ============================================================================ generador
