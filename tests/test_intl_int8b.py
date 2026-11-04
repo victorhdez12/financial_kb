@@ -147,12 +147,17 @@ def test_vivo_fuera_de_src_intl():
 
 
 # ---------------------------------------------------------------- warehouse real
-@pytest.mark.skipif(not db.WAREHOUSE.exists() or not NV.REFERENCIAS.exists(), reason="sin warehouse o referencias")
-def test_referencias_congeladas_igual_a_vivo_con_corte_2004():
-    """Las referencias congeladas (datos load_dev) = las recalculadas con la carga en vivo cortada en 2004-12: la carga en
-    vivo reproduce el desarrollo (también la IP interanual y el paro)."""
+@pytest.mark.skipif(not D.instantanea_disponible() or not NV.REFERENCIAS.exists(),
+                    reason="sin la instantánea ≤ 2004 (fuera del repo) o sin referencias")
+def test_referencias_congeladas_reproducidas_desde_instantanea():
+    """REPRODUCCIÓN (rediseñado el 4-nov; docs/int/INT8b_nowcast.md, «Revisiones de datos»): las referencias congeladas
+    (30-oct, datos load_dev de entonces) = las recalculadas con la carga en vivo cortada en 2004-12 sobre la instantánea
+    fechada e inmutable (research/int/instantanea_dev_2004.json, sha256 comprobado), y la carga en vivo reproduce el
+    desarrollo (también la IP interanual). Antes se recalculaba con el warehouse de cada día: fallaba cuando la OCDE
+    revisaba en origen series ≤ 2004 (2-nov). La deriva frente al warehouse de hoy se mide aparte
+    (tests/test_deriva_revisiones.py) y no rompe esta reproducción."""
     from src.intl import panel as P
-    con = db.connect(read_only=True)
+    con = D.connect(fuente="instantanea")
     try:
         pm, bis, pib, paro, _ = NV.cargar(con, "2004-12-31")
         dev = P.mensual(con)
@@ -169,6 +174,22 @@ def test_referencias_congeladas_igual_a_vivo_con_corte_2004():
         assert np.allclose(rec["indice"][c], cong["indice"][c], rtol=0, atol=1e-9), c
     assert np.allclose(rec["agregado"], cong["agregado"], rtol=0, atol=1e-9)
     assert D.DEV_END == pd.Timestamp("2004-12-31") or D.DEV_END.year == 2004
+
+
+@pytest.mark.skipif(not D.instantanea_disponible() or not NV.REFERENCIAS.exists(),
+                    reason="sin la instantánea ≤ 2004 (fuera del repo) o sin referencias")
+def test_ruta_de_desarrollo_lee_la_instantanea():
+    """scripts/int8b_corrida.cargar_dev(fuente="instantanea") (load_dev / load_dev_curado sobre la instantánea) vuelve a
+    dar exactamente las referencias congeladas."""
+    from scripts.int8b_corrida import cargar_dev
+    pm, bis, pib, paro, _ = cargar_dev("instantanea")
+    rec = K.referencias(K.componentes(pm, bis, pib, paro, NV.NUCLEO, NV.TODOS), NV.NUCLEO, NV.TODOS)
+    cong = NV.referencias_congeladas()
+    for k in K.CLAVES:
+        for c in NV.TODOS:
+            a, b = rec["indicadores"][k][c], cong["indicadores"][k][c]
+            assert len(a) == len(b) and np.allclose(a, b, rtol=0, atol=1e-12), (k, c)
+    assert np.allclose(rec["agregado"], cong["agregado"], rtol=0, atol=1e-9)
 
 
 def test_reporte_semanal_seccion_5c(vivo):

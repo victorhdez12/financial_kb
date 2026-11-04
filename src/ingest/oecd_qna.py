@@ -5,7 +5,8 @@ series_id = oecd_gdpq_<iso3 lower>. Key Q.Y.<area>.S1.S1.B1GQ._Z._Z._Z.XDC.LR.LA
 national currency, chain-linked volume (rebased), annual levels. Quarterly obs dated at quarter start.
 Latest release only (no vintages in this flow; declared in the design: "si no, la última"). Back-cast history (estimated
 observations before the national benchmark) is kept as published; OBS_STATUS counts go to the catalog notes.
-Raw: $FIN_DATA_ROOT/raw/oecd_qna/gdpq.csv (full API response) + provenance.json (url, sha256, UTC time).
+Raw: $FIN_DATA_ROOT/raw/oecd_qna/gdpq.csv (full API response) + provenance.json (url, sha256, UTC time); each new
+download is also archived, gzipped and dated, in raw/oecd_qna/archivo/ (src/ingest/_archivo_raw.py).
 
 Run: .venv/bin/python -m src.ingest.oecd_qna [--refresh]
 """
@@ -19,6 +20,7 @@ import time
 
 import pandas as pd
 
+from ._archivo_raw import archivar
 from ._extlong_common import CatalogWriter, http_get, log, raw_dir
 
 SRC = "oecd_qna"
@@ -39,6 +41,7 @@ def fetch(refresh: bool) -> pd.DataFrame:
             if b"TIME_PERIOD" not in r.content[:3000]:
                 raise ValueError(r.text[:200])
             dest.write_bytes(r.content)
+            archivar(raw_dir(SRC), "gdpq", r.content)       # copia fechada (src/ingest/_archivo_raw.py)
             (raw_dir(SRC) / "provenance.json").write_text(json.dumps({
                 "url": URL, "sha256": hashlib.sha256(r.content).hexdigest(), "bytes": len(r.content),
                 "downloaded_utc": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")}, indent=1))

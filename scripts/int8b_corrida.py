@@ -29,8 +29,10 @@ FIGURA = REPO / "research" / "int" / "graficas" / "int8b_ilustracion.png"
 UMBRAL_SOMBRA = 1 / 3       # ilustración: se sombrea si ≥ 1/3 del núcleo con dato está en recesión (fechado)
 
 
-def cargar_dev():
-    con = D.connect()
+def cargar_dev(fuente: str | None = None):
+    """Datos ≤ 2004 del warehouse (por defecto) o, con `fuente="instantanea"` (o FIN_DEV_FUENTE=instantanea), de la
+    instantánea inmutable con la que se congelaron las referencias (src/intl/data.py; docs/int/INT8b_nowcast.md)."""
+    con = D.connect(fuente)
     try:
         pm = P.mensual(con)
         bis = {c: s for c in NV.TODOS if not (s := D.load_dev(con, f"bis_creditgap_{D.ISO2[c]}_ratio")).empty}
@@ -38,7 +40,7 @@ def cargar_dev():
         usrec = D.load_dev(con, "USREC")
     finally:
         con.close()
-    pib = {c: D.load_dev_curado(f"oecd_gdpq_{c.lower()}") for c in NV.TODOS}
+    pib = {c: D.load_dev_curado(f"oecd_gdpq_{c.lower()}", fuente=fuente) for c in NV.TODOS}
     return pm, bis, pib, paro, usrec
 
 
