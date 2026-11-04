@@ -74,7 +74,43 @@ como candidata para un prerregistro en datos nuevos; si no, nada.
   otros agentes) se bajó, antes de congelar, el bosque de 200 a 100 árboles y el placebo de 100 a 30 réplicas.
 
 ## 6. Resultado
-(Pendiente: se rellena tras la corrida con puerta, sin cambiar §1-§5.)
+Corrida con puerta: commit `9240372` (árbol limpio), 2026-11-04 16:03 → 18:00 UTC; el plan se congeló en `bd49a1e` y el
+único cambio entre ambos fue limitar los procesos a 5 de un hilo (máquina compartida; no cambia el cálculo). La corrida
+escribió `resultado.json` y falló al dibujar la tabla (claves de cuantiles); `resultado.md` y la línea del registro se
+rehicieron desde el JSON sin recalcular (`--informe`, commit siguiente). Detalle: `research/int/hpo_ml_recesion/resultado.md`.
+
+ΔAUC estratificada anidada (selector − logit de INT-4), IC 95 % por bloques de año, placebo (30 réplicas con todo el
+procedimiento repetido) y Δlog-loss:
+
+| giro · selector | AUC logit → selector | ΔAUC [IC 95 %] | placebo media (dt) | z (p) | Δlog-loss [IC] | ¿≥ MDE 0,05? |
+|---|---|---|---|---|---|---|
+| T1 · GB | 0,732 → 0,752 | +0,020 [−0,014; +0,054] | +0,001 (0,034) | +0,54 (0,29) | −0,006 [−0,020; +0,006] | no |
+| T1 · RF | 0,732 → 0,749 | +0,017 [−0,016; +0,049] | −0,000 (0,037) | +0,48 (0,31) | −0,009 [−0,023; +0,006] | no |
+| T1 · EN | 0,732 → 0,724 | −0,007 [−0,017; +0,002] | +0,003 (0,032) | −0,31 (0,62) | +0,014 [0,000; +0,038] | no |
+| T1 · TODOS | 0,732 → 0,752 | +0,020 [−0,014; +0,054] | −0,002 (0,031) | +0,70 (0,24) | −0,006 [−0,019; +0,007] | no |
+| T2 · GB | 0,770 → 0,729 | −0,042 [−0,100; +0,021] | −0,013 (0,060) | −0,48 (0,69) | +0,011 [−0,032; +0,049] | no |
+| T2 · RF | 0,770 → 0,709 | −0,061 [−0,124; −0,001] | +0,006 (0,054) | −1,26 (0,90) | +0,015 [−0,023; +0,048] | no |
+| T2 · EN | 0,770 → 0,774 | +0,003 [−0,012; +0,021] | −0,001 (0,049) | +0,09 (0,47) | +0,017 [−0,026; +0,053] | no |
+| T2 · TODOS | 0,770 → 0,738 | −0,033 [−0,083; +0,016] | −0,014 (0,058) | −0,32 (0,63) | +0,027 [−0,018; +0,065] | no |
+
+- **Ningún selector cumple ningún criterio de §4 salvo (c) Δlog-loss < 0 en T1 (GB, RF, TODOS).** Ningún IC excluye 0
+  a favor del ML (ni sin Holm), ningún placebo da p < 0,2, y ninguna ganancia llega a la MDE (0,05-0,07; ni a 0,040 de INT-10).
+- **T1:** la búsqueda deja al GB en +0,020, prácticamente lo mismo que el M-GB fijo de INT-4-ML (+0,018). El interno
+  elige casi siempre GB poco profundos y monótonos (GB09: profundidad 3, 50 árboles, tasa 0,04, monotonía sí; 7 de 14
+  pliegues). La ganancia es ≈ 0,6 dt del placebo: ruido.
+- **T2:** los árboles empeoran (RF −0,061, el único IC que excluye 0, **en contra** del ML); el selector global acaba
+  eligiendo logits regularizados **sin interacciones**, es decir, el propio logit (EN +0,003).
+- **Optimismo de no anidar:** escoger la mejor de las 60 mirando el LOCO externo daría T1 +0,035 y T2 +0,000; pero con el
+  objetivo permutado ese mismo máximo sale de media +0,045 (T1) y +0,069 (T2), p95 +0,089 / +0,132. Es decir, **el
+  máximo observado está por debajo de lo que da el azar** con 60 configuraciones: quien publicara "la mejor
+  configuración" sin anidar estaría reportando ruido.
+- Todas las pruebas (60 configuraciones × 2 giros, con su puntuación interna, su ΔAUC LOCO no anidada y cuántas veces
+  se eligió) están en `resultado.json`.
 
 ## 7. Conclusión
-(Pendiente.)
+Un ajuste serio de hiperparámetros, bien anidado, **no cambia la conclusión de INT-4-ML ni de INT-10**: en la entrada
+(T1) el mejor ML gana ≈ +0,02 de AUC estratificada, igual que el modelo fijo, dentro del ruido (placebo z ≈ 0,5-0,7) y
+por debajo de la MDE (0,05-0,07); en la salida (T2) el ML pierde y la búsqueda vuelve al logit. La línea ML sigue
+cerrada sobre ≤ 2004. **No hay configuración que prerregistrar** (§4 no se cumple en ningún caso). Si en el futuro hay
+datos nuevos, la única forma con sentido sería un GB poco profundo y monótono como el GB09 o el M-GB ya congelado, y aun
+así con potencia insuficiente para +0,02 (INT-10).
