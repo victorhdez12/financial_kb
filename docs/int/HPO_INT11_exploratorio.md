@@ -40,6 +40,10 @@ Fuera del espacio, declarado: `k_pais` (en LOCO el país predicho no está en el
 - Puntuaciones por fila y activo (rentabilidad real simple): CRPS de la mezcla ponderada (exacto para la muestra),
   log-score (núcleo gaussiano de Silverman por régimen de partida, mezcla de densidades), PIT = F(y), dentro del
   p5-p95 (cuantil de la CDF de la mezcla, como la fase D), anchura.
+- Ejecución (cambio de ejecución sin ver resultados, 4-nov): la máquina estaba compartida y un trabajador del Pool
+  murió y colgó el primer intento (sin resultados leídos). Ahora son 4 procesos independientes (≤ 4, BLAS a 1 hilo)
+  con caché por configuración, y los pares guardan solo CRPS y dentro90, que es lo único que usa la regla interna.
+  Los resultados no cambian: cada configuración es determinista dada la semilla (se comprobó con `prueba`).
 
 ## 3. Regla de elección y evaluación (fijada antes)
 - **Anidado LOCO por país:** para cada país externo c, el interno es el LOCO sobre los otros 13 (ajuste sin {c, d},

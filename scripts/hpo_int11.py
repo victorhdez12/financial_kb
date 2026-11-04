@@ -19,7 +19,8 @@ Diseño (declarado antes de correr; §2 del doc):
 - Comparación con v3 en las mismas filas: diferencias con IC 90 % por bloques móviles de años (5 años, B = 2000).
 - Variación Monte Carlo: todo se repite con SEMILLAS_MC[1]; v3(semilla A) frente a v3(semilla B) da el ruido MC.
 
-Uso: .venv/bin/python -m scripts.hpo_int11 corre --semilla 0   (índice en SEMILLAS_MC; árbol limpio)
+Uso: .venv/bin/python -m scripts.hpo_int11 corre --semilla 0 --parte k/4  (4 procesos independientes; árbol limpio)
+     .venv/bin/python -m scripts.hpo_int11 corre --semilla 0   (reúne la caché y escribe corrida_s0.*)
      .venv/bin/python -m scripts.hpo_int11 analiza              (lee las dos corridas; árbol limpio)
      .venv/bin/python -m scripts.hpo_int11 prueba               (2 configuraciones, pocos sorteos; no escribe)
 """
@@ -32,7 +33,6 @@ import sys
 import time
 import warnings
 from dataclasses import asdict
-from multiprocessing import Pool
 from pathlib import Path
 
 import numpy as np
@@ -54,6 +54,7 @@ N_LOTES, POR_LOTE = 50, 100
 TOL_S5, TOL_ACT = 0.01, 0.03
 BLOQUE_AÑOS, B_BOOT = 5, 2000
 ACTS = list(E.ACTIVOS)
+MET_PAR = ("crps", "dentro")
 N_TRAB = 4                      # máquina compartida (coordinador 4-nov): ≤ 4 trabajadores, BLAS a 1 hilo
 A = len(ACTS)
 
@@ -99,8 +100,9 @@ def config(params: dict) -> E.Config:
 
 
 # ============================================================================ puntuación de la mezcla ponderada
-def puntuar(ms: list[np.ndarray], W: np.ndarray, y: np.ndarray) -> dict:
-    """ms: K muestras (vacías si peso 0); W (m, K) pesos de la mezcla; y (m,). CRPS, log-score, PIT, dentro90, ancho."""
+def puntuar(ms: list[np.ndarray], W: np.ndarray, y: np.ndarray, ligero: bool = False) -> dict:
+    """ms: K muestras (vacías si peso 0); W (m, K) pesos de la mezcla; y (m,). CRPS, log-score, PIT, dentro90, ancho.
+    ligero: solo CRPS y dentro90 (lo que usa la elección interna; los pares no necesitan más)."""
     K = len(ms)
     x = np.concatenate(ms)
     lab = np.concatenate([np.full(len(m), k) for k, m in enumerate(ms)])
@@ -113,6 +115,9 @@ def puntuar(ms: list[np.ndarray], W: np.ndarray, y: np.ndarray) -> dict:
     e_xy = np.sum(w * np.abs(x[None, :] - y[:, None]), 1)
     e_xx = 2 * np.sum(w * x[None, :] * ((C - w) - (1 - C)), 1)
     crps = e_xy - 0.5 * e_xx
+    if ligero:
+        q = V._cuantiles_filas(ms, W, (0.05, 0.95))
+        return {"crps": crps, "dentro": ((y >= q[0]) & (y <= q[1])).astype(float)}
     pit = np.sum(w * (x[None, :] <= y[:, None]), 1)
     dens = np.zeros(len(y))
     for k, m in enumerate(ms):
@@ -155,10 +160,10 @@ def evaluar_config(args) -> dict:
     m = len(f)
     met = ("crps", "ls", "pit", "dentro", "ancho")
     simple = {k: np.full((m, A), np.nan) for k in met}
-    par = {k: np.full((len(paises), m, A), np.nan) for k in met}       # par[k][i_c, fila de d, a]: fuera {c, d}
+    par = {k: np.full((len(paises), m, A), np.nan) for k in MET_PAR}       # par[k][i_c, fila de d, a]: fuera {c, d}
     t0 = time.time()
 
-    def predice(gen, c, fold, destino):
+    def predice(gen, c, fold, destino, ligero=False):
         idx = np.flatnonzero(pais == c)
         Wc = W[idx]
         usa = np.flatnonzero(Wc.max(0) > 0)
@@ -175,8 +180,8 @@ def evaluar_config(args) -> dict:
             ok = np.isfinite(y)
             if not ok.any():
                 continue
-            sc = puntuar(ms, Wc[ok], y[ok])
-            for k in met:
+            sc = puntuar(ms, Wc[ok], y[ok], ligero)
+            for k in sc:
                 destino[k][idx[ok], j] = sc[k]
 
     for k, c in enumerate(paises):
@@ -185,13 +190,13 @@ def evaluar_config(args) -> dict:
     for p_i, (c, d) in enumerate(itertools.combinations(paises, 2)):
         gen = E.Generador(cfg).ajustar(E.recalcular_sucesor(f[(pais != c) & (pais != d)]))
         ic, id_ = paises.index(c), paises.index(d)
-        predice(gen, d, 100 + p_i, {k: par[k][ic] for k in met})
-        predice(gen, c, 100 + p_i, {k: par[k][id_] for k in met})
+        predice(gen, d, 100 + p_i, {k: par[k][ic] for k in MET_PAR}, True)
+        predice(gen, c, 100 + p_i, {k: par[k][id_] for k in MET_PAR}, True)
     return {"id": cand["id"], "simple": simple, "par": par, "segundos": time.time() - t0,
             "config": asdict(cfg)}
 
 
-def corre(i_sem: int, prueba: bool = False) -> None:
+def corre(i_sem: int, prueba: bool = False, parte: tuple | None = None) -> None:
     semilla = SEMILLAS_MC[i_sem]
     proc = {"prueba": True} if prueba else procedencia()
     cands = candidatos()[:2] if prueba else candidatos()
@@ -208,13 +213,20 @@ def corre(i_sem: int, prueba: bool = False) -> None:
             res.append(pickle.loads(p.read_bytes()))
     hechos = {r["id"] for r in res}
     pend = [(c, semilla, n_lotes, por_lote) for c in cands if c["id"] not in hechos]
-    with Pool(N_TRAB if not prueba else 2, initializer=_init, maxtasksperchild=4) as pool:
-        for r in pool.imap_unordered(evaluar_config, pend):
-            r["procedencia"] = proc
-            if not prueba:
-                (cache / f"cfg{r['id']:03d}.pkl").write_bytes(pickle.dumps(r))
-            res.append(r)
-            print("config", r["id"], round(r["segundos"]), "s", len(res), "/", len(cands), flush=True)
+    if parte is not None:                       # proceso independiente k de n (sin Pool: máquina compartida, 4-nov)
+        k, n = parte
+        pend = [a for a in pend if a[0]["id"] % n == k]
+    if pend:
+        _init()
+    for a in pend:
+        r = evaluar_config(a)
+        r["procedencia"] = proc
+        if not prueba:
+            (cache / f"cfg{r['id']:03d}.pkl").write_bytes(pickle.dumps(r))
+        res.append(r)
+        print("config", r["id"], round(r["segundos"]), "s", len(res), "/", len(cands), flush=True)
+    if parte is not None:
+        return
     res.sort(key=lambda r: r["id"])
     if prueba:
         for r in res:
@@ -223,7 +235,7 @@ def corre(i_sem: int, prueba: bool = False) -> None:
     SALIDA.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(SALIDA / f"corrida_s{i_sem}.npz",
                         **{f"{k}_simple": np.stack([r["simple"][k] for r in res]) for k in res[0]["simple"]},
-                        **{f"{k}_par": np.stack([r["par"][k] for r in res]).astype(np.float32) for k in res[0]["par"]})
+                        **{f"{k}_par": np.stack([r["par"][k] for r in res]).astype(np.float32) for k in MET_PAR})
     f = cargar_real_v3(D.connect())
     meta = {"procedencia": proc, "semilla": semilla, "n_lotes": n_lotes, "por_lote": por_lote,
             "candidatos": cands, "procedencia_por_config": {r["id"]: r.get("procedencia") for r in res}, "config_completa": {r["id"]: r["config"] for r in res},
@@ -236,7 +248,8 @@ def corre(i_sem: int, prueba: bool = False) -> None:
 if __name__ == "__main__":
     warnings.filterwarnings("ignore", category=RuntimeWarning)
     if sys.argv[1] == "corre":
-        corre(int(sys.argv[sys.argv.index("--semilla") + 1]))
+        pa = sys.argv[sys.argv.index("--parte") + 1].split("/") if "--parte" in sys.argv else None
+        corre(int(sys.argv[sys.argv.index("--semilla") + 1]), parte=(int(pa[0]), int(pa[1])) if pa else None)
     elif sys.argv[1] == "prueba":
         corre(0, prueba=True)
     elif sys.argv[1] == "analiza":
