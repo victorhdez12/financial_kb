@@ -218,6 +218,28 @@ def md_nowcast(s: dict) -> str:
     return NV.markdown(nc, tit)
 
 
+def md_escenarios(s: dict) -> str:
+    """5d. Abanicos INT-11 v3 a 12 meses (docs/int/INT11_prerregistro_v3.md §8), descriptivos."""
+    es = s.get("escenarios")
+    tit = "## 5d. Escenarios a 12 meses por país (INT-11 v3, informativo)"
+    if es is None:
+        return f"{tit}\n\n_No disponible esta semana._"
+    if "error" in es:
+        return f"{tit}\n\n_No disponible esta semana: {es['error']}._"
+    cuerpo = es["md"].split("\n---\n", 1)[-1].lstrip()          # sin la cabecera YAML
+    cuerpo = cuerpo.split("\n", 1)[-1].lstrip() if cuerpo.startswith("# ") else cuerpo  # sin el título propio
+    return f"{tit}\n\n> {es['aviso']}\n\n{cuerpo}"
+
+
+def escenarios(today: date) -> dict:
+    from scripts import int11_v3_hoy as H  # import tardío: tarda ≈ 10 s y no debe tumbar el reporte
+    o = H.emitir(today.isoformat(), exigir_limpio=False)
+    return {"emision": o["emision"], "ventana": o["ventana_objetivo"], "procedencia": o["procedencia"],
+            "aviso": o["aviso"], "paises": {c: {k: r.get(k) for k in ("regimen_dominante", "p_caida_bolsa_20",
+                                                                    "p_inflacion_5")} for c, r in o["paises"].items()},
+            "md": H.markdown(o)}
+
+
 def markdown(s: dict, lectura: str, origin: str) -> str:
     r_ = dict(s["regime"])
     r_["G_state"] = "G" + ARROW.get(r_["G_state"], "?")
@@ -281,6 +303,8 @@ M2 a/a − PIB nominal a/a: {lq['m2_minus_gdp']} pp · Liquidez neta Fed: {lq['n
 
 {md_nowcast(s)}
 
+{md_escenarios(s)}
+
 ## 6. Lectura
 
 _Origen: {origin}._
@@ -313,6 +337,11 @@ def main(today: date | None = None) -> None:
         signal["nowcast"] = {"error": f"{type(e).__name__}: {e}"}
     finally:
         con.close()
+    # Escenarios INT-11 v3 (descriptivos): igual, después de la lectura y sin tumbar el reporte.
+    try:
+        signal["escenarios"] = escenarios(today or date.today())
+    except (Exception, SystemExit) as e:  # noqa: BLE001
+        signal["escenarios"] = {"error": f"{type(e).__name__}: {e}"}
     stamp = (today or date.today()).isoformat()
     REPORTS.mkdir(parents=True, exist_ok=True)
     (REPORTS / f"{stamp}_signal.json").write_text(json.dumps(signal, ensure_ascii=False, indent=2, default=str))

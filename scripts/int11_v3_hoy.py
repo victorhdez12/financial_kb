@@ -61,8 +61,9 @@ def pais_escenario(gen: E.Generador, c: str, e: dict, semilla: int) -> dict:
             "cerca_umbral": bool(abs(e["inflacion"] - E.UMBRAL_INFL) < CERCA_INFL or abs(e["brecha"]) < CERCA_BRECHA)}
 
 
-def emitir(fecha: str) -> dict:
-    proc = procedencia()
+def emitir(fecha: str, exigir_limpio: bool = True) -> dict:
+    """`exigir_limpio=False` solo para el reporte semanal (descriptivo; la procedencia anota si el árbol estaba limpio)."""
+    proc = procedencia(exigir_limpio)
     if not RESULTADO.exists():
         raise SystemExit("falta research/int/int11_v3_resultado.json (fase D): la salida v3 se etiqueta con su acierto")
     ac = acierto_medido(json.loads(RESULTADO.read_text()))
