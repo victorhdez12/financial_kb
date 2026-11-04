@@ -54,7 +54,7 @@ N_LOTES, POR_LOTE = 50, 100
 TOL_S5, TOL_ACT = 0.01, 0.03
 BLOQUE_AÑOS, B_BOOT = 5, 2000
 ACTS = list(E.ACTIVOS)
-N_TRAB = 8
+N_TRAB = 4                      # máquina compartida (coordinador 4-nov): ≤ 4 trabajadores, BLAS a 1 hilo
 A = len(ACTS)
 
 # espacio (declarado antes de correr). κ: "eb" = rejilla de Bayes empírico de v3 (log10 κ ∈ [0, 6]); si no, log10 κ fijo
