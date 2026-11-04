@@ -4,7 +4,9 @@ share prices and CPI (major economies).
 
 source_id = oecd. series_id = oecd_<measure>_<area>[_<variant>], area = OECD code lower case
 (ISO3 for countries; ea20, oecd, g7, g20... for aggregates).
-Monthly obs dated at month start. Raw = one CSV per query (the full API response, with labels).
+Monthly obs dated at month start. Raw = one CSV per query (the full API response, with labels), overwritten on each
+download; every new download is ALSO archived, gzipped and dated, in raw/oecd/archivo/ (src/ingest/_archivo_raw.py:
+the OECD revises old data at source; retention declared there).
 
 Curation criterion:
 - CLI (LI, amplitude adjusted), BCI and CCI: every area published (~50).
@@ -20,6 +22,7 @@ import time
 
 import pandas as pd
 
+from ._archivo_raw import archivar
 from ._extlong_common import CatalogWriter, http_get, log, raw_dir
 
 SRC = "oecd"
@@ -74,7 +77,8 @@ def fetch(name: str, q: str, refresh: bool) -> pd.DataFrame:
             if b"TIME_PERIOD" not in r.content[:3000]:
                 raise ValueError(r.text[:200])
             dest.write_bytes(r.content)
-            log.info("downloaded oecd %s (%d bytes)", name, len(r.content))
+            arch = archivar(raw_dir(SRC), name, r.content)       # copia fechada: la OCDE revisa en origen
+            log.info("downloaded oecd %s (%d bytes; archivo: %s)", name, len(r.content), arch.name if arch else "igual")
             time.sleep(5)
         except Exception as e:  # noqa: BLE001
             if not dest.exists():

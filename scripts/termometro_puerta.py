@@ -27,8 +27,10 @@ TODOS = NUCLEO + PRUEBA_TODO + PRUEBA_SIN_BOLSA
 GIROS = {"T1": COLS["T1"], "T2": COLS["T2"]}
 
 
-def cargar():
-    con = D.connect()
+def cargar(fuente: str | None = None):
+    """Datos ≤ 2004. `fuente` (o FIN_DEV_FUENTE) = "instantanea": el bloque mensual, el BIS y el PIB trimestral salen de
+    la instantánea inmutable (src/intl/data.py); el anual JST (versión fija R6, no se revisa) sigue del warehouse."""
+    con = D.connect("warehouse")
     a = P.anual(con)
     extra = {}
     for v in ("hpnom", "money", "wage"):
@@ -36,10 +38,12 @@ def cargar():
         s = pd.concat({c: x.set_axis(x.index.year) for c, x in s.items() if not x.empty})
         s.index.names = ["pais", "año"]
         extra[v] = s
+    con.close()
+    con = D.connect(fuente)
     pm = P.mensual(con)
     bis = {c: s for c in TODOS if not (s := D.load_dev(con, f"bis_creditgap_{D.ISO2[c]}_ratio")).empty}
     con.close()
-    pib = {c: D.load_dev_curado(f"oecd_gdpq_{c.lower()}") for c in TODOS}
+    pib = {c: D.load_dev_curado(f"oecd_gdpq_{c.lower()}", fuente=fuente) for c in TODOS}
     return a, pd.DataFrame(extra), pm, bis, pib
 
 

@@ -1,11 +1,24 @@
 """Corte técnico del panel internacional (INT-0): en desarrollo, ningún dato con fecha ≥ 2005-01, para ningún país.
 Mismo límite y misma comprobación que src/factors/data.py (DEV_END, check). `load_dev` es la única entrada de datos del
 warehouse en src/intl/ (un test lo comprueba) y falla cerrado con series fuera de las familias permitidas.
+
+Fuente de desarrollo (`connect(fuente=...)`; por defecto la variable de entorno FIN_DEV_FUENTE o "warehouse"):
+- "warehouse": `obs_latest` del warehouse (última publicación; la OCDE revisa en origen series ≤ 2004 sin avisar);
+- "instantanea": la instantánea fechada e inmutable de las series ≤ 2004 con las que se congelaron las referencias de
+  INT-8b y del termómetro (manifiesto en el repo, research/int/instantanea_dev_2004.json; parquet fuera del repo en
+  $FIN_DATA_ROOT/intl/snapshots/; sha256 comprobado al abrirla; docs/int/INT8b_nowcast.md, «Revisiones de datos»).
+  Con ella, `load_dev` falla si se pide una serie que la instantánea no cubre (nunca devuelve vacío en silencio).
 """
 from __future__ import annotations
 
+import functools
+import hashlib
+import json
+import os
 import re
+from pathlib import Path
 
+import duckdb
 import pandas as pd
 
 from src.factors.data import DEV_END, FactorCutoffError, check  # noqa: F401  (mismo corte para todo el proyecto)
@@ -50,9 +63,12 @@ def permitida(sid: str) -> bool:
 
 def load_dev(con, sid: str) -> pd.Series:
     """Serie `sid` con fechas ≤ DEV_END; vacía si no existe. Error si no es de una familia permitida o si se cuela algo
-    posterior (filtro SQL + comprobación)."""
+    posterior (filtro SQL + comprobación). Con la conexión de la instantánea, error si `sid` no está cubierta."""
     if not permitida(sid):
         raise FactorCutoffError(f"{sid}: no está en las familias del panel internacional (src/intl/data.py)")
+    if db.has_table(con, "instantanea_cobertura") and not con.execute(
+            "select count(*) from instantanea_cobertura where series_id = ?", [sid]).fetchone()[0]:
+        raise FactorCutoffError(f"{sid}: no está en la instantánea de desarrollo ({INSTANTANEA.name}); usa el warehouse")
     df = con.execute("select date, value from obs_latest where series_id = ? and value is not null and date <= ? "
                      "order by date", [sid, DEV_END.date()]).df()
     s = pd.Series(df["value"].astype(float).values, index=pd.to_datetime(df["date"]), name=sid)
@@ -62,12 +78,18 @@ def load_dev(con, sid: str) -> pd.Series:
     return s
 
 
-def load_dev_curado(sid: str) -> pd.Series:
+def load_dev_curado(sid: str, fuente: str | None = None) -> pd.Series:
     """Como `load_dev`, pero desde la capa curada ($FIN_DATA_ROOT/curated/<fuente>/<sid>.parquet) para series ya
     descargadas que todavía no están en el warehouse (se cargarán en la próxima reconstrucción). Mismo corte y mismas
-    familias permitidas."""
+    familias permitidas. Con `fuente="instantanea"` (o FIN_DEV_FUENTE), el PIB trimestral sale de la instantánea."""
     if not permitida(sid):
         raise FactorCutoffError(f"{sid}: no está en las familias del panel internacional (src/intl/data.py)")
+    if _fuente(fuente) == "instantanea" and sid.startswith("oecd_gdpq_"):
+        con = connect_instantanea()
+        try:
+            return load_dev(con, sid)
+        finally:
+            con.close()
     fuente = {"aqr_clr_": "aqr_clr", "oecd_gdpq_": "oecd_qna"}.get(next((k for k in ("aqr_clr_", "oecd_gdpq_")
                                                                        if sid.startswith(k)), ""))
     if fuente is None:
@@ -81,5 +103,80 @@ def load_dev_curado(sid: str) -> pd.Series:
     return s
 
 
-def connect():
+# ---------------------------------------------------------------- instantánea de desarrollo (≤ 2004, inmutable)
+INSTANTANEA = db.REPO / "research" / "int" / "instantanea_dev_2004.json"
+FUENTES = ("warehouse", "instantanea")
+
+
+class InstantaneaNoDisponible(FileNotFoundError):
+    """Falta el parquet de la instantánea (está fuera del repo) o su sha256 no coincide con el manifiesto."""
+
+
+def _fuente(fuente: str | None) -> str:
+    f = fuente or os.environ.get("FIN_DEV_FUENTE") or "warehouse"
+    if f not in FUENTES:
+        raise ValueError(f"fuente de desarrollo desconocida: {f} (válidas: {FUENTES})")
+    return f
+
+
+def sha256(path) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as fh:
+        for b in iter(lambda: fh.read(1 << 20), b""):
+            h.update(b)
+    return h.hexdigest()
+
+
+def ruta_instantanea(manifiesto: Path = INSTANTANEA) -> Path:
+    """Ruta del parquet: `ruta` del manifiesto, relativa a $FIN_DATA_ROOT."""
+    return db.DATA_ROOT / json.loads(Path(manifiesto).read_text())["ruta"]
+
+
+@functools.lru_cache(maxsize=4)
+def _leer_instantanea(manifiesto: str, _mtime: float) -> pd.DataFrame:
+    if not Path(manifiesto).exists():
+        raise InstantaneaNoDisponible(f"falta el manifiesto {manifiesto}")
+    man = json.loads(Path(manifiesto).read_text())
+    p = db.DATA_ROOT / man["ruta"]
+    if not p.exists():
+        raise InstantaneaNoDisponible(f"falta la instantánea {p} (fuera del repo; manifiesto {manifiesto})")
+    if (h := sha256(p)) != man["sha256"]:
+        raise InstantaneaNoDisponible(f"{p}: sha256 {h} ≠ manifiesto {man['sha256']} (la instantánea es inmutable)")
+    df = pd.read_parquet(p)
+    if pd.to_datetime(df["date"]).max() > DEV_END:
+        raise FactorCutoffError(f"{p}: datos posteriores a DEV_END")
+    return df
+
+
+def leer_instantanea(manifiesto: Path = INSTANTANEA) -> pd.DataFrame:
+    """Filas (series_id, date, value) de la instantánea, tras comprobar su sha256 con el manifiesto."""
+    m = Path(manifiesto)
+    return _leer_instantanea(str(m), m.stat().st_mtime if m.exists() else 0.0).copy()
+
+
+def instantanea_disponible(manifiesto: Path = INSTANTANEA) -> bool:
+    try:
+        leer_instantanea(manifiesto)
+        return True
+    except InstantaneaNoDisponible:
+        return False
+
+
+def connect_instantanea(manifiesto: Path = INSTANTANEA) -> duckdb.DuckDBPyConnection:
+    """Conexión en memoria con `obs_latest` = la instantánea (misma interfaz que el warehouse para `load_dev`) y la
+    tabla `instantanea_cobertura` (series cubiertas: `cobertura` del manifiesto, también las que no tienen datos
+    ≤ 2004, que salen vacías como en el warehouse)."""
+    df = leer_instantanea(manifiesto)  # noqa: F841  (lo lee duckdb por nombre)
+    cob = pd.DataFrame({"series_id": json.loads(Path(manifiesto).read_text()).get("cobertura")  # noqa: F841
+                        or sorted(df.series_id.unique())})
+    con = duckdb.connect(":memory:")
+    con.execute("create table obs_latest as select series_id, cast(date as date) as date, value from df")
+    con.execute("create table instantanea_cobertura as select distinct series_id from cob")
+    return con
+
+
+def connect(fuente: str | None = None):
+    """Conexión de desarrollo: warehouse (por defecto) o la instantánea ≤ 2004 (ver arriba)."""
+    if _fuente(fuente) == "instantanea":
+        return connect_instantanea()
     return db.connect(read_only=True)

@@ -61,7 +61,7 @@ reporte sale igual y lo dice. El JSON de la señal guarda el resultado de cada s
 - Datos: OCDE (tipos, IPC, bolsa, IP, paro, PIB) y BIS (crédito) del warehouse, con los retrasos "as of" de
   `src/intl/lags.py` y la carga de `src/report/termometro_vivo.py` (incluido el empalme declarado del tipo a 3 m de GBR).
 - Las distribuciones de referencia están **congeladas** (solo datos ≤ 2004) y un test comprueba que la carga en vivo
-  cortada en 2004-12 las reproduce exactamente.
+  cortada en 2004-12, sobre la instantánea ≤ 2004 con la que se congelaron, las reproduce exactamente (§6).
 - Huecos: la regla tipo Sahm exige 15 meses seguidos de paro; si falta un mes (EE. UU. no tiene 2025-10 por el cierre del
   Gobierno federal), K6 sale «—» hasta que el hueco salga de la ventana (≈ 2027-01) y el índice usa los otros cinco.
 - Observación (no es un resultado): en 2026 el crédito/PIB lleva años bajando en casi todos los países, así que K4 está en
@@ -83,3 +83,49 @@ Regla de evaluación fijada **ahora**, antes de ningún dato en vivo, solo descr
 episodios** y ≈ 56 para 20. Con 10 episodios, una tasa de aviso observada del 70 % tendría un IC 95 % ≈ [35 %; 93 %]:
 apenas distinguible del azar. **Antes de ≈ 2050 no habrá base para decir si anticipa.** Hasta entonces, se lee como lo
 que es: un resumen ordenado de indicadores conocidos.
+
+## 6. Revisiones de datos (4-nov-2026; decisión del usuario, opción 1)
+**Qué pasó.** En la ingesta semanal del 2-nov la OCDE revisó **en origen** series ≤ 2004: tipo a 10 años de BEL (162
+meses, ≤ 0,02 pp), producción industrial de GBR, ITA, BEL, ESP, FIN, FRA y SWE (interanual hasta 0,76 pp en GBR), paro de
+IRL e ITA (3 meses, 0,1 pp) y ventas de DNK y GBR. El código no cambió, pero los tests que recalculaban las referencias con
+el warehouse de cada día (este y el del termómetro) dejaron de reproducirlas. `raw/oecd` se sobrescribía: no quedaba
+ninguna descarga anterior; sí la caché del panel mensual de desarrollo del 26-oct (`$FIN_DATA_ROOT/intl/
+panel_mensual_dev.parquet`, sha256 `e8ac5a6c…9615`).
+
+**Decisiones.**
+1. **Las referencias congeladas siguen siendo la verdad.** No se recalculan ni se tocan (`research/int/
+   int8b_referencias.json`, `research/int/termometro_referencias.json`).
+2. **Instantánea fechada e inmutable** de las series ≤ 2004 de la congelación: `$FIN_DATA_ROOT/intl/snapshots/
+   dev_le2004_20261026.parquet` (fuera del repo, solo lectura; 252 series con datos, 95 755 filas: OCDE mensual y PIB
+   trimestral, BIS, AQR, JST eq_dp, USREC). Manifiesto en el repo: `research/int/instantanea_dev_2004.json` (ruta, sha256,
+   fecha, procedencia, series restauradas, lo que la caché no ve). La construye `scripts/instantanea_dev_2004.py`: parte
+   del warehouse de hoy ≤ 2004, detecta las series revisadas comparando `panel.mensual` con la caché y, solo en esas,
+   restaura el valor previo invirtiendo la caché (niveles con retraso; índices por su interanual; último mes del tipo a
+   10 años desde `r_bono`). No escribe nada si `panel.mensual` con la instantánea no es idéntico a la caché en todas las
+   columnas (|Δ| ≤ 1e-12) o si no reproduce las referencias congeladas de INT-8b **y** del termómetro con la tolerancia
+   de los tests (1e-12 en distribuciones; 1e-9 en índice y agregado). Resultado: diferencia máxima 0 en ambas.
+   Límites declarados: lo que la caché no ve (paro interpolado de antes de 1998 de los 9 países excluidos, los últimos
+   meses de 2004 de las series con retraso, el **nivel** de la IP y de las ventas —solo se usa su interanual—, PIB y BIS,
+   que no están en la caché pero quedan verificados por la reproducción exacta) se queda con el valor del 4-nov.
+3. **Dos tests, por separado:**
+   - *Reproducción* (`tests/test_intl_int8b.py::test_referencias_congeladas_reproducidas_desde_instantanea`,
+     `::test_ruta_de_desarrollo_lee_la_instantanea` y `tests/test_termometro_vivo.py::
+     test_referencias_congeladas_igual_a_recalculadas`): recalcula desde la instantánea (sha256 comprobado) y compara con
+     las congeladas. Debe pasar siempre; si falta el parquet, se salta.
+   - *Deriva de revisión* (`tests/test_deriva_revisiones.py`, `src/report/revisiones.py`): compara el warehouse de hoy
+     ≤ 2004 con la instantánea y **avisa** con las magnitudes por serie; solo **falla** si la diferencia es grande:
+     |Δ| > 0,10 pp en tipos o paro (la OCDE publica 2-3 decimales: los retoques de redondeo no llegan; más ya es un
+     cambio de fuente o de definición), > 1 pp en la interanual de un índice o en crédito/PIB (1 pp ya puede cambiar el
+     signo de la IP cerca de 0, K5), o **cualquier** percentil entero publicado hoy (nowcast: agregado, índice e
+     indicadores; termómetro: percentil ≤ 2004 de cada indicador) que cambiaría si se recalcularan las referencias con
+     los datos de hoy. Medido el 4-nov: 12 series revisadas, ninguna grande; 0 de 127 (nowcast) y 0 de 90 (termómetro)
+     percentiles cambiarían. Si un día falla, se decide a mano (nueva instantánea y nueva congelación declarada, o no).
+4. **Ruta de desarrollo.** `src/intl/data.connect(fuente="instantanea")` (o `FIN_DEV_FUENTE=instantanea`) abre la
+   instantánea con la misma interfaz que el warehouse; `load_dev` falla si se pide una serie que no cubre y
+   `load_dev_curado` lee de ella el PIB trimestral. `scripts/int8b_corrida.cargar_dev(fuente=...)` y
+   `scripts/termometro_puerta.cargar(fuente=...)` (el anual JST, versión fija R6, sigue del warehouse) la aceptan.
+5. **Archivo del raw.** La ingesta de la OCDE (`src/ingest/oecd.py`, `src/ingest/oecd_qna.py`) guarda además cada
+   descarga nueva comprimida y fechada en `raw/<fuente>/archivo/<nombre>_<AAAA-MM-DD>.csv.gz`, con índice
+   `archivo/indice.jsonl` (sha256; las idénticas no se duplican). Retención (`src/ingest/_archivo_raw.py`): todas las
+   copias de los últimos 730 días y, de las anteriores, la primera de cada mes (≈ 2,5 MB por juego semanal; ≈ 130 MB al
+   año). La próxima revisión en origen se podrá reconstruir desde ahí sin invertir cachés.

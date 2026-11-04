@@ -272,13 +272,22 @@ def test_corte_2004_reproduce_desarrollo():
         assert round(float(np.quantile(v, q / 100)), 4) == ref[f"p{q}"]
 
 
-@pytest.mark.skipif(not db.WAREHOUSE.exists(), reason="sin warehouse real")
+@pytest.mark.skipif(not db.WAREHOUSE.exists() or not D.instantanea_disponible(),
+                    reason="sin warehouse real o sin la instantánea ≤ 2004 (fuera del repo)")
 @pytest.mark.parametrize("fecha", ["2004-12-31", "2026-10-29"])
 def test_referencias_congeladas_igual_a_recalculadas(fecha):
-    """Las referencias ≤ 2004 congeladas (scripts/termometro_referencias.py, datos load_dev) = las que se recalculaban
-    en cada ejecución con los datos en vivo, con corte 2004-12 y con corte de hoy (as of: los meses ≤ 2004 no cambian)."""
+    """REPRODUCCIÓN (rediseñado el 4-nov; docs/int/TERMOMETRO_diseno_v1.md, «Revisiones de datos»): las referencias
+    ≤ 2004 congeladas (29-oct, scripts/termometro_referencias.py, datos load_dev de entonces) = las recalculadas con la
+    carga en vivo sobre la instantánea fechada e inmutable ≤ 2004 (research/int/instantanea_dev_2004.json) más lo
+    posterior a 2004 del warehouse, con corte 2004-12 y con corte de hoy (as of: los meses ≤ 2004 no cambian). La
+    deriva de revisión del warehouse ≤ 2004 se mide aparte (tests/test_deriva_revisiones.py)."""
     from src.intl import termometro as T
-    con = db.connect(read_only=True)
+    from src.report import revisiones as RV
+    vivo = db.connect(read_only=True)
+    try:
+        con = RV.con_instantanea_mas_vivo(vivo)
+    finally:
+        vivo.close()
     try:
         pm, bis, pib, _ = V.cargar(con, fecha)
     finally:

@@ -143,3 +143,19 @@ Cambios (los únicos):
 - En vivo (si pasa): rectas y recalibración ajustadas con TODOS los años ≤ 2004; percentiles de referencia recalculados con
   esas probabilidades recalibradas.
 - T1 y T2 se juzgan por separado: si solo pasa uno, solo se muestra ese.
+
+## 10. Revisiones de datos (4-nov-2026; decisión del usuario, opción 1)
+La OCDE revisó en origen series ≤ 2004 en la ingesta semanal del 2-nov (en lo que usa el termómetro: tipo a 10 años de
+BEL, ≤ 0,02 pp en 162 meses; además IP, paro y ventas, que usa INT-8b) y el test que recalculaba las referencias ≤ 2004
+con el warehouse del día dejó de reproducirlas (`research/int/termometro_referencias.json`, congeladas el 29-oct).
+- Las referencias congeladas **siguen siendo la verdad**: no se tocan ni se recalculan.
+- *Reproducción* (`tests/test_termometro_vivo.py::test_referencias_congeladas_igual_a_recalculadas`, corte 2004-12 y
+  2026-10-29): recalcula con la carga en vivo sobre la instantánea inmutable ≤ 2004 (`research/int/
+  instantanea_dev_2004.json`; parquet en `$FIN_DATA_ROOT/intl/snapshots/`, sha256 comprobado) más lo posterior a 2004 del
+  warehouse. Reproduce las congeladas con diferencia 0 (tolerancia 1e-12).
+- *Deriva de revisión* (`tests/test_deriva_revisiones.py`): avisa con las magnitudes y solo falla si son grandes
+  (> 0,10 pp en tipos, > 1 pp en interanuales o crédito/PIB, o algún percentil ≤ 2004 publicado hoy que cambiaría).
+  4-nov: 0 de 90 percentiles del termómetro cambiarían.
+- `test_corte_2004_reproduce_desarrollo` sigue con el warehouse del día (compara la carga en vivo con `panel.mensual`
+  sobre los mismos datos, así que no le afectan las revisiones).
+- Detalle de la instantánea, umbrales razonados y archivo fechado del raw de la OCDE: `docs/int/INT8b_nowcast.md` §6.

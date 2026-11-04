@@ -10,6 +10,7 @@ El proyecto está en `~/Proyectos/financial_kb` (fuera del Escritorio: macOS blo
 
 - Si el Mac está apagado o dormido a esa hora, launchd la lanza al despertar.
 - Resultado de cada ejecución: una línea en `obsidian/Proyecto/Actualizaciones.md` (estado, duración, fuentes con fallo, críticas de la auditoría, régimen) y el log en `~/financial_archive/logs/` (se borran a los 60 días).
+- Raw de la OCDE (`oecd`, `oecd_qna`, en la semanal): además de sobrescribir `raw/<fuente>/*.csv`, cada descarga nueva se archiva comprimida y fechada en `raw/<fuente>/archivo/` (índice `indice.jsonl` con sha256; las idénticas no se duplican). Retención: todo lo de los últimos 730 días y, antes, la primera copia de cada mes (`src/ingest/_archivo_raw.py`; motivo: la OCDE revisa en origen, `docs/int/INT8b_nowcast.md` §6).
 - Si alguna fuente falla o la auditoría tiene críticas: notificación de macOS. Las fuentes que fallan no paran el resto (se queda el último dato bueno).
 - No hace commits (los datos no van a git).
 
