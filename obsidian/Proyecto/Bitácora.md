@@ -692,3 +692,10 @@ Las entradas más recientes van arriba. Ver también [[Proyecto/Estado del proye
 ## 31-oct
 - Validador local INT-11 v3 ⚠️: puerta D reproducida bit a bit con 77b3bd1 (no la toca); IC estratificado correcto, pero con 100/lote var(medias) ≈ ruido MC → IC de "hoy" no estimable (DEU/FIN 0). Recomendado 1.000/lote (0,4 s/país). Scripts `val_int11v3_{repro,ic}.py`.
 - Lección: en scripts con procedencia, comprobar el árbol limpio AL EMPEZAR (se perdieron 8 min).
+
+## 2026-11-04
+- **Paper trading:** ensayo de oct aprobado por el usuario → decisión 2026-10-31 registrada y subida (`0d27cd3`; σ̂ 10,8 % < σ* 17,02 % → B0 = B1 = 70/15/15). Falta que el usuario cree `research/paper/ACTIVO` (el clasificador me lo bloqueó; por diseño lo crea él).
+- **INT-11 v3:** `por_lote = 1000` + `ic_estimable` (IC "no estimable" si var_par = 0) (`c68ab59`); "hoy" reemitido 4-nov (`e76526f`): todos los IC estimables. P(infl > 5 %): ESP 39, GBR 35, NOR 33, USA 32 %.
+- **Reporte semanal:** nueva sección 5d con los abanicos v3 (`94eff83`).
+- **Test roto INT-8b/termómetro:** la OCDE revisó series ≤ 2004 en la ingesta del 2-nov (BEL tipo 10a, IP GBR/ITA, paro IRL/ITA). Código bien; impacto en vivo nulo. Opciones: (1, recomendada) copia fechada de OCDE ≤ 2004 al congelar y test contra ella; (2) recongelar; archivar raw/oecd con fecha. Pendiente del usuario.
+- **E1 prerregistro:** agente en marcha (rama `worktree-agent-a3b3dec951bc02b91`).
