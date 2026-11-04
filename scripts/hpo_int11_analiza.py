@@ -41,13 +41,16 @@ def s_act(d, w):
 def crps_rel(c1, c0, w):
     """media por activo de Σ w·CRPS_1 / Σ w·CRPS_0 − 1 (filas con dato en los dos)."""
     ok = np.isfinite(c1) & np.isfinite(c0)
-    r = [np.sum(w[ok[:, a]] * c1[ok[:, a], a]) / np.sum(w[ok[:, a]] * c0[ok[:, a], a]) for a in range(A)]
-    return float(np.mean(r) - 1)
+    # un remuestreo por años puede no tener ninguna fila de un activo (oro ≥ 1972): ese activo se omite (nanmean)
+    r = [np.sum(w[ok[:, a]] * c1[ok[:, a], a]) / np.sum(w[ok[:, a]] * c0[ok[:, a], a]) if np.sum(w[ok[:, a]]) > 0
+         else np.nan for a in range(A)]
+    return float(np.nanmean(r) - 1)
 
 
 def ls_dif(l1, l0, w):
     ok = np.isfinite(l1) & np.isfinite(l0)
-    return float(np.mean([np.sum(w[ok[:, a]] * (l1 - l0)[ok[:, a], a]) / np.sum(w[ok[:, a]]) for a in range(A)]))
+    return float(np.nanmean([np.sum(w[ok[:, a]] * (l1 - l0)[ok[:, a], a]) / np.sum(w[ok[:, a]]) if np.sum(w[ok[:, a]]) > 0
+                             else np.nan for a in range(A)]))
 
 
 def pit_chi2(p):
