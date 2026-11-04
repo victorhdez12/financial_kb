@@ -63,5 +63,64 @@ entreno). `random_state` = 20261104. El modo "residuo" encoge hacia el HAR (si e
 - **Una sola corrida** con procedencia (árbol limpio; `src/intl/procedencia.py`); el script se niega si la salida
   (`research/int/hpo_int12/`) existe. Nada ≥ 2005.
 
-## 4. Resultado
-(se redacta después de la corrida)
+## 4. Resultado (corrida única; procedencia commit 28339b6, árbol limpio, 2026-11-04T14:06:44Z; 292 s + 1.995 s de placebo)
+Salida: `research/int/hpo_int12/` (`resultado.json`, `resumen.txt`, `pruebas_internas.csv` (660 = 11 × 60),
+`pruebas_externas_todas.csv` (60), `placebo.csv` (50), `previsiones.csv`). Comprobación: el HAR reproduce el QLIKE de
+INT-12 (0,2742).
+
+### 4.1 Principal: HPO-GB anidado frente a HAR (QLIKE, 1 mes, N = 659)
+| | valor |
+|---|---|
+| QLIKE HAR / HPO-GB | 0,2742 / 0,3346 |
+| **ganancia anidada** | **−22,0 %** |
+| IC 95 % bootstrap de bloques (ganancia) | **[−40,7 %; −2,4 %]** (entero por debajo de 0) |
+| IC 95 % bootstrap de la diferencia media d | [−0,152; −0,005] |
+| DM-NW (6 retardos) | t = −1,48, p unilateral = 0,93 (p bootstrap 0,92) |
+| por mitades (1950-77 / 1977-2004) | −0,0 % / −41,1 % |
+| ganancia **interna** media del elegido (lo que "prometía" la búsqueda) | +7,0 % |
+
+Selección por bloque (configuración, ganancia interna frente a HAR): 1950 #11 (+16,7 %), 1955 #34 (+11,6 %), 1960 #55
+(+11,4 %), 1965 #31 (+2,6 %), 1970 #25 (+4,4 %), 1975 #54 (+6,9 %), 1980 #3 (+9,5 %), 1985 #40 (+8,4 %), 1990 #33
+(+1,8 %), 1995 #22 (+2,7 %), 2000 #10 (+1,2 %). La elección **salta de configuración en cada bloque** (11 distintas de
+60; ambos modos, ambos conjuntos de rasgos, profundidad 1-5): no hay un óptimo estable, señal de que se elige ruido.
+
+### 4.2 Placebo (R = 50, objetivo barajado por bloques de 12 meses, procedimiento anidado entero)
+- Ganancia externa placebo: media −7,8 %, mediana −7,8 %, p95 +2,3 %, máx. +4,0 %.
+- Ganancia **interna** del elegido en el placebo: media +11,8 % (p95 +18,3 %) — **sin ninguna señal**, la búsqueda
+  "promete" más que en los datos reales (+7,0 %). Es decir: la ganancia interna real está dentro de lo que la búsqueda
+  produce por azar.
+- Real frente a placebo: p = (1 + #{placebo ≥ −22,0 %}) / 51 = **0,96**: la cifra real es peor que el 94 % de las
+  réplicas sin señal (el periodo real tiene saltos de volatilidad —1987— que castigan al GB más que en el barajado).
+
+### 4.3 Todas las pruebas (descriptivo; 60 configuraciones evaluadas fuera de muestra sin elegir)
+- Ganancia externa frente a HAR: mediana −8,6 %, media −13,7 %, rango [−56,8 %; +1,2 %]; solo **9 de 60 > 0**, todas
+  entre +0,3 % y +1,2 % y todas (salvo #19, también residuo) de modo **residuo** con poca capacidad (lr ≤ 0,016 o
+  ≤ 30 iteraciones, profundidad 1-2): son "HAR + un pellizco".
+- Por modo: mediana residuo −1,8 %, directo −17,9 %. Por rasgos: HAR −9,2 %, HAR + X −6,8 %.
+- La nº 0 (GB de INT-12) da −27,8 %, igual que el descriptivo D_gb_vs_har de INT-12 (comprobación).
+- La mejor ex post (#47, +1,2 %) es un **oráculo** (elegida mirando la evaluación) y queda por debajo del p95 del
+  placebo (+2,3 %).
+- Interno: solo el 26 % de las 660 pruebas bloque × configuración batieron al HAR dentro de muestra de validación.
+
+## 5. Conclusión
+- **Ajustar hiperparámetros no rescata al ML.** Con la búsqueda honesta (anidada, con embargo), el GB ajustado es un
+  **22 % peor** que el HAR (IC 95 % [−41 %; −2 %]); no mejora al GB fijado de INT-12 frente a HAR (−28 %) de forma
+  apreciable, y es peor que el HAR-X lineal. Confirma (exploratoriamente) C3 de INT-12: con 190-850 meses y un objetivo
+  tan ruidoso, la capacidad extra sobreajusta, y el bucle interno elige configuraciones distintas cada 5 años.
+- **La búsqueda infla:** promete +7 % dentro (+12 % en el placebo sin señal) y entrega −22 % fuera. Sin anidamiento,
+  la cifra a publicar habría sido la interna o la del oráculo (+1,2 %): ambas engañosas.
+- **El techo es el HAR:** lo único que no pierde es "HAR + residuo muy encogido", con ganancias de ≈ +1 % ex post, dentro
+  del ruido del placebo (p95 +2,3 %) y por debajo del 2-5 % que la fase 1 consideraba realista.
+- **Criterio "destaca de verdad" (§3): NO se cumple** (ganancia < 0, IC < 0, por debajo del p95 del placebo, una mitad
+  negativa). **No se propone ninguna configuración para prerregistrar.** El modelo operativo de volatilidad sigue
+  siendo el HAR lineal (INT-12 §7). Si en el futuro se quisiera insistir, la única vía con sentido sería un HAR con
+  corrección no lineal pequeña (modo residuo, lr ≈ 0,01, profundidad 1-2) frente al HAR en el periodo bloqueado; con
+  ganancias esperadas ≈ 1 % no tendría potencia, así que **no se recomienda gastar el bloqueado en ello**.
+
+## 6. Declaraciones
+- Exploratorio: no cambia ningún veredicto de INT-12; `research/int/int12_resultado.*` no se ha tocado.
+- Nada ≥ 2005. Una sola corrida (el script se niega si la salida existe). Sin paquetes nuevos (búsqueda aleatoria con
+  numpy; sklearn 1.5.2, joblib para el placebo en 12 procesos, un hilo BLAS/OpenMP por proceso).
+- Detalles que el lector debe saber: la selección se renueva cada 5 años (no cada enero) para acotar el coste; el
+  horizonte a 3 meses y las colas (VaR/ES) no se evaluaron; el placebo baraja (rv, n_días) juntos y deja los rasgos
+  intactos; el embargo interno→externo se comprueba con `assert` en cada bloque.
