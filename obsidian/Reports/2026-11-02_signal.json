@@ -1,0 +1,2347 @@
+{
+  "asof": "2026-11-02",
+  "generated_at": "2026-11-02T11:58:51",
+  "vintage_mode": "alfred",
+  "regime": {
+    "quadrant": "Goldilocks",
+    "G": 0.04,
+    "G_d6": 0.15,
+    "G_state": "up",
+    "I_state": "down",
+    "core_6m": 2.89,
+    "core_accel_3m": -0.05,
+    "I_composite_z": 0.58,
+    "sahm": 0.0,
+    "sahm_trigger": false
+  },
+  "changes": {
+    "1m": {
+      "date": "2026-10",
+      "quadrant": "Goldilocks",
+      "G": 0.04,
+      "I_state": "down",
+      "debt_phase": "expansión temprana",
+      "credit_light": "verde",
+      "liquidity": "neutral"
+    },
+    "3m": {
+      "date": "2026-08",
+      "quadrant": "Estanflación",
+      "G": -0.1,
+      "I_state": "up",
+      "debt_phase": "expansión tardía",
+      "credit_light": "verde",
+      "liquidity": "neutral"
+    },
+    "6m": {
+      "date": "2026-05",
+      "quadrant": "Estanflación",
+      "G": -0.11,
+      "I_state": "up",
+      "debt_phase": "expansión tardía",
+      "credit_light": "verde",
+      "liquidity": "neutral"
+    }
+  },
+  "debt_cycle": {
+    "phase": "expansión temprana",
+    "reason": "mantiene",
+    "curve": 0.78,
+    "inverted_months": 0,
+    "ff_d12": -0.34,
+    "real_ff": 1.18,
+    "tcu": 76.85
+  },
+  "long_cycle": {
+    "stage": "tardío",
+    "flags": "deuda_pub>100%_y_sube, deficit<-5%_sin_recesion",
+    "debt_gdp": 121.19,
+    "deficit_gdp": -5.75,
+    "fed_interest_receipts_pct": 33.55,
+    "private_credit_gdp": 140.3
+  },
+  "liquidity": {
+    "state": "neutral",
+    "score": -0.45,
+    "m2_minus_gdp": -0.16,
+    "net_liquidity_bn": 5742.0,
+    "net_liq_yoy": 1.77,
+    "dfii10": 2.63,
+    "nfci": -0.49
+  },
+  "credit": {
+    "light": "verde",
+    "reds": 0,
+    "ambers": 0,
+    "n": 9,
+    "baa_spread_pct": 35.0,
+    "baa_spread_d3": -0.05,
+    "hy_oas_pct": 75.0,
+    "hy_oas_d3": 0.66,
+    "indicators": {
+      "baa_spread": {
+        "status": "verde",
+        "value": 1.49
+      },
+      "hy_oas": {
+        "status": "verde",
+        "value": 3.26
+      },
+      "nfci": {
+        "status": "verde",
+        "value": -0.49
+      },
+      "anfci": {
+        "status": "verde",
+        "value": -0.5
+      },
+      "nfci_credit": {
+        "status": "verde",
+        "value": -0.02
+      },
+      "stlfsi": {
+        "status": "verde",
+        "value": -0.58
+      },
+      "sloos_ci": {
+        "status": "verde",
+        "value": 0.0
+      },
+      "delinq_all": {
+        "status": "verde",
+        "value": 1.42
+      },
+      "ted": {
+        "status": null,
+        "value": null
+      },
+      "curve": {
+        "status": "verde",
+        "value": 0.78
+      }
+    }
+  },
+  "indicators": [
+    {
+      "indicador": "Compuesto de crecimiento G (z)",
+      "valor": 0.04,
+      "unidad": "z",
+      "serie": "derivado",
+      "fecha_dato": "2026-11-02",
+      "percentil_hist": 45.0,
+      "desde": "1950"
+    },
+    {
+      "indicador": "Producción industrial a/a",
+      "valor": 2.25,
+      "unidad": "%",
+      "serie": "INDPRO",
+      "fecha_dato": "2026-09-01",
+      "percentil_hist": 45.0,
+      "desde": "1950"
+    },
+    {
+      "indicador": "Nóminas no agrícolas a/a",
+      "valor": 0.31,
+      "unidad": "%",
+      "serie": "PAYEMS",
+      "fecha_dato": "2026-09-01",
+      "percentil_hist": 21.0,
+      "desde": "1950"
+    },
+    {
+      "indicador": "PIB real t/t anualizado",
+      "valor": 3.37,
+      "unidad": "%",
+      "serie": "GDPC1",
+      "fecha_dato": "2026-07-01",
+      "percentil_hist": 58.0,
+      "desde": "1950"
+    },
+    {
+      "indicador": "Tasa de paro",
+      "valor": 4.2,
+      "unidad": "%",
+      "serie": "UNRATE",
+      "fecha_dato": "2026-09-01",
+      "percentil_hist": 23.0,
+      "desde": "1950"
+    },
+    {
+      "indicador": "Regla de Sahm",
+      "valor": 0.0,
+      "unidad": "pp",
+      "serie": "UNRATE",
+      "fecha_dato": "2026-09-01",
+      "percentil_hist": 42.0,
+      "desde": "1950"
+    },
+    {
+      "indicador": "IPC subyacente 6m anualizado",
+      "valor": 2.85,
+      "unidad": "%",
+      "serie": "CPILFESL",
+      "fecha_dato": "2026-09-01",
+      "percentil_hist": 53.0,
+      "desde": "1957"
+    },
+    {
+      "indicador": "PCE subyacente 6m anualizado",
+      "valor": 2.92,
+      "unidad": "%",
+      "serie": "PCEPILFE",
+      "fecha_dato": "2026-09-01",
+      "percentil_hist": 58.0,
+      "desde": "1959"
+    },
+    {
+      "indicador": "PPI a/a",
+      "valor": 12.84,
+      "unidad": "%",
+      "serie": "PPIACO",
+      "fecha_dato": "2026-09-01",
+      "percentil_hist": 93.0,
+      "desde": "1950"
+    },
+    {
+      "indicador": "Inflación implícita 5a (T5YIE)",
+      "valor": 2.46,
+      "unidad": "%",
+      "serie": "T5YIE",
+      "fecha_dato": "2026-10-30",
+      "percentil_hist": 83.0,
+      "desde": "2003"
+    },
+    {
+      "indicador": "Fed funds",
+      "valor": 3.75,
+      "unidad": "%",
+      "serie": "FEDFUNDS",
+      "fecha_dato": "2026-09-01",
+      "percentil_hist": 44.0,
+      "desde": "1954"
+    },
+    {
+      "indicador": "Tipo real fed funds",
+      "valor": 1.18,
+      "unidad": "pp",
+      "serie": "derivado",
+      "fecha_dato": "2026-11-02",
+      "percentil_hist": 51.0,
+      "desde": "1954"
+    },
+    {
+      "indicador": "Curva 10a−3m",
+      "valor": 0.78,
+      "unidad": "pp",
+      "serie": "T10Y3M",
+      "fecha_dato": "2026-10-30",
+      "percentil_hist": 35.0,
+      "desde": "1950"
+    },
+    {
+      "indicador": "Tipo real 10a (DFII10)",
+      "valor": 2.63,
+      "unidad": "%",
+      "serie": "DFII10",
+      "fecha_dato": "2026-10-29",
+      "percentil_hist": 99.0,
+      "desde": "2003"
+    },
+    {
+      "indicador": "Diferencial Baa−10a",
+      "valor": 1.49,
+      "unidad": "pp",
+      "serie": "BAA10Y",
+      "fecha_dato": "2026-10-29",
+      "percentil_hist": 33.0,
+      "desde": "1950"
+    },
+    {
+      "indicador": "HY OAS",
+      "valor": 3.26,
+      "unidad": "pp",
+      "serie": "BAMLH0A0HYM2",
+      "fecha_dato": "2026-10-29",
+      "percentil_hist": 76.0,
+      "desde": "2023"
+    },
+    {
+      "indicador": "NFCI",
+      "valor": -0.49,
+      "unidad": "índice",
+      "serie": "NFCI",
+      "fecha_dato": "2026-10-23",
+      "percentil_hist": 41.0,
+      "desde": "1971"
+    },
+    {
+      "indicador": "STLFSI",
+      "valor": -0.58,
+      "unidad": "índice",
+      "serie": "STLFSI4",
+      "fecha_dato": "2026-10-23",
+      "percentil_hist": 23.0,
+      "desde": "1994"
+    },
+    {
+      "indicador": "SLOOS C&I endurecimiento neto",
+      "valor": 0.0,
+      "unidad": "%",
+      "serie": "DRTSCILM",
+      "fecha_dato": "2026-07-01",
+      "percentil_hist": 51.0,
+      "desde": "1990"
+    },
+    {
+      "indicador": "Morosidad total préstamos bancarios",
+      "valor": 1.42,
+      "unidad": "%",
+      "serie": "DRALACBS",
+      "fecha_dato": "2026-04-01",
+      "percentil_hist": 9.0,
+      "desde": "1985"
+    },
+    {
+      "indicador": "VIX",
+      "valor": 17.2,
+      "unidad": "índice",
+      "serie": "VIXCLS",
+      "fecha_dato": "2026-10-29",
+      "percentil_hist": 48.0,
+      "desde": "1990"
+    },
+    {
+      "indicador": "M2 a/a − PIB nominal a/a",
+      "valor": -0.16,
+      "unidad": "pp",
+      "serie": "derivado",
+      "fecha_dato": "2026-11-02",
+      "percentil_hist": 48.0,
+      "desde": "1960"
+    },
+    {
+      "indicador": "Liquidez neta Fed (WALCL−TGA−RRP)",
+      "valor": 5741.53,
+      "unidad": "mm USD",
+      "serie": "derivado",
+      "fecha_dato": "2026-11-02",
+      "percentil_hist": 78.0,
+      "desde": "2002"
+    },
+    {
+      "indicador": "Deuda pública / PIB",
+      "valor": 121.19,
+      "unidad": "%",
+      "serie": "GFDEGDQ188S",
+      "fecha_dato": "2026-04-01",
+      "percentil_hist": 97.0,
+      "desde": "1966"
+    },
+    {
+      "indicador": "Utilización de capacidad",
+      "valor": 76.85,
+      "unidad": "%",
+      "serie": "TCU",
+      "fecha_dato": "2026-09-01",
+      "percentil_hist": 21.0,
+      "desde": "1967"
+    }
+  ],
+  "analogs": [
+    {
+      "date": "1955-07",
+      "distance": 0.39,
+      "quadrant": "Goldilocks",
+      "debt_phase": "endurecimiento",
+      "credit_light": "verde",
+      "G": 0.53,
+      "core_6m": -0.45,
+      "fwd_12m_pct": {
+        "acciones EE. UU. (TR)": 18.6,
+        "bonos 10a (TR)": -0.1,
+        "oro": null
+      },
+      "G_12m_later": -0.09,
+      "nber_recession_next_12m": false,
+      "events": [
+        "Currency crisis Russia 1956-1957 (1956-01)",
+        "Currency crisis Australia 1954-1955 (1954-01)",
+        "Argentine Military (1955-06)"
+      ]
+    },
+    {
+      "date": "1959-09",
+      "distance": 0.4,
+      "quadrant": "Goldilocks",
+      "debt_phase": "endurecimiento",
+      "credit_light": "verde",
+      "G": 0.83,
+      "core_6m": 2.12,
+      "fwd_12m_pct": {
+        "acciones EE. UU. (TR)": -0.6,
+        "bonos 10a (TR)": 9.9,
+        "oro": null
+      },
+      "G_12m_later": -0.32,
+      "nber_recession_next_12m": true,
+      "events": [
+        "US recession 1960-04 to 1961-02 (1960-04)",
+        "Currency crisis Russia 1960-1962 (1960-01)",
+        "Currency crisis Australia 1958-1959 (1958-01)"
+      ]
+    },
+    {
+      "date": "2007-09",
+      "distance": 0.42,
+      "quadrant": "Deflación/recesión",
+      "debt_phase": "desapalancamiento",
+      "credit_light": "rojo",
+      "G": 0.04,
+      "core_6m": 1.67,
+      "fwd_12m_pct": {
+        "acciones EE. UU. (TR)": -17.0,
+        "bonos 10a (TR)": 10.1,
+        "oro": 16.4
+      },
+      "G_12m_later": -1.2,
+      "nber_recession_next_12m": true,
+      "events": [
+        "Global Financial Crisis (2007-08)",
+        "US recession 2007-12 to 2009-06 (2007-12)",
+        "Systemic banking crisis Russia 2008 (2008-01)"
+      ]
+    },
+    {
+      "date": "1964-08",
+      "distance": 0.42,
+      "quadrant": "Goldilocks",
+      "debt_phase": "endurecimiento",
+      "credit_light": "verde",
+      "G": 0.41,
+      "core_6m": 0.95,
+      "fwd_12m_pct": {
+        "acciones EE. UU. (TR)": 8.6,
+        "bonos 10a (TR)": 3.5,
+        "oro": null
+      },
+      "G_12m_later": 0.62,
+      "nber_recession_next_12m": false,
+      "events": [
+        "Dominican Republic (1965-04)",
+        "Currency crisis Russia 1965-1967 (1965-01)",
+        "Currency crisis Australia 1964-1965 (1964-01)"
+      ]
+    },
+    {
+      "date": "1978-03",
+      "distance": 0.42,
+      "quadrant": "Estanflación",
+      "debt_phase": "endurecimiento",
+      "credit_light": "verde",
+      "G": 0.51,
+      "core_6m": 6.14,
+      "fwd_12m_pct": {
+        "acciones EE. UU. (TR)": 18.6,
+        "bonos 10a (TR)": 1.9,
+        "oro": 31.5
+      },
+      "G_12m_later": 0.76,
+      "nber_recession_next_12m": false,
+      "events": [
+        "Currency crisis Mauritius 1979 (1979-01)",
+        "Inflation crisis Mauritius 1979-1981 (1979-01)",
+        "Second Ogaden Phase 3 (1978-03)"
+      ]
+    }
+  ],
+  "analog_method": {
+    "dims": [
+      "G",
+      "G_d6",
+      "z_core_gap",
+      "z_curve",
+      "z_real_ff",
+      "z_baa_spread",
+      "liquidity_score"
+    ],
+    "return_series": {
+      "acciones EE. UU. (TR)": "shiller_nominal_stock_tr_ret_m",
+      "bonos 10a (TR)": "shiller_nominal_bond_tr_ret_m",
+      "oro": "gold_usd_monthly"
+    },
+    "horizon_months": 12
+  },
+  "disclaimer": "Apoyo a la decisión, no asesoramiento financiero. Cifras calculadas por Python a partir de datos públicos; pueden contener errores o revisiones. Ninguna decisión debe basarse solo en este reporte.",
+  "termometro": {
+    "fecha_calculo": "2026-10-31",
+    "aviso": "Informativo, no es una señal de cartera. Modelo histórico 1871-2004; el riesgo de ENTRAR en recesión no superó su puerta y se muestran solo sus indicadores; la probabilidad de SALIR sí (con pocas filas: prudencia). La inflación no se anticipa.",
+    "paises": {
+      "BEL": {
+        "grupo": "nucleo",
+        "estado": {
+          "en_recesion": false,
+          "ultimo_trimestre_pib": "2026Q2",
+          "meses_desde_entrada": null
+        },
+        "indicadores": {
+          "C1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 1.29,
+            "percentil_hasta_2004": 47,
+            "meses_hist": 540
+          },
+          "C4": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_hasta_2004": 28,
+            "meses_hist": 267
+          },
+          "C6": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 18.72,
+            "percentil_hasta_2004": 71,
+            "meses_hist": 224
+          },
+          "C2": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -47.53,
+            "percentil_hasta_2004": 0,
+            "meses_hist": 342
+          },
+          "S4": {
+            "indicador": "Difusión de PIB cayendo",
+            "unidad": "% países",
+            "valor": 0.0,
+            "percentil_hasta_2004": 30,
+            "meses_hist": 514
+          }
+        },
+        "salida_12m": null,
+        "avisos_datos": [],
+        "empalmes": []
+      },
+      "DEU": {
+        "grupo": "nucleo",
+        "estado": {
+          "en_recesion": false,
+          "ultimo_trimestre_pib": "2026Q2",
+          "meses_desde_entrada": null
+        },
+        "indicadores": {
+          "C1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 0.73,
+            "percentil_hasta_2004": 29,
+            "meses_hist": 531
+          },
+          "C4": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_hasta_2004": 28,
+            "meses_hist": 267
+          },
+          "C6": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 2.47,
+            "percentil_hasta_2004": 54,
+            "meses_hist": 527
+          },
+          "C2": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -15.13,
+            "percentil_hasta_2004": 0,
+            "meses_hist": 462
+          },
+          "S4": {
+            "indicador": "Difusión de PIB cayendo",
+            "unidad": "% países",
+            "valor": 0.0,
+            "percentil_hasta_2004": 31,
+            "meses_hist": 514
+          }
+        },
+        "salida_12m": null,
+        "avisos_datos": [],
+        "empalmes": []
+      },
+      "DNK": {
+        "grupo": "nucleo",
+        "estado": {
+          "en_recesion": false,
+          "ultimo_trimestre_pib": "2026Q2",
+          "meses_desde_entrada": null
+        },
+        "indicadores": {
+          "C1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 0.63,
+            "percentil_hasta_2004": 38,
+            "meses_hist": 207
+          },
+          "C4": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_hasta_2004": 26,
+            "meses_hist": 291
+          },
+          "C6": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": null,
+            "percentil_hasta_2004": null,
+            "meses_hist": 0
+          },
+          "C2": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -19.64,
+            "percentil_hasta_2004": 1,
+            "meses_hist": 390
+          },
+          "S4": {
+            "indicador": "Difusión de PIB cayendo",
+            "unidad": "% países",
+            "valor": 0.0,
+            "percentil_hasta_2004": 30,
+            "meses_hist": 514
+          }
+        },
+        "salida_12m": null,
+        "avisos_datos": [],
+        "empalmes": []
+      },
+      "ESP": {
+        "grupo": "nucleo",
+        "estado": {
+          "en_recesion": false,
+          "ultimo_trimestre_pib": "2026Q2",
+          "meses_desde_entrada": null
+        },
+        "indicadores": {
+          "C1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 1.19,
+            "percentil_hasta_2004": 68,
+            "meses_hist": 291
+          },
+          "C4": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_hasta_2004": 34,
+            "meses_hist": 267
+          },
+          "C6": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 22.55,
+            "percentil_hasta_2004": 76,
+            "meses_hist": 227
+          },
+          "C2": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -52.59,
+            "percentil_hasta_2004": 0,
+            "meses_hist": 352
+          },
+          "S4": {
+            "indicador": "Difusión de PIB cayendo",
+            "unidad": "% países",
+            "valor": 0.0,
+            "percentil_hasta_2004": 30,
+            "meses_hist": 514
+          }
+        },
+        "salida_12m": null,
+        "avisos_datos": [],
+        "empalmes": []
+      },
+      "FIN": {
+        "grupo": "nucleo",
+        "estado": {
+          "en_recesion": false,
+          "ultimo_trimestre_pib": "2026Q2",
+          "meses_desde_entrada": null
+        },
+        "indicadores": {
+          "C1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 1.1,
+            "percentil_hasta_2004": 43,
+            "meses_hist": 195
+          },
+          "C4": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_hasta_2004": 26,
+            "meses_hist": 291
+          },
+          "C6": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 20.72,
+            "percentil_hasta_2004": 70,
+            "meses_hist": 540
+          },
+          "C2": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -21.83,
+            "percentil_hasta_2004": 12,
+            "meses_hist": 342
+          },
+          "S4": {
+            "indicador": "Difusión de PIB cayendo",
+            "unidad": "% países",
+            "valor": 0.0,
+            "percentil_hasta_2004": 30,
+            "meses_hist": 514
+          }
+        },
+        "salida_12m": null,
+        "avisos_datos": [],
+        "empalmes": []
+      },
+      "FRA": {
+        "grupo": "nucleo",
+        "estado": {
+          "en_recesion": false,
+          "ultimo_trimestre_pib": "2026Q2",
+          "meses_desde_entrada": null
+        },
+        "indicadores": {
+          "C1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 1.49,
+            "percentil_hasta_2004": 55,
+            "meses_hist": 411
+          },
+          "C4": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_hasta_2004": 28,
+            "meses_hist": 267
+          },
+          "C6": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 2.23,
+            "percentil_hasta_2004": 50,
+            "meses_hist": 540
+          },
+          "C2": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -23.74,
+            "percentil_hasta_2004": 0,
+            "meses_hist": 354
+          },
+          "S4": {
+            "indicador": "Difusión de PIB cayendo",
+            "unidad": "% países",
+            "valor": 0.0,
+            "percentil_hasta_2004": 30,
+            "meses_hist": 514
+          }
+        },
+        "salida_12m": null,
+        "avisos_datos": [],
+        "empalmes": []
+      },
+      "GBR": {
+        "grupo": "nucleo",
+        "estado": {
+          "en_recesion": false,
+          "ultimo_trimestre_pib": "2026Q2",
+          "meses_desde_entrada": null
+        },
+        "indicadores": {
+          "C1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 0.96,
+            "percentil_hasta_2004": 78,
+            "meses_hist": 219
+          },
+          "C4": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_hasta_2004": 26,
+            "meses_hist": 291
+          },
+          "C6": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 11.69,
+            "percentil_hasta_2004": 68,
+            "meses_hist": 540
+          },
+          "C2": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -46.38,
+            "percentil_hasta_2004": 0,
+            "meses_hist": 436
+          },
+          "S4": {
+            "indicador": "Difusión de PIB cayendo",
+            "unidad": "% países",
+            "valor": 0.0,
+            "percentil_hasta_2004": 30,
+            "meses_hist": 514
+          }
+        },
+        "salida_12m": null,
+        "avisos_datos": [],
+        "empalmes": [
+          "tipo a 3 m: BoE OIS (SONIA) 3 m desde 2026-03 (empalme; sin ajuste de nivel: diferencia media OCDE − BoE +0.02 pp en 24 meses de solape 2024-03/2026-02, < 0.05 pp)"
+        ]
+      },
+      "ITA": {
+        "grupo": "nucleo",
+        "estado": {
+          "en_recesion": false,
+          "ultimo_trimestre_pib": "2026Q2",
+          "meses_desde_entrada": null
+        },
+        "indicadores": {
+          "C1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 1.51,
+            "percentil_hasta_2004": 63,
+            "meses_hist": 157
+          },
+          "C4": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_hasta_2004": 26,
+            "meses_hist": 291
+          },
+          "C6": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 16.5,
+            "percentil_hasta_2004": 76,
+            "meses_hist": 540
+          },
+          "C2": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -26.14,
+            "percentil_hasta_2004": 0,
+            "meses_hist": 462
+          },
+          "S4": {
+            "indicador": "Difusión de PIB cayendo",
+            "unidad": "% países",
+            "valor": 0.0,
+            "percentil_hasta_2004": 30,
+            "meses_hist": 514
+          }
+        },
+        "salida_12m": null,
+        "avisos_datos": [],
+        "empalmes": []
+      },
+      "JPN": {
+        "grupo": "nucleo",
+        "estado": {
+          "en_recesion": false,
+          "ultimo_trimestre_pib": "2026Q2",
+          "meses_desde_entrada": null
+        },
+        "indicadores": {
+          "C1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 1.17,
+            "percentil_hasta_2004": null,
+            "meses_hist": 24
+          },
+          "C4": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_hasta_2004": 29,
+            "meses_hist": 291
+          },
+          "C6": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": null,
+            "percentil_hasta_2004": null,
+            "meses_hist": 0
+          },
+          "C2": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -6.1,
+            "percentil_hasta_2004": 19,
+            "meses_hist": 414
+          },
+          "S4": {
+            "indicador": "Difusión de PIB cayendo",
+            "unidad": "% países",
+            "valor": 0.0,
+            "percentil_hasta_2004": 32,
+            "meses_hist": 514
+          }
+        },
+        "salida_12m": null,
+        "avisos_datos": [],
+        "empalmes": []
+      },
+      "NLD": {
+        "grupo": "nucleo",
+        "estado": {
+          "en_recesion": false,
+          "ultimo_trimestre_pib": "2026Q2",
+          "meses_desde_entrada": null
+        },
+        "indicadores": {
+          "C1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 0.85,
+            "percentil_hasta_2004": 34,
+            "meses_hist": 267
+          },
+          "C4": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_hasta_2004": 26,
+            "meses_hist": 291
+          },
+          "C6": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 16.68,
+            "percentil_hasta_2004": 75,
+            "meses_hist": 523
+          },
+          "C2": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -79.65,
+            "percentil_hasta_2004": 0,
+            "meses_hist": 460
+          },
+          "S4": {
+            "indicador": "Difusión de PIB cayendo",
+            "unidad": "% países",
+            "valor": 0.0,
+            "percentil_hasta_2004": 30,
+            "meses_hist": 514
+          }
+        },
+        "salida_12m": null,
+        "avisos_datos": [],
+        "empalmes": []
+      },
+      "NOR": {
+        "grupo": "nucleo",
+        "estado": {
+          "en_recesion": false,
+          "ultimo_trimestre_pib": "2026Q2",
+          "meses_desde_entrada": null
+        },
+        "indicadores": {
+          "C1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": -0.19,
+            "percentil_hasta_2004": 61,
+            "meses_hist": 231
+          },
+          "C4": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 0.0,
+            "percentil_hasta_2004": 16,
+            "meses_hist": 291
+          },
+          "C6": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 24.95,
+            "percentil_hasta_2004": 72,
+            "meses_hist": 215
+          },
+          "C2": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -42.44,
+            "percentil_hasta_2004": 0,
+            "meses_hist": 462
+          },
+          "S4": {
+            "indicador": "Difusión de PIB cayendo",
+            "unidad": "% países",
+            "valor": 0.0,
+            "percentil_hasta_2004": 30,
+            "meses_hist": 514
+          }
+        },
+        "salida_12m": null,
+        "avisos_datos": [],
+        "empalmes": []
+      },
+      "PRT": {
+        "grupo": "nucleo",
+        "estado": {
+          "en_recesion": false,
+          "ultimo_trimestre_pib": "2026Q2",
+          "meses_desde_entrada": null
+        },
+        "indicadores": {
+          "C1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 1.11,
+            "percentil_hasta_2004": 46,
+            "meses_hist": 129
+          },
+          "C4": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_hasta_2004": 28,
+            "meses_hist": 291
+          },
+          "C6": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 20.13,
+            "percentil_hasta_2004": 75,
+            "meses_hist": 191
+          },
+          "C2": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -50.87,
+            "percentil_hasta_2004": 4,
+            "meses_hist": 462
+          },
+          "S4": {
+            "indicador": "Difusión de PIB cayendo",
+            "unidad": "% países",
+            "valor": 0.0,
+            "percentil_hasta_2004": 32,
+            "meses_hist": 514
+          }
+        },
+        "salida_12m": null,
+        "avisos_datos": [],
+        "empalmes": []
+      },
+      "SWE": {
+        "grupo": "nucleo",
+        "estado": {
+          "en_recesion": false,
+          "ultimo_trimestre_pib": "2026Q2",
+          "meses_desde_entrada": null
+        },
+        "indicadores": {
+          "C1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 0.88,
+            "percentil_hasta_2004": 34,
+            "meses_hist": 208
+          },
+          "C4": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_hasta_2004": 26,
+            "meses_hist": 291
+          },
+          "C6": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 14.17,
+            "percentil_hasta_2004": 69,
+            "meses_hist": 540
+          },
+          "C2": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -34.81,
+            "percentil_hasta_2004": 0,
+            "meses_hist": 460
+          },
+          "S4": {
+            "indicador": "Difusión de PIB cayendo",
+            "unidad": "% países",
+            "valor": 0.0,
+            "percentil_hasta_2004": 31,
+            "meses_hist": 514
+          }
+        },
+        "salida_12m": null,
+        "avisos_datos": [],
+        "empalmes": []
+      },
+      "USA": {
+        "grupo": "usa",
+        "estado": {
+          "en_recesion": false,
+          "ultimo_trimestre_pib": "2026Q2",
+          "meses_desde_entrada": null
+        },
+        "indicadores": {
+          "C1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 0.58,
+            "percentil_hasta_2004": 46,
+            "meses_hist": 478
+          },
+          "C4": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_hasta_2004": 28,
+            "meses_hist": 267
+          },
+          "C6": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 8.94,
+            "percentil_hasta_2004": 65,
+            "meses_hist": 540
+          },
+          "C2": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -24.72,
+            "percentil_hasta_2004": 0,
+            "meses_hist": 540
+          },
+          "S4": {
+            "indicador": "Difusión de PIB cayendo",
+            "unidad": "% países",
+            "valor": 0.0,
+            "percentil_hasta_2004": 30,
+            "meses_hist": 514
+          }
+        },
+        "salida_12m": null,
+        "avisos_datos": [],
+        "empalmes": []
+      },
+      "AUS": {
+        "grupo": "prueba",
+        "estado": {
+          "en_recesion": false,
+          "ultimo_trimestre_pib": "2026Q2",
+          "meses_desde_entrada": null
+        },
+        "indicadores": {
+          "C1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 0.67,
+            "percentil_hasta_2004": 63,
+            "meses_hist": 417
+          },
+          "C4": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.14,
+            "percentil_hasta_2004": 26,
+            "meses_hist": 291
+          },
+          "C6": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": -4.06,
+            "percentil_hasta_2004": null,
+            "meses_hist": 0
+          },
+          "C2": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -14.61,
+            "percentil_hasta_2004": 0,
+            "meses_hist": 469
+          },
+          "S4": {
+            "indicador": "Difusión de PIB cayendo",
+            "unidad": "% países",
+            "valor": 0.0,
+            "percentil_hasta_2004": 30,
+            "meses_hist": 514
+          }
+        },
+        "salida_12m": null,
+        "avisos_datos": [],
+        "empalmes": []
+      },
+      "CHE": {
+        "grupo": "prueba",
+        "estado": {
+          "en_recesion": false,
+          "ultimo_trimestre_pib": "2026Q2",
+          "meses_desde_entrada": null
+        },
+        "indicadores": {
+          "C1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 0.41,
+            "percentil_hasta_2004": null,
+            "meses_hist": 57
+          },
+          "C4": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.14,
+            "percentil_hasta_2004": 26,
+            "meses_hist": 291
+          },
+          "C6": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 12.36,
+            "percentil_hasta_2004": 68,
+            "meses_hist": 540
+          },
+          "C2": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -25.34,
+            "percentil_hasta_2004": 3,
+            "meses_hist": 462
+          },
+          "S4": {
+            "indicador": "Difusión de PIB cayendo",
+            "unidad": "% países",
+            "valor": 0.0,
+            "percentil_hasta_2004": 30,
+            "meses_hist": 514
+          }
+        },
+        "salida_12m": null,
+        "avisos_datos": [],
+        "empalmes": []
+      },
+      "CAN": {
+        "grupo": "prueba",
+        "estado": {
+          "en_recesion": false,
+          "ultimo_trimestre_pib": "2026Q2",
+          "meses_desde_entrada": null
+        },
+        "indicadores": {
+          "C1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 1.21,
+            "percentil_hasta_2004": 66,
+            "meses_hist": 540
+          },
+          "C4": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.14,
+            "percentil_hasta_2004": 26,
+            "meses_hist": 291
+          },
+          "C6": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 16.99,
+            "percentil_hasta_2004": 81,
+            "meses_hist": 540
+          },
+          "C2": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -24.98,
+            "percentil_hasta_2004": 0,
+            "meses_hist": 522
+          },
+          "S4": {
+            "indicador": "Difusión de PIB cayendo",
+            "unidad": "% países",
+            "valor": 0.0,
+            "percentil_hasta_2004": 30,
+            "meses_hist": 514
+          }
+        },
+        "salida_12m": null,
+        "avisos_datos": [],
+        "empalmes": []
+      },
+      "IRL": {
+        "grupo": "prueba",
+        "estado": {
+          "en_recesion": true,
+          "ultimo_trimestre_pib": "2026Q2",
+          "meses_desde_entrada": 7
+        },
+        "indicadores": {
+          "C1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 0.94,
+            "percentil_hasta_2004": 53,
+            "meses_hist": 243
+          },
+          "C4": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.14,
+            "percentil_hasta_2004": 26,
+            "meses_hist": 291
+          },
+          "C6": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 19.86,
+            "percentil_hasta_2004": 72,
+            "meses_hist": 540
+          },
+          "C2": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -76.15,
+            "percentil_hasta_2004": 0,
+            "meses_hist": 337
+          },
+          "S4": {
+            "indicador": "Difusión de PIB cayendo",
+            "unidad": "% países",
+            "valor": 0.0,
+            "percentil_hasta_2004": 30,
+            "meses_hist": 514
+          }
+        },
+        "salida_12m": {
+          "motivo": "país de prueba: sin puerta propia de T2 (solo indicadores)"
+        },
+        "avisos_datos": [],
+        "empalmes": []
+      }
+    },
+    "en_recesion": [
+      "IRL"
+    ],
+    "percentiles_T2": {
+      "p50": 0.8159936465054107,
+      "p80": 0.9068323389130056,
+      "p95": 0.9552136637838904
+    },
+    "aviso_T2": "Léase la banda, no el porcentaje: la puerta de T2 se pasó con solo 31 filas / 22 episodios (r 0,82, IC 95 % ≈ [0,49; 0,94]; pasa solo en el 58 % de las réplicas bootstrap), y el «en recesión» del fechado trimestral coincide con el anual de JST solo ≈ 70 % de las veces.",
+    "parametros": "research/int/termometro_puerta_v2_corr.json",
+    "parametros_sin_redondeo": "research/int/termometro_referencias.json",
+    "procedencia_puerta": {
+      "commit": "d21901f4f5b2937375464210dc430c60e1cdd389",
+      "arbol_limpio": true,
+      "hora_utc": "2026-10-29T12:35:54+00:00"
+    },
+    "metodo": {
+      "contribucion": "b_k · (x_k − media ≤ 2004 de los meses en recesión del núcleo), en unidades del logit antes de recalibrar",
+      "percentil_indicador": "frente a los meses 1960-2004 del propio país (≥ 60 meses), rango medio con empates",
+      "datos": "obs_latest (sin vintages: niveles revisados), retrasos as of de src/intl/lags.py y src/intl/termometro.py"
+    }
+  },
+  "nowcast": {
+    "fecha_calculo": "2026-10-31",
+    "aviso": "Informativo, no es una señal de cartera. Nowcast descriptivo: percentil frente a la historia 1960-2004 de cada país (media con pesos iguales de 6 indicadores conocidos), no una probabilidad de recesión a 3 meses. No se ha probado que anticipe nada fuera de la muestra; su evaluación en vivo necesitará décadas.",
+    "agregado": {
+      "indice": 41.1,
+      "percentil": 34,
+      "banda": "bajo",
+      "paises_con_dato": 14,
+      "paises_alto": [],
+      "paises_en_recesion": []
+    },
+    "paises": {
+      "BEL": {
+        "grupo": "nucleo",
+        "indice": 38.1,
+        "percentil": 25,
+        "banda": "bajo",
+        "historia_corta": false,
+        "n_indicadores": 6,
+        "indicadores": {
+          "K1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 1.29,
+            "percentil_orientado": 53,
+            "meses_hist": 540
+          },
+          "K2": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_orientado": 28,
+            "meses_hist": 267
+          },
+          "K3": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 18.72,
+            "percentil_orientado": 29,
+            "meses_hist": 224
+          },
+          "K4": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -47.53,
+            "percentil_orientado": 0,
+            "meses_hist": 342
+          },
+          "K5": {
+            "indicador": "Difusión de IP interanual < 0",
+            "unidad": "% países",
+            "valor": 38.46,
+            "percentil_orientado": 79,
+            "meses_hist": 540
+          },
+          "K6": {
+            "indicador": "Regla tipo Sahm (paro)",
+            "unidad": "pp",
+            "valor": 0.13,
+            "percentil_orientado": 40,
+            "meses_hist": 67
+          }
+        },
+        "en_recesion_fechado": false
+      },
+      "DEU": {
+        "grupo": "nucleo",
+        "indice": 43.3,
+        "percentil": 37,
+        "banda": "bajo",
+        "historia_corta": false,
+        "n_indicadores": 6,
+        "indicadores": {
+          "K1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 0.73,
+            "percentil_orientado": 71,
+            "meses_hist": 531
+          },
+          "K2": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_orientado": 28,
+            "meses_hist": 267
+          },
+          "K3": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 2.47,
+            "percentil_orientado": 46,
+            "meses_hist": 527
+          },
+          "K4": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -15.13,
+            "percentil_orientado": 0,
+            "meses_hist": 462
+          },
+          "K5": {
+            "indicador": "Difusión de IP interanual < 0",
+            "unidad": "% países",
+            "valor": 38.46,
+            "percentil_orientado": 79,
+            "meses_hist": 540
+          },
+          "K6": {
+            "indicador": "Regla tipo Sahm (paro)",
+            "unidad": "pp",
+            "valor": 0.23,
+            "percentil_orientado": 36,
+            "meses_hist": 151
+          }
+        },
+        "en_recesion_fechado": false
+      },
+      "DNK": {
+        "grupo": "nucleo",
+        "indice": 48.4,
+        "percentil": 37,
+        "banda": "bajo",
+        "historia_corta": false,
+        "n_indicadores": 5,
+        "indicadores": {
+          "K1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 0.63,
+            "percentil_orientado": 62,
+            "meses_hist": 207
+          },
+          "K2": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_orientado": 26,
+            "meses_hist": 291
+          },
+          "K3": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": null,
+            "percentil_orientado": null,
+            "meses_hist": 0
+          },
+          "K4": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -19.64,
+            "percentil_orientado": 1,
+            "meses_hist": 390
+          },
+          "K5": {
+            "indicador": "Difusión de IP interanual < 0",
+            "unidad": "% países",
+            "valor": 46.15,
+            "percentil_orientado": 82,
+            "meses_hist": 540
+          },
+          "K6": {
+            "indicador": "Regla tipo Sahm (paro)",
+            "unidad": "pp",
+            "valor": 0.57,
+            "percentil_orientado": 72,
+            "meses_hist": 67
+          }
+        },
+        "en_recesion_fechado": false
+      },
+      "ESP": {
+        "grupo": "nucleo",
+        "indice": 38.9,
+        "percentil": 28,
+        "banda": "bajo",
+        "historia_corta": false,
+        "n_indicadores": 6,
+        "indicadores": {
+          "K1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 1.19,
+            "percentil_orientado": 32,
+            "meses_hist": 291
+          },
+          "K2": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_orientado": 34,
+            "meses_hist": 267
+          },
+          "K3": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 22.55,
+            "percentil_orientado": 24,
+            "meses_hist": 227
+          },
+          "K4": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -52.59,
+            "percentil_orientado": 0,
+            "meses_hist": 352
+          },
+          "K5": {
+            "indicador": "Difusión de IP interanual < 0",
+            "unidad": "% países",
+            "valor": 46.15,
+            "percentil_orientado": 83,
+            "meses_hist": 540
+          },
+          "K6": {
+            "indicador": "Regla tipo Sahm (paro)",
+            "unidad": "pp",
+            "valor": 0.03,
+            "percentil_orientado": 61,
+            "meses_hist": 208
+          }
+        },
+        "en_recesion_fechado": false
+      },
+      "FIN": {
+        "grupo": "nucleo",
+        "indice": 47.6,
+        "percentil": 44,
+        "banda": "bajo",
+        "historia_corta": false,
+        "n_indicadores": 6,
+        "indicadores": {
+          "K1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 1.1,
+            "percentil_orientado": 57,
+            "meses_hist": 195
+          },
+          "K2": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_orientado": 26,
+            "meses_hist": 291
+          },
+          "K3": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 20.72,
+            "percentil_orientado": 30,
+            "meses_hist": 540
+          },
+          "K4": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -21.83,
+            "percentil_orientado": 12,
+            "meses_hist": 342
+          },
+          "K5": {
+            "indicador": "Difusión de IP interanual < 0",
+            "unidad": "% países",
+            "valor": 46.15,
+            "percentil_orientado": 82,
+            "meses_hist": 540
+          },
+          "K6": {
+            "indicador": "Regla tipo Sahm (paro)",
+            "unidad": "pp",
+            "valor": 1.03,
+            "percentil_orientado": 78,
+            "meses_hist": 187
+          }
+        },
+        "en_recesion_fechado": false
+      },
+      "FRA": {
+        "grupo": "nucleo",
+        "indice": 50.3,
+        "percentil": 48,
+        "banda": "bajo",
+        "historia_corta": false,
+        "n_indicadores": 6,
+        "indicadores": {
+          "K1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 1.49,
+            "percentil_orientado": 45,
+            "meses_hist": 411
+          },
+          "K2": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_orientado": 28,
+            "meses_hist": 267
+          },
+          "K3": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 2.23,
+            "percentil_orientado": 50,
+            "meses_hist": 540
+          },
+          "K4": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -23.74,
+            "percentil_orientado": 0,
+            "meses_hist": 354
+          },
+          "K5": {
+            "indicador": "Difusión de IP interanual < 0",
+            "unidad": "% países",
+            "valor": 38.46,
+            "percentil_orientado": 79,
+            "meses_hist": 540
+          },
+          "K6": {
+            "indicador": "Regla tipo Sahm (paro)",
+            "unidad": "pp",
+            "valor": 0.63,
+            "percentil_orientado": 100,
+            "meses_hist": 67
+          }
+        },
+        "en_recesion_fechado": false
+      },
+      "GBR": {
+        "grupo": "nucleo",
+        "indice": 40.0,
+        "percentil": 23,
+        "banda": "bajo",
+        "historia_corta": false,
+        "n_indicadores": 6,
+        "indicadores": {
+          "K1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 0.96,
+            "percentil_orientado": 22,
+            "meses_hist": 219
+          },
+          "K2": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_orientado": 26,
+            "meses_hist": 291
+          },
+          "K3": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 11.69,
+            "percentil_orientado": 32,
+            "meses_hist": 540
+          },
+          "K4": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -46.38,
+            "percentil_orientado": 0,
+            "meses_hist": 436
+          },
+          "K5": {
+            "indicador": "Difusión de IP interanual < 0",
+            "unidad": "% países",
+            "valor": 46.15,
+            "percentil_orientado": 82,
+            "meses_hist": 540
+          },
+          "K6": {
+            "indicador": "Regla tipo Sahm (paro)",
+            "unidad": "pp",
+            "valor": 0.1,
+            "percentil_orientado": 78,
+            "meses_hist": 67
+          }
+        },
+        "en_recesion_fechado": false
+      },
+      "ITA": {
+        "grupo": "nucleo",
+        "indice": 44.4,
+        "percentil": 41,
+        "banda": "bajo",
+        "historia_corta": false,
+        "n_indicadores": 6,
+        "indicadores": {
+          "K1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 1.51,
+            "percentil_orientado": 37,
+            "meses_hist": 157
+          },
+          "K2": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_orientado": 26,
+            "meses_hist": 291
+          },
+          "K3": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 16.5,
+            "percentil_orientado": 24,
+            "meses_hist": 540
+          },
+          "K4": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -26.14,
+            "percentil_orientado": 0,
+            "meses_hist": 462
+          },
+          "K5": {
+            "indicador": "Difusión de IP interanual < 0",
+            "unidad": "% países",
+            "valor": 38.46,
+            "percentil_orientado": 80,
+            "meses_hist": 540
+          },
+          "K6": {
+            "indicador": "Regla tipo Sahm (paro)",
+            "unidad": "pp",
+            "valor": 0.37,
+            "percentil_orientado": 100,
+            "meses_hist": 67
+          }
+        },
+        "en_recesion_fechado": false
+      },
+      "JPN": {
+        "grupo": "nucleo",
+        "indice": 35.8,
+        "percentil": 15,
+        "banda": "bajo",
+        "historia_corta": false,
+        "n_indicadores": 4,
+        "indicadores": {
+          "K1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 1.17,
+            "percentil_orientado": null,
+            "meses_hist": 24
+          },
+          "K2": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_orientado": 29,
+            "meses_hist": 291
+          },
+          "K3": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": null,
+            "percentil_orientado": null,
+            "meses_hist": 0
+          },
+          "K4": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -6.1,
+            "percentil_orientado": 19,
+            "meses_hist": 414
+          },
+          "K5": {
+            "indicador": "Difusión de IP interanual < 0",
+            "unidad": "% países",
+            "valor": 46.15,
+            "percentil_orientado": 83,
+            "meses_hist": 540
+          },
+          "K6": {
+            "indicador": "Regla tipo Sahm (paro)",
+            "unidad": "pp",
+            "valor": -0.0,
+            "percentil_orientado": 13,
+            "meses_hist": 540
+          }
+        },
+        "en_recesion_fechado": false
+      },
+      "NLD": {
+        "grupo": "nucleo",
+        "indice": 41.7,
+        "percentil": 36,
+        "banda": "bajo",
+        "historia_corta": false,
+        "n_indicadores": 6,
+        "indicadores": {
+          "K1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 0.85,
+            "percentil_orientado": 66,
+            "meses_hist": 267
+          },
+          "K2": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_orientado": 26,
+            "meses_hist": 291
+          },
+          "K3": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 16.68,
+            "percentil_orientado": 25,
+            "meses_hist": 523
+          },
+          "K4": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -79.65,
+            "percentil_orientado": 0,
+            "meses_hist": 460
+          },
+          "K5": {
+            "indicador": "Difusión de IP interanual < 0",
+            "unidad": "% países",
+            "valor": 46.15,
+            "percentil_orientado": 82,
+            "meses_hist": 540
+          },
+          "K6": {
+            "indicador": "Regla tipo Sahm (paro)",
+            "unidad": "pp",
+            "valor": 0.1,
+            "percentil_orientado": 52,
+            "meses_hist": 67
+          }
+        },
+        "en_recesion_fechado": false
+      },
+      "NOR": {
+        "grupo": "nucleo",
+        "indice": 30.3,
+        "percentil": 17,
+        "banda": "bajo",
+        "historia_corta": false,
+        "n_indicadores": 6,
+        "indicadores": {
+          "K1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": -0.19,
+            "percentil_orientado": 39,
+            "meses_hist": 231
+          },
+          "K2": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 0.0,
+            "percentil_orientado": 16,
+            "meses_hist": 291
+          },
+          "K3": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 24.95,
+            "percentil_orientado": 28,
+            "meses_hist": 215
+          },
+          "K4": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -42.44,
+            "percentil_orientado": 0,
+            "meses_hist": 462
+          },
+          "K5": {
+            "indicador": "Difusión de IP interanual < 0",
+            "unidad": "% países",
+            "valor": 38.46,
+            "percentil_orientado": 78,
+            "meses_hist": 540
+          },
+          "K6": {
+            "indicador": "Regla tipo Sahm (paro)",
+            "unidad": "pp",
+            "valor": -0.03,
+            "percentil_orientado": 21,
+            "meses_hist": 175
+          }
+        },
+        "en_recesion_fechado": false
+      },
+      "PRT": {
+        "grupo": "nucleo",
+        "indice": 34.0,
+        "percentil": 8,
+        "banda": "bajo",
+        "historia_corta": false,
+        "n_indicadores": 6,
+        "indicadores": {
+          "K1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 1.11,
+            "percentil_orientado": 54,
+            "meses_hist": 129
+          },
+          "K2": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_orientado": 28,
+            "meses_hist": 291
+          },
+          "K3": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 20.13,
+            "percentil_orientado": 25,
+            "meses_hist": 191
+          },
+          "K4": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -50.87,
+            "percentil_orientado": 4,
+            "meses_hist": 462
+          },
+          "K5": {
+            "indicador": "Difusión de IP interanual < 0",
+            "unidad": "% países",
+            "valor": 38.46,
+            "percentil_orientado": 78,
+            "meses_hist": 540
+          },
+          "K6": {
+            "indicador": "Regla tipo Sahm (paro)",
+            "unidad": "pp",
+            "valor": 0.0,
+            "percentil_orientado": 16,
+            "meses_hist": 67
+          }
+        },
+        "en_recesion_fechado": false
+      },
+      "SWE": {
+        "grupo": "nucleo",
+        "indice": 42.5,
+        "percentil": 32,
+        "banda": "bajo",
+        "historia_corta": false,
+        "n_indicadores": 6,
+        "indicadores": {
+          "K1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 0.88,
+            "percentil_orientado": 66,
+            "meses_hist": 208
+          },
+          "K2": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_orientado": 26,
+            "meses_hist": 291
+          },
+          "K3": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 14.17,
+            "percentil_orientado": 31,
+            "meses_hist": 540
+          },
+          "K4": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -34.81,
+            "percentil_orientado": 0,
+            "meses_hist": 460
+          },
+          "K5": {
+            "indicador": "Difusión de IP interanual < 0",
+            "unidad": "% países",
+            "valor": 46.15,
+            "percentil_orientado": 83,
+            "meses_hist": 540
+          },
+          "K6": {
+            "indicador": "Regla tipo Sahm (paro)",
+            "unidad": "pp",
+            "valor": 0.33,
+            "percentil_orientado": 49,
+            "meses_hist": 67
+          }
+        },
+        "en_recesion_fechado": false
+      },
+      "USA": {
+        "grupo": "usa",
+        "indice": 40.0,
+        "percentil": 26,
+        "banda": "bajo",
+        "historia_corta": false,
+        "n_indicadores": 5,
+        "indicadores": {
+          "K1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 0.58,
+            "percentil_orientado": 54,
+            "meses_hist": 478
+          },
+          "K2": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.69,
+            "percentil_orientado": 28,
+            "meses_hist": 267
+          },
+          "K3": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 8.94,
+            "percentil_orientado": 35,
+            "meses_hist": 540
+          },
+          "K4": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -24.72,
+            "percentil_orientado": 0,
+            "meses_hist": 540
+          },
+          "K5": {
+            "indicador": "Difusión de IP interanual < 0",
+            "unidad": "% países",
+            "valor": 46.15,
+            "percentil_orientado": 83,
+            "meses_hist": 540
+          },
+          "K6": {
+            "indicador": "Regla tipo Sahm (paro)",
+            "unidad": "pp",
+            "valor": null,
+            "percentil_orientado": null,
+            "meses_hist": 540
+          }
+        },
+        "en_recesion_fechado": false
+      },
+      "AUS": {
+        "grupo": "prueba",
+        "indice": 42.5,
+        "percentil": 31,
+        "banda": "bajo",
+        "historia_corta": false,
+        "n_indicadores": 5,
+        "indicadores": {
+          "K1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 0.67,
+            "percentil_orientado": 37,
+            "meses_hist": 417
+          },
+          "K2": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.14,
+            "percentil_orientado": 26,
+            "meses_hist": 291
+          },
+          "K3": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": -4.06,
+            "percentil_orientado": null,
+            "meses_hist": 0
+          },
+          "K4": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -14.61,
+            "percentil_orientado": 0,
+            "meses_hist": 469
+          },
+          "K5": {
+            "indicador": "Difusión de IP interanual < 0",
+            "unidad": "% países",
+            "valor": 42.86,
+            "percentil_orientado": 81,
+            "meses_hist": 540
+          },
+          "K6": {
+            "indicador": "Regla tipo Sahm (paro)",
+            "unidad": "pp",
+            "valor": 0.28,
+            "percentil_orientado": 69,
+            "meses_hist": 306
+          }
+        },
+        "en_recesion_fechado": false
+      },
+      "CHE": {
+        "grupo": "prueba",
+        "indice": 35.2,
+        "percentil": 23,
+        "banda": "bajo",
+        "historia_corta": false,
+        "n_indicadores": 4,
+        "indicadores": {
+          "K1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 0.41,
+            "percentil_orientado": null,
+            "meses_hist": 57
+          },
+          "K2": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.14,
+            "percentil_orientado": 26,
+            "meses_hist": 291
+          },
+          "K3": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 12.36,
+            "percentil_orientado": 32,
+            "meses_hist": 540
+          },
+          "K4": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -25.34,
+            "percentil_orientado": 3,
+            "meses_hist": 462
+          },
+          "K5": {
+            "indicador": "Difusión de IP interanual < 0",
+            "unidad": "% países",
+            "valor": 42.86,
+            "percentil_orientado": 81,
+            "meses_hist": 540
+          },
+          "K6": {
+            "indicador": "Regla tipo Sahm (paro)",
+            "unidad": "pp",
+            "valor": null,
+            "percentil_orientado": null,
+            "meses_hist": 0
+          }
+        },
+        "en_recesion_fechado": false
+      },
+      "CAN": {
+        "grupo": "prueba",
+        "indice": 28.2,
+        "percentil": 11,
+        "banda": "bajo",
+        "historia_corta": false,
+        "n_indicadores": 6,
+        "indicadores": {
+          "K1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 1.21,
+            "percentil_orientado": 34,
+            "meses_hist": 540
+          },
+          "K2": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.14,
+            "percentil_orientado": 26,
+            "meses_hist": 291
+          },
+          "K3": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 16.99,
+            "percentil_orientado": 19,
+            "meses_hist": 540
+          },
+          "K4": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -24.98,
+            "percentil_orientado": 0,
+            "meses_hist": 522
+          },
+          "K5": {
+            "indicador": "Difusión de IP interanual < 0",
+            "unidad": "% países",
+            "valor": 42.86,
+            "percentil_orientado": 81,
+            "meses_hist": 540
+          },
+          "K6": {
+            "indicador": "Regla tipo Sahm (paro)",
+            "unidad": "pp",
+            "valor": -0.13,
+            "percentil_orientado": 9,
+            "meses_hist": 540
+          }
+        },
+        "en_recesion_fechado": false
+      },
+      "IRL": {
+        "grupo": "prueba",
+        "indice": 40.7,
+        "percentil": 30,
+        "banda": "bajo",
+        "historia_corta": false,
+        "n_indicadores": 6,
+        "indicadores": {
+          "K1": {
+            "indicador": "Curva 10a−3m (media 12 m)",
+            "unidad": "pp",
+            "valor": 0.94,
+            "percentil_orientado": 47,
+            "meses_hist": 243
+          },
+          "K2": {
+            "indicador": "Difusión de curvas invertidas",
+            "unidad": "% países",
+            "valor": 7.14,
+            "percentil_orientado": 26,
+            "meses_hist": 291
+          },
+          "K3": {
+            "indicador": "Bolsa real 12 m (precio)",
+            "unidad": "%",
+            "valor": 19.86,
+            "percentil_orientado": 28,
+            "meses_hist": 540
+          },
+          "K4": {
+            "indicador": "Δ5 años crédito/PIB (BIS)",
+            "unidad": "pp PIB",
+            "valor": -76.15,
+            "percentil_orientado": 0,
+            "meses_hist": 337
+          },
+          "K5": {
+            "indicador": "Difusión de IP interanual < 0",
+            "unidad": "% países",
+            "valor": 42.86,
+            "percentil_orientado": 81,
+            "meses_hist": 540
+          },
+          "K6": {
+            "indicador": "Regla tipo Sahm (paro)",
+            "unidad": "pp",
+            "valor": 0.27,
+            "percentil_orientado": 63,
+            "meses_hist": 67
+          }
+        },
+        "en_recesion_fechado": true
+      }
+    },
+    "empalmes": {
+      "GBR": "tipo a 3 m: BoE OIS (SONIA) 3 m desde 2026-03 (empalme; sin ajuste de nivel: diferencia media OCDE − BoE +0.02 pp en 24 meses de solape 2024-03/2026-02, < 0.05 pp)"
+    },
+    "metodo": {
+      "regla": "docs/int/INT8b_regla_v1.md (congelada)",
+      "referencias": "research/int/int8b_referencias.json",
+      "datos": "obs_latest (sin vintages: niveles revisados), retrasos as of de src/intl/lags.py"
+    }
+  }
+}
