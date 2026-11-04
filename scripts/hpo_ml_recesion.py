@@ -231,6 +231,12 @@ def datos() -> dict:
 
 def main() -> None:
     cfgs_all = configuraciones()
+    if "--informe" in sys.argv:   # solo re-renderiza resultado.md (y la línea del registro) desde resultado.json
+        R = json.loads((SALIDA / "resultado.json").read_text())
+        (SALIDA / "resultado.md").write_text(informe(R))
+        with open(REPO / "research" / "trial_log.md", "a") as fh:
+            fh.write(linea_registro(R))
+        return
     if "--espacio" in sys.argv:
         SALIDA.mkdir(parents=True, exist_ok=True)
         (SALIDA / "espacio.json").write_text(json.dumps(
@@ -286,7 +292,7 @@ def main() -> None:
             G["selectores"][s] = {
                 "estratificada": boot(y, p, p_log, t, g, auc_estrat, B=B_BOOT),
                 "logloss": boot_ll(y, p, p_log, t, B=B_BOOT), "calibracion": M.calibracion(y, p),
-                "placebo": ML.z_placebo(obs, ds), "placebo_cuantiles": {q: float(np.quantile(ds, q)) for q in
+                "placebo": ML.z_placebo(obs, ds), "placebo_cuantiles": {str(q): float(np.quantile(ds, q)) for q in
                                                                         (0.05, 0.5, 0.95)},
                 "elecciones": elig[s]}
         res["giros"][giro] = G
@@ -316,15 +322,21 @@ def main() -> None:
     SALIDA.mkdir(parents=True, exist_ok=True)
     (SALIDA / "resultado.json").write_text(json.dumps(R, indent=1, ensure_ascii=False))
     (SALIDA / "resultado.md").write_text(informe(R))
-    linea = (f"| {res['hora_fin_utc']} | Constructor (HPO-ML-RECESIÓN, EXPLORATORIO declarado; no reabre INT-4-ML) | "
-             f"{proc['commit'][:7]} | Validación cruzada anidada (externo e interno dejar un país fuera), GB/RF/EN × "
-             f"{PRESUPUESTO} configuraciones + selector global (60), T1 y T2, frente al logit de INT-4, AUC estratificada; "
-             f"placebo objetivo permutado por bloques ({N_PLACEBO}); Holm-8. Candidatas a prerregistro: "
-             f"{[k for k, v in ver.items() if v['candidata_a_prerregistro']]}. 60 × 2 configuraciones registradas. "
-             f"Nada ≥ 2005 | research/int/hpo_ml_recesion/resultado.{{json,md}} |\n")
     with open(REPO / "research" / "trial_log.md", "a") as fh:
-        fh.write(linea)
+        fh.write(linea_registro(R))
     print(json.dumps(_r(ver), indent=1, ensure_ascii=False))
+
+
+def linea_registro(r: dict) -> str:
+    ver = r["veredicto"]
+    return (f"| {r['hora_fin_utc']} | Constructor (HPO-ML-RECESIÓN, EXPLORATORIO declarado; no reabre INT-4-ML) | "
+            f"{r['procedencia']['commit'][:7]} | Validación cruzada anidada (externo e interno dejar un país fuera), GB/RF/EN × "
+            f"{r['presupuesto_por_candidato']} configuraciones + selector global (60), T1 y T2, frente al logit de INT-4, AUC "
+            f"estratificada; placebo objetivo permutado por bloques ({r['n_placebo']}); Holm-8. ΔAUC anidada: "
+            + "; ".join(f"{gi} " + ", ".join(f"{s} {v['estratificada']['d_auc']:+.3f}" for s, v in G["selectores"].items())
+                        for gi, G in r["giros"].items())
+            + f". Candidatas a prerregistro: {[k for k, v in ver.items() if v['candidata_a_prerregistro']]}. 60 × 2 "
+            f"configuraciones registradas. Nada ≥ 2005 | research/int/hpo_ml_recesion/resultado.{{json,md}} |\n")
 
 
 def _f(v, k=3):
