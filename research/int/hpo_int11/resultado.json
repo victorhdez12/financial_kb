@@ -1,0 +1,3740 @@
+{
+ "procedencia": {
+  "commit": "4de264ee158b0f83d871b87cd6a16a1cd315f511",
+  "arbol_limpio": true,
+  "hora_utc": "2026-11-04T19:02:29+00:00"
+ },
+ "semillas": [
+  20261104,
+  20261204
+ ],
+ "n_candidatos": 81,
+ "procedencia_corridas": [
+  {
+   "commit": "d1f40bc897f38c867d7e0c1aff83cff3dcd00245",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T18:31:58+00:00"
+  },
+  {
+   "commit": "67db661cb66807e8ca4b0748bec3752614b5ae2b",
+   "arbol_limpio": true,
+   "hora_utc": "2026-11-04T19:01:46+00:00"
+  }
+ ],
+ "registro_resumen": {
+  "admisibles_loco_plano_s0": 61
+ },
+ "plano_s0": {
+  "id": 74,
+  "params": {
+   "c_suavizado": 3.72972,
+   "nu_suavizado": 10.0,
+   "sigma_infl": 0.00619,
+   "sigma_brecha": 0.02472,
+   "n0_curtosis": 36.17,
+   "semivida_epoca": 0.0,
+   "n_min_celda": 20,
+   "log10_kappa": "eb"
+  },
+  "crps_rel": -0.00354
+ },
+ "plano_s1": {
+  "id": 48,
+  "params": {
+   "c_suavizado": 2.8877,
+   "nu_suavizado": 3.0,
+   "sigma_infl": 0.01145,
+   "sigma_brecha": 0.02282,
+   "n0_curtosis": 71.24,
+   "semivida_epoca": 100.0,
+   "n_min_celda": 20,
+   "log10_kappa": "eb"
+  },
+  "crps_rel": -0.00429
+ },
+ "anidado_s0": {
+  "eleccion": {
+   "BEL": {
+    "id": 35,
+    "crps_rel_interno": -0.00404,
+    "S5_interno": 0.9024,
+    "S5_interno_v3": 0.8977
+   },
+   "DEU": {
+    "id": 74,
+    "crps_rel_interno": -0.00601,
+    "S5_interno": 0.9088,
+    "S5_interno_v3": 0.8982
+   },
+   "DNK": {
+    "id": 74,
+    "crps_rel_interno": -0.0041,
+    "S5_interno": 0.9087,
+    "S5_interno_v3": 0.8967
+   },
+   "ESP": {
+    "id": 74,
+    "crps_rel_interno": -0.00492,
+    "S5_interno": 0.9088,
+    "S5_interno_v3": 0.9005
+   },
+   "FIN": {
+    "id": 48,
+    "crps_rel_interno": -0.00407,
+    "S5_interno": 0.9097,
+    "S5_interno_v3": 0.9025
+   },
+   "FRA": {
+    "id": 64,
+    "crps_rel_interno": -0.00486,
+    "S5_interno": 0.9025,
+    "S5_interno_v3": 0.898
+   },
+   "GBR": {
+    "id": 64,
+    "crps_rel_interno": -0.00513,
+    "S5_interno": 0.9049,
+    "S5_interno_v3": 0.8976
+   },
+   "ITA": {
+    "id": 74,
+    "crps_rel_interno": -0.00495,
+    "S5_interno": 0.9088,
+    "S5_interno_v3": 0.8986
+   },
+   "JPN": {
+    "id": 35,
+    "crps_rel_interno": -0.00382,
+    "S5_interno": 0.9052,
+    "S5_interno_v3": 0.8993
+   },
+   "NLD": {
+    "id": 74,
+    "crps_rel_interno": -0.00437,
+    "S5_interno": 0.9062,
+    "S5_interno_v3": 0.8991
+   },
+   "NOR": {
+    "id": 48,
+    "crps_rel_interno": -0.00401,
+    "S5_interno": 0.9085,
+    "S5_interno_v3": 0.8957
+   },
+   "PRT": {
+    "id": 74,
+    "crps_rel_interno": -0.00419,
+    "S5_interno": 0.9079,
+    "S5_interno_v3": 0.8985
+   },
+   "SWE": {
+    "id": 55,
+    "crps_rel_interno": -0.00313,
+    "S5_interno": 0.9021,
+    "S5_interno_v3": 0.8971
+   },
+   "USA": {
+    "id": 74,
+    "crps_rel_interno": -0.00396,
+    "S5_interno": 0.909,
+    "S5_interno_v3": 0.8995
+   }
+  },
+  "global": {
+   "filas": 1548,
+   "S5": 0.9054,
+   "S5_v3": 0.8975,
+   "S_activo": {
+    "bolsa": 0.9141,
+    "bonos": 0.9081,
+    "letras": 0.9099,
+    "vivienda": 0.907,
+    "oro": 0.8918
+   },
+   "crps": {
+    "bolsa": 0.11671,
+    "bonos": 0.05363,
+    "letras": 0.02624,
+    "vivienda": 0.05155,
+    "oro": 0.11703
+   },
+   "crps_rel_v3": -0.00162,
+   "ls_dif_v3": -0.01229,
+   "ls": {
+    "bolsa": -0.1547,
+    "bonos": -0.9413,
+    "letras": -1.6941,
+    "vivienda": -0.9515,
+    "oro": -0.3727
+   },
+   "ancho": {
+    "bolsa": 0.7509,
+    "bonos": 0.3271,
+    "letras": 0.1585,
+    "vivienda": 0.3227,
+    "oro": 0.6283
+   },
+   "pit_chi2": {
+    "bolsa": [
+     7.41,
+     0.5946
+    ],
+    "bonos": [
+     7.21,
+     0.6153
+    ],
+    "letras": [
+     9.06,
+     0.4319
+    ],
+    "vivienda": [
+     9.52,
+     0.3911
+    ],
+    "oro": [
+     9.47,
+     0.3949
+    ]
+   },
+   "pit_chi2_v3": {
+    "bolsa": [
+     65.65,
+     0.0
+    ],
+    "bonos": [
+     17.28,
+     0.0445
+    ],
+    "letras": [
+     6.17,
+     0.7226
+    ],
+    "vivienda": [
+     5.77,
+     0.7631
+    ],
+    "oro": [
+     10.12,
+     0.3408
+    ]
+   },
+   "pit_desv": 0.0085,
+   "pit_desv_v3": 0.0107
+  },
+  "ic_bloques": {
+   "dS5": {
+    "punto": 0.0079,
+    "ic90": [
+     0.00363,
+     0.01323
+    ]
+   },
+   "crps_rel": {
+    "punto": -0.00162,
+    "ic90": [
+     -0.00704,
+     0.00383
+    ]
+   },
+   "ls_dif": {
+    "punto": -0.01229,
+    "ic90": [
+     -0.03591,
+     0.00417
+    ]
+   },
+   "dS_bolsa": {
+    "punto": -0.01275,
+    "ic90": [
+     -0.01771,
+     -0.00683
+    ]
+   }
+  },
+  "por_pais": {
+   "BEL": {
+    "filas": 112,
+    "S5": 0.8844,
+    "S5_v3": 0.8832,
+    "S_activo": {
+     "bolsa": 0.9107,
+     "bonos": 0.9279,
+     "letras": 0.8214,
+     "vivienda": 0.8913,
+     "oro": 0.9091
+    },
+    "crps": {
+     "bolsa": 0.11289,
+     "bonos": 0.05316,
+     "letras": 0.03521,
+     "vivienda": 0.0641,
+     "oro": 0.11248
+    },
+    "crps_rel_v3": -0.00088,
+    "ls_dif_v3": -0.04161,
+    "ls": {
+     "bolsa": -0.1705,
+     "bonos": -0.9203,
+     "letras": -1.4257,
+     "vivienda": -0.8177,
+     "oro": -0.4926
+    },
+    "ancho": {
+     "bolsa": 0.7462,
+     "bonos": 0.3264,
+     "letras": 0.1453,
+     "vivienda": 0.3245,
+     "oro": 0.5963
+    },
+    "pit_chi2": {
+     "bolsa": [
+      7.29,
+      0.6074
+     ],
+     "bonos": [
+      7.83,
+      0.5515
+     ],
+     "letras": [
+      8.54,
+      0.4812
+     ],
+     "vivienda": [
+      24.74,
+      0.0033
+     ],
+     "oro": [
+      3.06,
+      0.9618
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      8.54,
+      0.4812
+     ],
+     "bonos": [
+      3.14,
+      0.9583
+     ],
+     "letras": [
+      8.71,
+      0.4641
+     ],
+     "vivienda": [
+      26.26,
+      0.0019
+     ],
+     "oro": [
+      3.06,
+      0.9618
+     ]
+    },
+    "pit_desv": 0.0261,
+    "pit_desv_v3": 0.0196
+   },
+   "DEU": {
+    "filas": 106,
+    "S5": 0.9187,
+    "S5_v3": 0.9124,
+    "S_activo": {
+     "bolsa": 0.8585,
+     "bonos": 0.9903,
+     "letras": 0.9804,
+     "vivienda": 0.8989,
+     "oro": 0.9091
+    },
+    "crps": {
+     "bolsa": 0.14309,
+     "bonos": 0.03442,
+     "letras": 0.01668,
+     "vivienda": 0.0472,
+     "oro": 0.10691
+    },
+    "crps_rel_v3": 0.00219,
+    "ls_dif_v3": 0.05357,
+    "ls": {
+     "bolsa": 0.3055,
+     "bonos": -1.3238,
+     "letras": -2.1133,
+     "vivienda": -1.0485,
+     "oro": -0.5083
+    },
+    "ancho": {
+     "bolsa": 0.7049,
+     "bonos": 0.3244,
+     "letras": 0.1706,
+     "vivienda": 0.3163,
+     "oro": 0.5358
+    },
+    "pit_chi2": {
+     "bolsa": [
+      11.55,
+      0.2401
+     ],
+     "bonos": [
+      27.39,
+      0.0012
+     ],
+     "letras": [
+      43.29,
+      0.0
+     ],
+     "vivienda": [
+      25.72,
+      0.0023
+     ],
+     "oro": [
+      9.12,
+      0.4262
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      14.38,
+      0.1095
+     ],
+     "bonos": [
+      34.57,
+      0.0001
+     ],
+     "letras": [
+      32.51,
+      0.0002
+     ],
+     "vivienda": [
+      19.88,
+      0.0187
+     ],
+     "oro": [
+      4.27,
+      0.8926
+     ]
+    },
+    "pit_desv": 0.0538,
+    "pit_desv_v3": 0.0515
+   },
+   "DNK": {
+    "filas": 112,
+    "S5": 0.9518,
+    "S5_v3": 0.9281,
+    "S_activo": {
+     "bolsa": 0.9821,
+     "bonos": 0.9196,
+     "letras": 0.9464,
+     "vivienda": 0.9554,
+     "oro": 0.9394
+    },
+    "crps": {
+     "bolsa": 0.08242,
+     "bonos": 0.05835,
+     "letras": 0.02545,
+     "vivienda": 0.04057,
+     "oro": 0.11016
+    },
+    "crps_rel_v3": -0.00921,
+    "ls_dif_v3": -0.02188,
+    "ls": {
+     "bolsa": -0.4757,
+     "bonos": -0.903,
+     "letras": -1.727,
+     "vivienda": -1.1534,
+     "oro": -0.5134
+    },
+    "ancho": {
+     "bolsa": 0.7687,
+     "bonos": 0.3223,
+     "letras": 0.1551,
+     "vivienda": 0.3184,
+     "oro": 0.6092
+    },
+    "pit_chi2": {
+     "bolsa": [
+      27.64,
+      0.0011
+     ],
+     "bonos": [
+      3.0,
+      0.9643
+     ],
+     "letras": [
+      19.61,
+      0.0205
+     ],
+     "vivienda": [
+      29.61,
+      0.0005
+     ],
+     "oro": [
+      1.24,
+      0.9986
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      42.46,
+      0.0
+     ],
+     "bonos": [
+      3.89,
+      0.9183
+     ],
+     "letras": [
+      28.0,
+      0.001
+     ],
+     "vivienda": [
+      24.96,
+      0.003
+     ],
+     "oro": [
+      0.64,
+      0.9999
+     ]
+    },
+    "pit_desv": 0.0397,
+    "pit_desv_v3": 0.0393
+   },
+   "ESP": {
+    "filas": 112,
+    "S5": 0.8897,
+    "S5_v3": 0.8612,
+    "S_activo": {
+     "bolsa": 0.9462,
+     "bonos": 0.8901,
+     "letras": 0.8807,
+     "vivienda": 0.8587,
+     "oro": 0.9394
+    },
+    "crps": {
+     "bolsa": 0.11626,
+     "bonos": 0.0519,
+     "letras": 0.03299,
+     "vivienda": 0.06522,
+     "oro": 0.11394
+    },
+    "crps_rel_v3": -0.00779,
+    "ls_dif_v3": -0.01277,
+    "ls": {
+     "bolsa": -0.1696,
+     "bonos": -0.9632,
+     "letras": -1.4214,
+     "vivienda": -0.6965,
+     "oro": -0.3223
+    },
+    "ancho": {
+     "bolsa": 0.8049,
+     "bonos": 0.3351,
+     "letras": 0.1718,
+     "vivienda": 0.3356,
+     "oro": 0.709
+    },
+    "pit_chi2": {
+     "bolsa": [
+      12.7,
+      0.1767
+     ],
+     "bonos": [
+      6.25,
+      0.7144
+     ],
+     "letras": [
+      16.96,
+      0.0493
+     ],
+     "vivienda": [
+      16.91,
+      0.0501
+     ],
+     "oro": [
+      8.52,
+      0.4832
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      13.34,
+      0.1476
+     ],
+     "bonos": [
+      10.87,
+      0.2849
+     ],
+     "letras": [
+      23.2,
+      0.0058
+     ],
+     "vivienda": [
+      16.91,
+      0.0501
+     ],
+     "oro": [
+      10.94,
+      0.2799
+     ]
+    },
+    "pit_desv": 0.034,
+    "pit_desv_v3": 0.0411
+   },
+   "FIN": {
+    "filas": 111,
+    "S5": 0.8279,
+    "S5_v3": 0.823,
+    "S_activo": {
+     "bolsa": 0.8229,
+     "bonos": 0.8559,
+     "letras": 0.8198,
+     "vivienda": 0.7632,
+     "oro": 0.9394
+    },
+    "crps": {
+     "bolsa": 0.15812,
+     "bonos": 0.06747,
+     "letras": 0.03339,
+     "vivienda": 0.08607,
+     "oro": 0.11757
+    },
+    "crps_rel_v3": -0.00177,
+    "ls_dif_v3": -0.0094,
+    "ls": {
+     "bolsa": 0.1062,
+     "bonos": -0.6751,
+     "letras": -1.3827,
+     "vivienda": -0.0341,
+     "oro": -0.3726
+    },
+    "ancho": {
+     "bolsa": 0.7506,
+     "bonos": 0.3243,
+     "letras": 0.1516,
+     "vivienda": 0.3045,
+     "oro": 0.6495
+    },
+    "pit_chi2": {
+     "bolsa": [
+      10.67,
+      0.2993
+     ],
+     "bonos": [
+      14.14,
+      0.1176
+     ],
+     "letras": [
+      11.61,
+      0.236
+     ],
+     "vivienda": [
+      21.63,
+      0.0101
+     ],
+     "oro": [
+      10.33,
+      0.3242
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      9.0,
+      0.4373
+     ],
+     "bonos": [
+      15.22,
+      0.0852
+     ],
+     "letras": [
+      21.7,
+      0.0099
+     ],
+     "vivienda": [
+      23.47,
+      0.0052
+     ],
+     "oro": [
+      8.52,
+      0.4832
+     ]
+    },
+    "pit_desv": 0.0616,
+    "pit_desv_v3": 0.0593
+   },
+   "FRA": {
+    "filas": 109,
+    "S5": 0.9005,
+    "S5_v3": 0.9009,
+    "S_activo": {
+     "bolsa": 0.9266,
+     "bonos": 0.8899,
+     "letras": 0.9151,
+     "vivienda": 0.8899,
+     "oro": 0.9091
+    },
+    "crps": {
+     "bolsa": 0.11437,
+     "bonos": 0.05714,
+     "letras": 0.02219,
+     "vivienda": 0.04624,
+     "oro": 0.10687
+    },
+    "crps_rel_v3": 0.012,
+    "ls_dif_v3": 0.02024,
+    "ls": {
+     "bolsa": -0.2198,
+     "bonos": -0.8694,
+     "letras": -1.8978,
+     "vivienda": -1.0789,
+     "oro": -0.5055
+    },
+    "ancho": {
+     "bolsa": 0.7458,
+     "bonos": 0.3223,
+     "letras": 0.1517,
+     "vivienda": 0.3079,
+     "oro": 0.6091
+    },
+    "pit_chi2": {
+     "bolsa": [
+      11.64,
+      0.2342
+     ],
+     "bonos": [
+      9.26,
+      0.4139
+     ],
+     "letras": [
+      20.04,
+      0.0177
+     ],
+     "vivienda": [
+      19.17,
+      0.0238
+     ],
+     "oro": [
+      6.09,
+      0.7308
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      29.26,
+      0.0006
+     ],
+     "bonos": [
+      8.16,
+      0.5185
+     ],
+     "letras": [
+      16.64,
+      0.0546
+     ],
+     "vivienda": [
+      23.57,
+      0.005
+     ],
+     "oro": [
+      7.91,
+      0.5433
+     ]
+    },
+    "pit_desv": 0.0459,
+    "pit_desv_v3": 0.0438
+   },
+   "GBR": {
+    "filas": 112,
+    "S5": 0.9134,
+    "S5_v3": 0.9246,
+    "S_activo": {
+     "bolsa": 0.9464,
+     "bonos": 0.8571,
+     "letras": 0.9643,
+     "vivienda": 0.8854,
+     "oro": 0.8182
+    },
+    "crps": {
+     "bolsa": 0.09748,
+     "bonos": 0.06051,
+     "letras": 0.02037,
+     "vivienda": 0.05404,
+     "oro": 0.11628
+    },
+    "crps_rel_v3": 0.00581,
+    "ls_dif_v3": 0.00254,
+    "ls": {
+     "bolsa": -0.3446,
+     "bonos": -0.8589,
+     "letras": -1.923,
+     "vivienda": -0.9026,
+     "oro": -0.3217
+    },
+    "ancho": {
+     "bolsa": 0.7407,
+     "bonos": 0.3221,
+     "letras": 0.1623,
+     "vivienda": 0.327,
+     "oro": 0.6447
+    },
+    "pit_chi2": {
+     "bolsa": [
+      13.0,
+      0.1626
+     ],
+     "bonos": [
+      14.43,
+      0.1079
+     ],
+     "letras": [
+      15.68,
+      0.0739
+     ],
+     "vivienda": [
+      13.79,
+      0.1299
+     ],
+     "oro": [
+      6.7,
+      0.6686
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      23.36,
+      0.0054
+     ],
+     "bonos": [
+      13.71,
+      0.1329
+     ],
+     "letras": [
+      14.25,
+      0.1137
+     ],
+     "vivienda": [
+      8.79,
+      0.4567
+     ],
+     "oro": [
+      6.09,
+      0.7308
+     ]
+    },
+    "pit_desv": 0.0441,
+    "pit_desv_v3": 0.029
+   },
+   "ITA": {
+    "filas": 110,
+    "S5": 0.9192,
+    "S5_v3": 0.9089,
+    "S_activo": {
+     "bolsa": 0.8727,
+     "bonos": 0.9091,
+     "letras": 0.9515,
+     "vivienda": 0.9559,
+     "oro": 0.8788
+    },
+    "crps": {
+     "bolsa": 0.12363,
+     "bonos": 0.05366,
+     "letras": 0.02177,
+     "vivienda": 0.04769,
+     "oro": 0.11754
+    },
+    "crps_rel_v3": -0.00715,
+    "ls_dif_v3": 0.00518,
+    "ls": {
+     "bolsa": -0.1268,
+     "bonos": -0.9682,
+     "letras": -1.8339,
+     "vivienda": -1.0198,
+     "oro": -0.3139
+    },
+    "ancho": {
+     "bolsa": 0.7457,
+     "bonos": 0.3255,
+     "letras": 0.162,
+     "vivienda": 0.3437,
+     "oro": 0.6953
+    },
+    "pit_chi2": {
+     "bolsa": [
+      8.55,
+      0.4802
+     ],
+     "bonos": [
+      11.82,
+      0.2238
+     ],
+     "letras": [
+      15.35,
+      0.0818
+     ],
+     "vivienda": [
+      20.82,
+      0.0135
+     ],
+     "oro": [
+      4.88,
+      0.8447
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      18.0,
+      0.0352
+     ],
+     "bonos": [
+      12.91,
+      0.1668
+     ],
+     "letras": [
+      12.44,
+      0.1898
+     ],
+     "vivienda": [
+      24.65,
+      0.0034
+     ],
+     "oro": [
+      4.88,
+      0.8447
+     ]
+    },
+    "pit_desv": 0.0321,
+    "pit_desv_v3": 0.0321
+   },
+   "JPN": {
+    "filas": 109,
+    "S5": 0.868,
+    "S5_v3": 0.8748,
+    "S_activo": {
+     "bolsa": 0.8846,
+     "bonos": 0.9358,
+     "letras": 0.8165,
+     "vivienda": 0.9434,
+     "oro": 0.8788
+    },
+    "crps": {
+     "bolsa": 0.13939,
+     "bonos": 0.04957,
+     "letras": 0.03248,
+     "vivienda": 0.04751,
+     "oro": 0.13631
+    },
+    "crps_rel_v3": -0.00378,
+    "ls_dif_v3": -0.14081,
+    "ls": {
+     "bolsa": 0.0282,
+     "bonos": -1.0316,
+     "letras": -1.4166,
+     "vivienda": -1.015,
+     "oro": -0.1758
+    },
+    "ancho": {
+     "bolsa": 0.7412,
+     "bonos": 0.3283,
+     "letras": 0.1501,
+     "vivienda": 0.3199,
+     "oro": 0.5109
+    },
+    "pit_chi2": {
+     "bolsa": [
+      10.23,
+      0.3321
+     ],
+     "bonos": [
+      5.22,
+      0.8147
+     ],
+     "letras": [
+      12.93,
+      0.166
+     ],
+     "vivienda": [
+      19.26,
+      0.023
+     ],
+     "oro": [
+      25.48,
+      0.0025
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      3.31,
+      0.9508
+     ],
+     "bonos": [
+      5.4,
+      0.7978
+     ],
+     "letras": [
+      18.25,
+      0.0324
+     ],
+     "vivienda": [
+      7.57,
+      0.5784
+     ],
+     "oro": [
+      26.09,
+      0.002
+     ]
+    },
+    "pit_desv": 0.0216,
+    "pit_desv_v3": 0.0289
+   },
+   "NLD": {
+    "filas": 112,
+    "S5": 0.9359,
+    "S5_v3": 0.9217,
+    "S_activo": {
+     "bolsa": 0.9677,
+     "bonos": 0.9107,
+     "letras": 0.9554,
+     "vivienda": 0.9107,
+     "oro": 0.9091
+    },
+    "crps": {
+     "bolsa": 0.10655,
+     "bonos": 0.04794,
+     "letras": 0.02197,
+     "vivienda": 0.04931,
+     "oro": 0.10674
+    },
+    "crps_rel_v3": -0.00148,
+    "ls_dif_v3": -0.00067,
+    "ls": {
+     "bolsa": -0.23,
+     "bonos": -1.0299,
+     "letras": -1.8146,
+     "vivienda": -1.0022,
+     "oro": -0.512
+    },
+    "ancho": {
+     "bolsa": 0.7765,
+     "bonos": 0.3343,
+     "letras": 0.168,
+     "vivienda": 0.3328,
+     "oro": 0.6009
+    },
+    "pit_chi2": {
+     "bolsa": [
+      6.46,
+      0.6929
+     ],
+     "bonos": [
+      7.64,
+      0.5705
+     ],
+     "letras": [
+      22.82,
+      0.0066
+     ],
+     "vivienda": [
+      8.36,
+      0.4986
+     ],
+     "oro": [
+      13.36,
+      0.1468
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      9.26,
+      0.4138
+     ],
+     "bonos": [
+      9.43,
+      0.3987
+     ],
+     "letras": [
+      8.71,
+      0.4641
+     ],
+     "vivienda": [
+      5.5,
+      0.7887
+     ],
+     "oro": [
+      13.36,
+      0.1468
+     ]
+    },
+    "pit_desv": 0.0437,
+    "pit_desv_v3": 0.0329
+   },
+   "NOR": {
+    "filas": 112,
+    "S5": 0.9371,
+    "S5_v3": 0.917,
+    "S_activo": {
+     "bolsa": 0.9464,
+     "bonos": 0.9554,
+     "letras": 0.9196,
+     "vivienda": 0.9286,
+     "oro": 0.9091
+    },
+    "crps": {
+     "bolsa": 0.10153,
+     "bonos": 0.04376,
+     "letras": 0.02641,
+     "vivienda": 0.04676,
+     "oro": 0.11815
+    },
+    "crps_rel_v3": -0.00215,
+    "ls_dif_v3": -0.00041,
+    "ls": {
+     "bolsa": -0.3119,
+     "bonos": -1.1179,
+     "letras": -1.6387,
+     "vivienda": -1.0747,
+     "oro": -0.3795
+    },
+    "ancho": {
+     "bolsa": 0.7702,
+     "bonos": 0.3363,
+     "letras": 0.1556,
+     "vivienda": 0.3179,
+     "oro": 0.662
+    },
+    "pit_chi2": {
+     "bolsa": [
+      13.71,
+      0.1329
+     ],
+     "bonos": [
+      14.79,
+      0.097
+     ],
+     "letras": [
+      10.68,
+      0.2984
+     ],
+     "vivienda": [
+      12.82,
+      0.1709
+     ],
+     "oro": [
+      2.45,
+      0.9821
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      19.96,
+      0.0181
+     ],
+     "bonos": [
+      20.32,
+      0.016
+     ],
+     "letras": [
+      11.75,
+      0.2278
+     ],
+     "vivienda": [
+      5.86,
+      0.7541
+     ],
+     "oro": [
+      3.06,
+      0.9618
+     ]
+    },
+    "pit_desv": 0.0231,
+    "pit_desv_v3": 0.0247
+   },
+   "PRT": {
+    "filas": 107,
+    "S5": 0.8589,
+    "S5_v3": 0.8402,
+    "S_activo": {
+     "bolsa": 0.8411,
+     "bonos": 0.8318,
+     "letras": 0.8505,
+     "vivienda": 0.9298,
+     "oro": 0.9091
+    },
+    "crps": {
+     "bolsa": 0.13522,
+     "bonos": 0.07212,
+     "letras": 0.03642,
+     "vivienda": 0.04658,
+     "oro": 0.11491
+    },
+    "crps_rel_v3": -0.00279,
+    "ls_dif_v3": -0.01601,
+    "ls": {
+     "bolsa": -0.0398,
+     "bonos": -0.5174,
+     "letras": -1.3387,
+     "vivienda": -1.0516,
+     "oro": -0.336
+    },
+    "ancho": {
+     "bolsa": 0.7478,
+     "bonos": 0.3316,
+     "letras": 0.1595,
+     "vivienda": 0.3233,
+     "oro": 0.7123
+    },
+    "pit_chi2": {
+     "bolsa": [
+      16.64,
+      0.0546
+     ],
+     "bonos": [
+      15.15,
+      0.0869
+     ],
+     "letras": [
+      15.15,
+      0.0869
+     ],
+     "vivienda": [
+      12.3,
+      0.197
+     ],
+     "oro": [
+      1.85,
+      0.9936
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      17.95,
+      0.0357
+     ],
+     "bonos": [
+      9.36,
+      0.4052
+     ],
+     "letras": [
+      19.26,
+      0.0231
+     ],
+     "vivienda": [
+      9.84,
+      0.3634
+     ],
+     "oro": [
+      6.09,
+      0.7308
+     ]
+    },
+    "pit_desv": 0.0363,
+    "pit_desv_v3": 0.0363
+   },
+   "SWE": {
+    "filas": 112,
+    "S5": 0.9371,
+    "S5_v3": 0.9402,
+    "S_activo": {
+     "bolsa": 0.9375,
+     "bonos": 0.9107,
+     "letras": 0.9732,
+     "vivienda": 0.9364,
+     "oro": 0.8788
+    },
+    "crps": {
+     "bolsa": 0.10345,
+     "bonos": 0.05201,
+     "letras": 0.02117,
+     "vivienda": 0.04649,
+     "oro": 0.12464
+    },
+    "crps_rel_v3": -0.00034,
+    "ls_dif_v3": -0.00807,
+    "ls": {
+     "bolsa": -0.2736,
+     "bonos": -0.9528,
+     "letras": -1.8956,
+     "vivienda": -1.0426,
+     "oro": -0.306
+    },
+    "ancho": {
+     "bolsa": 0.7474,
+     "bonos": 0.3121,
+     "letras": 0.1547,
+     "vivienda": 0.3186,
+     "oro": 0.6203
+    },
+    "pit_chi2": {
+     "bolsa": [
+      13.0,
+      0.1626
+     ],
+     "bonos": [
+      9.07,
+      0.4307
+     ],
+     "letras": [
+      12.29,
+      0.1977
+     ],
+     "vivienda": [
+      17.09,
+      0.0473
+     ],
+     "oro": [
+      8.52,
+      0.4832
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      13.54,
+      0.1398
+     ],
+     "bonos": [
+      11.21,
+      0.2613
+     ],
+     "letras": [
+      13.36,
+      0.1471
+     ],
+     "vivienda": [
+      19.45,
+      0.0216
+     ],
+     "oro": [
+      6.7,
+      0.6686
+     ]
+    },
+    "pit_desv": 0.0374,
+    "pit_desv_v3": 0.0478
+   },
+   "USA": {
+    "filas": 112,
+    "S5": 0.9299,
+    "S5_v3": 0.9259,
+    "S_activo": {
+     "bolsa": 0.9464,
+     "bonos": 0.9286,
+     "letras": 0.9464,
+     "vivienda": 0.9412,
+     "oro": 0.7576
+    },
+    "crps": {
+     "bolsa": 0.10752,
+     "bonos": 0.04789,
+     "letras": 0.02028,
+     "vivienda": 0.04203,
+     "oro": 0.13588
+    },
+    "crps_rel_v3": -0.00374,
+    "ls_dif_v3": 0.00126,
+    "ls": {
+     "bolsa": -0.1804,
+     "bonos": -1.0606,
+     "letras": -1.9141,
+     "vivienda": -1.1655,
+     "oro": -0.1576
+    },
+    "ancho": {
+     "bolsa": 0.7322,
+     "bonos": 0.3353,
+     "letras": 0.1622,
+     "vivienda": 0.3312,
+     "oro": 0.641
+    },
+    "pit_chi2": {
+     "bolsa": [
+      21.04,
+      0.0125
+     ],
+     "bonos": [
+      11.04,
+      0.2733
+     ],
+     "letras": [
+      24.79,
+      0.0032
+     ],
+     "vivienda": [
+      44.86,
+      0.0
+     ],
+     "oro": [
+      5.48,
+      0.7902
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      20.5,
+      0.0151
+     ],
+     "bonos": [
+      11.39,
+      0.2497
+     ],
+     "letras": [
+      15.68,
+      0.0739
+     ],
+     "vivienda": [
+      44.86,
+      0.0
+     ],
+     "oro": [
+      6.09,
+      0.7308
+     ]
+    },
+    "pit_desv": 0.0406,
+    "pit_desv_v3": 0.0448
+   }
+  },
+  "por_regimen": {
+   "expansion": {
+    "filas": 833,
+    "S5": 0.9177,
+    "S5_v3": 0.9045,
+    "S_activo": {
+     "bolsa": 0.9195,
+     "bonos": 0.9163,
+     "letras": 0.9229,
+     "vivienda": 0.9187,
+     "oro": 0.9286
+    },
+    "crps": {
+     "bolsa": 0.10083,
+     "bonos": 0.04577,
+     "letras": 0.02157,
+     "vivienda": 0.04661,
+     "oro": 0.05851
+    },
+    "crps_rel_v3": -0.00424,
+    "ls_dif_v3": -0.00925,
+    "ls": {
+     "bolsa": -0.3171,
+     "bonos": -1.0999,
+     "letras": -1.879,
+     "vivienda": -1.0307,
+     "oro": -0.9145
+    },
+    "ancho": {
+     "bolsa": 0.6544,
+     "bonos": 0.2915,
+     "letras": 0.1393,
+     "vivienda": 0.2972,
+     "oro": 0.4206
+    },
+    "pit_chi2": {
+     "bolsa": [
+      5.92,
+      0.7481
+     ],
+     "bonos": [
+      7.33,
+      0.6023
+     ],
+     "letras": [
+      17.16,
+      0.0463
+     ],
+     "vivienda": [
+      6.51,
+      0.6878
+     ],
+     "oro": [
+      16.29,
+      0.0611
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      66.62,
+      0.0
+     ],
+     "bonos": [
+      18.45,
+      0.0303
+     ],
+     "letras": [
+      20.17,
+      0.0169
+     ],
+     "vivienda": [
+      4.55,
+      0.8713
+     ],
+     "oro": [
+      13.43,
+      0.1442
+     ]
+    },
+    "pit_desv": 0.018,
+    "pit_desv_v3": 0.0201
+   },
+   "sobrecalentamiento": {
+    "filas": 616,
+    "S5": 0.8981,
+    "S5_v3": 0.8904,
+    "S_activo": {
+     "bolsa": 0.9143,
+     "bonos": 0.9054,
+     "letras": 0.9007,
+     "vivienda": 0.8996,
+     "oro": 0.8694
+    },
+    "crps": {
+     "bolsa": 0.13302,
+     "bonos": 0.05939,
+     "letras": 0.02887,
+     "vivienda": 0.05342,
+     "oro": 0.15121
+    },
+    "crps_rel_v3": -0.00263,
+    "ls_dif_v3": -0.01815,
+    "ls": {
+     "bolsa": -0.0295,
+     "bonos": -0.8162,
+     "letras": -1.5527,
+     "vivienda": -0.9261,
+     "oro": -0.057
+    },
+    "ancho": {
+     "bolsa": 0.8606,
+     "bonos": 0.3525,
+     "letras": 0.1691,
+     "vivienda": 0.3349,
+     "oro": 0.7479
+    },
+    "pit_chi2": {
+     "bolsa": [
+      4.78,
+      0.8531
+     ],
+     "bonos": [
+      5.35,
+      0.8026
+     ],
+     "letras": [
+      3.88,
+      0.919
+     ],
+     "vivienda": [
+      6.2,
+      0.72
+     ],
+     "oro": [
+      10.07,
+      0.3452
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      14.73,
+      0.0986
+     ],
+     "bonos": [
+      9.85,
+      0.3624
+     ],
+     "letras": [
+      10.2,
+      0.3344
+     ],
+     "vivienda": [
+      4.34,
+      0.888
+     ],
+     "oro": [
+      10.27,
+      0.329
+     ]
+    },
+    "pit_desv": 0.008,
+    "pit_desv_v3": 0.0132
+   },
+   "estanflacion": {
+    "filas": 34,
+    "S5": 0.7868,
+    "S5_v3": 0.875,
+    "S_activo": {
+     "bolsa": 0.8333,
+     "bonos": 0.75,
+     "letras": 0.7692,
+     "vivienda": 0.7895,
+     "oro": 1.0
+    },
+    "crps": {
+     "bolsa": 0.20776,
+     "bonos": 0.10519,
+     "letras": 0.08617,
+     "vivienda": 0.1191,
+     "oro": 0.0739
+    },
+    "crps_rel_v3": 0.05813,
+    "ls_dif_v3": 0.16583,
+    "ls": {
+     "bolsa": 1.5239,
+     "bonos": 0.0309,
+     "letras": -0.2681,
+     "vivienda": 0.1732,
+     "oro": -0.6954
+    },
+    "ancho": {
+     "bolsa": 1.1408,
+     "bonos": 0.466,
+     "letras": 0.3452,
+     "vivienda": 0.5554,
+     "oro": 0.7149
+    },
+    "pit_chi2": {
+     "bolsa": [
+      7.33,
+      0.6025
+     ],
+     "bonos": [
+      16.29,
+      0.0611
+     ],
+     "letras": [
+      11.69,
+      0.2312
+     ],
+     "vivienda": [
+      NaN,
+      NaN
+     ],
+     "oro": [
+      NaN,
+      NaN
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      4.67,
+      0.8623
+     ],
+     "bonos": [
+      6.29,
+      0.711
+     ],
+     "letras": [
+      7.85,
+      0.5497
+     ],
+     "vivienda": [
+      NaN,
+      NaN
+     ],
+     "oro": [
+      NaN,
+      NaN
+     ]
+    },
+    "pit_desv": 0.1115,
+    "pit_desv_v3": 0.0346
+   },
+   "crecimiento_bajo": {
+    "filas": 65,
+    "S5": 0.8782,
+    "S5_v3": 0.8867,
+    "S_activo": {
+     "bolsa": 0.8793,
+     "bonos": 0.8966,
+     "letras": 0.8852,
+     "vivienda": 0.8776,
+     "oro": 1.0
+    },
+    "crps": {
+     "bolsa": 0.1165,
+     "bonos": 0.07954,
+     "letras": 0.03781,
+     "vivienda": 0.07156,
+     "oro": 0.0797
+    },
+    "crps_rel_v3": -0.0045,
+    "ls_dif_v3": 0.01438,
+    "ls": {
+     "bolsa": -0.1079,
+     "bonos": -0.4784,
+     "letras": -1.2078,
+     "vivienda": -0.5971,
+     "oro": -0.6289
+    },
+    "ancho": {
+     "bolsa": 0.7239,
+     "bonos": 0.4954,
+     "letras": 0.2339,
+     "vivienda": 0.442,
+     "oro": 0.639
+    },
+    "pit_chi2": {
+     "bolsa": [
+      5.79,
+      0.7604
+     ],
+     "bonos": [
+      5.1,
+      0.8252
+     ],
+     "letras": [
+      4.41,
+      0.8824
+     ],
+     "vivienda": [
+      9.57,
+      0.3863
+     ],
+     "oro": [
+      NaN,
+      NaN
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      8.55,
+      0.4796
+     ],
+     "bonos": [
+      4.41,
+      0.8821
+     ],
+     "letras": [
+      6.05,
+      0.735
+     ],
+     "vivienda": [
+      3.86,
+      0.9206
+     ],
+     "oro": [
+      NaN,
+      NaN
+     ]
+    },
+    "pit_desv": 0.0228,
+    "pit_desv_v3": 0.0316
+   }
+  },
+  "v3_global": {
+   "filas": 1548,
+   "S5": 0.8975,
+   "S5_v3": 0.8975,
+   "S_activo": {
+    "bolsa": 0.9268,
+    "bonos": 0.9054,
+    "letras": 0.8811,
+    "vivienda": 0.8953,
+    "oro": 0.8983
+   },
+   "crps": {
+    "bolsa": 0.11766,
+    "bonos": 0.05352,
+    "letras": 0.02629,
+    "vivienda": 0.05152,
+    "oro": 0.11712
+   },
+   "crps_rel_v3": 0.0,
+   "ls_dif_v3": 0.0,
+   "ls": {
+    "bolsa": -0.1338,
+    "bonos": -0.9416,
+    "letras": -1.6865,
+    "vivienda": -0.9698,
+    "oro": -0.3211
+   },
+   "ancho": {
+    "bolsa": 0.7981,
+    "bonos": 0.329,
+    "letras": 0.1433,
+    "vivienda": 0.3088,
+    "oro": 0.6202
+   },
+   "pit_chi2": {
+    "bolsa": [
+     65.65,
+     0.0
+    ],
+    "bonos": [
+     17.28,
+     0.0445
+    ],
+    "letras": [
+     6.17,
+     0.7226
+    ],
+    "vivienda": [
+     5.77,
+     0.7631
+    ],
+    "oro": [
+     10.12,
+     0.3408
+    ]
+   },
+   "pit_chi2_v3": {
+    "bolsa": [
+     65.65,
+     0.0
+    ],
+    "bonos": [
+     17.28,
+     0.0445
+    ],
+    "letras": [
+     6.17,
+     0.7226
+    ],
+    "vivienda": [
+     5.77,
+     0.7631
+    ],
+    "oro": [
+     10.12,
+     0.3408
+    ]
+   },
+   "pit_desv": 0.0107,
+   "pit_desv_v3": 0.0107
+  }
+ },
+ "anidado_s1": {
+  "eleccion": {
+   "BEL": {
+    "id": 7,
+    "crps_rel_interno": -0.00415,
+    "S5_interno": 0.9039,
+    "S5_interno_v3": 0.8984
+   },
+   "DEU": {
+    "id": 7,
+    "crps_rel_interno": -0.00642,
+    "S5_interno": 0.9041,
+    "S5_interno_v3": 0.9006
+   },
+   "DNK": {
+    "id": 74,
+    "crps_rel_interno": -0.00397,
+    "S5_interno": 0.9075,
+    "S5_interno_v3": 0.8961
+   },
+   "ESP": {
+    "id": 74,
+    "crps_rel_interno": -0.00438,
+    "S5_interno": 0.9079,
+    "S5_interno_v3": 0.8997
+   },
+   "FIN": {
+    "id": 35,
+    "crps_rel_interno": -0.00371,
+    "S5_interno": 0.9047,
+    "S5_interno_v3": 0.8987
+   },
+   "FRA": {
+    "id": 64,
+    "crps_rel_interno": -0.00464,
+    "S5_interno": 0.906,
+    "S5_interno_v3": 0.9003
+   },
+   "GBR": {
+    "id": 74,
+    "crps_rel_interno": -0.00432,
+    "S5_interno": 0.9076,
+    "S5_interno_v3": 0.8958
+   },
+   "ITA": {
+    "id": 48,
+    "crps_rel_interno": -0.00432,
+    "S5_interno": 0.9081,
+    "S5_interno_v3": 0.8985
+   },
+   "JPN": {
+    "id": 35,
+    "crps_rel_interno": -0.00401,
+    "S5_interno": 0.9025,
+    "S5_interno_v3": 0.9002
+   },
+   "NLD": {
+    "id": 74,
+    "crps_rel_interno": -0.00528,
+    "S5_interno": 0.9093,
+    "S5_interno_v3": 0.8978
+   },
+   "NOR": {
+    "id": 74,
+    "crps_rel_interno": -0.00458,
+    "S5_interno": 0.909,
+    "S5_interno_v3": 0.8968
+   },
+   "PRT": {
+    "id": 74,
+    "crps_rel_interno": -0.00423,
+    "S5_interno": 0.9073,
+    "S5_interno_v3": 0.8985
+   },
+   "SWE": {
+    "id": 21,
+    "crps_rel_interno": -0.00396,
+    "S5_interno": 0.9017,
+    "S5_interno_v3": 0.8984
+   },
+   "USA": {
+    "id": 74,
+    "crps_rel_interno": -0.00431,
+    "S5_interno": 0.9089,
+    "S5_interno_v3": 0.8998
+   }
+  },
+  "global": {
+   "filas": 1548,
+   "S5": 0.9078,
+   "S5_v3": 0.8979,
+   "S_activo": {
+    "bolsa": 0.9168,
+    "bonos": 0.9094,
+    "letras": 0.9105,
+    "vivienda": 0.9125,
+    "oro": 0.8983
+   },
+   "crps": {
+    "bolsa": 0.11676,
+    "bonos": 0.05354,
+    "letras": 0.02617,
+    "vivienda": 0.05162,
+    "oro": 0.11709
+   },
+   "crps_rel_v3": -0.00243,
+   "ls_dif_v3": 0.00078,
+   "ls": {
+    "bolsa": -0.1452,
+    "bonos": -0.9426,
+    "letras": -1.6364,
+    "vivienda": -0.962,
+    "oro": -0.3556
+   },
+   "ancho": {
+    "bolsa": 0.7584,
+    "bonos": 0.3272,
+    "letras": 0.1603,
+    "vivienda": 0.3258,
+    "oro": 0.6389
+   },
+   "pit_chi2": {
+    "bolsa": [
+     12.5,
+     0.1867
+    ],
+    "bonos": [
+     8.09,
+     0.5251
+    ],
+    "letras": [
+     12.09,
+     0.2083
+    ],
+    "vivienda": [
+     8.2,
+     0.5138
+    ],
+    "oro": [
+     7.83,
+     0.5517
+    ]
+   },
+   "pit_chi2_v3": {
+    "bolsa": [
+     64.35,
+     0.0
+    ],
+    "bonos": [
+     12.29,
+     0.1973
+    ],
+    "letras": [
+     5.04,
+     0.8312
+    ],
+    "vivienda": [
+     6.39,
+     0.7003
+    ],
+    "oro": [
+     7.44,
+     0.5917
+    ]
+   },
+   "pit_desv": 0.0112,
+   "pit_desv_v3": 0.0093
+  },
+  "ic_bloques": {
+   "dS5": {
+    "punto": 0.00998,
+    "ic90": [
+     0.00533,
+     0.01559
+    ]
+   },
+   "crps_rel": {
+    "punto": -0.00243,
+    "ic90": [
+     -0.00836,
+     0.00349
+    ]
+   },
+   "ls_dif": {
+    "punto": 0.00078,
+    "ic90": [
+     -0.01484,
+     0.01853
+    ]
+   },
+   "dS_bolsa": {
+    "punto": -0.0094,
+    "ic90": [
+     -0.01502,
+     -0.00343
+    ]
+   }
+  },
+  "por_pais": {
+   "BEL": {
+    "filas": 112,
+    "S5": 0.8844,
+    "S5_v3": 0.8879,
+    "S_activo": {
+     "bolsa": 0.9196,
+     "bonos": 0.9279,
+     "letras": 0.8214,
+     "vivienda": 0.8804,
+     "oro": 0.9091
+    },
+    "crps": {
+     "bolsa": 0.1133,
+     "bonos": 0.0531,
+     "letras": 0.03551,
+     "vivienda": 0.06453,
+     "oro": 0.11303
+    },
+    "crps_rel_v3": 0.00337,
+    "ls_dif_v3": 0.11283,
+    "ls": {
+     "bolsa": -0.1719,
+     "bonos": -0.9239,
+     "letras": -0.5472,
+     "vivienda": -0.6801,
+     "oro": -0.4787
+    },
+    "ancho": {
+     "bolsa": 0.7889,
+     "bonos": 0.3191,
+     "letras": 0.1454,
+     "vivienda": 0.3073,
+     "oro": 0.6052
+    },
+    "pit_chi2": {
+     "bolsa": [
+      8.89,
+      0.4472
+     ],
+     "bonos": [
+      5.13,
+      0.8232
+     ],
+     "letras": [
+      9.96,
+      0.3534
+     ],
+     "vivienda": [
+      31.26,
+      0.0003
+     ],
+     "oro": [
+      3.06,
+      0.9618
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      9.07,
+      0.4307
+     ],
+     "bonos": [
+      4.23,
+      0.896
+     ],
+     "letras": [
+      8.36,
+      0.4986
+     ],
+     "vivienda": [
+      24.52,
+      0.0035
+     ],
+     "oro": [
+      3.06,
+      0.9618
+     ]
+    },
+    "pit_desv": 0.0174,
+    "pit_desv_v3": 0.0152
+   },
+   "DEU": {
+    "filas": 106,
+    "S5": 0.9195,
+    "S5_v3": 0.9093,
+    "S_activo": {
+     "bolsa": 0.8679,
+     "bonos": 0.9903,
+     "letras": 0.9804,
+     "vivienda": 0.8876,
+     "oro": 0.9091
+    },
+    "crps": {
+     "bolsa": 0.14298,
+     "bonos": 0.03485,
+     "letras": 0.01619,
+     "vivienda": 0.04709,
+     "oro": 0.10684
+    },
+    "crps_rel_v3": -0.00319,
+    "ls_dif_v3": 0.00936,
+    "ls": {
+     "bolsa": 0.3555,
+     "bonos": -1.3159,
+     "letras": -2.1769,
+     "vivienda": -1.0502,
+     "oro": -0.5245
+    },
+    "ancho": {
+     "bolsa": 0.7184,
+     "bonos": 0.3283,
+     "letras": 0.1521,
+     "vivienda": 0.3022,
+     "oro": 0.54
+    },
+    "pit_chi2": {
+     "bolsa": [
+      15.32,
+      0.0825
+     ],
+     "bonos": [
+      37.68,
+      0.0
+     ],
+     "letras": [
+      28.59,
+      0.0008
+     ],
+     "vivienda": [
+      27.74,
+      0.0011
+     ],
+     "oro": [
+      9.73,
+      0.373
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      13.81,
+      0.1292
+     ],
+     "bonos": [
+      39.82,
+      0.0
+     ],
+     "letras": [
+      28.78,
+      0.0007
+     ],
+     "vivienda": [
+      20.1,
+      0.0173
+     ],
+     "oro": [
+      6.09,
+      0.7308
+     ]
+    },
+    "pit_desv": 0.0515,
+    "pit_desv_v3": 0.0515
+   },
+   "DNK": {
+    "filas": 112,
+    "S5": 0.9536,
+    "S5_v3": 0.9254,
+    "S_activo": {
+     "bolsa": 0.9821,
+     "bonos": 0.9196,
+     "letras": 0.9375,
+     "vivienda": 0.9732,
+     "oro": 0.9394
+    },
+    "crps": {
+     "bolsa": 0.08228,
+     "bonos": 0.0583,
+     "letras": 0.02544,
+     "vivienda": 0.04059,
+     "oro": 0.11016
+    },
+    "crps_rel_v3": -0.00871,
+    "ls_dif_v3": -0.04617,
+    "ls": {
+     "bolsa": -0.4825,
+     "bonos": -0.8645,
+     "letras": -1.72,
+     "vivienda": -1.1474,
+     "oro": -0.5075
+    },
+    "ancho": {
+     "bolsa": 0.7581,
+     "bonos": 0.3146,
+     "letras": 0.1575,
+     "vivienda": 0.3337,
+     "oro": 0.6224
+    },
+    "pit_chi2": {
+     "bolsa": [
+      25.14,
+      0.0028
+     ],
+     "bonos": [
+      3.0,
+      0.9643
+     ],
+     "letras": [
+      21.21,
+      0.0117
+     ],
+     "vivienda": [
+      28.89,
+      0.0007
+     ],
+     "oro": [
+      0.64,
+      0.9999
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      42.82,
+      0.0
+     ],
+     "bonos": [
+      2.11,
+      0.9897
+     ],
+     "letras": [
+      28.54,
+      0.0008
+     ],
+     "vivienda": [
+      21.04,
+      0.0125
+     ],
+     "oro": [
+      1.24,
+      0.9986
+     ]
+    },
+    "pit_desv": 0.0397,
+    "pit_desv_v3": 0.0356
+   },
+   "ESP": {
+    "filas": 112,
+    "S5": 0.8937,
+    "S5_v3": 0.8656,
+    "S_activo": {
+     "bolsa": 0.9462,
+     "bonos": 0.9121,
+     "letras": 0.8807,
+     "vivienda": 0.8587,
+     "oro": 0.9394
+    },
+    "crps": {
+     "bolsa": 0.11605,
+     "bonos": 0.05172,
+     "letras": 0.0329,
+     "vivienda": 0.06524,
+     "oro": 0.11453
+    },
+    "crps_rel_v3": -0.00927,
+    "ls_dif_v3": -0.02283,
+    "ls": {
+     "bolsa": -0.1708,
+     "bonos": -0.9645,
+     "letras": -1.4367,
+     "vivienda": -0.7173,
+     "oro": -0.3019
+    },
+    "ancho": {
+     "bolsa": 0.7994,
+     "bonos": 0.3372,
+     "letras": 0.1685,
+     "vivienda": 0.3403,
+     "oro": 0.7266
+    },
+    "pit_chi2": {
+     "bolsa": [
+      13.34,
+      0.1476
+     ],
+     "bonos": [
+      9.77,
+      0.3695
+     ],
+     "letras": [
+      16.96,
+      0.0493
+     ],
+     "vivienda": [
+      19.3,
+      0.0227
+     ],
+     "oro": [
+      10.94,
+      0.2799
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      10.76,
+      0.2923
+     ],
+     "bonos": [
+      6.69,
+      0.6691
+     ],
+     "letras": [
+      21.55,
+      0.0104
+     ],
+     "vivienda": [
+      11.91,
+      0.2183
+     ],
+     "oro": [
+      8.52,
+      0.4832
+     ]
+    },
+    "pit_desv": 0.0292,
+    "pit_desv_v3": 0.0316
+   },
+   "FIN": {
+    "filas": 111,
+    "S5": 0.8302,
+    "S5_v3": 0.823,
+    "S_activo": {
+     "bolsa": 0.8229,
+     "bonos": 0.8559,
+     "letras": 0.8288,
+     "vivienda": 0.7632,
+     "oro": 0.9394
+    },
+    "crps": {
+     "bolsa": 0.15838,
+     "bonos": 0.06809,
+     "letras": 0.03333,
+     "vivienda": 0.08628,
+     "oro": 0.11709
+    },
+    "crps_rel_v3": -0.00145,
+    "ls_dif_v3": -0.03151,
+    "ls": {
+     "bolsa": 0.175,
+     "bonos": -0.6855,
+     "letras": -1.4101,
+     "vivienda": -0.3219,
+     "oro": -0.3661
+    },
+    "ancho": {
+     "bolsa": 0.7245,
+     "bonos": 0.3267,
+     "letras": 0.1591,
+     "vivienda": 0.301,
+     "oro": 0.6867
+    },
+    "pit_chi2": {
+     "bolsa": [
+      16.29,
+      0.061
+     ],
+     "bonos": [
+      17.02,
+      0.0484
+     ],
+     "letras": [
+      13.77,
+      0.1306
+     ],
+     "vivienda": [
+      24.26,
+      0.0039
+     ],
+     "oro": [
+      12.76,
+      0.1739
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      8.17,
+      0.5174
+     ],
+     "bonos": [
+      14.68,
+      0.1002
+     ],
+     "letras": [
+      24.95,
+      0.003
+     ],
+     "vivienda": [
+      23.74,
+      0.0047
+     ],
+     "oro": [
+      6.7,
+      0.6686
+     ]
+    },
+    "pit_desv": 0.0663,
+    "pit_desv_v3": 0.0663
+   },
+   "FRA": {
+    "filas": 109,
+    "S5": 0.9115,
+    "S5_v3": 0.9009,
+    "S_activo": {
+     "bolsa": 0.9266,
+     "bonos": 0.8899,
+     "letras": 0.9245,
+     "vivienda": 0.9174,
+     "oro": 0.9394
+    },
+    "crps": {
+     "bolsa": 0.11392,
+     "bonos": 0.05693,
+     "letras": 0.02219,
+     "vivienda": 0.04639,
+     "oro": 0.10672
+    },
+    "crps_rel_v3": 0.01232,
+    "ls_dif_v3": 0.02351,
+    "ls": {
+     "bolsa": -0.2346,
+     "bonos": -0.8791,
+     "letras": -1.8911,
+     "vivienda": -1.0744,
+     "oro": -0.517
+    },
+    "ancho": {
+     "bolsa": 0.7165,
+     "bonos": 0.3228,
+     "letras": 0.1562,
+     "vivienda": 0.3178,
+     "oro": 0.6119
+    },
+    "pit_chi2": {
+     "bolsa": [
+      16.96,
+      0.0493
+     ],
+     "bonos": [
+      5.59,
+      0.7804
+     ],
+     "letras": [
+      25.13,
+      0.0028
+     ],
+     "vivienda": [
+      20.08,
+      0.0174
+     ],
+     "oro": [
+      7.91,
+      0.5433
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      29.62,
+      0.0005
+     ],
+     "bonos": [
+      7.79,
+      0.5555
+     ],
+     "letras": [
+      17.21,
+      0.0456
+     ],
+     "vivienda": [
+      22.83,
+      0.0066
+     ],
+     "oro": [
+      6.09,
+      0.7308
+     ]
+    },
+    "pit_desv": 0.0438,
+    "pit_desv_v3": 0.0481
+   },
+   "GBR": {
+    "filas": 112,
+    "S5": 0.933,
+    "S5_v3": 0.9259,
+    "S_activo": {
+     "bolsa": 0.9554,
+     "bonos": 0.8839,
+     "letras": 0.9821,
+     "vivienda": 0.9167,
+     "oro": 0.8182
+    },
+    "crps": {
+     "bolsa": 0.09848,
+     "bonos": 0.05877,
+     "letras": 0.01984,
+     "vivienda": 0.05383,
+     "oro": 0.11647
+    },
+    "crps_rel_v3": -0.00406,
+    "ls_dif_v3": -0.01551,
+    "ls": {
+     "bolsa": -0.3227,
+     "bonos": -0.9012,
+     "letras": -1.9384,
+     "vivienda": -0.907,
+     "oro": -0.3446
+    },
+    "ancho": {
+     "bolsa": 0.8012,
+     "bonos": 0.3354,
+     "letras": 0.186,
+     "vivienda": 0.3748,
+     "oro": 0.6185
+    },
+    "pit_chi2": {
+     "bolsa": [
+      15.68,
+      0.0739
+     ],
+     "bonos": [
+      10.5,
+      0.3115
+     ],
+     "letras": [
+      21.21,
+      0.0117
+     ],
+     "vivienda": [
+      6.71,
+      0.6675
+     ],
+     "oro": [
+      6.7,
+      0.6686
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      17.11,
+      0.0471
+     ],
+     "bonos": [
+      16.04,
+      0.0661
+     ],
+     "letras": [
+      14.25,
+      0.1137
+     ],
+     "vivienda": [
+      12.75,
+      0.1742
+     ],
+     "oro": [
+      10.94,
+      0.2799
+     ]
+    },
+    "pit_desv": 0.0333,
+    "pit_desv_v3": 0.0398
+   },
+   "ITA": {
+    "filas": 110,
+    "S5": 0.9279,
+    "S5_v3": 0.9148,
+    "S_activo": {
+     "bolsa": 0.9,
+     "bonos": 0.9182,
+     "letras": 0.9515,
+     "vivienda": 0.9559,
+     "oro": 0.8788
+    },
+    "crps": {
+     "bolsa": 0.12404,
+     "bonos": 0.05355,
+     "letras": 0.02171,
+     "vivienda": 0.04758,
+     "oro": 0.11754
+    },
+    "crps_rel_v3": -0.00615,
+    "ls_dif_v3": -0.00963,
+    "ls": {
+     "bolsa": -0.1251,
+     "bonos": -0.9811,
+     "letras": -1.8423,
+     "vivienda": -1.0812,
+     "oro": -0.2984
+    },
+    "ancho": {
+     "bolsa": 0.7967,
+     "bonos": 0.3367,
+     "letras": 0.158,
+     "vivienda": 0.3332,
+     "oro": 0.679
+    },
+    "pit_chi2": {
+     "bolsa": [
+      6.36,
+      0.703
+     ],
+     "bonos": [
+      13.45,
+      0.1431
+     ],
+     "letras": [
+      13.02,
+      0.1617
+     ],
+     "vivienda": [
+      22.88,
+      0.0065
+     ],
+     "oro": [
+      5.48,
+      0.7902
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      17.27,
+      0.0446
+     ],
+     "bonos": [
+      12.55,
+      0.1843
+     ],
+     "letras": [
+      15.54,
+      0.077
+     ],
+     "vivienda": [
+      23.76,
+      0.0047
+     ],
+     "oro": [
+      3.06,
+      0.9618
+     ]
+    },
+    "pit_desv": 0.0344,
+    "pit_desv_v3": 0.0392
+   },
+   "JPN": {
+    "filas": 109,
+    "S5": 0.854,
+    "S5_v3": 0.8699,
+    "S_activo": {
+     "bolsa": 0.875,
+     "bonos": 0.9174,
+     "letras": 0.7982,
+     "vivienda": 0.9434,
+     "oro": 0.8788
+    },
+    "crps": {
+     "bolsa": 0.139,
+     "bonos": 0.04962,
+     "letras": 0.03258,
+     "vivienda": 0.04773,
+     "oro": 0.1367
+    },
+    "crps_rel_v3": -0.00347,
+    "ls_dif_v3": 0.01366,
+    "ls": {
+     "bolsa": 0.023,
+     "bonos": -1.0279,
+     "letras": -1.3941,
+     "vivienda": -1.0108,
+     "oro": -0.0102
+    },
+    "ancho": {
+     "bolsa": 0.7406,
+     "bonos": 0.3207,
+     "letras": 0.1478,
+     "vivienda": 0.312,
+     "oro": 0.5161
+    },
+    "pit_chi2": {
+     "bolsa": [
+      11.96,
+      0.2155
+     ],
+     "bonos": [
+      5.04,
+      0.8311
+     ],
+     "letras": [
+      15.31,
+      0.0827
+     ],
+     "vivienda": [
+      18.51,
+      0.0297
+     ],
+     "oro": [
+      26.09,
+      0.002
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      3.69,
+      0.9305
+     ],
+     "bonos": [
+      4.67,
+      0.8621
+     ],
+     "letras": [
+      15.5,
+      0.0782
+     ],
+     "vivienda": [
+      4.92,
+      0.8408
+     ],
+     "oro": [
+      26.7,
+      0.0016
+     ]
+    },
+    "pit_desv": 0.0275,
+    "pit_desv_v3": 0.0225
+   },
+   "NLD": {
+    "filas": 112,
+    "S5": 0.9301,
+    "S5_v3": 0.9336,
+    "S_activo": {
+     "bolsa": 0.9462,
+     "bonos": 0.9196,
+     "letras": 0.9554,
+     "vivienda": 0.9018,
+     "oro": 0.8788
+    },
+    "crps": {
+     "bolsa": 0.10661,
+     "bonos": 0.04793,
+     "letras": 0.02199,
+     "vivienda": 0.04926,
+     "oro": 0.10739
+    },
+    "crps_rel_v3": -0.00375,
+    "ls_dif_v3": -0.00279,
+    "ls": {
+     "bolsa": -0.2321,
+     "bonos": -1.018,
+     "letras": -1.8091,
+     "vivienda": -1.005,
+     "oro": -0.4832
+    },
+    "ancho": {
+     "bolsa": 0.7618,
+     "bonos": 0.3399,
+     "letras": 0.1712,
+     "vivienda": 0.331,
+     "oro": 0.596
+    },
+    "pit_chi2": {
+     "bolsa": [
+      5.17,
+      0.8191
+     ],
+     "bonos": [
+      7.46,
+      0.5889
+     ],
+     "letras": [
+      21.39,
+      0.011
+     ],
+     "vivienda": [
+      8.36,
+      0.4986
+     ],
+     "oro": [
+      10.94,
+      0.2799
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      9.47,
+      0.3948
+     ],
+     "bonos": [
+      7.11,
+      0.626
+     ],
+     "letras": [
+      8.18,
+      0.5163
+     ],
+     "vivienda": [
+      6.57,
+      0.6816
+     ],
+     "oro": [
+      7.3,
+      0.6056
+     ]
+    },
+    "pit_desv": 0.0394,
+    "pit_desv_v3": 0.0307
+   },
+   "NOR": {
+    "filas": 112,
+    "S5": 0.933,
+    "S5_v3": 0.9188,
+    "S_activo": {
+     "bolsa": 0.9375,
+     "bonos": 0.9464,
+     "letras": 0.9196,
+     "vivienda": 0.9286,
+     "oro": 0.9091
+    },
+    "crps": {
+     "bolsa": 0.10068,
+     "bonos": 0.04384,
+     "letras": 0.02628,
+     "vivienda": 0.04684,
+     "oro": 0.11814
+    },
+    "crps_rel_v3": -0.00427,
+    "ls_dif_v3": -0.01144,
+    "ls": {
+     "bolsa": -0.3305,
+     "bonos": -1.1242,
+     "letras": -1.6599,
+     "vivienda": -1.0631,
+     "oro": -0.3887
+    },
+    "ancho": {
+     "bolsa": 0.7582,
+     "bonos": 0.3315,
+     "letras": 0.1608,
+     "vivienda": 0.3231,
+     "oro": 0.6402
+    },
+    "pit_chi2": {
+     "bolsa": [
+      10.14,
+      0.339
+     ],
+     "bonos": [
+      14.07,
+      0.1198
+     ],
+     "letras": [
+      7.82,
+      0.5522
+     ],
+     "vivienda": [
+      13.36,
+      0.1471
+     ],
+     "oro": [
+      3.06,
+      0.9618
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      18.18,
+      0.0332
+     ],
+     "bonos": [
+      19.96,
+      0.0181
+     ],
+     "letras": [
+      10.5,
+      0.3115
+     ],
+     "vivienda": [
+      10.86,
+      0.2856
+     ],
+     "oro": [
+      4.27,
+      0.8926
+     ]
+    },
+    "pit_desv": 0.0227,
+    "pit_desv_v3": 0.0268
+   },
+   "PRT": {
+    "filas": 107,
+    "S5": 0.857,
+    "S5_v3": 0.8358,
+    "S_activo": {
+     "bolsa": 0.8411,
+     "bonos": 0.8224,
+     "letras": 0.8505,
+     "vivienda": 0.9298,
+     "oro": 0.9091
+    },
+    "crps": {
+     "bolsa": 0.13506,
+     "bonos": 0.07225,
+     "letras": 0.03625,
+     "vivienda": 0.0467,
+     "oro": 0.11504
+    },
+    "crps_rel_v3": -0.00536,
+    "ls_dif_v3": -0.01782,
+    "ls": {
+     "bolsa": -0.0231,
+     "bonos": -0.4963,
+     "letras": -1.3459,
+     "vivienda": -1.0433,
+     "oro": -0.3215
+    },
+    "ancho": {
+     "bolsa": 0.7307,
+     "bonos": 0.3254,
+     "letras": 0.1645,
+     "vivienda": 0.3262,
+     "oro": 0.7406
+    },
+    "pit_chi2": {
+     "bolsa": [
+      13.28,
+      0.1503
+     ],
+     "bonos": [
+      14.78,
+      0.0973
+     ],
+     "letras": [
+      13.09,
+      0.1584
+     ],
+     "vivienda": [
+      8.44,
+      0.4906
+     ],
+     "oro": [
+      3.67,
+      0.932
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      18.89,
+      0.0262
+     ],
+     "bonos": [
+      8.05,
+      0.5294
+     ],
+     "letras": [
+      20.38,
+      0.0157
+     ],
+     "vivienda": [
+      6.33,
+      0.7061
+     ],
+     "oro": [
+      4.88,
+      0.8447
+     ]
+    },
+    "pit_desv": 0.0411,
+    "pit_desv_v3": 0.0363
+   },
+   "SWE": {
+    "filas": 112,
+    "S5": 0.9446,
+    "S5_v3": 0.9299,
+    "S_activo": {
+     "bolsa": 0.9554,
+     "bonos": 0.9107,
+     "letras": 0.9732,
+     "vivienda": 0.9364,
+     "oro": 0.9394
+    },
+    "crps": {
+     "bolsa": 0.10427,
+     "bonos": 0.05202,
+     "letras": 0.0213,
+     "vivienda": 0.04659,
+     "oro": 0.12357
+    },
+    "crps_rel_v3": -0.00132,
+    "ls_dif_v3": -0.00383,
+    "ls": {
+     "bolsa": -0.2525,
+     "bonos": -0.9629,
+     "letras": -1.8851,
+     "vivienda": -1.0424,
+     "oro": -0.301
+    },
+    "ancho": {
+     "bolsa": 0.7848,
+     "bonos": 0.3195,
+     "letras": 0.1536,
+     "vivienda": 0.3073,
+     "oro": 0.6955
+    },
+    "pit_chi2": {
+     "bolsa": [
+      13.89,
+      0.1262
+     ],
+     "bonos": [
+      12.29,
+      0.1977
+     ],
+     "letras": [
+      18.0,
+      0.0352
+     ],
+     "vivienda": [
+      15.45,
+      0.0792
+     ],
+     "oro": [
+      7.91,
+      0.5433
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      19.25,
+      0.0231
+     ],
+     "bonos": [
+      14.25,
+      0.1137
+     ],
+     "letras": [
+      14.07,
+      0.1198
+     ],
+     "vivienda": [
+      17.64,
+      0.0396
+     ],
+     "oro": [
+      5.48,
+      0.7902
+     ]
+    },
+    "pit_desv": 0.0541,
+    "pit_desv_v3": 0.0499
+   },
+   "USA": {
+    "filas": 112,
+    "S5": 0.9339,
+    "S5_v3": 0.9259,
+    "S_activo": {
+     "bolsa": 0.9464,
+     "bonos": 0.9196,
+     "letras": 0.9464,
+     "vivienda": 0.9608,
+     "oro": 0.7879
+    },
+    "crps": {
+     "bolsa": 0.10759,
+     "bonos": 0.04774,
+     "letras": 0.02034,
+     "vivienda": 0.04214,
+     "oro": 0.13597
+    },
+    "crps_rel_v3": 0.00102,
+    "ls_dif_v3": 0.00434,
+    "ls": {
+     "bolsa": -0.1713,
+     "bonos": -1.0639,
+     "letras": -1.904,
+     "vivienda": -1.1694,
+     "oro": -0.1346
+    },
+    "ancho": {
+     "bolsa": 0.736,
+     "bonos": 0.3247,
+     "letras": 0.163,
+     "vivienda": 0.341,
+     "oro": 0.6657
+    },
+    "pit_chi2": {
+     "bolsa": [
+      13.0,
+      0.1626
+     ],
+     "bonos": [
+      9.79,
+      0.3681
+     ],
+     "letras": [
+      23.36,
+      0.0054
+     ],
+     "vivienda": [
+      50.35,
+      0.0
+     ],
+     "oro": [
+      6.09,
+      0.7308
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      16.39,
+      0.0591
+     ],
+     "bonos": [
+      14.61,
+      0.1023
+     ],
+     "letras": [
+      17.11,
+      0.0471
+     ],
+     "vivienda": [
+      42.31,
+      0.0
+     ],
+     "oro": [
+      6.09,
+      0.7308
+     ]
+    },
+    "pit_desv": 0.0406,
+    "pit_desv_v3": 0.0427
+   }
+  },
+  "por_regimen": {
+   "expansion": {
+    "filas": 833,
+    "S5": 0.9197,
+    "S5_v3": 0.9037,
+    "S_activo": {
+     "bolsa": 0.9245,
+     "bonos": 0.9211,
+     "letras": 0.9205,
+     "vivienda": 0.9202,
+     "oro": 0.9345
+    },
+    "crps": {
+     "bolsa": 0.10089,
+     "bonos": 0.04589,
+     "letras": 0.02163,
+     "vivienda": 0.04669,
+     "oro": 0.0587
+    },
+    "crps_rel_v3": -0.00244,
+    "ls_dif_v3": -0.01276,
+    "ls": {
+     "bolsa": -0.3072,
+     "bonos": -1.0977,
+     "letras": -1.879,
+     "vivienda": -1.0572,
+     "oro": -0.9098
+    },
+    "ancho": {
+     "bolsa": 0.6692,
+     "bonos": 0.2937,
+     "letras": 0.14,
+     "vivienda": 0.2988,
+     "oro": 0.4283
+    },
+    "pit_chi2": {
+     "bolsa": [
+      16.28,
+      0.0612
+     ],
+     "bonos": [
+      12.41,
+      0.1913
+     ],
+     "letras": [
+      19.45,
+      0.0217
+     ],
+     "vivienda": [
+      5.46,
+      0.7927
+     ],
+     "oro": [
+      12.95,
+      0.1648
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      67.0,
+      0.0
+     ],
+     "bonos": [
+      15.64,
+      0.0749
+     ],
+     "letras": [
+      20.0,
+      0.0179
+     ],
+     "vivienda": [
+      3.17,
+      0.9572
+     ],
+     "oro": [
+      17.48,
+      0.0418
+     ]
+    },
+    "pit_desv": 0.0211,
+    "pit_desv_v3": 0.0198
+   },
+   "sobrecalentamiento": {
+    "filas": 616,
+    "S5": 0.8995,
+    "S5_v3": 0.8927,
+    "S_activo": {
+     "bolsa": 0.9127,
+     "bonos": 0.9005,
+     "letras": 0.9023,
+     "vivienda": 0.9088,
+     "oro": 0.8763
+    },
+    "crps": {
+     "bolsa": 0.13297,
+     "bonos": 0.05931,
+     "letras": 0.02865,
+     "vivienda": 0.05339,
+     "oro": 0.15118
+    },
+    "crps_rel_v3": -0.00498,
+    "ls_dif_v3": -0.00734,
+    "ls": {
+     "bolsa": -0.026,
+     "bonos": -0.8113,
+     "letras": -1.5662,
+     "vivienda": -0.9324,
+     "oro": -0.0325
+    },
+    "ancho": {
+     "bolsa": 0.8515,
+     "bonos": 0.349,
+     "letras": 0.1696,
+     "vivienda": 0.3351,
+     "oro": 0.76
+    },
+    "pit_chi2": {
+     "bolsa": [
+      3.53,
+      0.9397
+     ],
+     "bonos": [
+      3.92,
+      0.9168
+     ],
+     "letras": [
+      10.1,
+      0.3421
+     ],
+     "vivienda": [
+      7.11,
+      0.6257
+     ],
+     "oro": [
+      9.24,
+      0.4154
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      12.95,
+      0.1649
+     ],
+     "bonos": [
+      9.63,
+      0.3816
+     ],
+     "letras": [
+      13.04,
+      0.161
+     ],
+     "vivienda": [
+      5.87,
+      0.753
+     ],
+     "oro": [
+      10.55,
+      0.3081
+     ]
+    },
+    "pit_desv": 0.0083,
+    "pit_desv_v3": 0.0121
+   },
+   "estanflacion": {
+    "filas": 34,
+    "S5": 0.8382,
+    "S5_v3": 0.875,
+    "S_activo": {
+     "bolsa": 0.8667,
+     "bonos": 0.8214,
+     "letras": 0.8846,
+     "vivienda": 0.8421,
+     "oro": 1.0
+    },
+    "crps": {
+     "bolsa": 0.21039,
+     "bonos": 0.09817,
+     "letras": 0.08546,
+     "vivienda": 0.12101,
+     "oro": 0.07604
+    },
+    "crps_rel_v3": 0.05459,
+    "ls_dif_v3": 0.67295,
+    "ls": {
+     "bolsa": 1.7645,
+     "bonos": -0.1478,
+     "letras": 3.5217,
+     "vivienda": 0.5794,
+     "oro": -0.69
+    },
+    "ancho": {
+     "bolsa": 1.305,
+     "bonos": 0.4848,
+     "letras": 0.4121,
+     "vivienda": 0.6971,
+     "oro": 0.7256
+    },
+    "pit_chi2": {
+     "bolsa": [
+      6.67,
+      0.6718
+     ],
+     "bonos": [
+      7.71,
+      0.5632
+     ],
+     "letras": [
+      8.62,
+      0.4735
+     ],
+     "vivienda": [
+      NaN,
+      NaN
+     ],
+     "oro": [
+      NaN,
+      NaN
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      6.0,
+      0.7399
+     ],
+     "bonos": [
+      6.29,
+      0.711
+     ],
+     "letras": [
+      5.54,
+      0.7851
+     ],
+     "vivienda": [
+      NaN,
+      NaN
+     ],
+     "oro": [
+      NaN,
+      NaN
+     ]
+    },
+    "pit_desv": 0.0327,
+    "pit_desv_v3": 0.025
+   },
+   "crecimiento_bajo": {
+    "filas": 65,
+    "S5": 0.8713,
+    "S5_v3": 0.8828,
+    "S_activo": {
+     "bolsa": 0.8793,
+     "bonos": 0.8793,
+     "letras": 0.8689,
+     "vivienda": 0.8776,
+     "oro": 1.0
+    },
+    "crps": {
+     "bolsa": 0.11626,
+     "bonos": 0.07969,
+     "letras": 0.03782,
+     "vivienda": 0.07173,
+     "oro": 0.08208
+    },
+    "crps_rel_v3": -0.00316,
+    "ls_dif_v3": -0.02911,
+    "ls": {
+     "bolsa": -0.1598,
+     "bonos": -0.5107,
+     "letras": -1.2396,
+     "vivienda": -0.6001,
+     "oro": -0.646
+    },
+    "ancho": {
+     "bolsa": 0.7249,
+     "bonos": 0.4962,
+     "letras": 0.2364,
+     "vivienda": 0.444,
+     "oro": 0.6589
+    },
+    "pit_chi2": {
+     "bolsa": [
+      6.83,
+      0.6551
+     ],
+     "bonos": [
+      3.03,
+      0.9629
+     ],
+     "letras": [
+      5.07,
+      0.8286
+     ],
+     "vivienda": [
+      5.08,
+      0.8271
+     ],
+     "oro": [
+      NaN,
+      NaN
+     ]
+    },
+    "pit_chi2_v3": {
+     "bolsa": [
+      8.9,
+      0.4469
+     ],
+     "bonos": [
+      3.38,
+      0.9473
+     ],
+     "letras": [
+      4.41,
+      0.8824
+     ],
+     "vivienda": [
+      5.08,
+      0.8271
+     ],
+     "oro": [
+      NaN,
+      NaN
+     ]
+    },
+    "pit_desv": 0.0228,
+    "pit_desv_v3": 0.0272
+   }
+  },
+  "v3_global": {
+   "filas": 1548,
+   "S5": 0.8979,
+   "S5_v3": 0.8979,
+   "S_activo": {
+    "bolsa": 0.9262,
+    "bonos": 0.91,
+    "letras": 0.8805,
+    "vivienda": 0.8953,
+    "oro": 0.8961
+   },
+   "crps": {
+    "bolsa": 0.1177,
+    "bonos": 0.05349,
+    "letras": 0.02632,
+    "vivienda": 0.05152,
+    "oro": 0.11726
+   },
+   "crps_rel_v3": 0.0,
+   "ls_dif_v3": 0.0,
+   "ls": {
+    "bolsa": -0.1296,
+    "bonos": -0.9377,
+    "letras": -1.6496,
+    "vivienda": -0.9666,
+    "oro": -0.3621
+   },
+   "ancho": {
+    "bolsa": 0.7947,
+    "bonos": 0.3295,
+    "letras": 0.143,
+    "vivienda": 0.3103,
+    "oro": 0.6248
+   },
+   "pit_chi2": {
+    "bolsa": [
+     64.35,
+     0.0
+    ],
+    "bonos": [
+     12.29,
+     0.1973
+    ],
+    "letras": [
+     5.04,
+     0.8312
+    ],
+    "vivienda": [
+     6.39,
+     0.7003
+    ],
+    "oro": [
+     7.44,
+     0.5917
+    ]
+   },
+   "pit_chi2_v3": {
+    "bolsa": [
+     64.35,
+     0.0
+    ],
+    "bonos": [
+     12.29,
+     0.1973
+    ],
+    "letras": [
+     5.04,
+     0.8312
+    ],
+    "vivienda": [
+     6.39,
+     0.7003
+    ],
+    "oro": [
+     7.44,
+     0.5917
+    ]
+   },
+   "pit_desv": 0.0093,
+   "pit_desv_v3": 0.0093
+  }
+ },
+ "ruido_mc_v3": {
+  "dS5": {
+   "punto": 0.00038,
+   "ic90": [
+    -0.00175,
+    0.00265
+   ]
+  },
+  "crps_rel": {
+   "punto": 0.00044,
+   "ic90": [
+    -0.00022,
+    0.00109
+   ]
+  },
+  "ls_dif": {
+   "punto": 0.00145,
+   "ic90": [
+    -0.01536,
+    0.0171
+   ]
+  },
+  "dS_bolsa": {
+   "punto": -0.00067,
+   "ic90": [
+    -0.00402,
+    0.00336
+   ]
+  }
+ },
+ "cruzado_eleccion_s0_eval_s1": {
+  "global": {
+   "filas": 1548,
+   "S5": 0.9061,
+   "S5_v3": 0.8979,
+   "S_activo": {
+    "bolsa": 0.9161,
+    "bonos": 0.9068,
+    "letras": 0.9079,
+    "vivienda": 0.9109,
+    "oro": 0.9004
+   },
+   "crps": {
+    "bolsa": 0.1166,
+    "bonos": 0.05359,
+    "letras": 0.02619,
+    "vivienda": 0.05155,
+    "oro": 0.11704
+   },
+   "crps_rel_v3": -0.00278,
+   "ls_dif_v3": -0.00821,
+   "ls": {
+    "bolsa": -0.1506,
+    "bonos": -0.9382,
+    "letras": -1.6684,
+    "vivienda": -0.9729,
+    "oro": -0.3564
+   },
+   "ancho": {
+    "bolsa": 0.7482,
+    "bonos": 0.3265,
+    "letras": 0.1591,
+    "vivienda": 0.323,
+    "oro": 0.6374
+   },
+   "pit_chi2": {
+    "bolsa": [
+     8.6,
+     0.4746
+    ],
+    "bonos": [
+     11.41,
+     0.2485
+    ],
+    "letras": [
+     11.63,
+     0.2348
+    ],
+    "vivienda": [
+     8.12,
+     0.5216
+    ],
+    "oro": [
+     6.35,
+     0.7039
+    ]
+   },
+   "pit_chi2_v3": {
+    "bolsa": [
+     64.35,
+     0.0
+    ],
+    "bonos": [
+     12.29,
+     0.1973
+    ],
+    "letras": [
+     5.04,
+     0.8312
+    ],
+    "vivienda": [
+     6.39,
+     0.7003
+    ],
+    "oro": [
+     7.44,
+     0.5917
+    ]
+   },
+   "pit_desv": 0.0092,
+   "pit_desv_v3": 0.0093
+  },
+  "ic_bloques": {
+   "dS5": {
+    "punto": 0.00829,
+    "ic90": [
+     0.00317,
+     0.01436
+    ]
+   },
+   "crps_rel": {
+    "punto": -0.00278,
+    "ic90": [
+     -0.00824,
+     0.00346
+    ]
+   },
+   "ls_dif": {
+    "punto": -0.00821,
+    "ic90": [
+     -0.02004,
+     0.00174
+    ]
+   },
+   "dS_bolsa": {
+    "punto": -0.01007,
+    "ic90": [
+     -0.01543,
+     -0.00462
+    ]
+   }
+  }
+ },
+ "banda_nula_pais_oficial": {
+  "BEL": [
+   0.8333,
+   0.9139
+  ],
+  "DEU": [
+   0.8607,
+   0.9297
+  ],
+  "DNK": [
+   0.9045,
+   0.9581
+  ],
+  "ESP": [
+   0.8611,
+   0.9345
+  ],
+  "FIN": [
+   0.7994,
+   0.8817
+  ],
+  "FRA": [
+   0.8852,
+   0.9468
+  ],
+  "GBR": [
+   0.9034,
+   0.9581
+  ],
+  "ITA": [
+   0.8847,
+   0.9433
+  ],
+  "JPN": [
+   0.8162,
+   0.9035
+  ],
+  "NLD": [
+   0.9199,
+   0.9604
+  ],
+  "NOR": [
+   0.9209,
+   0.9652
+  ],
+  "PRT": [
+   0.7839,
+   0.8824
+  ],
+  "SWE": [
+   0.9294,
+   0.9708
+  ],
+  "USA": [
+   0.9082,
+   0.9627
+  ]
+ }
+}
