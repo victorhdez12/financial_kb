@@ -315,18 +315,20 @@ def main() -> None:
     esc = escenarios_bloqueado()
     for nom, df in esc.items():
         res["bloqueado"][nom] = {"estructura": resumen(df)}
-        for t in taus:
+        for t in TAUS:          # todos los τ: los no compatibles con INT-13 se publican como sensibilidad pesimista
             res["bloqueado"][nom][f"tau{t}"] = simular(df, A0, DELTAS, *pc(t), t, reps, rng)
             print(nom, res["bloqueado"][nom]["estructura"]["eventos"], t,
                   res["bloqueado"][nom][f"tau{t}"]["mde80_z_empirico"], flush=True)
     res["bloqueado_A0_0.60_central"] = simular(esc["B_central_sin2020"], 0.60, DELTAS, *pc(tc), tc, reps, rng)
-    # (iv) en vivo: MDE frente a número de episodios nuevos (τ central)
-    vivo = {}
-    for k in (3, 5, 8, 12, 16, 24):
+    # (iv) en vivo: MDE frente a número de episodios nuevos (τ central y τ = 0,4)
+    res["vivo_por_episodios"] = {}
+    for tv in sorted({tc, 0.4}):
+      vivo = {}
+      for k in (3, 5, 8, 12, 16, 24):
         sims = []
         for _ in range(3 if prueba else 6):
             df, años = estructura_sintetica(rng, k, PAISES_BLOQ)
-            sims.append(simular(df, A0, DELTAS, *pc(tc), tc, max(reps // 5, 20), rng))
+            sims.append(simular(df, A0, DELTAS, *pc(tv), tv, max(reps // 5, 20), rng))
         pot = {d: float(np.mean([s["por_delta"][f"{d:.3f}"]["pot_z_empirico"] for s in sims])) for d in DELTAS}
         mde = f"> {DELTAS[-1]:.2f}"
         xs = list(pot.items())
@@ -336,8 +338,8 @@ def main() -> None:
                 break
         vivo[str(k)] = {"años_aprox": años, "mde80_z_empirico": mde,
                         "pot_dev_0.167": _r(pot[0.167]), "pot_mitad_0.08": _r(pot[0.08])}
-        print("vivo", k, vivo[str(k)], flush=True)
-    res["vivo_por_episodios"] = vivo
+        print("vivo", tv, k, vivo[str(k)], flush=True)
+      res["vivo_por_episodios"][f"tau{tv}"] = vivo
     res["segundos"] = round(time.time() - t0, 1)
     if prueba:
         print(json.dumps(res, ensure_ascii=False, indent=1, default=str)[:3000])
