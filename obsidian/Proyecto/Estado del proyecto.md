@@ -50,7 +50,9 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Línea A — cartera operativa:** B0 = estática **70/15/15** y B1 = su ajuste por volatilidad, paper trading desde el cierre de octubre. 70/15/15 decidido **después** de ver el −42 % de la 80/10/10 (declarado). Pendiente antes de la primera decisión: σ\* en la medida en vivo (calculado: 17,02 % con 1963-2004; sin congelar), declaración S&P 500 / French Developed, nota de potencia de 36 meses, launchd con aviso, y pasar código/spec/tests/ensayo a 70/15/15. El nowcast no interviene.
 
-**▶ Retomar (5-nov, 2):** E1 en vivo hecho (primer registro ≈ 3-dic). En marcha 4 agentes (worktrees `.claude/worktrees`): INT-15 crédito, INT-11 v4 correlaciones, INT-16 prima por plazo, panel de liquidez semanal → revisar ramas y fusionar (ver Bitácora 5-nov). Pendiente usuario: ACTIVO, umbrales deriva, B1′, fuente bolsa en vivo.
+**▶ Retomar (5-nov, 3):** E1 en vivo (primer registro ≈ 3-dic). Golden rules: 4 agentes terminados y fusionados (INT-15 crédito, INT-11 v4 correlaciones, INT-16 prima por plazo: ninguno con potencia → no correr; panel de liquidez y crédito = sección 5e del semanal). Pendiente usuario: decisiones de v4 (V2 arreglar imputación independiente, V3 dependencia en "hoy"), registro en vivo opcional de INT-15, ACTIVO, umbrales deriva, B1′, fuente bolsa en vivo.
+
+**(anterior) ▶ Retomar (5-nov, 2):** E1 en vivo hecho (primer registro ≈ 3-dic). En marcha 4 agentes (worktrees `.claude/worktrees`): INT-15 crédito, INT-11 v4 correlaciones, INT-16 prima por plazo, panel de liquidez semanal → revisar ramas y fusionar (ver Bitácora 5-nov). Pendiente usuario: ACTIVO, umbrales deriva, B1′, fuente bolsa en vivo.
 
 **(anterior) ▶ Retomar (5-nov, 1):** E1 congelado v1.0 y ajustado (≤ 2004, signos ✅, `research/int/e1_modelos.json`); siguiente: `scripts/e1_vivo.py` (registro mensual, no se muestra). Pendiente usuario: `touch research/paper/ACTIVO`, umbrales deriva OCDE, respaldo instantánea, B1′, fuente bolsa en vivo.
 

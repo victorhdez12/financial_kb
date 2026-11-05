@@ -136,7 +136,7 @@ BCE_DESDE = pd.Timestamp("1999-01-01")
 def rasgos(lee, rej: pd.DatetimeIndex, paises=PAISES, euro_bce: bool = False) -> pd.DataFrame:
     """Las 4 variables "as of" en el fin de cada mes de `rej`, con las MISMAS transformaciones que
     src/intl/panel.mensual + src/intl/int13.construir. `lee(sid)` devuelve la serie cruda (load_dev en el test de
-    equivalencia; obs_latest hasta el corte en vivo)."""
+    equivalencia; la tabla de últimas publicaciones hasta el corte, en vivo (scripts/e1_vivo.py))."""
     from src.intl import lags as Lg
     from src.intl import panel as P
     out = []
