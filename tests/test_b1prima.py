@@ -207,10 +207,18 @@ def test_registro_reglas():
         P.validar_b1p(T("2027-01-31"), T("2027-02-03"), ["2026-11-30"])   # falta diciembre
 
 
+def test_auto_antes_del_arranque_no_hace_nada(monkeypatch, tmp_path):
+    monkeypatch.setattr(B, "LOG", tmp_path / "d.jsonl")
+    monkeypatch.setattr(B, "decidir", lambda *a, **k: (_ for _ in ()).throw(AssertionError("no debe decidir")))
+    monkeypatch.setattr(P, "cierre_objetivo", lambda hoy: T("2026-10-31"))
+    assert P.main(["--auto", "--registrar"]) == 0 and not (tmp_path / "d.jsonl").exists()
+
+
 def test_sin_activo_no_registra(monkeypatch, tmp_path):
     monkeypatch.setattr(B, "ACTIVO", tmp_path / "ACTIVO")
     monkeypatch.setattr(B, "LOG", tmp_path / "d.jsonl")
     monkeypatch.setattr(P, "validar_b1p", lambda *a: None)
+    monkeypatch.setattr(P, "cierre_objetivo", lambda hoy: T("2026-11-30"))
     llamado = []
     monkeypatch.setattr(B, "decidir", lambda *a, **k: llamado.append(1))
     assert P.main(["--auto", "--registrar"]) == 6

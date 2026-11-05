@@ -64,7 +64,7 @@ redondeados a 12 decimales; `cargar_congelado` lo comprueba antes de cada decisi
    las del calendario NYSE** (interpretación de "meses que faltan" a escala diaria); falta el fichero congelado o su
    sha256 no cuadra.
 7. **Arranque:** "el primer cierre de mes después de la aprobación" (5-nov) = **2026-11-30**. `--registrar` rechaza
-   cierres anteriores (sin historia retroactiva); el cierre de octubre solo se ensaya.
+   cierres anteriores (sin historia retroactiva); el cierre de octubre solo se ensaya. Con `--auto`, un cierre anterior al arranque devuelve 0 sin hacer nada (launchd no avisa en todo noviembre).
 8. **ACTIVO:** en B1 lo comprueba `paper_mensual.sh`; en B1′ lo comprueba además el propio script (`--registrar` sin
    `research/paper/ACTIVO` → código 6, no escribe). Peso previo: el último de su propio registro (70 % si está vacío).
 9. Como B1, `--registrar` commitea y hace `push origin main` (la hora del commit en el remoto fecha la decisión). Mismo

@@ -6,7 +6,7 @@ Uso: .venv/bin/python -m scripts.paper_decision_b1prima [--cierre AAAA-MM-DD | -
   por mes, sin saltos) y el árbol limpio: que exista research/paper/ACTIVO (como B1) y que el cierre sea ≥ 2026-11-30
   (primer cierre después de la aprobación del 5-nov-2026; sin historia retroactiva). Añade la línea a
   research/paper/decisiones_b1prima.jsonl (fichero propio, inmutable), commitea y sube.
-Códigos de salida: 0 hecho (o ya registrado con --auto), 3 ya registrado, 4 mes no válido, 5 árbol sucio,
+Códigos de salida: 0 hecho (o ya registrado, o anterior al arranque, con --auto), 3 ya registrado, 4 mes no válido, 5 árbol sucio,
 6 sin research/paper/ACTIVO, 1 otros.
 """
 from __future__ import annotations
@@ -58,6 +58,9 @@ def main(argv=None) -> int:
     hoy = pd.Timestamp(dt.date.today())
     cierre = cierre_objetivo(hoy) if (a.auto or not a.cierre) else pd.Timestamp(a.cierre)
     if a.registrar:
+        if a.auto and cierre < PRIMER_CIERRE:
+            print(f"B1′ aún no arranca: primer cierre registrable {PRIMER_CIERRE.date()} (nada que hacer)")
+            return 0
         try:
             validar_b1p(cierre, hoy, registrados())
         except YaRegistrado as e:
