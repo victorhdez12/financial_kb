@@ -50,7 +50,9 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Línea A — cartera operativa:** B0 = estática **70/15/15** y B1 = su ajuste por volatilidad, paper trading desde el cierre de octubre. 70/15/15 decidido **después** de ver el −42 % de la 80/10/10 (declarado). Pendiente antes de la primera decisión: σ\* en la medida en vivo (calculado: 17,02 % con 1963-2004; sin congelar), declaración S&P 500 / French Developed, nota de potencia de 36 meses, launchd con aviso, y pasar código/spec/tests/ensayo a 70/15/15. El nowcast no interviene.
 
-**▶ Retomar (5-nov, 4):** registros en vivo: E1 12 m + E1b 6 m (mensual, primer origen 2026-11-30 ≈ 3-dic) y K1v crédito → crisis bancaria (anual, desde t = 2026). Todo enganchado a `scripts/paper_mensual.sh`. HPO descartado (ya hecho 4-nov). Pendiente usuario: v4 V2/V3, ACTIVO, umbrales deriva, B1′, fuente bolsa en vivo.
+**▶ Retomar (5-nov, 5):** fusionados hoy: Validador E1/E1b/K1v (arreglos del registro), K1v enmienda 1, INT-11 v3.1 (imputación PMM + dependencia por régimen en hoy/5d), deriva OCDE (umbrales propuestos + respaldo .xz), fuente de bolsa en vivo D9 (propuesta). Sin agentes. **Pendiente usuario:** umbrales OCDE (§2 a-d), D9 A1-A7 (`docs/int/INT11_fuente_bolsa_vivo.md` §7), ACTIVO, B1′.
+
+**(anterior) ▶ Retomar (5-nov, 4):** registros en vivo: E1 12 m + E1b 6 m (mensual, primer origen 2026-11-30 ≈ 3-dic) y K1v crédito → crisis bancaria (anual, desde t = 2026). Todo enganchado a `scripts/paper_mensual.sh`. HPO descartado (ya hecho 4-nov). Pendiente usuario: v4 V2/V3, ACTIVO, umbrales deriva, B1′, fuente bolsa en vivo.
 
 **(anterior) ▶ Retomar (5-nov, 3):** E1 en vivo (primer registro ≈ 3-dic). Golden rules: 4 agentes terminados y fusionados (INT-15 crédito, INT-11 v4 correlaciones, INT-16 prima por plazo: ninguno con potencia → no correr; panel de liquidez y crédito = sección 5e del semanal). Pendiente usuario: decisiones de v4 (V2 arreglar imputación independiente, V3 dependencia en "hoy"), registro en vivo opcional de INT-15, ACTIVO, umbrales deriva, B1′, fuente bolsa en vivo.
 
