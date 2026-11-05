@@ -102,3 +102,40 @@ def registrar(o: dict, carpeta: Path) -> Path:
     if serie and not (carpeta / "SERIE").exists():
         (carpeta / "SERIE").write_text(serie + "\n")
     return ruta
+
+
+def comprobaciones_ensayo(fecha, carpeta: Path, vintage: bool = False, hoy=None, sucios: list[str] | None = None) -> dict:
+    """Modo ENSAYO: las mismas comprobaciones que una emisión real (`comprobar_fecha`, `procedencia_registro`, que no
+    exista ya el mes), pero ANOTADAS en lugar de abortar. Devuelve {"procedencia": …, "fecha_ok", "arbol_ok",
+    "mes_libre", "abortaria": [motivos]}."""
+    motivos = []
+    try:
+        comprobar_fecha(fecha, hoy=hoy, vintage=vintage)
+        fecha_ok = True
+    except SystemExit as e:
+        fecha_ok, motivos = False, motivos + [str(e)]
+    try:
+        proc = procedencia_registro(carpeta, sucios)
+        arbol_ok = True
+    except SystemExit as e:
+        arbol_ok, motivos = False, motivos + [str(e).splitlines()[0]]
+        s = _sucios() if sucios is None else sucios
+        proc = {"commit": None, "arbol_limpio": False, "pendientes_en_registro": s, "ensayo": True}
+    mes = str(pd.Timestamp(fecha).date())[:7]
+    libre = not (Path(carpeta) / f"{mes}.json").exists()
+    if not libre:
+        motivos.append(f"{mes}.json ya existe en el registro")
+    return {"procedencia": proc, "fecha_ok": fecha_ok, "arbol_ok": arbol_ok, "mes_libre": libre,
+            "abortaria": motivos}
+
+
+def resumen_ensayo(o: dict, carpeta: Path, plan_bolsa: dict | None = None) -> dict:
+    """Lo que el ensayo habría registrado (sin escribir): archivo, sha256 del contenido, ventana, países emitidos y,
+    si se da, el plan de evaluación de la bolsa (fuente D9)."""
+    mes = o["emision"][:7]
+    texto = json.dumps(o, ensure_ascii=False, indent=1, sort_keys=True, default=float)
+    paises = {c: ("ok" if "cuantiles_1_99" in r else r.get("aviso", "?")) for c, r in o["paises"].items()}
+    return {"modo": "ENSAYO (no se ha escrito nada)", "archivo_que_se_escribiria": str(Path(carpeta) / f"{mes}.json"),
+            "sha256_contenido": hashlib.sha256(texto.encode()).hexdigest(), "bytes": len(texto),
+            "sha256_entradas": o.get("entradas", {}).get("sha256"), "ventana_objetivo": o["ventana_objetivo"],
+            "comprobaciones": o.get("ensayo"), "paises": paises, "bolsa_evaluacion": plan_bolsa}

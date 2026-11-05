@@ -9,6 +9,8 @@ Uso: .venv/bin/python -m scripts.int11_v2_hoy [AAAA-MM-DD]              → rese
      .venv/bin/python -m scripts.int11_v2_hoy [AAAA-MM-DD] --registro   → SOLO research/int/int11_vivo/AAAA-MM.json
                                                                            (+ índice con sha256; nunca sobrescribe)
      ... --registro --vintage                                            → fecha atrasada: solo países con vintages
+     ... --ensayo                                                        → ENSAYO del registro: mismas comprobaciones
+           (anotadas, no abortan), emisión completa y plan de la evaluación de la bolsa (D9); NO escribe nada
 Registro (v0.2, arreglos de la validación v2, hallazgo 3; src/report/registro_vivo.py): con --registro NO se reescribe
 la salida "hoy" (la 2.ª emisión ya no aborta por árbol sucio), el árbol puede tener cambios solo dentro de
 research/int/int11_vivo, la fecha debe ser hoy ± 3 días (o --vintage) y se guarda la huella de las entradas.
@@ -56,10 +58,15 @@ def pais_escenario(gen: E.Generador, c: str, e: dict, semilla: int) -> dict:
             "p_inflacion_5": esc.prob_inflacion(0.05, h=1), "factor_dispersion": gen.escala_resumen["factor_pais"].get(c)}
 
 
-def emitir(fecha: str, registro: bool = False, vintage: bool = False) -> dict:
-    if registro:
+def emitir(fecha: str, registro: bool = False, vintage: bool = False, ensayo: bool = False) -> dict:
+    """`ensayo` (solo con registro): mismas comprobaciones, pero se ANOTAN en `ensayo` en lugar de abortar; no escribe."""
+    if ensayo:
+        chequeos = RV.comprobaciones_ensayo(fecha, VIVO, vintage=vintage)
+        proc = chequeos.pop("procedencia")
+    elif registro:
         RV.comprobar_fecha(fecha, vintage=vintage)
-    proc = RV.procedencia_registro(VIVO) if registro else procedencia()
+    if not ensayo:
+        proc = RV.procedencia_registro(VIVO) if registro else procedencia()
     if not RESULTADO.exists():
         raise SystemExit("falta research/int/int11_v2_resultado.json (fase D): la salida v2 se etiqueta con su acierto")
     ac = acierto_medido(json.loads(RESULTADO.read_text()))
@@ -81,6 +88,7 @@ def emitir(fecha: str, registro: bool = False, vintage: bool = False) -> dict:
             "corte_datos": est["corte"], "ventana_objetivo": est["ventana_objetivo"], "kappa": gen.kappa,
             "kappa_en_borde": gen.kappa_en_borde, "acierto_medido_fase_D": ac, "paises": paises,
             **({"entradas": entradas, "vintage": vintage} if registro else {}),
+            **({"ensayo": chequeos} if ensayo else {}),
             "aviso": "DESCRIPTIVO. Motor v2 estimado SOLO con ≤ 2004 (JST, 14 países); estado OCDE en vivo (12 meses móviles,"
                      " PIB per cápita con población Maddison extrapolada). Calibración comprobada solo en desarrollo "
                      "(contaminado); NO confirmada fuera de muestra. Rentabilidades reales en moneda local. No es una "
@@ -146,9 +154,28 @@ def main() -> None:
     warnings.filterwarnings("ignore", category=RuntimeWarning)
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     fecha = args[0] if args else str(pd.Timestamp.today().date())
-    registro = "--registro" in sys.argv
-    o = emitir(fecha, registro=registro, vintage="--vintage" in sys.argv)
+    ensayo = "--ensayo" in sys.argv
+    registro = "--registro" in sys.argv or ensayo
+    o = emitir(fecha, registro=registro, vintage="--vintage" in sys.argv, **({"ensayo": True} if ensayo else {}))
     md = markdown(o)
+    if ensayo:                       # modo ensayo: NO escribe nada en el repositorio
+        from scripts.int11_fuente_bolsa import fx_diarias
+        from src.report import bolsa_vivo as B
+        r = RV.resumen_ensayo(o, VIVO, B.plan_evaluacion(o["ventana_objetivo"]))
+        # prueba de FONTANERÍA de la lectura (última ventana de 12 meses con todos los datos de la principal; no se
+        # compara con ningún abanico)
+        con = D.connect()
+        u = pd.Timestamp(con.execute("select max(date) from obs_latest where series_id = 'aqr_mkt_usa_m'").fetchone()[0])
+        desde = (u - pd.DateOffset(months=11)).date()
+        lect = B.leer_realizado(con, fx_diarias(), desde, (u + pd.offsets.MonthEnd(0)).date())
+        r["bolsa_evaluacion"]["prueba_lectura"] = {
+            "ventana": {"desde": str(desde), "hasta": str((u + pd.offsets.MonthEnd(0)).date())},
+            "paises": {c: {"usada": x["usada"], "real_principal": x.get("principal", {}).get("real"),
+                           "real_respaldo": x.get("respaldo", {}).get("real"), "ultimo_dato": x["ultimo_dato"],
+                           "ipc_interpolados": x["ipc_interpolados"]}
+                       for c, x in lect.items()}}
+        print(json.dumps(r, ensure_ascii=False, indent=1, default=float))
+        return
     if registro:                     # solo el registro: no ensucia el árbol con la salida "hoy"
         print("registro:", registrar(o))
     else:
