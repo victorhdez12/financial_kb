@@ -120,6 +120,9 @@ panel_mensual_dev.parquet`, sha256 `e8ac5a6c…9615`).
      indicadores; termómetro: percentil ≤ 2004 de cada indicador) que cambiaría si se recalcularan las referencias con
      los datos de hoy. Medido el 4-nov: 12 series revisadas, ninguna grande; 0 de 127 (nowcast) y 0 de 90 (termómetro)
      percentiles cambiarían. Si un día falla, se decide a mano (nueva instantánea y nueva congelación declarada, o no).
+     **5-nov (propuesta pendiente de aprobación):** umbrales por familia con dos niveles, aviso y fallo, en la
+     transformación que usa cada indicador, reglas de rotura y respaldo de la instantánea en el repo (xz, mismo sha256,
+     lectura con caída al respaldo y `scripts/instantanea_respaldo.py restaurar`): `docs/int/OCDE_deriva_umbrales.md`.
 4. **Ruta de desarrollo.** `src/intl/data.connect(fuente="instantanea")` (o `FIN_DEV_FUENTE=instantanea`) abre la
    instantánea con la misma interfaz que el warehouse; `load_dev` falla si se pide una serie que no cubre y
    `load_dev_curado` lee de ella el PIB trimestral. `scripts/int8b_corrida.cargar_dev(fuente=...)` y
