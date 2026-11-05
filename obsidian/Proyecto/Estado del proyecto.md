@@ -50,7 +50,9 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Línea A — cartera operativa:** B0 = estática **70/15/15** y B1 = su ajuste por volatilidad, paper trading desde el cierre de octubre. 70/15/15 decidido **después** de ver el −42 % de la 80/10/10 (declarado). Pendiente antes de la primera decisión: σ\* en la medida en vivo (calculado: 17,02 % con 1963-2004; sin congelar), declaración S&P 500 / French Developed, nota de potencia de 36 meses, launchd con aviso, y pasar código/spec/tests/ensayo a 70/15/15. El nowcast no interviene.
 
-**▶ Retomar (5-nov, 7):** evaluación de los 4 registros en vivo congelada (`docs/int/EVAL_registros_vivo.md`; §4 ambigüedades a aprobar). Pendiente usuario: instalar launchd INT-11 (`scripts/launchd/`), ACTIVO, B1′ (condición (a) cumplida), §4 de EVAL. Antes de jun-2027: declarar inicios de crisis 2026 en `scripts/k1_vivo.py`. Antes de feb-2028: prerregistrar realizado de bonos/letras/vivienda/oro de INT-11.
+**▶ Retomar (5-nov, 8):** B1′ implementado (registra con ACTIVO desde cierre nov). Realizado en vivo de INT-11 + semáforo en borrador (`docs/int/INT11_vivo_realizado_v0.md`, V1-V8 pendientes). Sin agentes. Pendiente usuario: instalar launchd INT-11, ACTIVO, V1-V8. Por hacer: formato del informe mensual B1 vs B1′ (spec §4).
+
+**(anterior) ▶ Retomar (5-nov, 7):** evaluación de los 4 registros en vivo congelada (`docs/int/EVAL_registros_vivo.md`; §4 ambigüedades a aprobar). Pendiente usuario: instalar launchd INT-11 (`scripts/launchd/`), ACTIVO, B1′ (condición (a) cumplida), §4 de EVAL. Antes de jun-2027: declarar inicios de crisis 2026 en `scripts/k1_vivo.py`. Antes de feb-2028: prerregistrar realizado de bonos/letras/vivienda/oro de INT-11.
 
 **(anterior) ▶ Retomar (5-nov, 6):** aprobados umbrales OCDE y fuente de bolsa D9; registro mensual INT-11 v3.1 listo (`scripts/int11_vivo_mensual.sh`), falta que el usuario instale el launchd (`scripts/launchd/com.financialkb.int11vivo.plist`). Primera emisión ≈ 20-nov. Pendiente usuario: instalar launchd, ACTIVO, B1′.
 
