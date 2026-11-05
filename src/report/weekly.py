@@ -14,6 +14,7 @@ import pandas as pd
 from src.regime.credit import THRESHOLDS
 from src.report.analogs import find_analogs
 from src.report import liquidez_vivo as LV
+from src.paper import informe as PI
 from src.report import nowcast_vivo as NV
 from src.report import termometro_vivo as TV
 from src.report.narrative import reading
@@ -234,6 +235,15 @@ def md_escenarios(s: dict) -> str:
     return f"{tit}\n\n> {es['aviso']}\n\n{cuerpo}"
 
 
+def md_paper(s: dict) -> str:
+    """5f. Paper trading B0 / B1 / B1′ (src/paper/informe.py; formato fijado en docs/factors/paper_informe_formato.md)."""
+    p = s.get("paper")
+    if p is None or "error" in (p or {}):
+        return "### 5f. Paper trading (B0 / B1 / B1′)\n\n_No disponible esta semana" + (
+            f": {p['error']}" if p else "") + "._"
+    return PI.markdown(p)
+
+
 def md_liquidez_credito(s: dict) -> str:
     """5e. Liquidez y crédito de EE. UU. (src/report/liquidez_vivo.py): descriptivo, sin señal, no validado."""
     lc = s.get("liquidez_credito")
@@ -323,6 +333,8 @@ M2 a/a − PIB nominal a/a: {lq['m2_minus_gdp']} pp · Liquidez neta Fed: {lq['n
 
 {md_liquidez_credito(s)}
 
+{md_paper(s)}
+
 ## 6. Lectura
 
 _Origen: {origin}._
@@ -358,6 +370,11 @@ def main(today: date | None = None) -> None:
         signal["liquidez_credito"] = LV.liquidez_credito(con, today or date.today())
     except Exception as e:  # noqa: BLE001
         signal["liquidez_credito"] = {"error": f"{type(e).__name__}: {e}"}
+    # Paper trading B0 / B1 / B1′ (seguimiento; no tumba el reporte)
+    try:
+        signal["paper"] = PI.informe(con)
+    except Exception as e:  # noqa: BLE001
+        signal["paper"] = {"error": f"{type(e).__name__}: {e}"}
     finally:
         con.close()
     # Escenarios INT-11 v3.1 (descriptivos): igual, después de la lectura y sin tumbar el reporte.
