@@ -37,3 +37,10 @@ def test_modelos_congelados(dev):
     j = json.loads((REPO / "research/int/e1_modelos.json").read_text())
     mod = E.ajustar(E.filas(M.muestra(dev, E.OBJ)))
     assert E.sha(mod) == j["modelos_sha256"] == E.sha(j["modelos"])
+
+
+def test_modelos_6m_congelados(dev):
+    from src.intl import int13 as M
+    j = json.loads((REPO / "research/int/e1_6_modelos.json").read_text())
+    mod = E.ajustar(E.filas(M.muestra(dev, "E1_6"), "y_E1_6"), "y_E1_6")
+    assert E.sha(mod) == j["modelos_sha256"] == E.sha(j["modelos"])

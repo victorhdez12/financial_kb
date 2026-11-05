@@ -23,6 +23,7 @@ from src.intl import e1 as E
 
 REPO = Path(__file__).resolve().parents[1]
 MODELOS = REPO / "research/int/e1_modelos.json"
+MODELOS6 = REPO / "research/int/e1_6_modelos.json"      # P-E1b (6 meses)
 LOG = REPO / "research/int/e1_vivo.jsonl"
 
 
@@ -49,7 +50,9 @@ def main() -> int:
     cierre = V.fin_de_mes(a.cierre) if a.cierre else ultimo
     j = json.loads(MODELOS.read_text())
     mod = j["modelos"]
-    if E.sha(mod) != j["modelos_sha256"]:
+    j6 = json.loads(MODELOS6.read_text())
+    mod6 = j6["modelos"]
+    if E.sha(mod) != j["modelos_sha256"] or E.sha(mod6) != j6["modelos_sha256"]:
         print("modelos alterados: sha256 no coincide")
         return 1
     if a.registrar:
@@ -69,10 +72,12 @@ def main() -> int:
     finally:
         con.close()
     d = E.prediccion(mod, r[r.fecha == cierre])
+    d6 = E.prediccion(mod6, r[r.fecha == cierre]).set_index("pais")
+    d["p_L6"], d["p_A6"] = d.pais.map(d6.p_L), d.pais.map(d6.p_A)
     faltan = sorted(set(E.PAISES) - set(d.pais))
     print(f"E1 cierre {cierre.date()} (registro, no es señal ni se muestra): {len(d)} países; sin dato: {faltan}")
     for x in d.itertuples():
-        print(f"  {x.pais}: p_L {x.p_L:.3f}  p_A {x.p_A:.3f}")
+        print(f"  {x.pais}: 12 m p_L {x.p_L:.3f} p_A {x.p_A:.3f} | 6 m p_L {x.p_L6:.3f} p_A {x.p_A6:.3f}")
     if not a.registrar:
         return 0
     ahora = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
@@ -80,8 +85,8 @@ def main() -> int:
     with LOG.open("a") as f:
         for x in d.itertuples():
             f.write(json.dumps({"origen": str(cierre.date()), "pais": x.pais, "p_L": round(x.p_L, 6),
-                                "p_A": round(x.p_A, 6), **{c: round(getattr(x, c), 6) for c in E.COLS["A"]},
-                                "modelos_sha256": j["modelos_sha256"], "registrado": ahora, "git_head": head}) + "\n")
+                                "p_A": round(x.p_A, 6), "p_L6": round(x.p_L6, 6), "p_A6": round(x.p_A6, 6), **{c: round(getattr(x, c), 6) for c in E.COLS["A"]},
+                                "modelos_sha256": j["modelos_sha256"], "modelos6_sha256": j6["modelos_sha256"], "registrado": ahora, "git_head": head}) + "\n")
         for c in faltan:
             f.write(json.dumps({"origen": str(cierre.date()), "pais": c, "sin_dato": True, "registrado": ahora,
                                 "git_head": head}) + "\n")
