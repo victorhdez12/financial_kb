@@ -38,6 +38,9 @@ FAMILIAS: dict[str, str] = {
     r"gold_wb_usd_m": "Oro, Banco Mundial Pink Sheet, media mensual en USD/oz (Londres)",
     r"bundesbank_bund_zero_(1|2|5|10)y_m": "Bund cupón cero (Svensson, Bundesbank), mensual (1972-09 →): renta fija en EUR",
     r"oecd_ir3m_deu": "Tipo a 3 meses de Alemania (OCDE), mensual (1960 →): efectivo en EUR",
+    # INT-16 (docs/int/INT16_prima_plazo_v0.md): descomposición ACM del Tesoro (NY Fed). NO es PIT: el modelo se
+    # reestima con toda la muestra publicada (incluida la ≥ 2005); solo como sensibilidad o para calibrar la potencia.
+    r"nyfed_acm_(y|tp|rny)\d\d_m": "NY Fed ACM: rendimiento ajustado, prima por plazo y neutral al riesgo, mensual (1961-06 →; no PIT)",
 }
 _RX = [re.compile(f"^(?:{p})$") for p in FAMILIAS]
 
