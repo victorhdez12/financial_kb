@@ -8,14 +8,23 @@ Fuente de desarrollo (`connect(fuente=...)`; por defecto la variable de entorno 
   INT-8b y del termómetro (manifiesto en el repo, research/int/instantanea_dev_2004.json; parquet fuera del repo en
   $FIN_DATA_ROOT/intl/snapshots/; sha256 comprobado al abrirla; docs/int/INT8b_nowcast.md, «Revisiones de datos»).
   Con ella, `load_dev` falla si se pide una serie que la instantánea no cubre (nunca devuelve vacío en silencio).
+  Respaldo (docs/int/OCDE_deriva_umbrales.md): copia xz en el repo (`respaldo` del manifiesto: sha256 del .xz y, una vez
+  descomprimido, el sha256 del parquet). Si el parquet de $FIN_DATA_ROOT falta o su sha256 no coincide, se lee el
+  respaldo (aviso InstantaneaDesdeRespaldo) y `restaurar_instantanea()` (scripts/instantanea_respaldo.py restaurar) lo
+  vuelve a escribir. La ruta del warehouse (`load_dev` sobre `db.connect`) no depende de nada de esto.
 """
 from __future__ import annotations
 
+import datetime as dt
 import functools
 import hashlib
+import io
 import json
+import lzma
 import os
 import re
+import stat
+import warnings
 from pathlib import Path
 
 import duckdb
@@ -109,7 +118,12 @@ FUENTES = ("warehouse", "instantanea")
 
 
 class InstantaneaNoDisponible(FileNotFoundError):
-    """Falta el parquet de la instantánea (está fuera del repo) o su sha256 no coincide con el manifiesto."""
+    """No hay ninguna copia válida de la instantánea: ni el parquet de $FIN_DATA_ROOT ni el respaldo del repo existen
+    con el sha256 del manifiesto."""
+
+
+class InstantaneaDesdeRespaldo(UserWarning):
+    """El parquet de $FIN_DATA_ROOT falta o está corrupto y se ha leído el respaldo del repo (mismo sha256)."""
 
 
 def _fuente(fuente: str | None) -> str:
@@ -127,39 +141,189 @@ def sha256(path) -> str:
     return h.hexdigest()
 
 
-def ruta_instantanea(manifiesto: Path = INSTANTANEA) -> Path:
-    """Ruta del parquet: `ruta` del manifiesto, relativa a $FIN_DATA_ROOT."""
-    return db.DATA_ROOT / json.loads(Path(manifiesto).read_text())["ruta"]
-
-
-@functools.lru_cache(maxsize=4)
-def _leer_instantanea(manifiesto: str, _mtime: float) -> pd.DataFrame:
+def _manifiesto(manifiesto: Path) -> dict:
     if not Path(manifiesto).exists():
         raise InstantaneaNoDisponible(f"falta el manifiesto {manifiesto}")
-    man = json.loads(Path(manifiesto).read_text())
+    return json.loads(Path(manifiesto).read_text())
+
+
+def ruta_instantanea(manifiesto: Path = INSTANTANEA) -> Path:
+    """Ruta del parquet: `ruta` del manifiesto, relativa a $FIN_DATA_ROOT."""
+    return db.DATA_ROOT / _manifiesto(manifiesto)["ruta"]
+
+
+def ruta_respaldo(manifiesto: Path = INSTANTANEA) -> Path | None:
+    """Ruta de la copia xz del repo (`respaldo.ruta`, relativa a la raíz del repo); None si el manifiesto no la declara."""
+    r = _manifiesto(manifiesto).get("respaldo")
+    return db.REPO / r["ruta"] if r else None
+
+
+def _comprobar_archivo(man: dict) -> tuple[bool, str]:
     p = db.DATA_ROOT / man["ruta"]
     if not p.exists():
-        raise InstantaneaNoDisponible(f"falta la instantánea {p} (fuera del repo; manifiesto {manifiesto})")
+        return False, f"falta {p}"
     if (h := sha256(p)) != man["sha256"]:
-        raise InstantaneaNoDisponible(f"{p}: sha256 {h} ≠ manifiesto {man['sha256']} (la instantánea es inmutable)")
-    df = pd.read_parquet(p)
+        return False, f"{p}: sha256 {h} ≠ manifiesto {man['sha256']} (la instantánea es inmutable)"
+    return True, str(p)
+
+
+def _bytes_respaldo(manifiesto: Path) -> bytes:
+    """Parquet descomprimido del respaldo del repo, tras comprobar el sha256 del .xz y el del parquet."""
+    man = _manifiesto(manifiesto)
+    r = man.get("respaldo")
+    if not r:
+        raise InstantaneaNoDisponible("el manifiesto no declara respaldo")
+    p = db.REPO / r["ruta"]
+    if not p.exists():
+        raise InstantaneaNoDisponible(f"falta el respaldo {p}")
+    if (h := sha256(p)) != r["sha256_xz"]:
+        raise InstantaneaNoDisponible(f"{p}: sha256 {h} ≠ respaldo.sha256_xz {r['sha256_xz']}")
+    try:
+        b = lzma.decompress(p.read_bytes())
+    except lzma.LZMAError as e:
+        raise InstantaneaNoDisponible(f"{p}: no se descomprime ({e})") from None
+    if (h := hashlib.sha256(b).hexdigest()) != man["sha256"]:
+        raise InstantaneaNoDisponible(f"{p}: el parquet descomprimido tiene sha256 {h} ≠ manifiesto {man['sha256']}")
+    return b
+
+
+def _sin_posteriores(df: pd.DataFrame, origen) -> pd.DataFrame:
     if pd.to_datetime(df["date"]).max() > DEV_END:
-        raise FactorCutoffError(f"{p}: datos posteriores a DEV_END")
+        raise FactorCutoffError(f"{origen}: datos posteriores a DEV_END")
     return df
 
 
-def leer_instantanea(manifiesto: Path = INSTANTANEA) -> pd.DataFrame:
-    """Filas (series_id, date, value) de la instantánea, tras comprobar su sha256 con el manifiesto."""
+@functools.lru_cache(maxsize=8)
+def _leer_instantanea(manifiesto: str, _firma: tuple) -> tuple[pd.DataFrame, str, str]:
+    """(filas, origen 'archivo' | 'respaldo', motivo). Primero el parquet de $FIN_DATA_ROOT; si falta o su sha256 no
+    coincide, el respaldo del repo (con el mismo sha256). Si ninguno vale, InstantaneaNoDisponible."""
+    man = _manifiesto(Path(manifiesto))
+    ok, motivo = _comprobar_archivo(man)
+    if ok:
+        return _sin_posteriores(pd.read_parquet(motivo), motivo), "archivo", motivo
+    try:
+        b = _bytes_respaldo(Path(manifiesto))
+    except InstantaneaNoDisponible as e:
+        raise InstantaneaNoDisponible(f"sin instantánea válida: {motivo}; respaldo: {e}") from None
+    return _sin_posteriores(pd.read_parquet(io.BytesIO(b)), "respaldo"), "respaldo", motivo
+
+
+def _firma(m: Path) -> tuple:
+    """Clave de caché: cambia si cambian el manifiesto, el parquet o el respaldo (p. ej. al borrar o restaurar)."""
+    def st(p):
+        try:
+            s = Path(p).stat()
+            return s.st_mtime_ns, s.st_size, s.st_ino
+        except (OSError, TypeError):
+            return None
+    try:
+        prim, resp = ruta_instantanea(m), ruta_respaldo(m)
+    except (InstantaneaNoDisponible, KeyError, ValueError):
+        prim = resp = None
+    return st(m), st(prim), st(resp), str(db.DATA_ROOT), str(db.REPO)
+
+
+def _leer(manifiesto: Path) -> tuple[pd.DataFrame, str]:
     m = Path(manifiesto)
-    return _leer_instantanea(str(m), m.stat().st_mtime if m.exists() else 0.0).copy()
+    df, origen, motivo = _leer_instantanea(str(m), _firma(m))
+    if origen == "respaldo":
+        warnings.warn(f"instantánea leída del respaldo del repo ({motivo}); restáurala con "
+                      "`.venv/bin/python scripts/instantanea_respaldo.py restaurar`", InstantaneaDesdeRespaldo,
+                      stacklevel=3)
+    return df, origen
+
+
+def leer_instantanea(manifiesto: Path = INSTANTANEA) -> pd.DataFrame:
+    """Filas (series_id, date, value) de la instantánea, tras comprobar su sha256 con el manifiesto: del parquet de
+    $FIN_DATA_ROOT o, si falta o está corrupto, del respaldo del repo (aviso InstantaneaDesdeRespaldo)."""
+    return _leer(manifiesto)[0].copy()
+
+
+def origen_instantanea(manifiesto: Path = INSTANTANEA) -> str:
+    """'archivo' (parquet de $FIN_DATA_ROOT) o 'respaldo' (copia xz del repo); InstantaneaNoDisponible si ninguna."""
+    m = Path(manifiesto)
+    return _leer_instantanea(str(m), _firma(m))[1]
 
 
 def instantanea_disponible(manifiesto: Path = INSTANTANEA) -> bool:
     try:
-        leer_instantanea(manifiesto)
+        origen_instantanea(manifiesto)
         return True
     except InstantaneaNoDisponible:
         return False
+
+
+def verificar_instantanea(manifiesto: Path = INSTANTANEA) -> dict:
+    """Estado de las dos copias: {'archivo': (ok, detalle), 'respaldo': (ok, detalle)}."""
+    m = Path(manifiesto)
+    out = {"archivo": _comprobar_archivo(_manifiesto(m))}
+    try:
+        _bytes_respaldo(m)
+        out["respaldo"] = (True, str(ruta_respaldo(m)))
+    except InstantaneaNoDisponible as e:
+        out["respaldo"] = (False, str(e))
+    return out
+
+
+def _escribir_solo_lectura(destino: Path, b: bytes) -> None:
+    """Escritura atómica (temporal + os.replace) y permisos 0o444."""
+    destino.parent.mkdir(parents=True, exist_ok=True)
+    tmp = destino.with_name(destino.name + ".tmp")
+    if tmp.exists():
+        tmp.chmod(stat.S_IRUSR | stat.S_IWUSR)
+        tmp.unlink()
+    tmp.write_bytes(b)
+    os.chmod(tmp, stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH)
+    os.replace(tmp, destino)
+
+
+def restaurar_instantanea(manifiesto: Path = INSTANTANEA) -> str:
+    """Reescribe el parquet de $FIN_DATA_ROOT desde el respaldo del repo si falta o su sha256 no coincide. Nunca toca una
+    copia válida; la corrupta se aparta como `<nombre>.corrupta-<fecha>` (no se borra). Devuelve qué ha hecho."""
+    m = Path(manifiesto)
+    man = _manifiesto(m)
+    ok, motivo = _comprobar_archivo(man)
+    if ok:
+        return f"nada que hacer: {motivo} es válida"
+    b = _bytes_respaldo(m)                                   # falla si el respaldo tampoco vale
+    destino = db.DATA_ROOT / man["ruta"]
+    if destino.exists():
+        aparte = destino.with_name(f"{destino.name}.corrupta-{dt.datetime.now():%Y%m%dT%H%M%S}")
+        os.replace(destino, aparte)
+        motivo += f"; apartada en {aparte}"
+    _escribir_solo_lectura(destino, b)
+    if sha256(destino) != man["sha256"]:
+        raise InstantaneaNoDisponible(f"{destino}: restaurada pero el sha256 no coincide")
+    _leer_instantanea.cache_clear()
+    return f"restaurada {destino} desde {ruta_respaldo(m)} ({motivo})"
+
+
+def respaldar_instantanea(manifiesto: Path = INSTANTANEA, destino: Path | None = None) -> dict:
+    """Crea la copia xz del repo a partir del parquet VÁLIDO de $FIN_DATA_ROOT y la declara en el manifiesto
+    (`respaldo`: ruta relativa al repo, sha256 y bytes del .xz). Si ya hay un respaldo válido, no hace nada."""
+    m = Path(manifiesto)
+    man = _manifiesto(m)
+    if man.get("respaldo"):
+        try:
+            _bytes_respaldo(m)
+            return man["respaldo"]
+        except InstantaneaNoDisponible:
+            pass
+    ok, motivo = _comprobar_archivo(man)
+    if not ok:
+        raise InstantaneaNoDisponible(f"no se puede respaldar: {motivo}")
+    destino = Path(destino or db.REPO / "research" / "int" / "snapshots" / (Path(man["ruta"]).name + ".xz"))
+    xz = lzma.compress(Path(motivo).read_bytes(), preset=9)
+    if hashlib.sha256(lzma.decompress(xz)).hexdigest() != man["sha256"]:
+        raise InstantaneaNoDisponible("la compresión no conserva el sha256")
+    _escribir_solo_lectura(destino, xz)
+    man["respaldo"] = {"ruta": str(destino.relative_to(db.REPO)), "raiz": "repo", "formato": "xz (lzma, preset 9)",
+                       "sha256_xz": hashlib.sha256(xz).hexdigest(), "bytes_xz": len(xz),
+                       "comprobacion": "sha256 del .xz y, descomprimido, el sha256 del manifiesto (el del parquet)",
+                       "creado": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")}
+    m.write_text(json.dumps(man, ensure_ascii=False, indent=1) + "\n")
+    _leer_instantanea.cache_clear()
+    return man["respaldo"]
 
 
 def connect_instantanea(manifiesto: Path = INSTANTANEA) -> duckdb.DuckDBPyConnection:

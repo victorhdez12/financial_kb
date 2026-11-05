@@ -389,5 +389,14 @@
    "dif_max_distribuciones": 0.0,
    "tolerancia": "1e-12"
   }
+ },
+ "respaldo": {
+  "ruta": "research/int/snapshots/dev_le2004_20261026.parquet.xz",
+  "raiz": "repo",
+  "formato": "xz (lzma, preset 9)",
+  "sha256_xz": "d1a128a29b6ca642f027740916c292a6780c9852dfac2d5a1c9a8d00eb04fa35",
+  "bytes_xz": 436532,
+  "comprobacion": "sha256 del .xz y, descomprimido, el sha256 del manifiesto (el del parquet)",
+  "creado": "2026-11-05T10:06:25+00:00"
  }
 }
