@@ -43,6 +43,17 @@ if [ ! -f "$LOGDIR/.e1_hecho_$MES" ]; then
   fi
 fi
 
+# P-K1v (registro anual en vivo, docs/int/K1_vivo_prerregistro_v1.md): solo registra t ≥ 2026, una vez por año
+ANIO="$(date +%Y)"
+if [ ! -f "$LOGDIR/.k1_hecho_$ANIO" ]; then
+  KLOG="$LOGDIR/$(date +%Y-%m-%d_%H%M)_k1.log"
+  if .venv/bin/python -m scripts.k1_vivo --registrar > "$KLOG" 2>&1; then
+    grep -q "registrado y subido\|ya registrado" "$KLOG" && touch "$LOGDIR/.k1_hecho_$ANIO"
+  else
+    avisa "K1: registro en vivo fallido (mira el log _k1); reintento mañana"
+  fi
+fi
+
 if [ ! -f "$REPO/research/paper/ACTIVO" ]; then
   [ -f "$LOGDIR/.paper_ensayo_$MES" ] && exit 0
   if .venv/bin/python -m scripts.paper_decision --auto > "$LOG" 2>&1; then

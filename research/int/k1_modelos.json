@@ -1,0 +1,52 @@
+{
+ "documento": "P-K1v v1.0",
+ "doc_sha256": "72696291c9abb70f0c98fbfbfb0589d9dc14f64483357e50bc0f80843952e451",
+ "procedencia": {
+  "commit": "37a70d7b68948d465609d2bf6f1e9243663f11ae",
+  "arbol_limpio": true,
+  "hora_utc": "2026-11-05T09:57:27+00:00"
+ },
+ "filas": 1137,
+ "eventos": 49,
+ "paises": [
+  "BEL",
+  "DEU",
+  "DNK",
+  "ESP",
+  "FIN",
+  "FRA",
+  "GBR",
+  "ITA",
+  "JPN",
+  "NLD",
+  "NOR",
+  "PRT",
+  "SWE",
+  "USA"
+ ],
+ "modelos": {
+  "L": {
+   "cols": [
+    "B1"
+   ],
+   "b": [
+    -1.3324106650155112,
+    -0.583012219478612
+   ]
+  },
+  "K": {
+   "cols": [
+    "B1",
+    "x_d5_credito_pp"
+   ],
+   "b": [
+    -1.1553653784503464,
+    -0.7678225926171939,
+    0.059142789816033575
+   ]
+  }
+ },
+ "modelos_sha256": "9789f0d18eeafeeab9c81fea62290cd5c0ef9909a48554ca23db5ce709ffb8d4",
+ "estado": "congelado",
+ "nota": "solo ajuste ≤ 2004; ninguna métrica de desarrollo cuenta; evaluación en vivo (§4)"
+}
