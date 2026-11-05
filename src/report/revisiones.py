@@ -41,7 +41,7 @@ class Umbral:
     fallo: float         # |Δ| máx > fallo → «fallo»
 
 
-# PROPUESTA v1 (5-nov-2026), PENDIENTE DE APROBACIÓN DEL USUARIO (docs/int/OCDE_deriva_umbrales.md, §2). Estrictamente
+# v1 APROBADA por el usuario el 5-nov-2026 (docs/int/OCDE_deriva_umbrales.md, §2); recalibrar ≈ mayo 2027. Estrictamente
 # mayor, con holgura 1e-9. Criterio: «aviso» por encima del redondeo con el que publica la fuente (un retoque de la
 # última cifra no avisa); «fallo» ≈ 0,2-0,3 desviaciones típicas ≤ 2004 de la transformación usada en el país con
 # menos variación (σ mínima por familia: IP 3,9; ventas 1,9; IPC 1,7; bolsa 14,5; PIB 1,8 pp interanual; CLI/confianza

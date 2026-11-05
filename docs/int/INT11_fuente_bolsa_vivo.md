@@ -1,6 +1,6 @@
 ---
 documento: INT-11 — fuente de la bolsa en vivo (D9) para evaluar el registro mensual
-version: 0.1 (2026-11-05) — PROPUESTA. Nada activado; requiere aprobación del usuario (§7)
+version: 1.0 (2026-11-05) — APROBADA por el usuario (A1-A7, con las recomendaciones de §7); registro de la serie v3.1 activado
 parte_de: docs/int/INT11_registro_vivo.md §3 · docs/int/INT11_prerregistro_v2.md (D9) · docs/int/INT11_prerregistro_v3.md §8
 código: src/report/bolsa_vivo.py (lectura, funciones puras) · tests/test_bolsa_vivo.py ·
         scripts/int11_fuente_bolsa.py (mediciones → research/int/int11_fuente_bolsa.json) ·
@@ -184,3 +184,14 @@ interpolación log-lineal y los declara (`ipc_interpolados`).
   (anual).
 - La divisa de FRED (mediodía en NY) no es exactamente la que usa AQR. El efecto medido frente a French es pequeño
   (dt mensual 0,5 pp).
+
+## 9. Aprobación y activación (5-nov-2026)
+- A1-A4 como se recomiendan. A4: JPN medido a fin de mes como los demás; **sensibilidad sin JPN declarada de antemano**
+  en la evaluación del registro (la medida "con medias anuales" solo descriptiva).
+- A5: `DEXDNUS DEXNOUS DEXSDUS` en `src/ingest/fred_extended.py` (entran con la actualización diaria);
+  French International Countries en `src/ingest/ken_french_paises.py` (`ffc_<iso3>_<tr|precio>_m`, en el ingest semanal).
+- A6: el repositorio es **público** → en git solo el realizado derivado (rentabilidad real de la ventana por país), nunca
+  series de AQR ni de French.
+- A7: registro mensual de la **serie v3.1** (`scripts/int11_v3_hoy.py --registro` → `research/int/int11_v3_1_vivo/`)
+  con `scripts/int11_vivo_mensual.sh` y launchd `com.financialkb.int11vivo` (diario 10:30; emite a partir del día 20,
+  una vez por mes). La serie v2 (`int11_vivo/`) queda sin registrar.

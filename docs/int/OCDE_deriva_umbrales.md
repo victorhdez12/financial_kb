@@ -1,4 +1,4 @@
-# Deriva de revisión OCDE ≤ 2004: umbrales y respaldo de la instantánea (propuesta v1, 5-nov-2026)
+# Deriva de revisión OCDE ≤ 2004: umbrales y respaldo de la instantánea (v1, APROBADA por el usuario el 5-nov-2026: §2 a-d)
 
 **Estado: PROPUESTA, pendiente de aprobación del usuario** (las dos decisiones que quedaron abiertas en la opción 1 del
 4-nov; `docs/int/INT8b_nowcast.md` §6). Código: `src/report/revisiones.py` (umbrales), `src/intl/data.py` (respaldo),
@@ -115,3 +115,7 @@ falla); `respaldar` crea el respaldo una vez desde un archivo válido (ya hecho)
 apuntando a un archivo inexistente.
 
 Pendiente opcional (no implementado): ejecutar `instantanea_respaldo.py verificar` en el trabajo semanal de launchd.
+
+
+## Aprobación (5-nov-2026)
+El usuario aprobó (a) la tabla de umbrales, (b) las reglas de estructura, (c) percentiles: aviso con 1 punto, fallo con ≥ 3 o de nulo a no nulo, (d) recalibrar en ≈ 6 meses (≈ mayo 2027) con las descargas fechadas archivadas desde el 4-nov.

@@ -116,6 +116,7 @@ UNIVERSE: dict[str, tuple] = {
     "DTWEXBGS": _u("fx"), "TWEXBMTH": _u("fx"), "TWEXB": _u("fx"), "TWEXMMTH": _u("fx"),
     "RTWEXBGS": _u("fx"), "DEXUSEU": _u("fx"), "DEXJPUS": _u("fx"), "DEXUSUK": _u("fx"),
     "DEXCHUS": _u("fx"), "DEXSZUS": _u("fx"),
+    "DEXDNUS": _u("fx"), "DEXNOUS": _u("fx"), "DEXSDUS": _u("fx"),   # D9 (INT-11 bolsa en vivo, 5-nov-2026)
     # --- markets ---
     "SP500": _u("markets"), "NASDAQCOM": _u("markets"), "VIXCLS": _u("markets"),
     "DJIA": _u("markets"),

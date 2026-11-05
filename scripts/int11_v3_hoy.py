@@ -29,6 +29,7 @@ from src.intl import data as D
 from src.intl import escenarios as E
 from src.intl.procedencia import procedencia
 from src.report import escenarios_vivo as V
+from src.report import registro_vivo as RV
 
 REPO = Path(__file__).resolve().parents[1]
 SALIDA = REPO / "research/int/int11_v3_hoy.json"
@@ -109,10 +110,16 @@ def pais_escenario(gen: E.Generador, c: str, e: dict, semilla: int) -> dict:
             "cerca_umbral": bool(abs(e["inflacion"] - E.UMBRAL_INFL) < CERCA_INFL or abs(e["brecha"]) < CERCA_BRECHA)}
 
 
-def emitir(fecha: str, exigir_limpio: bool = True, motor: str = "v3.1") -> dict:
+def emitir(fecha: str, exigir_limpio: bool = True, motor: str = "v3.1", registro: bool = False) -> dict:
     """`exigir_limpio=False` solo para el reporte semanal (descriptivo; la procedencia anota si el árbol estaba limpio).
     `motor`: "v3.1" (por defecto) o "v3" (imputación independiente; solo para comparar)."""
-    proc = procedencia(exigir_limpio)
+    if registro:   # registro en vivo (D8/D9 aprobados 5-nov-2026): solo v3.1, fecha = hoy ± 3 días, árbol limpio
+        if motor != "v3.1":
+            raise SystemExit("el registro en vivo es solo de la serie v3.1")
+        RV.comprobar_fecha(fecha)
+        proc = RV.procedencia_registro(VIVO_V3_1)
+    else:
+        proc = procedencia(exigir_limpio)
     if motor not in MOTORES:
         raise ValueError(motor)
     if not RESULTADO.exists():
@@ -128,7 +135,8 @@ def emitir(fecha: str, exigir_limpio: bool = True, motor: str = "v3.1") -> dict:
     if filas["año"].max() > 2004:
         raise D.FactorCutoffError("filas > 2004")
     gen = E.Generador(getattr(E.Config, MOTORES[motor])()).ajustar(filas)
-    est = V.estado_actual_movil(con, fecha)
+    est = V.estado_actual_movil(con, fecha, entradas=registro)
+    entradas = RV.huella_entradas(est.pop("_series")) if registro else None
     paises = {}
     for i, c in enumerate(NUCLEO):
         e = est["paises"][c]
@@ -138,6 +146,8 @@ def emitir(fecha: str, exigir_limpio: bool = True, motor: str = "v3.1") -> dict:
         paises[c] = {"estado": e, **pais_escenario(gen, c, e, SEED + i)}
     return {"procedencia": proc, "version_motor": E.VERSION, "motor": motor,
             "serie_registro": SERIE_VIVO if motor == "v3.1" else "int11_v3",
+            **({"entradas": entradas, "fuente_bolsa_evaluacion": "docs/int/INT11_fuente_bolsa_vivo.md (A1-A7 aprobadas)"}
+               if registro else {}),
             "dependencia_descriptiva_2004": descriptiva_regimen(), "config": str(gen.cfg), "emision": est["emision"],
             "corte_datos": est["corte"], "ventana_objetivo": est["ventana_objetivo"], "kappa": gen.kappa,
             "kappa_en_borde": gen.kappa_en_borde, "acierto_medido_fase_D": ac, "paises": paises,
@@ -270,6 +280,10 @@ def main() -> None:
     warnings.filterwarnings("ignore", category=RuntimeWarning)
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     fecha = args[0] if args else str(pd.Timestamp.today().date())
+    if "--registro" in sys.argv:     # SOLO research/int/int11_v3_1_vivo/AAAA-MM.json (no reescribe la salida "hoy")
+        o = emitir(fecha, registro=True)
+        print("registro:", RV.registrar(o, VIVO_V3_1))
+        return
     o = emitir(fecha, motor="v3" if "--v3" in sys.argv else "v3.1")
     md = markdown(o)
     SALIDA.write_text(json.dumps(o, ensure_ascii=False, indent=1, default=float))

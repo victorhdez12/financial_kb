@@ -39,7 +39,7 @@ graph-down:           ## para Neo4j (los datos persisten en ~/financial_archive/
 INGEST := fred_extended alfred_vintages fred_us fed_yieldcurve us_treasury nyfed_hhdc nber_macrohistory \
           shiller shiller_housing us_hist_labor ken_french damodaran wb_pinksheet measuringworth gold \
           fred_banking_1914 fed_z1 nyfed_repo us_liquidity cb_balance_sheets \
-          ken_french_intl aqr jkp cftc_cot cboe fed_ebp \
+          ken_french_intl ken_french_paises aqr jkp cftc_cot cboe fed_ebp \
           cboe_vx eia_futures atl_mpt clev_inflexp mpls_mpd \
           cycle_nyfed cycle_rtdsm cycle_spf umich \
           ecb eurostat bde ine bundesbank ifo zew \
