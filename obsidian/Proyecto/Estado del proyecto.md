@@ -50,7 +50,9 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Línea A — cartera operativa:** B0 = estática **70/15/15** y B1 = su ajuste por volatilidad, paper trading desde el cierre de octubre. 70/15/15 decidido **después** de ver el −42 % de la 80/10/10 (declarado). Pendiente antes de la primera decisión: σ\* en la medida en vivo (calculado: 17,02 % con 1963-2004; sin congelar), declaración S&P 500 / French Developed, nota de potencia de 36 meses, launchd con aviso, y pasar código/spec/tests/ensayo a 70/15/15. El nowcast no interviene.
 
-**▶ Retomar (5-nov, 8):** B1′ implementado (registra con ACTIVO desde cierre nov). Realizado en vivo de INT-11 + semáforo en borrador (`docs/int/INT11_vivo_realizado_v0.md`, V1-V8 pendientes). Sin agentes. Pendiente usuario: instalar launchd INT-11, ACTIVO, V1-V8. Por hacer: formato del informe mensual B1 vs B1′ (spec §4).
+**▶ Retomar (5-nov, 9):** los 4 registros en vivo (E1, E1b, K1v, INT-11 v3.1) tienen medidas, evaluadores y semáforo congelados y aprobados; B1′ listo. Sin agentes. Pendiente usuario: instalar launchd INT-11 (`scripts/launchd/`), `touch research/paper/ACTIVO`. Por hacer: formato del informe mensual B1 vs B1′. Calendario: ≈ 20-nov 1.ª emisión INT-11; ≈ 3-dic 1.er registro E1/E1b y B1/B1′; antes de jun-2027 declarar inicios de crisis 2026 (con mes) en `scripts/k1_vivo.py`; may-2027 recalibrar umbrales OCDE.
+
+**(anterior) ▶ Retomar (5-nov, 8):** B1′ implementado (registra con ACTIVO desde cierre nov). Realizado en vivo de INT-11 + semáforo en borrador (`docs/int/INT11_vivo_realizado_v0.md`, V1-V8 pendientes). Sin agentes. Pendiente usuario: instalar launchd INT-11, ACTIVO, V1-V8. Por hacer: formato del informe mensual B1 vs B1′ (spec §4).
 
 **(anterior) ▶ Retomar (5-nov, 7):** evaluación de los 4 registros en vivo congelada (`docs/int/EVAL_registros_vivo.md`; §4 ambigüedades a aprobar). Pendiente usuario: instalar launchd INT-11 (`scripts/launchd/`), ACTIVO, B1′ (condición (a) cumplida), §4 de EVAL. Antes de jun-2027: declarar inicios de crisis 2026 en `scripts/k1_vivo.py`. Antes de feb-2028: prerregistrar realizado de bonos/letras/vivienda/oro de INT-11.
 
