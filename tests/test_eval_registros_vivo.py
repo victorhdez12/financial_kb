@@ -204,3 +204,43 @@ def test_int11_lectura_realizado_con_warehouse_sintetico():
         assert abs(r["bolsa"][c]["real"] - ((1 + nominal) / (1 + infl) - 1)) < 1e-9
         assert r["inflacion"][c]["y"] == 0
     assert r["bolsa"]["JPN"]["descriptiva_medias"] is not None and len(r["sha256_series"]) == 64
+
+
+# ---------------------------------------------------------------- INT-11: activos nuevos y semáforo (borrador)
+def test_int11_retraso_por_activo_y_borrador_no_mide():
+    o = {"ventana_objetivo": {"desde": "2027-01-01", "hasta": "2027-12-31"}}
+    assert EI.cerrada(o, "2028-04-01", "oro") and not EI.cerrada(o, "2028-04-01", "vivienda")
+    assert EI.cerrada(o, "2029-01-01", "vivienda")
+    assert EI.MEDIDAS_NUEVAS_APROBADAS is False and EI.ACTIVOS_MEDIDOS == ("bolsa",)
+
+
+def test_int11_bandas_congeladas_integridad(tmp_path):
+    b = EI.bandas()
+    assert set(b["10"]) >= {"bolsa", "bonos", "letras", "vivienda", "oro", "S5"}
+    assert b["10"]["S5"]["p2_5"] < 0.9 < b["10"]["S5"]["p97_5"]
+    f = tmp_path / "s.json"
+    f.write_text(EI.SEMAFORO.read_text() + " ")
+    with pytest.raises(SystemExit):
+        EI.bandas(f)
+
+
+def test_int11_semaforo_y_contraste_sintetico(monkeypatch):
+    monkeypatch.setattr(EI, "ACTIVOS_MEDIDOS", EI.ACTIVOS)
+    e, re = EI.sintetico(escala_real=1.0, k2_informativa=False, años=12)
+    r = EI.evaluar(e, re)
+    s = r["semaforo"]
+    assert s["S5"]["años"] == 12 and s["S5"]["contraste_10_años"]["estado"] == "NO SE RECHAZA LA CALIBRACIÓN"
+    assert all(s[a]["color"] in ("verde", "ámbar") for a in EI.ACTIVOS)
+    assert r["principal_diciembre"]["K1_oro"]["n"] == 12 * 14
+    e, re = EI.sintetico(escala_real=1.7, k2_informativa=False, años=12)
+    s = EI.evaluar(e, re)["semaforo"]
+    assert s["S5"]["color"] == "rojo" and s["S5"]["contraste_10_años"]["estado"] == "DESCALIBRADO EN VIVO"
+    assert s["S5"]["contraste_10_años"]["lado"] == "abanico estrecho"
+    e, re = EI.sintetico(escala_real=1.7, k2_informativa=False, años=4)
+    assert EI.evaluar(e, re)["semaforo"]["S5"]["contraste_10_años"]["estado"].startswith("sin contraste")
+
+
+def test_int11_semaforo_sin_los_5_activos_no_da_s5():
+    e, re = EI.sintetico(escala_real=1.0, k2_informativa=False, años=3)
+    s = EI.evaluar(e, re)["semaforo"]
+    assert "nota" in s["S5"] and s["bolsa"]["años"] == 3
