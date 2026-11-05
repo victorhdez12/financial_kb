@@ -167,3 +167,7 @@ codigo: scripts/eval_e1_vivo.py · scripts/eval_k1_vivo.py · scripts/eval_int11
 - No se ha leído ningún dato ≥ 2005 como resultado, ni ningún realizado. Los modos reales se han corrido hoy, y los
   tres dicen "sin ventanas cerradas" sin abrir el warehouse.
 - No se ha cambiado ningún registro, modelo congelado ni prerregistro.
+
+
+## Aprobación (5-nov-2026)
+El usuario aprobó las resoluciones de §4 tal como están ("sigue" tras la propuesta). Nota a vigilar: en K1 un inicio sin mes declarado cuenta como previo al registro; al declarar cada inicio anual, anotar el MES para no perderlo del principal.
