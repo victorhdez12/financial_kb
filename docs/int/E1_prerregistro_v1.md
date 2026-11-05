@@ -1,10 +1,9 @@
 ---
 documento: P-E1 — logit de ACTIVIDAD frente a logit de CURVA para la entrada en recesión a 12 meses (OCDE mensual): prerregistro
-version: 0.1-borrador (2026-11-04)
-estado: BORRADOR para el usuario. NO congelado y NO ejecutable. Ningún indicador cruzado con ningún objetivo en este
-  trabajo; ninguna corrida sobre resultados. El periodo bloqueado (≥ 2005) NO se ha leído: ni indicadores, ni PIB, ni
-  disponibilidad. Lo único calculado es la potencia (solo estructura de eventos ≤ 2004, disponibilidad de columnas ≤ 2004,
-  una cifra ya publicada de INT-13 y estructuras de eventos SUPUESTAS para 2005-2024).
+version: 1.0 (congelado 2026-11-05, decisiones §10 aprobadas por el usuario: todas las recomendadas)
+estado: CONGELADO v1.0. Modo = REGISTRO PROSPECTIVO EN VIVO (decisión 1: el bloqueado ≥ 2005 NO se gasta en E1 ni
+  se lee para contar eventos). Ningún indicador cruzado con ningún objetivo ≥ 2005. Ver §11 (lo que cambia respecto al
+  borrador por las decisiones).
 nace_de: INT-13 (EXPLORATORIO; research/int/int13_resultado.md, corrida 3bfd43a): el paquete de actividad (P3) es el
   que más aporta a E1-12 sobre el logit de curva (ΔAUC V1 +0,167 [+0,100; +0,226]; V2 0,82 frente a 0,66) pero NO pasa
   Holm-32 (p Holm 0,053). Su "Lectura" propone la pregunta confirmatoria "logit con actividad frente a logit con curva".
@@ -229,3 +228,20 @@ de P-EVAL-INT4), con la potencia escrita delante:
 9. **Métrica principal ΔAUC** (log-loss como condición) frente a Δlog-loss principal (como INT-13): **recomendado ΔAUC**
    por el intercepto congelado (§5).
 10. Si se aprueban 1-9, este borrador pasa a v1.0 con hora **antes** de escribir `scripts/e1_corrida.py`.
+
+## 11. Decisiones registradas (v1.0, 2026-11-05) y lo que implican
+Aprobadas por el usuario ("ok E1") las recomendaciones 1-9 de §10:
+1. **Bloqueado NO se gasta en E1** (ni para contar eventos, decisión 8). `load_bloqueado` no se escribe.
+2. **Confirmación = registro prospectivo en vivo:** L y A congelados con ≤ 2004 (coeficientes + media/dt con sha256 en
+   `research/int/e1_modelos.json`); cada mes, una predicción por país con procedencia en `research/int/e1_vivo.jsonl`
+   (solo meses de origen ≥ 2026-11, posteriores a esta congelación). **No se muestra como probabilidad en el reporte.**
+   Evaluación (§5, §7 con la muestra en vivo en lugar del bloqueado) fijada para cuando haya **≥ 12 episodios nuevos**
+   (≈ 30+ años); antes, solo revisiones descriptivas sin veredicto. Declarado: no dará respuesta en un horizonte útil.
+3. Actividad = `ip_yoy` + `confianza_emp` (paro fuera). 4. Anidado. 5. Congelado sin reajuste (walk-forward = sensibilidad).
+6. M4 "anticipación pura" secundario obligatorio. 7. 2020 fuera a priori (aplica igual a pandemias/choques futuros solo
+   si se declaran ANTES de ver la predicción; ninguno declarado). 9. Principal ΔAUC; log-loss como condición.
+
+**Pasos ejecutables (orden fijo):** (a) `scripts/e1_corrida.py --sintetico` = P4 (señal plantada recuperada; sin señal
+ΔAUC ≈ 0); (b) `scripts/e1_corrida.py` = ajuste único ≤ 2004 con puerta (árbol limpio, sha256 de este documento,
+comprueba 3.306 filas / 240 eventos de INT-13 = P5, signos de §4: si la actividad sale al revés, se publica y se para);
+(c) `scripts/e1_vivo.py` mensual (pendiente; usa datos en vivo como `src/report/termometro_vivo`).
