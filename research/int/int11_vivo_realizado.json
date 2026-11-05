@@ -1,0 +1,7037 @@
+{
+ "hoy": "2026-11-05",
+ "historico_vs_jst_hasta_2004": {
+  "BEL": {
+   "bonos.irlt_encadenado": {
+    "n": 49,
+    "desde": 1956,
+    "hasta": 2004,
+    "corr": 0.952,
+    "sesgo_pp": 0.41,
+    "dt_dif_pp": 2.86,
+    "rmse_pp": 2.86
+   },
+   "bonos.irlt_media_anual_formula": {
+    "n": 49,
+    "desde": 1956,
+    "hasta": 2004,
+    "corr": 0.8317,
+    "sesgo_pp": -0.05,
+    "dt_dif_pp": 4.97,
+    "rmse_pp": 4.92
+   },
+   "letras.ir3m_media": {
+    "n": 47,
+    "desde": 1958,
+    "hasta": 2004,
+    "corr": 0.9972,
+    "sesgo_pp": 0.13,
+    "dt_dif_pp": 0.28,
+    "rmse_pp": 0.3
+   },
+   "letras.ir3m_encadenada": {
+    "n": 47,
+    "desde": 1958,
+    "hasta": 2004,
+    "corr": 0.9968,
+    "sesgo_pp": 0.38,
+    "dt_dif_pp": 0.31,
+    "rmse_pp": 0.49
+   },
+   "letras.ircall_media": {
+    "n": 6,
+    "desde": 1999,
+    "hasta": 2004,
+    "corr": 0.9919,
+    "sesgo_pp": 0.05,
+    "dt_dif_pp": 0.12,
+    "rmse_pp": 0.12
+   },
+   "vivienda.plusvalia_bis_q4": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9264,
+    "sesgo_pp": 0.01,
+    "dt_dif_pp": 2.36,
+    "rmse_pp": 2.33
+   },
+   "vivienda.plusvalia_bis_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.7415,
+    "sesgo_pp": 0.19,
+    "dt_dif_pp": 2.06,
+    "rmse_pp": 2.02
+   },
+   "vivienda.plusvalia_bis_media": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9882,
+    "sesgo_pp": -0.22,
+    "dt_dif_pp": 1.02,
+    "rmse_pp": 1.03
+   },
+   "vivienda.plusvalia_bis_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9405,
+    "sesgo_pp": 0.05,
+    "dt_dif_pp": 0.93,
+    "rmse_pp": 0.91
+   },
+   "vivienda.plusvalia_ocde_hpi_q4": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9244,
+    "sesgo_pp": -0.02,
+    "dt_dif_pp": 2.39,
+    "rmse_pp": 2.36
+   },
+   "vivienda.plusvalia_ocde_hpi_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.7291,
+    "sesgo_pp": 0.19,
+    "dt_dif_pp": 2.08,
+    "rmse_pp": 2.03
+   },
+   "vivienda.plusvalia_ocde_hpi_media": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9884,
+    "sesgo_pp": -0.19,
+    "dt_dif_pp": 1.0,
+    "rmse_pp": 1.0
+   },
+   "vivienda.plusvalia_ocde_hpi_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9403,
+    "sesgo_pp": 0.05,
+    "dt_dif_pp": 0.93,
+    "rmse_pp": 0.91
+   },
+   "vivienda.ancla": {
+    "año": 1984,
+    "rent_yd_jst": 0.0787
+   },
+   "vivienda.total_indice_alquiler": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.955,
+    "sesgo_pp": 0.1,
+    "dt_dif_pp": 0.93,
+    "rmse_pp": 0.91
+   },
+   "vivienda.total_indice_alquiler_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.7978,
+    "sesgo_pp": 0.15,
+    "dt_dif_pp": 2.06,
+    "rmse_pp": 2.02
+   },
+   "vivienda.total_alquiler_fijo": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.8426,
+    "sesgo_pp": 1.86,
+    "dt_dif_pp": 1.7,
+    "rmse_pp": 2.49
+   },
+   "vivienda.total_alquiler_fijo_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.6987,
+    "sesgo_pp": 2.06,
+    "dt_dif_pp": 2.49,
+    "rmse_pp": 3.18
+   },
+   "vivienda.total_solo_precio": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.8426,
+    "sesgo_pp": -6.49,
+    "dt_dif_pp": 1.65,
+    "rmse_pp": 6.69
+   },
+   "vivienda.total_solo_precio_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.6987,
+    "sesgo_pp": -6.3,
+    "dt_dif_pp": 2.37,
+    "rmse_pp": 6.71
+   },
+   "vivienda.rent_yd_encadenado_vs_jst": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9965,
+    "sesgo_pp": 0.07,
+    "dt_dif_pp": 0.1,
+    "rmse_pp": 0.12
+   },
+   "vivienda.rent_yd_2004": {
+    "encadenado": 0.0443,
+    "jst": 0.0446,
+    "fijo_en_ancla": 0.0787
+   },
+   "oro.wb_fx_fred_vs_motor": {
+    "n": 5,
+    "desde": 2000,
+    "hasta": 2004,
+    "corr": 0.9777,
+    "sesgo_pp": 0.17,
+    "dt_dif_pp": 0.62,
+    "rmse_pp": 0.58
+   },
+   "oro.fx_fred_fin_dic_vs_jst_xrusd_cambio": {
+    "n": 5,
+    "desde": 2000,
+    "hasta": 2004,
+    "corr": 0.9996,
+    "sesgo_pp": 0.11,
+    "dt_dif_pp": 0.57,
+    "rmse_pp": 0.53
+   }
+  },
+  "DEU": {
+   "bonos.irlt_encadenado": {
+    "n": 48,
+    "desde": 1957,
+    "hasta": 2004,
+    "corr": 0.9045,
+    "sesgo_pp": 0.94,
+    "dt_dif_pp": 3.26,
+    "rmse_pp": 3.36
+   },
+   "bonos.irlt_media_anual_formula": {
+    "n": 48,
+    "desde": 1957,
+    "hasta": 2004,
+    "corr": 0.7202,
+    "sesgo_pp": 0.53,
+    "dt_dif_pp": 4.48,
+    "rmse_pp": 4.47
+   },
+   "letras.ir3m_media": {
+    "n": 45,
+    "desde": 1960,
+    "hasta": 2004,
+    "corr": 0.9843,
+    "sesgo_pp": 0.51,
+    "dt_dif_pp": 0.45,
+    "rmse_pp": 0.68
+   },
+   "letras.ir3m_encadenada": {
+    "n": 44,
+    "desde": 1961,
+    "hasta": 2004,
+    "corr": 0.9865,
+    "sesgo_pp": 0.7,
+    "dt_dif_pp": 0.51,
+    "rmse_pp": 0.86
+   },
+   "letras.ircall_media": {
+    "n": 45,
+    "desde": 1960,
+    "hasta": 2004,
+    "corr": 1.0,
+    "sesgo_pp": 0.0,
+    "dt_dif_pp": 0.0,
+    "rmse_pp": 0.0
+   },
+   "vivienda.plusvalia_bis_q4": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9447,
+    "sesgo_pp": 0.01,
+    "dt_dif_pp": 1.22,
+    "rmse_pp": 1.21
+   },
+   "vivienda.plusvalia_bis_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9352,
+    "sesgo_pp": -0.07,
+    "dt_dif_pp": 1.15,
+    "rmse_pp": 1.12
+   },
+   "vivienda.plusvalia_bis_media": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9601,
+    "sesgo_pp": 0.1,
+    "dt_dif_pp": 1.05,
+    "rmse_pp": 1.04
+   },
+   "vivienda.plusvalia_bis_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9567,
+    "sesgo_pp": -0.05,
+    "dt_dif_pp": 0.97,
+    "rmse_pp": 0.94
+   },
+   "vivienda.plusvalia_ocde_hpi_q4": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9479,
+    "sesgo_pp": -0.03,
+    "dt_dif_pp": 1.18,
+    "rmse_pp": 1.17
+   },
+   "vivienda.plusvalia_ocde_hpi_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9335,
+    "sesgo_pp": 0.04,
+    "dt_dif_pp": 1.15,
+    "rmse_pp": 1.12
+   },
+   "vivienda.plusvalia_ocde_hpi_media": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9685,
+    "sesgo_pp": 0.11,
+    "dt_dif_pp": 0.93,
+    "rmse_pp": 0.92
+   },
+   "vivienda.plusvalia_ocde_hpi_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.967,
+    "sesgo_pp": 0.08,
+    "dt_dif_pp": 0.86,
+    "rmse_pp": 0.84
+   },
+   "vivienda.ancla": {
+    "año": 1984,
+    "rent_yd_jst": 0.0351
+   },
+   "vivienda.total_indice_alquiler": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9431,
+    "sesgo_pp": 0.05,
+    "dt_dif_pp": 1.0,
+    "rmse_pp": 0.98
+   },
+   "vivienda.total_indice_alquiler_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9259,
+    "sesgo_pp": 0.05,
+    "dt_dif_pp": 1.15,
+    "rmse_pp": 1.12
+   },
+   "vivienda.total_alquiler_fijo": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9442,
+    "sesgo_pp": -0.78,
+    "dt_dif_pp": 0.97,
+    "rmse_pp": 1.22
+   },
+   "vivienda.total_alquiler_fijo_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9206,
+    "sesgo_pp": -0.76,
+    "dt_dif_pp": 1.15,
+    "rmse_pp": 1.35
+   },
+   "vivienda.total_solo_precio": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9442,
+    "sesgo_pp": -4.33,
+    "dt_dif_pp": 0.97,
+    "rmse_pp": 4.44
+   },
+   "vivienda.total_solo_precio_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9206,
+    "sesgo_pp": -4.32,
+    "dt_dif_pp": 1.15,
+    "rmse_pp": 4.46
+   },
+   "vivienda.rent_yd_encadenado_vs_jst": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9915,
+    "sesgo_pp": 0.15,
+    "dt_dif_pp": 0.1,
+    "rmse_pp": 0.18
+   },
+   "vivienda.rent_yd_2004": {
+    "encadenado": 0.0526,
+    "jst": 0.051,
+    "fijo_en_ancla": 0.0351
+   },
+   "oro.wb_fx_fred_vs_motor": {
+    "n": 5,
+    "desde": 2000,
+    "hasta": 2004,
+    "corr": 0.9777,
+    "sesgo_pp": 0.17,
+    "dt_dif_pp": 0.62,
+    "rmse_pp": 0.58
+   },
+   "oro.fx_fred_fin_dic_vs_jst_xrusd_cambio": {
+    "n": 5,
+    "desde": 2000,
+    "hasta": 2004,
+    "corr": 0.9996,
+    "sesgo_pp": 0.11,
+    "dt_dif_pp": 0.57,
+    "rmse_pp": 0.53
+   }
+  },
+  "DNK": {
+   "bonos.irlt_encadenado": {
+    "n": 17,
+    "desde": 1988,
+    "hasta": 2004,
+    "corr": 0.9661,
+    "sesgo_pp": 0.41,
+    "dt_dif_pp": 2.82,
+    "rmse_pp": 2.77
+   },
+   "bonos.irlt_media_anual_formula": {
+    "n": 17,
+    "desde": 1988,
+    "hasta": 2004,
+    "corr": 0.638,
+    "sesgo_pp": -0.14,
+    "dt_dif_pp": 8.34,
+    "rmse_pp": 8.09
+   },
+   "letras.ir3m_media": {
+    "n": 18,
+    "desde": 1987,
+    "hasta": 2004,
+    "corr": 0.9987,
+    "sesgo_pp": 0.14,
+    "dt_dif_pp": 0.18,
+    "rmse_pp": 0.23
+   },
+   "letras.ir3m_encadenada": {
+    "n": 17,
+    "desde": 1988,
+    "hasta": 2004,
+    "corr": 0.9934,
+    "sesgo_pp": 0.42,
+    "dt_dif_pp": 0.5,
+    "rmse_pp": 0.64
+   },
+   "letras.ircall_media": {
+    "n": 8,
+    "desde": 1997,
+    "hasta": 2004,
+    "corr": 0.9803,
+    "sesgo_pp": -0.1,
+    "dt_dif_pp": 0.2,
+    "rmse_pp": 0.21
+   },
+   "vivienda.plusvalia_bis_q4": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.8836,
+    "sesgo_pp": 0.42,
+    "dt_dif_pp": 3.93,
+    "rmse_pp": 3.9
+   },
+   "vivienda.plusvalia_bis_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.8015,
+    "sesgo_pp": 0.02,
+    "dt_dif_pp": 3.93,
+    "rmse_pp": 3.83
+   },
+   "vivienda.plusvalia_bis_media": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9905,
+    "sesgo_pp": 0.23,
+    "dt_dif_pp": 1.06,
+    "rmse_pp": 1.07
+   },
+   "vivienda.plusvalia_bis_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9972,
+    "sesgo_pp": 0.11,
+    "dt_dif_pp": 0.47,
+    "rmse_pp": 0.47
+   },
+   "vivienda.plusvalia_ocde_hpi_q4": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.8836,
+    "sesgo_pp": 0.5,
+    "dt_dif_pp": 3.93,
+    "rmse_pp": 3.9
+   },
+   "vivienda.plusvalia_ocde_hpi_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.7978,
+    "sesgo_pp": 0.13,
+    "dt_dif_pp": 3.99,
+    "rmse_pp": 3.89
+   },
+   "vivienda.plusvalia_ocde_hpi_media": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9895,
+    "sesgo_pp": 0.29,
+    "dt_dif_pp": 1.11,
+    "rmse_pp": 1.13
+   },
+   "vivienda.plusvalia_ocde_hpi_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9951,
+    "sesgo_pp": 0.2,
+    "dt_dif_pp": 0.61,
+    "rmse_pp": 0.63
+   },
+   "vivienda.ancla": {
+    "año": 1984,
+    "rent_yd_jst": 0.0424
+   },
+   "vivienda.total_indice_alquiler": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9976,
+    "sesgo_pp": -0.04,
+    "dt_dif_pp": 0.47,
+    "rmse_pp": 0.46
+   },
+   "vivienda.total_indice_alquiler_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.8359,
+    "sesgo_pp": -0.08,
+    "dt_dif_pp": 3.94,
+    "rmse_pp": 3.85
+   },
+   "vivienda.total_alquiler_fijo": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9884,
+    "sesgo_pp": -0.09,
+    "dt_dif_pp": 1.08,
+    "rmse_pp": 1.06
+   },
+   "vivienda.total_alquiler_fijo_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.8408,
+    "sesgo_pp": -0.06,
+    "dt_dif_pp": 4.0,
+    "rmse_pp": 3.9
+   },
+   "vivienda.total_solo_precio": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9884,
+    "sesgo_pp": -4.55,
+    "dt_dif_pp": 1.01,
+    "rmse_pp": 4.65
+   },
+   "vivienda.total_solo_precio_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.8408,
+    "sesgo_pp": -4.52,
+    "dt_dif_pp": 3.87,
+    "rmse_pp": 5.89
+   },
+   "vivienda.rent_yd_encadenado_vs_jst": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9994,
+    "sesgo_pp": -0.14,
+    "dt_dif_pp": 0.04,
+    "rmse_pp": 0.14
+   },
+   "vivienda.rent_yd_2004": {
+    "encadenado": 0.0324,
+    "jst": 0.0342,
+    "fijo_en_ancla": 0.0424
+   },
+   "oro.wb_fx_fred_vs_motor": {
+    "n": 33,
+    "desde": 1972,
+    "hasta": 2004,
+    "corr": 0.9999,
+    "sesgo_pp": 0.02,
+    "dt_dif_pp": 0.49,
+    "rmse_pp": 0.48
+   },
+   "oro.fx_fred_fin_dic_vs_jst_xrusd_cambio": {
+    "n": 33,
+    "desde": 1972,
+    "hasta": 2004,
+    "corr": 0.9992,
+    "sesgo_pp": 0.02,
+    "dt_dif_pp": 0.5,
+    "rmse_pp": 0.49
+   }
+  },
+  "ESP": {
+   "bonos.irlt_encadenado": {
+    "n": 24,
+    "desde": 1981,
+    "hasta": 2004,
+    "corr": 0.8276,
+    "sesgo_pp": 2.57,
+    "dt_dif_pp": 7.76,
+    "rmse_pp": 8.02
+   },
+   "bonos.irlt_media_anual_formula": {
+    "n": 24,
+    "desde": 1981,
+    "hasta": 2004,
+    "corr": 0.3591,
+    "sesgo_pp": 1.41,
+    "dt_dif_pp": 11.48,
+    "rmse_pp": 11.33
+   },
+   "letras.ir3m_media": {
+    "n": 28,
+    "desde": 1977,
+    "hasta": 2004,
+    "corr": 0.9817,
+    "sesgo_pp": 0.26,
+    "dt_dif_pp": 1.04,
+    "rmse_pp": 1.06
+   },
+   "letras.ir3m_encadenada": {
+    "n": 27,
+    "desde": 1978,
+    "hasta": 2004,
+    "corr": 0.9824,
+    "sesgo_pp": 0.92,
+    "dt_dif_pp": 1.18,
+    "rmse_pp": 1.48
+   },
+   "letras.ircall_media": {
+    "n": 31,
+    "desde": 1974,
+    "hasta": 2004,
+    "corr": 0.9922,
+    "sesgo_pp": 0.14,
+    "dt_dif_pp": 0.66,
+    "rmse_pp": 0.66
+   },
+   "vivienda.plusvalia_bis_q4": {
+    "n": 33,
+    "desde": 1972,
+    "hasta": 2004,
+    "corr": 0.688,
+    "sesgo_pp": 1.75,
+    "dt_dif_pp": 8.19,
+    "rmse_pp": 8.26
+   },
+   "vivienda.plusvalia_bis_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9287,
+    "sesgo_pp": 0.7,
+    "dt_dif_pp": 4.07,
+    "rmse_pp": 4.02
+   },
+   "vivienda.plusvalia_bis_media": {
+    "n": 33,
+    "desde": 1972,
+    "hasta": 2004,
+    "corr": 0.7341,
+    "sesgo_pp": 1.63,
+    "dt_dif_pp": 7.43,
+    "rmse_pp": 7.49
+   },
+   "vivienda.plusvalia_bis_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9316,
+    "sesgo_pp": 0.51,
+    "dt_dif_pp": 3.8,
+    "rmse_pp": 3.73
+   },
+   "vivienda.plusvalia_ocde_hpi_q4": {
+    "n": 33,
+    "desde": 1972,
+    "hasta": 2004,
+    "corr": 0.6827,
+    "sesgo_pp": 2.34,
+    "dt_dif_pp": 8.5,
+    "rmse_pp": 8.69
+   },
+   "vivienda.plusvalia_ocde_hpi_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9193,
+    "sesgo_pp": 1.14,
+    "dt_dif_pp": 4.38,
+    "rmse_pp": 4.42
+   },
+   "vivienda.plusvalia_ocde_hpi_media": {
+    "n": 33,
+    "desde": 1972,
+    "hasta": 2004,
+    "corr": 0.7329,
+    "sesgo_pp": 2.06,
+    "dt_dif_pp": 7.71,
+    "rmse_pp": 7.87
+   },
+   "vivienda.plusvalia_ocde_hpi_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9269,
+    "sesgo_pp": 1.0,
+    "dt_dif_pp": 4.22,
+    "rmse_pp": 4.22
+   },
+   "vivienda.ancla": {
+    "año": 1984,
+    "rent_yd_jst": 0.0415
+   },
+   "vivienda.total_indice_alquiler": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9327,
+    "sesgo_pp": 0.28,
+    "dt_dif_pp": 3.78,
+    "rmse_pp": 3.69
+   },
+   "vivienda.total_indice_alquiler_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9312,
+    "sesgo_pp": 0.43,
+    "dt_dif_pp": 4.01,
+    "rmse_pp": 3.93
+   },
+   "vivienda.total_alquiler_fijo": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9334,
+    "sesgo_pp": 2.14,
+    "dt_dif_pp": 3.86,
+    "rmse_pp": 4.33
+   },
+   "vivienda.total_alquiler_fijo_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9386,
+    "sesgo_pp": 2.38,
+    "dt_dif_pp": 3.95,
+    "rmse_pp": 4.53
+   },
+   "vivienda.total_solo_precio": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9334,
+    "sesgo_pp": -2.49,
+    "dt_dif_pp": 3.63,
+    "rmse_pp": 4.32
+   },
+   "vivienda.total_solo_precio_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9386,
+    "sesgo_pp": -2.26,
+    "dt_dif_pp": 3.69,
+    "rmse_pp": 4.24
+   },
+   "vivienda.rent_yd_encadenado_vs_jst": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9895,
+    "sesgo_pp": -0.14,
+    "dt_dif_pp": 0.1,
+    "rmse_pp": 0.17
+   },
+   "vivienda.rent_yd_2004": {
+    "encadenado": 0.0165,
+    "jst": 0.0174,
+    "fijo_en_ancla": 0.0415
+   },
+   "oro.wb_fx_fred_vs_motor": {
+    "n": 5,
+    "desde": 2000,
+    "hasta": 2004,
+    "corr": 0.9777,
+    "sesgo_pp": 0.17,
+    "dt_dif_pp": 0.62,
+    "rmse_pp": 0.58
+   },
+   "oro.fx_fred_fin_dic_vs_jst_xrusd_cambio": {
+    "n": 5,
+    "desde": 2000,
+    "hasta": 2004,
+    "corr": 0.9996,
+    "sesgo_pp": 0.11,
+    "dt_dif_pp": 0.57,
+    "rmse_pp": 0.53
+   }
+  },
+  "FIN": {
+   "bonos.irlt_encadenado": {
+    "n": 15,
+    "desde": 1989,
+    "hasta": 2004,
+    "corr": 0.9824,
+    "sesgo_pp": 0.88,
+    "dt_dif_pp": 2.6,
+    "rmse_pp": 2.66
+   },
+   "bonos.irlt_media_anual_formula": {
+    "n": 16,
+    "desde": 1989,
+    "hasta": 2004,
+    "corr": 0.6079,
+    "sesgo_pp": -0.53,
+    "dt_dif_pp": 9.5,
+    "rmse_pp": 9.22
+   },
+   "letras.ir3m_media": {
+    "n": 18,
+    "desde": 1987,
+    "hasta": 2004,
+    "corr": 0.9167,
+    "sesgo_pp": 0.44,
+    "dt_dif_pp": 1.74,
+    "rmse_pp": 1.75
+   },
+   "letras.ir3m_encadenada": {
+    "n": 17,
+    "desde": 1988,
+    "hasta": 2004,
+    "corr": 0.9011,
+    "sesgo_pp": 0.78,
+    "dt_dif_pp": 2.01,
+    "rmse_pp": 2.1
+   },
+   "letras.ircall_media": {
+    "n": 6,
+    "desde": 1999,
+    "hasta": 2004,
+    "corr": 0.5199,
+    "sesgo_pp": 0.05,
+    "dt_dif_pp": 0.98,
+    "rmse_pp": 0.9
+   },
+   "vivienda.plusvalia_bis_q4": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9135,
+    "sesgo_pp": 0.01,
+    "dt_dif_pp": 4.72,
+    "rmse_pp": 4.65
+   },
+   "vivienda.plusvalia_bis_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9073,
+    "sesgo_pp": 0.03,
+    "dt_dif_pp": 5.57,
+    "rmse_pp": 5.42
+   },
+   "vivienda.plusvalia_bis_media": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9951,
+    "sesgo_pp": -0.01,
+    "dt_dif_pp": 1.12,
+    "rmse_pp": 1.1
+   },
+   "vivienda.plusvalia_bis_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9985,
+    "sesgo_pp": -0.1,
+    "dt_dif_pp": 0.83,
+    "rmse_pp": 0.82
+   },
+   "vivienda.plusvalia_ocde_hpi_q4": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9168,
+    "sesgo_pp": -0.11,
+    "dt_dif_pp": 4.51,
+    "rmse_pp": 4.44
+   },
+   "vivienda.plusvalia_ocde_hpi_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9133,
+    "sesgo_pp": -0.13,
+    "dt_dif_pp": 5.27,
+    "rmse_pp": 5.13
+   },
+   "vivienda.plusvalia_ocde_hpi_media": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9856,
+    "sesgo_pp": -0.2,
+    "dt_dif_pp": 1.95,
+    "rmse_pp": 1.93
+   },
+   "vivienda.plusvalia_ocde_hpi_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9873,
+    "sesgo_pp": -0.27,
+    "dt_dif_pp": 2.21,
+    "rmse_pp": 2.17
+   },
+   "vivienda.ancla": {
+    "año": 1984,
+    "rent_yd_jst": 0.0702
+   },
+   "vivienda.total_indice_alquiler": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9965,
+    "sesgo_pp": -0.68,
+    "dt_dif_pp": 1.15,
+    "rmse_pp": 1.31
+   },
+   "vivienda.total_indice_alquiler_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9086,
+    "sesgo_pp": -0.68,
+    "dt_dif_pp": 5.45,
+    "rmse_pp": 5.36
+   },
+   "vivienda.total_alquiler_fijo": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9903,
+    "sesgo_pp": 0.15,
+    "dt_dif_pp": 1.77,
+    "rmse_pp": 1.74
+   },
+   "vivienda.total_alquiler_fijo_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9186,
+    "sesgo_pp": 0.21,
+    "dt_dif_pp": 5.39,
+    "rmse_pp": 5.26
+   },
+   "vivienda.total_solo_precio": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9903,
+    "sesgo_pp": -7.23,
+    "dt_dif_pp": 1.84,
+    "rmse_pp": 7.45
+   },
+   "vivienda.total_solo_precio_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9186,
+    "sesgo_pp": -7.18,
+    "dt_dif_pp": 5.12,
+    "rmse_pp": 8.74
+   },
+   "vivienda.rent_yd_encadenado_vs_jst": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9435,
+    "sesgo_pp": -0.56,
+    "dt_dif_pp": 0.54,
+    "rmse_pp": 0.77
+   },
+   "vivienda.rent_yd_2004": {
+    "encadenado": 0.0525,
+    "jst": 0.0602,
+    "fijo_en_ancla": 0.0702
+   },
+   "oro.wb_fx_fred_vs_motor": {
+    "n": 5,
+    "desde": 2000,
+    "hasta": 2004,
+    "corr": 0.9777,
+    "sesgo_pp": 0.17,
+    "dt_dif_pp": 0.62,
+    "rmse_pp": 0.58
+   },
+   "oro.fx_fred_fin_dic_vs_jst_xrusd_cambio": {
+    "n": 5,
+    "desde": 2000,
+    "hasta": 2004,
+    "corr": 0.9996,
+    "sesgo_pp": 0.11,
+    "dt_dif_pp": 0.57,
+    "rmse_pp": 0.53
+   }
+  },
+  "FRA": {
+   "bonos.irlt_encadenado": {
+    "n": 44,
+    "desde": 1961,
+    "hasta": 2004,
+    "corr": 0.9011,
+    "sesgo_pp": 1.12,
+    "dt_dif_pp": 4.64,
+    "rmse_pp": 4.72
+   },
+   "bonos.irlt_media_anual_formula": {
+    "n": 44,
+    "desde": 1961,
+    "hasta": 2004,
+    "corr": 0.7559,
+    "sesgo_pp": 0.61,
+    "dt_dif_pp": 6.86,
+    "rmse_pp": 6.81
+   },
+   "letras.ir3m_media": {
+    "n": 35,
+    "desde": 1970,
+    "hasta": 2004,
+    "corr": 0.9987,
+    "sesgo_pp": 0.15,
+    "dt_dif_pp": 0.19,
+    "rmse_pp": 0.24
+   },
+   "letras.ir3m_encadenada": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9986,
+    "sesgo_pp": 0.52,
+    "dt_dif_pp": 0.29,
+    "rmse_pp": 0.59
+   },
+   "letras.ircall_media": {
+    "n": 50,
+    "desde": 1955,
+    "hasta": 2004,
+    "corr": 1.0,
+    "sesgo_pp": 0.01,
+    "dt_dif_pp": 0.03,
+    "rmse_pp": 0.03
+   },
+   "vivienda.plusvalia_bis_q4": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9796,
+    "sesgo_pp": 0.06,
+    "dt_dif_pp": 1.14,
+    "rmse_pp": 1.13
+   },
+   "vivienda.plusvalia_bis_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9845,
+    "sesgo_pp": 0.09,
+    "dt_dif_pp": 0.94,
+    "rmse_pp": 0.92
+   },
+   "vivienda.plusvalia_bis_media": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9988,
+    "sesgo_pp": -0.06,
+    "dt_dif_pp": 0.27,
+    "rmse_pp": 0.27
+   },
+   "vivienda.plusvalia_bis_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9978,
+    "sesgo_pp": -0.1,
+    "dt_dif_pp": 0.36,
+    "rmse_pp": 0.37
+   },
+   "vivienda.plusvalia_ocde_hpi_q4": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.93,
+    "sesgo_pp": 0.06,
+    "dt_dif_pp": 2.24,
+    "rmse_pp": 2.21
+   },
+   "vivienda.plusvalia_ocde_hpi_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.924,
+    "sesgo_pp": -0.15,
+    "dt_dif_pp": 2.16,
+    "rmse_pp": 2.11
+   },
+   "vivienda.plusvalia_ocde_hpi_media": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9531,
+    "sesgo_pp": -0.15,
+    "dt_dif_pp": 1.84,
+    "rmse_pp": 1.82
+   },
+   "vivienda.plusvalia_ocde_hpi_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9548,
+    "sesgo_pp": -0.31,
+    "dt_dif_pp": 1.61,
+    "rmse_pp": 1.6
+   },
+   "vivienda.ancla": {
+    "año": 1984,
+    "rent_yd_jst": 0.045
+   },
+   "vivienda.total_indice_alquiler": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9976,
+    "sesgo_pp": -0.1,
+    "dt_dif_pp": 0.35,
+    "rmse_pp": 0.36
+   },
+   "vivienda.total_indice_alquiler_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9829,
+    "sesgo_pp": 0.01,
+    "dt_dif_pp": 0.93,
+    "rmse_pp": 0.91
+   },
+   "vivienda.total_alquiler_fijo": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9961,
+    "sesgo_pp": 0.03,
+    "dt_dif_pp": 0.53,
+    "rmse_pp": 0.52
+   },
+   "vivienda.total_alquiler_fijo_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9871,
+    "sesgo_pp": 0.23,
+    "dt_dif_pp": 0.97,
+    "rmse_pp": 0.98
+   },
+   "vivienda.total_solo_precio": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9961,
+    "sesgo_pp": -4.71,
+    "dt_dif_pp": 0.45,
+    "rmse_pp": 4.73
+   },
+   "vivienda.total_solo_precio_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9871,
+    "sesgo_pp": -4.51,
+    "dt_dif_pp": 0.86,
+    "rmse_pp": 4.59
+   },
+   "vivienda.rent_yd_encadenado_vs_jst": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9996,
+    "sesgo_pp": -0.0,
+    "dt_dif_pp": 0.02,
+    "rmse_pp": 0.02
+   },
+   "vivienda.rent_yd_2004": {
+    "encadenado": 0.0321,
+    "jst": 0.0316,
+    "fijo_en_ancla": 0.045
+   },
+   "oro.wb_fx_fred_vs_motor": {
+    "n": 5,
+    "desde": 2000,
+    "hasta": 2004,
+    "corr": 0.9777,
+    "sesgo_pp": 0.17,
+    "dt_dif_pp": 0.62,
+    "rmse_pp": 0.58
+   },
+   "oro.fx_fred_fin_dic_vs_jst_xrusd_cambio": {
+    "n": 5,
+    "desde": 2000,
+    "hasta": 2004,
+    "corr": 0.9996,
+    "sesgo_pp": 0.11,
+    "dt_dif_pp": 0.57,
+    "rmse_pp": 0.53
+   }
+  },
+  "GBR": {
+   "bonos.irlt_encadenado": {
+    "n": 44,
+    "desde": 1961,
+    "hasta": 2004,
+    "corr": 0.9433,
+    "sesgo_pp": 0.2,
+    "dt_dif_pp": 4.82,
+    "rmse_pp": 4.77
+   },
+   "bonos.irlt_media_anual_formula": {
+    "n": 44,
+    "desde": 1961,
+    "hasta": 2004,
+    "corr": 0.7573,
+    "sesgo_pp": -0.62,
+    "dt_dif_pp": 9.58,
+    "rmse_pp": 9.5
+   },
+   "letras.ir3m_media": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9991,
+    "sesgo_pp": 0.49,
+    "dt_dif_pp": 0.2,
+    "rmse_pp": 0.52
+   },
+   "letras.ir3m_encadenada": {
+    "n": 18,
+    "desde": 1987,
+    "hasta": 2004,
+    "corr": 0.997,
+    "sesgo_pp": 0.84,
+    "dt_dif_pp": 0.51,
+    "rmse_pp": 0.97
+   },
+   "letras.ircall_media": {
+    "n": 27,
+    "desde": 1978,
+    "hasta": 2004,
+    "corr": 0.9939,
+    "sesgo_pp": 0.3,
+    "dt_dif_pp": 0.45,
+    "rmse_pp": 0.54
+   },
+   "letras.boe_tbill3m_media": {
+    "n": 30,
+    "desde": 1975,
+    "hasta": 2004,
+    "corr": 0.9997,
+    "sesgo_pp": -0.01,
+    "dt_dif_pp": 0.08,
+    "rmse_pp": 0.08
+   },
+   "vivienda.plusvalia_bis_q4": {
+    "n": 36,
+    "desde": 1969,
+    "hasta": 2004,
+    "corr": 0.8618,
+    "sesgo_pp": 0.31,
+    "dt_dif_pp": 5.4,
+    "rmse_pp": 5.33
+   },
+   "vivienda.plusvalia_bis_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.8115,
+    "sesgo_pp": 0.52,
+    "dt_dif_pp": 5.85,
+    "rmse_pp": 5.72
+   },
+   "vivienda.plusvalia_bis_media": {
+    "n": 35,
+    "desde": 1970,
+    "hasta": 2004,
+    "corr": 0.9826,
+    "sesgo_pp": 0.26,
+    "dt_dif_pp": 1.86,
+    "rmse_pp": 1.85
+   },
+   "vivienda.plusvalia_bis_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9627,
+    "sesgo_pp": 0.45,
+    "dt_dif_pp": 2.48,
+    "rmse_pp": 2.45
+   },
+   "vivienda.plusvalia_ocde_hpi_q4": {
+    "n": 36,
+    "desde": 1969,
+    "hasta": 2004,
+    "corr": 0.8622,
+    "sesgo_pp": 0.34,
+    "dt_dif_pp": 5.37,
+    "rmse_pp": 5.31
+   },
+   "vivienda.plusvalia_ocde_hpi_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.8119,
+    "sesgo_pp": 0.53,
+    "dt_dif_pp": 5.83,
+    "rmse_pp": 5.7
+   },
+   "vivienda.plusvalia_ocde_hpi_media": {
+    "n": 35,
+    "desde": 1970,
+    "hasta": 2004,
+    "corr": 0.983,
+    "sesgo_pp": 0.26,
+    "dt_dif_pp": 1.84,
+    "rmse_pp": 1.83
+   },
+   "vivienda.plusvalia_ocde_hpi_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9628,
+    "sesgo_pp": 0.45,
+    "dt_dif_pp": 2.47,
+    "rmse_pp": 2.45
+   },
+   "vivienda.ancla": {
+    "año": 1984,
+    "rent_yd_jst": 0.037
+   },
+   "vivienda.total_indice_alquiler": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9607,
+    "sesgo_pp": 0.1,
+    "dt_dif_pp": 2.43,
+    "rmse_pp": 2.37
+   },
+   "vivienda.total_indice_alquiler_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.8049,
+    "sesgo_pp": 0.1,
+    "dt_dif_pp": 5.74,
+    "rmse_pp": 5.59
+   },
+   "vivienda.total_alquiler_fijo": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9729,
+    "sesgo_pp": 0.5,
+    "dt_dif_pp": 2.02,
+    "rmse_pp": 2.03
+   },
+   "vivienda.total_alquiler_fijo_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.8302,
+    "sesgo_pp": 0.61,
+    "dt_dif_pp": 5.54,
+    "rmse_pp": 5.44
+   },
+   "vivienda.total_solo_precio": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9729,
+    "sesgo_pp": -3.54,
+    "dt_dif_pp": 2.02,
+    "rmse_pp": 4.05
+   },
+   "vivienda.total_solo_precio_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.8302,
+    "sesgo_pp": -3.43,
+    "dt_dif_pp": 5.38,
+    "rmse_pp": 6.27
+   },
+   "vivienda.rent_yd_encadenado_vs_jst": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9194,
+    "sesgo_pp": -0.31,
+    "dt_dif_pp": 0.29,
+    "rmse_pp": 0.41
+   },
+   "vivienda.rent_yd_2004": {
+    "encadenado": 0.0213,
+    "jst": 0.0243,
+    "fijo_en_ancla": 0.037
+   },
+   "oro.wb_fx_fred_vs_motor": {
+    "n": 33,
+    "desde": 1972,
+    "hasta": 2004,
+    "corr": 0.9998,
+    "sesgo_pp": 0.03,
+    "dt_dif_pp": 0.49,
+    "rmse_pp": 0.48
+   },
+   "oro.fx_fred_fin_dic_vs_jst_xrusd_cambio": {
+    "n": 33,
+    "desde": 1972,
+    "hasta": 2004,
+    "corr": 0.9993,
+    "sesgo_pp": 0.02,
+    "dt_dif_pp": 0.47,
+    "rmse_pp": 0.47
+   }
+  },
+  "ITA": {
+   "bonos.irlt_encadenado": {
+    "n": 13,
+    "desde": 1992,
+    "hasta": 2004,
+    "corr": 0.9885,
+    "sesgo_pp": 1.37,
+    "dt_dif_pp": 3.0,
+    "rmse_pp": 3.2
+   },
+   "bonos.irlt_media_anual_formula": {
+    "n": 13,
+    "desde": 1992,
+    "hasta": 2004,
+    "corr": 0.5306,
+    "sesgo_pp": 0.41,
+    "dt_dif_pp": 12.17,
+    "rmse_pp": 11.7
+   },
+   "letras.ir3m_media": {
+    "n": 26,
+    "desde": 1979,
+    "hasta": 2004,
+    "corr": 0.9915,
+    "sesgo_pp": 0.22,
+    "dt_dif_pp": 0.72,
+    "rmse_pp": 0.73
+   },
+   "letras.ir3m_encadenada": {
+    "n": 26,
+    "desde": 1979,
+    "hasta": 2004,
+    "corr": 0.9883,
+    "sesgo_pp": 0.91,
+    "dt_dif_pp": 1.1,
+    "rmse_pp": 1.41
+   },
+   "letras.ircall_media": {
+    "n": 6,
+    "desde": 1999,
+    "hasta": 2004,
+    "corr": 0.9622,
+    "sesgo_pp": -0.04,
+    "dt_dif_pp": 0.27,
+    "rmse_pp": 0.25
+   },
+   "vivienda.plusvalia_bis_q4": {
+    "n": 77,
+    "desde": 1928,
+    "hasta": 2004,
+    "corr": 0.9292,
+    "sesgo_pp": -0.11,
+    "dt_dif_pp": 16.36,
+    "rmse_pp": 16.26
+   },
+   "vivienda.plusvalia_bis_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9746,
+    "sesgo_pp": 0.04,
+    "dt_dif_pp": 1.47,
+    "rmse_pp": 1.43
+   },
+   "vivienda.plusvalia_bis_media": {
+    "n": 77,
+    "desde": 1928,
+    "hasta": 2004,
+    "corr": 0.9927,
+    "sesgo_pp": -0.25,
+    "dt_dif_pp": 5.24,
+    "rmse_pp": 5.21
+   },
+   "vivienda.plusvalia_bis_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9858,
+    "sesgo_pp": -0.07,
+    "dt_dif_pp": 1.11,
+    "rmse_pp": 1.08
+   },
+   "vivienda.plusvalia_ocde_hpi_q4": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.8295,
+    "sesgo_pp": -0.23,
+    "dt_dif_pp": 9.4,
+    "rmse_pp": 9.27
+   },
+   "vivienda.plusvalia_ocde_hpi_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.7481,
+    "sesgo_pp": 0.19,
+    "dt_dif_pp": 5.47,
+    "rmse_pp": 5.33
+   },
+   "vivienda.plusvalia_ocde_hpi_media": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9268,
+    "sesgo_pp": -0.37,
+    "dt_dif_pp": 6.25,
+    "rmse_pp": 6.16
+   },
+   "vivienda.plusvalia_ocde_hpi_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.8141,
+    "sesgo_pp": 0.11,
+    "dt_dif_pp": 5.04,
+    "rmse_pp": 4.9
+   },
+   "vivienda.ancla": {
+    "año": 1984,
+    "rent_yd_jst": 0.0327
+   },
+   "vivienda.total_indice_alquiler": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9852,
+    "sesgo_pp": -1.04,
+    "dt_dif_pp": 1.14,
+    "rmse_pp": 1.52
+   },
+   "vivienda.total_indice_alquiler_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9773,
+    "sesgo_pp": -0.98,
+    "dt_dif_pp": 1.41,
+    "rmse_pp": 1.69
+   },
+   "vivienda.total_alquiler_fijo": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9815,
+    "sesgo_pp": -0.59,
+    "dt_dif_pp": 1.25,
+    "rmse_pp": 1.35
+   },
+   "vivienda.total_alquiler_fijo_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9831,
+    "sesgo_pp": -0.47,
+    "dt_dif_pp": 1.21,
+    "rmse_pp": 1.27
+   },
+   "vivienda.total_solo_precio": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9815,
+    "sesgo_pp": -4.08,
+    "dt_dif_pp": 1.28,
+    "rmse_pp": 4.27
+   },
+   "vivienda.total_solo_precio_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9831,
+    "sesgo_pp": -3.96,
+    "dt_dif_pp": 1.26,
+    "rmse_pp": 4.15
+   },
+   "vivienda.rent_yd_encadenado_vs_jst": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.8623,
+    "sesgo_pp": -0.9,
+    "dt_dif_pp": 0.26,
+    "rmse_pp": 0.93
+   },
+   "vivienda.rent_yd_2004": {
+    "encadenado": 0.0249,
+    "jst": 0.0335,
+    "fijo_en_ancla": 0.0327
+   },
+   "oro.wb_fx_fred_vs_motor": {
+    "n": 5,
+    "desde": 2000,
+    "hasta": 2004,
+    "corr": 0.9777,
+    "sesgo_pp": 0.17,
+    "dt_dif_pp": 0.62,
+    "rmse_pp": 0.58
+   },
+   "oro.fx_fred_fin_dic_vs_jst_xrusd_cambio": {
+    "n": 5,
+    "desde": 2000,
+    "hasta": 2004,
+    "corr": 0.9996,
+    "sesgo_pp": 0.11,
+    "dt_dif_pp": 0.57,
+    "rmse_pp": 0.53
+   }
+  },
+  "JPN": {
+   "bonos.irlt_encadenado": {
+    "n": 15,
+    "desde": 1990,
+    "hasta": 2004,
+    "corr": 0.9393,
+    "sesgo_pp": -0.19,
+    "dt_dif_pp": 2.43,
+    "rmse_pp": 2.36
+   },
+   "bonos.irlt_media_anual_formula": {
+    "n": 15,
+    "desde": 1990,
+    "hasta": 2004,
+    "corr": 0.7144,
+    "sesgo_pp": -0.4,
+    "dt_dif_pp": 5.06,
+    "rmse_pp": 4.9
+   },
+   "letras.ir3m_media": {
+    "n": 2
+   },
+   "letras.ir3m_encadenada": {
+    "n": 2
+   },
+   "letras.ircall_media": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 1.0,
+    "sesgo_pp": -0.0,
+    "dt_dif_pp": 0.0,
+    "rmse_pp": 0.0
+   },
+   "vivienda.plusvalia_bis_q4": {
+    "n": 49,
+    "desde": 1956,
+    "hasta": 2004,
+    "corr": 0.8933,
+    "sesgo_pp": -0.35,
+    "dt_dif_pp": 5.07,
+    "rmse_pp": 5.03
+   },
+   "vivienda.plusvalia_bis_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.8497,
+    "sesgo_pp": -0.4,
+    "dt_dif_pp": 3.08,
+    "rmse_pp": 3.02
+   },
+   "vivienda.plusvalia_bis_media": {
+    "n": 49,
+    "desde": 1956,
+    "hasta": 2004,
+    "corr": 0.9699,
+    "sesgo_pp": -0.2,
+    "dt_dif_pp": 2.68,
+    "rmse_pp": 2.66
+   },
+   "vivienda.plusvalia_bis_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9487,
+    "sesgo_pp": -0.25,
+    "dt_dif_pp": 1.78,
+    "rmse_pp": 1.75
+   },
+   "vivienda.plusvalia_ocde_hpi_q4": {
+    "n": 44,
+    "desde": 1961,
+    "hasta": 2004,
+    "corr": 0.8852,
+    "sesgo_pp": -0.78,
+    "dt_dif_pp": 4.92,
+    "rmse_pp": 4.93
+   },
+   "vivienda.plusvalia_ocde_hpi_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.8501,
+    "sesgo_pp": -0.39,
+    "dt_dif_pp": 3.08,
+    "rmse_pp": 3.02
+   },
+   "vivienda.plusvalia_ocde_hpi_media": {
+    "n": 44,
+    "desde": 1961,
+    "hasta": 2004,
+    "corr": 0.9671,
+    "sesgo_pp": -0.4,
+    "dt_dif_pp": 2.68,
+    "rmse_pp": 2.68
+   },
+   "vivienda.plusvalia_ocde_hpi_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9489,
+    "sesgo_pp": -0.25,
+    "dt_dif_pp": 1.78,
+    "rmse_pp": 1.75
+   },
+   "vivienda.ancla": {
+    "año": 1984,
+    "rent_yd_jst": 0.0326
+   },
+   "vivienda.total_indice_alquiler": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9448,
+    "sesgo_pp": -0.24,
+    "dt_dif_pp": 1.75,
+    "rmse_pp": 1.73
+   },
+   "vivienda.total_indice_alquiler_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.8378,
+    "sesgo_pp": -0.38,
+    "dt_dif_pp": 3.03,
+    "rmse_pp": 2.98
+   },
+   "vivienda.total_alquiler_fijo": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9483,
+    "sesgo_pp": -0.31,
+    "dt_dif_pp": 1.78,
+    "rmse_pp": 1.77
+   },
+   "vivienda.total_alquiler_fijo_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.8522,
+    "sesgo_pp": -0.47,
+    "dt_dif_pp": 3.03,
+    "rmse_pp": 2.99
+   },
+   "vivienda.total_solo_precio": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9483,
+    "sesgo_pp": -3.57,
+    "dt_dif_pp": 1.73,
+    "rmse_pp": 3.95
+   },
+   "vivienda.total_solo_precio_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.8522,
+    "sesgo_pp": -3.72,
+    "dt_dif_pp": 2.96,
+    "rmse_pp": 4.71
+   },
+   "vivienda.rent_yd_encadenado_vs_jst": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.995,
+    "sesgo_pp": 0.02,
+    "dt_dif_pp": 0.05,
+    "rmse_pp": 0.06
+   },
+   "vivienda.rent_yd_2004": {
+    "encadenado": 0.0456,
+    "jst": 0.0449,
+    "fijo_en_ancla": 0.0326
+   },
+   "oro.wb_fx_fred_vs_motor": {
+    "n": 33,
+    "desde": 1972,
+    "hasta": 2004,
+    "corr": 0.9998,
+    "sesgo_pp": -0.03,
+    "dt_dif_pp": 0.81,
+    "rmse_pp": 0.8
+   },
+   "oro.fx_fred_fin_dic_vs_jst_xrusd_cambio": {
+    "n": 33,
+    "desde": 1972,
+    "hasta": 2004,
+    "corr": 0.998,
+    "sesgo_pp": -0.02,
+    "dt_dif_pp": 0.78,
+    "rmse_pp": 0.77
+   }
+  },
+  "NLD": {
+   "bonos.irlt_encadenado": {
+    "n": 45,
+    "desde": 1960,
+    "hasta": 2004,
+    "corr": 0.9472,
+    "sesgo_pp": 0.85,
+    "dt_dif_pp": 2.86,
+    "rmse_pp": 2.95
+   },
+   "bonos.irlt_media_anual_formula": {
+    "n": 45,
+    "desde": 1960,
+    "hasta": 2004,
+    "corr": 0.5269,
+    "sesgo_pp": 0.45,
+    "dt_dif_pp": 7.49,
+    "rmse_pp": 7.42
+   },
+   "letras.ir3m_media": {
+    "n": 23,
+    "desde": 1982,
+    "hasta": 2004,
+    "corr": 0.9986,
+    "sesgo_pp": 0.05,
+    "dt_dif_pp": 0.12,
+    "rmse_pp": 0.12
+   },
+   "letras.ir3m_encadenada": {
+    "n": 22,
+    "desde": 1983,
+    "hasta": 2004,
+    "corr": 0.9979,
+    "sesgo_pp": 0.19,
+    "dt_dif_pp": 0.18,
+    "rmse_pp": 0.27
+   },
+   "letras.ircall_media": {
+    "n": 6,
+    "desde": 1999,
+    "hasta": 2004,
+    "corr": 0.9885,
+    "sesgo_pp": -0.08,
+    "dt_dif_pp": 0.14,
+    "rmse_pp": 0.15
+   },
+   "vivienda.plusvalia_bis_q4": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9383,
+    "sesgo_pp": 0.13,
+    "dt_dif_pp": 3.46,
+    "rmse_pp": 3.41
+   },
+   "vivienda.plusvalia_bis_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9,
+    "sesgo_pp": -0.28,
+    "dt_dif_pp": 2.01,
+    "rmse_pp": 1.97
+   },
+   "vivienda.plusvalia_bis_media": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9793,
+    "sesgo_pp": 0.22,
+    "dt_dif_pp": 2.02,
+    "rmse_pp": 2.0
+   },
+   "vivienda.plusvalia_bis_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9912,
+    "sesgo_pp": -0.35,
+    "dt_dif_pp": 0.63,
+    "rmse_pp": 0.7
+   },
+   "vivienda.plusvalia_ocde_hpi_q4": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9517,
+    "sesgo_pp": -0.05,
+    "dt_dif_pp": 3.08,
+    "rmse_pp": 3.03
+   },
+   "vivienda.plusvalia_ocde_hpi_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9206,
+    "sesgo_pp": 0.04,
+    "dt_dif_pp": 1.84,
+    "rmse_pp": 1.79
+   },
+   "vivienda.plusvalia_ocde_hpi_media": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 1.0,
+    "sesgo_pp": 0.01,
+    "dt_dif_pp": 0.07,
+    "rmse_pp": 0.07
+   },
+   "vivienda.plusvalia_ocde_hpi_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9998,
+    "sesgo_pp": 0.01,
+    "dt_dif_pp": 0.09,
+    "rmse_pp": 0.09
+   },
+   "vivienda.ancla": {
+    "año": 1984,
+    "rent_yd_jst": 0.0719
+   },
+   "vivienda.total_indice_alquiler": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.991,
+    "sesgo_pp": -0.35,
+    "dt_dif_pp": 0.64,
+    "rmse_pp": 0.72
+   },
+   "vivienda.total_indice_alquiler_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.8993,
+    "sesgo_pp": -0.36,
+    "dt_dif_pp": 2.02,
+    "rmse_pp": 2.0
+   },
+   "vivienda.total_alquiler_fijo": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9319,
+    "sesgo_pp": 1.28,
+    "dt_dif_pp": 1.76,
+    "rmse_pp": 2.14
+   },
+   "vivienda.total_alquiler_fijo_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.8851,
+    "sesgo_pp": 1.39,
+    "dt_dif_pp": 2.3,
+    "rmse_pp": 2.64
+   },
+   "vivienda.total_solo_precio": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9319,
+    "sesgo_pp": -6.45,
+    "dt_dif_pp": 1.67,
+    "rmse_pp": 6.65
+   },
+   "vivienda.total_solo_precio_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.8851,
+    "sesgo_pp": -6.34,
+    "dt_dif_pp": 2.19,
+    "rmse_pp": 6.69
+   },
+   "vivienda.rent_yd_encadenado_vs_jst": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9989,
+    "sesgo_pp": -0.0,
+    "dt_dif_pp": 0.12,
+    "rmse_pp": 0.12
+   },
+   "vivienda.rent_yd_2004": {
+    "encadenado": 0.035,
+    "jst": 0.0339,
+    "fijo_en_ancla": 0.0719
+   },
+   "oro.wb_fx_fred_vs_motor": {
+    "n": 5,
+    "desde": 2000,
+    "hasta": 2004,
+    "corr": 0.9777,
+    "sesgo_pp": 0.17,
+    "dt_dif_pp": 0.62,
+    "rmse_pp": 0.58
+   },
+   "oro.fx_fred_fin_dic_vs_jst_xrusd_cambio": {
+    "n": 5,
+    "desde": 2000,
+    "hasta": 2004,
+    "corr": 0.9996,
+    "sesgo_pp": 0.11,
+    "dt_dif_pp": 0.57,
+    "rmse_pp": 0.53
+   }
+  },
+  "NOR": {
+   "bonos.irlt_encadenado": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9841,
+    "sesgo_pp": 0.66,
+    "dt_dif_pp": 1.88,
+    "rmse_pp": 1.94
+   },
+   "bonos.irlt_media_anual_formula": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.7549,
+    "sesgo_pp": -0.08,
+    "dt_dif_pp": 5.81,
+    "rmse_pp": 5.65
+   },
+   "letras.ir3m_media": {
+    "n": 26,
+    "desde": 1979,
+    "hasta": 2004,
+    "corr": 0.9324,
+    "sesgo_pp": 2.71,
+    "dt_dif_pp": 1.79,
+    "rmse_pp": 3.23
+   },
+   "letras.ir3m_encadenada": {
+    "n": 25,
+    "desde": 1980,
+    "hasta": 2004,
+    "corr": 0.9371,
+    "sesgo_pp": 3.19,
+    "dt_dif_pp": 2.06,
+    "rmse_pp": 3.78
+   },
+   "letras.ircall_media": {
+    "n": 23,
+    "desde": 1982,
+    "hasta": 2004,
+    "corr": 0.9391,
+    "sesgo_pp": 2.52,
+    "dt_dif_pp": 1.73,
+    "rmse_pp": 3.04
+   },
+   "vivienda.plusvalia_bis_q4": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.879,
+    "sesgo_pp": -0.32,
+    "dt_dif_pp": 4.68,
+    "rmse_pp": 4.62
+   },
+   "vivienda.plusvalia_bis_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9252,
+    "sesgo_pp": -0.88,
+    "dt_dif_pp": 4.14,
+    "rmse_pp": 4.12
+   },
+   "vivienda.plusvalia_bis_media": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9851,
+    "sesgo_pp": -0.36,
+    "dt_dif_pp": 1.66,
+    "rmse_pp": 1.67
+   },
+   "vivienda.plusvalia_bis_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9802,
+    "sesgo_pp": -0.56,
+    "dt_dif_pp": 2.18,
+    "rmse_pp": 2.19
+   },
+   "vivienda.plusvalia_ocde_hpi_q4": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.5609,
+    "sesgo_pp": -1.0,
+    "dt_dif_pp": 8.38,
+    "rmse_pp": 8.32
+   },
+   "vivienda.plusvalia_ocde_hpi_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.8463,
+    "sesgo_pp": -1.34,
+    "dt_dif_pp": 5.83,
+    "rmse_pp": 5.83
+   },
+   "vivienda.plusvalia_ocde_hpi_media": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.7058,
+    "sesgo_pp": -1.05,
+    "dt_dif_pp": 6.88,
+    "rmse_pp": 6.86
+   },
+   "vivienda.plusvalia_ocde_hpi_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9033,
+    "sesgo_pp": -0.92,
+    "dt_dif_pp": 4.71,
+    "rmse_pp": 4.68
+   },
+   "vivienda.ancla": {
+    "año": 1984,
+    "rent_yd_jst": 0.0585
+   },
+   "vivienda.total_indice_alquiler": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.975,
+    "sesgo_pp": -1.43,
+    "dt_dif_pp": 2.4,
+    "rmse_pp": 2.74
+   },
+   "vivienda.total_indice_alquiler_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9126,
+    "sesgo_pp": -1.46,
+    "dt_dif_pp": 4.4,
+    "rmse_pp": 4.53
+   },
+   "vivienda.total_alquiler_fijo": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9703,
+    "sesgo_pp": -0.78,
+    "dt_dif_pp": 2.62,
+    "rmse_pp": 2.67
+   },
+   "vivienda.total_alquiler_fijo_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9254,
+    "sesgo_pp": -0.75,
+    "dt_dif_pp": 4.13,
+    "rmse_pp": 4.09
+   },
+   "vivienda.total_solo_precio": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9703,
+    "sesgo_pp": -7.02,
+    "dt_dif_pp": 2.61,
+    "rmse_pp": 7.47
+   },
+   "vivienda.total_solo_precio_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9254,
+    "sesgo_pp": -6.99,
+    "dt_dif_pp": 4.07,
+    "rmse_pp": 8.04
+   },
+   "vivienda.rent_yd_encadenado_vs_jst": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9283,
+    "sesgo_pp": -0.73,
+    "dt_dif_pp": 0.48,
+    "rmse_pp": 0.87
+   },
+   "vivienda.rent_yd_2004": {
+    "encadenado": 0.0376,
+    "jst": 0.0506,
+    "fijo_en_ancla": 0.0585
+   },
+   "oro.wb_fx_fred_vs_motor": {
+    "n": 33,
+    "desde": 1972,
+    "hasta": 2004,
+    "corr": 0.9998,
+    "sesgo_pp": 0.05,
+    "dt_dif_pp": 0.55,
+    "rmse_pp": 0.54
+   },
+   "oro.fx_fred_fin_dic_vs_jst_xrusd_cambio": {
+    "n": 33,
+    "desde": 1972,
+    "hasta": 2004,
+    "corr": 0.9985,
+    "sesgo_pp": 0.03,
+    "dt_dif_pp": 0.58,
+    "rmse_pp": 0.58
+   }
+  },
+  "PRT": {
+   "bonos.irlt_encadenado": {
+    "n": 11,
+    "desde": 1994,
+    "hasta": 2004,
+    "corr": 0.9849,
+    "sesgo_pp": 0.49,
+    "dt_dif_pp": 2.13,
+    "rmse_pp": 2.09
+   },
+   "bonos.irlt_media_anual_formula": {
+    "n": 11,
+    "desde": 1994,
+    "hasta": 2004,
+    "corr": 0.5481,
+    "sesgo_pp": 0.13,
+    "dt_dif_pp": 9.69,
+    "rmse_pp": 9.24
+   },
+   "letras.ir3m_media": {
+    "n": 17,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9991,
+    "sesgo_pp": 0.06,
+    "dt_dif_pp": 0.25,
+    "rmse_pp": 0.25
+   },
+   "letras.ir3m_encadenada": {
+    "n": 17,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9983,
+    "sesgo_pp": 0.7,
+    "dt_dif_pp": 0.74,
+    "rmse_pp": 1.0
+   },
+   "letras.ircall_media": {
+    "n": 6,
+    "desde": 1999,
+    "hasta": 2004,
+    "corr": 0.9885,
+    "sesgo_pp": -0.08,
+    "dt_dif_pp": 0.14,
+    "rmse_pp": 0.15
+   },
+   "vivienda.plusvalia_bis_q4": {
+    "n": 16,
+    "desde": 1989,
+    "hasta": 2004,
+    "corr": 0.4961,
+    "sesgo_pp": -4.81,
+    "dt_dif_pp": 6.2,
+    "rmse_pp": 7.69
+   },
+   "vivienda.plusvalia_bis_q4_desde_1986": {
+    "n": 16,
+    "desde": 1989,
+    "hasta": 2004,
+    "corr": 0.4961,
+    "sesgo_pp": -4.81,
+    "dt_dif_pp": 6.2,
+    "rmse_pp": 7.69
+   },
+   "vivienda.plusvalia_bis_media": {
+    "n": 16,
+    "desde": 1989,
+    "hasta": 2004,
+    "corr": 0.4746,
+    "sesgo_pp": -4.35,
+    "dt_dif_pp": 6.49,
+    "rmse_pp": 7.64
+   },
+   "vivienda.plusvalia_bis_media_desde_1986": {
+    "n": 16,
+    "desde": 1989,
+    "hasta": 2004,
+    "corr": 0.4746,
+    "sesgo_pp": -4.35,
+    "dt_dif_pp": 6.49,
+    "rmse_pp": 7.64
+   },
+   "vivienda.plusvalia_ocde_hpi_q4": {
+    "n": 16,
+    "desde": 1989,
+    "hasta": 2004,
+    "corr": 0.4973,
+    "sesgo_pp": -4.83,
+    "dt_dif_pp": 6.2,
+    "rmse_pp": 7.71
+   },
+   "vivienda.plusvalia_ocde_hpi_q4_desde_1986": {
+    "n": 16,
+    "desde": 1989,
+    "hasta": 2004,
+    "corr": 0.4973,
+    "sesgo_pp": -4.83,
+    "dt_dif_pp": 6.2,
+    "rmse_pp": 7.71
+   },
+   "vivienda.plusvalia_ocde_hpi_media": {
+    "n": 16,
+    "desde": 1989,
+    "hasta": 2004,
+    "corr": 0.4735,
+    "sesgo_pp": -4.36,
+    "dt_dif_pp": 6.49,
+    "rmse_pp": 7.65
+   },
+   "vivienda.plusvalia_ocde_hpi_media_desde_1986": {
+    "n": 16,
+    "desde": 1989,
+    "hasta": 2004,
+    "corr": 0.4735,
+    "sesgo_pp": -4.36,
+    "dt_dif_pp": 6.49,
+    "rmse_pp": 7.65
+   },
+   "vivienda.ancla": {
+    "año": 1989,
+    "rent_yd_jst": 0.0356
+   },
+   "vivienda.total_indice_alquiler": {
+    "n": 15,
+    "desde": 1990,
+    "hasta": 2004,
+    "corr": 0.3715,
+    "sesgo_pp": -4.48,
+    "dt_dif_pp": 6.5,
+    "rmse_pp": 7.72
+   },
+   "vivienda.total_indice_alquiler_q4": {
+    "n": 15,
+    "desde": 1990,
+    "hasta": 2004,
+    "corr": 0.3977,
+    "sesgo_pp": -5.0,
+    "dt_dif_pp": 6.19,
+    "rmse_pp": 7.79
+   },
+   "vivienda.total_alquiler_fijo": {
+    "n": 15,
+    "desde": 1990,
+    "hasta": 2004,
+    "corr": 0.3753,
+    "sesgo_pp": -5.17,
+    "dt_dif_pp": 6.6,
+    "rmse_pp": 8.21
+   },
+   "vivienda.total_alquiler_fijo_q4": {
+    "n": 15,
+    "desde": 1990,
+    "hasta": 2004,
+    "corr": 0.4047,
+    "sesgo_pp": -5.61,
+    "dt_dif_pp": 6.27,
+    "rmse_pp": 8.26
+   },
+   "vivienda.total_solo_precio": {
+    "n": 15,
+    "desde": 1990,
+    "hasta": 2004,
+    "corr": 0.3753,
+    "sesgo_pp": -8.93,
+    "dt_dif_pp": 6.48,
+    "rmse_pp": 10.91
+   },
+   "vivienda.total_solo_precio_q4": {
+    "n": 15,
+    "desde": 1990,
+    "hasta": 2004,
+    "corr": 0.4047,
+    "sesgo_pp": -9.36,
+    "dt_dif_pp": 6.17,
+    "rmse_pp": 11.1
+   },
+   "vivienda.rent_yd_encadenado_vs_jst": {
+    "n": 15,
+    "desde": 1990,
+    "hasta": 2004,
+    "corr": 0.5434,
+    "sesgo_pp": 0.2,
+    "dt_dif_pp": 0.6,
+    "rmse_pp": 0.61
+   },
+   "vivienda.rent_yd_2004": {
+    "encadenado": 0.042,
+    "jst": 0.0269,
+    "fijo_en_ancla": 0.0356
+   },
+   "oro.wb_fx_fred_vs_motor": {
+    "n": 5,
+    "desde": 2000,
+    "hasta": 2004,
+    "corr": 0.9777,
+    "sesgo_pp": 0.17,
+    "dt_dif_pp": 0.62,
+    "rmse_pp": 0.58
+   },
+   "oro.fx_fred_fin_dic_vs_jst_xrusd_cambio": {
+    "n": 5,
+    "desde": 2000,
+    "hasta": 2004,
+    "corr": 0.9996,
+    "sesgo_pp": 0.11,
+    "dt_dif_pp": 0.57,
+    "rmse_pp": 0.53
+   }
+  },
+  "SWE": {
+   "bonos.irlt_encadenado": {
+    "n": 18,
+    "desde": 1987,
+    "hasta": 2004,
+    "corr": 0.9908,
+    "sesgo_pp": -0.16,
+    "dt_dif_pp": 1.57,
+    "rmse_pp": 1.53
+   },
+   "bonos.irlt_media_anual_formula": {
+    "n": 18,
+    "desde": 1987,
+    "hasta": 2004,
+    "corr": 0.5569,
+    "sesgo_pp": -0.95,
+    "dt_dif_pp": 9.73,
+    "rmse_pp": 9.5
+   },
+   "letras.ir3m_media": {
+    "n": 23,
+    "desde": 1982,
+    "hasta": 2004,
+    "corr": 0.9319,
+    "sesgo_pp": 1.75,
+    "dt_dif_pp": 1.49,
+    "rmse_pp": 2.27
+   },
+   "letras.ir3m_encadenada": {
+    "n": 22,
+    "desde": 1983,
+    "hasta": 2004,
+    "corr": 0.9201,
+    "sesgo_pp": 2.15,
+    "dt_dif_pp": 1.75,
+    "rmse_pp": 2.75
+   },
+   "letras.ircall_media": {
+    "n": 50,
+    "desde": 1955,
+    "hasta": 2004,
+    "corr": 0.9228,
+    "sesgo_pp": -0.4,
+    "dt_dif_pp": 1.05,
+    "rmse_pp": 1.11
+   },
+   "vivienda.plusvalia_bis_q4": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9326,
+    "sesgo_pp": -0.35,
+    "dt_dif_pp": 2.76,
+    "rmse_pp": 2.75
+   },
+   "vivienda.plusvalia_bis_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9398,
+    "sesgo_pp": -0.5,
+    "dt_dif_pp": 2.96,
+    "rmse_pp": 2.92
+   },
+   "vivienda.plusvalia_bis_media": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9796,
+    "sesgo_pp": -0.38,
+    "dt_dif_pp": 1.65,
+    "rmse_pp": 1.67
+   },
+   "vivienda.plusvalia_bis_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9889,
+    "sesgo_pp": -0.66,
+    "dt_dif_pp": 1.54,
+    "rmse_pp": 1.64
+   },
+   "vivienda.plusvalia_ocde_hpi_q4": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9348,
+    "sesgo_pp": -0.25,
+    "dt_dif_pp": 2.72,
+    "rmse_pp": 2.69
+   },
+   "vivienda.plusvalia_ocde_hpi_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9386,
+    "sesgo_pp": -0.46,
+    "dt_dif_pp": 2.98,
+    "rmse_pp": 2.94
+   },
+   "vivienda.plusvalia_ocde_hpi_media": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.9732,
+    "sesgo_pp": -0.3,
+    "dt_dif_pp": 1.85,
+    "rmse_pp": 1.85
+   },
+   "vivienda.plusvalia_ocde_hpi_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9898,
+    "sesgo_pp": -0.58,
+    "dt_dif_pp": 1.51,
+    "rmse_pp": 1.58
+   },
+   "vivienda.ancla": {
+    "año": 1984,
+    "rent_yd_jst": 0.0794
+   },
+   "vivienda.total_indice_alquiler": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9791,
+    "sesgo_pp": 1.42,
+    "dt_dif_pp": 1.84,
+    "rmse_pp": 2.29
+   },
+   "vivienda.total_indice_alquiler_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9095,
+    "sesgo_pp": 1.4,
+    "dt_dif_pp": 3.37,
+    "rmse_pp": 3.57
+   },
+   "vivienda.total_alquiler_fijo": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9714,
+    "sesgo_pp": 0.05,
+    "dt_dif_pp": 1.93,
+    "rmse_pp": 1.88
+   },
+   "vivienda.total_alquiler_fijo_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9388,
+    "sesgo_pp": 0.16,
+    "dt_dif_pp": 2.83,
+    "rmse_pp": 2.76
+   },
+   "vivienda.total_solo_precio": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9714,
+    "sesgo_pp": -8.4,
+    "dt_dif_pp": 1.97,
+    "rmse_pp": 8.62
+   },
+   "vivienda.total_solo_precio_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9388,
+    "sesgo_pp": -8.31,
+    "dt_dif_pp": 2.79,
+    "rmse_pp": 8.74
+   },
+   "vivienda.rent_yd_encadenado_vs_jst": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.874,
+    "sesgo_pp": 2.0,
+    "dt_dif_pp": 0.94,
+    "rmse_pp": 2.2
+   },
+   "vivienda.rent_yd_2004": {
+    "encadenado": 0.075,
+    "jst": 0.05,
+    "fijo_en_ancla": 0.0794
+   },
+   "oro.wb_fx_fred_vs_motor": {
+    "n": 33,
+    "desde": 1972,
+    "hasta": 2004,
+    "corr": 0.9996,
+    "sesgo_pp": 0.05,
+    "dt_dif_pp": 0.82,
+    "rmse_pp": 0.81
+   },
+   "oro.fx_fred_fin_dic_vs_jst_xrusd_cambio": {
+    "n": 33,
+    "desde": 1972,
+    "hasta": 2004,
+    "corr": 0.998,
+    "sesgo_pp": 0.02,
+    "dt_dif_pp": 0.83,
+    "rmse_pp": 0.82
+   }
+  },
+  "USA": {
+   "bonos.irlt_encadenado": {
+    "n": 51,
+    "desde": 1954,
+    "hasta": 2004,
+    "corr": 0.96,
+    "sesgo_pp": 0.26,
+    "dt_dif_pp": 3.03,
+    "rmse_pp": 3.01
+   },
+   "bonos.irlt_media_anual_formula": {
+    "n": 51,
+    "desde": 1954,
+    "hasta": 2004,
+    "corr": 0.6457,
+    "sesgo_pp": -0.08,
+    "dt_dif_pp": 7.97,
+    "rmse_pp": 7.89
+   },
+   "bonos.gs10_encadenado": {
+    "n": 51,
+    "desde": 1954,
+    "hasta": 2004,
+    "corr": 0.96,
+    "sesgo_pp": 0.26,
+    "dt_dif_pp": 3.03,
+    "rmse_pp": 3.01
+   },
+   "bonos.dgs10_fin_de_mes_encadenado": {
+    "n": 42,
+    "desde": 1963,
+    "hasta": 2004,
+    "corr": 0.9701,
+    "sesgo_pp": 0.32,
+    "dt_dif_pp": 2.69,
+    "rmse_pp": 2.68
+   },
+   "bonos.damodaran_tbond": {
+    "n": 77,
+    "desde": 1928,
+    "hasta": 2004,
+    "corr": 0.9524,
+    "sesgo_pp": -0.22,
+    "dt_dif_pp": 2.92,
+    "rmse_pp": 2.91
+   },
+   "letras.ir3m_media": {
+    "n": 40,
+    "desde": 1965,
+    "hasta": 2004,
+    "corr": 0.9999,
+    "sesgo_pp": -0.01,
+    "dt_dif_pp": 0.03,
+    "rmse_pp": 0.04
+   },
+   "letras.ir3m_encadenada": {
+    "n": 40,
+    "desde": 1965,
+    "hasta": 2004,
+    "corr": 0.9974,
+    "sesgo_pp": 0.24,
+    "dt_dif_pp": 0.35,
+    "rmse_pp": 0.42
+   },
+   "letras.ircall_media": {
+    "n": 50,
+    "desde": 1955,
+    "hasta": 2004,
+    "corr": 0.9932,
+    "sesgo_pp": -0.12,
+    "dt_dif_pp": 0.39,
+    "rmse_pp": 0.41
+   },
+   "letras.tb3ms_media": {
+    "n": 71,
+    "desde": 1934,
+    "hasta": 2004,
+    "corr": 0.9807,
+    "sesgo_pp": -0.67,
+    "dt_dif_pp": 0.68,
+    "rmse_pp": 0.95
+   },
+   "vivienda.plusvalia_bis_q4": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.8277,
+    "sesgo_pp": 1.55,
+    "dt_dif_pp": 2.66,
+    "rmse_pp": 3.04
+   },
+   "vivienda.plusvalia_bis_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9362,
+    "sesgo_pp": 1.3,
+    "dt_dif_pp": 2.53,
+    "rmse_pp": 2.79
+   },
+   "vivienda.plusvalia_bis_media": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.8333,
+    "sesgo_pp": 1.44,
+    "dt_dif_pp": 2.54,
+    "rmse_pp": 2.88
+   },
+   "vivienda.plusvalia_bis_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.954,
+    "sesgo_pp": 1.13,
+    "dt_dif_pp": 2.21,
+    "rmse_pp": 2.43
+   },
+   "vivienda.plusvalia_ocde_hpi_q4": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.7373,
+    "sesgo_pp": 0.47,
+    "dt_dif_pp": 2.32,
+    "rmse_pp": 2.33
+   },
+   "vivienda.plusvalia_ocde_hpi_q4_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.937,
+    "sesgo_pp": 0.27,
+    "dt_dif_pp": 1.03,
+    "rmse_pp": 1.04
+   },
+   "vivienda.plusvalia_ocde_hpi_media": {
+    "n": 34,
+    "desde": 1971,
+    "hasta": 2004,
+    "corr": 0.7805,
+    "sesgo_pp": 0.43,
+    "dt_dif_pp": 2.07,
+    "rmse_pp": 2.09
+   },
+   "vivienda.plusvalia_ocde_hpi_media_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9604,
+    "sesgo_pp": 0.21,
+    "dt_dif_pp": 0.76,
+    "rmse_pp": 0.77
+   },
+   "vivienda.ancla": {
+    "año": 1984,
+    "rent_yd_jst": 0.0553
+   },
+   "vivienda.total_indice_alquiler": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9411,
+    "sesgo_pp": 0.99,
+    "dt_dif_pp": 2.1,
+    "rmse_pp": 2.28
+   },
+   "vivienda.total_indice_alquiler_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9156,
+    "sesgo_pp": 1.1,
+    "dt_dif_pp": 2.4,
+    "rmse_pp": 2.58
+   },
+   "vivienda.total_alquiler_fijo": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9364,
+    "sesgo_pp": 1.49,
+    "dt_dif_pp": 2.5,
+    "rmse_pp": 2.86
+   },
+   "vivienda.total_alquiler_fijo_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9169,
+    "sesgo_pp": 1.71,
+    "dt_dif_pp": 2.83,
+    "rmse_pp": 3.25
+   },
+   "vivienda.total_solo_precio": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9364,
+    "sesgo_pp": -4.36,
+    "dt_dif_pp": 2.29,
+    "rmse_pp": 4.9
+   },
+   "vivienda.total_solo_precio_q4": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.9169,
+    "sesgo_pp": -4.16,
+    "dt_dif_pp": 2.6,
+    "rmse_pp": 4.87
+   },
+   "vivienda.rent_yd_encadenado_vs_jst": {
+    "n": 20,
+    "desde": 1985,
+    "hasta": 2004,
+    "corr": 0.901,
+    "sesgo_pp": -0.14,
+    "dt_dif_pp": 0.26,
+    "rmse_pp": 0.29
+   },
+   "vivienda.rent_yd_2004": {
+    "encadenado": 0.0373,
+    "jst": 0.0433,
+    "fijo_en_ancla": 0.0553
+   },
+   "oro.wb_fx_fred_vs_motor": {
+    "n": 33,
+    "desde": 1972,
+    "hasta": 2004,
+    "corr": 1.0,
+    "sesgo_pp": 0.0,
+    "dt_dif_pp": 0.0,
+    "rmse_pp": 0.0
+   }
+  },
+  "_oro_usd": {
+   "wb_dic_vs_damodaran_1961_2004": {
+    "n": 44,
+    "desde": 1961,
+    "hasta": 2004,
+    "corr": 0.983,
+    "sesgo_pp": -0.2,
+    "dt_dif_pp": 5.17,
+    "rmse_pp": 5.12
+   }
+  }
+ },
+ "resumen_historico": {
+  "bonos.damodaran_tbond": {
+   "n_paises": 1,
+   "corr": 0.952,
+   "sesgo_pp": -0.22,
+   "dt_dif_pp": 2.92,
+   "años_mediana": 77
+  },
+  "bonos.dgs10_fin_de_mes_encadenado": {
+   "n_paises": 1,
+   "corr": 0.97,
+   "sesgo_pp": 0.32,
+   "dt_dif_pp": 2.69,
+   "años_mediana": 42
+  },
+  "bonos.gs10_encadenado": {
+   "n_paises": 1,
+   "corr": 0.96,
+   "sesgo_pp": 0.26,
+   "dt_dif_pp": 3.03,
+   "años_mediana": 51
+  },
+  "bonos.irlt_encadenado": {
+   "n_paises": 14,
+   "corr": 0.956,
+   "sesgo_pp": 0.575,
+   "dt_dif_pp": 2.86,
+   "años_mediana": 21
+  },
+  "bonos.irlt_media_anual_formula": {
+   "n_paises": 14,
+   "corr": 0.642,
+   "sesgo_pp": -0.065,
+   "dt_dif_pp": 8.155,
+   "años_mediana": 21
+  },
+  "letras.boe_tbill3m_media": {
+   "n_paises": 1,
+   "corr": 1.0,
+   "sesgo_pp": -0.01,
+   "dt_dif_pp": 0.08,
+   "años_mediana": 30
+  },
+  "letras.ir3m_encadenada": {
+   "n_paises": 13,
+   "corr": 0.993,
+   "sesgo_pp": 0.7,
+   "dt_dif_pp": 0.51,
+   "años_mediana": 25
+  },
+  "letras.ir3m_media": {
+   "n_paises": 13,
+   "corr": 0.997,
+   "sesgo_pp": 0.22,
+   "dt_dif_pp": 0.28,
+   "años_mediana": 26
+  },
+  "letras.ircall_media": {
+   "n_paises": 14,
+   "corr": 0.99,
+   "sesgo_pp": 0.0,
+   "dt_dif_pp": 0.235,
+   "años_mediana": 21
+  },
+  "letras.tb3ms_media": {
+   "n_paises": 1,
+   "corr": 0.981,
+   "sesgo_pp": -0.67,
+   "dt_dif_pp": 0.68,
+   "años_mediana": 71
+  },
+  "oro.fx_fred_fin_dic_vs_jst_xrusd_cambio": {
+   "n_paises": 13,
+   "corr": 1.0,
+   "sesgo_pp": 0.11,
+   "dt_dif_pp": 0.57,
+   "años_mediana": 5
+  },
+  "oro.wb_fx_fred_vs_motor": {
+   "n_paises": 14,
+   "corr": 0.978,
+   "sesgo_pp": 0.17,
+   "dt_dif_pp": 0.62,
+   "años_mediana": 5
+  },
+  "vivienda.plusvalia_bis_media": {
+   "n_paises": 14,
+   "corr": 0.981,
+   "sesgo_pp": -0.035,
+   "dt_dif_pp": 1.76,
+   "años_mediana": 34
+  },
+  "vivienda.plusvalia_bis_media_desde_1986": {
+   "n_paises": 14,
+   "corr": 0.971,
+   "sesgo_pp": -0.085,
+   "dt_dif_pp": 1.325,
+   "años_mediana": 19
+  },
+  "vivienda.plusvalia_bis_q4": {
+   "n_paises": 14,
+   "corr": 0.903,
+   "sesgo_pp": 0.01,
+   "dt_dif_pp": 4.305,
+   "años_mediana": 34
+  },
+  "vivienda.plusvalia_bis_q4_desde_1986": {
+   "n_paises": 14,
+   "corr": 0.916,
+   "sesgo_pp": 0.025,
+   "dt_dif_pp": 3.02,
+   "años_mediana": 19
+  },
+  "vivienda.plusvalia_ocde_hpi_media": {
+   "n_paises": 14,
+   "corr": 0.968,
+   "sesgo_pp": -0.17,
+   "dt_dif_pp": 1.9,
+   "años_mediana": 34
+  },
+  "vivienda.plusvalia_ocde_hpi_media_desde_1986": {
+   "n_paises": 14,
+   "corr": 0.958,
+   "sesgo_pp": 0.03,
+   "dt_dif_pp": 1.695,
+   "años_mediana": 19
+  },
+  "vivienda.plusvalia_ocde_hpi_q4": {
+   "n_paises": 14,
+   "corr": 0.884,
+   "sesgo_pp": -0.04,
+   "dt_dif_pp": 4.22,
+   "años_mediana": 34
+  },
+  "vivienda.plusvalia_ocde_hpi_q4_desde_1986": {
+   "n_paises": 14,
+   "corr": 0.882,
+   "sesgo_pp": 0.04,
+   "dt_dif_pp": 3.535,
+   "años_mediana": 19
+  },
+  "vivienda.rent_yd_encadenado_vs_jst": {
+   "n_paises": 14,
+   "corr": 0.967,
+   "sesgo_pp": -0.07,
+   "dt_dif_pp": 0.19,
+   "años_mediana": 20
+  },
+  "vivienda.total_alquiler_fijo": {
+   "n_paises": 14,
+   "corr": 0.959,
+   "sesgo_pp": 0.04,
+   "dt_dif_pp": 1.775,
+   "años_mediana": 20
+  },
+  "vivienda.total_alquiler_fijo_q4": {
+   "n_paises": 14,
+   "corr": 0.918,
+   "sesgo_pp": 0.185,
+   "dt_dif_pp": 2.93,
+   "años_mediana": 20
+  },
+  "vivienda.total_indice_alquiler": {
+   "n_paises": 14,
+   "corr": 0.968,
+   "sesgo_pp": -0.07,
+   "dt_dif_pp": 1.45,
+   "años_mediana": 20
+  },
+  "vivienda.total_indice_alquiler_q4": {
+   "n_paises": 14,
+   "corr": 0.909,
+   "sesgo_pp": -0.035,
+   "dt_dif_pp": 3.2,
+   "años_mediana": 20
+  },
+  "vivienda.total_solo_precio": {
+   "n_paises": 14,
+   "corr": 0.959,
+   "sesgo_pp": -4.63,
+   "dt_dif_pp": 1.785,
+   "años_mediana": 20
+  },
+  "vivienda.total_solo_precio_q4": {
+   "n_paises": 14,
+   "corr": 0.918,
+   "sesgo_pp": -4.515,
+   "dt_dif_pp": 2.875,
+   "años_mediana": 20
+  }
+ },
+ "vivo_entre_fuentes_desde_2005": {
+  "BEL": {
+   "letras.ir3m_vs_ircall_media_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9925,
+    "sesgo_pp": 0.21,
+    "dt_dif_pp": 0.22,
+    "rmse_pp": 0.3
+   },
+   "vivienda.bis_vs_ocde_hpi_q4": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9962,
+    "sesgo_pp": 0.08,
+    "dt_dif_pp": 0.32,
+    "rmse_pp": 0.33
+   },
+   "vivienda.alquiler_ocde_crec_medio_2005_": 0.0223
+  },
+  "DEU": {
+   "letras.ir3m_vs_ircall_media_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9925,
+    "sesgo_pp": 0.21,
+    "dt_dif_pp": 0.22,
+    "rmse_pp": 0.3
+   },
+   "vivienda.bis_vs_ocde_hpi_q4": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9349,
+    "sesgo_pp": -0.11,
+    "dt_dif_pp": 1.61,
+    "rmse_pp": 1.57
+   },
+   "vivienda.alquiler_ocde_crec_medio_2005_": 0.014
+  },
+  "DNK": {
+   "letras.ir3m_vs_ircall_media_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9926,
+    "sesgo_pp": 0.33,
+    "dt_dif_pp": 0.22,
+    "rmse_pp": 0.39
+   },
+   "vivienda.bis_vs_ocde_hpi_q4": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 1.0,
+    "sesgo_pp": 0.03,
+    "dt_dif_pp": 0.06,
+    "rmse_pp": 0.07
+   },
+   "vivienda.alquiler_ocde_crec_medio_2005_": 0.0204
+  },
+  "ESP": {
+   "bonos.irlt_vs_bde_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 1.0,
+    "sesgo_pp": 0.0,
+    "dt_dif_pp": 0.09,
+    "rmse_pp": 0.08
+   },
+   "letras.ir3m_vs_ircall_media_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9925,
+    "sesgo_pp": 0.21,
+    "dt_dif_pp": 0.22,
+    "rmse_pp": 0.3
+   },
+   "vivienda.bis_vs_ocde_hpi_q4": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9971,
+    "sesgo_pp": -0.18,
+    "dt_dif_pp": 0.64,
+    "rmse_pp": 0.65
+   },
+   "vivienda.bis_vs_bde_m2_q4": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9486,
+    "sesgo_pp": 1.0,
+    "dt_dif_pp": 2.56,
+    "rmse_pp": 2.7
+   },
+   "vivienda.alquiler_ocde_crec_medio_2005_": 0.0164
+  },
+  "FIN": {
+   "letras.ir3m_vs_ircall_media_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9925,
+    "sesgo_pp": 0.21,
+    "dt_dif_pp": 0.22,
+    "rmse_pp": 0.3
+   },
+   "vivienda.bis_vs_ocde_hpi_q4": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9995,
+    "sesgo_pp": -0.01,
+    "dt_dif_pp": 0.14,
+    "rmse_pp": 0.13
+   },
+   "vivienda.alquiler_ocde_crec_medio_2005_": 0.024
+  },
+  "FRA": {
+   "letras.ir3m_vs_ircall_media_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9925,
+    "sesgo_pp": 0.21,
+    "dt_dif_pp": 0.22,
+    "rmse_pp": 0.3
+   },
+   "vivienda.bis_vs_ocde_hpi_q4": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9987,
+    "sesgo_pp": 0.05,
+    "dt_dif_pp": 0.35,
+    "rmse_pp": 0.35
+   },
+   "vivienda.alquiler_ocde_crec_medio_2005_": 0.015
+  },
+  "GBR": {
+   "letras.ir3m_vs_ircall_media_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9933,
+    "sesgo_pp": 0.24,
+    "dt_dif_pp": 0.25,
+    "rmse_pp": 0.34
+   },
+   "letras.ir3m_vs_ois3m_media_anual": {
+    "n": 10,
+    "desde": 2016,
+    "hasta": 2025,
+    "corr": 0.9996,
+    "sesgo_pp": 0.09,
+    "dt_dif_pp": 0.06,
+    "rmse_pp": 0.11
+   },
+   "vivienda.bis_vs_ocde_hpi_q4": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9978,
+    "sesgo_pp": -0.08,
+    "dt_dif_pp": 0.34,
+    "rmse_pp": 0.34
+   },
+   "vivienda.alquiler_ocde_crec_medio_2005_": 0.0279
+  },
+  "ITA": {
+   "letras.ir3m_vs_ircall_media_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9925,
+    "sesgo_pp": 0.21,
+    "dt_dif_pp": 0.22,
+    "rmse_pp": 0.3
+   },
+   "vivienda.bis_vs_ocde_hpi_q4": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9731,
+    "sesgo_pp": 0.14,
+    "dt_dif_pp": 0.84,
+    "rmse_pp": 0.83
+   },
+   "vivienda.alquiler_ocde_crec_medio_2005_": 0.0151
+  },
+  "JPN": {
+   "letras.ir3m_vs_ircall_media_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9352,
+    "sesgo_pp": 0.16,
+    "dt_dif_pp": 0.14,
+    "rmse_pp": 0.21
+   },
+   "vivienda.bis_vs_ocde_hpi_q4": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9973,
+    "sesgo_pp": -0.08,
+    "dt_dif_pp": 0.22,
+    "rmse_pp": 0.23
+   },
+   "vivienda.alquiler_ocde_crec_medio_2005_": -0.0015
+  },
+  "NLD": {
+   "letras.ir3m_vs_ircall_media_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9925,
+    "sesgo_pp": 0.21,
+    "dt_dif_pp": 0.22,
+    "rmse_pp": 0.3
+   },
+   "vivienda.bis_vs_ocde_hpi_q4": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 1.0,
+    "sesgo_pp": 0.01,
+    "dt_dif_pp": 0.06,
+    "rmse_pp": 0.06
+   },
+   "vivienda.alquiler_ocde_crec_medio_2005_": 0.0261
+  },
+  "NOR": {
+   "letras.ir3m_vs_ircall_media_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9919,
+    "sesgo_pp": 0.36,
+    "dt_dif_pp": 0.21,
+    "rmse_pp": 0.41
+   },
+   "vivienda.bis_vs_ocde_hpi_q4": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9997,
+    "sesgo_pp": -0.05,
+    "dt_dif_pp": 0.13,
+    "rmse_pp": 0.14
+   },
+   "vivienda.alquiler_ocde_crec_medio_2005_": 0.0251
+  },
+  "PRT": {
+   "letras.ir3m_vs_ircall_media_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9925,
+    "sesgo_pp": 0.21,
+    "dt_dif_pp": 0.22,
+    "rmse_pp": 0.3
+   },
+   "vivienda.bis_vs_ocde_hpi_q4": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9986,
+    "sesgo_pp": -0.06,
+    "dt_dif_pp": 0.38,
+    "rmse_pp": 0.38
+   },
+   "vivienda.alquiler_ocde_crec_medio_2005_": 0.0271
+  },
+  "SWE": {
+   "letras.ir3m_vs_ircall_media_anual": {
+    "n": 15,
+    "desde": 2005,
+    "hasta": 2019,
+    "corr": 0.9968,
+    "sesgo_pp": -0.2,
+    "dt_dif_pp": 0.12,
+    "rmse_pp": 0.23
+   },
+   "vivienda.bis_vs_ocde_hpi_q4": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9999,
+    "sesgo_pp": -0.0,
+    "dt_dif_pp": 0.08,
+    "rmse_pp": 0.08
+   },
+   "vivienda.alquiler_ocde_crec_medio_2005_": 0.0217
+  },
+  "USA": {
+   "bonos.irlt_vs_dgs10_fin_de_mes_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9827,
+    "sesgo_pp": 0.0,
+    "dt_dif_pp": 1.74,
+    "rmse_pp": 1.69
+   },
+   "bonos.irlt_vs_dgs10_fin_de_mes_movil12": {
+    "n_ventanas": 250,
+    "desde": "2005-12",
+    "hasta": "2026-09",
+    "corr": 0.9808,
+    "sesgo_pp": 0.07,
+    "dt_dif_pp": 1.45,
+    "p95_abs_dif_pp": 2.85
+   },
+   "bonos.irlt_vs_damodaran_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9811,
+    "sesgo_pp": 0.08,
+    "dt_dif_pp": 1.96,
+    "rmse_pp": 1.92
+   },
+   "letras.ir3m_vs_ircall_media_anual": {
+    "n": 20,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9955,
+    "sesgo_pp": 0.17,
+    "dt_dif_pp": 0.19,
+    "rmse_pp": 0.25
+   },
+   "letras.ir3m_vs_tb3ms_media_anual": {
+    "n": 20,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9897,
+    "sesgo_pp": 0.26,
+    "dt_dif_pp": 0.29,
+    "rmse_pp": 0.38
+   },
+   "vivienda.bis_vs_ocde_hpi_q4": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9473,
+    "sesgo_pp": -0.47,
+    "dt_dif_pp": 2.69,
+    "rmse_pp": 2.67
+   },
+   "vivienda.bis_vs_case_shiller_dic": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9717,
+    "sesgo_pp": -0.19,
+    "dt_dif_pp": 1.83,
+    "rmse_pp": 1.79
+   },
+   "vivienda.alquiler_ocde_crec_medio_2005_": 0.0332
+  },
+  "_oro_usd": {
+   "wb_vs_datahub_mensual_max_abs_dif_pct": 0.0,
+   "n_meses": 285
+  }
+ },
+ "disponibilidad": {
+  "BEL": {
+   "oecd_irlt": "2026-09-01",
+   "oecd_ir3m": "2026-09-01",
+   "bis_spp_n": "2026-01-01",
+   "ocde_hpi_q (caché)": "2026-04-01",
+   "ocde_rpi_q (caché)": "2026-07-01",
+   "oecd_cpi": "2026-09-01"
+  },
+  "DEU": {
+   "oecd_irlt": "2026-10-01",
+   "oecd_ir3m": "2026-09-01",
+   "bis_spp_n": "2026-04-01",
+   "ocde_hpi_q (caché)": "2026-04-01",
+   "ocde_rpi_q (caché)": "2026-07-01",
+   "oecd_cpi": "2026-09-01"
+  },
+  "DNK": {
+   "oecd_irlt": "2026-09-01",
+   "oecd_ir3m": "2026-09-01",
+   "bis_spp_n": "2026-04-01",
+   "ocde_hpi_q (caché)": "2026-04-01",
+   "ocde_rpi_q (caché)": "2026-07-01",
+   "oecd_cpi": "2026-09-01"
+  },
+  "ESP": {
+   "oecd_irlt": "2026-09-01",
+   "oecd_ir3m": "2026-09-01",
+   "bis_spp_n": "2026-04-01",
+   "ocde_hpi_q (caché)": "2026-04-01",
+   "ocde_rpi_q (caché)": "2026-07-01",
+   "oecd_cpi": "2026-09-01"
+  },
+  "FIN": {
+   "oecd_irlt": "2026-09-01",
+   "oecd_ir3m": "2026-09-01",
+   "bis_spp_n": "2026-04-01",
+   "ocde_hpi_q (caché)": "2026-04-01",
+   "ocde_rpi_q (caché)": "2026-07-01",
+   "oecd_cpi": "2026-09-01"
+  },
+  "FRA": {
+   "oecd_irlt": "2026-09-01",
+   "oecd_ir3m": "2026-09-01",
+   "bis_spp_n": "2026-04-01",
+   "ocde_hpi_q (caché)": "2026-04-01",
+   "ocde_rpi_q (caché)": "2026-07-01",
+   "oecd_cpi": "2026-09-01"
+  },
+  "GBR": {
+   "oecd_irlt": "2026-09-01",
+   "oecd_ir3m": "2026-02-01",
+   "bis_spp_n": "2026-04-01",
+   "ocde_hpi_q (caché)": "2026-04-01",
+   "ocde_rpi_q (caché)": "2026-07-01",
+   "oecd_cpi": "2026-09-01"
+  },
+  "ITA": {
+   "oecd_irlt": "2026-09-01",
+   "oecd_ir3m": "2026-09-01",
+   "bis_spp_n": "2026-04-01",
+   "ocde_hpi_q (caché)": "2026-04-01",
+   "ocde_rpi_q (caché)": "2025-10-01",
+   "oecd_cpi": "2026-09-01"
+  },
+  "JPN": {
+   "oecd_irlt": "2026-09-01",
+   "oecd_ir3m": "2026-08-01",
+   "bis_spp_n": "2025-10-01",
+   "ocde_hpi_q (caché)": "2025-10-01",
+   "ocde_rpi_q (caché)": "2026-07-01",
+   "oecd_cpi": "2026-09-01"
+  },
+  "NLD": {
+   "oecd_irlt": "2026-09-01",
+   "oecd_ir3m": "2026-09-01",
+   "bis_spp_n": "2026-04-01",
+   "ocde_hpi_q (caché)": "2025-10-01",
+   "ocde_rpi_q (caché)": "2026-07-01",
+   "oecd_cpi": "2026-09-01"
+  },
+  "NOR": {
+   "oecd_irlt": "2026-10-01",
+   "oecd_ir3m": "2026-09-01",
+   "bis_spp_n": "2026-04-01",
+   "ocde_hpi_q (caché)": "2026-04-01",
+   "ocde_rpi_q (caché)": "2026-07-01",
+   "oecd_cpi": "2026-09-01"
+  },
+  "PRT": {
+   "oecd_irlt": "2026-09-01",
+   "oecd_ir3m": "2026-09-01",
+   "bis_spp_n": "2026-04-01",
+   "ocde_hpi_q (caché)": "2026-04-01",
+   "ocde_rpi_q (caché)": "2026-07-01",
+   "oecd_cpi": "2026-09-01"
+  },
+  "SWE": {
+   "oecd_irlt": "2026-09-01",
+   "oecd_ir3m": "2026-09-01",
+   "bis_spp_n": "2026-04-01",
+   "ocde_hpi_q (caché)": "2026-04-01",
+   "ocde_rpi_q (caché)": "2026-07-01",
+   "oecd_cpi": "2026-09-01"
+  },
+  "USA": {
+   "oecd_irlt": "2026-09-01",
+   "oecd_ir3m": "2026-09-01",
+   "bis_spp_n": "2026-04-01",
+   "ocde_hpi_q (caché)": "2026-04-01",
+   "ocde_rpi_q (caché)": "2024-10-01",
+   "oecd_cpi": "2026-09-01"
+  },
+  "_comunes": {
+   "gold_wb_usd_m": "2026-09-01",
+   "boe_ois3m_m": "2026-09-01",
+   "hoy": "2026-11-05"
+  }
+ },
+ "ipc_ocde_vs_jst_hasta_2004": {
+  "BEL": {
+   "n": 49,
+   "desde": 1956,
+   "hasta": 2004,
+   "corr": 0.9998,
+   "sesgo_pp": 0.0,
+   "dt_dif_pp": 0.05,
+   "rmse_pp": 0.05
+  },
+  "DEU": {
+   "n": 49,
+   "desde": 1956,
+   "hasta": 2004,
+   "corr": 0.9979,
+   "sesgo_pp": 0.02,
+   "dt_dif_pp": 0.11,
+   "rmse_pp": 0.11
+  },
+  "DNK": {
+   "n": 37,
+   "desde": 1968,
+   "hasta": 2004,
+   "corr": 0.9995,
+   "sesgo_pp": 0.05,
+   "dt_dif_pp": 0.13,
+   "rmse_pp": 0.14
+  },
+  "ESP": {
+   "n": 49,
+   "desde": 1956,
+   "hasta": 2004,
+   "corr": 0.9979,
+   "sesgo_pp": -0.02,
+   "dt_dif_pp": 0.36,
+   "rmse_pp": 0.35
+  },
+  "FIN": {
+   "n": 49,
+   "desde": 1956,
+   "hasta": 2004,
+   "corr": 0.9981,
+   "sesgo_pp": -0.07,
+   "dt_dif_pp": 0.27,
+   "rmse_pp": 0.28
+  },
+  "FRA": {
+   "n": 49,
+   "desde": 1956,
+   "hasta": 2004,
+   "corr": 0.9963,
+   "sesgo_pp": -0.06,
+   "dt_dif_pp": 0.34,
+   "rmse_pp": 0.35
+  },
+  "GBR": {
+   "n": 49,
+   "desde": 1956,
+   "hasta": 2004,
+   "corr": 0.9953,
+   "sesgo_pp": 0.39,
+   "dt_dif_pp": 0.58,
+   "rmse_pp": 0.69
+  },
+  "ITA": {
+   "n": 49,
+   "desde": 1956,
+   "hasta": 2004,
+   "corr": 0.998,
+   "sesgo_pp": 0.02,
+   "dt_dif_pp": 0.35,
+   "rmse_pp": 0.35
+  },
+  "JPN": {
+   "n": 49,
+   "desde": 1956,
+   "hasta": 2004,
+   "corr": 0.9983,
+   "sesgo_pp": -0.04,
+   "dt_dif_pp": 0.3,
+   "rmse_pp": 0.3
+  },
+  "NLD": {
+   "n": 43,
+   "desde": 1962,
+   "hasta": 2004,
+   "corr": 0.9918,
+   "sesgo_pp": -0.08,
+   "dt_dif_pp": 0.34,
+   "rmse_pp": 0.34
+  },
+  "NOR": {
+   "n": 49,
+   "desde": 1956,
+   "hasta": 2004,
+   "corr": 0.9995,
+   "sesgo_pp": -0.01,
+   "dt_dif_pp": 0.1,
+   "rmse_pp": 0.1
+  },
+  "PRT": {
+   "n": 49,
+   "desde": 1956,
+   "hasta": 2004,
+   "corr": 0.9633,
+   "sesgo_pp": 0.14,
+   "dt_dif_pp": 2.77,
+   "rmse_pp": 2.75
+  },
+  "SWE": {
+   "n": 49,
+   "desde": 1956,
+   "hasta": 2004,
+   "corr": 0.9996,
+   "sesgo_pp": -0.0,
+   "dt_dif_pp": 0.09,
+   "rmse_pp": 0.09
+  },
+  "USA": {
+   "n": 49,
+   "desde": 1956,
+   "hasta": 2004,
+   "corr": 0.989,
+   "sesgo_pp": 0.19,
+   "dt_dif_pp": 0.48,
+   "rmse_pp": 0.51
+  }
+ },
+ "sd_total_log_real": {
+  "bolsa": 0.20773071510973046,
+  "bonos": 0.09994258351673724,
+  "letras": 0.05613599558215744,
+  "vivienda": 0.08937438111673837,
+  "oro": 0.20943185049079807
+ },
+ "efecto_error_de_medida": {
+  "bonos": {
+   "medida": "bonos.irlt_encadenado",
+   "sd_total_pp": 10.0,
+   "dt_error_pp": 2.86,
+   "sesgo_pp": 0.575,
+   "cobertura": 0.8857
+  },
+  "letras": {
+   "medida": "letras.ir3m_media",
+   "sd_total_pp": 5.6,
+   "dt_error_pp": 0.28,
+   "sesgo_pp": 0.22,
+   "cobertura": 0.8993
+  },
+  "vivienda": {
+   "medida": "vivienda.total_indice_alquiler",
+   "sd_total_pp": 8.9,
+   "dt_error_pp": 1.45,
+   "sesgo_pp": -0.07,
+   "cobertura": 0.8955
+  },
+  "oro": {
+   "medida": "oro.wb_fx_fred_vs_motor",
+   "sd_total_pp": 20.9,
+   "dt_error_pp": 0.62,
+   "sesgo_pp": 0.17,
+   "cobertura": 0.8998
+  },
+  "vivienda (alquiler fijo)": {
+   "medida": "vivienda.total_alquiler_fijo",
+   "sd_total_pp": 8.9,
+   "dt_error_pp": 1.775,
+   "sesgo_pp": 0.04,
+   "cobertura": 0.8933
+  },
+  "vivienda (solo precio)": {
+   "medida": "vivienda.total_solo_precio",
+   "sd_total_pp": 8.9,
+   "dt_error_pp": 1.785,
+   "sesgo_pp": -4.63,
+   "cobertura": 0.8485
+  },
+  "vivienda (T4/T4 + alquiler)": {
+   "medida": "vivienda.total_indice_alquiler_q4",
+   "sd_total_pp": 8.9,
+   "dt_error_pp": 3.2,
+   "sesgo_pp": -0.035,
+   "cobertura": 0.8785
+  },
+  "letras (encadenada)": {
+   "medida": "letras.ir3m_encadenada",
+   "sd_total_pp": 5.6,
+   "dt_error_pp": 0.51,
+   "sesgo_pp": 0.7,
+   "cobertura": 0.896
+  }
+ },
+ "semaforo": {
+  "entrada": {
+   "fuente": "research/int/int11_potencia.json → medicion.y (JST ≤ 2004, log real; choque común del año y propio del país, t multivariante entre activos)",
+   "sd_comun": {
+    "bolsa": 0.1178,
+    "bonos": 0.0656,
+    "letras": 0.0326,
+    "vivienda": 0.0217,
+    "oro": 0.1997
+   },
+   "sd_propio": {
+    "bolsa": 0.1711,
+    "bonos": 0.0754,
+    "letras": 0.0457,
+    "vivienda": 0.0867,
+    "oro": 0.0631
+   },
+   "rho_comun": {
+    "bolsa": 0.322,
+    "bonos": 0.43,
+    "letras": 0.337,
+    "vivienda": 0.059,
+    "oro": 0.909
+   },
+   "nu": 5.247749174982397,
+   "escala_realizado_H80": {
+    "bolsa": 1.3364,
+    "bonos": 1.3358,
+    "letras": 1.3369,
+    "vivienda": 1.3514,
+    "oro": 1.3524
+   },
+   "escala_realizado_H85": {
+    "bolsa": 1.1734,
+    "bonos": 1.1731,
+    "letras": 1.1754,
+    "vivienda": 1.1773,
+    "oro": 1.1786
+   },
+   "nsim": 20000,
+   "semilla": 20261105,
+   "paises": 14
+  },
+  "por_años": {
+   "1": {
+    "bolsa": {
+     "p2_5": 0.5714,
+     "p10": 0.7857,
+     "p90": 1.0,
+     "p97_5": 1.0,
+     "media_H0": 0.8997,
+     "efecto_diseño": 2.45,
+     "n_eff": 5.7,
+     "binomial_ingenua_2_5_97_5": [
+      0.7143,
+      1.0
+     ],
+     "tamaño_real_binomial_ingenua": 0.045,
+     "binomial_neff_2_5_97_5": [
+      0.6474,
+      1.0
+     ],
+     "potencia_80": 0.065,
+     "potencia_85": 0.043,
+     "verde_bajo_H80": 0.721,
+     "media_H80": 0.7988
+    },
+    "bonos": {
+     "p2_5": 0.5,
+     "p10": 0.7857,
+     "p90": 1.0,
+     "p97_5": 1.0,
+     "media_H0": 0.9011,
+     "efecto_diseño": 3.12,
+     "n_eff": 4.5,
+     "binomial_ingenua_2_5_97_5": [
+      0.7143,
+      1.0
+     ],
+     "tamaño_real_binomial_ingenua": 0.059,
+     "binomial_neff_2_5_97_5": [
+      0.5488,
+      1.0
+     ],
+     "potencia_80": 0.067,
+     "potencia_85": 0.046,
+     "verde_bajo_H80": 0.734,
+     "media_H80": 0.7993
+    },
+    "letras": {
+     "p2_5": 0.5714,
+     "p10": 0.7857,
+     "p90": 1.0,
+     "p97_5": 1.0,
+     "media_H0": 0.9011,
+     "efecto_diseño": 2.41,
+     "n_eff": 5.8,
+     "binomial_ingenua_2_5_97_5": [
+      0.7143,
+      1.0
+     ],
+     "tamaño_real_binomial_ingenua": 0.047,
+     "binomial_neff_2_5_97_5": [
+      0.6545,
+      1.0
+     ],
+     "potencia_80": 0.067,
+     "potencia_85": 0.045,
+     "verde_bajo_H80": 0.726,
+     "media_H80": 0.8009
+    },
+    "vivienda": {
+     "p2_5": 0.7143,
+     "p10": 0.7857,
+     "p90": 1.0,
+     "p97_5": 1.0,
+     "media_H0": 0.9004,
+     "efecto_diseño": 1.07,
+     "n_eff": 13.1,
+     "binomial_ingenua_2_5_97_5": [
+      0.7143,
+      1.0
+     ],
+     "tamaño_real_binomial_ingenua": 0.012,
+     "binomial_neff_2_5_97_5": [
+      0.6941,
+      1.0
+     ],
+     "potencia_80": 0.132,
+     "potencia_85": 0.052,
+     "verde_bajo_H80": 0.702,
+     "media_H80": 0.8
+    },
+    "oro": {
+     "p2_5": 0.0,
+     "p10": 0.6429,
+     "p90": 1.0,
+     "p97_5": 1.0,
+     "media_H0": 0.899,
+     "efecto_diseño": 10.19,
+     "n_eff": 1.4,
+     "binomial_ingenua_2_5_97_5": [
+      0.7143,
+      1.0
+     ],
+     "tamaño_real_binomial_ingenua": 0.108,
+     "binomial_neff_2_5_97_5": [
+      0.1872,
+      1.0
+     ],
+     "potencia_80": 0.0,
+     "potencia_85": 0.0,
+     "verde_bajo_H80": 0.798,
+     "media_H80": 0.8002
+    },
+    "S5": {
+     "p2_5": 0.6571,
+     "p10": 0.7857,
+     "p90": 0.9714,
+     "p97_5": 0.9857,
+     "media_H0": 0.9002,
+     "efecto_diseño": 5.97,
+     "n_eff": 11.7,
+     "binomial_ingenua_2_5_97_5": [
+      0.8286,
+      0.9571
+     ],
+     "tamaño_real_binomial_ingenua": 0.349,
+     "binomial_neff_2_5_97_5": [
+      0.6839,
+      1.0
+     ],
+     "potencia_80": 0.119,
+     "potencia_85": 0.063,
+     "verde_bajo_H80": 0.653,
+     "media_H80": 0.7998
+    },
+    "S4_sin_bolsa": {
+     "p2_5": 0.6429,
+     "p10": 0.7679,
+     "p90": 0.9821,
+     "p97_5": 1.0,
+     "media_H0": 0.9004,
+     "efecto_diseño": 5.75,
+     "n_eff": 9.7,
+     "binomial_ingenua_2_5_97_5": [
+      0.8214,
+      0.9643
+     ],
+     "tamaño_real_binomial_ingenua": 0.285,
+     "binomial_neff_2_5_97_5": [
+      0.6914,
+      1.0
+     ],
+     "potencia_80": 0.112,
+     "potencia_85": 0.061,
+     "verde_bajo_H80": 0.694,
+     "media_H80": 0.8001
+    }
+   },
+   "2": {
+    "bolsa": {
+     "p2_5": 0.6429,
+     "p10": 0.7857,
+     "p90": 1.0,
+     "p97_5": 1.0,
+     "media_H0": 0.8994,
+     "efecto_diseño": 2.43,
+     "n_eff": 11.5,
+     "binomial_ingenua_2_5_97_5": [
+      0.7857,
+      1.0
+     ],
+     "tamaño_real_binomial_ingenua": 0.068,
+     "binomial_neff_2_5_97_5": [
+      0.6952,
+      1.0
+     ],
+     "potencia_80": 0.107,
+     "potencia_85": 0.057,
+     "verde_bajo_H80": 0.594,
+     "media_H80": 0.7985
+    },
+    "bonos": {
+     "p2_5": 0.6071,
+     "p10": 0.7857,
+     "p90": 1.0,
+     "p97_5": 1.0,
+     "media_H0": 0.9008,
+     "efecto_diseño": 3.16,
+     "n_eff": 8.8,
+     "binomial_ingenua_2_5_97_5": [
+      0.7857,
+      1.0
+     ],
+     "tamaño_real_binomial_ingenua": 0.089,
+     "binomial_neff_2_5_97_5": [
+      0.6604,
+      1.0
+     ],
+     "potencia_80": 0.088,
+     "potencia_85": 0.05,
+     "verde_bajo_H80": 0.684,
+     "media_H80": 0.7988
+    },
+    "letras": {
+     "p2_5": 0.6429,
+     "p10": 0.7857,
+     "p90": 1.0,
+     "p97_5": 1.0,
+     "media_H0": 0.9003,
+     "efecto_diseño": 2.45,
+     "n_eff": 11.4,
+     "binomial_ingenua_2_5_97_5": [
+      0.7857,
+      1.0
+     ],
+     "tamaño_real_binomial_ingenua": 0.074,
+     "binomial_neff_2_5_97_5": [
+      0.7004,
+      1.0
+     ],
+     "potencia_80": 0.085,
+     "potencia_85": 0.047,
+     "verde_bajo_H80": 0.6,
+     "media_H80": 0.7996
+    },
+    "vivienda": {
+     "p2_5": 0.7857,
+     "p10": 0.8214,
+     "p90": 0.9643,
+     "p97_5": 1.0,
+     "media_H0": 0.8997,
+     "efecto_diseño": 1.08,
+     "n_eff": 25.9,
+     "binomial_ingenua_2_5_97_5": [
+      0.7857,
+      1.0
+     ],
+     "tamaño_real_binomial_ingenua": 0.023,
+     "binomial_neff_2_5_97_5": [
+      0.7681,
+      1.0
+     ],
+     "potencia_80": 0.321,
+     "potencia_85": 0.121,
+     "verde_bajo_H80": 0.502,
+     "media_H80": 0.8
+    },
+    "oro": {
+     "p2_5": 0.5,
+     "p10": 0.5357,
+     "p90": 1.0,
+     "p97_5": 1.0,
+     "media_H0": 0.9001,
+     "efecto_diseño": 10.11,
+     "n_eff": 2.8,
+     "binomial_ingenua_2_5_97_5": [
+      0.7857,
+      1.0
+     ],
+     "tamaño_real_binomial_ingenua": 0.177,
+     "binomial_neff_2_5_97_5": [
+      0.3719,
+      1.0
+     ],
+     "potencia_80": 0.091,
+     "potencia_85": 0.05,
+     "verde_bajo_H80": 0.817,
+     "media_H80": 0.7989
+    },
+    "S5": {
+     "p2_5": 0.7357,
+     "p10": 0.8143,
+     "p90": 0.9571,
+     "p97_5": 0.9786,
+     "media_H0": 0.9001,
+     "efecto_diseño": 5.99,
+     "n_eff": 23.4,
+     "binomial_ingenua_2_5_97_5": [
+      0.85,
+      0.95
+     ],
+     "tamaño_real_binomial_ingenua": 0.313,
+     "binomial_neff_2_5_97_5": [
+      0.7702,
+      1.0
+     ],
+     "potencia_80": 0.196,
+     "potencia_85": 0.08,
+     "verde_bajo_H80": 0.479,
+     "media_H80": 0.7992
+    },
+    "S4_sin_bolsa": {
+     "p2_5": 0.7232,
+     "p10": 0.8036,
+     "p90": 0.9643,
+     "p97_5": 0.9821,
+     "media_H0": 0.9002,
+     "efecto_diseño": 5.79,
+     "n_eff": 19.4,
+     "binomial_ingenua_2_5_97_5": [
+      0.8393,
+      0.9554
+     ],
+     "tamaño_real_binomial_ingenua": 0.296,
+     "binomial_neff_2_5_97_5": [
+      0.7415,
+      1.0
+     ],
+     "potencia_80": 0.176,
+     "potencia_85": 0.076,
+     "verde_bajo_H80": 0.567,
+     "media_H80": 0.7993
+    }
+   },
+   "3": {
+    "bolsa": {
+     "p2_5": 0.6905,
+     "p10": 0.8095,
+     "p90": 0.9762,
+     "p97_5": 1.0,
+     "media_H0": 0.8997,
+     "efecto_diseño": 2.42,
+     "n_eff": 17.4,
+     "binomial_ingenua_2_5_97_5": [
+      0.8095,
+      0.9762
+     ],
+     "tamaño_real_binomial_ingenua": 0.236,
+     "binomial_neff_2_5_97_5": [
+      0.7486,
+      1.0
+     ],
+     "potencia_80": 0.133,
+     "potencia_85": 0.06,
+     "verde_bajo_H80": 0.515,
+     "media_H80": 0.7987
+    },
+    "bonos": {
+     "p2_5": 0.6667,
+     "p10": 0.7857,
+     "p90": 0.9762,
+     "p97_5": 1.0,
+     "media_H0": 0.9006,
+     "efecto_diseño": 3.21,
+     "n_eff": 13.1,
+     "binomial_ingenua_2_5_97_5": [
+      0.8095,
+      0.9762
+     ],
+     "tamaño_real_binomial_ingenua": 0.307,
+     "binomial_neff_2_5_97_5": [
+      0.6945,
+      1.0
+     ],
+     "potencia_80": 0.115,
+     "potencia_85": 0.054,
+     "verde_bajo_H80": 0.659,
+     "media_H80": 0.7989
+    },
+    "letras": {
+     "p2_5": 0.6905,
+     "p10": 0.8095,
+     "p90": 0.9762,
+     "p97_5": 1.0,
+     "media_H0": 0.9001,
+     "efecto_diseño": 2.51,
+     "n_eff": 16.8,
+     "binomial_ingenua_2_5_97_5": [
+      0.8095,
+      0.9762
+     ],
+     "tamaño_real_binomial_ingenua": 0.248,
+     "binomial_neff_2_5_97_5": [
+      0.7611,
+      1.0
+     ],
+     "potencia_80": 0.135,
+     "potencia_85": 0.066,
+     "verde_bajo_H80": 0.586,
+     "media_H80": 0.7999
+    },
+    "vivienda": {
+     "p2_5": 0.7857,
+     "p10": 0.8333,
+     "p90": 0.9524,
+     "p97_5": 0.9762,
+     "media_H0": 0.8997,
+     "efecto_diseño": 1.07,
+     "n_eff": 39.1,
+     "binomial_ingenua_2_5_97_5": [
+      0.8095,
+      0.9762
+     ],
+     "tamaño_real_binomial_ingenua": 0.117,
+     "binomial_neff_2_5_97_5": [
+      0.7953,
+      0.9744
+     ],
+     "potencia_80": 0.331,
+     "potencia_85": 0.099,
+     "verde_bajo_H80": 0.381,
+     "media_H80": 0.7997
+    },
+    "oro": {
+     "p2_5": 0.5476,
+     "p10": 0.6667,
+     "p90": 1.0,
+     "p97_5": 1.0,
+     "media_H0": 0.901,
+     "efecto_diseño": 10.01,
+     "n_eff": 4.2,
+     "binomial_ingenua_2_5_97_5": [
+      0.8095,
+      0.9762
+     ],
+     "tamaño_real_binomial_ingenua": 0.809,
+     "binomial_neff_2_5_97_5": [
+      0.5197,
+      1.0
+     ],
+     "potencia_80": 0.094,
+     "potencia_85": 0.053,
+     "verde_bajo_H80": 0.79,
+     "media_H80": 0.7996
+    },
+    "S5": {
+     "p2_5": 0.7714,
+     "p10": 0.8333,
+     "p90": 0.9524,
+     "p97_5": 0.9667,
+     "media_H0": 0.9002,
+     "efecto_diseño": 6.03,
+     "n_eff": 34.9,
+     "binomial_ingenua_2_5_97_5": [
+      0.8571,
+      0.9381
+     ],
+     "tamaño_real_binomial_ingenua": 0.375,
+     "binomial_neff_2_5_97_5": [
+      0.7991,
+      1.0
+     ],
+     "potencia_80": 0.294,
+     "potencia_85": 0.105,
+     "verde_bajo_H80": 0.346,
+     "media_H80": 0.7994
+    },
+    "S4_sin_bolsa": {
+     "p2_5": 0.7619,
+     "p10": 0.8214,
+     "p90": 0.9583,
+     "p97_5": 0.9702,
+     "media_H0": 0.9004,
+     "efecto_diseño": 5.81,
+     "n_eff": 28.9,
+     "binomial_ingenua_2_5_97_5": [
+      0.8512,
+      0.9405
+     ],
+     "tamaño_real_binomial_ingenua": 0.391,
+     "binomial_neff_2_5_97_5": [
+      0.7926,
+      1.0
+     ],
+     "potencia_80": 0.263,
+     "potencia_85": 0.103,
+     "verde_bajo_H80": 0.43,
+     "media_H80": 0.7995
+    }
+   },
+   "4": {
+    "bolsa": {
+     "p2_5": 0.7321,
+     "p10": 0.8214,
+     "p90": 0.9643,
+     "p97_5": 0.9821,
+     "media_H0": 0.8998,
+     "efecto_diseño": 2.43,
+     "n_eff": 23.1,
+     "binomial_ingenua_2_5_97_5": [
+      0.8214,
+      0.9643
+     ],
+     "tamaño_real_binomial_ingenua": 0.178,
+     "binomial_neff_2_5_97_5": [
+      0.7806,
+      1.0
+     ],
+     "potencia_80": 0.196,
+     "potencia_85": 0.081,
+     "verde_bajo_H80": 0.493,
+     "media_H80": 0.7989
+    },
+    "bonos": {
+     "p2_5": 0.7143,
+     "p10": 0.8036,
+     "p90": 0.9643,
+     "p97_5": 0.9821,
+     "media_H0": 0.9008,
+     "efecto_diseño": 3.18,
+     "n_eff": 17.6,
+     "binomial_ingenua_2_5_97_5": [
+      0.8214,
+      0.9643
+     ],
+     "tamaño_real_binomial_ingenua": 0.244,
+     "binomial_neff_2_5_97_5": [
+      0.7389,
+      1.0
+     ],
+     "potencia_80": 0.172,
+     "potencia_85": 0.084,
+     "verde_bajo_H80": 0.575,
+     "media_H80": 0.7997
+    },
+    "letras": {
+     "p2_5": 0.7321,
+     "p10": 0.8214,
+     "p90": 0.9643,
+     "p97_5": 0.9821,
+     "media_H0": 0.9,
+     "efecto_diseño": 2.53,
+     "n_eff": 22.1,
+     "binomial_ingenua_2_5_97_5": [
+      0.8214,
+      0.9643
+     ],
+     "tamaño_real_binomial_ingenua": 0.189,
+     "binomial_neff_2_5_97_5": [
+      0.774,
+      1.0
+     ],
+     "potencia_80": 0.168,
+     "potencia_85": 0.075,
+     "verde_bajo_H80": 0.504,
+     "media_H80": 0.8002
+    },
+    "vivienda": {
+     "p2_5": 0.8036,
+     "p10": 0.8393,
+     "p90": 0.9464,
+     "p97_5": 0.9643,
+     "media_H0": 0.9,
+     "efecto_diseño": 1.08,
+     "n_eff": 51.6,
+     "binomial_ingenua_2_5_97_5": [
+      0.8214,
+      0.9643
+     ],
+     "tamaño_real_binomial_ingenua": 0.069,
+     "binomial_neff_2_5_97_5": [
+      0.8063,
+      0.9806
+     ],
+     "potencia_80": 0.475,
+     "potencia_85": 0.155,
+     "verde_bajo_H80": 0.265,
+     "media_H80": 0.8
+    },
+    "oro": {
+     "p2_5": 0.5714,
+     "p10": 0.7321,
+     "p90": 1.0,
+     "p97_5": 1.0,
+     "media_H0": 0.9009,
+     "efecto_diseño": 9.9,
+     "n_eff": 5.7,
+     "binomial_ingenua_2_5_97_5": [
+      0.8214,
+      0.9643
+     ],
+     "tamaño_real_binomial_ingenua": 0.748,
+     "binomial_neff_2_5_97_5": [
+      0.6438,
+      1.0
+     ],
+     "potencia_80": 0.104,
+     "potencia_85": 0.058,
+     "verde_bajo_H80": 0.715,
+     "media_H80": 0.7989
+    },
+    "S5": {
+     "p2_5": 0.7964,
+     "p10": 0.8429,
+     "p90": 0.9464,
+     "p97_5": 0.9607,
+     "media_H0": 0.9003,
+     "efecto_diseño": 5.97,
+     "n_eff": 46.9,
+     "binomial_ingenua_2_5_97_5": [
+      0.8643,
+      0.9321
+     ],
+     "tamaño_real_binomial_ingenua": 0.429,
+     "binomial_neff_2_5_97_5": [
+      0.8082,
+      0.9787
+     ],
+     "potencia_80": 0.418,
+     "potencia_85": 0.146,
+     "verde_bajo_H80": 0.248,
+     "media_H80": 0.7995
+    },
+    "S4_sin_bolsa": {
+     "p2_5": 0.7813,
+     "p10": 0.8348,
+     "p90": 0.9509,
+     "p97_5": 0.9643,
+     "media_H0": 0.9004,
+     "efecto_diseño": 5.76,
+     "n_eff": 38.9,
+     "binomial_ingenua_2_5_97_5": [
+      0.8571,
+      0.9375
+     ],
+     "tamaño_real_binomial_ingenua": 0.376,
+     "binomial_neff_2_5_97_5": [
+      0.7942,
+      0.9743
+     ],
+     "potencia_80": 0.358,
+     "potencia_85": 0.129,
+     "verde_bajo_H80": 0.332,
+     "media_H80": 0.7997
+    }
+   },
+   "5": {
+    "bolsa": {
+     "p2_5": 0.7571,
+     "p10": 0.8286,
+     "p90": 0.9571,
+     "p97_5": 0.9714,
+     "media_H0": 0.8998,
+     "efecto_diseño": 2.41,
+     "n_eff": 29.0,
+     "binomial_ingenua_2_5_97_5": [
+      0.8286,
+      0.9571
+     ],
+     "tamaño_real_binomial_ingenua": 0.192,
+     "binomial_neff_2_5_97_5": [
+      0.7924,
+      1.0
+     ],
+     "potencia_80": 0.233,
+     "potencia_85": 0.086,
+     "verde_bajo_H80": 0.428,
+     "media_H80": 0.7989
+    },
+    "bonos": {
+     "p2_5": 0.7286,
+     "p10": 0.8143,
+     "p90": 0.9714,
+     "p97_5": 0.9857,
+     "media_H0": 0.9004,
+     "efecto_diseño": 3.23,
+     "n_eff": 21.7,
+     "binomial_ingenua_2_5_97_5": [
+      0.8286,
+      0.9571
+     ],
+     "tamaño_real_binomial_ingenua": 0.267,
+     "binomial_neff_2_5_97_5": [
+      0.7695,
+      1.0
+     ],
+     "potencia_80": 0.201,
+     "potencia_85": 0.088,
+     "verde_bajo_H80": 0.531,
+     "media_H80": 0.7999
+    },
+    "letras": {
+     "p2_5": 0.7571,
+     "p10": 0.8286,
+     "p90": 0.9571,
+     "p97_5": 0.9714,
+     "media_H0": 0.9002,
+     "efecto_diseño": 2.55,
+     "n_eff": 27.5,
+     "binomial_ingenua_2_5_97_5": [
+      0.8286,
+      0.9571
+     ],
+     "tamaño_real_binomial_ingenua": 0.202,
+     "binomial_neff_2_5_97_5": [
+      0.7815,
+      1.0
+     ],
+     "potencia_80": 0.223,
+     "potencia_85": 0.093,
+     "verde_bajo_H80": 0.438,
+     "media_H80": 0.8003
+    },
+    "vivienda": {
+     "p2_5": 0.8143,
+     "p10": 0.8571,
+     "p90": 0.9429,
+     "p97_5": 0.9714,
+     "media_H0": 0.9,
+     "efecto_diseño": 1.09,
+     "n_eff": 64.5,
+     "binomial_ingenua_2_5_97_5": [
+      0.8286,
+      0.9571
+     ],
+     "tamaño_real_binomial_ingenua": 0.077,
+     "binomial_neff_2_5_97_5": [
+      0.8224,
+      0.969
+     ],
+     "potencia_80": 0.642,
+     "potencia_85": 0.239,
+     "verde_bajo_H80": 0.157,
+     "media_H80": 0.7998
+    },
+    "oro": {
+     "p2_5": 0.6143,
+     "p10": 0.7571,
+     "p90": 1.0,
+     "p97_5": 1.0,
+     "media_H0": 0.9011,
+     "efecto_diseño": 9.93,
+     "n_eff": 7.1,
+     "binomial_ingenua_2_5_97_5": [
+      0.8286,
+      0.9571
+     ],
+     "tamaño_real_binomial_ingenua": 0.757,
+     "binomial_neff_2_5_97_5": [
+      0.5742,
+      1.0
+     ],
+     "potencia_80": 0.119,
+     "potencia_85": 0.061,
+     "verde_bajo_H80": 0.68,
+     "media_H80": 0.7991
+    },
+    "S5": {
+     "p2_5": 0.8057,
+     "p10": 0.8486,
+     "p90": 0.9429,
+     "p97_5": 0.9571,
+     "media_H0": 0.9003,
+     "efecto_diseño": 6.05,
+     "n_eff": 57.8,
+     "binomial_ingenua_2_5_97_5": [
+      0.8686,
+      0.9314
+     ],
+     "tamaño_real_binomial_ingenua": 0.399,
+     "binomial_neff_2_5_97_5": [
+      0.8127,
+      0.9654
+     ],
+     "potencia_80": 0.493,
+     "potencia_85": 0.16,
+     "verde_bajo_H80": 0.177,
+     "media_H80": 0.7996
+    },
+    "S4_sin_bolsa": {
+     "p2_5": 0.7964,
+     "p10": 0.8429,
+     "p90": 0.9464,
+     "p97_5": 0.9607,
+     "media_H0": 0.9004,
+     "efecto_diseño": 5.87,
+     "n_eff": 47.7,
+     "binomial_ingenua_2_5_97_5": [
+      0.8643,
+      0.9321
+     ],
+     "tamaño_real_binomial_ingenua": 0.414,
+     "binomial_neff_2_5_97_5": [
+      0.8115,
+      0.9791
+     ],
+     "potencia_80": 0.431,
+     "potencia_85": 0.148,
+     "verde_bajo_H80": 0.25,
+     "media_H80": 0.7998
+    }
+   },
+   "6": {
+    "bolsa": {
+     "p2_5": 0.7738,
+     "p10": 0.8333,
+     "p90": 0.9524,
+     "p97_5": 0.9762,
+     "media_H0": 0.9,
+     "efecto_diseño": 2.42,
+     "n_eff": 34.7,
+     "binomial_ingenua_2_5_97_5": [
+      0.8333,
+      0.9643
+     ],
+     "tamaño_real_binomial_ingenua": 0.148,
+     "binomial_neff_2_5_97_5": [
+      0.7979,
+      1.0
+     ],
+     "potencia_80": 0.316,
+     "potencia_85": 0.115,
+     "verde_bajo_H80": 0.365,
+     "media_H80": 0.7991
+    },
+    "bonos": {
+     "p2_5": 0.75,
+     "p10": 0.8214,
+     "p90": 0.9643,
+     "p97_5": 0.9762,
+     "media_H0": 0.9004,
+     "efecto_diseño": 3.23,
+     "n_eff": 26.0,
+     "binomial_ingenua_2_5_97_5": [
+      0.8333,
+      0.9643
+     ],
+     "tamaño_real_binomial_ingenua": 0.21,
+     "binomial_neff_2_5_97_5": [
+      0.7693,
+      1.0
+     ],
+     "potencia_80": 0.223,
+     "potencia_85": 0.089,
+     "verde_bajo_H80": 0.476,
+     "media_H80": 0.7997
+    },
+    "letras": {
+     "p2_5": 0.7738,
+     "p10": 0.8333,
+     "p90": 0.9524,
+     "p97_5": 0.9762,
+     "media_H0": 0.9002,
+     "efecto_diseño": 2.53,
+     "n_eff": 33.2,
+     "binomial_ingenua_2_5_97_5": [
+      0.8333,
+      0.9643
+     ],
+     "tamaño_real_binomial_ingenua": 0.154,
+     "binomial_neff_2_5_97_5": [
+      0.7893,
+      1.0
+     ],
+     "potencia_80": 0.281,
+     "potencia_85": 0.107,
+     "verde_bajo_H80": 0.37,
+     "media_H80": 0.8002
+    },
+    "vivienda": {
+     "p2_5": 0.8333,
+     "p10": 0.8571,
+     "p90": 0.9405,
+     "p97_5": 0.9643,
+     "media_H0": 0.9003,
+     "efecto_diseño": 1.08,
+     "n_eff": 77.7,
+     "binomial_ingenua_2_5_97_5": [
+      0.8333,
+      0.9643
+     ],
+     "tamaño_real_binomial_ingenua": 0.047,
+     "binomial_neff_2_5_97_5": [
+      0.8326,
+      0.9614
+     ],
+     "potencia_80": 0.721,
+     "potencia_85": 0.277,
+     "verde_bajo_H80": 0.126,
+     "media_H80": 0.7997
+    },
+    "oro": {
+     "p2_5": 0.6548,
+     "p10": 0.7619,
+     "p90": 1.0,
+     "p97_5": 1.0,
+     "media_H0": 0.9013,
+     "efecto_diseño": 10.0,
+     "n_eff": 8.4,
+     "binomial_ingenua_2_5_97_5": [
+      0.8333,
+      0.9643
+     ],
+     "tamaño_real_binomial_ingenua": 0.617,
+     "binomial_neff_2_5_97_5": [
+      0.6415,
+      1.0
+     ],
+     "potencia_80": 0.138,
+     "potencia_85": 0.066,
+     "verde_bajo_H80": 0.663,
+     "media_H80": 0.7991
+    },
+    "S5": {
+     "p2_5": 0.8167,
+     "p10": 0.8524,
+     "p90": 0.9405,
+     "p97_5": 0.9548,
+     "media_H0": 0.9004,
+     "efecto_diseño": 6.04,
+     "n_eff": 69.5,
+     "binomial_ingenua_2_5_97_5": [
+      0.8714,
+      0.9286
+     ],
+     "tamaño_real_binomial_ingenua": 0.402,
+     "binomial_neff_2_5_97_5": [
+      0.8273,
+      0.9642
+     ],
+     "potencia_80": 0.598,
+     "potencia_85": 0.199,
+     "verde_bajo_H80": 0.122,
+     "media_H80": 0.7996
+    },
+    "S4_sin_bolsa": {
+     "p2_5": 0.8065,
+     "p10": 0.8482,
+     "p90": 0.9464,
+     "p97_5": 0.9583,
+     "media_H0": 0.9005,
+     "efecto_diseño": 5.85,
+     "n_eff": 57.4,
+     "binomial_ingenua_2_5_97_5": [
+      0.8661,
+      0.9315
+     ],
+     "tamaño_real_binomial_ingenua": 0.392,
+     "binomial_neff_2_5_97_5": [
+      0.8189,
+      0.9652
+     ],
+     "potencia_80": 0.509,
+     "potencia_85": 0.172,
+     "verde_bajo_H80": 0.183,
+     "media_H80": 0.7997
+    }
+   },
+   "7": {
+    "bolsa": {
+     "p2_5": 0.7857,
+     "p10": 0.8367,
+     "p90": 0.949,
+     "p97_5": 0.9694,
+     "media_H0": 0.8999,
+     "efecto_diseño": 2.41,
+     "n_eff": 40.6,
+     "binomial_ingenua_2_5_97_5": [
+      0.8367,
+      0.9592
+     ],
+     "tamaño_real_binomial_ingenua": 0.186,
+     "binomial_neff_2_5_97_5": [
+      0.8028,
+      0.9754
+     ],
+     "potencia_80": 0.354,
+     "potencia_85": 0.122,
+     "verde_bajo_H80": 0.332,
+     "media_H80": 0.7993
+    },
+    "bonos": {
+     "p2_5": 0.7653,
+     "p10": 0.8265,
+     "p90": 0.9592,
+     "p97_5": 0.9796,
+     "media_H0": 0.9004,
+     "efecto_diseño": 3.27,
+     "n_eff": 30.0,
+     "binomial_ingenua_2_5_97_5": [
+      0.8367,
+      0.9592
+     ],
+     "tamaño_real_binomial_ingenua": 0.257,
+     "binomial_neff_2_5_97_5": [
+      0.7669,
+      1.0
+     ],
+     "potencia_80": 0.293,
+     "potencia_85": 0.114,
+     "verde_bajo_H80": 0.426,
+     "media_H80": 0.7997
+    },
+    "letras": {
+     "p2_5": 0.7857,
+     "p10": 0.8367,
+     "p90": 0.949,
+     "p97_5": 0.9694,
+     "media_H0": 0.9004,
+     "efecto_diseño": 2.53,
+     "n_eff": 38.7,
+     "binomial_ingenua_2_5_97_5": [
+      0.8367,
+      0.9592
+     ],
+     "tamaño_real_binomial_ingenua": 0.196,
+     "binomial_neff_2_5_97_5": [
+      0.7933,
+      0.9742
+     ],
+     "potencia_80": 0.335,
+     "potencia_85": 0.125,
+     "verde_bajo_H80": 0.333,
+     "media_H80": 0.7999
+    },
+    "vivienda": {
+     "p2_5": 0.8367,
+     "p10": 0.8571,
+     "p90": 0.9388,
+     "p97_5": 0.9592,
+     "media_H0": 0.9001,
+     "efecto_diseño": 1.08,
+     "n_eff": 90.5,
+     "binomial_ingenua_2_5_97_5": [
+      0.8367,
+      0.9592
+     ],
+     "tamaño_real_binomial_ingenua": 0.067,
+     "binomial_neff_2_5_97_5": [
+      0.8342,
+      0.9558
+     ],
+     "potencia_80": 0.776,
+     "potencia_85": 0.305,
+     "verde_bajo_H80": 0.091,
+     "media_H80": 0.7996
+    },
+    "oro": {
+     "p2_5": 0.6735,
+     "p10": 0.7653,
+     "p90": 1.0,
+     "p97_5": 1.0,
+     "media_H0": 0.9007,
+     "efecto_diseño": 10.17,
+     "n_eff": 9.6,
+     "binomial_ingenua_2_5_97_5": [
+      0.8367,
+      0.9592
+     ],
+     "tamaño_real_binomial_ingenua": 0.617,
+     "binomial_neff_2_5_97_5": [
+      0.6879,
+      1.0
+     ],
+     "potencia_80": 0.153,
+     "potencia_85": 0.069,
+     "verde_bajo_H80": 0.648,
+     "media_H80": 0.7994
+    },
+    "S5": {
+     "p2_5": 0.8224,
+     "p10": 0.8551,
+     "p90": 0.9388,
+     "p97_5": 0.951,
+     "media_H0": 0.9003,
+     "efecto_diseño": 6.12,
+     "n_eff": 80.1,
+     "binomial_ingenua_2_5_97_5": [
+      0.8735,
+      0.9265
+     ],
+     "tamaño_real_binomial_ingenua": 0.401,
+     "binomial_neff_2_5_97_5": [
+      0.8252,
+      0.9625
+     ],
+     "potencia_80": 0.675,
+     "potencia_85": 0.226,
+     "verde_bajo_H80": 0.084,
+     "media_H80": 0.7996
+    },
+    "S4_sin_bolsa": {
+     "p2_5": 0.8138,
+     "p10": 0.8495,
+     "p90": 0.9413,
+     "p97_5": 0.9541,
+     "media_H0": 0.9004,
+     "efecto_diseño": 5.95,
+     "n_eff": 65.9,
+     "binomial_ingenua_2_5_97_5": [
+      0.8699,
+      0.9286
+     ],
+     "tamaño_real_binomial_ingenua": 0.412,
+     "binomial_neff_2_5_97_5": [
+      0.8178,
+      0.9696
+     ],
+     "potencia_80": 0.587,
+     "potencia_85": 0.196,
+     "verde_bajo_H80": 0.148,
+     "media_H80": 0.7997
+    }
+   },
+   "8": {
+    "bolsa": {
+     "p2_5": 0.7946,
+     "p10": 0.8393,
+     "p90": 0.9464,
+     "p97_5": 0.9643,
+     "media_H0": 0.8999,
+     "efecto_diseño": 2.42,
+     "n_eff": 46.2,
+     "binomial_ingenua_2_5_97_5": [
+      0.8393,
+      0.9554
+     ],
+     "tamaño_real_binomial_ingenua": 0.139,
+     "binomial_neff_2_5_97_5": [
+      0.8053,
+      0.9784
+     ],
+     "potencia_80": 0.402,
+     "potencia_85": 0.136,
+     "verde_bajo_H80": 0.274,
+     "media_H80": 0.7994
+    },
+    "bonos": {
+     "p2_5": 0.7768,
+     "p10": 0.8304,
+     "p90": 0.9554,
+     "p97_5": 0.9732,
+     "media_H0": 0.9001,
+     "efecto_diseño": 3.29,
+     "n_eff": 34.1,
+     "binomial_ingenua_2_5_97_5": [
+      0.8393,
+      0.9554
+     ],
+     "tamaño_real_binomial_ingenua": 0.201,
+     "binomial_neff_2_5_97_5": [
+      0.7946,
+      1.0
+     ],
+     "potencia_80": 0.321,
+     "potencia_85": 0.12,
+     "verde_bajo_H80": 0.388,
+     "media_H80": 0.7998
+    },
+    "letras": {
+     "p2_5": 0.7946,
+     "p10": 0.8393,
+     "p90": 0.9464,
+     "p97_5": 0.9643,
+     "media_H0": 0.9002,
+     "efecto_diseño": 2.54,
+     "n_eff": 44.1,
+     "binomial_ingenua_2_5_97_5": [
+      0.8393,
+      0.9554
+     ],
+     "tamaño_real_binomial_ingenua": 0.145,
+     "binomial_neff_2_5_97_5": [
+      0.796,
+      0.9773
+     ],
+     "potencia_80": 0.393,
+     "potencia_85": 0.142,
+     "verde_bajo_H80": 0.284,
+     "media_H80": 0.8
+    },
+    "vivienda": {
+     "p2_5": 0.8393,
+     "p10": 0.8571,
+     "p90": 0.9375,
+     "p97_5": 0.9554,
+     "media_H0": 0.8999,
+     "efecto_diseño": 1.08,
+     "n_eff": 103.2,
+     "binomial_ingenua_2_5_97_5": [
+      0.8393,
+      0.9554
+     ],
+     "tamaño_real_binomial_ingenua": 0.041,
+     "binomial_neff_2_5_97_5": [
+      0.8353,
+      0.9516
+     ],
+     "potencia_80": 0.814,
+     "potencia_85": 0.319,
+     "verde_bajo_H80": 0.051,
+     "media_H80": 0.7996
+    },
+    "oro": {
+     "p2_5": 0.6786,
+     "p10": 0.7679,
+     "p90": 1.0,
+     "p97_5": 1.0,
+     "media_H0": 0.9002,
+     "efecto_diseño": 10.21,
+     "n_eff": 11.0,
+     "binomial_ingenua_2_5_97_5": [
+      0.8393,
+      0.9554
+     ],
+     "tamaño_real_binomial_ingenua": 0.562,
+     "binomial_neff_2_5_97_5": [
+      0.7265,
+      1.0
+     ],
+     "potencia_80": 0.153,
+     "potencia_85": 0.067,
+     "verde_bajo_H80": 0.631,
+     "media_H80": 0.799
+    },
+    "S5": {
+     "p2_5": 0.8268,
+     "p10": 0.8589,
+     "p90": 0.9357,
+     "p97_5": 0.9482,
+     "media_H0": 0.9001,
+     "efecto_diseño": 6.16,
+     "n_eff": 90.8,
+     "binomial_ingenua_2_5_97_5": [
+      0.875,
+      0.925
+     ],
+     "tamaño_real_binomial_ingenua": 0.4,
+     "binomial_neff_2_5_97_5": [
+      0.8349,
+      0.956
+     ],
+     "potencia_80": 0.726,
+     "potencia_85": 0.24,
+     "verde_bajo_H80": 0.057,
+     "media_H80": 0.7996
+    },
+    "S4_sin_bolsa": {
+     "p2_5": 0.8192,
+     "p10": 0.8549,
+     "p90": 0.9397,
+     "p97_5": 0.9531,
+     "media_H0": 0.9001,
+     "efecto_diseño": 6.0,
+     "n_eff": 74.6,
+     "binomial_ingenua_2_5_97_5": [
+      0.8705,
+      0.9263
+     ],
+     "tamaño_real_binomial_ingenua": 0.42,
+     "binomial_neff_2_5_97_5": [
+      0.8258,
+      0.9598
+     ],
+     "potencia_80": 0.639,
+     "potencia_85": 0.211,
+     "verde_bajo_H80": 0.103,
+     "media_H80": 0.7996
+    }
+   },
+   "9": {
+    "bolsa": {
+     "p2_5": 0.8016,
+     "p10": 0.8413,
+     "p90": 0.9444,
+     "p97_5": 0.9603,
+     "media_H0": 0.8999,
+     "efecto_diseño": 2.4,
+     "n_eff": 52.5,
+     "binomial_ingenua_2_5_97_5": [
+      0.8413,
+      0.9524
+     ],
+     "tamaño_real_binomial_ingenua": 0.145,
+     "binomial_neff_2_5_97_5": [
+      0.8094,
+      0.9809
+     ],
+     "potencia_80": 0.469,
+     "potencia_85": 0.16,
+     "verde_bajo_H80": 0.227,
+     "media_H80": 0.7995
+    },
+    "bonos": {
+     "p2_5": 0.7857,
+     "p10": 0.8333,
+     "p90": 0.9524,
+     "p97_5": 0.9683,
+     "media_H0": 0.9001,
+     "efecto_diseño": 3.29,
+     "n_eff": 38.4,
+     "binomial_ingenua_2_5_97_5": [
+      0.8413,
+      0.9524
+     ],
+     "tamaño_real_binomial_ingenua": 0.21,
+     "binomial_neff_2_5_97_5": [
+      0.7914,
+      0.9739
+     ],
+     "potencia_80": 0.358,
+     "potencia_85": 0.129,
+     "verde_bajo_H80": 0.344,
+     "media_H80": 0.7999
+    },
+    "letras": {
+     "p2_5": 0.8016,
+     "p10": 0.8413,
+     "p90": 0.9444,
+     "p97_5": 0.9603,
+     "media_H0": 0.9002,
+     "efecto_diseño": 2.52,
+     "n_eff": 50.1,
+     "binomial_ingenua_2_5_97_5": [
+      0.8413,
+      0.9524
+     ],
+     "tamaño_real_binomial_ingenua": 0.154,
+     "binomial_neff_2_5_97_5": [
+      0.8191,
+      0.98
+     ],
+     "potencia_80": 0.437,
+     "potencia_85": 0.156,
+     "verde_bajo_H80": 0.232,
+     "media_H80": 0.8002
+    },
+    "vivienda": {
+     "p2_5": 0.8413,
+     "p10": 0.8651,
+     "p90": 0.9365,
+     "p97_5": 0.9524,
+     "media_H0": 0.9,
+     "efecto_diseño": 1.09,
+     "n_eff": 115.8,
+     "binomial_ingenua_2_5_97_5": [
+      0.8413,
+      0.9524
+     ],
+     "tamaño_real_binomial_ingenua": 0.039,
+     "binomial_neff_2_5_97_5": [
+      0.8446,
+      0.9482
+     ],
+     "potencia_80": 0.858,
+     "potencia_85": 0.356,
+     "verde_bajo_H80": 0.037,
+     "media_H80": 0.7997
+    },
+    "oro": {
+     "p2_5": 0.6984,
+     "p10": 0.7778,
+     "p90": 0.9921,
+     "p97_5": 1.0,
+     "media_H0": 0.9002,
+     "efecto_diseño": 10.15,
+     "n_eff": 12.4,
+     "binomial_ingenua_2_5_97_5": [
+      0.8413,
+      0.9524
+     ],
+     "tamaño_real_binomial_ingenua": 0.555,
+     "binomial_neff_2_5_97_5": [
+      0.6773,
+      1.0
+     ],
+     "potencia_80": 0.177,
+     "potencia_85": 0.078,
+     "verde_bajo_H80": 0.608,
+     "media_H80": 0.799
+    },
+    "S5": {
+     "p2_5": 0.8317,
+     "p10": 0.8603,
+     "p90": 0.9349,
+     "p97_5": 0.946,
+     "media_H0": 0.9001,
+     "efecto_diseño": 6.14,
+     "n_eff": 102.6,
+     "binomial_ingenua_2_5_97_5": [
+      0.8762,
+      0.9222
+     ],
+     "tamaño_real_binomial_ingenua": 0.421,
+     "binomial_neff_2_5_97_5": [
+      0.8381,
+      0.9513
+     ],
+     "potencia_80": 0.794,
+     "potencia_85": 0.279,
+     "verde_bajo_H80": 0.039,
+     "media_H80": 0.7997
+    },
+    "S4_sin_bolsa": {
+     "p2_5": 0.8254,
+     "p10": 0.8571,
+     "p90": 0.9385,
+     "p97_5": 0.9504,
+     "media_H0": 0.9001,
+     "efecto_diseño": 5.97,
+     "n_eff": 84.4,
+     "binomial_ingenua_2_5_97_5": [
+      0.873,
+      0.9246
+     ],
+     "tamaño_real_binomial_ingenua": 0.417,
+     "binomial_neff_2_5_97_5": [
+      0.8341,
+      0.9597
+     ],
+     "potencia_80": 0.703,
+     "potencia_85": 0.239,
+     "verde_bajo_H80": 0.077,
+     "media_H80": 0.7997
+    }
+   },
+   "10": {
+    "bolsa": {
+     "p2_5": 0.8071,
+     "p10": 0.8429,
+     "p90": 0.9429,
+     "p97_5": 0.9571,
+     "media_H0": 0.8999,
+     "efecto_diseño": 2.42,
+     "n_eff": 58.0,
+     "binomial_ingenua_2_5_97_5": [
+      0.85,
+      0.95
+     ],
+     "tamaño_real_binomial_ingenua": 0.158,
+     "binomial_neff_2_5_97_5": [
+      0.811,
+      0.9655
+     ],
+     "potencia_80": 0.499,
+     "potencia_85": 0.165,
+     "verde_bajo_H80": 0.188,
+     "media_H80": 0.7994
+    },
+    "bonos": {
+     "p2_5": 0.7929,
+     "p10": 0.8357,
+     "p90": 0.95,
+     "p97_5": 0.9643,
+     "media_H0": 0.8999,
+     "efecto_diseño": 3.29,
+     "n_eff": 42.6,
+     "binomial_ingenua_2_5_97_5": [
+      0.85,
+      0.95
+     ],
+     "tamaño_real_binomial_ingenua": 0.223,
+     "binomial_neff_2_5_97_5": [
+      0.8121,
+      0.9765
+     ],
+     "potencia_80": 0.4,
+     "potencia_85": 0.139,
+     "verde_bajo_H80": 0.31,
+     "media_H80": 0.7997
+    },
+    "letras": {
+     "p2_5": 0.8071,
+     "p10": 0.8429,
+     "p90": 0.9429,
+     "p97_5": 0.9643,
+     "media_H0": 0.9001,
+     "efecto_diseño": 2.52,
+     "n_eff": 55.6,
+     "binomial_ingenua_2_5_97_5": [
+      0.85,
+      0.95
+     ],
+     "tamaño_real_binomial_ingenua": 0.165,
+     "binomial_neff_2_5_97_5": [
+      0.82,
+      0.964
+     ],
+     "potencia_80": 0.484,
+     "potencia_85": 0.168,
+     "verde_bajo_H80": 0.229,
+     "media_H80": 0.8002
+    },
+    "vivienda": {
+     "p2_5": 0.8429,
+     "p10": 0.8643,
+     "p90": 0.9357,
+     "p97_5": 0.95,
+     "media_H0": 0.8999,
+     "efecto_diseño": 1.08,
+     "n_eff": 129.1,
+     "binomial_ingenua_2_5_97_5": [
+      0.85,
+      0.95
+     ],
+     "tamaño_real_binomial_ingenua": 0.044,
+     "binomial_neff_2_5_97_5": [
+      0.8451,
+      0.9458
+     ],
+     "potencia_80": 0.884,
+     "potencia_85": 0.375,
+     "verde_bajo_H80": 0.034,
+     "media_H80": 0.7997
+    },
+    "oro": {
+     "p2_5": 0.7071,
+     "p10": 0.7929,
+     "p90": 0.9929,
+     "p97_5": 1.0,
+     "media_H0": 0.8998,
+     "efecto_diseño": 10.14,
+     "n_eff": 13.8,
+     "binomial_ingenua_2_5_97_5": [
+      0.85,
+      0.95
+     ],
+     "tamaño_real_binomial_ingenua": 0.552,
+     "binomial_neff_2_5_97_5": [
+      0.7101,
+      1.0
+     ],
+     "potencia_80": 0.184,
+     "potencia_85": 0.077,
+     "verde_bajo_H80": 0.559,
+     "media_H80": 0.7992
+    },
+    "S5": {
+     "p2_5": 0.8357,
+     "p10": 0.8629,
+     "p90": 0.9329,
+     "p97_5": 0.9443,
+     "media_H0": 0.8999,
+     "efecto_diseño": 6.1,
+     "n_eff": 114.7,
+     "binomial_ingenua_2_5_97_5": [
+      0.8771,
+      0.9214
+     ],
+     "tamaño_real_binomial_ingenua": 0.425,
+     "binomial_neff_2_5_97_5": [
+      0.843,
+      0.9477
+     ],
+     "potencia_80": 0.839,
+     "potencia_85": 0.306,
+     "verde_bajo_H80": 0.025,
+     "media_H80": 0.7996
+    },
+    "S4_sin_bolsa": {
+     "p2_5": 0.8304,
+     "p10": 0.8589,
+     "p90": 0.9357,
+     "p97_5": 0.9482,
+     "media_H0": 0.8999,
+     "efecto_diseño": 5.92,
+     "n_eff": 94.5,
+     "binomial_ingenua_2_5_97_5": [
+      0.875,
+      0.925
+     ],
+     "tamaño_real_binomial_ingenua": 0.397,
+     "binomial_neff_2_5_97_5": [
+      0.8357,
+      0.9577
+     ],
+     "potencia_80": 0.763,
+     "potencia_85": 0.268,
+     "verde_bajo_H80": 0.058,
+     "media_H80": 0.7997
+    }
+   },
+   "11": {
+    "bolsa": {
+     "p2_5": 0.8117,
+     "p10": 0.8506,
+     "p90": 0.9416,
+     "p97_5": 0.961,
+     "media_H0": 0.9,
+     "efecto_diseño": 2.44,
+     "n_eff": 63.2,
+     "binomial_ingenua_2_5_97_5": [
+      0.8506,
+      0.9416
+     ],
+     "tamaño_real_binomial_ingenua": 0.191,
+     "binomial_neff_2_5_97_5": [
+      0.8261,
+      0.9684
+     ],
+     "potencia_80": 0.553,
+     "potencia_85": 0.186,
+     "verde_bajo_H80": 0.156,
+     "media_H80": 0.7993
+    },
+    "bonos": {
+     "p2_5": 0.7987,
+     "p10": 0.8377,
+     "p90": 0.9481,
+     "p97_5": 0.961,
+     "media_H0": 0.9,
+     "efecto_diseño": 3.3,
+     "n_eff": 46.7,
+     "binomial_ingenua_2_5_97_5": [
+      0.8506,
+      0.9416
+     ],
+     "tamaño_real_binomial_ingenua": 0.266,
+     "binomial_neff_2_5_97_5": [
+      0.8071,
+      0.9786
+     ],
+     "potencia_80": 0.434,
+     "potencia_85": 0.151,
+     "verde_bajo_H80": 0.274,
+     "media_H80": 0.7996
+    },
+    "letras": {
+     "p2_5": 0.8117,
+     "p10": 0.8506,
+     "p90": 0.9416,
+     "p97_5": 0.961,
+     "media_H0": 0.9002,
+     "efecto_diseño": 2.54,
+     "n_eff": 60.6,
+     "binomial_ingenua_2_5_97_5": [
+      0.8506,
+      0.9416
+     ],
+     "tamaño_real_binomial_ingenua": 0.199,
+     "binomial_neff_2_5_97_5": [
+      0.8184,
+      0.967
+     ],
+     "potencia_80": 0.539,
+     "potencia_85": 0.186,
+     "verde_bajo_H80": 0.174,
+     "media_H80": 0.8002
+    },
+    "vivienda": {
+     "p2_5": 0.8506,
+     "p10": 0.8636,
+     "p90": 0.9286,
+     "p97_5": 0.9481,
+     "media_H0": 0.8999,
+     "efecto_diseño": 1.09,
+     "n_eff": 141.9,
+     "binomial_ingenua_2_5_97_5": [
+      0.8506,
+      0.9416
+     ],
+     "tamaño_real_binomial_ingenua": 0.055,
+     "binomial_neff_2_5_97_5": [
+      0.8459,
+      0.9436
+     ],
+     "potencia_80": 0.928,
+     "potencia_85": 0.45,
+     "verde_bajo_H80": 0.019,
+     "media_H80": 0.7998
+    },
+    "oro": {
+     "p2_5": 0.7208,
+     "p10": 0.7987,
+     "p90": 0.9935,
+     "p97_5": 1.0,
+     "media_H0": 0.8999,
+     "efecto_diseño": 10.08,
+     "n_eff": 15.3,
+     "binomial_ingenua_2_5_97_5": [
+      0.8506,
+      0.9416
+     ],
+     "tamaño_real_binomial_ingenua": 0.565,
+     "binomial_neff_2_5_97_5": [
+      0.738,
+      1.0
+     ],
+     "potencia_80": 0.207,
+     "potencia_85": 0.086,
+     "verde_bajo_H80": 0.547,
+     "media_H80": 0.7993
+    },
+    "S5": {
+     "p2_5": 0.8403,
+     "p10": 0.8649,
+     "p90": 0.9312,
+     "p97_5": 0.9429,
+     "media_H0": 0.9,
+     "efecto_diseño": 6.08,
+     "n_eff": 126.5,
+     "binomial_ingenua_2_5_97_5": [
+      0.8779,
+      0.9208
+     ],
+     "tamaño_real_binomial_ingenua": 0.409,
+     "binomial_neff_2_5_97_5": [
+      0.8419,
+      0.9483
+     ],
+     "potencia_80": 0.888,
+     "potencia_85": 0.35,
+     "verde_bajo_H80": 0.016,
+     "media_H80": 0.7996
+    },
+    "S4_sin_bolsa": {
+     "p2_5": 0.8344,
+     "p10": 0.8604,
+     "p90": 0.9351,
+     "p97_5": 0.9464,
+     "media_H0": 0.9,
+     "efecto_diseño": 5.9,
+     "n_eff": 104.4,
+     "binomial_ingenua_2_5_97_5": [
+      0.875,
+      0.9237
+     ],
+     "tamaño_real_binomial_ingenua": 0.398,
+     "binomial_neff_2_5_97_5": [
+      0.8372,
+      0.9521
+     ],
+     "potencia_80": 0.814,
+     "potencia_85": 0.298,
+     "verde_bajo_H80": 0.039,
+     "media_H80": 0.7997
+    }
+   },
+   "12": {
+    "bolsa": {
+     "p2_5": 0.8155,
+     "p10": 0.8512,
+     "p90": 0.9405,
+     "p97_5": 0.9583,
+     "media_H0": 0.9001,
+     "efecto_diseño": 2.42,
+     "n_eff": 69.5,
+     "binomial_ingenua_2_5_97_5": [
+      0.8512,
+      0.9405
+     ],
+     "tamaño_real_binomial_ingenua": 0.216,
+     "binomial_neff_2_5_97_5": [
+      0.8273,
+      0.9644
+     ],
+     "potencia_80": 0.597,
+     "potencia_85": 0.203,
+     "verde_bajo_H80": 0.134,
+     "media_H80": 0.7994
+    },
+    "bonos": {
+     "p2_5": 0.7976,
+     "p10": 0.8452,
+     "p90": 0.9464,
+     "p97_5": 0.9643,
+     "media_H0": 0.9001,
+     "efecto_diseño": 3.3,
+     "n_eff": 50.9,
+     "binomial_ingenua_2_5_97_5": [
+      0.8512,
+      0.9405
+     ],
+     "tamaño_real_binomial_ingenua": 0.295,
+     "binomial_neff_2_5_97_5": [
+      0.8063,
+      0.9803
+     ],
+     "potencia_80": 0.457,
+     "potencia_85": 0.158,
+     "verde_bajo_H80": 0.232,
+     "media_H80": 0.7997
+    },
+    "letras": {
+     "p2_5": 0.8155,
+     "p10": 0.8512,
+     "p90": 0.9405,
+     "p97_5": 0.9583,
+     "media_H0": 0.9003,
+     "efecto_diseño": 2.53,
+     "n_eff": 66.4,
+     "binomial_ingenua_2_5_97_5": [
+      0.8512,
+      0.9405
+     ],
+     "tamaño_real_binomial_ingenua": 0.225,
+     "binomial_neff_2_5_97_5": [
+      0.8192,
+      0.9699
+     ],
+     "potencia_80": 0.566,
+     "potencia_85": 0.189,
+     "verde_bajo_H80": 0.143,
+     "media_H80": 0.8004
+    },
+    "vivienda": {
+     "p2_5": 0.8512,
+     "p10": 0.869,
+     "p90": 0.9286,
+     "p97_5": 0.9464,
+     "media_H0": 0.8999,
+     "efecto_diseño": 1.09,
+     "n_eff": 153.7,
+     "binomial_ingenua_2_5_97_5": [
+      0.8512,
+      0.9405
+     ],
+     "tamaño_real_binomial_ingenua": 0.07,
+     "binomial_neff_2_5_97_5": [
+      0.8504,
+      0.9433
+     ],
+     "potencia_80": 0.938,
+     "potencia_85": 0.46,
+     "verde_bajo_H80": 0.014,
+     "media_H80": 0.7999
+    },
+    "oro": {
+     "p2_5": 0.7321,
+     "p10": 0.8036,
+     "p90": 0.9881,
+     "p97_5": 1.0,
+     "media_H0": 0.9001,
+     "efecto_diseño": 10.03,
+     "n_eff": 16.8,
+     "binomial_ingenua_2_5_97_5": [
+      0.8512,
+      0.9405
+     ],
+     "tamaño_real_binomial_ingenua": 0.563,
+     "binomial_neff_2_5_97_5": [
+      0.7611,
+      1.0
+     ],
+     "potencia_80": 0.224,
+     "potencia_85": 0.093,
+     "verde_bajo_H80": 0.521,
+     "media_H80": 0.7987
+    },
+    "S5": {
+     "p2_5": 0.8429,
+     "p10": 0.8655,
+     "p90": 0.9298,
+     "p97_5": 0.9417,
+     "media_H0": 0.9001,
+     "efecto_diseño": 6.04,
+     "n_eff": 139.1,
+     "binomial_ingenua_2_5_97_5": [
+      0.8798,
+      0.9202
+     ],
+     "tamaño_real_binomial_ingenua": 0.426,
+     "binomial_neff_2_5_97_5": [
+      0.849,
+      0.9497
+     ],
+     "potencia_80": 0.921,
+     "potencia_85": 0.387,
+     "verde_bajo_H80": 0.011,
+     "media_H80": 0.7996
+    },
+    "S4_sin_bolsa": {
+     "p2_5": 0.8378,
+     "p10": 0.8631,
+     "p90": 0.933,
+     "p97_5": 0.9449,
+     "media_H0": 0.9001,
+     "efecto_diseño": 5.86,
+     "n_eff": 114.7,
+     "binomial_ingenua_2_5_97_5": [
+      0.8765,
+      0.9226
+     ],
+     "tamaño_real_binomial_ingenua": 0.404,
+     "binomial_neff_2_5_97_5": [
+      0.843,
+      0.9477
+     ],
+     "potencia_80": 0.854,
+     "potencia_85": 0.326,
+     "verde_bajo_H80": 0.028,
+     "media_H80": 0.7997
+    }
+   },
+   "13": {
+    "bolsa": {
+     "p2_5": 0.8187,
+     "p10": 0.8516,
+     "p90": 0.9396,
+     "p97_5": 0.956,
+     "media_H0": 0.9001,
+     "efecto_diseño": 2.42,
+     "n_eff": 75.3,
+     "binomial_ingenua_2_5_97_5": [
+      0.8571,
+      0.9396
+     ],
+     "tamaño_real_binomial_ingenua": 0.225,
+     "binomial_neff_2_5_97_5": [
+      0.8273,
+      0.9602
+     ],
+     "potencia_80": 0.637,
+     "potencia_85": 0.217,
+     "verde_bajo_H80": 0.117,
+     "media_H80": 0.7993
+    },
+    "bonos": {
+     "p2_5": 0.8077,
+     "p10": 0.8462,
+     "p90": 0.9451,
+     "p97_5": 0.9615,
+     "media_H0": 0.9001,
+     "efecto_diseño": 3.29,
+     "n_eff": 55.3,
+     "binomial_ingenua_2_5_97_5": [
+      0.8571,
+      0.9396
+     ],
+     "tamaño_real_binomial_ingenua": 0.305,
+     "binomial_neff_2_5_97_5": [
+      0.8191,
+      0.9638
+     ],
+     "potencia_80": 0.508,
+     "potencia_85": 0.179,
+     "verde_bajo_H80": 0.214,
+     "media_H80": 0.7998
+    },
+    "letras": {
+     "p2_5": 0.8187,
+     "p10": 0.8516,
+     "p90": 0.9396,
+     "p97_5": 0.956,
+     "media_H0": 0.9004,
+     "efecto_diseño": 2.54,
+     "n_eff": 71.5,
+     "binomial_ingenua_2_5_97_5": [
+      0.8571,
+      0.9396
+     ],
+     "tamaño_real_binomial_ingenua": 0.235,
+     "binomial_neff_2_5_97_5": [
+      0.825,
+      0.9581
+     ],
+     "potencia_80": 0.605,
+     "potencia_85": 0.204,
+     "verde_bajo_H80": 0.124,
+     "media_H80": 0.8003
+    },
+    "vivienda": {
+     "p2_5": 0.8516,
+     "p10": 0.8681,
+     "p90": 0.9286,
+     "p97_5": 0.9396,
+     "media_H0": 0.8998,
+     "efecto_diseño": 1.09,
+     "n_eff": 166.5,
+     "binomial_ingenua_2_5_97_5": [
+      0.8571,
+      0.9396
+     ],
+     "tamaño_real_binomial_ingenua": 0.073,
+     "binomial_neff_2_5_97_5": [
+      0.8498,
+      0.9432
+     ],
+     "potencia_80": 0.957,
+     "potencia_85": 0.509,
+     "verde_bajo_H80": 0.011,
+     "media_H80": 0.7999
+    },
+    "oro": {
+     "p2_5": 0.7418,
+     "p10": 0.8022,
+     "p90": 0.989,
+     "p97_5": 1.0,
+     "media_H0": 0.9002,
+     "efecto_diseño": 10.06,
+     "n_eff": 18.1,
+     "binomial_ingenua_2_5_97_5": [
+      0.8571,
+      0.9396
+     ],
+     "tamaño_real_binomial_ingenua": 0.568,
+     "binomial_neff_2_5_97_5": [
+      0.7235,
+      1.0
+     ],
+     "potencia_80": 0.248,
+     "potencia_85": 0.099,
+     "verde_bajo_H80": 0.523,
+     "media_H80": 0.7987
+    },
+    "S5": {
+     "p2_5": 0.8451,
+     "p10": 0.867,
+     "p90": 0.9286,
+     "p97_5": 0.9407,
+     "media_H0": 0.9001,
+     "efecto_diseño": 6.06,
+     "n_eff": 150.2,
+     "binomial_ingenua_2_5_97_5": [
+      0.8802,
+      0.9187
+     ],
+     "tamaño_real_binomial_ingenua": 0.432,
+     "binomial_neff_2_5_97_5": [
+      0.8469,
+      0.9468
+     ],
+     "potencia_80": 0.939,
+     "potencia_85": 0.414,
+     "verde_bajo_H80": 0.007,
+     "media_H80": 0.7996
+    },
+    "S4_sin_bolsa": {
+     "p2_5": 0.8407,
+     "p10": 0.864,
+     "p90": 0.9327,
+     "p97_5": 0.9437,
+     "media_H0": 0.9001,
+     "efecto_diseño": 5.88,
+     "n_eff": 123.9,
+     "binomial_ingenua_2_5_97_5": [
+      0.8777,
+      0.9217
+     ],
+     "tamaño_real_binomial_ingenua": 0.421,
+     "binomial_neff_2_5_97_5": [
+      0.8466,
+      0.9516
+     ],
+     "potencia_80": 0.883,
+     "potencia_85": 0.354,
+     "verde_bajo_H80": 0.021,
+     "media_H80": 0.7997
+    }
+   },
+   "14": {
+    "bolsa": {
+     "p2_5": 0.8214,
+     "p10": 0.8571,
+     "p90": 0.9388,
+     "p97_5": 0.9541,
+     "media_H0": 0.9002,
+     "efecto_diseño": 2.43,
+     "n_eff": 80.8,
+     "binomial_ingenua_2_5_97_5": [
+      0.8571,
+      0.9388
+     ],
+     "tamaño_real_binomial_ingenua": 0.186,
+     "binomial_neff_2_5_97_5": [
+      0.8268,
+      0.9629
+     ],
+     "potencia_80": 0.672,
+     "potencia_85": 0.234,
+     "verde_bajo_H80": 0.091,
+     "media_H80": 0.7993
+    },
+    "bonos": {
+     "p2_5": 0.8112,
+     "p10": 0.8469,
+     "p90": 0.9439,
+     "p97_5": 0.9592,
+     "media_H0": 0.9001,
+     "efecto_diseño": 3.29,
+     "n_eff": 59.7,
+     "binomial_ingenua_2_5_97_5": [
+      0.8571,
+      0.9388
+     ],
+     "tamaño_real_binomial_ingenua": 0.257,
+     "binomial_neff_2_5_97_5": [
+      0.8156,
+      0.9665
+     ],
+     "potencia_80": 0.542,
+     "potencia_85": 0.19,
+     "verde_bajo_H80": 0.196,
+     "media_H80": 0.7997
+    },
+    "letras": {
+     "p2_5": 0.8214,
+     "p10": 0.8571,
+     "p90": 0.9388,
+     "p97_5": 0.9541,
+     "media_H0": 0.9004,
+     "efecto_diseño": 2.54,
+     "n_eff": 77.2,
+     "binomial_ingenua_2_5_97_5": [
+      0.8571,
+      0.9388
+     ],
+     "tamaño_real_binomial_ingenua": 0.192,
+     "binomial_neff_2_5_97_5": [
+      0.8316,
+      0.9611
+     ],
+     "potencia_80": 0.639,
+     "potencia_85": 0.217,
+     "verde_bajo_H80": 0.1,
+     "media_H80": 0.8003
+    },
+    "vivienda": {
+     "p2_5": 0.852,
+     "p10": 0.8724,
+     "p90": 0.9286,
+     "p97_5": 0.9388,
+     "media_H0": 0.8998,
+     "efecto_diseño": 1.1,
+     "n_eff": 178.6,
+     "binomial_ingenua_2_5_97_5": [
+      0.8571,
+      0.9388
+     ],
+     "tamaño_real_binomial_ingenua": 0.052,
+     "binomial_neff_2_5_97_5": [
+      0.8545,
+      0.944
+     ],
+     "potencia_80": 0.966,
+     "potencia_85": 0.522,
+     "verde_bajo_H80": 0.006,
+     "media_H80": 0.7999
+    },
+    "oro": {
+     "p2_5": 0.7449,
+     "p10": 0.8061,
+     "p90": 0.9847,
+     "p97_5": 0.9949,
+     "media_H0": 0.9004,
+     "efecto_diseño": 9.99,
+     "n_eff": 19.6,
+     "binomial_ingenua_2_5_97_5": [
+      0.8571,
+      0.9388
+     ],
+     "tamaño_real_binomial_ingenua": 0.531,
+     "binomial_neff_2_5_97_5": [
+      0.7449,
+      1.0
+     ],
+     "potencia_80": 0.256,
+     "potencia_85": 0.102,
+     "verde_bajo_H80": 0.498,
+     "media_H80": 0.7985
+    },
+    "S5": {
+     "p2_5": 0.848,
+     "p10": 0.8694,
+     "p90": 0.9286,
+     "p97_5": 0.9388,
+     "media_H0": 0.9002,
+     "efecto_diseño": 6.01,
+     "n_eff": 163.1,
+     "binomial_ingenua_2_5_97_5": [
+      0.8806,
+      0.9184
+     ],
+     "tamaño_real_binomial_ingenua": 0.426,
+     "binomial_neff_2_5_97_5": [
+      0.8528,
+      0.9448
+     ],
+     "potencia_80": 0.955,
+     "potencia_85": 0.444,
+     "verde_bajo_H80": 0.004,
+     "media_H80": 0.7996
+    },
+    "S4_sin_bolsa": {
+     "p2_5": 0.8431,
+     "p10": 0.8661,
+     "p90": 0.9311,
+     "p97_5": 0.9426,
+     "media_H0": 0.9002,
+     "efecto_diseño": 5.82,
+     "n_eff": 134.7,
+     "binomial_ingenua_2_5_97_5": [
+      0.8788,
+      0.9209
+     ],
+     "tamaño_real_binomial_ingenua": 0.412,
+     "binomial_neff_2_5_97_5": [
+      0.844,
+      0.948
+     ],
+     "potencia_80": 0.909,
+     "potencia_85": 0.383,
+     "verde_bajo_H80": 0.014,
+     "media_H80": 0.7996
+    }
+   },
+   "15": {
+    "bolsa": {
+     "p2_5": 0.8286,
+     "p10": 0.8571,
+     "p90": 0.9381,
+     "p97_5": 0.9524,
+     "media_H0": 0.9003,
+     "efecto_diseño": 2.42,
+     "n_eff": 86.7,
+     "binomial_ingenua_2_5_97_5": [
+      0.8571,
+      0.9381
+     ],
+     "tamaño_real_binomial_ingenua": 0.204,
+     "binomial_neff_2_5_97_5": [
+      0.8306,
+      0.9539
+     ],
+     "potencia_80": 0.721,
+     "potencia_85": 0.261,
+     "verde_bajo_H80": 0.08,
+     "media_H80": 0.7994
+    },
+    "bonos": {
+     "p2_5": 0.8143,
+     "p10": 0.8524,
+     "p90": 0.9429,
+     "p97_5": 0.9571,
+     "media_H0": 0.9002,
+     "efecto_diseño": 3.25,
+     "n_eff": 64.6,
+     "binomial_ingenua_2_5_97_5": [
+      0.8571,
+      0.9381
+     ],
+     "tamaño_real_binomial_ingenua": 0.274,
+     "binomial_neff_2_5_97_5": [
+      0.8208,
+      0.969
+     ],
+     "potencia_80": 0.577,
+     "potencia_85": 0.2,
+     "verde_bajo_H80": 0.154,
+     "media_H80": 0.7998
+    },
+    "letras": {
+     "p2_5": 0.8238,
+     "p10": 0.8571,
+     "p90": 0.9381,
+     "p97_5": 0.9524,
+     "media_H0": 0.9003,
+     "efecto_diseño": 2.52,
+     "n_eff": 83.3,
+     "binomial_ingenua_2_5_97_5": [
+      0.8571,
+      0.9381
+     ],
+     "tamaño_real_binomial_ingenua": 0.208,
+     "binomial_neff_2_5_97_5": [
+      0.8319,
+      0.964
+     ],
+     "potencia_80": 0.672,
+     "potencia_85": 0.229,
+     "verde_bajo_H80": 0.089,
+     "media_H80": 0.8003
+    },
+    "vivienda": {
+     "p2_5": 0.8524,
+     "p10": 0.8714,
+     "p90": 0.9286,
+     "p97_5": 0.9381,
+     "media_H0": 0.8998,
+     "efecto_diseño": 1.09,
+     "n_eff": 192.0,
+     "binomial_ingenua_2_5_97_5": [
+      0.8571,
+      0.9381
+     ],
+     "tamaño_real_binomial_ingenua": 0.062,
+     "binomial_neff_2_5_97_5": [
+      0.8542,
+      0.9427
+     ],
+     "potencia_80": 0.972,
+     "potencia_85": 0.532,
+     "verde_bajo_H80": 0.005,
+     "media_H80": 0.7999
+    },
+    "oro": {
+     "p2_5": 0.7524,
+     "p10": 0.8095,
+     "p90": 0.981,
+     "p97_5": 0.9952,
+     "media_H0": 0.9004,
+     "efecto_diseño": 9.96,
+     "n_eff": 21.1,
+     "binomial_ingenua_2_5_97_5": [
+      0.8571,
+      0.9381
+     ],
+     "tamaño_real_binomial_ingenua": 0.512,
+     "binomial_neff_2_5_97_5": [
+      0.7629,
+      1.0
+     ],
+     "potencia_80": 0.275,
+     "potencia_85": 0.108,
+     "verde_bajo_H80": 0.484,
+     "media_H80": 0.7986
+    },
+    "S5": {
+     "p2_5": 0.8505,
+     "p10": 0.8705,
+     "p90": 0.9267,
+     "p97_5": 0.9381,
+     "media_H0": 0.9002,
+     "efecto_diseño": 5.96,
+     "n_eff": 176.3,
+     "binomial_ingenua_2_5_97_5": [
+      0.8819,
+      0.9181
+     ],
+     "tamaño_real_binomial_ingenua": 0.423,
+     "binomial_neff_2_5_97_5": [
+      0.8525,
+      0.9433
+     ],
+     "potencia_80": 0.969,
+     "potencia_85": 0.478,
+     "verde_bajo_H80": 0.003,
+     "media_H80": 0.7996
+    },
+    "S4_sin_bolsa": {
+     "p2_5": 0.8452,
+     "p10": 0.8667,
+     "p90": 0.9298,
+     "p97_5": 0.9417,
+     "media_H0": 0.9002,
+     "efecto_diseño": 5.77,
+     "n_eff": 145.6,
+     "binomial_ingenua_2_5_97_5": [
+      0.8798,
+      0.9202
+     ],
+     "tamaño_real_binomial_ingenua": 0.419,
+     "binomial_neff_2_5_97_5": [
+      0.8489,
+      0.945
+     ],
+     "potencia_80": 0.928,
+     "potencia_85": 0.406,
+     "verde_bajo_H80": 0.009,
+     "media_H80": 0.7997
+    }
+   },
+   "16": {
+    "bolsa": {
+     "p2_5": 0.8304,
+     "p10": 0.8571,
+     "p90": 0.9375,
+     "p97_5": 0.9509,
+     "media_H0": 0.9003,
+     "efecto_diseño": 2.42,
+     "n_eff": 92.7,
+     "binomial_ingenua_2_5_97_5": [
+      0.8571,
+      0.9375
+     ],
+     "tamaño_real_binomial_ingenua": 0.192,
+     "binomial_neff_2_5_97_5": [
+      0.8381,
+      0.9568
+     ],
+     "potencia_80": 0.749,
+     "potencia_85": 0.268,
+     "verde_bajo_H80": 0.061,
+     "media_H80": 0.7995
+    },
+    "bonos": {
+     "p2_5": 0.817,
+     "p10": 0.8527,
+     "p90": 0.942,
+     "p97_5": 0.9554,
+     "media_H0": 0.9003,
+     "efecto_diseño": 3.27,
+     "n_eff": 68.6,
+     "binomial_ingenua_2_5_97_5": [
+      0.8571,
+      0.9375
+     ],
+     "tamaño_real_binomial_ingenua": 0.263,
+     "binomial_neff_2_5_97_5": [
+      0.825,
+      0.9708
+     ],
+     "potencia_80": 0.594,
+     "potencia_85": 0.206,
+     "verde_bajo_H80": 0.138,
+     "media_H80": 0.7999
+    },
+    "letras": {
+     "p2_5": 0.8259,
+     "p10": 0.8571,
+     "p90": 0.9375,
+     "p97_5": 0.9509,
+     "media_H0": 0.9003,
+     "efecto_diseño": 2.53,
+     "n_eff": 88.6,
+     "binomial_ingenua_2_5_97_5": [
+      0.8571,
+      0.9375
+     ],
+     "tamaño_real_binomial_ingenua": 0.198,
+     "binomial_neff_2_5_97_5": [
+      0.8308,
+      0.9549
+     ],
+     "potencia_80": 0.723,
+     "potencia_85": 0.26,
+     "verde_bajo_H80": 0.082,
+     "media_H80": 0.8003
+    },
+    "vivienda": {
+     "p2_5": 0.8571,
+     "p10": 0.8705,
+     "p90": 0.9241,
+     "p97_5": 0.9375,
+     "media_H0": 0.8998,
+     "efecto_diseño": 1.09,
+     "n_eff": 205.2,
+     "binomial_ingenua_2_5_97_5": [
+      0.8571,
+      0.9375
+     ],
+     "tamaño_real_binomial_ingenua": 0.055,
+     "binomial_neff_2_5_97_5": [
+      0.8586,
+      0.9408
+     ],
+     "potencia_80": 0.981,
+     "potencia_85": 0.575,
+     "verde_bajo_H80": 0.003,
+     "media_H80": 0.8
+    },
+    "oro": {
+     "p2_5": 0.7589,
+     "p10": 0.8125,
+     "p90": 0.9821,
+     "p97_5": 0.9955,
+     "media_H0": 0.9003,
+     "efecto_diseño": 9.95,
+     "n_eff": 22.5,
+     "binomial_ingenua_2_5_97_5": [
+      0.8571,
+      0.9375
+     ],
+     "tamaño_real_binomial_ingenua": 0.501,
+     "binomial_neff_2_5_97_5": [
+      0.7777,
+      1.0
+     ],
+     "potencia_80": 0.293,
+     "potencia_85": 0.114,
+     "verde_bajo_H80": 0.466,
+     "media_H80": 0.7988
+    },
+    "S5": {
+     "p2_5": 0.8518,
+     "p10": 0.8714,
+     "p90": 0.9268,
+     "p97_5": 0.9375,
+     "media_H0": 0.9002,
+     "efecto_diseño": 5.96,
+     "n_eff": 187.9,
+     "binomial_ingenua_2_5_97_5": [
+      0.8821,
+      0.917
+     ],
+     "tamaño_real_binomial_ingenua": 0.43,
+     "binomial_neff_2_5_97_5": [
+      0.8563,
+      0.9414
+     ],
+     "potencia_80": 0.979,
+     "potencia_85": 0.504,
+     "verde_bajo_H80": 0.002,
+     "media_H80": 0.7997
+    },
+    "S4_sin_bolsa": {
+     "p2_5": 0.8471,
+     "p10": 0.8683,
+     "p90": 0.9297,
+     "p97_5": 0.9408,
+     "media_H0": 0.9002,
+     "efecto_diseño": 5.78,
+     "n_eff": 154.9,
+     "binomial_ingenua_2_5_97_5": [
+      0.8795,
+      0.9196
+     ],
+     "tamaño_real_binomial_ingenua": 0.412,
+     "binomial_neff_2_5_97_5": [
+      0.8515,
+      0.9419
+     ],
+     "potencia_80": 0.942,
+     "potencia_85": 0.428,
+     "verde_bajo_H80": 0.007,
+     "media_H80": 0.7997
+    }
+   },
+   "17": {
+    "bolsa": {
+     "p2_5": 0.8319,
+     "p10": 0.8613,
+     "p90": 0.937,
+     "p97_5": 0.9496,
+     "media_H0": 0.9004,
+     "efecto_diseño": 2.42,
+     "n_eff": 98.2,
+     "binomial_ingenua_2_5_97_5": [
+      0.8613,
+      0.937
+     ],
+     "tamaño_real_binomial_ingenua": 0.202,
+     "binomial_neff_2_5_97_5": [
+      0.8371,
+      0.9593
+     ],
+     "potencia_80": 0.772,
+     "potencia_85": 0.281,
+     "verde_bajo_H80": 0.052,
+     "media_H80": 0.7996
+    },
+    "bonos": {
+     "p2_5": 0.8193,
+     "p10": 0.8529,
+     "p90": 0.9412,
+     "p97_5": 0.9538,
+     "media_H0": 0.9003,
+     "efecto_diseño": 3.28,
+     "n_eff": 72.6,
+     "binomial_ingenua_2_5_97_5": [
+      0.8613,
+      0.937
+     ],
+     "tamaño_real_binomial_ingenua": 0.275,
+     "binomial_neff_2_5_97_5": [
+      0.8209,
+      0.9587
+     ],
+     "potencia_80": 0.624,
+     "potencia_85": 0.213,
+     "verde_bajo_H80": 0.125,
+     "media_H80": 0.7999
+    },
+    "letras": {
+     "p2_5": 0.8319,
+     "p10": 0.8571,
+     "p90": 0.937,
+     "p97_5": 0.9496,
+     "media_H0": 0.9003,
+     "efecto_diseño": 2.52,
+     "n_eff": 94.6,
+     "binomial_ingenua_2_5_97_5": [
+      0.8613,
+      0.937
+     ],
+     "tamaño_real_binomial_ingenua": 0.209,
+     "binomial_neff_2_5_97_5": [
+      0.8349,
+      0.9577
+     ],
+     "potencia_80": 0.757,
+     "potencia_85": 0.276,
+     "verde_bajo_H80": 0.064,
+     "media_H80": 0.8004
+    },
+    "vivienda": {
+     "p2_5": 0.8571,
+     "p10": 0.8739,
+     "p90": 0.9244,
+     "p97_5": 0.937,
+     "media_H0": 0.8997,
+     "efecto_diseño": 1.09,
+     "n_eff": 217.7,
+     "binomial_ingenua_2_5_97_5": [
+      0.8613,
+      0.937
+     ],
+     "tamaño_real_binomial_ingenua": 0.062,
+     "binomial_neff_2_5_97_5": [
+      0.8576,
+      0.9369
+     ],
+     "potencia_80": 0.985,
+     "potencia_85": 0.587,
+     "verde_bajo_H80": 0.002,
+     "media_H80": 0.7999
+    },
+    "oro": {
+     "p2_5": 0.7647,
+     "p10": 0.8193,
+     "p90": 0.979,
+     "p97_5": 0.9958,
+     "media_H0": 0.9004,
+     "efecto_diseño": 9.98,
+     "n_eff": 23.9,
+     "binomial_ingenua_2_5_97_5": [
+      0.8613,
+      0.937
+     ],
+     "tamaño_real_binomial_ingenua": 0.524,
+     "binomial_neff_2_5_97_5": [
+      0.7547,
+      1.0
+     ],
+     "potencia_80": 0.313,
+     "potencia_85": 0.122,
+     "verde_bajo_H80": 0.428,
+     "media_H80": 0.7985
+    },
+    "S5": {
+     "p2_5": 0.8529,
+     "p10": 0.8723,
+     "p90": 0.9261,
+     "p97_5": 0.9361,
+     "media_H0": 0.9002,
+     "efecto_diseño": 5.98,
+     "n_eff": 199.0,
+     "binomial_ingenua_2_5_97_5": [
+      0.8824,
+      0.9168
+     ],
+     "tamaño_real_binomial_ingenua": 0.417,
+     "binomial_neff_2_5_97_5": [
+      0.8543,
+      0.9397
+     ],
+     "potencia_80": 0.984,
+     "potencia_85": 0.525,
+     "verde_bajo_H80": 0.001,
+     "media_H80": 0.7997
+    },
+    "S4_sin_bolsa": {
+     "p2_5": 0.8487,
+     "p10": 0.8687,
+     "p90": 0.9286,
+     "p97_5": 0.9401,
+     "media_H0": 0.9002,
+     "efecto_diseño": 5.8,
+     "n_eff": 164.0,
+     "binomial_ingenua_2_5_97_5": [
+      0.8803,
+      0.9191
+     ],
+     "tamaño_real_binomial_ingenua": 0.412,
+     "binomial_neff_2_5_97_5": [
+      0.8537,
+      0.9451
+     ],
+     "potencia_80": 0.957,
+     "potencia_85": 0.455,
+     "verde_bajo_H80": 0.005,
+     "media_H80": 0.7997
+    }
+   },
+   "18": {
+    "bolsa": {
+     "p2_5": 0.8333,
+     "p10": 0.8611,
+     "p90": 0.9365,
+     "p97_5": 0.9484,
+     "media_H0": 0.9003,
+     "efecto_diseño": 2.42,
+     "n_eff": 104.1,
+     "binomial_ingenua_2_5_97_5": [
+      0.8611,
+      0.9365
+     ],
+     "tamaño_real_binomial_ingenua": 0.177,
+     "binomial_neff_2_5_97_5": [
+      0.8367,
+      0.952
+     ],
+     "potencia_80": 0.796,
+     "potencia_85": 0.293,
+     "verde_bajo_H80": 0.048,
+     "media_H80": 0.7996
+    },
+    "bonos": {
+     "p2_5": 0.8214,
+     "p10": 0.8532,
+     "p90": 0.9405,
+     "p97_5": 0.9524,
+     "media_H0": 0.9003,
+     "efecto_diseño": 3.27,
+     "n_eff": 77.1,
+     "binomial_ingenua_2_5_97_5": [
+      0.8611,
+      0.9365
+     ],
+     "tamaño_real_binomial_ingenua": 0.246,
+     "binomial_neff_2_5_97_5": [
+      0.8313,
+      0.9611
+     ],
+     "potencia_80": 0.664,
+     "potencia_85": 0.233,
+     "verde_bajo_H80": 0.123,
+     "media_H80": 0.7999
+    },
+    "letras": {
+     "p2_5": 0.8333,
+     "p10": 0.8611,
+     "p90": 0.9365,
+     "p97_5": 0.9484,
+     "media_H0": 0.9003,
+     "efecto_diseño": 2.52,
+     "n_eff": 100.2,
+     "binomial_ingenua_2_5_97_5": [
+      0.8611,
+      0.9365
+     ],
+     "tamaño_real_binomial_ingenua": 0.182,
+     "binomial_neff_2_5_97_5": [
+      0.8402,
+      0.9501
+     ],
+     "potencia_80": 0.779,
+     "potencia_85": 0.288,
+     "verde_bajo_H80": 0.054,
+     "media_H80": 0.8003
+    },
+    "vivienda": {
+     "p2_5": 0.8611,
+     "p10": 0.873,
+     "p90": 0.9246,
+     "p97_5": 0.9365,
+     "media_H0": 0.8997,
+     "efecto_diseño": 1.1,
+     "n_eff": 229.8,
+     "binomial_ingenua_2_5_97_5": [
+      0.8611,
+      0.9365
+     ],
+     "tamaño_real_binomial_ingenua": 0.048,
+     "binomial_neff_2_5_97_5": [
+      0.8608,
+      0.9391
+     ],
+     "potencia_80": 0.992,
+     "potencia_85": 0.645,
+     "verde_bajo_H80": 0.002,
+     "media_H80": 0.7998
+    },
+    "oro": {
+     "p2_5": 0.7698,
+     "p10": 0.8214,
+     "p90": 0.9762,
+     "p97_5": 0.9921,
+     "media_H0": 0.9003,
+     "efecto_diseño": 9.95,
+     "n_eff": 25.3,
+     "binomial_ingenua_2_5_97_5": [
+      0.8611,
+      0.9365
+     ],
+     "tamaño_real_binomial_ingenua": 0.515,
+     "binomial_neff_2_5_97_5": [
+      0.763,
+      1.0
+     ],
+     "potencia_80": 0.333,
+     "potencia_85": 0.128,
+     "verde_bajo_H80": 0.417,
+     "media_H80": 0.7987
+    },
+    "S5": {
+     "p2_5": 0.8548,
+     "p10": 0.873,
+     "p90": 0.9254,
+     "p97_5": 0.9357,
+     "media_H0": 0.9002,
+     "efecto_diseño": 5.98,
+     "n_eff": 210.6,
+     "binomial_ingenua_2_5_97_5": [
+      0.8833,
+      0.9159
+     ],
+     "tamaño_real_binomial_ingenua": 0.426,
+     "binomial_neff_2_5_97_5": [
+      0.8576,
+      0.9383
+     ],
+     "potencia_80": 0.989,
+     "potencia_85": 0.549,
+     "verde_bajo_H80": 0.001,
+     "media_H80": 0.7997
+    },
+    "S4_sin_bolsa": {
+     "p2_5": 0.8512,
+     "p10": 0.87,
+     "p90": 0.9276,
+     "p97_5": 0.9395,
+     "media_H0": 0.9002,
+     "efecto_diseño": 5.81,
+     "n_eff": 173.6,
+     "binomial_ingenua_2_5_97_5": [
+      0.881,
+      0.9177
+     ],
+     "tamaño_real_binomial_ingenua": 0.422,
+     "binomial_neff_2_5_97_5": [
+      0.8524,
+      0.9424
+     ],
+     "potencia_80": 0.968,
+     "potencia_85": 0.486,
+     "verde_bajo_H80": 0.004,
+     "media_H80": 0.7997
+    }
+   },
+   "19": {
+    "bolsa": {
+     "p2_5": 0.8383,
+     "p10": 0.8609,
+     "p90": 0.9361,
+     "p97_5": 0.9474,
+     "media_H0": 0.9003,
+     "efecto_diseño": 2.41,
+     "n_eff": 110.2,
+     "binomial_ingenua_2_5_97_5": [
+      0.8609,
+      0.9361
+     ],
+     "tamaño_real_binomial_ingenua": 0.174,
+     "binomial_neff_2_5_97_5": [
+      0.8367,
+      0.9546
+     ],
+     "potencia_80": 0.836,
+     "potencia_85": 0.326,
+     "verde_bajo_H80": 0.038,
+     "media_H80": 0.7996
+    },
+    "bonos": {
+     "p2_5": 0.8233,
+     "p10": 0.8571,
+     "p90": 0.9398,
+     "p97_5": 0.9549,
+     "media_H0": 0.9003,
+     "efecto_diseño": 3.27,
+     "n_eff": 81.3,
+     "binomial_ingenua_2_5_97_5": [
+      0.8609,
+      0.9361
+     ],
+     "tamaño_real_binomial_ingenua": 0.245,
+     "binomial_neff_2_5_97_5": [
+      0.8279,
+      0.9631
+     ],
+     "potencia_80": 0.675,
+     "potencia_85": 0.231,
+     "verde_bajo_H80": 0.094,
+     "media_H80": 0.7998
+    },
+    "letras": {
+     "p2_5": 0.8346,
+     "p10": 0.8609,
+     "p90": 0.9361,
+     "p97_5": 0.9474,
+     "media_H0": 0.9004,
+     "efecto_diseño": 2.51,
+     "n_eff": 106.1,
+     "binomial_ingenua_2_5_97_5": [
+      0.8609,
+      0.9361
+     ],
+     "tamaño_real_binomial_ingenua": 0.179,
+     "binomial_neff_2_5_97_5": [
+      0.8398,
+      0.9529
+     ],
+     "potencia_80": 0.811,
+     "potencia_85": 0.308,
+     "verde_bajo_H80": 0.043,
+     "media_H80": 0.8002
+    },
+    "vivienda": {
+     "p2_5": 0.8609,
+     "p10": 0.8759,
+     "p90": 0.9248,
+     "p97_5": 0.9361,
+     "media_H0": 0.8997,
+     "efecto_diseño": 1.1,
+     "n_eff": 241.8,
+     "binomial_ingenua_2_5_97_5": [
+      0.8609,
+      0.9361
+     ],
+     "tamaño_real_binomial_ingenua": 0.045,
+     "binomial_neff_2_5_97_5": [
+      0.8594,
+      0.938
+     ],
+     "potencia_80": 0.993,
+     "potencia_85": 0.648,
+     "verde_bajo_H80": 0.001,
+     "media_H80": 0.7998
+    },
+    "oro": {
+     "p2_5": 0.7707,
+     "p10": 0.8233,
+     "p90": 0.9737,
+     "p97_5": 0.9925,
+     "media_H0": 0.9002,
+     "efecto_diseño": 9.98,
+     "n_eff": 26.7,
+     "binomial_ingenua_2_5_97_5": [
+      0.8609,
+      0.9361
+     ],
+     "tamaño_real_binomial_ingenua": 0.515,
+     "binomial_neff_2_5_97_5": [
+      0.7749,
+      1.0
+     ],
+     "potencia_80": 0.341,
+     "potencia_85": 0.13,
+     "verde_bajo_H80": 0.403,
+     "media_H80": 0.7984
+    },
+    "S5": {
+     "p2_5": 0.8564,
+     "p10": 0.8737,
+     "p90": 0.9248,
+     "p97_5": 0.9346,
+     "media_H0": 0.9002,
+     "efecto_diseño": 5.98,
+     "n_eff": 222.3,
+     "binomial_ingenua_2_5_97_5": [
+      0.8835,
+      0.9158
+     ],
+     "tamaño_real_binomial_ingenua": 0.42,
+     "binomial_neff_2_5_97_5": [
+      0.8606,
+      0.937
+     ],
+     "potencia_80": 0.992,
+     "potencia_85": 0.58,
+     "verde_bajo_H80": 0.001,
+     "media_H80": 0.7996
+    },
+    "S4_sin_bolsa": {
+     "p2_5": 0.8515,
+     "p10": 0.8703,
+     "p90": 0.9267,
+     "p97_5": 0.938,
+     "media_H0": 0.9002,
+     "efecto_diseño": 5.81,
+     "n_eff": 183.1,
+     "binomial_ingenua_2_5_97_5": [
+      0.8816,
+      0.9173
+     ],
+     "tamaño_real_binomial_ingenua": 0.424,
+     "binomial_neff_2_5_97_5": [
+      0.8525,
+      0.9399
+     ],
+     "potencia_80": 0.975,
+     "potencia_85": 0.502,
+     "verde_bajo_H80": 0.003,
+     "media_H80": 0.7996
+    }
+   },
+   "20": {
+    "bolsa": {
+     "p2_5": 0.8393,
+     "p10": 0.8643,
+     "p90": 0.9321,
+     "p97_5": 0.9464,
+     "media_H0": 0.9003,
+     "efecto_diseño": 2.4,
+     "n_eff": 116.6,
+     "binomial_ingenua_2_5_97_5": [
+      0.8643,
+      0.9321
+     ],
+     "tamaño_real_binomial_ingenua": 0.209,
+     "binomial_neff_2_5_97_5": [
+      0.8456,
+      0.9485
+     ],
+     "potencia_80": 0.851,
+     "potencia_85": 0.333,
+     "verde_bajo_H80": 0.029,
+     "media_H80": 0.7996
+    },
+    "bonos": {
+     "p2_5": 0.825,
+     "p10": 0.8571,
+     "p90": 0.9393,
+     "p97_5": 0.9536,
+     "media_H0": 0.9003,
+     "efecto_diseño": 3.27,
+     "n_eff": 85.6,
+     "binomial_ingenua_2_5_97_5": [
+      0.8643,
+      0.9321
+     ],
+     "tamaño_real_binomial_ingenua": 0.287,
+     "binomial_neff_2_5_97_5": [
+      0.8364,
+      0.9533
+     ],
+     "potencia_80": 0.711,
+     "potencia_85": 0.25,
+     "verde_bajo_H80": 0.086,
+     "media_H80": 0.7997
+    },
+    "letras": {
+     "p2_5": 0.8357,
+     "p10": 0.8643,
+     "p90": 0.9321,
+     "p97_5": 0.9464,
+     "media_H0": 0.9005,
+     "efecto_diseño": 2.52,
+     "n_eff": 111.3,
+     "binomial_ingenua_2_5_97_5": [
+      0.8643,
+      0.9321
+     ],
+     "tamaño_real_binomial_ingenua": 0.216,
+     "binomial_neff_2_5_97_5": [
+      0.8383,
+      0.9551
+     ],
+     "potencia_80": 0.816,
+     "potencia_85": 0.303,
+     "verde_bajo_H80": 0.034,
+     "media_H80": 0.8003
+    },
+    "vivienda": {
+     "p2_5": 0.8607,
+     "p10": 0.875,
+     "p90": 0.925,
+     "p97_5": 0.9357,
+     "media_H0": 0.8997,
+     "efecto_diseño": 1.1,
+     "n_eff": 254.5,
+     "binomial_ingenua_2_5_97_5": [
+      0.8643,
+      0.9321
+     ],
+     "tamaño_real_binomial_ingenua": 0.066,
+     "binomial_neff_2_5_97_5": [
+      0.8625,
+      0.9352
+     ],
+     "potencia_80": 0.994,
+     "potencia_85": 0.655,
+     "verde_bajo_H80": 0.001,
+     "media_H80": 0.7998
+    },
+    "oro": {
+     "p2_5": 0.775,
+     "p10": 0.825,
+     "p90": 0.9714,
+     "p97_5": 0.9929,
+     "media_H0": 0.9003,
+     "efecto_diseño": 10.04,
+     "n_eff": 27.9,
+     "binomial_ingenua_2_5_97_5": [
+      0.8643,
+      0.9321
+     ],
+     "tamaño_real_binomial_ingenua": 0.571,
+     "binomial_neff_2_5_97_5": [
+      0.7848,
+      1.0
+     ],
+     "potencia_80": 0.351,
+     "potencia_85": 0.132,
+     "verde_bajo_H80": 0.391,
+     "media_H80": 0.7985
+    },
+    "S5": {
+     "p2_5": 0.8578,
+     "p10": 0.8743,
+     "p90": 0.9243,
+     "p97_5": 0.9343,
+     "media_H0": 0.9002,
+     "efecto_diseño": 6.01,
+     "n_eff": 233.0,
+     "binomial_ingenua_2_5_97_5": [
+      0.8843,
+      0.9157
+     ],
+     "tamaño_real_binomial_ingenua": 0.418,
+     "binomial_neff_2_5_97_5": [
+      0.8584,
+      0.9356
+     ],
+     "potencia_80": 0.995,
+     "potencia_85": 0.612,
+     "verde_bajo_H80": 0.001,
+     "media_H80": 0.7996
+    },
+    "S4_sin_bolsa": {
+     "p2_5": 0.8536,
+     "p10": 0.8714,
+     "p90": 0.9268,
+     "p97_5": 0.9375,
+     "media_H0": 0.9002,
+     "efecto_diseño": 5.85,
+     "n_eff": 191.5,
+     "binomial_ingenua_2_5_97_5": [
+      0.8821,
+      0.917
+     ],
+     "tamaño_real_binomial_ingenua": 0.418,
+     "binomial_neff_2_5_97_5": [
+      0.8538,
+      0.9426
+     ],
+     "potencia_80": 0.982,
+     "potencia_85": 0.523,
+     "verde_bajo_H80": 0.002,
+     "media_H80": 0.7996
+    }
+   }
+  },
+  "años_para_potencia_0_8": {
+   "bolsa": {
+    "80": 19,
+    "85": null
+   },
+   "bonos": {
+    "80": null,
+    "85": null
+   },
+   "letras": {
+    "80": 19,
+    "85": null
+   },
+   "vivienda": {
+    "80": 8,
+    "85": null
+   },
+   "oro": {
+    "80": null,
+    "85": null
+   },
+   "S5": {
+    "80": 10,
+    "85": null
+   },
+   "S4_sin_bolsa": {
+    "80": 11,
+    "85": null
+   }
+  }
+ }
+}

@@ -57,7 +57,7 @@ ver Actualizaciones.md).
   deflactada con el IPC OCDE. Dentro/fuera del p5-p95 guardado; PIT con los percentiles 1-99.
 - **Solapes:** las ventanas mensuales se solapan 11 de 12 meses; la inferencia usa **conglomerados por año de
   emisión** (o una sola emisión por año, la de diciembre, como análisis principal a decidir antes de evaluar).
-- **Semáforo** (sin contraste, cada año): cobertura acumulada frente a la banda simulada del motor para ese nº de
+- **Semáforo** (serie v3.1: sustituido por el borrador docs/int/INT11_vivo_realizado_v0.md §5, que fija también la medida de bonos, letras, vivienda y oro; lo que sigue es el diseño v2) (sin contraste, cada año): cobertura acumulada frente a la banda simulada del motor para ese nº de
   años (diseño §5.2: en vivo 5 años [79,7; 96,0], 10 años [82,7; 95,0]); verde dentro del 80 % central, ámbar 80-95 %,
   rojo fuera.
 - **Contraste formal:** calibración (K1) y Brier de inflación (K2) a los 10 años de registro (potencia ≈ 0,55-0,6;

@@ -13,11 +13,14 @@ Ambigüedades resueltas y partes PENDIENTES: docs/int/EVAL_registros_vivo.md (se
     * bolsa: `src/report/bolsa_vivo.leer_realizado` (principal AQR + FX fin de mes; si falta un mes, respaldo OCDE +
       dividendo implícito; nunca mezcladas), real con el IPC OCDE "media"; JPN "con medias" solo descriptivo;
     * inflación (K2): media del IPC OCDE de la ventana / media de los 12 anteriores − 1 > 5 % → 1;
-    * bonos, letras, vivienda, oro: PENDIENTE (medida realizada en vivo no fijada; no se inventa).
+    * bonos, letras, vivienda, oro: medida del BORRADOR docs/int/INT11_vivo_realizado_v0.md (src/report/activos_vivo.py),
+      leída una vez por activo a su propio retraso (`RETRASO`; vivienda 12 meses) en `.../AAAA-MM_<activo>.json`.
+      Mientras `MEDIDAS_NUEVAS_APROBADAS` sea False NO se leen (se anotan como pendientes).
 - Métricas: cobertura p5-p95, PIT (interpolado en los percentiles 1-99), CRPS aproximado por cuantiles (descriptivo),
   Brier K2 de M1 (p guardada) frente a M0 = 26,2 %. Principal: emisiones de DICIEMBRE (ventanas enero-diciembre sin
   solape); todas las emisiones, descriptivo con conglomerados por año de emisión. Sensibilidad sin JPN (A4).
-  Semáforo y contraste formal a 10 años: PENDIENTES (bandas de v3.1 por nº de años sin calcular).
+  Semáforo (borrador §5): cobertura acumulada de diciembre frente a las bandas congeladas de
+  research/int/int11_vivo_semaforo.json (sha256 comprobado); contraste formal único con 10 años de diciembre (S5).
 
 Uso: .venv/bin/python -m scripts.eval_int11_vivo [--sintetico] [--hoy AAAA-MM-DD]
 """
@@ -33,15 +36,25 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from src.report import activos_vivo as V
+
 REPO = Path(__file__).resolve().parents[1]
 CARPETA = REPO / "research/int/int11_v3_1_vivo"
 REALIZADO = REPO / "research/int/int11_v3_1_realizado"
 SALIDA = REPO / "research/int/eval_int11_vivo.json"
 SERIE = "int11_v3_1"
 ACTIVOS = ("bolsa", "bonos", "letras", "vivienda", "oro")
-ACTIVOS_MEDIDOS = ("bolsa",)
-PENDIENTES = {a: "medida realizada en vivo no fijada (registro_vivo.md §3 solo la esboza); pendiente de prerregistro"
+ACTIVOS_NUEVOS = ("bonos", "letras", "vivienda", "oro")
+# Interruptor del BORRADOR docs/int/INT11_vivo_realizado_v0.md: hasta que el usuario apruebe las medidas (V1-V7) no se
+# lee ni se congela ningún realizado de bonos, letras, vivienda u oro. Cambiarlo es un commit propio con la aprobación.
+MEDIDAS_NUEVAS_APROBADAS = False
+ACTIVOS_MEDIDOS = ("bolsa", *ACTIVOS_NUEVOS) if MEDIDAS_NUEVAS_APROBADAS else ("bolsa",)
+PENDIENTES = {a: "medida en BORRADOR (docs/int/INT11_vivo_realizado_v0.md), pendiente de aprobación"
               for a in ACTIVOS if a not in ACTIVOS_MEDIDOS}
+SEMAFORO = REPO / "research/int/int11_vivo_semaforo.json"
+SHA_SEMAFORO = "1f3703acd90321d38eb8c304dbe86efb17c246c1c112b7cb86669848df7309ec"   # INT11_vivo_realizado_v0.md §5
+VEREDICTO = REPO / "research/int/eval_int11_vivo_veredicto_10a.json"
+AÑOS_CONTRASTE = 10
 NIVELES = np.arange(1, 100) / 100
 I5, I95 = 4, 94                       # índices de p5 y p95 en cuantiles_1_99
 UMBRAL_INFL = 0.05
@@ -73,9 +86,12 @@ def leer_emisiones(carpeta: Path = CARPETA) -> list[dict]:
     return out
 
 
-def cerrada(o: dict, hoy) -> bool:
+RETRASO = {"bolsa": RETRASO_PRINCIPAL, **V.RETRASO_MESES}   # meses tras el fin de la ventana, por activo
+
+
+def cerrada(o: dict, hoy, activo: str = "bolsa") -> bool:
     fin = pd.Timestamp(o["ventana_objetivo"]["hasta"])
-    return pd.Timestamp(hoy) > fin + pd.offsets.MonthEnd(RETRASO_PRINCIPAL)
+    return pd.Timestamp(hoy) > fin + pd.offsets.MonthEnd(RETRASO[activo])
 
 
 # ---------------------------------------------------------------- puntuaciones (puras)
@@ -157,19 +173,68 @@ def brier_k2(d: pd.DataFrame) -> dict:
 
 def evaluar(emisiones: list[dict], realizados: dict) -> dict:
     d = filas(emisiones, realizados)
-    out = {"emisiones_evaluadas": sorted(realizados), "activos_pendientes": PENDIENTES,
-           "semaforo": "PENDIENTE: bandas simuladas de v3.1 por nº de años sin calcular (las de registro_vivo.md §3.2 "
-                       "son del diseño v2)",
-           "contraste_formal_10_años": "PENDIENTE: regla de decisión en vivo sin fijar (registro_vivo.md §3)"}
+    out = {"emisiones_evaluadas": sorted(realizados), "activos_pendientes": PENDIENTES}
     if d.empty:
         return {**out, "nota": "sin filas evaluables"}
     for nom, m in (("principal_diciembre", d.diciembre), ("todas_las_emisiones", pd.Series(True, index=d.index))):
-        b = d[m & (d.activo != "inflacion")]
+        b = d[m & (d.activo == "bolsa")]
         k = d[m & (d.activo == "inflacion")]
         out[nom] = {"K1_bolsa": resumen_cobertura(b), "K1_bolsa_sin_JPN": resumen_cobertura(b[b.pais != "JPN"]),
                     "K1_bolsa_por_pais": {c: {"n": int(len(g)), "cobertura": float(g.dentro.mean())}
                                           for c, g in b.groupby("pais")},
                     "K2_inflacion_5": brier_k2(k)}
+        for a in ACTIVOS_MEDIDOS[1:]:
+            out[nom][f"K1_{a}"] = resumen_cobertura(d[m & (d.activo == a)])
+    out["semaforo"] = semaforo_diciembre(d[d.diciembre & (d.activo != "inflacion")])
+    return out
+
+
+# ---------------------------------------------------------------- semáforo y contraste (INT11_vivo_realizado_v0.md §5)
+def bandas(ruta: Path = SEMAFORO, sha: str = SHA_SEMAFORO) -> dict:
+    """Bandas congeladas (no se recalculan): se comprueba su sha256."""
+    texto = ruta.read_text()
+    if hashlib.sha256(texto.encode()).hexdigest() != sha:
+        raise SystemExit(f"{ruta.name}: sha256 distinto del congelado (las bandas no se recalculan)")
+    return json.loads(texto)["bandas"]
+
+
+def contraste(s5: float, años: int, banda: dict | None) -> dict:
+    """Contraste formal ÚNICO (§5.3): con ≥ 10 años de diciembre, S5 fuera de [p2_5, p97_5] de su banda para 10 años →
+    "DESCALIBRADO EN VIVO"; dentro → "NO SE RECHAZA LA CALIBRACIÓN". Antes de 10 años: sin contraste."""
+    if años < AÑOS_CONTRASTE or banda is None:
+        return {"estado": f"sin contraste: {años} < {AÑOS_CONTRASTE} años de diciembre"}
+    dentro = banda["p2_5"] <= s5 <= banda["p97_5"]
+    return {"estado": "NO SE RECHAZA LA CALIBRACIÓN" if dentro else "DESCALIBRADO EN VIVO", "años": años, "S5": s5,
+            "banda_95": [banda["p2_5"], banda["p97_5"]],
+            "lado": None if dentro else ("abanico estrecho" if s5 < banda["p2_5"] else "abanico ancho")}
+
+
+def semaforo_diciembre(d: pd.DataFrame, tabla: dict | None = None) -> dict:
+    """Color por activo y de S5 (media de las coberturas de los 5 activos) con la cobertura ACUMULADA de las emisiones
+    de diciembre; años = años de emisión de diciembre con dato (con > 20 años se usa la banda de 20). S5 y su contraste,
+    solo con los 5 activos medidos."""
+    if d.empty:
+        return {"nota": "sin emisiones de diciembre evaluadas"}
+    tabla = tabla if tabla is not None else bandas()
+    out, cob = {}, {}
+    for a, g in d.groupby("activo"):
+        Y = int(g.año.nunique())
+        cob[a] = float(g.dentro.mean())
+        b = tabla.get(str(min(Y, 20)), {}).get(a)
+        out[a] = {"años": Y, "cobertura": cob[a], "paises_por_año_min": int(g.groupby("año").pais.nunique().min()),
+                  "color": V.semaforo(cob[a], b) if b else "sin banda", "banda": b}
+    if set(ACTIVOS) <= set(cob):
+        Y = int(d.groupby("activo").año.nunique().min())
+        s5 = float(np.mean([cob[a] for a in ACTIVOS]))
+        b = tabla.get(str(min(Y, 20)), {}).get("S5")
+        b10 = tabla.get(str(AÑOS_CONTRASTE), {}).get("S5")
+        primeros = sorted(d.año.unique())[:AÑOS_CONTRASTE]          # el contraste usa SOLO los 10 primeros años
+        d10 = d[d.año.isin(primeros)]
+        s5_10 = float(np.mean([d10[d10.activo == a].dentro.mean() for a in ACTIVOS]))
+        out["S5"] = {"años": Y, "cobertura": s5, "color": V.semaforo(s5, b) if b else "sin banda", "banda": b,
+                     "contraste_10_años": contraste(s5_10, Y, b10)}
+    else:
+        out["S5"] = {"nota": "S5 solo con los 5 activos medidos", "activos_medidos": sorted(cob)}
     return out
 
 
@@ -228,6 +293,25 @@ def leer_realizado_emision(con, o: dict) -> dict:
             "pendientes": PENDIENTES, "nota": "solo el realizado derivado (A6: no se guardan series de AQR ni French)"}
 
 
+def leer_realizado_activo(con, o: dict, activo: str) -> dict:
+    """Realizado de un activo nuevo (bonos, letras, vivienda u oro) de una emisión; se lee UNA vez, a su retraso."""
+    v = o["ventana_objetivo"]
+    desde, hasta = pd.Timestamp(v["desde"]), pd.Timestamp(v["hasta"])
+    paises = list(o["paises"])
+    fx = fx_diarias(con, paises) if activo == "oro" else {}
+    lect = V.leer_realizado_activos(con, fx, desde, hasta, paises=paises, activos=(activo,))
+    claves = ("real", "nominal", "completo", "faltan", "metodo", "modo", "plusvalia", "rent_yd", "descriptiva_encadenada")
+    filas = {c: {**{k: x[activo][k] for k in claves if k in x[activo]},
+                 "usada": "principal" if x[activo].get("real") is not None else None,
+                 "inflacion_media": x["inflacion"], "ipc_interpolados": x["ipc_interpolados"], "notas": x["notas"]}
+             for c, x in lect.items()}
+    sids = V.series_leidas(paises, (activo,)) + [f"oecd_cpi_{c.lower()}_idx" for c in paises]
+    return {"emision": o["_mes"], "activo": activo, "ventana": v,
+            "leido_utc": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), "fuente": V.FUENTE[activo],
+            "sha256_series": _huella(con, sids, desde - pd.DateOffset(years=2), hasta), activo: filas,
+            "nota": "solo el realizado derivado (sin series)"}
+
+
 # ---------------------------------------------------------------- sintético
 def sintetico(semilla: int = 20261105, años: int = 20, escala_real: float = 1.0, k2_informativa: bool = True):
     """Emisiones mensuales inventadas (14 países) con abanicos N(μ, σ) por activo; bolsa realizada de N(μ, escala·σ)
@@ -236,6 +320,7 @@ def sintetico(semilla: int = 20261105, años: int = 20, escala_real: float = 1.0
     from scipy.stats import norm
     from src.report.bolsa_vivo import NUCLEO
     rng = np.random.default_rng(semilla)
+    rng2 = np.random.default_rng(semilla + 1)
     z = norm.ppf(NIVELES)
     emis, real = [], {}
     for i in range(años * 12):
@@ -245,13 +330,15 @@ def sintetico(semilla: int = 20261105, años: int = 20, escala_real: float = 1.0
         o = {"_mes": mes, "emision": str(em.date()), "serie_registro": SERIE,
              "ventana_objetivo": {"desde": str(des.date()), "hasta": str((des + pd.offsets.MonthEnd(12)).date())},
              "paises": {}}
-        re = {"bolsa": {}, "inflacion": {}}
+        re = {a: {} for a in ACTIVOS} | {"inflacion": {}}
         for c in NUCLEO:
             mu, sd = rng.normal(0.05, 0.02), rng.uniform(0.15, 0.25)
             p = float(rng.uniform(0.02, 0.7))
             o["paises"][c] = {"cuantiles_1_99": {a: (mu + sd * z).round(5).tolist() for a in ACTIVOS},
                               "p_inflacion_5": {"p": p}}
             re["bolsa"][c] = {"usada": "principal", "real": float(mu + escala_real * sd * rng.standard_normal())}
+            for a in ACTIVOS[1:]:        # generador aparte: la bolsa y K2 sintéticas no cambian (EVAL §3)
+                re[a][c] = {"usada": "principal", "real": float(mu + escala_real * sd * rng2.standard_normal())}
             re["inflacion"][c] = {"y": int(rng.random() < (p if k2_informativa else M0_INFL))}
         emis.append(o)
         real[mes] = re
@@ -317,19 +404,38 @@ def main(argv=None) -> int:
     REALIZADO.mkdir(parents=True, exist_ok=True)
     realizados = {}
     con = db.connect(read_only=True)
+    sin_leer = []
     try:
         for o in cer:
             p = REALIZADO / f"{o['_mes']}.json"
             if not p.exists():          # se lee una sola vez; nunca se reescribe
                 p.write_text(json.dumps(_f(leer_realizado_emision(con, o)), ensure_ascii=False, indent=1))
             realizados[o["_mes"]] = json.loads(p.read_text())
+            for a in ACTIVOS_NUEVOS:
+                if not cerrada(o, hoy, a):
+                    continue
+                if a not in ACTIVOS_MEDIDOS:
+                    sin_leer.append(f"{o['_mes']}:{a}")
+                    continue
+                pa = REALIZADO / f"{o['_mes']}_{a}.json"
+                if not pa.exists():     # una sola vez por activo, a su propio retraso; nunca se reescribe
+                    pa.write_text(json.dumps(_f(leer_realizado_activo(con, o, a)), ensure_ascii=False, indent=1))
+                realizados[o["_mes"]][a] = json.loads(pa.read_text())[a]
     finally:
         con.close()
+    if sin_leer:
+        print(f"sin leer (medidas en borrador, MEDIDAS_NUEVAS_APROBADAS = False): {len(sin_leer)} activo-emisión")
     r = evaluar(cer, realizados)
     print(resumen(r))
+    c10 = ((r.get("semaforo") or {}).get("S5") or {}).get("contraste_10_años") or {}
+    if c10.get("estado") in ("NO SE RECHAZA LA CALIBRACIÓN", "DESCALIBRADO EN VIVO") and not VEREDICTO.exists():
+        VEREDICTO.write_text(json.dumps(_f({"procedencia": proc, "hoy": str(hoy.date()), "contraste": c10,
+                                             "documento": "docs/int/INT11_vivo_realizado_v0.md §5.3"}),
+                                        ensure_ascii=False, indent=1))
+        print(f"veredicto único escrito: {VEREDICTO.relative_to(REPO)} → {c10['estado']}")
     SALIDA.write_text(json.dumps({"procedencia": proc, "hoy": str(hoy.date()), "documentos": [
         "docs/int/INT11_registro_vivo.md", "docs/int/INT11_fuente_bolsa_vivo.md", "docs/int/INT11_prerregistro_v3.md",
-        "docs/int/EVAL_registros_vivo.md"], "resultados": _f(r)}, ensure_ascii=False, indent=1))
+        "docs/int/EVAL_registros_vivo.md", "docs/int/INT11_vivo_realizado_v0.md"], "resultados": _f(r)}, ensure_ascii=False, indent=1))
     print(f"escrito {SALIDA.relative_to(REPO)} (descriptivo)")
     return 0
 
