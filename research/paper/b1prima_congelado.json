@@ -1,0 +1,61 @@
+{
+ "documento": "B1′: coeficientes log-HAR y σ*′ congelados (docs/factors/B1prima_spec.md v1.0 §3)",
+ "procedencia": {
+  "commit": "52a46270435cef49e3677825f46b1fe8e7f8ed5b",
+  "arbol_limpio": true,
+  "hora_utc": "2026-11-05T13:23:34+00:00"
+ },
+ "spec": "docs/factors/B1prima_spec.md v1.0 (2026-10-30)",
+ "apertura": {
+  "C1": "research/int/int12_resultado.json h1.contrastes.C1.veredicto = establecido",
+  "aprobacion_usuario": "2026-11-05"
+ },
+ "medida": "RV EE. UU. diaria (AQR aqr_mkt_usa_d, exceso sobre letra, como P-DEV-INT12) en EUR: DEM/USD Frankfurt/1,95583 ≤ 1998, BCE ≥ 1999; fixing llevado al último conocido en cada sesión",
+ "modelo": "log(RV_{M+1}/n_{M+1}) = b0 + b5·lrv5 + b21·lrv21 + b63·lrv63; f = n·exp(·)·duan; σ̂′ = √(12 f)",
+ "datos": {
+  "huellas_sha256": {
+   "aqr_mkt_usa_d": "f2d2dc7ef08400b86e9819db532e1cf46e0b42d65cf8ad1d3bf62d98c63906c2",
+   "eur_por_usd": "032ddcdf43e28aa6af76db924f3cedec09efb672121e326e16accb70f2f3278d",
+   "r_eur": "c92b42c6f5b92dba15cd697702b557cb0ef628208a5fe42f248b13bee77e9e30"
+  },
+  "r_eur_desde": "1948-06-22",
+  "r_eur_hasta": "2004-12-31",
+  "n_sesiones": 14532
+ },
+ "parametros": {
+  "beta": [
+   -2.008698434606,
+   0.089664788156,
+   0.322652528072,
+   0.376352312399
+  ],
+  "duan": 1.289617680923,
+  "sigma_star_prima": 0.166735045496
+ },
+ "sha256_parametros": "064ebd8c3662854099f4c2f2ead386b3ed69d93b064e05493d8aaea4c35cb6fd",
+ "estimacion": {
+  "n_meses": 497,
+  "desde": "1963-07",
+  "hasta": "2004-11",
+  "fin_objetivo": "2004-12-31"
+ },
+ "sigma_prima_dev": {
+  "meses": 498,
+  "desde": "1963-07",
+  "hasta": "2004-12",
+  "n_mes_siguiente_2004-12_calendario_nyse": 20,
+  "percentiles": {
+   "5": 0.0841,
+   "25": 0.1349,
+   "50": 0.1667,
+   "75": 0.1977,
+   "95": 0.2662
+  },
+  "ultimo_2004-12": 0.1164
+ },
+ "recortes_dev": {
+  "pct_meses_recortado": 0.504,
+  "rv_media_recortado": 0.601,
+  "cambios_al_año": 4.05
+ }
+}

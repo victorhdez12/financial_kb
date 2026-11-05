@@ -54,6 +54,29 @@ if [ ! -f "$LOGDIR/.k1_hecho_$ANIO" ]; then
   fi
 fi
 
+# B1′ EN PARALELO (docs/factors/B1prima_implementacion.md §6): su propio registro y sus marcas; no toca el de B1.
+# Sin ACTIVO solo ensaya (una vez al mes). Si falla al registrar, deja decisiones_b1prima.jsonl como en HEAD para no
+# ensuciar el árbol que B1 necesita limpio, avisa y se reintenta mañana.
+B1P_F="research/paper/decisiones_b1prima.jsonl"
+if [ ! -f "$LOGDIR/.b1p_hecho_$MES" ]; then
+  BLOG="$LOGDIR/$(date +%Y-%m-%d_%H%M)_b1prima.log"
+  if [ ! -f "$REPO/research/paper/ACTIVO" ]; then
+    if [ ! -f "$LOGDIR/.b1p_ensayo_$MES" ]; then
+      .venv/bin/python -m scripts.paper_decision_b1prima --auto > "$BLOG" 2>&1 && touch "$LOGDIR/.b1p_ensayo_$MES" \
+        || avisa "B1′: ensayo fallido (mira el log _b1prima)"
+    fi
+  elif .venv/bin/python -m scripts.paper_decision_b1prima --auto --registrar > "$BLOG" 2>&1; then
+    touch "$LOGDIR/.b1p_hecho_$MES"
+    grep -q "registrada y subida" "$BLOG" && nota "✅ B1′: decisión registrada y subida"
+  else
+    if [ -n "$(git status --porcelain -- "$B1P_F")" ]; then
+      git checkout -q HEAD -- "$B1P_F" 2>/dev/null || rm -f "$B1P_F"
+    fi
+    nota "❌ B1′ no registrada: $(tail -1 "$BLOG" | cut -c1-120) · se reintenta mañana"
+    avisa "B1′: no se pudo registrar (mira el log _b1prima). Reintento mañana."
+  fi
+fi
+
 # la marca del paper solo corta el paper: E1/K1 se reintentan aunque la decisión del mes ya esté (Validador 2026-11-05)
 [ -f "$LOGDIR/.paper_hecho_$MES" ] && exit 0
 
