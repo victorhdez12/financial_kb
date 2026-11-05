@@ -28,3 +28,10 @@ def test_paper_mensual_no_corta_e1_k1():
     assert s.index('.paper_hecho_$MES" ] && exit 0') > s.index("scripts.k1_vivo") > s.index("scripts.e1_vivo")
     linea = next(x for x in s.splitlines() if "touch" in x and ".k1_hecho_" in x)
     assert "ya registrado" not in linea
+
+
+def test_t_registro_pais_atrasado_no_bloquea():
+    from scripts.k1_vivo import t_registro
+    assert t_registro([2026, 2026]) == 2026
+    assert t_registro([2026, 2025], hoy="2027-08-01") is None          # se espera al rezagado
+    assert t_registro([2026, 2025], hoy="2028-01-02") == 2026          # vencido: el rezagado va como "sin dato"

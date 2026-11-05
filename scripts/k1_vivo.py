@@ -29,14 +29,26 @@ INICIOS_DESDE_2021: dict[str, list[int]] = {}   # §2: ninguno declarado hasta 2
 INICIOS_REVISADOS_HASTA = 2025
 
 
-def puede_registrar(ts, revisado_hasta: int = INICIOS_REVISADOS_HASTA) -> tuple[int, str]:
-    """(código, motivo): 0 = sí; 10 = aún no toca (t mezclados o t < PRIMER_T); 6 = inicios de t sin revisar."""
+def t_registro(ts, hoy=None) -> int | None:
+    """Año t a registrar. Con t mezclados se espera, salvo que ya haya pasado el 31-dic de t_max + 1: entonces se
+    registra t_max y los países atrasados como "sin dato" (enmienda 1 §3: un país no bloquea el registro)."""
     ts = sorted({int(x) for x in ts if x == x})
-    if len(ts) != 1 or ts[0] < PRIMER_T:
-        return 10, f"t = {ts} (se exige un único t ≥ {PRIMER_T})"
-    if ts[0] > revisado_hasta:
-        return 6, (f"t = {ts[0]}: inicios de crisis revisados solo hasta {revisado_hasta}; declara los de "
-                   f"{revisado_hasta + 1}-{ts[0]} en INICIOS_DESDE_2021 y sube INICIOS_REVISADOS_HASTA")
+    if not ts:
+        return None
+    if len(ts) == 1:
+        return ts[0]
+    hoy = pd.Timestamp(hoy or dt.date.today())
+    return ts[-1] if hoy > pd.Timestamp(f"{ts[-1] + 1}-12-31") else None
+
+
+def puede_registrar(ts, revisado_hasta: int = INICIOS_REVISADOS_HASTA, hoy=None) -> tuple[int, str]:
+    """(código, motivo): 0 = sí; 10 = aún no toca (t mezclados o t < PRIMER_T); 6 = inicios de t sin revisar."""
+    t = t_registro(ts, hoy)
+    if t is None or t < PRIMER_T:
+        return 10, f"t = {sorted({int(x) for x in ts if x == x})} (se exige un t ≥ {PRIMER_T} común o vencido)"
+    if t > revisado_hasta:
+        return 6, (f"t = {t}: inicios de crisis revisados solo hasta {revisado_hasta}; declara los de "
+                   f"{revisado_hasta + 1}-{t} en INICIOS_DESDE_2021 y sube INICIOS_REVISADOS_HASTA")
     return 0, ""
 
 
@@ -94,7 +106,12 @@ def main() -> int:
     if rc:
         print(f"no se registra: {motivo}")
         return 0 if rc == 10 else rc
-    t = int(d.t.min())
+    t = t_registro(d.t)
+    atras = d.t != t
+    d.loc[atras, ["p_L", "p_K"]] = np.nan
+    d["sin_dato"] = atras | d.get("sin_dato", False).fillna(False).astype(bool) if "sin_dato" in d else atras
+    # enmienda 1 §1: inicio de crisis en t + 1 ya conocido al registrar → fuera del contraste principal
+    d["inicio_previo_al_registro"] = [(t + 1) in INICIOS_DESDE_2021.get(c, []) for c in d.pais]
     hechos = {(r["pais"], r["t"]) for r in map(json.loads, LOG.read_text().splitlines())} if LOG.exists() else set()
     if any((p, t) in hechos for p in d.pais):
         print(f"t = {t} ya registrado")
