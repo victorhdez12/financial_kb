@@ -114,3 +114,59 @@ def evaluar(mod, df: pd.DataFrame, sin_2020: bool = True) -> dict:
     if "y_E1_6" in base:
         out["m4"] = m4_anticipacion(mod, base, base["y_E1_6"])
     return out
+
+
+# ---------------------------------------------------------------- registro en vivo (§11)
+PAISES = ["BEL", "CAN", "DEU", "DNK", "ESP", "FIN", "FRA", "GBR", "IRL", "ITA", "JPN", "NLD", "NOR", "PRT", "SWE", "USA"]
+CORTO_3M = {"FIN", "IRL"}
+PRIMER_ORIGEN = pd.Timestamp("2026-11-30")   # orígenes posteriores a la congelación (5-nov-2026)
+
+
+def sids(c: str) -> dict:
+    from src.intl import data as D
+    lc = c.lower()
+    return {"corto": f"oecd_ir3m_{lc}" if c in CORTO_3M else f"bis_cbpol_{D.ISO2[c]}", "irlt": f"oecd_irlt_{lc}",
+            "ip": f"oecd_ip_{lc}", "bci": f"oecd_bci_{lc}"}
+
+
+EURO_BCE = {"BEL", "DEU", "ESP", "FRA", "ITA", "NLD", "PRT"}   # BIS publica su tipo oficial solo hasta 1998-12
+BCE_DESDE = pd.Timestamp("1999-01-01")
+
+
+def rasgos(lee, rej: pd.DatetimeIndex, paises=PAISES, euro_bce: bool = False) -> pd.DataFrame:
+    """Las 4 variables "as of" en el fin de cada mes de `rej`, con las MISMAS transformaciones que
+    src/intl/panel.mensual + src/intl/int13.construir. `lee(sid)` devuelve la serie cruda (load_dev en el test de
+    equivalencia; obs_latest hasta el corte en vivo)."""
+    from src.intl import lags as Lg
+    from src.intl import panel as P
+    out = []
+    for c in paises:
+        s = sids(c)
+        crudo = {k: lee(v) for k, v in s.items()}
+        if euro_bce and c in EURO_BCE:   # enmienda 1 (docs/int/E1_enmienda_1.md): tipo del BCE desde 1999-01
+            n, x = crudo["corto"], lee("bis_cbpol_xm")
+            crudo["corto"] = pd.concat([n[n.index < BCE_DESDE], x[x.index >= BCE_DESDE]])
+        raw = {k: P._mensual_completa(v) for k, v in crudo.items()}
+        co = raw["corto"]
+        corto = (pd.Series(co.values, index=M13_me(co.index)).reindex(rej) if not co.empty
+                 else pd.Series(np.nan, index=rej)).shift(1)
+        d = pd.DataFrame({"tipo_10a": Lg.asof(raw["irlt"], s["irlt"], rej),
+                          "ip_yoy": Lg.asof(np.log(raw["ip"]).diff(12), s["ip"], rej),
+                          "confianza_emp": Lg.asof(raw["bci"], s["bci"], rej)}, index=rej)
+        d["curva"] = d["tipo_10a"] - corto
+        d["d12_corto"] = corto - corto.shift(12)
+        d["pais"] = c
+        out.append(d.reset_index(names="fecha"))
+    return pd.concat(out, ignore_index=True)
+
+
+def M13_me(idx):
+    from src.intl import int13 as M13
+    return M13._me(idx)
+
+
+def prediccion(mod: dict, r: pd.DataFrame) -> pd.DataFrame:
+    """P(entrada en recesión en 12 meses) de L y A para las filas con las 4 variables (no se muestra en el reporte)."""
+    d = r[r[COLS["A"]].notna().all(axis=1)].copy()
+    d["p_L"], d["p_A"] = predecir(mod, d, "L"), predecir(mod, d, "A")
+    return d

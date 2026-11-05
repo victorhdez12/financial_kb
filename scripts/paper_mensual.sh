@@ -34,6 +34,15 @@ avisa() { /usr/bin/osascript -e "display notification \"$1\" with title \"financ
 for _ in $(seq 1 60); do curl -sS -o /dev/null --max-time 5 https://api.stlouisfed.org/ 2>/dev/null && break; sleep 10; done
 for _ in $(seq 1 120); do [ -d "$LOGDIR/.actualizar.lock" ] || break; sleep 30; done
 
+# P-E1 (registro en vivo, docs/int/E1_prerregistro_v1.md §11): independiente de ACTIVO; no se muestra en el reporte
+if [ ! -f "$LOGDIR/.e1_hecho_$MES" ]; then
+  if .venv/bin/python -m scripts.e1_vivo --auto --registrar > "$LOGDIR/$(date +%Y-%m-%d_%H%M)_e1.log" 2>&1; then
+    touch "$LOGDIR/.e1_hecho_$MES"
+  else
+    avisa "E1: registro en vivo fallido (mira el log _e1); reintento mañana"
+  fi
+fi
+
 if [ ! -f "$REPO/research/paper/ACTIVO" ]; then
   [ -f "$LOGDIR/.paper_ensayo_$MES" ] && exit 0
   if .venv/bin/python -m scripts.paper_decision --auto > "$LOG" 2>&1; then

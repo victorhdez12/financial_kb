@@ -717,3 +717,4 @@ Las entradas más recientes van arriba. Ver también [[Proyecto/Estado del proye
 - `src/intl/e1.py` + `scripts/e1_corrida.py`. P4 sintético ✅ (señal ΔAUC +0,57 p 0,008; sin señal +0,03; P2/P3 la anulan).
 - Ajuste único ≤ 2004 → `research/int/e1_modelos.json` (3.306 filas / 240 eventos = INT-13; signos ✅; modelos sha256 227ffa8c…). Sin métricas de desarrollo (no cuentan).
 - Siguiente: `scripts/e1_vivo.py` (predicción mensual por país → `research/int/e1_vivo.jsonl`, sin mostrar en el reporte) + launchd mensual.
+- **E1 en vivo:** `scripts/e1_vivo.py` (+ `tests/test_e1.py`: variables en vivo = INT-13 con ≤ 2004; sha256 de modelos). Enmienda 1 operativa (`docs/int/E1_enmienda_1.md`): tipo BCE desde 1999 para 7 países del euro (antes de registrar nada). CAN sin confianza OCDE desde 2026-04 → sin dato. Enganchado a `scripts/paper_mensual.sh` (independiente de ACTIVO); primer registro: origen 2026-11-30 (≈ 3-dic). Ensayo oct: 15 países, no se muestra.
