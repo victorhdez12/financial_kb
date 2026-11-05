@@ -44,3 +44,15 @@ def test_modelos_6m_congelados(dev):
     j = json.loads((REPO / "research/int/e1_6_modelos.json").read_text())
     mod = E.ajustar(E.filas(M.muestra(dev, "E1_6"), "y_E1_6"), "y_E1_6")
     assert E.sha(mod) == j["modelos_sha256"] == E.sha(j["modelos"])
+
+
+def test_meses_dato_y_almacen_al_dia():
+    """Validador 2026-11-05: procedencia del registro en vivo (mes del último dato usado) y guarda de warehouse viejo."""
+    from scripts.e1_vivo import almacen_al_dia
+    idx = pd.date_range("2025-01-01", "2026-10-01", freq="MS")
+    s = pd.Series(1.0, index=idx)
+    m = E.meses_dato(lambda sid: s, pd.Timestamp("2026-10-31"), "DEU", euro_bce=True)
+    # tipos: M − 1; IP: 75 días → julio; confianza: 10 días → septiembre; tipo a 10 años: 1 día → septiembre
+    assert m == {"corto": "2026-09", "irlt": "2026-09", "ip": "2026-07", "bci": "2026-09"}
+    assert almacen_al_dia(pd.Timestamp("2026-12-03 09:00"), pd.Timestamp("2026-11-30"))
+    assert not almacen_al_dia(pd.Timestamp("2026-11-30 23:00"), pd.Timestamp("2026-11-30"))

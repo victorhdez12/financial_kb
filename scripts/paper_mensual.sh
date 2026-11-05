@@ -15,7 +15,6 @@ mkdir -p "$LOGDIR"
 cd "$REPO" || exit 1
 
 [ "$(date +%-d)" -lt 3 ] && exit 0
-[ -f "$LOGDIR/.paper_hecho_$MES" ] && exit 0
 
 nota() {   # $1 = línea
   [ -f "$NOTA" ] || return 0
@@ -48,11 +47,15 @@ ANIO="$(date +%Y)"
 if [ ! -f "$LOGDIR/.k1_hecho_$ANIO" ]; then
   KLOG="$LOGDIR/$(date +%Y-%m-%d_%H%M)_k1.log"
   if .venv/bin/python -m scripts.k1_vivo --registrar > "$KLOG" 2>&1; then
-    grep -q "registrado y subido\|ya registrado" "$KLOG" && touch "$LOGDIR/.k1_hecho_$ANIO"
+    # solo al registrar: "ya registrado" (t del año anterior aún vigente) no debe cerrar el año (Validador 2026-11-05)
+    grep -q "registrado y subido" "$KLOG" && touch "$LOGDIR/.k1_hecho_$ANIO"
   else
     avisa "K1: registro en vivo fallido (mira el log _k1); reintento mañana"
   fi
 fi
+
+# la marca del paper solo corta el paper: E1/K1 se reintentan aunque la decisión del mes ya esté (Validador 2026-11-05)
+[ -f "$LOGDIR/.paper_hecho_$MES" ] && exit 0
 
 if [ ! -f "$REPO/research/paper/ACTIVO" ]; then
   [ -f "$LOGDIR/.paper_ensayo_$MES" ] && exit 0

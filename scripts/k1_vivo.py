@@ -24,6 +24,20 @@ REPO = Path(__file__).resolve().parents[1]
 LOG = REPO / "research/int/k1_vivo.jsonl"
 PRIMER_T = 2026
 INICIOS_DESDE_2021: dict[str, list[int]] = {}   # §2: ninguno declarado hasta 2025
+# Último año para el que se han revisado (y declarado arriba) los inicios de crisis desde 2021. B1 y "en riesgo" de t
+# dependen de los inicios ≤ t: no se registra t > INICIOS_REVISADOS_HASTA sin declararlo antes (Validador 2026-11-05).
+INICIOS_REVISADOS_HASTA = 2025
+
+
+def puede_registrar(ts, revisado_hasta: int = INICIOS_REVISADOS_HASTA) -> tuple[int, str]:
+    """(código, motivo): 0 = sí; 10 = aún no toca (t mezclados o t < PRIMER_T); 6 = inicios de t sin revisar."""
+    ts = sorted({int(x) for x in ts if x == x})
+    if len(ts) != 1 or ts[0] < PRIMER_T:
+        return 10, f"t = {ts} (se exige un único t ≥ {PRIMER_T})"
+    if ts[0] > revisado_hasta:
+        return 6, (f"t = {ts[0]}: inicios de crisis revisados solo hasta {revisado_hasta}; declara los de "
+                   f"{revisado_hasta + 1}-{ts[0]} en INICIOS_DESDE_2021 y sube INICIOS_REVISADOS_HASTA")
+    return 0, ""
 
 
 def git(*a) -> str:
@@ -76,10 +90,11 @@ def main() -> int:
     print(d.round(3).to_string(index=False))
     if "--registrar" not in sys.argv:
         return 0
+    rc, motivo = puede_registrar(d.t)
+    if rc:
+        print(f"no se registra: {motivo}")
+        return 0 if rc == 10 else rc
     t = int(d.t.min())
-    if d.t.nunique() != 1 or t < PRIMER_T:
-        print(f"no se registra: t = {sorted(d.t.dropna().unique())} (se exige un único t ≥ {PRIMER_T})")
-        return 0
     hechos = {(r["pais"], r["t"]) for r in map(json.loads, LOG.read_text().splitlines())} if LOG.exists() else set()
     if any((p, t) in hechos for p in d.pais):
         print(f"t = {t} ya registrado")

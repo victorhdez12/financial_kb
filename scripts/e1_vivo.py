@@ -6,7 +6,9 @@ Uso: .venv/bin/python -m scripts.e1_vivo [--cierre AAAA-MM-DD | --auto] [--regis
 - Sin --registrar: ensayo (imprime, no escribe).
 - --registrar: árbol limpio, cierre = último fin de mes pasado, ≥ 2026-11-30 (posterior a la congelación), no registrado
   antes; añade una línea por país a research/int/e1_vivo.jsonl, commitea y sube.
-Salida: 0 hecho / ya registrado / aún no toca (--auto); 3 ya registrado; 4 mes no válido; 5 árbol sucio; 1 otros.
+Salida: 0 hecho / ya registrado / aún no toca (--auto); 3 ya registrado; 4 mes no válido; 5 árbol sucio;
+6 warehouse no reconstruido tras el cierre; 1 otros. Cada línea lleva `mes_dato` (mes del último dato usado por
+variable) y la hora de construcción del warehouse.
 """
 from __future__ import annotations
 
@@ -35,6 +37,12 @@ def registrados() -> set:
     if not LOG.exists():
         return set()
     return {json.loads(x)["origen"] for x in LOG.read_text().splitlines() if x.strip()}
+
+
+def almacen_al_dia(construido, cierre: pd.Timestamp) -> bool:
+    """El warehouse se reconstruyó DESPUÉS del cierre (si no, faltarían los datos del mes y el "as of" tiraría de
+    valores más viejos sin avisar; Validador 2026-11-05)."""
+    return pd.Timestamp(construido).date() > cierre.date()
 
 
 def main() -> int:
@@ -67,8 +75,15 @@ def main() -> int:
             return 5
     con = db.connect(read_only=True)
     try:
+        construido = con.execute("select built_at from build_log").fetchone()[0]
+        if a.registrar and not almacen_al_dia(construido, cierre):
+            print(f"warehouse construido el {construido}, no después del cierre {cierre.date()}: no se registra "
+                  "con datos viejos (reintento mañana)")
+            return 6
+        lee = lambda sid: V._serie(con, sid, cierre)  # noqa: E731
         rej = pd.date_range("1950-01-31", cierre, freq="ME")
-        r = E.rasgos(lambda sid: V._serie(con, sid, cierre), rej, euro_bce=True)
+        r = E.rasgos(lee, rej, euro_bce=True)
+        meses = {c: E.meses_dato(lee, cierre, c, euro_bce=True) for c in E.PAISES}
     finally:
         con.close()
     d = E.prediccion(mod, r[r.fecha == cierre])
@@ -86,10 +101,11 @@ def main() -> int:
         for x in d.itertuples():
             f.write(json.dumps({"origen": str(cierre.date()), "pais": x.pais, "p_L": round(x.p_L, 6),
                                 "p_A": round(x.p_A, 6), "p_L6": round(x.p_L6, 6), "p_A6": round(x.p_A6, 6), **{c: round(getattr(x, c), 6) for c in E.COLS["A"]},
-                                "modelos_sha256": j["modelos_sha256"], "modelos6_sha256": j6["modelos_sha256"], "registrado": ahora, "git_head": head}) + "\n")
+                                "modelos_sha256": j["modelos_sha256"], "modelos6_sha256": j6["modelos_sha256"], "mes_dato": meses[x.pais],
+                                "warehouse": str(construido), "registrado": ahora, "git_head": head}) + "\n")
         for c in faltan:
-            f.write(json.dumps({"origen": str(cierre.date()), "pais": c, "sin_dato": True, "registrado": ahora,
-                                "git_head": head}) + "\n")
+            f.write(json.dumps({"origen": str(cierre.date()), "pais": c, "sin_dato": True, "mes_dato": meses[c],
+                                "warehouse": str(construido), "registrado": ahora, "git_head": head}) + "\n")
     git("add", str(LOG.relative_to(REPO)))
     git("commit", "-q", "-m", f"E1 live registry: origin {cierre.date()}\n\n"
                               "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>")
