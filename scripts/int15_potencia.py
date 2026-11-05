@@ -202,21 +202,27 @@ class O1:
                 self.bloques.append((np.where(self.t + H <= p0)[0], pred))
         self.ev = np.concatenate([b[1] for b in self.bloques])
 
-    def una(self, rng, a: float, b: float, tau: float, phi_u: float, phi_w: float) -> tuple[float, float]:
+    def una(self, rng, a: float, b: float, tau: float, phi_u: float, phi_w: float) -> tuple:
+        """Devuelve (ΔAUC apilado, AUC listón apilado, ΔAUC índice, AUC listón índice).
+        - apilado: probabilidades del logit de cada año apiladas (cambian intercepto y pendiente cada enero);
+        - índice (métrica propuesta como principal, §5 del borrador): listón = x1 (rango invariante al reajuste),
+          candidato = x1 + (β2/β1)·x2 con los coeficientes de ese año → aísla si el crédito AÑADE orden."""
         u, w = ar1(rng, self.nt, phi_u)[self.t], ar1(rng, self.nt, phi_w)[self.t]
         be = b + tau * rng.standard_normal(self.n_ent)
         x1 = a * self.y + u
         x2 = np.where(self.y == 1, be[np.maximum(self.ent, 0)], 0.0) + w
-        sL, sA = np.empty(len(self.y)), np.empty(len(self.y))
+        sL, sA, iA = (np.empty(len(self.y)) for _ in range(3))
         bl, ba = None, None
         for fit, pred in self.bloques:
             bl = logit(x1[fit, None], self.y[fit], bl)
             ba = logit(np.column_stack([x1[fit], x2[fit]]), self.y[fit], ba)
             sL[pred] = bl[0] + bl[1] * x1[pred]
             sA[pred] = ba[0] + ba[1] * x1[pred] + ba[2] * x2[pred]
+            iA[pred] = x1[pred] + (ba[2] / ba[1]) * x2[pred] if ba[1] > 1e-6 else ba[1] * x1[pred] + ba[2] * x2[pred]
         y = self.y[self.ev]
         aL, aA = auc(sL[self.ev], y), auc(sA[self.ev], y)
-        return aA - aL, aL
+        iL, iAa = auc(x1[self.ev], y), auc(iA[self.ev], y)
+        return aA - aL, aL, iAa - iL, iL
 
 
 def delta_poblacional(a: float, b: float) -> float:
@@ -232,23 +238,30 @@ def b_para_delta(a: float, d: float) -> float:
     return (lo + hi) / 2
 
 
-def potencia_o1(est: O1, auc_l: float, tau: float, deltas, reps: int, rng, phi_u=0.9, phi_w=0.85) -> dict:
-    a = np.sqrt(2) * norm.ppf(auc_l)
-    nula = np.array([est.una(rng, a, 0.0, 0.0, phi_u, phi_w)[0] for _ in range(reps)])
-    c05, c025 = np.quantile(nula, 0.95), np.quantile(nula, 0.975)
+def _bloque_o1(nula: np.ndarray, sims_por_delta: list, deltas, col: int) -> dict:
+    c05, c025 = np.quantile(nula[:, col], 0.95), np.quantile(nula[:, col], 0.975)
     filas = []
-    for d in deltas:
-        b = b_para_delta(a, d)
-        sims = np.array([est.una(rng, a, b, tau, phi_u, phi_w) for _ in range(reps)])
-        dd = sims[:, 0]
+    for d, (b, sims) in zip(deltas, sims_por_delta):
+        dd = sims[:, col]
         filas.append({"delta_poblacional": d, "b": _r(b), "delta_medio_realizado": _r(dd.mean()),
-                      "sd_delta": _r(dd.std(ddof=1)), "auc_liston_medio": _r(sims[:, 1].mean()),
+                      "sd_delta": _r(dd.std(ddof=1)), "auc_liston_medio": _r(sims[:, col + 1].mean()),
                       "potencia_5": _r((dd > c05).mean(), 3), "potencia_2_5": _r((dd > c025).mean(), 3),
                       "p_delta_pos": _r((dd > 0).mean(), 3)})
-    return {"auc_liston": auc_l, "tau": tau, "phi_u": phi_u, "phi_w": phi_w,
-            "nula": {"media": _r(nula.mean()), "sd": _r(nula.std(ddof=1)), "critico_5": _r(c05), "critico_2_5": _r(c025),
-                     "p_delta_pos": _r((nula > 0).mean(), 3)},
+    n = nula[:, col]
+    return {"nula": {"media": _r(n.mean()), "sd": _r(n.std(ddof=1)), "critico_5": _r(c05), "critico_2_5": _r(c025),
+                     "p_delta_pos": _r((n > 0).mean(), 3), "auc_liston_medio": _r(nula[:, col + 1].mean())},
             "filas": filas, "mde_80_5": mde(filas, "potencia_5"), "mde_80_2_5": mde(filas, "potencia_2_5")}
+
+
+def potencia_o1(est: O1, auc_l: float, tau: float, deltas, reps: int, rng, phi_u=0.9, phi_w=0.85) -> dict:
+    a = np.sqrt(2) * norm.ppf(auc_l)
+    nula = np.array([est.una(rng, a, 0.0, 0.0, phi_u, phi_w) for _ in range(reps)])
+    sims = []
+    for d in deltas:
+        b = b_para_delta(a, d)
+        sims.append((b, np.array([est.una(rng, a, b, tau, phi_u, phi_w) for _ in range(reps)])))
+    return {"auc_liston_rasgo": auc_l, "tau": tau, "phi_u": phi_u, "phi_w": phi_w,
+            "indice": _bloque_o1(nula, sims, deltas, 2), "apilado": _bloque_o1(nula, sims, deltas, 0)}
 
 
 def mde(filas: list, clave: str, x: str = "delta_poblacional", objetivo: float = 0.8):
@@ -380,8 +393,10 @@ def main(argv=None):
                             (0.70, 0.25, 0.9), (0.65, 0.25, 0.97)):
         k = f"aucL{auc_l}_tau{tau}_phi{phi}"
         o1[k] = potencia_o1(est, auc_l, tau, deltas, reps, rng, phi_u=phi, phi_w=min(phi, 0.97))
-        print("O1", k, o1[k]["nula"], o1[k]["mde_80_5"], [(f["delta_poblacional"], f["potencia_5"]) for f in o1[k]["filas"]],
-              round(time.time() - t0), flush=True)
+        for met in ("indice", "apilado"):
+            v = o1[k][met]
+            print("O1", k, met, v["nula"], v["mde_80_5"], v["mde_80_2_5"],
+                  [(f["delta_poblacional"], f["potencia_5"]) for f in v["filas"]], round(time.time() - t0), flush=True)
     res["potencia_O1"] = o1
 
     # (iv) O2 (sd log RV 1 m 1950-2004 = 0,8856, research/int/int12_potencia.json → objetivos_marginales_EEUU)
