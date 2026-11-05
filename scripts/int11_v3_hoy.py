@@ -192,7 +192,8 @@ Correlación (log) de los escenarios a 12 meses, bolsa-bonos / bonos-oro: hoy (c
 partiendo de cada régimen. Con inflación alta (sobrecalentamiento) bolsa y bonos se mueven más juntos y el oro se mueve
 más contra los bonos. Es la dependencia que el motor hereda de las filas históricas ≤ 2004; **no está confirmada fuera
 de muestra** y no se ha contrastado (la potencia no da: docs/int/INT11_v4_correlaciones_v0.md). La correlación
-negativa bolsa-bonos de los últimos años (época, no régimen) no la reproduce el motor.
+negativa bolsa-bonos de los últimos años (época, no régimen) no la reproduce el motor. La de "hoy" mezcla regímenes
+con medias distintas y puede quedar algo por encima de las dos columnas de partida.
 
 | país | hoy | partiendo de expansión | partiendo de sobrecalentamiento |
 |---|---|---|---|
