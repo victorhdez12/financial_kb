@@ -165,6 +165,24 @@ def rasgos(lee, rej: pd.DatetimeIndex, paises=PAISES, euro_bce: bool = False) ->
     return pd.concat(out, ignore_index=True)
 
 
+def meses_dato(lee, cierre: pd.Timestamp, pais: str, euro_bce: bool = True) -> dict:
+    """Mes de referencia del último dato que entra en las variables "as of" en `cierre` (procedencia del registro en
+    vivo; Validador 2026-11-05). Tipos: M − 1; resto: el último mes con fin + retraso ≤ cierre (src/intl/lags.py)."""
+    from src.intl import lags as Lg
+    s = sids(pais)
+    if euro_bce and pais in EURO_BCE:
+        s["corto"] = "bis_cbpol_xm"
+    out = {}
+    for k, sid in s.items():
+        x = lee(sid).dropna()
+        if k == "corto":
+            ok = (x.index + pd.offsets.MonthEnd(0)) <= cierre - pd.offsets.MonthEnd(1)
+        else:
+            ok = Lg.disponible(x.index, sid) <= cierre
+        out[k] = x.index[ok].max().strftime("%Y-%m") if ok.any() else None
+    return out
+
+
 def M13_me(idx):
     from src.intl import int13 as M13
     return M13._me(idx)
