@@ -1,0 +1,2660 @@
+{
+ "hoy": "2026-11-05",
+ "historico_vs_jst_hasta_2004": {
+  "BEL": {
+   "aqr_local": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9861,
+    "sesgo_pp": -0.04,
+    "dt_dif_pp": 4.16,
+    "rmse_pp": 4.05
+   },
+   "french_local_tr": {
+    "n": 30,
+    "desde": 1975,
+    "hasta": 2004,
+    "corr": 0.9866,
+    "sesgo_pp": 2.46,
+    "dt_dif_pp": 3.74,
+    "rmse_pp": 4.42
+   },
+   "french_local_precio": {
+    "n": 30,
+    "desde": 1975,
+    "hasta": 2004,
+    "corr": 0.9778,
+    "sesgo_pp": -4.76,
+    "dt_dif_pp": 4.46,
+    "rmse_pp": 6.47
+   },
+   "oecd_precio": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9886,
+    "sesgo_pp": -3.78,
+    "dt_dif_pp": 3.6,
+    "rmse_pp": 5.15
+   },
+   "oecd_precio_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9886,
+    "sesgo_pp": -3.78,
+    "dt_dif_pp": 3.6,
+    "rmse_pp": 5.15
+   },
+   "oecd_precio_mas_dp_jst": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9889,
+    "sesgo_pp": -0.78,
+    "dt_dif_pp": 3.45,
+    "rmse_pp": 3.44
+   },
+   "oecd_precio_mas_dp_constante_86_04": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9886,
+    "sesgo_pp": -0.79,
+    "dt_dif_pp": 3.49,
+    "rmse_pp": 3.49,
+    "dp": 0.0271
+   }
+  },
+  "DEU": {
+   "aqr_local": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9781,
+    "sesgo_pp": -1.1,
+    "dt_dif_pp": 5.18,
+    "rmse_pp": 5.16
+   },
+   "french_local_tr": {
+    "n": 30,
+    "desde": 1975,
+    "hasta": 2004,
+    "corr": 0.9885,
+    "sesgo_pp": 0.97,
+    "dt_dif_pp": 4.19,
+    "rmse_pp": 4.23
+   },
+   "french_local_precio": {
+    "n": 30,
+    "desde": 1975,
+    "hasta": 2004,
+    "corr": 0.9874,
+    "sesgo_pp": -2.63,
+    "dt_dif_pp": 4.17,
+    "rmse_pp": 4.87
+   },
+   "jkp_local": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9574,
+    "sesgo_pp": -1.02,
+    "dt_dif_pp": 7.14,
+    "rmse_pp": 7.03
+   },
+   "oecd_precio": {
+    "n": 44,
+    "desde": 1961,
+    "hasta": 2004,
+    "corr": 0.9888,
+    "sesgo_pp": -3.45,
+    "dt_dif_pp": 3.35,
+    "rmse_pp": 4.78
+   },
+   "oecd_precio_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9815,
+    "sesgo_pp": -3.68,
+    "dt_dif_pp": 4.97,
+    "rmse_pp": 6.08
+   },
+   "oecd_precio_mas_dp_jst": {
+    "n": 44,
+    "desde": 1961,
+    "hasta": 2004,
+    "corr": 0.9896,
+    "sesgo_pp": -0.57,
+    "dt_dif_pp": 3.2,
+    "rmse_pp": 3.22
+   },
+   "oecd_precio_mas_dp_constante_86_04": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9815,
+    "sesgo_pp": -1.51,
+    "dt_dif_pp": 4.84,
+    "rmse_pp": 4.95,
+    "dp": 0.0205
+   }
+  },
+  "DNK": {
+   "aqr_local": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.669,
+    "sesgo_pp": 1.33,
+    "dt_dif_pp": 19.36,
+    "rmse_pp": 18.89
+   },
+   "french_local_tr": {
+    "n": 16,
+    "desde": 1989,
+    "hasta": 2004,
+    "corr": 0.7242,
+    "sesgo_pp": -1.1,
+    "dt_dif_pp": 16.19,
+    "rmse_pp": 15.72
+   },
+   "french_local_precio": {
+    "n": 16,
+    "desde": 1989,
+    "hasta": 2004,
+    "corr": 0.7196,
+    "sesgo_pp": -2.82,
+    "dt_dif_pp": 16.19,
+    "rmse_pp": 15.93
+   },
+   "oecd_precio": {
+    "n": 21,
+    "desde": 1984,
+    "hasta": 2004,
+    "corr": 0.6534,
+    "sesgo_pp": -1.18,
+    "dt_dif_pp": 18.84,
+    "rmse_pp": 18.42
+   },
+   "oecd_precio_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.7324,
+    "sesgo_pp": -1.57,
+    "dt_dif_pp": 16.24,
+    "rmse_pp": 15.89
+   },
+   "oecd_precio_mas_dp_jst": {
+    "n": 21,
+    "desde": 1984,
+    "hasta": 2004,
+    "corr": 0.6437,
+    "sesgo_pp": 0.68,
+    "dt_dif_pp": 19.5,
+    "rmse_pp": 19.04
+   },
+   "oecd_precio_mas_dp_constante_86_04": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.7324,
+    "sesgo_pp": 0.19,
+    "dt_dif_pp": 16.48,
+    "rmse_pp": 16.04,
+    "dp": 0.0159
+   }
+  },
+  "ESP": {
+   "aqr_local": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9538,
+    "sesgo_pp": -1.95,
+    "dt_dif_pp": 9.65,
+    "rmse_pp": 9.59
+   },
+   "french_local_tr": {
+    "n": 30,
+    "desde": 1975,
+    "hasta": 2004,
+    "corr": 0.9332,
+    "sesgo_pp": 0.78,
+    "dt_dif_pp": 10.88,
+    "rmse_pp": 10.72
+   },
+   "french_local_precio": {
+    "n": 30,
+    "desde": 1975,
+    "hasta": 2004,
+    "corr": 0.9382,
+    "sesgo_pp": -5.04,
+    "dt_dif_pp": 10.56,
+    "rmse_pp": 11.54
+   },
+   "jkp_local": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9453,
+    "sesgo_pp": -1.44,
+    "dt_dif_pp": 10.49,
+    "rmse_pp": 10.31
+   },
+   "oecd_precio": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9459,
+    "sesgo_pp": -5.51,
+    "dt_dif_pp": 10.44,
+    "rmse_pp": 11.56
+   },
+   "oecd_precio_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9459,
+    "sesgo_pp": -5.51,
+    "dt_dif_pp": 10.44,
+    "rmse_pp": 11.56
+   },
+   "oecd_precio_mas_dp_jst": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9455,
+    "sesgo_pp": -1.75,
+    "dt_dif_pp": 10.48,
+    "rmse_pp": 10.35
+   },
+   "oecd_precio_mas_dp_constante_86_04": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9459,
+    "sesgo_pp": -1.77,
+    "dt_dif_pp": 10.42,
+    "rmse_pp": 10.3,
+    "dp": 0.0323
+   }
+  },
+  "FIN": {
+   "aqr_local": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.999,
+    "sesgo_pp": -1.09,
+    "dt_dif_pp": 2.72,
+    "rmse_pp": 2.86
+   },
+   "french_local_tr": {
+    "n": 17,
+    "desde": 1988,
+    "hasta": 2004,
+    "corr": 0.9892,
+    "sesgo_pp": 0.7,
+    "dt_dif_pp": 7.88,
+    "rmse_pp": 7.68
+   },
+   "french_local_precio": {
+    "n": 17,
+    "desde": 1988,
+    "hasta": 2004,
+    "corr": 0.9895,
+    "sesgo_pp": -1.73,
+    "dt_dif_pp": 7.74,
+    "rmse_pp": 7.71
+   },
+   "oecd_precio": {
+    "n": 47,
+    "desde": 1958,
+    "hasta": 2004,
+    "corr": 0.9813,
+    "sesgo_pp": -4.01,
+    "dt_dif_pp": 7.01,
+    "rmse_pp": 8.01
+   },
+   "oecd_precio_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9889,
+    "sesgo_pp": -2.75,
+    "dt_dif_pp": 8.1,
+    "rmse_pp": 8.35
+   },
+   "oecd_precio_mas_dp_jst": {
+    "n": 47,
+    "desde": 1958,
+    "hasta": 2004,
+    "corr": 0.982,
+    "sesgo_pp": 0.59,
+    "dt_dif_pp": 6.86,
+    "rmse_pp": 6.81
+   },
+   "oecd_precio_mas_dp_constante_86_04": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9889,
+    "sesgo_pp": 0.17,
+    "dt_dif_pp": 7.74,
+    "rmse_pp": 7.53,
+    "dp": 0.0242
+   }
+  },
+  "FRA": {
+   "aqr_local": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9889,
+    "sesgo_pp": -0.77,
+    "dt_dif_pp": 4.02,
+    "rmse_pp": 3.99
+   },
+   "french_local_tr": {
+    "n": 30,
+    "desde": 1975,
+    "hasta": 2004,
+    "corr": 0.9774,
+    "sesgo_pp": 2.35,
+    "dt_dif_pp": 5.75,
+    "rmse_pp": 6.12
+   },
+   "french_local_precio": {
+    "n": 30,
+    "desde": 1975,
+    "hasta": 2004,
+    "corr": 0.9771,
+    "sesgo_pp": -2.11,
+    "dt_dif_pp": 5.7,
+    "rmse_pp": 5.98
+   },
+   "jkp_local": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9802,
+    "sesgo_pp": -0.07,
+    "dt_dif_pp": 5.36,
+    "rmse_pp": 5.22
+   },
+   "oecd_precio": {
+    "n": 49,
+    "desde": 1956,
+    "hasta": 2004,
+    "corr": 0.9409,
+    "sesgo_pp": 0.39,
+    "dt_dif_pp": 8.32,
+    "rmse_pp": 8.24
+   },
+   "oecd_precio_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9781,
+    "sesgo_pp": -2.74,
+    "dt_dif_pp": 5.64,
+    "rmse_pp": 6.13
+   },
+   "oecd_precio_mas_dp_jst": {
+    "n": 49,
+    "desde": 1956,
+    "hasta": 2004,
+    "corr": 0.9469,
+    "sesgo_pp": 4.18,
+    "dt_dif_pp": 8.02,
+    "rmse_pp": 8.97
+   },
+   "oecd_precio_mas_dp_constante_86_04": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9781,
+    "sesgo_pp": 0.49,
+    "dt_dif_pp": 5.69,
+    "rmse_pp": 5.56,
+    "dp": 0.0291
+   }
+  },
+  "GBR": {
+   "aqr_local": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9947,
+    "sesgo_pp": -0.67,
+    "dt_dif_pp": 1.66,
+    "rmse_pp": 1.75
+   },
+   "french_local_tr": {
+    "n": 30,
+    "desde": 1975,
+    "hasta": 2004,
+    "corr": 0.9975,
+    "sesgo_pp": -0.22,
+    "dt_dif_pp": 2.23,
+    "rmse_pp": 2.2
+   },
+   "french_local_precio": {
+    "n": 30,
+    "desde": 1975,
+    "hasta": 2004,
+    "corr": 0.9956,
+    "sesgo_pp": -5.36,
+    "dt_dif_pp": 3.63,
+    "rmse_pp": 6.44
+   },
+   "jkp_local": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9425,
+    "sesgo_pp": -0.21,
+    "dt_dif_pp": 5.56,
+    "rmse_pp": 5.42
+   },
+   "oecd_precio": {
+    "n": 47,
+    "desde": 1958,
+    "hasta": 2004,
+    "corr": 0.9911,
+    "sesgo_pp": -5.11,
+    "dt_dif_pp": 3.95,
+    "rmse_pp": 6.43
+   },
+   "oecd_precio_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9779,
+    "sesgo_pp": -4.22,
+    "dt_dif_pp": 3.41,
+    "rmse_pp": 5.37
+   },
+   "oecd_precio_mas_dp_jst": {
+    "n": 47,
+    "desde": 1958,
+    "hasta": 2004,
+    "corr": 0.9909,
+    "sesgo_pp": -0.17,
+    "dt_dif_pp": 3.94,
+    "rmse_pp": 3.9
+   },
+   "oecd_precio_mas_dp_constante_86_04": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9779,
+    "sesgo_pp": -0.29,
+    "dt_dif_pp": 3.34,
+    "rmse_pp": 3.26,
+    "dp": 0.0365
+   }
+  },
+  "ITA": {
+   "aqr_local": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9891,
+    "sesgo_pp": -1.88,
+    "dt_dif_pp": 4.29,
+    "rmse_pp": 4.58
+   },
+   "french_local_tr": {
+    "n": 30,
+    "desde": 1975,
+    "hasta": 2004,
+    "corr": 0.9814,
+    "sesgo_pp": 1.12,
+    "dt_dif_pp": 6.86,
+    "rmse_pp": 6.83
+   },
+   "french_local_precio": {
+    "n": 30,
+    "desde": 1975,
+    "hasta": 2004,
+    "corr": 0.9812,
+    "sesgo_pp": -1.77,
+    "dt_dif_pp": 6.78,
+    "rmse_pp": 6.9
+   },
+   "jkp_local": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9655,
+    "sesgo_pp": -2.53,
+    "dt_dif_pp": 7.52,
+    "rmse_pp": 7.74
+   },
+   "oecd_precio": {
+    "n": 47,
+    "desde": 1958,
+    "hasta": 2004,
+    "corr": 0.9573,
+    "sesgo_pp": -2.31,
+    "dt_dif_pp": 9.0,
+    "rmse_pp": 9.2
+   },
+   "oecd_precio_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9755,
+    "sesgo_pp": -4.49,
+    "dt_dif_pp": 6.61,
+    "rmse_pp": 7.85
+   },
+   "oecd_precio_mas_dp_jst": {
+    "n": 47,
+    "desde": 1958,
+    "hasta": 2004,
+    "corr": 0.9589,
+    "sesgo_pp": 0.84,
+    "dt_dif_pp": 9.04,
+    "rmse_pp": 8.98
+   },
+   "oecd_precio_mas_dp_constante_86_04": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9755,
+    "sesgo_pp": -1.73,
+    "dt_dif_pp": 6.46,
+    "rmse_pp": 6.52,
+    "dp": 0.0251
+   }
+  },
+  "JPN": {
+   "aqr_local": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.617,
+    "sesgo_pp": 1.28,
+    "dt_dif_pp": 21.36,
+    "rmse_pp": 20.83
+   },
+   "french_local_tr": {
+    "n": 30,
+    "desde": 1975,
+    "hasta": 2004,
+    "corr": 0.6224,
+    "sesgo_pp": 1.6,
+    "dt_dif_pp": 18.04,
+    "rmse_pp": 17.81
+   },
+   "french_local_precio": {
+    "n": 30,
+    "desde": 1975,
+    "hasta": 2004,
+    "corr": 0.622,
+    "sesgo_pp": 0.32,
+    "dt_dif_pp": 17.91,
+    "rmse_pp": 17.62
+   },
+   "oecd_precio": {
+    "n": 45,
+    "desde": 1960,
+    "hasta": 2004,
+    "corr": 0.6998,
+    "sesgo_pp": -1.35,
+    "dt_dif_pp": 17.21,
+    "rmse_pp": 17.07
+   },
+   "oecd_precio_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.7032,
+    "sesgo_pp": -0.33,
+    "dt_dif_pp": 17.57,
+    "rmse_pp": 17.11
+   },
+   "oecd_precio_mas_dp_jst": {
+    "n": 45,
+    "desde": 1960,
+    "hasta": 2004,
+    "corr": 0.6992,
+    "sesgo_pp": 0.79,
+    "dt_dif_pp": 17.6,
+    "rmse_pp": 17.42
+   },
+   "oecd_precio_mas_dp_constante_86_04": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.7032,
+    "sesgo_pp": 0.55,
+    "dt_dif_pp": 17.69,
+    "rmse_pp": 17.22,
+    "dp": 0.0085
+   }
+  },
+  "NLD": {
+   "aqr_local": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9984,
+    "sesgo_pp": -0.6,
+    "dt_dif_pp": 1.63,
+    "rmse_pp": 1.7
+   },
+   "french_local_tr": {
+    "n": 30,
+    "desde": 1975,
+    "hasta": 2004,
+    "corr": 0.9927,
+    "sesgo_pp": 0.21,
+    "dt_dif_pp": 2.65,
+    "rmse_pp": 2.61
+   },
+   "french_local_precio": {
+    "n": 30,
+    "desde": 1975,
+    "hasta": 2004,
+    "corr": 0.9902,
+    "sesgo_pp": -4.77,
+    "dt_dif_pp": 3.18,
+    "rmse_pp": 5.7
+   },
+   "jkp_local": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9576,
+    "sesgo_pp": -1.12,
+    "dt_dif_pp": 6.7,
+    "rmse_pp": 6.62
+   },
+   "oecd_precio": {
+    "n": 47,
+    "desde": 1958,
+    "hasta": 2004,
+    "corr": 0.9445,
+    "sesgo_pp": -4.87,
+    "dt_dif_pp": 6.99,
+    "rmse_pp": 8.46
+   },
+   "oecd_precio_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.989,
+    "sesgo_pp": -3.77,
+    "dt_dif_pp": 3.49,
+    "rmse_pp": 5.08
+   },
+   "oecd_precio_mas_dp_jst": {
+    "n": 47,
+    "desde": 1958,
+    "hasta": 2004,
+    "corr": 0.9469,
+    "sesgo_pp": -0.13,
+    "dt_dif_pp": 6.83,
+    "rmse_pp": 6.76
+   },
+   "oecd_precio_mas_dp_constante_86_04": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.989,
+    "sesgo_pp": 0.24,
+    "dt_dif_pp": 3.37,
+    "rmse_pp": 3.29,
+    "dp": 0.0368
+   }
+  },
+  "NOR": {
+   "aqr_local": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9767,
+    "sesgo_pp": 1.76,
+    "dt_dif_pp": 7.11,
+    "rmse_pp": 7.14
+   },
+   "french_local_tr": {
+    "n": 30,
+    "desde": 1975,
+    "hasta": 2004,
+    "corr": 0.844,
+    "sesgo_pp": 1.31,
+    "dt_dif_pp": 21.83,
+    "rmse_pp": 21.5
+   },
+   "french_local_precio": {
+    "n": 30,
+    "desde": 1975,
+    "hasta": 2004,
+    "corr": 0.8478,
+    "sesgo_pp": -2.12,
+    "dt_dif_pp": 21.07,
+    "rmse_pp": 20.82
+   },
+   "oecd_precio": {
+    "n": 18,
+    "desde": 1987,
+    "hasta": 2004,
+    "corr": 0.9816,
+    "sesgo_pp": -1.13,
+    "dt_dif_pp": 5.75,
+    "rmse_pp": 5.71
+   },
+   "oecd_precio_desde_1986": {
+    "n": 18,
+    "desde": 1987,
+    "hasta": 2004,
+    "corr": 0.9816,
+    "sesgo_pp": -1.13,
+    "dt_dif_pp": 5.75,
+    "rmse_pp": 5.71
+   },
+   "oecd_precio_mas_dp_jst": {
+    "n": 18,
+    "desde": 1987,
+    "hasta": 2004,
+    "corr": 0.9805,
+    "sesgo_pp": 1.72,
+    "dt_dif_pp": 6.13,
+    "rmse_pp": 6.2
+   },
+   "oecd_precio_mas_dp_constante_86_04": {
+    "n": 18,
+    "desde": 1987,
+    "hasta": 2004,
+    "corr": 0.9816,
+    "sesgo_pp": 1.66,
+    "dt_dif_pp": 5.91,
+    "rmse_pp": 5.98,
+    "dp": 0.0244
+   }
+  },
+  "PRT": {
+   "aqr_local": {
+    "n": 16,
+    "desde": 1989,
+    "hasta": 2004,
+    "corr": 0.9878,
+    "sesgo_pp": 0.3,
+    "dt_dif_pp": 4.33,
+    "rmse_pp": 4.21
+   },
+   "oecd_precio": {
+    "n": 16,
+    "desde": 1989,
+    "hasta": 2004,
+    "corr": 0.9967,
+    "sesgo_pp": -0.16,
+    "dt_dif_pp": 2.23,
+    "rmse_pp": 2.16
+   },
+   "oecd_precio_desde_1986": {
+    "n": 16,
+    "desde": 1989,
+    "hasta": 2004,
+    "corr": 0.9967,
+    "sesgo_pp": -0.16,
+    "dt_dif_pp": 2.23,
+    "rmse_pp": 2.16
+   },
+   "oecd_precio_mas_dp_jst": {
+    "n": 0
+   },
+   "oecd_precio_mas_dp_constante_86_04": {
+    "n": 16,
+    "desde": 1989,
+    "hasta": 2004,
+    "corr": 0.9967,
+    "sesgo_pp": 0.4,
+    "dt_dif_pp": 2.21,
+    "rmse_pp": 2.18,
+    "dp": 0.0051
+   }
+  },
+  "SWE": {
+   "aqr_local": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9855,
+    "sesgo_pp": -0.04,
+    "dt_dif_pp": 5.5,
+    "rmse_pp": 5.35
+   },
+   "french_local_tr": {
+    "n": 30,
+    "desde": 1975,
+    "hasta": 2004,
+    "corr": 0.991,
+    "sesgo_pp": 0.61,
+    "dt_dif_pp": 3.86,
+    "rmse_pp": 3.85
+   },
+   "french_local_precio": {
+    "n": 30,
+    "desde": 1975,
+    "hasta": 2004,
+    "corr": 0.9896,
+    "sesgo_pp": -2.65,
+    "dt_dif_pp": 4.11,
+    "rmse_pp": 4.83
+   },
+   "oecd_precio": {
+    "n": 54,
+    "desde": 1951,
+    "hasta": 2004,
+    "corr": 0.9899,
+    "sesgo_pp": -3.92,
+    "dt_dif_pp": 3.51,
+    "rmse_pp": 5.24
+   },
+   "oecd_precio_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9886,
+    "sesgo_pp": -3.06,
+    "dt_dif_pp": 4.86,
+    "rmse_pp": 5.63
+   },
+   "oecd_precio_mas_dp_jst": {
+    "n": 54,
+    "desde": 1951,
+    "hasta": 2004,
+    "corr": 0.9917,
+    "sesgo_pp": -0.23,
+    "dt_dif_pp": 3.18,
+    "rmse_pp": 3.16
+   },
+   "oecd_precio_mas_dp_constante_86_04": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9886,
+    "sesgo_pp": -0.22,
+    "dt_dif_pp": 4.65,
+    "rmse_pp": 4.53,
+    "dp": 0.0246
+   }
+  },
+  "USA": {
+   "aqr_local": {
+    "n": 78,
+    "desde": 1927,
+    "hasta": 2004,
+    "corr": 0.9799,
+    "sesgo_pp": 0.02,
+    "dt_dif_pp": 4.07,
+    "rmse_pp": 4.04
+   },
+   "jkp_local": {
+    "n": 78,
+    "desde": 1927,
+    "hasta": 2004,
+    "corr": 0.9409,
+    "sesgo_pp": 1.23,
+    "dt_dif_pp": 8.07,
+    "rmse_pp": 8.11
+   },
+   "oecd_precio": {
+    "n": 47,
+    "desde": 1958,
+    "hasta": 2004,
+    "corr": 0.9762,
+    "sesgo_pp": -3.59,
+    "dt_dif_pp": 3.54,
+    "rmse_pp": 5.01
+   },
+   "oecd_precio_desde_1986": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9646,
+    "sesgo_pp": -2.99,
+    "dt_dif_pp": 4.47,
+    "rmse_pp": 5.28
+   },
+   "oecd_precio_mas_dp_jst": {
+    "n": 47,
+    "desde": 1958,
+    "hasta": 2004,
+    "corr": 0.9772,
+    "sesgo_pp": -0.11,
+    "dt_dif_pp": 3.43,
+    "rmse_pp": 3.4
+   },
+   "oecd_precio_mas_dp_constante_86_04": {
+    "n": 19,
+    "desde": 1986,
+    "hasta": 2004,
+    "corr": 0.9646,
+    "sesgo_pp": -0.38,
+    "dt_dif_pp": 4.37,
+    "rmse_pp": 4.27,
+    "dp": 0.0237
+   },
+   "french_mkt": {
+    "n": 78,
+    "desde": 1927,
+    "hasta": 2004,
+    "corr": 0.981,
+    "sesgo_pp": 0.11,
+    "dt_dif_pp": 4.07,
+    "rmse_pp": 4.04
+   },
+   "shiller_tr": {
+    "n": 133,
+    "desde": 1872,
+    "hasta": 2004,
+    "corr": 0.9996,
+    "sesgo_pp": 0.17,
+    "dt_dif_pp": 0.66,
+    "rmse_pp": 0.68
+   },
+   "damodaran_tr": {
+    "n": 77,
+    "desde": 1928,
+    "hasta": 2004,
+    "corr": 0.9882,
+    "sesgo_pp": 0.07,
+    "dt_dif_pp": 3.15,
+    "rmse_pp": 3.13
+   },
+   "aqr_local_1927_2004": {
+    "n": 78,
+    "desde": 1927,
+    "hasta": 2004,
+    "corr": 0.9799,
+    "sesgo_pp": 0.02,
+    "dt_dif_pp": 4.07,
+    "rmse_pp": 4.04
+   }
+  }
+ },
+ "ipc_ocde_vs_jst_hasta_2004": {
+  "BEL": {
+   "n": 49,
+   "desde": 1956,
+   "hasta": 2004,
+   "corr": 0.9998,
+   "sesgo_pp": 0.0,
+   "dt_dif_pp": 0.05,
+   "rmse_pp": 0.05
+  },
+  "DEU": {
+   "n": 49,
+   "desde": 1956,
+   "hasta": 2004,
+   "corr": 0.9979,
+   "sesgo_pp": 0.02,
+   "dt_dif_pp": 0.11,
+   "rmse_pp": 0.11
+  },
+  "DNK": {
+   "n": 37,
+   "desde": 1968,
+   "hasta": 2004,
+   "corr": 0.9995,
+   "sesgo_pp": 0.05,
+   "dt_dif_pp": 0.13,
+   "rmse_pp": 0.14
+  },
+  "ESP": {
+   "n": 49,
+   "desde": 1956,
+   "hasta": 2004,
+   "corr": 0.9979,
+   "sesgo_pp": -0.02,
+   "dt_dif_pp": 0.36,
+   "rmse_pp": 0.35
+  },
+  "FIN": {
+   "n": 49,
+   "desde": 1956,
+   "hasta": 2004,
+   "corr": 0.9981,
+   "sesgo_pp": -0.07,
+   "dt_dif_pp": 0.27,
+   "rmse_pp": 0.28
+  },
+  "FRA": {
+   "n": 49,
+   "desde": 1956,
+   "hasta": 2004,
+   "corr": 0.9963,
+   "sesgo_pp": -0.06,
+   "dt_dif_pp": 0.34,
+   "rmse_pp": 0.35
+  },
+  "GBR": {
+   "n": 49,
+   "desde": 1956,
+   "hasta": 2004,
+   "corr": 0.9953,
+   "sesgo_pp": 0.39,
+   "dt_dif_pp": 0.58,
+   "rmse_pp": 0.69
+  },
+  "ITA": {
+   "n": 49,
+   "desde": 1956,
+   "hasta": 2004,
+   "corr": 0.998,
+   "sesgo_pp": 0.02,
+   "dt_dif_pp": 0.35,
+   "rmse_pp": 0.35
+  },
+  "JPN": {
+   "n": 49,
+   "desde": 1956,
+   "hasta": 2004,
+   "corr": 0.9983,
+   "sesgo_pp": -0.04,
+   "dt_dif_pp": 0.3,
+   "rmse_pp": 0.3
+  },
+  "NLD": {
+   "n": 43,
+   "desde": 1962,
+   "hasta": 2004,
+   "corr": 0.9918,
+   "sesgo_pp": -0.08,
+   "dt_dif_pp": 0.34,
+   "rmse_pp": 0.34
+  },
+  "NOR": {
+   "n": 49,
+   "desde": 1956,
+   "hasta": 2004,
+   "corr": 0.9995,
+   "sesgo_pp": -0.01,
+   "dt_dif_pp": 0.1,
+   "rmse_pp": 0.1
+  },
+  "PRT": {
+   "n": 49,
+   "desde": 1956,
+   "hasta": 2004,
+   "corr": 0.9633,
+   "sesgo_pp": 0.14,
+   "dt_dif_pp": 2.77,
+   "rmse_pp": 2.75
+  },
+  "SWE": {
+   "n": 49,
+   "desde": 1956,
+   "hasta": 2004,
+   "corr": 0.9996,
+   "sesgo_pp": -0.0,
+   "dt_dif_pp": 0.09,
+   "rmse_pp": 0.09
+  },
+  "USA": {
+   "n": 49,
+   "desde": 1956,
+   "hasta": 2004,
+   "corr": 0.989,
+   "sesgo_pp": 0.19,
+   "dt_dif_pp": 0.48,
+   "rmse_pp": 0.51
+  }
+ },
+ "vivo_entre_fuentes_desde_2005": {
+  "BEL": {
+   "aqr_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9691,
+    "sesgo_pp": 4.04,
+    "dt_dif_pp": 6.47,
+    "rmse_pp": 7.49
+   },
+   "aqr_vs_oecd_precio_movil12": {
+    "n_ventanas": 249,
+    "desde": "2005-12",
+    "hasta": "2026-08",
+    "corr": 0.9417,
+    "sesgo_pp": 3.55,
+    "dt_dif_pp": 6.82,
+    "p95_abs_dif_pp": 15.08
+   },
+   "div_implicito": {
+    "2005-2014": 0.0486,
+    "2015-2024": 0.0184
+   },
+   "aqr_vs_oecd_mas_div05_14_2015_": {
+    "n": 11,
+    "desde": 2015,
+    "hasta": 2025,
+    "corr": 0.9424,
+    "sesgo_pp": -2.85,
+    "dt_dif_pp": 5.03,
+    "rmse_pp": 5.58
+   },
+   "aqr_vs_french_local_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9937,
+    "sesgo_pp": 1.23,
+    "dt_dif_pp": 2.81,
+    "rmse_pp": 3.0
+   },
+   "aqr_vs_french_local_movil12": {
+    "n_ventanas": 241,
+    "desde": "2005-12",
+    "hasta": "2025-12",
+    "corr": 0.994,
+    "sesgo_pp": 1.14,
+    "dt_dif_pp": 2.55,
+    "p95_abs_dif_pp": 4.54
+   },
+   "aqr_vs_french_local_mensual": {
+    "n_ventanas": 252,
+    "desde": "2005-01",
+    "hasta": "2025-12",
+    "corr": 0.9871,
+    "sesgo_pp": 0.08,
+    "dt_dif_pp": 0.74,
+    "p95_abs_dif_pp": 1.59
+   },
+   "french_rend_div": {
+    "2005-2014": 0.0246,
+    "2015-2025": 0.0277
+   },
+   "french_precio_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.968,
+    "sesgo_pp": 0.09,
+    "dt_dif_pp": 5.46,
+    "rmse_pp": 5.33
+   }
+  },
+  "DEU": {
+   "aqr_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9676,
+    "sesgo_pp": 2.13,
+    "dt_dif_pp": 4.71,
+    "rmse_pp": 5.06
+   },
+   "aqr_vs_oecd_precio_movil12": {
+    "n_ventanas": 249,
+    "desde": "2005-12",
+    "hasta": "2026-08",
+    "corr": 0.9621,
+    "sesgo_pp": 2.09,
+    "dt_dif_pp": 4.93,
+    "p95_abs_dif_pp": 9.85
+   },
+   "div_implicito": {
+    "2005-2014": 0.0216,
+    "2015-2024": 0.0325
+   },
+   "aqr_vs_oecd_mas_div05_14_2015_": {
+    "n": 11,
+    "desde": 2015,
+    "hasta": 2025,
+    "corr": 0.9543,
+    "sesgo_pp": 0.63,
+    "dt_dif_pp": 4.11,
+    "rmse_pp": 3.97
+   },
+   "aqr_vs_french_local_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9895,
+    "sesgo_pp": -0.13,
+    "dt_dif_pp": 2.54,
+    "rmse_pp": 2.48
+   },
+   "aqr_vs_french_local_movil12": {
+    "n_ventanas": 241,
+    "desde": "2005-12",
+    "hasta": "2025-12",
+    "corr": 0.9916,
+    "sesgo_pp": -0.14,
+    "dt_dif_pp": 2.29,
+    "p95_abs_dif_pp": 4.01
+   },
+   "aqr_vs_french_local_mensual": {
+    "n_ventanas": 252,
+    "desde": "2005-01",
+    "hasta": "2025-12",
+    "corr": 0.9854,
+    "sesgo_pp": -0.01,
+    "dt_dif_pp": 0.79,
+    "p95_abs_dif_pp": 1.53
+   },
+   "french_rend_div": {
+    "2005-2014": 0.0289,
+    "2015-2025": 0.0281
+   },
+   "french_precio_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9799,
+    "sesgo_pp": -0.75,
+    "dt_dif_pp": 3.79,
+    "rmse_pp": 3.77
+   },
+   "aqr_vs_jkp_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9684,
+    "sesgo_pp": -0.67,
+    "dt_dif_pp": 4.64,
+    "rmse_pp": 4.58
+   },
+   "aqr_vs_jkp_movil12": {
+    "n_ventanas": 241,
+    "desde": "2005-12",
+    "hasta": "2025-12",
+    "corr": 0.9759,
+    "sesgo_pp": -0.38,
+    "dt_dif_pp": 4.04,
+    "p95_abs_dif_pp": 7.31
+   },
+   "aqr_vs_jkp_mensual": {
+    "n_ventanas": 252,
+    "desde": "2005-01",
+    "hasta": "2025-12",
+    "corr": 0.9646,
+    "sesgo_pp": -0.03,
+    "dt_dif_pp": 1.18,
+    "p95_abs_dif_pp": 2.13
+   }
+  },
+  "DNK": {
+   "aqr_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9819,
+    "sesgo_pp": 3.21,
+    "dt_dif_pp": 4.39,
+    "rmse_pp": 5.35
+   },
+   "aqr_vs_oecd_precio_movil12": {
+    "n_ventanas": 249,
+    "desde": "2005-12",
+    "hasta": "2026-08",
+    "corr": 0.9783,
+    "sesgo_pp": 3.09,
+    "dt_dif_pp": 4.43,
+    "p95_abs_dif_pp": 10.57
+   },
+   "div_implicito": {
+    "2005-2014": 0.0302,
+    "2015-2024": 0.0211
+   },
+   "aqr_vs_oecd_mas_div05_14_2015_": {
+    "n": 11,
+    "desde": 2015,
+    "hasta": 2025,
+    "corr": 0.9624,
+    "sesgo_pp": -0.23,
+    "dt_dif_pp": 5.07,
+    "rmse_pp": 4.84
+   },
+   "aqr_vs_french_local_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9937,
+    "sesgo_pp": 0.49,
+    "dt_dif_pp": 2.56,
+    "rmse_pp": 2.55
+   },
+   "aqr_vs_french_local_movil12": {
+    "n_ventanas": 241,
+    "desde": "2005-12",
+    "hasta": "2025-12",
+    "corr": 0.9929,
+    "sesgo_pp": 0.53,
+    "dt_dif_pp": 2.56,
+    "p95_abs_dif_pp": 6.41
+   },
+   "aqr_vs_french_local_mensual": {
+    "n_ventanas": 252,
+    "desde": "2005-01",
+    "hasta": "2025-12",
+    "corr": 0.9918,
+    "sesgo_pp": 0.03,
+    "dt_dif_pp": 0.6,
+    "p95_abs_dif_pp": 1.32
+   },
+   "french_rend_div": {
+    "2005-2014": 0.0178,
+    "2015-2025": 0.0244
+   },
+   "french_precio_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9863,
+    "sesgo_pp": 0.37,
+    "dt_dif_pp": 3.63,
+    "rmse_pp": 3.56
+   }
+  },
+  "ESP": {
+   "aqr_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9777,
+    "sesgo_pp": 3.8,
+    "dt_dif_pp": 4.51,
+    "rmse_pp": 5.81
+   },
+   "aqr_vs_oecd_precio_movil12": {
+    "n_ventanas": 249,
+    "desde": "2005-12",
+    "hasta": "2026-08",
+    "corr": 0.9692,
+    "sesgo_pp": 4.02,
+    "dt_dif_pp": 5.11,
+    "p95_abs_dif_pp": 12.45
+   },
+   "div_implicito": {
+    "2005-2014": 0.0384,
+    "2015-2024": 0.0484
+   },
+   "aqr_vs_oecd_mas_div05_14_2015_": {
+    "n": 11,
+    "desde": 2015,
+    "hasta": 2025,
+    "corr": 0.9733,
+    "sesgo_pp": 0.48,
+    "dt_dif_pp": 4.32,
+    "rmse_pp": 4.15
+   },
+   "aqr_vs_french_local_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9959,
+    "sesgo_pp": 0.37,
+    "dt_dif_pp": 1.72,
+    "rmse_pp": 1.72
+   },
+   "aqr_vs_french_local_movil12": {
+    "n_ventanas": 241,
+    "desde": "2005-12",
+    "hasta": "2025-12",
+    "corr": 0.9956,
+    "sesgo_pp": 0.39,
+    "dt_dif_pp": 1.82,
+    "p95_abs_dif_pp": 3.85
+   },
+   "aqr_vs_french_local_mensual": {
+    "n_ventanas": 252,
+    "desde": "2005-01",
+    "hasta": "2025-12",
+    "corr": 0.9958,
+    "sesgo_pp": 0.04,
+    "dt_dif_pp": 0.48,
+    "p95_abs_dif_pp": 0.8
+   },
+   "french_rend_div": {
+    "2005-2014": 0.0414,
+    "2015-2025": 0.0326
+   },
+   "french_precio_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9784,
+    "sesgo_pp": -0.39,
+    "dt_dif_pp": 4.61,
+    "rmse_pp": 4.52
+   },
+   "aqr_vs_jkp_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9611,
+    "sesgo_pp": 0.07,
+    "dt_dif_pp": 5.33,
+    "rmse_pp": 5.2
+   },
+   "aqr_vs_jkp_movil12": {
+    "n_ventanas": 241,
+    "desde": "2005-12",
+    "hasta": "2025-12",
+    "corr": 0.9741,
+    "sesgo_pp": -0.05,
+    "dt_dif_pp": 4.72,
+    "p95_abs_dif_pp": 8.28
+   },
+   "aqr_vs_jkp_mensual": {
+    "n_ventanas": 252,
+    "desde": "2005-01",
+    "hasta": "2025-12",
+    "corr": 0.9748,
+    "sesgo_pp": 0.02,
+    "dt_dif_pp": 1.15,
+    "p95_abs_dif_pp": 2.32
+   }
+  },
+  "FIN": {
+   "aqr_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9912,
+    "sesgo_pp": 4.38,
+    "dt_dif_pp": 3.12,
+    "rmse_pp": 5.34
+   },
+   "aqr_vs_oecd_precio_movil12": {
+    "n_ventanas": 249,
+    "desde": "2005-12",
+    "hasta": "2026-08",
+    "corr": 0.9762,
+    "sesgo_pp": 4.18,
+    "dt_dif_pp": 4.51,
+    "p95_abs_dif_pp": 10.98
+   },
+   "div_implicito": {
+    "2005-2014": 0.0429,
+    "2015-2024": 0.0392
+   },
+   "aqr_vs_oecd_mas_div05_14_2015_": {
+    "n": 11,
+    "desde": 2015,
+    "hasta": 2025,
+    "corr": 0.9682,
+    "sesgo_pp": -0.31,
+    "dt_dif_pp": 3.5,
+    "rmse_pp": 3.35
+   },
+   "aqr_vs_french_local_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.998,
+    "sesgo_pp": -0.39,
+    "dt_dif_pp": 1.36,
+    "rmse_pp": 1.39
+   },
+   "aqr_vs_french_local_movil12": {
+    "n_ventanas": 241,
+    "desde": "2005-12",
+    "hasta": "2025-12",
+    "corr": 0.9988,
+    "sesgo_pp": -0.35,
+    "dt_dif_pp": 1.03,
+    "p95_abs_dif_pp": 2.47
+   },
+   "aqr_vs_french_local_mensual": {
+    "n_ventanas": 252,
+    "desde": "2005-01",
+    "hasta": "2025-12",
+    "corr": 0.9968,
+    "sesgo_pp": -0.02,
+    "dt_dif_pp": 0.42,
+    "p95_abs_dif_pp": 0.97
+   },
+   "french_rend_div": {
+    "2005-2014": 0.042,
+    "2015-2025": 0.0405
+   },
+   "french_precio_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9914,
+    "sesgo_pp": 0.44,
+    "dt_dif_pp": 2.81,
+    "rmse_pp": 2.78
+   }
+  },
+  "FRA": {
+   "aqr_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9899,
+    "sesgo_pp": 3.83,
+    "dt_dif_pp": 2.58,
+    "rmse_pp": 4.58
+   },
+   "aqr_vs_oecd_precio_movil12": {
+    "n_ventanas": 249,
+    "desde": "2005-12",
+    "hasta": "2026-08",
+    "corr": 0.9716,
+    "sesgo_pp": 3.66,
+    "dt_dif_pp": 4.05,
+    "p95_abs_dif_pp": 10.53
+   },
+   "div_implicito": {
+    "2005-2014": 0.0405,
+    "2015-2024": 0.0344
+   },
+   "aqr_vs_oecd_mas_div05_14_2015_": {
+    "n": 11,
+    "desde": 2015,
+    "hasta": 2025,
+    "corr": 0.9857,
+    "sesgo_pp": -0.74,
+    "dt_dif_pp": 2.44,
+    "rmse_pp": 2.44
+   },
+   "aqr_vs_french_local_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9988,
+    "sesgo_pp": 0.02,
+    "dt_dif_pp": 0.85,
+    "rmse_pp": 0.83
+   },
+   "aqr_vs_french_local_movil12": {
+    "n_ventanas": 241,
+    "desde": "2005-12",
+    "hasta": "2025-12",
+    "corr": 0.999,
+    "sesgo_pp": -0.03,
+    "dt_dif_pp": 0.76,
+    "p95_abs_dif_pp": 1.65
+   },
+   "aqr_vs_french_local_mensual": {
+    "n_ventanas": 252,
+    "desde": "2005-01",
+    "hasta": "2025-12",
+    "corr": 0.9972,
+    "sesgo_pp": -0.0,
+    "dt_dif_pp": 0.34,
+    "p95_abs_dif_pp": 0.7
+   },
+   "french_rend_div": {
+    "2005-2014": 0.0336,
+    "2015-2025": 0.0281
+   },
+   "french_precio_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9901,
+    "sesgo_pp": 0.56,
+    "dt_dif_pp": 2.39,
+    "rmse_pp": 2.4
+   },
+   "aqr_vs_jkp_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9694,
+    "sesgo_pp": -0.62,
+    "dt_dif_pp": 5.05,
+    "rmse_pp": 4.97
+   },
+   "aqr_vs_jkp_movil12": {
+    "n_ventanas": 241,
+    "desde": "2005-12",
+    "hasta": "2025-12",
+    "corr": 0.9709,
+    "sesgo_pp": -0.49,
+    "dt_dif_pp": 4.67,
+    "p95_abs_dif_pp": 9.16
+   },
+   "aqr_vs_jkp_mensual": {
+    "n_ventanas": 252,
+    "desde": "2005-01",
+    "hasta": "2025-12",
+    "corr": 0.971,
+    "sesgo_pp": -0.03,
+    "dt_dif_pp": 1.12,
+    "p95_abs_dif_pp": 2.35
+   }
+  },
+  "GBR": {
+   "aqr_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9713,
+    "sesgo_pp": 3.98,
+    "dt_dif_pp": 4.07,
+    "rmse_pp": 5.62
+   },
+   "aqr_vs_oecd_precio_movil12": {
+    "n_ventanas": 249,
+    "desde": "2005-12",
+    "hasta": "2026-08",
+    "corr": 0.9618,
+    "sesgo_pp": 3.84,
+    "dt_dif_pp": 3.95,
+    "p95_abs_dif_pp": 9.72
+   },
+   "div_implicito": {
+    "2005-2014": 0.0356,
+    "2015-2024": 0.0358
+   },
+   "aqr_vs_oecd_mas_div05_14_2015_": {
+    "n": 11,
+    "desde": 2015,
+    "hasta": 2025,
+    "corr": 0.9322,
+    "sesgo_pp": 0.21,
+    "dt_dif_pp": 4.26,
+    "rmse_pp": 4.07
+   },
+   "aqr_vs_french_local_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9958,
+    "sesgo_pp": -0.04,
+    "dt_dif_pp": 1.61,
+    "rmse_pp": 1.57
+   },
+   "aqr_vs_french_local_movil12": {
+    "n_ventanas": 241,
+    "desde": "2005-12",
+    "hasta": "2025-12",
+    "corr": 0.996,
+    "sesgo_pp": -0.18,
+    "dt_dif_pp": 1.28,
+    "p95_abs_dif_pp": 2.66
+   },
+   "aqr_vs_french_local_mensual": {
+    "n_ventanas": 252,
+    "desde": "2005-01",
+    "hasta": "2025-12",
+    "corr": 0.9924,
+    "sesgo_pp": -0.01,
+    "dt_dif_pp": 0.46,
+    "p95_abs_dif_pp": 1.01
+   },
+   "french_rend_div": {
+    "2005-2014": 0.0383,
+    "2015-2025": 0.0393
+   },
+   "french_precio_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9779,
+    "sesgo_pp": -0.01,
+    "dt_dif_pp": 2.97,
+    "rmse_pp": 2.9
+   },
+   "aqr_vs_jkp_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9675,
+    "sesgo_pp": -1.21,
+    "dt_dif_pp": 5.86,
+    "rmse_pp": 5.84
+   },
+   "aqr_vs_jkp_movil12": {
+    "n_ventanas": 241,
+    "desde": "2005-12",
+    "hasta": "2025-12",
+    "corr": 0.9697,
+    "sesgo_pp": -1.08,
+    "dt_dif_pp": 4.92,
+    "p95_abs_dif_pp": 11.77
+   },
+   "aqr_vs_jkp_mensual": {
+    "n_ventanas": 252,
+    "desde": "2005-01",
+    "hasta": "2025-12",
+    "corr": 0.965,
+    "sesgo_pp": -0.06,
+    "dt_dif_pp": 1.14,
+    "p95_abs_dif_pp": 2.21
+   }
+  },
+  "ITA": {
+   "aqr_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9912,
+    "sesgo_pp": 3.54,
+    "dt_dif_pp": 2.69,
+    "rmse_pp": 4.41
+   },
+   "aqr_vs_oecd_precio_movil12": {
+    "n_ventanas": 249,
+    "desde": "2005-12",
+    "hasta": "2026-08",
+    "corr": 0.9766,
+    "sesgo_pp": 3.57,
+    "dt_dif_pp": 4.34,
+    "p95_abs_dif_pp": 10.42
+   },
+   "div_implicito": {
+    "2005-2014": 0.038,
+    "2015-2024": 0.0302
+   },
+   "aqr_vs_oecd_mas_div05_14_2015_": {
+    "n": 11,
+    "desde": 2015,
+    "hasta": 2025,
+    "corr": 0.9835,
+    "sesgo_pp": -0.62,
+    "dt_dif_pp": 3.17,
+    "rmse_pp": 3.08
+   },
+   "aqr_vs_french_local_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9968,
+    "sesgo_pp": -0.12,
+    "dt_dif_pp": 1.62,
+    "rmse_pp": 1.59
+   },
+   "aqr_vs_french_local_movil12": {
+    "n_ventanas": 241,
+    "desde": "2005-12",
+    "hasta": "2025-12",
+    "corr": 0.9976,
+    "sesgo_pp": -0.17,
+    "dt_dif_pp": 1.4,
+    "p95_abs_dif_pp": 2.66
+   },
+   "aqr_vs_french_local_mensual": {
+    "n_ventanas": 252,
+    "desde": "2005-01",
+    "hasta": "2025-12",
+    "corr": 0.9964,
+    "sesgo_pp": -0.01,
+    "dt_dif_pp": 0.45,
+    "p95_abs_dif_pp": 0.91
+   },
+   "french_rend_div": {
+    "2005-2014": 0.0388,
+    "2015-2025": 0.0384
+   },
+   "french_precio_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9913,
+    "sesgo_pp": -0.32,
+    "dt_dif_pp": 2.58,
+    "rmse_pp": 2.54
+   },
+   "aqr_vs_jkp_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9901,
+    "sesgo_pp": -0.96,
+    "dt_dif_pp": 3.11,
+    "rmse_pp": 3.18
+   },
+   "aqr_vs_jkp_movil12": {
+    "n_ventanas": 241,
+    "desde": "2005-12",
+    "hasta": "2025-12",
+    "corr": 0.9907,
+    "sesgo_pp": -0.75,
+    "dt_dif_pp": 2.9,
+    "p95_abs_dif_pp": 5.92
+   },
+   "aqr_vs_jkp_mensual": {
+    "n_ventanas": 252,
+    "desde": "2005-01",
+    "hasta": "2025-12",
+    "corr": 0.9882,
+    "sesgo_pp": -0.06,
+    "dt_dif_pp": 0.81,
+    "p95_abs_dif_pp": 1.59
+   }
+  },
+  "JPN": {
+   "aqr_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9876,
+    "sesgo_pp": 2.04,
+    "dt_dif_pp": 3.31,
+    "rmse_pp": 3.82
+   },
+   "aqr_vs_oecd_precio_movil12": {
+    "n_ventanas": 249,
+    "desde": "2005-12",
+    "hasta": "2026-08",
+    "corr": 0.9832,
+    "sesgo_pp": 2.07,
+    "dt_dif_pp": 3.87,
+    "p95_abs_dif_pp": 8.67
+   },
+   "div_implicito": {
+    "2005-2014": 0.0188,
+    "2015-2024": 0.023
+   },
+   "aqr_vs_oecd_mas_div05_14_2015_": {
+    "n": 11,
+    "desde": 2015,
+    "hasta": 2025,
+    "corr": 0.982,
+    "sesgo_pp": 0.48,
+    "dt_dif_pp": 2.69,
+    "rmse_pp": 2.61
+   },
+   "aqr_vs_french_local_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9978,
+    "sesgo_pp": -0.22,
+    "dt_dif_pp": 1.41,
+    "rmse_pp": 1.4
+   },
+   "aqr_vs_french_local_movil12": {
+    "n_ventanas": 241,
+    "desde": "2005-12",
+    "hasta": "2025-12",
+    "corr": 0.9985,
+    "sesgo_pp": -0.35,
+    "dt_dif_pp": 1.12,
+    "p95_abs_dif_pp": 3.5
+   },
+   "aqr_vs_french_local_mensual": {
+    "n_ventanas": 252,
+    "desde": "2005-01",
+    "hasta": "2025-12",
+    "corr": 0.9973,
+    "sesgo_pp": -0.02,
+    "dt_dif_pp": 0.34,
+    "p95_abs_dif_pp": 0.8
+   },
+   "french_rend_div": {
+    "2005-2014": 0.018,
+    "2015-2025": 0.0231
+   },
+   "french_precio_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.991,
+    "sesgo_pp": 0.04,
+    "dt_dif_pp": 2.8,
+    "rmse_pp": 2.73
+   }
+  },
+  "NLD": {
+   "aqr_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9696,
+    "sesgo_pp": 5.07,
+    "dt_dif_pp": 5.89,
+    "rmse_pp": 7.66
+   },
+   "aqr_vs_oecd_precio_movil12": {
+    "n_ventanas": 249,
+    "desde": "2005-12",
+    "hasta": "2026-08",
+    "corr": 0.9622,
+    "sesgo_pp": 4.96,
+    "dt_dif_pp": 5.67,
+    "p95_abs_dif_pp": 13.82
+   },
+   "div_implicito": {
+    "2005-2014": 0.0451,
+    "2015-2024": 0.0394
+   },
+   "aqr_vs_oecd_mas_div05_14_2015_": {
+    "n": 11,
+    "desde": 2015,
+    "hasta": 2025,
+    "corr": 0.9228,
+    "sesgo_pp": 0.14,
+    "dt_dif_pp": 6.54,
+    "rmse_pp": 6.24
+   },
+   "aqr_vs_french_local_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9927,
+    "sesgo_pp": -0.8,
+    "dt_dif_pp": 2.59,
+    "rmse_pp": 2.65
+   },
+   "aqr_vs_french_local_movil12": {
+    "n_ventanas": 241,
+    "desde": "2005-12",
+    "hasta": "2025-12",
+    "corr": 0.9917,
+    "sesgo_pp": -0.92,
+    "dt_dif_pp": 2.55,
+    "p95_abs_dif_pp": 5.53
+   },
+   "aqr_vs_french_local_mensual": {
+    "n_ventanas": 252,
+    "desde": "2005-01",
+    "hasta": "2025-12",
+    "corr": 0.9831,
+    "sesgo_pp": -0.07,
+    "dt_dif_pp": 0.92,
+    "p95_abs_dif_pp": 2.03
+   },
+   "french_rend_div": {
+    "2005-2014": 0.0327,
+    "2015-2025": 0.0241
+   },
+   "french_precio_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.968,
+    "sesgo_pp": 2.82,
+    "dt_dif_pp": 5.2,
+    "rmse_pp": 5.81
+   },
+   "aqr_vs_jkp_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9803,
+    "sesgo_pp": 0.27,
+    "dt_dif_pp": 4.13,
+    "rmse_pp": 4.04
+   },
+   "aqr_vs_jkp_movil12": {
+    "n_ventanas": 241,
+    "desde": "2005-12",
+    "hasta": "2025-12",
+    "corr": 0.9751,
+    "sesgo_pp": -0.06,
+    "dt_dif_pp": 4.42,
+    "p95_abs_dif_pp": 8.95
+   },
+   "aqr_vs_jkp_mensual": {
+    "n_ventanas": 252,
+    "desde": "2005-01",
+    "hasta": "2025-12",
+    "corr": 0.9548,
+    "sesgo_pp": 0.02,
+    "dt_dif_pp": 1.48,
+    "p95_abs_dif_pp": 2.78
+   }
+  },
+  "NOR": {
+   "aqr_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9907,
+    "sesgo_pp": -0.21,
+    "dt_dif_pp": 3.03,
+    "rmse_pp": 2.96
+   },
+   "aqr_vs_oecd_precio_movil12": {
+    "n_ventanas": 249,
+    "desde": "2005-12",
+    "hasta": "2026-08",
+    "corr": 0.9809,
+    "sesgo_pp": -0.25,
+    "dt_dif_pp": 3.89,
+    "p95_abs_dif_pp": 8.02
+   },
+   "div_implicito": {
+    "2005-2014": -0.0004,
+    "2015-2024": -0.0029
+   },
+   "aqr_vs_oecd_mas_div05_14_2015_": {
+    "n": 11,
+    "desde": 2015,
+    "hasta": 2025,
+    "corr": 0.9059,
+    "sesgo_pp": -0.06,
+    "dt_dif_pp": 3.35,
+    "rmse_pp": 3.19
+   },
+   "aqr_vs_french_local_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9973,
+    "sesgo_pp": 0.49,
+    "dt_dif_pp": 1.84,
+    "rmse_pp": 1.86
+   },
+   "aqr_vs_french_local_movil12": {
+    "n_ventanas": 241,
+    "desde": "2005-12",
+    "hasta": "2025-12",
+    "corr": 0.9971,
+    "sesgo_pp": 0.36,
+    "dt_dif_pp": 1.65,
+    "p95_abs_dif_pp": 4.53
+   },
+   "aqr_vs_french_local_mensual": {
+    "n_ventanas": 252,
+    "desde": "2005-01",
+    "hasta": "2025-12",
+    "corr": 0.9943,
+    "sesgo_pp": 0.03,
+    "dt_dif_pp": 0.54,
+    "p95_abs_dif_pp": 1.12
+   },
+   "french_rend_div": {
+    "2005-2014": 0.0385,
+    "2015-2025": 0.0511
+   },
+   "french_precio_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9896,
+    "sesgo_pp": -5.47,
+    "dt_dif_pp": 3.54,
+    "rmse_pp": 6.47
+   }
+  },
+  "PRT": {
+   "aqr_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9924,
+    "sesgo_pp": -0.08,
+    "dt_dif_pp": 2.6,
+    "rmse_pp": 2.54
+   },
+   "aqr_vs_oecd_precio_movil12": {
+    "n_ventanas": 249,
+    "desde": "2005-12",
+    "hasta": "2026-08",
+    "corr": 0.9793,
+    "sesgo_pp": -0.0,
+    "dt_dif_pp": 3.86,
+    "p95_abs_dif_pp": 8.39
+   },
+   "div_implicito": {
+    "2005-2014": -0.0054,
+    "2015-2024": 0.0023
+   },
+   "aqr_vs_oecd_mas_div05_14_2015_": {
+    "n": 11,
+    "desde": 2015,
+    "hasta": 2025,
+    "corr": 0.9693,
+    "sesgo_pp": 0.98,
+    "dt_dif_pp": 3.05,
+    "rmse_pp": 3.07
+   }
+  },
+  "SWE": {
+   "aqr_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9901,
+    "sesgo_pp": 3.33,
+    "dt_dif_pp": 3.21,
+    "rmse_pp": 4.57
+   },
+   "aqr_vs_oecd_precio_movil12": {
+    "n_ventanas": 249,
+    "desde": "2005-12",
+    "hasta": "2026-08",
+    "corr": 0.9788,
+    "sesgo_pp": 3.15,
+    "dt_dif_pp": 4.02,
+    "p95_abs_dif_pp": 8.98
+   },
+   "div_implicito": {
+    "2005-2014": 0.0344,
+    "2015-2024": 0.0204
+   },
+   "aqr_vs_oecd_mas_div05_14_2015_": {
+    "n": 11,
+    "desde": 2015,
+    "hasta": 2025,
+    "corr": 0.98,
+    "sesgo_pp": -0.71,
+    "dt_dif_pp": 3.73,
+    "rmse_pp": 3.62
+   },
+   "aqr_vs_french_local_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9984,
+    "sesgo_pp": -0.06,
+    "dt_dif_pp": 1.22,
+    "rmse_pp": 1.19
+   },
+   "aqr_vs_french_local_movil12": {
+    "n_ventanas": 241,
+    "desde": "2005-12",
+    "hasta": "2025-12",
+    "corr": 0.9978,
+    "sesgo_pp": -0.25,
+    "dt_dif_pp": 1.31,
+    "p95_abs_dif_pp": 2.86
+   },
+   "aqr_vs_french_local_mensual": {
+    "n_ventanas": 252,
+    "desde": "2005-01",
+    "hasta": "2025-12",
+    "corr": 0.9941,
+    "sesgo_pp": -0.01,
+    "dt_dif_pp": 0.53,
+    "p95_abs_dif_pp": 1.16
+   },
+   "french_rend_div": {
+    "2005-2014": 0.0364,
+    "2015-2025": 0.0304
+   },
+   "french_precio_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9933,
+    "sesgo_pp": -0.17,
+    "dt_dif_pp": 2.48,
+    "rmse_pp": 2.43
+   }
+  },
+  "USA": {
+   "aqr_vs_oecd_precio_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.937,
+    "sesgo_pp": 4.94,
+    "dt_dif_pp": 6.16,
+    "rmse_pp": 7.78
+   },
+   "aqr_vs_oecd_precio_movil12": {
+    "n_ventanas": 249,
+    "desde": "2005-12",
+    "hasta": "2026-08",
+    "corr": 0.9492,
+    "sesgo_pp": 4.93,
+    "dt_dif_pp": 5.2,
+    "p95_abs_dif_pp": 14.12
+   },
+   "div_implicito": {
+    "2005-2014": 0.0371,
+    "2015-2024": 0.0556
+   },
+   "aqr_vs_oecd_mas_div05_14_2015_": {
+    "n": 11,
+    "desde": 2015,
+    "hasta": 2025,
+    "corr": 0.9069,
+    "sesgo_pp": 2.19,
+    "dt_dif_pp": 7.36,
+    "rmse_pp": 7.35
+   },
+   "aqr_vs_jkp_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9727,
+    "sesgo_pp": 0.67,
+    "dt_dif_pp": 4.34,
+    "rmse_pp": 4.29
+   },
+   "aqr_vs_jkp_movil12": {
+    "n_ventanas": 241,
+    "desde": "2005-12",
+    "hasta": "2025-12",
+    "corr": 0.9743,
+    "sesgo_pp": 0.54,
+    "dt_dif_pp": 4.64,
+    "p95_abs_dif_pp": 8.98
+   },
+   "aqr_vs_jkp_mensual": {
+    "n_ventanas": 252,
+    "desde": "2005-01",
+    "hasta": "2025-12",
+    "corr": 0.9785,
+    "sesgo_pp": 0.04,
+    "dt_dif_pp": 1.14,
+    "p95_abs_dif_pp": 2.31
+   },
+   "aqr_vs_french_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9965,
+    "sesgo_pp": -0.6,
+    "dt_dif_pp": 1.46,
+    "rmse_pp": 1.54
+   },
+   "aqr_vs_french_movil12": {
+    "n_ventanas": 249,
+    "desde": "2005-12",
+    "hasta": "2026-08",
+    "corr": 0.9968,
+    "sesgo_pp": -0.62,
+    "dt_dif_pp": 1.31,
+    "p95_abs_dif_pp": 2.61
+   },
+   "aqr_vs_shiller_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9812,
+    "sesgo_pp": -0.39,
+    "dt_dif_pp": 3.39,
+    "rmse_pp": 3.34
+   },
+   "aqr_vs_damodaran_anual": {
+    "n": 21,
+    "desde": 2005,
+    "hasta": 2025,
+    "corr": 0.9892,
+    "sesgo_pp": -0.28,
+    "dt_dif_pp": 2.59,
+    "rmse_pp": 2.54
+   },
+   "sp500_fred_precio_desde": "2016-10-07"
+  }
+ },
+ "rupturas_ocde": {
+  "BEL": {
+   "2008-10": -0.272,
+   "2020-03": -0.316
+  },
+  "DEU": {
+   "1987-11": -0.274,
+   "2020-03": -0.282
+  },
+  "DNK": {
+   "2008-10": -0.269
+  },
+  "ESP": {
+   "1987-11": -0.271,
+   "2020-03": -0.299
+  },
+  "FIN": {
+   "1999-12": 0.262,
+   "2001-02": -0.256,
+   "2020-03": -0.266
+  },
+  "FRA": {
+   "1982-03": -0.281,
+   "1987-10": -0.278,
+   "2020-03": -0.282
+  },
+  "GBR": {
+   "1975-02": 0.363
+  },
+  "ITA": {
+   "2020-03": -0.307
+  },
+  "JPN": {},
+  "NLD": {
+   "2008-10": -0.305,
+   "2020-03": -0.255
+  },
+  "NOR": {
+   "1987-11": -0.346,
+   "2008-10": -0.326,
+   "2020-03": -0.254
+  },
+  "PRT": {},
+  "SWE": {
+   "1987-11": -0.286
+  },
+  "USA": {
+   "2008-10": -0.255
+  }
+ },
+ "disponibilidad": {
+  "aqr_mkt_<pais>_m": {
+   "ultimo": "2026-08-01",
+   "dias_desde_fin_de_ese_mes": 66
+  },
+  "aqr_rf_risk_free_rate_m": {
+   "ultimo": "2026-09-01",
+   "dias_desde_fin_de_ese_mes": 36
+  },
+  "oecd_share_<pais>": {
+   "ultimo": "2026-09-01",
+   "dias_desde_fin_de_ese_mes": 36
+  },
+  "oecd_cpi_<pais>_idx": {
+   "ultimo": "2026-09-01",
+   "dias_desde_fin_de_ese_mes": 36
+  },
+  "jkp_<pais>_mkt_m": {
+   "ultimo": "2025-12-01",
+   "dias_desde_fin_de_ese_mes": 309
+  },
+  "ff_mkt_rf_m": {
+   "ultimo": "2026-09-01",
+   "dias_desde_fin_de_ese_mes": 36
+  },
+  "shiller_nominal_stock_tr_ret_m": {
+   "ultimo": "2026-10-01",
+   "dias_desde_fin_de_ese_mes": 5
+  },
+  "SP500 (FRED, diario)": {
+   "ultimo": "2026-11-03",
+   "dias_desde_fin_de_ese_mes": -25
+  },
+  "FRED DEXDNUS": {
+   "ultimo": "2026-10-30",
+   "dias_desde_fin_de_ese_mes": 6
+  },
+  "FRED DEXJPUS": {
+   "ultimo": "2026-10-30",
+   "dias_desde_fin_de_ese_mes": 6
+  },
+  "FRED DEXNOUS": {
+   "ultimo": "2026-10-30",
+   "dias_desde_fin_de_ese_mes": 6
+  },
+  "FRED DEXSDUS": {
+   "ultimo": "2026-10-30",
+   "dias_desde_fin_de_ese_mes": 6
+  },
+  "FRED DEXUSEU": {
+   "ultimo": "2026-10-30",
+   "dias_desde_fin_de_ese_mes": 6
+  },
+  "FRED DEXUSUK": {
+   "ultimo": "2026-10-30",
+   "dias_desde_fin_de_ese_mes": 6
+  },
+  "oecd_share_ultimo_por_pais": {
+   "BEL": "2026-09-01",
+   "DEU": "2026-09-01",
+   "DNK": "2026-09-01",
+   "ESP": "2026-09-01",
+   "FIN": "2026-09-01",
+   "FRA": "2026-09-01",
+   "GBR": "2026-09-01",
+   "ITA": "2026-09-01",
+   "JPN": "2026-09-01",
+   "NLD": "2026-09-01",
+   "NOR": "2026-09-01",
+   "PRT": "2026-09-01",
+   "SWE": "2026-09-01",
+   "USA": "2026-09-01"
+  },
+  "aqr_mkt_ultimo_por_pais": {
+   "BEL": "2026-08-01",
+   "DEU": "2026-08-01",
+   "DNK": "2026-08-01",
+   "ESP": "2026-08-01",
+   "FIN": "2026-08-01",
+   "FRA": "2026-08-01",
+   "GBR": "2026-08-01",
+   "ITA": "2026-08-01",
+   "JPN": "2026-08-01",
+   "NLD": "2026-08-01",
+   "NOR": "2026-08-01",
+   "PRT": "2026-08-01",
+   "SWE": "2026-08-01",
+   "USA": "2026-08-01"
+  }
+ },
+ "resumen": {
+  "aqr_local.corr": {
+   "n_paises": 14,
+   "mediana": 0.986,
+   "min": 0.617,
+   "max": 0.999
+  },
+  "aqr_local.sesgo_pp": {
+   "n_paises": 14,
+   "mediana": -0.32,
+   "min": -1.95,
+   "max": 1.76
+  },
+  "aqr_local.dt_dif_pp": {
+   "n_paises": 14,
+   "mediana": 4.31,
+   "min": 1.63,
+   "max": 21.36
+  },
+  "jkp_local.corr": {
+   "n_paises": 7,
+   "mediana": 0.957,
+   "min": 0.941,
+   "max": 0.98
+  },
+  "jkp_local.sesgo_pp": {
+   "n_paises": 7,
+   "mediana": -1.02,
+   "min": -2.53,
+   "max": 1.23
+  },
+  "jkp_local.dt_dif_pp": {
+   "n_paises": 7,
+   "mediana": 7.14,
+   "min": 5.36,
+   "max": 10.49
+  },
+  "french_local_tr.corr": {
+   "n_paises": 12,
+   "mediana": 0.984,
+   "min": 0.622,
+   "max": 0.998
+  },
+  "french_local_tr.sesgo_pp": {
+   "n_paises": 12,
+   "mediana": 0.875,
+   "min": -1.1,
+   "max": 2.46
+  },
+  "french_local_tr.dt_dif_pp": {
+   "n_paises": 12,
+   "mediana": 6.305,
+   "min": 2.23,
+   "max": 21.83
+  },
+  "oecd_precio_desde_1986.corr": {
+   "n_paises": 14,
+   "mediana": 0.98,
+   "min": 0.703,
+   "max": 0.997
+  },
+  "oecd_precio_desde_1986.sesgo_pp": {
+   "n_paises": 14,
+   "mediana": -3.025,
+   "min": -5.51,
+   "max": -0.16
+  },
+  "oecd_precio_desde_1986.dt_dif_pp": {
+   "n_paises": 14,
+   "mediana": 5.305,
+   "min": 2.23,
+   "max": 17.57
+  },
+  "oecd_precio_mas_dp_constante_86_04.corr": {
+   "n_paises": 14,
+   "mediana": 0.98,
+   "min": 0.703,
+   "max": 0.997
+  },
+  "oecd_precio_mas_dp_constante_86_04.sesgo_pp": {
+   "n_paises": 14,
+   "mediana": -0.025,
+   "min": -1.77,
+   "max": 1.66
+  },
+  "oecd_precio_mas_dp_constante_86_04.dt_dif_pp": {
+   "n_paises": 14,
+   "mediana": 5.265,
+   "min": 2.21,
+   "max": 17.69
+  },
+  "vivo.aqr_vs_jkp_anual.corr": {
+   "n_paises": 7,
+   "mediana": 0.969,
+   "min": 0.961,
+   "max": 0.99
+  },
+  "vivo.aqr_vs_jkp_anual.sesgo_pp": {
+   "n_paises": 7,
+   "mediana": -0.62,
+   "min": -1.21,
+   "max": 0.67
+  },
+  "vivo.aqr_vs_jkp_anual.dt_dif_pp": {
+   "n_paises": 7,
+   "mediana": 4.64,
+   "min": 3.11,
+   "max": 5.86
+  },
+  "vivo.aqr_vs_jkp_movil12.corr": {
+   "n_paises": 7,
+   "mediana": 0.974,
+   "min": 0.97,
+   "max": 0.991
+  },
+  "vivo.aqr_vs_jkp_movil12.sesgo_pp": {
+   "n_paises": 7,
+   "mediana": -0.38,
+   "min": -1.08,
+   "max": 0.54
+  },
+  "vivo.aqr_vs_jkp_movil12.dt_dif_pp": {
+   "n_paises": 7,
+   "mediana": 4.64,
+   "min": 2.9,
+   "max": 4.92
+  },
+  "vivo.aqr_vs_french_local_anual.corr": {
+   "n_paises": 12,
+   "mediana": 0.996,
+   "min": 0.99,
+   "max": 0.999
+  },
+  "vivo.aqr_vs_french_local_anual.sesgo_pp": {
+   "n_paises": 12,
+   "mediana": -0.05,
+   "min": -0.8,
+   "max": 1.23
+  },
+  "vivo.aqr_vs_french_local_anual.dt_dif_pp": {
+   "n_paises": 12,
+   "mediana": 1.67,
+   "min": 0.85,
+   "max": 2.81
+  },
+  "vivo.aqr_vs_french_local_movil12.corr": {
+   "n_paises": 12,
+   "mediana": 0.997,
+   "min": 0.992,
+   "max": 0.999
+  },
+  "vivo.aqr_vs_french_local_movil12.sesgo_pp": {
+   "n_paises": 12,
+   "mediana": -0.155,
+   "min": -0.92,
+   "max": 1.14
+  },
+  "vivo.aqr_vs_french_local_movil12.dt_dif_pp": {
+   "n_paises": 12,
+   "mediana": 1.525,
+   "min": 0.76,
+   "max": 2.56
+  },
+  "vivo.aqr_vs_french_local_mensual.corr": {
+   "n_paises": 12,
+   "mediana": 0.994,
+   "min": 0.983,
+   "max": 0.997
+  },
+  "vivo.aqr_vs_french_local_mensual.sesgo_pp": {
+   "n_paises": 12,
+   "mediana": -0.01,
+   "min": -0.07,
+   "max": 0.08
+  },
+  "vivo.aqr_vs_french_local_mensual.dt_dif_pp": {
+   "n_paises": 12,
+   "mediana": 0.505,
+   "min": 0.34,
+   "max": 0.92
+  },
+  "vivo.aqr_vs_oecd_precio_anual.corr": {
+   "n_paises": 14,
+   "mediana": 0.985,
+   "min": 0.937,
+   "max": 0.992
+  },
+  "vivo.aqr_vs_oecd_precio_anual.sesgo_pp": {
+   "n_paises": 14,
+   "mediana": 3.67,
+   "min": -0.21,
+   "max": 5.07
+  },
+  "vivo.aqr_vs_oecd_precio_anual.dt_dif_pp": {
+   "n_paises": 14,
+   "mediana": 3.69,
+   "min": 2.58,
+   "max": 6.47
+  },
+  "vivo.aqr_vs_oecd_precio_movil12.corr": {
+   "n_paises": 14,
+   "mediana": 0.974,
+   "min": 0.942,
+   "max": 0.983
+  },
+  "vivo.aqr_vs_oecd_precio_movil12.sesgo_pp": {
+   "n_paises": 14,
+   "mediana": 3.56,
+   "min": -0.25,
+   "max": 4.96
+  },
+  "vivo.aqr_vs_oecd_precio_movil12.dt_dif_pp": {
+   "n_paises": 14,
+   "mediana": 4.385,
+   "min": 3.86,
+   "max": 6.82
+  },
+  "vivo.aqr_vs_oecd_mas_div05_14_2015_.corr": {
+   "n_paises": 14,
+   "mediana": 0.965,
+   "min": 0.906,
+   "max": 0.986
+  },
+  "vivo.aqr_vs_oecd_mas_div05_14_2015_.sesgo_pp": {
+   "n_paises": 14,
+   "mediana": 0.04,
+   "min": -2.85,
+   "max": 2.19
+  },
+  "vivo.aqr_vs_oecd_mas_div05_14_2015_.dt_dif_pp": {
+   "n_paises": 14,
+   "mediana": 3.92,
+   "min": 2.44,
+   "max": 7.36
+  }
+ }
+}
