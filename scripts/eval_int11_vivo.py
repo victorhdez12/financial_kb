@@ -47,7 +47,7 @@ ACTIVOS = ("bolsa", "bonos", "letras", "vivienda", "oro")
 ACTIVOS_NUEVOS = ("bonos", "letras", "vivienda", "oro")
 # Interruptor del BORRADOR docs/int/INT11_vivo_realizado_v0.md: hasta que el usuario apruebe las medidas (V1-V7) no se
 # lee ni se congela ningún realizado de bonos, letras, vivienda u oro. Cambiarlo es un commit propio con la aprobación.
-MEDIDAS_NUEVAS_APROBADAS = False
+MEDIDAS_NUEVAS_APROBADAS = True    # V8: aprobado por el usuario el 5-nov-2026
 ACTIVOS_MEDIDOS = ("bolsa", *ACTIVOS_NUEVOS) if MEDIDAS_NUEVAS_APROBADAS else ("bolsa",)
 PENDIENTES = {a: "medida en BORRADOR (docs/int/INT11_vivo_realizado_v0.md), pendiente de aprobación"
               for a in ACTIVOS if a not in ACTIVOS_MEDIDOS}

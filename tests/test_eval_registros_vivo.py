@@ -143,7 +143,7 @@ def test_int11_recupera_descalibracion_y_k2():
     e, re = EI.sintetico(escala_real=1.0, k2_informativa=False, años=12)
     r = EI.evaluar(e, re)
     assert EI.detecta(r) == {"descalibracion": False, "k2_habilidad": False}
-    assert set(r["activos_pendientes"]) == {"bonos", "letras", "vivienda", "oro"}
+    assert set(r["activos_pendientes"]) == set()          # V8 (5-nov-2026): los 4 activos nuevos se miden
     assert r["principal_diciembre"]["K1_bolsa"]["n"] == 12 * 14
     assert r["principal_diciembre"]["K1_bolsa_sin_JPN"]["paises"] == 13
 
@@ -207,11 +207,11 @@ def test_int11_lectura_realizado_con_warehouse_sintetico():
 
 
 # ---------------------------------------------------------------- INT-11: activos nuevos y semáforo (borrador)
-def test_int11_retraso_por_activo_y_borrador_no_mide():
+def test_int11_retraso_por_activo_y_activos_aprobados():
     o = {"ventana_objetivo": {"desde": "2027-01-01", "hasta": "2027-12-31"}}
     assert EI.cerrada(o, "2028-04-01", "oro") and not EI.cerrada(o, "2028-04-01", "vivienda")
     assert EI.cerrada(o, "2029-01-01", "vivienda")
-    assert EI.MEDIDAS_NUEVAS_APROBADAS is False and EI.ACTIVOS_MEDIDOS == ("bolsa",)
+    assert EI.MEDIDAS_NUEVAS_APROBADAS is True and EI.ACTIVOS_MEDIDOS == ("bolsa", "bonos", "letras", "vivienda", "oro")
 
 
 def test_int11_bandas_congeladas_integridad(tmp_path):
@@ -240,7 +240,8 @@ def test_int11_semaforo_y_contraste_sintetico(monkeypatch):
     assert EI.evaluar(e, re)["semaforo"]["S5"]["contraste_10_años"]["estado"].startswith("sin contraste")
 
 
-def test_int11_semaforo_sin_los_5_activos_no_da_s5():
+def test_int11_semaforo_sin_los_5_activos_no_da_s5(monkeypatch):
+    monkeypatch.setattr(EI, "ACTIVOS_MEDIDOS", ("bolsa",))        # como antes de V8: solo la bolsa medida
     e, re = EI.sintetico(escala_real=1.0, k2_informativa=False, años=3)
     s = EI.evaluar(e, re)["semaforo"]
     assert "nota" in s["S5"] and s["bolsa"]["años"] == 3
