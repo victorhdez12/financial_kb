@@ -13,6 +13,7 @@ import pandas as pd
 
 from src.regime.credit import THRESHOLDS
 from src.report.analogs import find_analogs
+from src.report import liquidez_vivo as LV
 from src.report import nowcast_vivo as NV
 from src.report import termometro_vivo as TV
 from src.report.narrative import reading
@@ -231,6 +232,17 @@ def md_escenarios(s: dict) -> str:
     return f"{tit}\n\n> {es['aviso']}\n\n{cuerpo}"
 
 
+def md_liquidez_credito(s: dict) -> str:
+    """5e. Liquidez y crédito de EE. UU. (src/report/liquidez_vivo.py): descriptivo, sin señal, no validado."""
+    lc = s.get("liquidez_credito")
+    tit = LV.TITULO
+    if lc is None:
+        return f"{tit}\n\n_No disponible esta semana._"
+    if "error" in lc:
+        return f"{tit}\n\n_No disponible esta semana: {lc['error']}._"
+    return LV.markdown(lc, tit)
+
+
 def escenarios(today: date) -> dict:
     from scripts import int11_v3_hoy as H  # import tardío: tarda ≈ 10 s y no debe tumbar el reporte
     o = H.emitir(today.isoformat(), exigir_limpio=False)
@@ -305,6 +317,8 @@ M2 a/a − PIB nominal a/a: {lq['m2_minus_gdp']} pp · Liquidez neta Fed: {lq['n
 
 {md_escenarios(s)}
 
+{md_liquidez_credito(s)}
+
 ## 6. Lectura
 
 _Origen: {origin}._
@@ -335,6 +349,11 @@ def main(today: date | None = None) -> None:
         signal["nowcast"] = NV.nowcast(con, today or date.today())
     except Exception as e:  # noqa: BLE001
         signal["nowcast"] = {"error": f"{type(e).__name__}: {e}"}
+    # Liquidez y crédito de EE. UU. (descriptivo, sin señal, no validado): igual, sin tumbar el reporte.
+    try:
+        signal["liquidez_credito"] = LV.liquidez_credito(con, today or date.today())
+    except Exception as e:  # noqa: BLE001
+        signal["liquidez_credito"] = {"error": f"{type(e).__name__}: {e}"}
     finally:
         con.close()
     # Escenarios INT-11 v3 (descriptivos): igual, después de la lectura y sin tumbar el reporte.
