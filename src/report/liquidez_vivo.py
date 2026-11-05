@@ -290,7 +290,9 @@ def markdown(res: dict, titulo: str = TITULO) -> str:
            f"| M2 (M2SL; Δ a 3 meses, a/a {_f(m2['a_a_pct'], ' %')}) | {_f(m2['valor'])} | | "
            f"{_f(m2['cambio_3m'], signo=True)} (3 m) | {_fecha(m2)} |", "",
            "WALCL, WTREGEN y WRESBAL vienen en millones y se pasan a miles de millones; RRPONTSYD y M2SL ya están en "
-           "miles de millones. Flujo = cambio del stock frente al último dato ≤ 4 o 13 semanas antes.", "",
+           "miles de millones. Flujo = cambio del stock frente al último dato ≤ 4 o 13 semanas antes. Aquí la liquidez neta "
+           "usa el repo inverso del MISMO miércoles del balance; la sección 4 (régimen) usa el último repo inverso "
+           "disponible, por eso las dos cifras pueden diferir unos miles de millones.", "",
            "### Crédito y volatilidad", "",
            "| indicador | valor | Δ 1 mes | Δ 3 meses | percentil (historia disponible) | desde | fecha del dato |",
            "|---|---|---|---|---|---|---|"]
