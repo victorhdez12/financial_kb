@@ -50,7 +50,9 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Línea A — cartera operativa:** B0 = estática **70/15/15** y B1 = su ajuste por volatilidad, paper trading desde el cierre de octubre. 70/15/15 decidido **después** de ver el −42 % de la 80/10/10 (declarado). Pendiente antes de la primera decisión: σ\* en la medida en vivo (calculado: 17,02 % con 1963-2004; sin congelar), declaración S&P 500 / French Developed, nota de potencia de 36 meses, launchd con aviso, y pasar código/spec/tests/ensayo a 70/15/15. El nowcast no interviene.
 
-**▶ Retomar (4-nov, 3):** HPO ×4 hecho y fusionado: no ayuda en ninguna línea (ver Bitácora 4-nov). Pendiente usuario: "ok E1" (9 decisiones, recomendadas), `touch research/paper/ACTIVO`, umbrales de deriva OCDE, respaldo instantánea, B1′, fuente bolsa en vivo.
+**▶ Retomar (5-nov, 1):** E1 congelado v1.0 y ajustado (≤ 2004, signos ✅, `research/int/e1_modelos.json`); siguiente: `scripts/e1_vivo.py` (registro mensual, no se muestra). Pendiente usuario: `touch research/paper/ACTIVO`, umbrales deriva OCDE, respaldo instantánea, B1′, fuente bolsa en vivo.
+
+**(anterior) ▶ Retomar (4-nov, 3):** HPO ×4 hecho y fusionado: no ayuda en ninguna línea (ver Bitácora 4-nov). Pendiente usuario: "ok E1" (9 decisiones, recomendadas), `touch research/paper/ACTIVO`, umbrales de deriva OCDE, respaldo instantánea, B1′, fuente bolsa en vivo.
 
 **(anterior) ▶ Retomar (4-nov, 2):** hechos: paper oct registrado (falta `touch research/paper/ACTIVO`), INT-11 v3 1000/lote + 5d semanal, opción 1 OCDE (instantánea + test de deriva), E1 borrador (sin potencia; esperando "ok E1"). En curso: HPO exploratorio INT-12/INT-13/ML recesión/INT-11 (ver Bitácora 4-nov para ramas y commits). Pendiente usuario: umbrales de deriva, respaldo instantánea, B1′, fuente bolsa en vivo.
 

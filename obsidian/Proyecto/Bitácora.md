@@ -711,3 +711,9 @@ Las entradas más recientes van arriba. Ver también [[Proyecto/Estado del proye
 - **HPO INT-11 fusionado:** CRPS −0,16/−0,24 % vs v3 (IC incluyen 0), cobertura 90,5-90,8 %; ruido MC pequeño pero ≪ incertidumbre por años. Único contenido: PIT de bolsa pasa a uniforme (c ≈ 2,5-3,7, σ más anchas); estanflación empeora (cobertura 87,5 → 79-84 %). ν ≤ 4 explota → ν = 5 mínimo. No hay v4; v3 sigue. 
 - **Balance HPO (4-nov):** el ajuste de hiperparámetros NO ayuda en ninguna de las 4 líneas (INT-12, INT-13, ML recesión, INT-11). Nada que prerregistrar.
 - **Cierre de sesión 4-nov:** todo en main y origin; las 6 ramas de agentes, fusionadas. Matrices .npz de HPO INT-11 (fuera de git) copiadas a `~/financial_archive/hpo_backup/2026-11-04_final/` (404 MB). Retomar con "▶ Retomar (4-nov, 3)".
+
+## 2026-11-05 — E1 congelado y ajustado
+- Usuario: "ok E1" (todas las recomendaciones de §10). Prerregistro v1.0 `docs/int/E1_prerregistro_v1.md` (sha256 62fb1b57…), modo **registro prospectivo en vivo**; bloqueado NO se gasta.
+- `src/intl/e1.py` + `scripts/e1_corrida.py`. P4 sintético ✅ (señal ΔAUC +0,57 p 0,008; sin señal +0,03; P2/P3 la anulan).
+- Ajuste único ≤ 2004 → `research/int/e1_modelos.json` (3.306 filas / 240 eventos = INT-13; signos ✅; modelos sha256 227ffa8c…). Sin métricas de desarrollo (no cuentan).
+- Siguiente: `scripts/e1_vivo.py` (predicción mensual por país → `research/int/e1_vivo.jsonl`, sin mostrar en el reporte) + launchd mensual.
