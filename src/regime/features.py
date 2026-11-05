@@ -143,7 +143,7 @@ KNOWN_UNITS = {"WALCL": "Millions", "WTREGEN": "Millions", "RRPONTSYD": "Billion
 
 
 def to_billions(con, sid: str, s: pd.Series) -> pd.Series:
-    """Scale to USD billions using the catalog units (WALCL is in millions, TGA/RRP in billions)."""
+    """Scale to USD billions using the catalog units (WALCL and TGA in millions, RRP in billions)."""
     row = con.execute("select units from catalog where series_id = ? and units is not null limit 1",
                       [sid]).fetchone()
     units = (row[0] if row else KNOWN_UNITS.get(sid, "")).lower()
