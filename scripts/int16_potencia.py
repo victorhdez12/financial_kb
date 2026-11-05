@@ -50,7 +50,7 @@ KAPPA_TR = 0.25            # sensibilidad: ruido de añada de la prima en tiempo
 # muestras: (filas con objetivo, primera fila fuera de muestra)
 MUESTRAS = {
     "dev_TR_1981_2003": (389, 120),        # orígenes 1971-08…2003-12; ACM-TR desde 1981-08 (10 años de arranque) → 269
-    "dev_publicado_1971_2003": (391, 120), # ACM publicado 1961-06…, objetivo ACM ajustado; OOS 1971-06…2003-12 → 391
+    "dev_publicado_1971_2003": (511, 120), # ACM publicado 1961-06…, objetivo ACM ajustado; OOS 1971-06…2003-12 → 391
     "bloqueado_2005_2023": (629, 401),     # historia 1971-08…2004-12; OOS 2005-01…2023-12 → 228 (hipotético; no se lee)
 }
 VIVO_AÑOS = (10, 20, 30, 40)               # en vivo: historia 1971-08…2026-10 (663 filas) + años nuevos
