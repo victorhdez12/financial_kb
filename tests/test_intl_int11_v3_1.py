@@ -112,3 +112,46 @@ def test_pmm_tambien_en_v1(filas_dep):
     r0 = _corr_sorteos(E.Generador(E.Config()).ajustar(filas_dep), 1)[0]
     r1 = _corr_sorteos(E.Generador(E.Config(imputacion="pmm")).ajustar(filas_dep), 1)[0]
     assert abs(r1 - rho_c) < 0.1 and abs(r0) < abs(rho_c) - 0.25
+
+
+# ------------------------------------------------------------------ registro en vivo: serie nueva
+def test_registro_serie_nueva_no_se_mezcla(tmp_path):
+    from src.report import registro_vivo as RV
+    base = {"procedencia": {"commit": "abc"}, "ventana_objetivo": {"desde": "2026-12-01", "hasta": "2027-11-30"}}
+    v31 = tmp_path / "v3_1"
+    RV.registrar({**base, "emision": "2026-11-20", "serie_registro": "int11_v3_1"}, v31)
+    assert (v31 / "SERIE").read_text().strip() == "int11_v3_1"
+    RV.registrar({**base, "emision": "2026-12-20", "serie_registro": "int11_v3_1"}, v31)       # misma serie: sigue
+    with pytest.raises(SystemExit):
+        RV.registrar({**base, "emision": "2027-01-20", "serie_registro": "int11_v3"}, v31)    # otra serie: no
+    v2 = tmp_path / "v2"
+    RV.registrar({**base, "emision": "2026-11-20"}, v2)                                       # serie v2 sin marca
+    with pytest.raises(SystemExit):
+        RV.registrar({**base, "emision": "2026-12-20", "serie_registro": "int11_v3_1"}, v2)
+    from scripts import int11_v3_hoy as H
+    assert H.SERIE_VIVO == "int11_v3_1" and H.VIVO_V3_1.name == "int11_v3_1_vivo"
+
+
+def test_hoy_markdown_publica_la_dependencia_por_regimen():
+    from scripts import int11_v3_hoy as H
+    q = list(np.linspace(-0.3, 0.4, 99))
+    dep = {"bolsa-bonos": 0.2, "bonos-oro": -0.05}
+    r = {"estado": {"mes_ipc": "2026-09-01", "inflacion": 0.02, "brecha": 0.02, "codigo": 0},
+         "pesos_regimen": {"expansion": 1.0, "sobrecalentamiento": 0.0, "estanflacion": 0.0, "crecimiento_bajo": 0.0},
+         "regimen_dominante": "expansion", "cuantiles_1_99": {a: q for a in E.ACTIVOS},
+         "p_caida_bolsa_20": {"p": 0.1, "ic90": (0.05, 0.15)}, "p_inflacion_5": {"p": 0.1, "ic90": (0.05, 0.15)},
+         "p_inflacion_5_regimen_duro": 0.1, "distancia_umbral_pp": -1.0, "cerca_umbral": False,
+         "dependencia_hoy": dep,
+         "dependencia_por_regimen": {"expansion": dep, "sobrecalentamiento": {"bolsa-bonos": 0.45, "bonos-oro": -0.27}}}
+    o = {"procedencia": {}, "emision": "2026-11-05", "corte_datos": "2026-10-31", "kappa": 1e6, "kappa_en_borde": True,
+         "motor": "v3.1", "ventana_objetivo": {"desde": "2026-12-01", "hasta": "2027-11-30"}, "aviso": "x",
+         "dependencia_descriptiva_2004": H.descriptiva_regimen(),
+         "acierto_medido_fase_D": {"activo": {a: 0.9 for a in E.ACTIVOS}, "global": 0.898, "puerta_D": True,
+                                   "cerca_umbral": 0.94, "regimen": {"expansion": {"bolsa": 0.93}},
+                                   "pais": {"ESP": {"bolsa": 0.95}},
+                                   "informativa_v3_1": {"global": 0.8993, "activo": {}, "cerca_umbral": 0.94}},
+         "paises": {"ESP": r}}
+    md = H.markdown(o)
+    assert "≤ 2004, no confirmado" in md and "| ESP | +0,20 / -0,05 | +0,20 / -0,05 | +0,45 / -0,27 |" in md
+    assert "motor v3.1" in md and "Recalculada con v3.1 (informativo, no es una puerta nueva): 89.9 %" in md
+    assert "Descriptiva ≤ 2004" in md and "1972-2004" in md
