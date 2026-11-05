@@ -718,3 +718,8 @@ Las entradas más recientes van arriba. Ver también [[Proyecto/Estado del proye
 - Ajuste único ≤ 2004 → `research/int/e1_modelos.json` (3.306 filas / 240 eventos = INT-13; signos ✅; modelos sha256 227ffa8c…). Sin métricas de desarrollo (no cuentan).
 - Siguiente: `scripts/e1_vivo.py` (predicción mensual por país → `research/int/e1_vivo.jsonl`, sin mostrar en el reporte) + launchd mensual.
 - **E1 en vivo:** `scripts/e1_vivo.py` (+ `tests/test_e1.py`: variables en vivo = INT-13 con ≤ 2004; sha256 de modelos). Enmienda 1 operativa (`docs/int/E1_enmienda_1.md`): tipo BCE desde 1999 para 7 países del euro (antes de registrar nada). CAN sin confianza OCDE desde 2026-04 → sin dato. Enganchado a `scripts/paper_mensual.sh` (independiente de ACTIVO); primer registro: origen 2026-11-30 (≈ 3-dic). Ensayo oct: 15 países, no se muestra.
+
+## 2026-11-05 — "golden rules": 4 agentes en paralelo (worktrees .claude/worktrees)
+- Valoración: útiles como principios (muchos ya aplicados); como ML, solo contrastes prerregistrados con potencia. Liquidez (Fed 2002+, RRP 2013+), expectativas de mercado y posicionamiento: sin historia ≤ 2004 → solo descriptivo. NFCI no es PIT. HY/CCC de FRED solo desde 2023.
+- Agentes: (1) INT-15 crédito antes que bolsa (Baa−Aaa → caídas/vol; potencia + borrador); (2) INT-11 v4 correlaciones condicionadas al régimen (potencia + borrador); (3) INT-16 prima por plazo ACM (potencia + borrador); (4) sección descriptiva "Liquidez y crédito (EE. UU.)" del reporte semanal.
+- Al terminar: revisar rama → fusionar en main → apuntar hallazgos aquí.
