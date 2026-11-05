@@ -38,7 +38,10 @@ ISO2 = {"BEL": "be", "DEU": "de", "DNK": "dk", "ESP": "es", "FIN": "fi", "FRA": 
         "JPN": "jp", "NLD": "nl", "NOR": "no", "PRT": "pt", "SWE": "se", "USA": "us"}
 SERIES = {"bonos": "oecd_irlt_{p}", "letras": "oecd_ir3m_{p}", "vivienda_precio": "bis_spp_{i2}_n",
           "vivienda_alquiler": "oecd_rpi_{p}_q", "vivienda_precio_ocde": "oecd_hpi_{p}_q", "oro": "gold_wb_usd_m"}
-SUSTITUTO_3M = {"GBR": "boe_ois3m_m"}      # docs/int/GBR_3m_sustituto.md (empalme de termometro_vivo)
+SUSTITUTO_3M = {"GBR": "boe_ois3m_m"}
+# V4 (aprobada 5-nov-2026): el RPI OCDE de USA está parado desde 2024-T4; si no cubre la ventana se usa el IPC de
+# alquileres de FRED (mensual → media trimestral, fechada a inicio de trimestre). Declarado en la nota del realizado.
+SUSTITUTO_ALQUILER = {"USA": "CUSR0000SEHA"}      # docs/int/GBR_3m_sustituto.md (empalme de termometro_vivo)
 AÑO_ANCLA_ALQUILER = 2004                  # último rent_yd JST permitido (≤ 2004)
 # Meses tras el fin de la ventana en que se lee cada activo (UNA vez; medidos el 2026-11-05, §2 del documento):
 # OCDE tipos y Banco Mundial ≈ 1-2 meses; BIS trimestral ≈ 4 meses (JPN ≈ 10, BEL ≈ 7) → 12 para tener los 14.
@@ -50,7 +53,16 @@ FUENTE = {
                 "2004 × (RPI/RPI_2004)/(P/P_2004) OCDE; sin RPI, rent_yd fijo en 2004 (respaldo, declarado)",
     "oro": "Banco Mundial (media mensual, USD): último mes de la ventana / mes previo × FX FRED H.10 de fin de mes",
     "deflactor": "IPC OCDE, media de los 12 meses de la ventana / media de los 12 anteriores (como la bolsa)",
-    "estado": "BORRADOR (docs/int/INT11_vivo_realizado_v0.md; pendiente de aprobación del usuario)"}
+    "estado": "APROBADO por el usuario el 5-nov-2026 (docs/int/INT11_vivo_realizado_v0.md §7, V1-V8)"}
+
+
+def alquiler_trimestral(m: pd.Series) -> pd.Series:
+    """Índice mensual → media trimestral (solo trimestres completos), fechada a inicio de trimestre (como el RPI OCDE)."""
+    if not len(m):
+        return m
+    q = m.groupby(m.index.to_period("Q"))
+    out = q.mean()[q.count() == 3]
+    return pd.Series(out.values, index=out.index.to_timestamp(how="start"))
 
 
 # ------------------------------------------------------------------------------------------------- bonos y letras
@@ -243,6 +255,9 @@ def leer_realizado_activos(con, fx_diarias: dict[str, pd.Series], desde, hasta, 
         if "vivienda" in activos:
             kw["precio_viv"] = B.leer_obs(con, SERIES["vivienda_precio"].format(i2=i2))
             alq = B.leer_obs(con, SERIES["vivienda_alquiler"].format(p=lc))
+            if c in SUSTITUTO_ALQUILER and (not len(alq) or alq.index.max() < pd.Timestamp(hasta) - pd.DateOffset(months=3)):
+                alq = alquiler_trimestral(B.leer_obs(con, SUSTITUTO_ALQUILER[c]))
+                notas["vivienda_alquiler_sustituto"] = SUSTITUTO_ALQUILER[c]
             kw["alquiler_viv"] = alq if len(alq) else None
             kw["yd_ancla"] = yd_ancla_jst(con, c)
             notas["vivienda_alquiler_serie"] = SERIES["vivienda_alquiler"].format(p=lc) if len(alq) else None
@@ -270,6 +285,7 @@ def series_leidas(paises=NUCLEO, activos=ACTIVOS_NUEVOS) -> list[str]:
             s += [SERIES["letras"].format(p=lc)] + ([SUSTITUTO_3M[c]] if c in SUSTITUTO_3M else [])
         if "vivienda" in activos:
             s += [SERIES["vivienda_precio"].format(i2=i2), SERIES["vivienda_alquiler"].format(p=lc)]
+            s += [SUSTITUTO_ALQUILER[c]] if c in SUSTITUTO_ALQUILER else []
     return s + ([SERIES["oro"]] if "oro" in activos else [])
 
 

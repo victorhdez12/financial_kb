@@ -100,6 +100,7 @@ UNIVERSE: dict[str, tuple] = {
     "WALCL": _u("liquidity"), "BOGMBASE": _u("money"),
     # --- inflation & commodities ---
     "PPIACO": _u("inflation"), "WPU0561": _u("commodities"), "CPIAUCNS": _u("inflation"),
+    "CUSR0000SEHA": _u("housing", note="CPI rent of primary residence (INT-11 vivienda USA, V4 5-nov-2026)"),
     "PCOPPUSDM": _u("commodities", "WLD"), "PWHEAMTUSDM": _u("commodities", "WLD"),
     "POILBREUSDM": _u("commodities", "WLD"), "MCOILWTICO": _u("commodities"),
     "PNGASUSUSDM": _u("commodities"), "PALLFNFINDEXM": _u("commodities", "WLD"),

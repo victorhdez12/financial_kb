@@ -346,3 +346,15 @@ No deciden nada; sirven para diagnosticar un ámbar o un rojo.
   el error del rent_yd de JST.
 - El efecto de diseño de S5 (6) hace que 14 países × 5 activos valgan como ≈ 11-12 observaciones independientes al
   año. Ninguna regla de evaluación cambia eso: solo lo arregla el tiempo.
+
+
+## 8. Aprobación (5-nov-2026)
+El usuario aprobó V1-V8 con las recomendaciones:
+- V1 vivienda media/media; V2 bonos y letras como la tabla; V7 semáforo con bandas simuladas congeladas y contraste
+  único S5 de los 10 primeros diciembres.
+- V3: ingest `src/ingest/oecd_vivienda.py` (`oecd_hpi_<iso3>_q`, `oecd_rpi_<iso3>_q`, 18 países), en el semanal.
+- V4: USA usa el IPC de alquileres de FRED `CUSR0000SEHA` (media trimestral) cuando el RPI OCDE no cubre la ventana
+  (hoy parado en 2024-T4); anotado en cada realizado.
+- V5: oro sin respaldo independiente, declarado (si el Banco Mundial falla, el oro queda "sin dato" esa ventana).
+- V6: sensibilidad sin PRT en vivienda (además de bolsa sin JPN).
+- V8: `MEDIDAS_NUEVAS_APROBADAS = True` en un commit propio (5-nov-2026).

@@ -185,6 +185,8 @@ def evaluar(emisiones: list[dict], realizados: dict) -> dict:
                     "K2_inflacion_5": brier_k2(k)}
         for a in ACTIVOS_MEDIDOS[1:]:
             out[nom][f"K1_{a}"] = resumen_cobertura(d[m & (d.activo == a)])
+        if "vivienda" in ACTIVOS_MEDIDOS:   # V6 (aprobada 5-nov-2026): sensibilidad sin PRT en vivienda
+            out[nom]["K1_vivienda_sin_PRT"] = resumen_cobertura(d[m & (d.activo == "vivienda") & (d.pais != "PRT")])
     out["semaforo"] = semaforo_diciembre(d[d.diciembre & (d.activo != "inflacion")])
     return out
 

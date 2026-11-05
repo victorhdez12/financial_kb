@@ -128,3 +128,12 @@ def test_simulacion_calibrada_cubre_90_y_escala_baja_a_80():
     # con choque común, la cobertura de un año varía más que una binomial de 14 filas (efecto de diseño > 1)
     años = d[:, :, :, 0].mean(axis=2).ravel()
     assert años.var() > 0.09 / 14 * 1.5
+
+
+def test_alquiler_trimestral_sustituto():
+    import pandas as pd
+    from src.report.activos_vivo import alquiler_trimestral
+    m = pd.Series(range(1, 8), index=pd.date_range("2025-01-01", periods=7, freq="MS"), dtype=float)
+    q = alquiler_trimestral(m)
+    assert list(q.index) == [pd.Timestamp("2025-01-01"), pd.Timestamp("2025-04-01")]   # el 3.er trimestre está incompleto
+    assert list(q.values) == [2.0, 5.0]
