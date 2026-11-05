@@ -95,7 +95,7 @@ codigo: scripts/eval_e1_vivo.py · scripts/eval_k1_vivo.py · scripts/eval_int11
     respaldo OCDE + dividendo implícito, sin mezclarlas nunca. Se pasa a real con el IPC OCDE "media". JPN "con
     medias" solo como descriptivo (A4).
   - **inflación (K2):** media del IPC de la ventana / media de los 12 meses anteriores − 1 > 5 %.
-  - **bonos, letras, vivienda, oro: PENDIENTE.** `INT11_registro_vivo.md` §3 solo esboza su medida ("índices de deuda
+  - **bonos, letras, vivienda, oro: BORRADOR** (docs/int/INT11_vivo_realizado_v0.md, 5-nov-2026; antes PENDIENTE). `INT11_registro_vivo.md` §3 solo esboza su medida ("índices de deuda
     pública o reconstrucción con tipos OCDE; vivienda: precios OCDE + alquiler imputado; oro en moneda local"). No
     fija ni la fuente, ni la construcción, ni el respaldo. **No se inventa:** hace falta un prerregistro de esas medidas
     antes de la primera ventana cerrada (≈ febrero de 2028).
@@ -146,11 +146,11 @@ codigo: scripts/eval_e1_vivo.py · scripts/eval_k1_vivo.py · scripts/eval_int11
 ### INT-11 v3.1
 | # | ambigüedad | resolución |
 |---|---|---|
-| I-1 | Medida realizada en vivo de bonos, letras, vivienda y oro | **PENDIENTE** (§3). Hasta que haya un prerregistro, solo se evalúa la bolsa (y K2) |
+| I-1 | Medida realizada en vivo de bonos, letras, vivienda y oro | **BORRADOR** en docs/int/INT11_vivo_realizado_v0.md (5-nov-2026), conectado al evaluador con `MEDIDAS_NUEVAS_APROBADAS = False`: hasta aprobarlo, solo se evalúa la bolsa (y K2) |
 | I-2 | Solape de las ventanas (§3: "conglomerados por año, o una emisión por año, la de diciembre, a decidir antes de evaluar") | **Principal = emisiones de diciembre**: ventanas de enero a diciembre, sin solape, como los años naturales de JST. Todas las emisiones van como descriptivo, con IC por conglomerados de año |
 | I-3 | Cuándo se lee el realizado | Fin de la ventana + 3 meses (el retraso de la principal). El respaldo solo se usa si en ese momento a la principal le falta algún mes. Lo leído la primera vez queda fijo |
 | I-4 | PIT y CRPS (P-INT11 v3 §5 no los calculaba en la fase D) | Se publican como **descriptivos**. PIT por interpolación en los percentiles 1-99; si el realizado cae fuera de p1 o p99, vale 0,005 o 0,995. CRPS ≈ 2 · media de la pérdida de cuantil (colas truncadas) |
-| I-5 | Semáforo anual y contraste formal a 10 años | **PENDIENTE.** Las bandas de §3 ([79,7; 96,0] a 5 años, [82,7; 95,0] a 10) son del diseño v2, y no está claro a qué percentil corresponden. Hay que simular las de v3.1 por número de años y fijar la regla del contraste antes de ≈ 2031 (5 años) |
+| I-5 | Semáforo anual y contraste formal a 10 años | **BORRADOR** en docs/int/INT11_vivo_realizado_v0.md §5: bandas de v3.1 simuladas con choque común del año y congeladas (`research/int/int11_vivo_semaforo.json`, sha256 en el evaluador); contraste único de S5 con los 10 primeros años de diciembre. Las bandas de registro_vivo.md §3 (diseño v2) quedan sustituidas |
 | I-6 | K2 | y = inflación "media" de la ventana > 5 % (equivale a log > log 1,05). p = `p_inflacion_5.p` (pertenencia suave). M0 = 0,262 |
 | I-7 | Sensibilidad sin JPN (A4) | Cobertura y PIT de la bolsa en 13 países, al lado de la de 14. JPN "con medias", solo descriptivo |
 | I-8 | Emisión alterada o país sin abanico | Si el sha256 no coincide con `indice.csv`, aborta. Los países con "sin datos suficientes" no entran |
