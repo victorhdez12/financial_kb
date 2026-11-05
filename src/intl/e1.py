@@ -21,15 +21,19 @@ ESPERADO_DEV = (3306, 240)            # filas / eventos de E1-12 con las 4 colum
 SIN_2020 = (pd.Timestamp("2019-01-31"), pd.Timestamp("2021-06-30"))
 
 
-def filas(df: pd.DataFrame) -> pd.DataFrame:
+def _y(mod: dict) -> str:
+    return mod.get("y", Y)
+
+
+def filas(df: pd.DataFrame, y: str = Y) -> pd.DataFrame:
     """Casos completos: objetivo + las 4 columnas (mismas filas para L y A)."""
-    ok = df[Y].notna() & df[COLS["A"]].notna().all(axis=1)
+    ok = df[y].notna() & df[COLS["A"]].notna().all(axis=1)
     return df[ok].reset_index(drop=True)
 
 
-def ajustar(d: pd.DataFrame) -> dict:
-    y = d[Y].to_numpy(float)
-    out = {}
+def ajustar(d: pd.DataFrame, yc: str = Y) -> dict:
+    y = d[yc].to_numpy(float)
+    out = {} if yc == Y else {"y": yc}   # E1-12: sin clave "y" (sha256 congelado de e1_modelos.json)
     for m, cols in COLS.items():
         X = d[cols].to_numpy(float)
         mu, sd = X.mean(0), X.std(0, ddof=0)
@@ -54,7 +58,7 @@ def predecir(mod: dict, d: pd.DataFrame, m: str) -> np.ndarray:
 
 
 def _delta(mod, d) -> dict:
-    y = d[Y].to_numpy(float)
+    y = d[_y(mod)].to_numpy(float)
     pa, pl = predecir(mod, d, "A"), predecir(mod, d, "L")
     return {"dauc": M4.auc(y, pa) - M4.auc(y, pl), "dlogloss": M4.logloss(y, pa) - M4.logloss(y, pl),
             "dbrier": M4.brier(y, pa) - M4.brier(y, pl), "auc_A": M4.auc(y, pa), "auc_L": M4.auc(y, pl),
@@ -75,13 +79,14 @@ def p1_circular(mod, df: pd.DataFrame) -> dict:
     """Placebo P1: desplazamiento circular k ∈ [24, T − 24] de la actividad (misma k para todos los países)."""
     fechas = np.sort(df.fecha.unique())
     T = len(fechas)
-    obs = _delta(mod, filas(df))["dauc"]
+    yc = _y(mod)
+    obs = _delta(mod, filas(df, yc))["dauc"]
     nulos = []
     for k in range(24, T - 23):
         g = lambda w: pd.DataFrame(np.roll(w.reindex(fechas).to_numpy(), k, axis=0), index=fechas,  # noqa: E731
                                    columns=w.columns)
-        d = filas(_mover_actividad(df, g))
-        if d[Y].sum() > 0 and d[Y].sum() < len(d):
+        d = filas(_mover_actividad(df, g), yc)
+        if d[yc].sum() > 0 and d[yc].sum() < len(d):
             nulos.append(_delta(mod, d)["dauc"])
     nulos = np.array(nulos)
     return {"dauc_obs": obs, "k": int(len(nulos)), "p": float((1 + (nulos >= obs).sum()) / (1 + len(nulos)))}
@@ -91,16 +96,16 @@ def p2_paises(mod, df) -> float:
     paises = sorted(df.pais.unique())
     rot = dict(zip(paises, paises[1:] + paises[:1]))
     g = lambda w: w.rename(columns={v: k for k, v in rot.items()})  # noqa: E731  (cada país recibe la del siguiente)
-    return _delta(mod, filas(_mover_actividad(df, g)))["dauc"]
+    return _delta(mod, filas(_mover_actividad(df, g), _y(mod)))["dauc"]
 
 
 def p3_retraso(mod, df) -> float:
-    return _delta(mod, filas(_mover_actividad(df, lambda w: w.shift(24))))["dauc"]
+    return _delta(mod, filas(_mover_actividad(df, lambda w: w.shift(24)), _y(mod)))["dauc"]
 
 
 def m4_anticipacion(mod, df, entrada_6m: pd.Series) -> dict:
     """Quita las filas con entrada en (M, M + 6] (y = 1 solo si la entrada cae en (M + 6, M + 12])."""
-    d = filas(df.assign(_e6=entrada_6m.values))
+    d = filas(df.assign(_e6=entrada_6m.values), _y(mod))
     return _delta(mod, d[d._e6 != 1])
 
 
@@ -109,9 +114,9 @@ def evaluar(mod, df: pd.DataFrame, sin_2020: bool = True) -> dict:
     base = df
     if sin_2020:
         base = df[~df.fecha.between(*SIN_2020)]
-    out = {"principal": _delta(mod, filas(base)), "p1": p1_circular(mod, base), "p2_dauc": p2_paises(mod, base),
+    out = {"principal": _delta(mod, filas(base, _y(mod))), "p1": p1_circular(mod, base), "p2_dauc": p2_paises(mod, base),
            "p3_dauc": p3_retraso(mod, base)}
-    if "y_E1_6" in base:
+    if "y_E1_6" in base and _y(mod) == Y:
         out["m4"] = m4_anticipacion(mod, base, base["y_E1_6"])
     return out
 
