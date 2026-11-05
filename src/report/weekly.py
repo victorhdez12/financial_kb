@@ -220,15 +220,17 @@ def md_nowcast(s: dict) -> str:
 
 
 def md_escenarios(s: dict) -> str:
-    """5d. Abanicos INT-11 v3 a 12 meses (docs/int/INT11_prerregistro_v3.md §8), descriptivos."""
+    """5d. Abanicos INT-11 v3.1 a 12 meses (docs/int/INT11_prerregistro_v3.md §8; v3.1 = imputación condicionada,
+    docs/int/INT11_v3_1_imputacion.md), descriptivos, con la dependencia por régimen (≤ 2004, no confirmado)."""
     es = s.get("escenarios")
-    tit = "## 5d. Escenarios a 12 meses por país (INT-11 v3, informativo)"
+    tit = "## 5d. Escenarios a 12 meses por país (INT-11 v3.1, informativo)"
     if es is None:
         return f"{tit}\n\n_No disponible esta semana._"
     if "error" in es:
         return f"{tit}\n\n_No disponible esta semana: {es['error']}._"
     cuerpo = es["md"].split("\n---\n", 1)[-1].lstrip()          # sin la cabecera YAML
     cuerpo = cuerpo.split("\n", 1)[-1].lstrip() if cuerpo.startswith("# ") else cuerpo  # sin el título propio
+    cuerpo = cuerpo.replace("\n### ", "\n#### ")                    # subsecciones bajo el ## del reporte
     return f"{tit}\n\n> {es['aviso']}\n\n{cuerpo}"
 
 
@@ -247,9 +249,11 @@ def escenarios(today: date) -> dict:
     from scripts import int11_v3_hoy as H  # import tardío: tarda ≈ 10 s y no debe tumbar el reporte
     o = H.emitir(today.isoformat(), exigir_limpio=False)
     return {"emision": o["emision"], "ventana": o["ventana_objetivo"], "procedencia": o["procedencia"],
-            "aviso": o["aviso"], "paises": {c: {k: r.get(k) for k in ("regimen_dominante", "p_caida_bolsa_20",
-                                                                    "p_inflacion_5")} for c, r in o["paises"].items()},
-            "md": H.markdown(o)}
+            "motor": o.get("motor"), "aviso": o["aviso"],
+            "paises": {c: {k: r.get(k) for k in ("regimen_dominante", "p_caida_bolsa_20", "p_inflacion_5",
+                                                 "dependencia_hoy", "dependencia_por_regimen")}
+                       for c, r in o["paises"].items()},
+            "dependencia_descriptiva_2004": o.get("dependencia_descriptiva_2004"), "md": H.markdown(o)}
 
 
 def markdown(s: dict, lectura: str, origin: str) -> str:
@@ -356,7 +360,7 @@ def main(today: date | None = None) -> None:
         signal["liquidez_credito"] = {"error": f"{type(e).__name__}: {e}"}
     finally:
         con.close()
-    # Escenarios INT-11 v3 (descriptivos): igual, después de la lectura y sin tumbar el reporte.
+    # Escenarios INT-11 v3.1 (descriptivos): igual, después de la lectura y sin tumbar el reporte.
     try:
         signal["escenarios"] = escenarios(today or date.today())
     except (Exception, SystemExit) as e:  # noqa: BLE001

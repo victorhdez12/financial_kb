@@ -63,6 +63,12 @@ ver Actualizaciones.md).
 - **Contraste formal:** calibración (K1) y Brier de inflación (K2) a los 10 años de registro (potencia ≈ 0,55-0,6;
   a 20 años ≈ 0,8-0,9), salvo que antes llegue la confirmación final única con el bloqueado (prerregistro §6).
 
+## 3 bis. Series (v0.3, 5-nov-2026)
+Una carpeta = una serie = un motor. La v3.1 (imputación condicionada, docs/int/INT11_v3_1_imputacion.md) es una serie
+nueva, `int11_v3_1`, en `research/int/int11_v3_1_vivo/`: `registro_vivo.registrar` escribe la marca `SERIE` con la
+primera emisión y rechaza mezclar series (o poner una serie con nombre en una carpeta con emisiones sin marca, como la
+v2). Sigue sin activarse hasta fijar la fuente de bolsa.
+
 ## 4. Qué NO hace el registro
 No reajusta el motor con los datos nuevos (sigue estimado con ≤ 2004); no cambia el umbral ni las ventanas; no se mira
 el dentro/fuera parcial de una ventana abierta.

@@ -48,6 +48,11 @@ N0_CURTOSIS_V3 = 50.0                             # encogimiento de la curtosis 
 SEMIVIDA_V3 = 50.0                                # años: peso de una fila = 0,5^((año_ref − año) / semivida)
 SIGMA_INFL_V3 = 0.005                             # 0,5 pp: incertidumbre de medida/definición de la inflación
 SIGMA_BRECHA_V3 = 0.01                            # 1 pp: revisión del PIB + población extrapolada en la brecha
+# ---- v3.1 (docs/int/INT11_v3_1_imputacion.md): cambio de INGENIERÍA declarado (decisión V2 de
+# docs/int/INT11_v4_correlaciones_v0.md §6). Fijados a priori (valores de manual del PMM), sin mirar ningún resultado.
+K_PMM = 5                                         # donantes candidatos (van Buuren: d = 5)
+RIDGE_PMM = 1.0                                   # penalización ridge de la regresión de emparejamiento (Z estandarizada)
+N_MIN_PMM = 20                                    # donantes con todos los predictores; si no, respaldo s_prev → todos
 
 
 # ============================================================================ régimen operable
@@ -309,6 +314,14 @@ class Config:
     #                                    estado de evento
     recuentos_evento: dict = field(default_factory=dict)   # {e: (eventos, años)} fija el recuento (si no, de las filas)
     n_min_evento: int = 5              # celda (s_prev, s) ∩ evento con menos filas → (·, s) ∩ evento → evento
+    # ---- v3.1 (docs/int/INT11_v3_1_imputacion.md). "independiente" reproduce v1, v2 y v3 BIT A BIT; Config.v3_1()
+    # activa "pmm": el activo sin dato de la fila sorteada se toma de un donante EMPAREJADO (predictive mean matching
+    # dentro de la celda: regresión ridge del activo sobre las demás variables observadas de la fila, y donante al azar
+    # entre los k_pmm de la celda cuya predicción está más cerca de la de la fila) en lugar de uno independiente.
+    imputacion: str = "independiente"
+    k_pmm: int = K_PMM
+    ridge_pmm: float = RIDGE_PMM
+    n_min_pmm: int = N_MIN_PMM
 
     @classmethod
     def v2(cls, **cambios) -> "Config":
@@ -326,6 +339,14 @@ class Config:
                     sigma_infl=SIGMA_INFL_V3, sigma_brecha=SIGMA_BRECHA_V3)
         base.update(cambios)
         return cls(**base)
+
+    @classmethod
+    def v3_1(cls, **cambios) -> "Config":
+        """v3.1 = v3 + imputación condicionada (PMM) de los activos sin dato (cambio de ingeniería declarado, sin puerta
+        propia; serie nueva del registro en vivo). Todo lo demás, incluida la semivida, igual que v3."""
+        base = dict(imputacion="pmm")
+        base.update(cambios)
+        return cls.v3(**base)
 
     @property
     def es_v2(self) -> bool:
@@ -535,9 +556,85 @@ class Generador:
                 if len(d) < 5:
                     d = np.flatnonzero(fin)
                 self.donantes[(c, v)] = d
+        if cfg.imputacion == "pmm":
+            self._ajustar_pmm()
+        elif cfg.imputacion != "independiente":
+            raise ValueError(cfg.imputacion)
         if cfg.es_v2:
             self._ajustar_v2(alta)
         return self
+
+    # ------------------------------------------------------------ v3.1: imputación condicionada (PMM)
+    def _ajustar_pmm(self) -> None:
+        """Para cada celda c, variable v con huecos y fila r sin v: los k_pmm donantes candidatos (predictive mean
+        matching). Predictores Z = las demás variables observadas de r (activos en log 1 + r, macro tal cual);
+        donantes = filas con v y con todo Z observado, de la celda c (los mismos `donantes` de v3), o si son < n_min_pmm,
+        del mismo s_prev, o de todas. Regresión ridge (Z estandarizada en los donantes) de v sobre Z; candidatos = los
+        k_pmm donantes con la predicción más cercana a la de r. Se guarda (cand (N, k), n_cand (N,)); n_cand = 0 → donante
+        independiente (solo si ni con todas las filas hay n_min_pmm donantes o la fila no tiene ningún predictor)."""
+        cfg = self.cfg
+        A = len(cfg.activos)
+        N, nv = self.V.shape
+        Z = self.V.copy()
+        with np.errstate(invalid="ignore"):
+            Z[:, :A] = np.log1p(Z[:, :A])
+        fin = np.isfinite(Z)
+        k = int(cfg.k_pmm)
+        self.pmm, self.pmm_nivel = {}, {}
+        for v in range(nv):
+            falta = np.flatnonzero(~fin[:, v])
+            if not len(falta):
+                continue
+            pats, inv = np.unique(fin[falta], axis=0, return_inverse=True)
+            inv = np.asarray(inv).reshape(-1)
+            for c in self.celdas:
+                cand = np.full((N, k), -1, np.int64)
+                ncand = np.zeros(N, np.int64)
+                niveles = np.zeros(4, np.int64)                     # celda, s_prev, todas, independiente (filas)
+                pools = (self.donantes[(c, v)], np.flatnonzero(fin[:, v] & (self.s_prev == c[0])),
+                         np.flatnonzero(fin[:, v]))
+                for p, pat in enumerate(pats):
+                    rec = falta[inv == p]
+                    zc = np.flatnonzero(pat)
+                    Dp, nivel = None, 3
+                    if len(zc):
+                        for nivel, pool in enumerate(pools):
+                            Dp = pool[fin[pool][:, zc].all(1)]
+                            if len(Dp) >= cfg.n_min_pmm:
+                                break
+                        else:
+                            Dp, nivel = None, 3
+                    niveles[nivel] += len(rec)
+                    if Dp is None:
+                        continue
+                    X = Z[np.ix_(Dp, zc)]
+                    mu, sd = X.mean(0), X.std(0)
+                    sd = np.where(sd > 0, sd, 1.0)
+                    Xs = (X - mu) / sd
+                    y = Z[Dp, v]
+                    beta = np.linalg.solve(Xs.T @ Xs + cfg.ridge_pmm * np.eye(len(zc)), Xs.T @ (y - y.mean()))
+                    pd_ = Xs @ beta
+                    pr = ((Z[np.ix_(rec, zc)] - mu) / sd) @ beta
+                    kk = min(k, len(Dp))
+                    dist = np.abs(pr[:, None] - pd_[None, :])
+                    near = np.argpartition(dist, kk - 1, axis=1)[:, :kk]
+                    cand[rec, :kk] = Dp[near]
+                    ncand[rec] = kk
+                self.pmm[(c, v)] = (cand, ncand)
+                self.pmm_nivel[(c, v)] = niveles
+
+    def _donante(self, c, v, r, d, rng) -> np.ndarray:
+        """Donantes para las filas sorteadas r (sin dato en v) en la celda simulada c."""
+        if self.cfg.imputacion != "pmm":
+            return rng.choice(d, len(r))
+        cand, nc = self.pmm[(c, v)]
+        n = nc[r]
+        out = np.empty(len(r), np.int64)
+        ok = n > 0
+        out[ok] = cand[r[ok], (rng.random(ok.sum()) * n[ok]).astype(np.int64)]
+        if (~ok).any():
+            out[~ok] = rng.choice(d, (~ok).sum())
+        return out
 
     # ------------------------------------------------------------ v3: eventos como estados opcionales
     def _ajustar_eventos(self) -> None:
@@ -864,7 +961,7 @@ class Generador:
                     X[:, h] = self._valores_v2(r, s, s_new, g, rng)
                 else:
                     X[:, h] = self.V[r]
-                    self._imputar(X[:, h], s, s_new, rng)
+                    self._imputar(X[:, h], s, s_new, rng, r)
                 r_prev = r
             else:
                 for (i, j) in self.celdas:
@@ -920,7 +1017,7 @@ class Generador:
                 if m.any():
                     d = self.donantes[((i, j), v)]
                     if len(d):
-                        RI[m, v] = rng.choice(d, m.sum())
+                        RI[m, v] = self._donante((i, j), v, r[m], d, rng)
         X = self.V[RI, np.arange(len(self.vars))[None, :]]
         cols = np.arange(A)[None, :]
         L = self.L[RI[:, :A], cols]
@@ -943,8 +1040,9 @@ class Generador:
         X[:, :A] = np.where(np.isfinite(L), np.expm1(L), X[:, :A])
         return X
 
-    def _imputar(self, Xh, s, s_new, rng):
-        """Huecos (p. ej. oro antes de su inicio, vivienda): donante al azar de la misma celda con dato."""
+    def _imputar(self, Xh, s, s_new, rng, r=None):
+        """Huecos (p. ej. oro antes de su inicio, vivienda): donante al azar de la misma celda con dato (v3.1: emparejado,
+        `_donante`; necesita las filas sorteadas r)."""
         for v in range(Xh.shape[1]):
             falta = ~np.isfinite(Xh[:, v])
             if not falta.any():
@@ -954,7 +1052,8 @@ class Generador:
                 if m.any():
                     d = self.donantes[((i, j), v)]
                     if len(d):
-                        Xh[m, v] = self.V[rng.choice(d, m.sum()), v]
+                        Xh[m, v] = self.V[self._donante((i, j), v, r[m], d, rng) if r is not None
+                                          else rng.choice(d, m.sum()), v]
 
     # ------------------------------------------------------------ modo paramétrico t
     def _momentos(self, base, peso_año):

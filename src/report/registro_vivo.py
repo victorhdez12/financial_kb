@@ -64,10 +64,26 @@ def huella_entradas(series: dict[str, pd.Series]) -> dict:
     return {"series": s, "sha256": h}
 
 
+def comprobar_serie(carpeta: Path, serie: str) -> None:
+    """Una carpeta = una serie del registro (un motor). v3.1 cambia el motor → serie nueva (docs/int/INT11_v3_1_imputacion.md):
+    la marca `SERIE` se escribe con la primera emisión y una emisión de otra serie se rechaza; una carpeta con emisiones
+    previas y sin marca (p. ej. la serie v2) no admite una serie con nombre."""
+    marca = carpeta / "SERIE"
+    if marca.exists():
+        previa = marca.read_text().strip()
+        if previa != serie:
+            raise SystemExit(f"{carpeta}: serie {previa!r}; no se mezcla con {serie!r} (abre una carpeta nueva)")
+    elif any(carpeta.glob("*.json")):
+        raise SystemExit(f"{carpeta}: tiene emisiones sin marca de serie; la serie {serie!r} necesita carpeta propia")
+
+
 def registrar(o: dict, carpeta: Path) -> Path:
     """Guarda la emisión del mes (inmutable): carpeta/AAAA-MM.json + línea en indice.csv con sha256, commit, ventana y
-    huella de las entradas."""
+    huella de las entradas. Si la emisión trae `serie_registro`, la carpeta queda marcada con esa serie."""
     carpeta.mkdir(parents=True, exist_ok=True)
+    serie = o.get("serie_registro")
+    if serie:
+        comprobar_serie(carpeta, serie)
     mes = o["emision"][:7]
     ruta = carpeta / f"{mes}.json"
     if ruta.exists():
@@ -83,4 +99,6 @@ def registrar(o: dict, carpeta: Path) -> Path:
         f.write(f"{mes},{ruta.name},{h},{o['procedencia'].get('commit', '')},{o['emision']},"
                 f"{o['ventana_objetivo']['desde']},{o['ventana_objetivo']['hasta']},"
                 f"{o.get('entradas', {}).get('sha256', '')}\n")
+    if serie and not (carpeta / "SERIE").exists():
+        (carpeta / "SERIE").write_text(serie + "\n")
     return ruta

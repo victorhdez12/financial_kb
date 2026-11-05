@@ -1,0 +1,760 @@
+{
+ "procedencia": {
+  "commit": "63d70ea9e50d284ab664d300ec14fc5defac5caf",
+  "arbol_limpio": true,
+  "hora_utc": "2026-11-05T10:06:50+00:00"
+ },
+ "documento": "docs/int/INT11_v3_1_imputacion.md",
+ "config_v3_1": "Config(activos=('bolsa', 'bonos', 'letras', 'vivienda', 'oro'), modo='bootstrap', k_pais=40.0, bloque_medio=3.0, n_min_celda=25, contagio=False, incertidumbre=True, nu_t=5.0, n0_cov=30.0, anio_max=2004, escala_pais=True, min_paises_año=3, k_mezcla=0.0, c_suavizado=5.25, nu_suavizado=5.0, rejilla_kappa=(0.0, 6.0, 121), curtosis_escala='pais', n0_curtosis=50.0, semivida_epoca=50.0, anio_ref_epoca=None, sigma_infl=0.005, sigma_brecha=0.01, eventos=(), evento_condiciona=False, recuentos_evento={}, n_min_evento=5, imputacion='pmm', k_pmm=5, ridge_pmm=1.0, n_min_pmm=20)",
+ "aviso": "Medición de un cambio de ingeniería declarado; ≤ 2004; no es puerta ni confirmación.",
+ "frac_filas_sin_dato": {
+  "bolsa": 0.037,
+  "bonos": 0.016,
+  "letras": 0.011,
+  "vivienda": 0.173,
+  "oro": 0.702
+ },
+ "A_correlacion_motor": {
+  "v3": {
+   "USA|expansion": {
+    "bolsa-bonos": 0.111,
+    "bolsa-vivienda": 0.089,
+    "bonos-oro": -0.016,
+    "bolsa-oro": -0.081,
+    "bonos-vivienda": 0.092
+   },
+   "USA|sobrecalentamiento": {
+    "bolsa-bonos": 0.446,
+    "bolsa-vivienda": 0.121,
+    "bonos-oro": -0.182,
+    "bolsa-oro": -0.098,
+    "bonos-vivienda": 0.083
+   },
+   "DEU|expansion": {
+    "bolsa-bonos": 0.149,
+    "bolsa-vivienda": 0.054,
+    "bonos-oro": -0.082,
+    "bolsa-oro": -0.116,
+    "bonos-vivienda": -0.02
+   },
+   "DEU|sobrecalentamiento": {
+    "bolsa-bonos": 0.422,
+    "bolsa-vivienda": 0.064,
+    "bonos-oro": -0.184,
+    "bolsa-oro": -0.043,
+    "bonos-vivienda": -0.012
+   },
+   "GBR|expansion": {
+    "bolsa-bonos": 0.217,
+    "bolsa-vivienda": -0.038,
+    "bonos-oro": -0.037,
+    "bolsa-oro": -0.07,
+    "bonos-vivienda": 0.01
+   },
+   "GBR|sobrecalentamiento": {
+    "bolsa-bonos": 0.502,
+    "bolsa-vivienda": 0.007,
+    "bonos-oro": -0.198,
+    "bolsa-oro": -0.134,
+    "bonos-vivienda": -0.095
+   },
+   "ESP|expansion": {
+    "bolsa-bonos": 0.22,
+    "bolsa-vivienda": 0.084,
+    "bonos-oro": -0.089,
+    "bolsa-oro": -0.046,
+    "bonos-vivienda": -0.017
+   },
+   "ESP|sobrecalentamiento": {
+    "bolsa-bonos": 0.481,
+    "bolsa-vivienda": 0.132,
+    "bonos-oro": -0.121,
+    "bolsa-oro": -0.035,
+    "bonos-vivienda": 0.12
+   }
+  },
+  "v3_1": {
+   "USA|expansion": {
+    "bolsa-bonos": 0.112,
+    "bolsa-vivienda": 0.066,
+    "bonos-oro": 0.021,
+    "bolsa-oro": -0.115,
+    "bonos-vivienda": 0.072
+   },
+   "USA|sobrecalentamiento": {
+    "bolsa-bonos": 0.444,
+    "bolsa-vivienda": 0.126,
+    "bonos-oro": -0.266,
+    "bolsa-oro": -0.154,
+    "bonos-vivienda": 0.083
+   },
+   "DEU|expansion": {
+    "bolsa-bonos": 0.131,
+    "bolsa-vivienda": 0.063,
+    "bonos-oro": -0.069,
+    "bolsa-oro": -0.146,
+    "bonos-vivienda": -0.033
+   },
+   "DEU|sobrecalentamiento": {
+    "bolsa-bonos": 0.42,
+    "bolsa-vivienda": 0.066,
+    "bonos-oro": -0.295,
+    "bolsa-oro": -0.136,
+    "bonos-vivienda": 0.023
+   },
+   "GBR|expansion": {
+    "bolsa-bonos": 0.191,
+    "bolsa-vivienda": 0.002,
+    "bonos-oro": -0.029,
+    "bolsa-oro": -0.052,
+    "bonos-vivienda": 0.036
+   },
+   "GBR|sobrecalentamiento": {
+    "bolsa-bonos": 0.525,
+    "bolsa-vivienda": 0.021,
+    "bonos-oro": -0.301,
+    "bolsa-oro": -0.196,
+    "bonos-vivienda": -0.073
+   },
+   "ESP|expansion": {
+    "bolsa-bonos": 0.24,
+    "bolsa-vivienda": 0.11,
+    "bonos-oro": -0.067,
+    "bolsa-oro": -0.075,
+    "bonos-vivienda": -0.009
+   },
+   "ESP|sobrecalentamiento": {
+    "bolsa-bonos": 0.452,
+    "bolsa-vivienda": 0.119,
+    "bonos-oro": -0.245,
+    "bolsa-oro": -0.063,
+    "bonos-vivienda": 0.118
+   }
+  },
+  "v3_1_sin_suavizado": {
+   "USA|expansion": {
+    "bolsa-bonos": 0.118,
+    "bolsa-vivienda": 0.091,
+    "bonos-oro": 0.003,
+    "bolsa-oro": -0.119,
+    "bonos-vivienda": 0.083
+   },
+   "USA|sobrecalentamiento": {
+    "bolsa-bonos": 0.453,
+    "bolsa-vivienda": 0.157,
+    "bonos-oro": -0.256,
+    "bolsa-oro": -0.151,
+    "bonos-vivienda": 0.105
+   },
+   "DEU|expansion": {
+    "bolsa-bonos": 0.163,
+    "bolsa-vivienda": 0.058,
+    "bonos-oro": -0.066,
+    "bolsa-oro": -0.171,
+    "bonos-vivienda": -0.019
+   },
+   "DEU|sobrecalentamiento": {
+    "bolsa-bonos": 0.397,
+    "bolsa-vivienda": 0.069,
+    "bonos-oro": -0.282,
+    "bolsa-oro": -0.088,
+    "bonos-vivienda": -0.007
+   },
+   "GBR|expansion": {
+    "bolsa-bonos": 0.187,
+    "bolsa-vivienda": -0.02,
+    "bonos-oro": -0.043,
+    "bolsa-oro": -0.075,
+    "bonos-vivienda": 0.051
+   },
+   "GBR|sobrecalentamiento": {
+    "bolsa-bonos": 0.511,
+    "bolsa-vivienda": 0.01,
+    "bonos-oro": -0.294,
+    "bolsa-oro": -0.199,
+    "bonos-vivienda": -0.076
+   },
+   "ESP|expansion": {
+    "bolsa-bonos": 0.217,
+    "bolsa-vivienda": 0.107,
+    "bonos-oro": -0.071,
+    "bolsa-oro": -0.041,
+    "bonos-vivienda": -0.015
+   },
+   "ESP|sobrecalentamiento": {
+    "bolsa-bonos": 0.469,
+    "bolsa-vivienda": 0.136,
+    "bonos-oro": -0.266,
+    "bolsa-oro": -0.055,
+    "bonos-vivienda": 0.135
+   }
+  },
+  "filas_por_s_prev_crudas": {
+   "expansion": {
+    "bolsa-bonos": {
+     "rho": 0.223,
+     "n": 795
+    },
+    "bolsa-vivienda": {
+     "rho": 0.105,
+     "n": 647
+    },
+    "bonos-oro": {
+     "rho": 0.023,
+     "n": 168
+    },
+    "bolsa-oro": {
+     "rho": -0.059,
+     "n": 168
+    },
+    "bonos-vivienda": {
+     "rho": 0.091,
+     "n": 664
+    }
+   },
+   "sobrecalentamiento": {
+    "bolsa-bonos": {
+     "rho": 0.455,
+     "n": 607
+    },
+    "bolsa-vivienda": {
+     "rho": 0.115,
+     "n": 548
+    },
+    "bonos-oro": {
+     "rho": -0.263,
+     "n": 291
+    },
+    "bolsa-oro": {
+     "rho": -0.052,
+     "n": 291
+    },
+    "bonos-vivienda": {
+     "rho": 0.134,
+     "n": 548
+    }
+   }
+  },
+  "v3_reproduce_D_motor_v3": true
+ },
+ "B_niveles_pmm": {
+  "bolsa": {
+   "filas_sin_dato": 58,
+   "celda": 0.8976,
+   "mismo_s_prev": 0.0205,
+   "todas": 0.0819,
+   "independiente": 0.0
+  },
+  "bonos": {
+   "filas_sin_dato": 25,
+   "celda": 0.9675,
+   "mismo_s_prev": 0.0025,
+   "todas": 0.03,
+   "independiente": 0.0
+  },
+  "letras": {
+   "filas_sin_dato": 17,
+   "celda": 0.8897,
+   "mismo_s_prev": 0.0221,
+   "todas": 0.0882,
+   "independiente": 0.0
+  },
+  "vivienda": {
+   "filas_sin_dato": 268,
+   "celda": 0.6854,
+   "mismo_s_prev": 0.0609,
+   "todas": 0.2537,
+   "independiente": 0.0
+  },
+  "oro": {
+   "filas_sin_dato": 1086,
+   "celda": 0.875,
+   "mismo_s_prev": 0.125,
+   "todas": 0.0,
+   "independiente": 0.0
+  }
+ },
+ "C_fase_D_informativa": {
+  "aviso": "INFORMATIVO, no es una puerta: ≤ 2004 ya usado para desarrollar (contaminado); misma semilla y pliegues que la fase D de v3; banda nula = la OFICIAL de v3 (no recalculada).",
+  "v3_recalculada": {
+   "loco": {
+    "S5": 0.8976421188630491,
+    "Sb": 0.9234899328859061,
+    "S_activo": [
+     0.9234899328859061,
+     0.9080761654629022,
+     0.8824297844546048,
+     0.89609375,
+     0.8961038961038961
+    ],
+    "ancho_bolsa": 0.7968388786621604,
+    "S_raros": 0.8975903614457831,
+    "S5_cerca": 0.9402332361516035,
+    "n_cerca": 164,
+    "infl5": {
+     "bss": 0.2689214451484102,
+     "p": 2.852497100312657e-05,
+     "brier": 0.14371787492575916,
+     "brier_cerca": 0.14930609321226437,
+     "p_media_cerca": 0.26150317082554697,
+     "frec_cerca": 0.16463414634146342,
+     "eventos": 414,
+     "n": 1548
+    },
+    "caida20": {
+     "bss": 0.022075072259648887,
+     "p": 0.051460433580988084,
+     "frecuencia": 0.0912751677852349,
+     "n": 1490
+    }
+   },
+   "temporal": {
+    "S5": 0.9152597402597402,
+    "Sb": 0.8220779220779221,
+    "S_activo": [
+     0.8220779220779221,
+     0.9194805194805195,
+     0.9818181818181818,
+     0.938858695652174,
+     NaN
+    ],
+    "ancho_bolsa": 0.657277395595134,
+    "S_raros": 0.9166666666666666,
+    "S5_cerca": 0.9472477064220184,
+    "n_cerca": 110,
+    "infl5": {
+     "bss": 0.2496130475623014,
+     "p": 9.681232663453146e-05,
+     "brier": 0.2193518862242565,
+     "brier_cerca": 0.12290155200086268,
+     "p_media_cerca": 0.18413159224330183,
+     "frec_cerca": 0.13636363636363635,
+     "eventos": 297,
+     "n": 770
+    },
+    "caida20": {
+     "bss": 0.027182722233827117,
+     "p": 0.16271432584361478,
+     "frecuencia": 0.11298701298701298,
+     "n": 770
+    }
+   },
+   "cobertura_por_regimen_loco": {
+    "expansion": {
+     "filas": 833,
+     "bolsa": 0.9333,
+     "bonos": 0.9199,
+     "letras": 0.8831,
+     "vivienda": 0.8961,
+     "oro": 0.9286
+    },
+    "sobrecalentamiento": {
+     "filas": 616,
+     "bolsa": 0.9143,
+     "bonos": 0.894,
+     "letras": 0.8811,
+     "vivienda": 0.8942,
+     "oro": 0.8763
+    },
+    "estanflacion": {
+     "filas": 34,
+     "bolsa": 0.9,
+     "bonos": 0.8929,
+     "letras": 0.8846,
+     "vivienda": 0.8947,
+     "oro": 1.0
+    },
+    "crecimiento_bajo": {
+     "filas": 65,
+     "bolsa": 0.8966,
+     "bonos": 0.8966,
+     "letras": 0.8852,
+     "vivienda": 0.9184,
+     "oro": 1.0
+    }
+   },
+   "cobertura_por_pais_loco": {
+    "BEL": {
+     "filas": 112,
+     "S5": 0.8844,
+     "bolsa": 0.9196,
+     "bonos": 0.9369,
+     "letras": 0.8125,
+     "vivienda": 0.8804,
+     "oro": 0.9091
+    },
+    "DEU": {
+     "filas": 106,
+     "S5": 0.9124,
+     "bolsa": 0.8679,
+     "bonos": 0.9903,
+     "letras": 0.9608,
+     "vivienda": 0.8764,
+     "oro": 0.9091
+    },
+    "DNK": {
+     "filas": 112,
+     "S5": 0.9263,
+     "bolsa": 0.9732,
+     "bonos": 0.9196,
+     "letras": 0.8482,
+     "vivienda": 0.9554,
+     "oro": 0.9394
+    },
+    "ESP": {
+     "filas": 112,
+     "S5": 0.8634,
+     "bolsa": 0.9462,
+     "bonos": 0.8901,
+     "letras": 0.8349,
+     "vivienda": 0.8478,
+     "oro": 0.9394
+    },
+    "FIN": {
+     "filas": 111,
+     "S5": 0.8207,
+     "bolsa": 0.8333,
+     "bonos": 0.8468,
+     "letras": 0.8198,
+     "vivienda": 0.75,
+     "oro": 0.9394
+    },
+    "FRA": {
+     "filas": 109,
+     "S5": 0.905,
+     "bolsa": 0.9358,
+     "bonos": 0.8899,
+     "letras": 0.8962,
+     "vivienda": 0.8991,
+     "oro": 0.9394
+    },
+    "GBR": {
+     "filas": 112,
+     "S5": 0.9241,
+     "bolsa": 0.9643,
+     "bonos": 0.875,
+     "letras": 0.9821,
+     "vivienda": 0.875,
+     "oro": 0.8182
+    },
+    "ITA": {
+     "filas": 110,
+     "S5": 0.9112,
+     "bolsa": 0.9091,
+     "bonos": 0.8818,
+     "letras": 0.932,
+     "vivienda": 0.9265,
+     "oro": 0.8788
+    },
+    "JPN": {
+     "filas": 109,
+     "S5": 0.8625,
+     "bolsa": 0.8942,
+     "bonos": 0.9174,
+     "letras": 0.8073,
+     "vivienda": 0.9434,
+     "oro": 0.9091
+    },
+    "NLD": {
+     "filas": 112,
+     "S5": 0.931,
+     "bolsa": 0.9677,
+     "bonos": 0.9286,
+     "letras": 0.9286,
+     "vivienda": 0.9018,
+     "oro": 0.9091
+    },
+    "NOR": {
+     "filas": 112,
+     "S5": 0.921,
+     "bolsa": 0.9554,
+     "bonos": 0.9554,
+     "letras": 0.8661,
+     "vivienda": 0.9107,
+     "oro": 0.9091
+    },
+    "PRT": {
+     "filas": 107,
+     "S5": 0.8441,
+     "bolsa": 0.8411,
+     "bonos": 0.8411,
+     "letras": 0.7944,
+     "vivienda": 0.8947,
+     "oro": 0.9091
+    },
+    "SWE": {
+     "filas": 112,
+     "S5": 0.9321,
+     "bolsa": 0.9554,
+     "bonos": 0.9107,
+     "letras": 0.9375,
+     "vivienda": 0.9364,
+     "oro": 0.8788
+    },
+    "USA": {
+     "filas": 112,
+     "S5": 0.9259,
+     "bolsa": 0.9554,
+     "bonos": 0.9286,
+     "letras": 0.9375,
+     "vivienda": 0.9216,
+     "oro": 0.7576
+    }
+   },
+   "puerta_D_referencia": {
+    "S5_sobre_p2.5_nulo": true,
+    "S5_bajo_techo_0.93": true,
+    "activos_a_3pp": {
+     "bolsa": true,
+     "bonos": true,
+     "letras": true,
+     "vivienda": true,
+     "oro": true
+    },
+    "raros_sobre_p10_nulo": true,
+    "pasa": true
+   }
+  },
+  "v3_1": {
+   "loco": {
+    "S5": 0.8993001722652885,
+    "Sb": 0.9248322147651007,
+    "S_activo": [
+     0.9248322147651007,
+     0.9107025607353907,
+     0.883736120182887,
+     0.89453125,
+     0.9025974025974026
+    ],
+    "ancho_bolsa": 0.7925735943246617,
+    "S_raros": 0.8945783132530121,
+    "S5_cerca": 0.9431486880466472,
+    "n_cerca": 164,
+    "infl5": {
+     "bss": 0.2688534193451395,
+     "p": 2.6377789750019496e-05,
+     "brier": 0.1437312476663782,
+     "brier_cerca": 0.1490458064410735,
+     "p_media_cerca": 0.26024451554452716,
+     "frec_cerca": 0.16463414634146342,
+     "eventos": 414,
+     "n": 1548
+    },
+    "caida20": {
+     "bss": 0.020016207175229783,
+     "p": 0.0598543113617006,
+     "frecuencia": 0.0912751677852349,
+     "n": 1490
+    }
+   },
+   "temporal": {
+    "S5": 0.9153679653679654,
+    "Sb": 0.8233766233766234,
+    "S_activo": [
+     0.8233766233766234,
+     0.9155844155844156,
+     0.9844155844155844,
+     0.938858695652174,
+     NaN
+    ],
+    "ancho_bolsa": 0.6586460536552873,
+    "S_raros": 0.9444444444444444,
+    "S5_cerca": 0.944954128440367,
+    "n_cerca": 110,
+    "infl5": {
+     "bss": 0.24796084507697014,
+     "p": 9.5961609049105e-05,
+     "brier": 0.2198348553515907,
+     "brier_cerca": 0.12266101486915976,
+     "p_media_cerca": 0.1833400038927025,
+     "frec_cerca": 0.13636363636363635,
+     "eventos": 297,
+     "n": 770
+    },
+    "caida20": {
+     "bss": 0.027887254888126933,
+     "p": 0.16584194452389395,
+     "frecuencia": 0.11298701298701298,
+     "n": 770
+    }
+   },
+   "cobertura_por_regimen_loco": {
+    "expansion": {
+     "filas": 833,
+     "bolsa": 0.9358,
+     "bonos": 0.9199,
+     "letras": 0.8855,
+     "vivienda": 0.8916,
+     "oro": 0.9286
+    },
+    "sobrecalentamiento": {
+     "filas": 616,
+     "bolsa": 0.916,
+     "bonos": 0.9005,
+     "letras": 0.8811,
+     "vivienda": 0.896,
+     "oro": 0.8866
+    },
+    "estanflacion": {
+     "filas": 34,
+     "bolsa": 0.9,
+     "bonos": 0.8929,
+     "letras": 0.8846,
+     "vivienda": 0.8947,
+     "oro": 1.0
+    },
+    "crecimiento_bajo": {
+     "filas": 65,
+     "bolsa": 0.8793,
+     "bonos": 0.8966,
+     "letras": 0.8852,
+     "vivienda": 0.9184,
+     "oro": 1.0
+    }
+   },
+   "cobertura_por_pais_loco": {
+    "BEL": {
+     "filas": 112,
+     "S5": 0.8839,
+     "bolsa": 0.9107,
+     "bonos": 0.9369,
+     "letras": 0.8125,
+     "vivienda": 0.8804,
+     "oro": 0.9394
+    },
+    "DEU": {
+     "filas": 106,
+     "S5": 0.9143,
+     "bolsa": 0.8679,
+     "bonos": 0.9903,
+     "letras": 0.9608,
+     "vivienda": 0.8764,
+     "oro": 0.9394
+    },
+    "DNK": {
+     "filas": 112,
+     "S5": 0.9263,
+     "bolsa": 0.9732,
+     "bonos": 0.9196,
+     "letras": 0.8482,
+     "vivienda": 0.9554,
+     "oro": 0.9394
+    },
+    "ESP": {
+     "filas": 112,
+     "S5": 0.8612,
+     "bolsa": 0.9462,
+     "bonos": 0.8901,
+     "letras": 0.8349,
+     "vivienda": 0.837,
+     "oro": 0.9394
+    },
+    "FIN": {
+     "filas": 111,
+     "S5": 0.8257,
+     "bolsa": 0.8333,
+     "bonos": 0.8649,
+     "letras": 0.8108,
+     "vivienda": 0.75,
+     "oro": 0.9394
+    },
+    "FRA": {
+     "filas": 109,
+     "S5": 0.9092,
+     "bolsa": 0.9358,
+     "bonos": 0.8991,
+     "letras": 0.9057,
+     "vivienda": 0.8991,
+     "oro": 0.9394
+    },
+    "GBR": {
+     "filas": 112,
+     "S5": 0.9281,
+     "bolsa": 0.9643,
+     "bonos": 0.8839,
+     "letras": 0.9821,
+     "vivienda": 0.875,
+     "oro": 0.8485
+    },
+    "ITA": {
+     "filas": 110,
+     "S5": 0.9089,
+     "bolsa": 0.9,
+     "bonos": 0.8818,
+     "letras": 0.932,
+     "vivienda": 0.9265,
+     "oro": 0.8788
+    },
+    "JPN": {
+     "filas": 109,
+     "S5": 0.8729,
+     "bolsa": 0.9231,
+     "bonos": 0.9266,
+     "letras": 0.8073,
+     "vivienda": 0.9434,
+     "oro": 0.8788
+    },
+    "NLD": {
+     "filas": 112,
+     "S5": 0.9266,
+     "bolsa": 0.9677,
+     "bonos": 0.9196,
+     "letras": 0.9375,
+     "vivienda": 0.8929,
+     "oro": 0.8788
+    },
+    "NOR": {
+     "filas": 112,
+     "S5": 0.921,
+     "bolsa": 0.9554,
+     "bonos": 0.9554,
+     "letras": 0.8661,
+     "vivienda": 0.9107,
+     "oro": 0.9091
+    },
+    "PRT": {
+     "filas": 107,
+     "S5": 0.8433,
+     "bolsa": 0.8505,
+     "bonos": 0.8411,
+     "letras": 0.785,
+     "vivienda": 0.8947,
+     "oro": 0.9091
+    },
+    "SWE": {
+     "filas": 112,
+     "S5": 0.9384,
+     "bolsa": 0.9554,
+     "bonos": 0.9107,
+     "letras": 0.9554,
+     "vivienda": 0.9364,
+     "oro": 0.9091
+    },
+    "USA": {
+     "filas": 112,
+     "S5": 0.9277,
+     "bolsa": 0.9554,
+     "bonos": 0.9286,
+     "letras": 0.9375,
+     "vivienda": 0.9216,
+     "oro": 0.7879
+    }
+   },
+   "puerta_D_referencia": {
+    "S5_sobre_p2.5_nulo": true,
+    "S5_bajo_techo_0.93": true,
+    "activos_a_3pp": {
+     "bolsa": true,
+     "bonos": true,
+     "letras": true,
+     "vivienda": true,
+     "oro": true
+    },
+    "raros_sobre_p10_nulo": true,
+    "pasa": true
+   }
+  },
+  "v3_identica_a_la_oficial": true
+ },
+ "segundos": 44
+}
