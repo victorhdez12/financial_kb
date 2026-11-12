@@ -14,6 +14,7 @@ import pandas as pd
 from src.regime.credit import THRESHOLDS
 from src.report.analogs import find_analogs
 from src.report import liquidez_vivo as LV
+from src.report import pulso_paises as PP
 from src.paper import informe as PI
 from src.report import nowcast_vivo as NV
 from src.report import termometro_vivo as TV
@@ -380,6 +381,11 @@ def main(today: date | None = None) -> None:
         signal["liquidez_credito"] = LV.liquidez_credito(con, today or date.today())
     except Exception as e:  # noqa: BLE001
         signal["liquidez_credito"] = {"error": f"{type(e).__name__}: {e}"}
+    # Pulso por país (descriptivo, reglas fijas; para el panel web): igual, sin tumbar el reporte.
+    try:
+        signal["pulso_paises"] = PP.pulso(con, today or date.today())
+    except Exception as e:  # noqa: BLE001
+        signal["pulso_paises"] = {"error": f"{type(e).__name__}: {e}"}
     # Paper trading B0 / B1 / B1′ (seguimiento; no tumba el reporte)
     try:
         signal["paper"] = PI.informe(con)

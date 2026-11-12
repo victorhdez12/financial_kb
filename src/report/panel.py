@@ -23,6 +23,7 @@ import os
 from datetime import date, datetime
 from pathlib import Path
 
+from src.report import panel_paises as PP
 from src.warehouse import db
 
 REPO = db.REPO
@@ -42,8 +43,11 @@ ETIQ_VIVO = "validado solo en el pasado; en seguimiento en vivo"
 NO_OOS = "no confirmado fuera de muestra"
 ND = '<span class="nd">no disponible</span>'
 ACTIVOS = [("bolsa", "Bolsa"), ("bonos", "Bonos"), ("letras", "Letras"), ("vivienda", "Vivienda"), ("oro", "Oro")]
-REGIMEN_NOMBRE = {"expansion": "expansión", "sobrecalentamiento": "sobrecalentamiento",
-                  "estanflacion": "estanflación", "crecimiento_bajo": "crecimiento bajo"}
+# nombres llanos (12-nov): «expansión» del motor = solo «sin caída fuerte del PIB e inflación ≤ 3 %»
+REGIMEN_NOMBRE = {"expansion": "expansión (sin caída del PIB, inflación ≤ 3 %)",
+                  "sobrecalentamiento": "sobrecalentamiento (sin caída del PIB, inflación > 3 %)",
+                  "estanflacion": "estanflación (PIB cayendo, inflación > 3 %)",
+                  "crecimiento_bajo": "crecimiento bajo (PIB cayendo, inflación ≤ 3 %)"}
 # cuadrante mensual de EE. UU. (src/regime/classify.QUADRANTS) → tarjetas del atlas que le corresponden
 CUADRANTE_ATLAS = {"Goldilocks": ["expansion"], "Reflación": ["sobrecalentamiento", "inflacion_alta"],
                    "Estanflación": ["estanflacion", "inflacion_alta"], "Deflación/recesión": ["crecimiento_bajo"]}
@@ -930,7 +934,7 @@ var tabs=[].slice.call(document.querySelectorAll('nav.tabs button')),secs=[].sli
 function show(id){tabs.forEach(function(b){b.setAttribute('aria-selected',b.dataset.t===id?'true':'false')});
 secs.forEach(function(s){s.hidden=s.id!==id});try{history.replaceState(null,'','#'+id)}catch(e){}}
 tabs.forEach(function(b){b.addEventListener('click',function(){show(b.dataset.t)})});
-var h=(location.hash||'').slice(1);show(secs.some(function(s){return s.id===h})?h:'hoy');
+var h=(location.hash||'').slice(1);show(secs.some(function(s){return s.id===h})?h:'paises');
 document.addEventListener('click',function(e){var a=e.target.closest('a[href^="#atlas-"]');if(a){show('atlas');}});
 var sel=document.getElementById('pais');
 function pais(c){[].forEach.call(document.querySelectorAll('.pais-blk'),function(d){d.hidden=d.dataset.pais!==c});
@@ -952,7 +956,7 @@ var n=d==='dark'?'light':'dark';root.setAttribute('data-theme',n);try{localStora
 })();
 """
 
-PESTANAS = [("hoy", "Hoy"), ("escenarios", "Escenarios 12 meses"), ("atlas", "Qué funciona en cada régimen"),
+PESTANAS = [("paises", "Países"), ("hoy", "Hoy (EE. UU. y recesión)"), ("escenarios", "Escenarios 12 meses"), ("atlas", "Qué funciona en cada régimen"),
             ("cartera", "Mi cartera"), ("estado", "Estado y avisos")]
 
 
@@ -971,28 +975,30 @@ def construir(s: dict, hoy: date | None = None) -> str:
         fr = []
     res = ("<ol>" + "".join(f"<li>{_md_negrita(f)}</li>" for f in fr) + "</ol>") if fr else f"<p>{ND}</p>"
     av = avisos_datos(s, hoy)
-    secciones = {"hoy": seccion_segura(sec_hoy, s, es), "escenarios": seccion_segura(sec_escenarios, s, es, fuente_es),
+    secciones = {"paises": seccion_segura(PP.sec_paises, s, es), "hoy": seccion_segura(sec_hoy, s, es), "escenarios": seccion_segura(sec_escenarios, s, es, fuente_es),
                  "atlas": seccion_segura(sec_atlas, s, es), "cartera": seccion_segura(sec_cartera, s, reg),
-                 "estado": seccion_segura(sec_estado, s, reg, hoy)}
+                 "estado": seccion_segura(sec_estado, s, reg, hoy) + PP.glosario_html()}
     nav = "".join(f'<button type="button" role="tab" data-t="{k}" aria-controls="{k}">{esc(v)}'
                   + (f" ({len(av)})" if k == "estado" and av else "") + "</button>" for k, v in PESTANAS)
-    cuerpo = "".join(f'<section id="{k}" role="tabpanel" aria-label="{esc(v)}"><h2>{esc(v)}</h2>{secciones[k]}</section>'
+    cuerpo = "".join(f'<section id="{k}" role="tabpanel" aria-label="{esc(v)}"><h2>{esc(v)}</h2>{PP.intro(k)}{secciones[k]}</section>'
                      for k, v in PESTANAS)
     return f"""<!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex"><title>Panel macro personal</title>
-<style>{CSS}</style></head>
+<style>{CSS}{PP.CSS}</style></head>
 <body>
 <header><div class="top"><div><h1>Panel macro personal</h1>
 <p class="muted">Reporte semanal del {esc(s.get("asof") or "—")} · panel generado el {esc(datetime.now().strftime("%Y-%m-%d %H:%M"))}</p></div>
 <button type="button" class="themebtn" id="theme" aria-label="Cambiar entre modo claro y oscuro">Claro / oscuro</button></div>
 <p class="disc"><strong>No es asesoramiento.</strong> {esc(AVISO_GENERAL)} Cada probabilidad lleva su acierto medido en el pasado y está {NO_OOS}.</p>
-<div class="resumen"><h3>Resumen de la semana <span class="muted">(reglas fijas, sin IA)</span></h3>{res}</div>
+{PP.guia()}
+<div class="resumen"><h3>Resumen de la semana <span class="muted">(reglas fijas, sin IA)</span></h3>{res}
+<details><summary><strong>Qué ha cambiado esta semana</strong></summary>{seccion_segura(PP.cambios_semana, s, REPORTS)}</details></div>
 <nav class="tabs" role="tablist">{nav}</nav></header>
 <main>{cuerpo}</main>
 <footer>{esc(AVISO_GENERAL)} Generado por src/report/panel.py a partir de obsidian/Reports/{esc(s.get("asof") or "—")}_signal.json.</footer>
 <div id="tip" role="tooltip"></div>
-<script>{JS}</script>
+<script>{JS}{PP.JS}</script>
 </body></html>"""
 
 

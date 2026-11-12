@@ -38,6 +38,7 @@ PAGE = "https://data.imf.org/en/datasets/IMF.RES:WEO"
 
 COUNTRIES = ["USA", "G163", "DEU", "FRA", "ITA", "ESP", "NLD", "GBR", "JPN", "CHN", "CAN", "CHE", "AUS",
              "KOR", "IND", "BRA", "MEX", "RUS", "ZAF", "TUR", "IDN", "SAU", "ARG",
+             "BEL", "DNK", "FIN", "NOR", "PRT", "SWE", "IRL",   # países del panel internacional (panel web, 12-nov)
              "G001", "G110", "G200", "G119"]
 ISO_OUT = {"G163": "EA", "G001": "WLD", "G110": "ADV", "G200": "EMDE", "G119": "G7"}
 INDICATORS = {  # code -> (category, units)
