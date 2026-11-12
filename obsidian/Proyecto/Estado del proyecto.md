@@ -36,7 +36,7 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Agentes de la fase:** Constructor · Investigador de relaciones · **Validador independiente** · **Reportero** (ver [[Proyecto/Agentes]]). Informe: [[Reports/Fase 3/Informe de resultados]].
 
-**▶ Retomar (12-nov, noche):** panel con pestaña Países (18 países, semáforo + detalle), guía, glosario y cambios semanales; se regenera cada domingo. Siguiente: feedback del usuario sobre la versión fácil. FALLO de deriva OCDE aceptado (opción 1). Emisión INT-11 20-30 nov; primeras decisiones paper ≈ 6-dic.
+**▶ Retomar (12-nov, noche 2):** panel con Países (preciso, previsiones FMI, escenarios por activo, dinero) y «Mis activos» (29 activos, simulaciones A/B); diario. Pendiente: confirmar escisión CTVA; feedback del usuario. Bloqueado ≥ 2005 intacto (opción A).
 
 ## ▶ Retomar aquí (26-oct, RECONDUCCIÓN: líneas A y B)
 

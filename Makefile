@@ -44,12 +44,12 @@ INGEST := fred_extended alfred_vintages fred_us fed_yieldcurve us_treasury nyfed
           cboe_vx eia_futures atl_mpt clev_inflexp mpls_mpd \
           cycle_nyfed cycle_rtdsm cycle_spf umich \
           ecb eurostat bde ine bundesbank ifo zew \
-          cycle_bis bis_ext oecd oecd_qna oecd_vivienda aqr_clr imf_weo imf_ifs imf_gdd imf_hpdd imf_mfs wb_wdi jst_macrohistory boe_millennium_uk boe_rates cycle_worldorder \
+          cycle_bis bis_ext oecd oecd_qna oecd_vivienda aqr_clr imf_weo imf_ifs imf_gdd imf_hpdd imf_mfs yahoo_precios wb_wdi jst_macrohistory boe_millennium_uk boe_rates cycle_worldorder \
           events_nber events_wars events_financial_crises events_gpr events_curated
 .PHONY: ingest audit data ingest-daily daily semanal
 
 # Fuentes con datos diarios o semanales (actualización diaria automática, ver scripts/actualizar.sh)
-INGEST_DAILY := fred_extended fed_yieldcurve us_liquidity nyfed_repo ecb bundesbank cboe cboe_vx atl_mpt umich
+INGEST_DAILY := yahoo_precios fred_extended fed_yieldcurve us_liquidity nyfed_repo ecb bundesbank cboe cboe_vx atl_mpt umich
 
 ingest:               ## descarga/actualiza todas las fuentes curadas (lento; idempotente)
 	@for s in $(INGEST); do echo "== $$s"; $(PY) -m src.ingest.$$s || echo "FALLO $$s"; done
@@ -62,6 +62,7 @@ data: ingest warehouse regime audit   ## ciclo completo de la fase de datos
 ingest-daily:         ## solo las fuentes diarias (minutos)
 	@for s in $(INGEST_DAILY); do echo "== $$s"; $(PY) -m src.ingest.$$s || echo "FALLO $$s"; done
 
-daily: ingest-daily warehouse regime   ## actualización diaria (launchd, lun-sáb)
+daily: ingest-daily warehouse regime   ## actualización diaria (launchd, lun-sáb) + panel web
+	$(PY) -m src.report.panel || echo "AVISO panel no generado"
 
 semanal: data weekly  ## actualización completa + auditoría + reporte (launchd, domingo)

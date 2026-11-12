@@ -35,7 +35,7 @@ INDICATORS = [
     ("Regla de Sahm", "sahm", "pp", "sahm"),
     ("IPC subyacente 6m anualizado", "core_cpi_6m", "%", "core_cpi_6m"),
     ("PCE subyacente 6m anualizado", "core_pce_6m", "%", "core_pce_6m"),
-    ("PPI a/a", "ppi_yoy", "%", "ppi_yoy"),
+    ("PPI todas las mercancías a/a (PPIACO, muy sensible a energía)", "ppi_yoy", "%", "ppi_yoy"),
     ("Inflación implícita 5a (T5YIE)", "t5yie", "%", "t5yie"),
     ("Fed funds", "fedfunds", "%", "fedfunds"),
     ("Tipo real fed funds", "real_ff", "pp", None),

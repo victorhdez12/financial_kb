@@ -337,6 +337,9 @@ INTRO = {
     "cartera": ("Qué haría tu cartera de seguimiento (B0, B1, B1′) este mes.",
                 "Hoy la volatilidad está por debajo del umbral, así que B1 no recorta la bolsa. Las rentabilidades "
                 "empiezan a aparecer en diciembre (los datos llegan con ≈ 2 meses de retraso)."),
+    "activos": ("Tus acciones, ETF y materias primas: cómo van, su riesgo y dos simulaciones a 12 meses.",
+                "La tabla resume; pulsa un activo para su ficha. Las simulaciones no están validadas y no son "
+                "recomendaciones: sirven para ver el RANGO de lo que puede pasar, no un precio objetivo."),
     "estado": ("Cuánto fiarte de cada herramienta, avisos de datos y glosario.",
                "Si una fuente falla o un dato está viejo, sale aquí. El glosario explica cada término."),
 }
