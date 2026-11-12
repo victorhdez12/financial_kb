@@ -1,5 +1,5 @@
 """P-E1: las variables del registro en vivo (`e1.rasgos`) son idénticas a las de INT-13 (`int13.construir`) con ≤ 2004,
-y los modelos congelados se reproducen con su sha256."""
+y los modelos congelados son íntegros (sha256) y se reproducen a ≤ TOL_COEF con el warehouse de hoy."""
 import json
 from pathlib import Path
 
@@ -10,6 +10,25 @@ import pytest
 from src.intl import e1 as E
 
 REPO = Path(__file__).resolve().parents[1]
+
+
+TOL_COEF = 0.01   # revisión OCDE ≤ 2004 del 10-nov-2026: |Δ| máx 0,0017; los modelos congelados (JSON) no se reajustan
+
+
+def _num(d, p=""):
+    if isinstance(d, dict):
+        return {k2: v2 for k, v in d.items() for k2, v2 in _num(v, f"{p}/{k}").items()}
+    if isinstance(d, list):
+        return {k2: v2 for i, v in enumerate(d) for k2, v2 in _num(v, f"{p}[{i}]").items()}
+    return {p: float(d)} if isinstance(d, (int, float)) and not isinstance(d, bool) else {}
+
+
+def _comparar(j, mod):
+    """El JSON congelado es íntegro (sha exacto) y el reajuste con el warehouse de hoy queda a ≤ TOL_COEF."""
+    assert j["modelos_sha256"] == E.sha(j["modelos"])
+    a, b = _num(j["modelos"]), _num(mod)
+    assert a.keys() == b.keys()
+    assert max(abs(a[k] - b[k]) for k in a) <= TOL_COEF
 
 
 @pytest.fixture(scope="module")
@@ -35,15 +54,13 @@ def test_rasgos_vivo_igual_que_int13(dev):
 def test_modelos_congelados(dev):
     from src.intl import int13 as M
     j = json.loads((REPO / "research/int/e1_modelos.json").read_text())
-    mod = E.ajustar(E.filas(M.muestra(dev, E.OBJ)))
-    assert E.sha(mod) == j["modelos_sha256"] == E.sha(j["modelos"])
+    _comparar(j, E.ajustar(E.filas(M.muestra(dev, E.OBJ))))
 
 
 def test_modelos_6m_congelados(dev):
     from src.intl import int13 as M
     j = json.loads((REPO / "research/int/e1_6_modelos.json").read_text())
-    mod = E.ajustar(E.filas(M.muestra(dev, "E1_6"), "y_E1_6"), "y_E1_6")
-    assert E.sha(mod) == j["modelos_sha256"] == E.sha(j["modelos"])
+    _comparar(j, E.ajustar(E.filas(M.muestra(dev, "E1_6"), "y_E1_6"), "y_E1_6"))
 
 
 def test_meses_dato_y_almacen_al_dia():

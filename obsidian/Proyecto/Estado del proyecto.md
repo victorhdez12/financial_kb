@@ -36,7 +36,7 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Agentes de la fase:** Constructor · Investigador de relaciones · **Validador independiente** · **Reportero** (ver [[Proyecto/Agentes]]). Informe: [[Reports/Fase 3/Informe de resultados]].
 
-**▶ Retomar (12-nov):** panel v1 hecho y en main (`acd86ad`), se regenera cada domingo. Siguiente: panel pulido (fin nov) con el feedback del usuario. Pendiente usuario: decidir el FALLO de deriva OCDE (CLI FRA/ITA, sin efecto en percentiles; recomendado no renovar). Emisión INT-11 20-30 nov; primeras decisiones paper ≈ 6-dic.
+**▶ Retomar (12-nov):** panel v1 hecho y en main (`acd86ad`), se regenera cada domingo. Siguiente: panel pulido (fin nov) con el feedback del usuario. FALLO de deriva OCDE aceptado (opción 1). Emisión INT-11 20-30 nov; primeras decisiones paper ≈ 6-dic.
 
 ## ▶ Retomar aquí (26-oct, RECONDUCCIÓN: líneas A y B)
 

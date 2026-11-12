@@ -124,7 +124,16 @@ def test_deriva_de_revision_del_warehouse():
     finally:
         con.close()
     warnings.warn(RV.texto(inf), UserWarning, stacklevel=1)
-    assert inf["estado"] != "fallo", RV.texto(inf)
+    no_aceptadas = [r["series_id"] for r in inf["series_revisadas"] if r["estado"] == "fallo"
+                    and not r["dif_max"] <= FALLOS_ACEPTADOS.get(r["series_id"], -1)]
+    pct_fallo = [n for n, d in inf["percentiles"].items() if d["estado"] == "fallo"]
+    assert not no_aceptadas and not pct_fallo, RV.texto(inf)
+
+
+# Fallos decididos a mano (docs/int/OCDE_deriva_umbrales.md §2: «se decide a mano»). Serie → |Δ| máx aceptado; una
+# revisión mayor o en otra serie vuelve a fallar. 12-nov-2026 (usuario): CLI FRA 0,3976 y CLI ITA 0,3860 puntos,
+# 0 de 217 percentiles afectados → no se renueva la instantánea ni se recongela nada.
+FALLOS_ACEPTADOS = {"oecd_cli_fra": 0.40, "oecd_cli_ita": 0.39}
 
 
 @pytest.mark.skipif(not D.instantanea_disponible(), reason="sin la instantánea ≤ 2004")

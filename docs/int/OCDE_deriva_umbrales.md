@@ -119,3 +119,7 @@ Pendiente opcional (no implementado): ejecutar `instantanea_respaldo.py verifica
 
 ## Aprobación (5-nov-2026)
 El usuario aprobó (a) la tabla de umbrales, (b) las reglas de estructura, (c) percentiles: aviso con 1 punto, fallo con ≥ 3 o de nulo a no nulo, (d) recalibrar en ≈ 6 meses (≈ mayo 2027) con las descargas fechadas archivadas desde el 4-nov.
+
+## Decisiones a mano
+
+- **12-nov-2026 (usuario):** FALLO por CLI FRA (|Δ| 0,3976 puntos, 1968-05) y CLI ITA (0,3860, 1992-12), descarga del 10-nov; 0 de 217 percentiles publicados cambian. Se acepta sin renovar la instantánea ni recongelar (`FALLOS_ACEPTADOS` en `tests/test_deriva_revisiones.py`, con tope por serie). Los tests de reproducción de E1/E1b y del termómetro pasan a tolerancia (coef. ≤ 0,01; percentiles ≤ 1e-4): el reajuste con el warehouse de hoy mueve los coeficientes de E1 ≤ 0,0017.

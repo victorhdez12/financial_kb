@@ -267,9 +267,11 @@ def test_corte_2004_reproduce_desarrollo():
     v = np.concatenate(ps)
     ref = json.loads(V.CONGELADO.read_text())["final"]["percentiles_referencia"]["T2"]
     assert len(v) == ref["meses"]
-    for q in (50, 80, 95):      # parámetros sin redondear: reproduce los percentiles exactos (antes, error ≤ 5e-4)
-        assert np.quantile(v, q / 100) == pytest.approx(par["pct_T2"][f"p{q}"], abs=1e-12)
-        assert round(float(np.quantile(v, q / 100)), 4) == ref[f"p{q}"]
+    # Tolerancia 1e-4 (antes 1e-12): la OCDE revisa en origen series ≤ 2004 (CLI FRA/ITA, 10-nov-2026) y el warehouse
+    # ya no reproduce bit a bit; los percentiles congelados no se tocan (test_deriva_revisiones vigila la deriva).
+    for q in (50, 80, 95):
+        assert np.quantile(v, q / 100) == pytest.approx(par["pct_T2"][f"p{q}"], abs=1e-4)
+        assert float(np.quantile(v, q / 100)) == pytest.approx(ref[f"p{q}"], abs=1e-4)
 
 
 @pytest.mark.skipif(not db.WAREHOUSE.exists() or not D.instantanea_disponible(),
