@@ -197,6 +197,11 @@ def acierto_int11() -> dict:
     return {"infl5": g(r, "loco", "infl5"), "caida20": g(r, "loco", "caida20"), "fuente": "research/int/int11_v3_resultado.json (fase D, LOCO, ≤ 2004)"}
 
 
+def _abanico(v):
+    from src.report.weekly import abanico
+    return abanico(v)
+
+
 def escenarios_completos(s: dict) -> tuple[dict | None, str]:
     """Escenarios del signal; si el signal es anterior a que llevara los abanicos (p5/p50/p95), los toma de
     research/int/int11_v3_hoy.json cuando su emisión es de la misma semana. Devuelve (escenarios, nota de fuente)."""
@@ -218,7 +223,7 @@ def escenarios_completos(s: dict) -> tuple[dict | None, str]:
         q = r.get("cuantiles_1_99") or {}
         paises[c] = {k: r.get(k) for k in ("regimen_dominante", "p_caida_bolsa_20", "p_inflacion_5", "dependencia_hoy",
                                             "dependencia_por_regimen", "pesos_regimen", "cerca_umbral")}
-        paises[c]["abanicos"] = {a: {"p5": v[4], "p50": v[49], "p95": v[94]} for a, v in q.items() if len(v) == 99}
+        paises[c]["abanicos"] = {a: _abanico(v) for a, v in q.items() if len(v) == 99}
         paises[c]["estado"] = {k: (r.get("estado") or {}).get(k) for k in ("mes_ipc", "inflacion", "brecha")}
     return ({"emision": h.get("emision"), "ventana": h.get("ventana_objetivo"), "aviso": h.get("aviso"),
              "motor": h.get("version_motor") or h.get("motor"), "paises": paises,
@@ -867,7 +872,7 @@ CSS = """
 --hl:rgba(57,135,229,.12);--tipbg:#f0efec;--tipink:#0b0b0b}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--page);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
-header,main,footer{max-width:1100px;margin:0 auto;padding:0 16px}
+header,main,footer{max-width:1280px;margin:0 auto;padding:0 16px}
 header{padding-top:20px}h1{font-size:22px;margin:0 0 4px}h2{font-size:18px;margin:24px 0 8px}h3{font-size:16px;margin:0 0 8px}
 h4{font-size:14px;margin:14px 0 6px}p{margin:6px 0}a{color:var(--s1)}
 .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
@@ -934,7 +939,9 @@ var tabs=[].slice.call(document.querySelectorAll('nav.tabs button')),secs=[].sli
 function show(id){tabs.forEach(function(b){b.setAttribute('aria-selected',b.dataset.t===id?'true':'false')});
 secs.forEach(function(s){s.hidden=s.id!==id});try{history.replaceState(null,'','#'+id)}catch(e){}}
 tabs.forEach(function(b){b.addEventListener('click',function(){show(b.dataset.t)})});
-var h=(location.hash||'').slice(1);show(secs.some(function(s){return s.id===h})?h:'paises');
+var h=(location.hash||'').slice(1);
+if(h.indexOf('pais-')===0){show('paises');var dp=document.getElementById(h);if(dp){dp.open=true;setTimeout(function(){dp.scrollIntoView()},0)}}
+else{show(secs.some(function(s){return s.id===h})?h:'paises')}
 document.addEventListener('click',function(e){var a=e.target.closest('a[href^="#atlas-"]');if(a){show('atlas');}});
 var sel=document.getElementById('pais');
 function pais(c){[].forEach.call(document.querySelectorAll('.pais-blk'),function(d){d.hidden=d.dataset.pais!==c});

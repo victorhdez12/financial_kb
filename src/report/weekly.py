@@ -259,7 +259,17 @@ def md_liquidez_credito(s: dict) -> str:
 def _abanicos(r: dict) -> dict:
     """p5 / p50 / p95 de cada activo (rejilla 1..99 de int11_v3_hoy) para el panel (src/report/panel.py)."""
     q = r.get("cuantiles_1_99") or {}
-    return {a: {"p5": v[4], "p50": v[49], "p95": v[94]} for a, v in q.items() if len(v) == 99}
+    return {a: abanico(v) for a, v in q.items() if len(v) == 99}
+
+
+def abanico(v: list) -> dict:
+    """Resumen de la rejilla de percentiles 1..99: p5/p25/p50/p75/p95 y P(rentabilidad real < 0) por interpolación
+    lineal entre percentiles (resolución ≈ 1 punto)."""
+    import numpy as np
+    x = np.asarray(v, float)
+    q = np.arange(1, 100) / 100
+    p_neg = float(np.interp(0.0, x, q)) if x[0] < 0 < x[-1] else (1.0 if x[-1] <= 0 else 0.0)
+    return {"p5": v[4], "p25": v[24], "p50": v[49], "p75": v[74], "p95": v[94], "p_neg": round(p_neg, 3)}
 
 
 def escenarios(today: date) -> dict:

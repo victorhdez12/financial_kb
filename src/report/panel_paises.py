@@ -108,10 +108,10 @@ def _banda_recesion(s: dict, c: str) -> tuple[str, str]:
     t = ((s.get("termometro") or {}).get("paises") or {}).get(c) or {}
     nw = ((s.get("nowcast") or {}).get("paises") or {}).get(c) or {}
     if (t.get("estado") or {}).get("en_recesion"):
-        return "rojo", "en recesión (fechado)"
+        return "rojo", "en recesión"
     b = nw.get("banda")
     if b:
-        return {"bajo": "verde", "medio": "ambar", "alto": "rojo"}.get(b, "gris"), f"nowcast {b} (p{nw.get('percentil')})"
+        return {"bajo": "verde", "medio": "ambar", "alto": "rojo"}.get(b, "gris"), f"{b} · p{nw.get('percentil')}"
     return "gris", "sin dato"
 
 
@@ -132,13 +132,24 @@ def _motor(es: dict | None, c: str) -> dict:
     return ((es or {}).get("paises") or {}).get(c) or {}
 
 
+CAB = {"crecimiento": ("Crecimiento", "PIB real frente a hace un año"),
+       "inflacion": ("Inflación", "último dato a/a (IPC o IPCA)"),
+       "empleo": ("Paro", "tasa (cambio en 12 meses, pp)"),
+       "bonos": ("Bono 10 años", "tipo (euro: diferencial con Alemania; resto: cambio en 3 meses)"),
+       "fiscal": ("Deuda · saldo", "deuda pública / PIB · saldo / PIB (FMI)"),
+       "bolsa": ("Bolsa", "caída desde su máximo de 12 meses"),
+       "confianza": ("CLI", "indicador adelantado OCDE (100 = tendencia) y dirección en 3 meses")}
+ACTIVO_N = {"bolsa": "Bolsa", "bonos": "Bonos del Estado", "letras": "Letras (liquidez)", "vivienda": "Vivienda",
+            "oro": "Oro"}
+
+
 def sec_paises(s: dict, es: dict | None) -> str:
     pul = pulso_desde(s)
     if not pul:
         return '<div class="card"><p class="nd">Pulso por país no disponible.</p></div>'
     P = pul["paises"]
-    leyenda = " · ".join(f'{chip(k, PALABRA[k])}' for k in ("verde", "ambar", "rojo", "gris"))
-    cab = "".join(f"<span>{esc(t)}</span>" for _, t in TEMAS)
+    leyenda = " ".join(chip(k, PALABRA[k]) for k in ("verde", "ambar", "rojo", "gris"))
+    cab = "".join(f'<span data-tip="{esc(d)}">{esc(t)}</span>' for t, d in CAB.values())
     filas = []
     for c in [x for x in ORDEN if x in P]:
         r = P[c]
@@ -146,84 +157,147 @@ def sec_paises(s: dict, es: dict | None) -> str:
             filas.append(f'<details class="pais"><summary><span class="pn">{esc(r.get("nombre", c))}</span>'
                          f'<span class="nd">sin datos ({esc(r["error"])})</span></summary></details>')
             continue
-        col = r["colores"]
-        chips = "".join(f'<span class="cell" data-l="{esc(t)}">{chip(col[k]["color"], col[k]["texto"], t + ": " + col[k]["texto"])}</span>'
-                        for k, t in TEMAS)
+        celdas = []
+        for k, (tit, desc) in CAB.items():
+            v = r["colores"][k]
+            ayuda = f"{tit}: {v['texto']} · {desc} · dato de {v['fecha']}"
+            celdas.append(f'<span class="cell" data-l="{esc(tit)}">{chip(v["color"], v["cifra"], ayuda)}</span>')
         rc, rt = _banda_recesion(s, c)
+        celdas.append(f'<span class="cell" data-l="Recesión">{chip(rc, rt, "Riesgo de recesión hoy: " + rt)}</span>')
         m = _motor(es, c)
         reg = m.get("regimen_dominante")
         reg_t = REG_LLANO.get(reg, "—") if reg else "no incluido en el motor"
         filas.append(f'''<details class="pais" id="pais-{esc(c)}"><summary>
 <span class="pn">{esc(r["nombre"])} <span class="muted">{esc(c)}</span></span>
-<span class="cells">{chips}<span class="cell" data-l="Recesión">{chip(rc, rt, "Riesgo de recesión: " + rt)}</span></span>
-<span class="frase1">{esc(r["frase"])}</span></summary>
-{_detalle(c, r, m, reg_t, s)}</details>''')
-    return f'''<div class="intro"><p><strong>Los 18 países de un vistazo.</strong> Cada fila es un país y cada color resume un
-tema con reglas fijas y sencillas. <strong>Pulsa un país</strong> para ver la explicación en frases, todas las cifras y lo que
-dicen los modelos.</p><p class="small">Leyenda: {leyenda}. Pasa el ratón por un color para ver qué significa.</p></div>
-<div class="card"><div class="phead"><span>País</span><span class="cells">{cab}<span>Recesión</span></span></div>
+<span class="cells">{"".join(celdas)}</span></summary>
+{_detalle(c, r, m, reg_t, s, es)}</details>''')
+    return f'''<div class="intro"><p><strong>Los 18 países de un vistazo.</strong> Cada celda es una cifra real con un color
+que la resume (reglas fijas). <strong>Pulsa un país</strong> para ver la explicación en frases, qué se espera (FMI), sus
+probabilidades y escenarios, el dinero y todas las cifras con su fecha.</p>
+<p class="small">Leyenda: {leyenda}. Pasa el ratón por una cifra o por el título de una columna para ver qué es y de
+qué mes es el dato.</p></div>
+<div class="card ptabla"><div class="phead"><span>País</span><span class="cells">{cab}<span data-tip="nowcast descriptivo o fechado trimestral">Recesión</span></span></div>
 {"".join(filas)}</div>
 <details class="card"><summary><h3>¿Cómo se decide cada color?</h3></summary>
-<p class="small">{esc(pul.get("aviso"))}</p><ul class="small">{"".join(f"<li><strong>{esc(t)}:</strong> {esc(pul['reglas'].get(k, ''))}</li>" for k, t in TEMAS)}
-<li><strong>Recesión:</strong> rojo si el fechado trimestral la marca; si no, la banda del {term("nowcast")} (bajo / medio / alto).</li></ul></details>'''
+<p class="small">{esc(pul.get("aviso"))}</p><ul class="small">{"".join(f"<li><strong>{esc(CAB[k][0])}:</strong> {esc(pul['reglas'].get(k, ''))}</li>" for k in CAB)}
+<li><strong>Recesión:</strong> rojo si el fechado trimestral marca recesión; si no, la banda del {term("nowcast")}
+(bajo / medio / alto) frente a 1960-2004.</li></ul></details>'''
 
 
-def _detalle(c: str, r: dict, m: dict, reg_t: str, s: dict) -> str:
-    cr, inf, em, ti, fi, bo, vi, co = (r.get(k) or {} for k in
-                                       ("crecimiento", "inflacion", "empleo", "tipos", "fiscal", "bolsa", "vivienda", "confianza"))
+def _tabla(filas) -> str:
+    return ('<table class="num"><tbody>' + "".join(
+        f"<tr><td>{a}</td><td><strong>{b}</strong></td><td class='muted'>{esc(f)}</td></tr>" for a, b, f in filas)
+        + "</tbody></table>")
+
+
+def _detalle(c: str, r: dict, m: dict, reg_t: str, s: dict, es: dict | None = None) -> str:
+    cr, inf, em, ti, fi, bo, vi, co, di = (r.get(k) or {} for k in ("crecimiento", "inflacion", "empleo", "tipos",
+                                                                    "fiscal", "bolsa", "vivienda", "confianza", "dinero"))
     fi_año = f"{fi.get('año')}{' (previsión FMI)' if fi.get('proyeccion') else ''}"
-    filas = [
-        ("Crecimiento", [("PIB real " + term("a/a"), n(cr.get("pib_aa"), signo=True), cr.get("trimestre", "")[:7]),
-                         ("PIB último trimestre (anualizado)", n(cr.get("pib_trim_anualizado"), signo=True), ""),
+    pct = lambda v, d: (n(v, 0, "") + (f" (desde {d})" if d else "")) if v is not None else n(None)  # noqa: E731
+    bloques = [
+        ("Crecimiento", [("PIB real " + term("a/a"), n(cr.get("pib_aa"), signo=True), cr.get("trimestre")),
+                         ("PIB último trimestre, anualizado", n(cr.get("pib_trim_anualizado"), signo=True), cr.get("trimestre")),
                          ("Media de los últimos 10 años", n(cr.get("media_10a")) + " al año", ""),
-                         ("Producción industrial a/a", n(cr.get("ip_aa"), signo=True), (cr.get("ip_mes") or "")[:7]),
-                         ("Previsión del FMI para este año", n(cr.get("weo_crec_año"), signo=True), "WEO")]),
-        ("Inflación", [("IPC a/a (último mes)", n(inf.get("ipc_aa")), (inf.get("mes") or "")[:7]),
-                       ("IPC media 12 meses (la que usa el motor)", n(inf.get("ipc_media_12m")), ""),
-                       ("Subyacente a/a (sin energía ni alimentos)", n(inf.get("subyacente_aa")), (inf.get("mes_sub") or "")[:7]),
-                       (term("percentil") + " del IPC en su historia", n(inf.get("pct_ipc"), 0, ""), "")]),
-        ("Empleo", [("Tasa de paro", n(em.get("paro")), (em.get("mes") or "")[:7]),
-                    ("Cambio en 12 meses", n(em.get("delta_12m"), 1, " pp", True), ""),
-                    (term("percentil") + " del paro en su historia", n(em.get("pct_paro"), 0, ""), "")]),
-        ("Tipos y bonos", [("Tipo a 3 meses", n(ti.get("corto_3m"), 2), ""),
-                           ("Bono a 10 años", n(ti.get("largo_10a"), 2), (ti.get("mes") or "")[:7]),
+                         ("Producción industrial a/a", n(cr.get("ip_aa"), signo=True), cr.get("ip_mes"))]),
+        ("Inflación", [("Inflación general (" + esc(inf.get("general_fuente")) + ")", n(inf.get("general")), inf.get("general_mes")),
+                       ("IPC nacional a/a (OCDE)", n(inf.get("ipc_aa")), inf.get("mes")),
+                       ("IPCA a/a (BCE)", n(inf.get("hicp_aa")), inf.get("mes_hicp")),
+                       ("IPC media 12 meses (la del motor)" + (" · 1 mes interpolado" if inf.get("huecos_media_12m") else ""),
+                        n(inf.get("ipc_media_12m")), inf.get("mes")),
+                       ("Subyacente a/a (OCDE)", n(inf.get("subyacente_aa")), inf.get("mes_sub")),
+                       ("Subyacente IPCA a/a (BCE)", n(inf.get("hicp_sub_aa")), inf.get("mes_hicp_sub")),
+                       (term("percentil") + " del IPC en su historia", pct(inf.get("pct_ipc"), inf.get("pct_ipc_desde")), "")]),
+        ("Empleo", [("Tasa de paro", n(em.get("paro")), em.get("mes")),
+                    (f"Cambio en {em.get('delta_meses', 12)} meses" + (" (el mes de hace 12 no se publicó)" if em.get("delta_meses") == 13 else ""),
+                     n(em.get("delta_12m"), 1, " pp", True), ""),
+                    (term("percentil") + " del paro en su historia", pct(em.get("pct_paro"), em.get("pct_paro_desde")), "")]),
+        ("Tipos y bonos", [("Tipo a 3 meses (mismo mes)", n(ti.get("corto_3m"), 2), ti.get("mes")),
+                           ("Bono a 10 años", n(ti.get("largo_10a"), 2), ti.get("mes")),
                            ("Cambio del 10 años en 3 meses", n(ti.get("delta_3m_10a"), 2, " pp", True), ""),
-                           (term("diferencial") + " frente a Alemania", n(ti.get("dif_alemania"), 2, " pp", True), ""),
-                           (term("curva") + " 10a − 3m", n(ti.get("curva_10a_3m"), 2, " pp", True), ""),
-                           (term("r − g"), n(ti.get("r_menos_g"), 1, " pp", True), ""),
-                           (term("percentil") + " del 10 años en su historia", n(ti.get("pct_10a"), 0, ""), "")]),
+                           (term("diferencial") + " con Alemania (mismo mes)", n(ti.get("dif_alemania"), 2, " pp", True), ti.get("mes")),
+                           (term("curva") + " 10a − 3m", n(ti.get("curva_10a_3m"), 2, " pp", True), ti.get("mes")),
+                           (term("r − g") + " (aprox.)", n(ti.get("r_menos_g"), 1, " pp", True), ""),
+                           (term("percentil") + " del 10 años en su historia", pct(ti.get("pct_10a"), ti.get("pct_10a_desde")), "")]),
         ("Cuentas públicas", [("Deuda pública bruta / PIB", n(fi.get("deuda_pib"), 0), fi_año),
                               ("Saldo público / PIB", n(fi.get("saldo_pib"), 1, " %", True), fi_año),
                               (term("saldo primario") + " / PIB", n(fi.get("saldo_primario_pib"), 1, " %", True), fi_año),
                               ("Intereses de la deuda / PIB", n(fi.get("intereses_pib"), 1), fi_año)]),
-        ("Mercados", [("Bolsa (precio) a/a", n(bo.get("aa"), signo=True), (bo.get("mes") or "")[:7]),
-                      ("Caída desde el máximo de 12 meses", n(bo.get("caida_max_12m"), signo=True), ""),
-                      ("Vivienda (precio) a/a", n(vi.get("precio_aa"), signo=True), (vi.get("trimestre") or "")[:7])]),
-        ("Confianza", [(term("CLI") + " OCDE (100 = tendencia)", n(co.get("cli"), 1, ""), (co.get("mes") or "")[:7]),
+        ("Dinero y crédito", [(esc(di.get("agregado") or "Dinero"), n(di.get("aa"), signo=True), di.get("mes")),
+                              ("M2 real (descontada la inflación)", n(di.get("real_aa"), signo=True), di.get("mes")) if "real_aa" in di else None,
+                              ("M1 zona euro a/a", n(di.get("m1_aa"), signo=True), di.get("mes")) if "m1_aa" in di else None,
+                              ("Préstamos a hogares (euro) a/a", n(di.get("prestamos_hogares_aa"), signo=True), di.get("mes")) if "m1_aa" in di else None,
+                              ("Préstamos a empresas (euro) a/a", n(di.get("prestamos_empresas_aa"), signo=True), di.get("mes")) if "m1_aa" in di else None]),
+        ("Mercados", [("Bolsa (precio, media mensual) a/a", n(bo.get("aa"), signo=True), bo.get("mes")),
+                      ("Caída desde el máximo de 12 meses", n(bo.get("caida_max_12m"), signo=True), bo.get("mes")),
+                      ("Vivienda (precio nominal) a/a", n(vi.get("precio_aa"), signo=True), vi.get("trimestre"))]),
+        ("Confianza", [(term("CLI") + " OCDE (100 = tendencia)", n(co.get("cli"), 1, ""), co.get("mes")),
                        ("Cambio del CLI en 3 meses", n(co.get("delta_3m_cli"), 2, "", True), ""),
-                       ("Confianza empresarial", n(co.get("empresas"), 1, ""), ""),
-                       ("Confianza del consumidor", n(co.get("consumidores"), 1, ""), "")]),
+                       ("Confianza empresarial (OCDE)", n(co.get("empresas"), 1, ""), ""),
+                       ("Confianza del consumidor (OCDE)", n(co.get("consumidores"), 1, ""), "")]),
     ]
-    bloques = "".join(f'<div class="dblk"><h4>{t}</h4><table class="num"><tbody>' +
-                      "".join(f"<tr><td>{a}</td><td><strong>{b}</strong></td><td class='muted'>{esc(f)}</td></tr>" for a, b, f in fs)
-                      + "</tbody></table></div>" for t, fs in filas)
+    html_bl = "".join(f'<div class="dblk"><h4>{t}</h4>{_tabla([f for f in fs if f])}</div>' for t, fs in bloques)
+    nota_din = (f'<p class="small">Dinero: {esc(di.get("nota"))}. ' if di.get("nota") else '<p class="small">') + \
+        "El dinero es descriptivo: en nuestras pruebas (INT-6, 1870-2004) su crecimiento no anticipó la inflación ni la bolsa.</p>"
+
+    # Qué se espera (FMI)
+    pv = r.get("prevision_fmi") or {}
+    años = sorted(pv)
+    fmi = ""
+    if años:
+        filas = [("Crecimiento del PIB real", "crecimiento", 1, True), ("Inflación media del año", "inflacion", 1, False),
+                 ("Paro", "paro", 1, False), ("Deuda pública / PIB", "deuda", 0, False), ("Saldo público / PIB", "saldo", 1, True)]
+        cab = "".join(f"<th>{esc(a)}</th>" for a in años)
+        cuerpo = "".join("<tr><td>" + esc(t) + "</td>" + "".join(f"<td><strong>{n((pv[a] or {}).get(k), d, ' %', sg)}</strong></td>" for a in años) + "</tr>"
+                         for t, k, d, sg in filas)
+        fmi = (f'<div class="dblk"><h4>Qué se espera (previsión del FMI, WEO oct-2026)</h4><table class="num"><thead><tr><th></th>{cab}</tr></thead>'
+               f'<tbody>{cuerpo}</tbody></table><p class="small">Previsión externa del FMI (no es nuestra ni está validada aquí). '
+               f'Sirve de referencia de «lo esperado»: las sorpresas frente a ella son lo que mueve los mercados.</p></div>')
+
+    # Probabilidades y escenarios (motor INT-11)
     if m:
+        ab = m.get("abanicos") or {}
+        filas_ab = []
+        for a, nom in ACTIVO_N.items():
+            q = ab.get(a)
+            if not q:
+                continue
+            filas_ab.append((nom, q))
+        filas_ab.sort(key=lambda x: -(x[1].get("p50") or -9))
+        tab = "".join(
+            f"<tr><td>{esc(nom)}</td><td><strong>{n(100 * q['p50'], 1, ' %', True)}</strong></td>"
+            f"<td>{n(100 * q['p5'], 0, ' %', True)} a {n(100 * q['p95'], 0, ' %', True)}</td>"
+            f"<td>{n(100 * q['p25'], 0, ' %', True) if q.get('p25') is not None else n(None)} a {n(100 * q['p75'], 0, ' %', True) if q.get('p75') is not None else n(None)}</td>"
+            f"<td>{n(100 * q['p_neg'], 0) if q.get('p_neg') is not None else n(None)}</td></tr>" for nom, q in filas_ab)
         ps = m.get("pesos_regimen") or {}
         pes = ", ".join(f"{REG_LLANO.get(k, k)} {round(100 * w)} %" for k, w in sorted(ps.items(), key=lambda kv: -kv[1]) if w and w >= 0.01)
         if max(ps.values() or [0]) >= 0.99:
             pes = ""
-        mot = (f'<p><strong>Motor de escenarios ({term("validado en el pasado")}):</strong> situación de partida '
-               f'«{esc(reg_t)}»{(" — " + esc(pes)) if pes else ""}. P(bolsa real ≤ −20 % en 12 meses) '
-               f'<strong>{_p(m.get("p_caida_bolsa_20"))}</strong>; P(inflación &gt; 5 %) <strong>{_p(m.get("p_inflacion_5"))}</strong>. '
-               f'<a href="#escenarios" data-pais="{esc(c)}">Ver sus abanicos de rentabilidad →</a></p>'
-               f'<p class="small">Ojo: el {term("régimen")} del motor solo mira la inflación media de 12 meses y si el PIB '
-               f'ha caído con fuerza; no mira el ritmo de este año, ni los bonos, ni la deuda. Por eso un país estancado '
-               f'puede salir «sin caída». Léelo junto con los colores de arriba.</p>')
+        mot = (f'<div class="dblk wide"><h4>Probabilidades y escenarios a 12 meses (motor, {term("validado en el pasado")})</h4>'
+               f'<p class="small">Situación de partida: «{esc(reg_t)}»{(" — " + esc(pes)) if pes else ""}. '
+               f'Rentabilidades REALES (descontada la inflación) en moneda local, de dic-2026 a nov-2027.</p>'
+               f'<table class="num"><thead><tr><th>Activo (ordenado por mediana)</th><th>Mediana</th><th>{term("p5-p95", "Rango 90 %")}</th>'
+               f'<th>Rango 50 %</th><th>P(perder en términos reales)</th></tr></thead><tbody>{tab}</tbody></table>'
+               f'<p>P(bolsa real ≤ −20 % en 12 meses) <strong>{_p(m.get("p_caida_bolsa_20"))}</strong> · '
+               f'P(inflación &gt; 5 % el próximo año) <strong>{_p(m.get("p_inflacion_5"))}</strong>. '
+               f'<a href="#escenarios" data-pais="{esc(c)}">Ver gráfico →</a></p>'
+               f'<p class="small">Lectura: la mediana es el resultado típico; el rango 90 % es lo que pasó 9 de cada 10 '
+               f'veces en situaciones parecidas (1870-2004). El orden de la tabla NO es una recomendación de compra: '
+               f'las medianas se parecen mucho entre sí frente a la anchura de los rangos. El {term("régimen")} solo '
+               f'mira la inflación media de 12 meses y si el PIB ha caído con fuerza (no el ritmo de este año, ni '
+               f'bonos, ni deuda).</p></div>')
     else:
-        mot = '<p class="small">Este país no está en el motor de escenarios (solo en el termómetro y el nowcast).</p>'
-    viejo = (f'<p class="small">▲ Datos con retraso: {esc(", ".join(r["datos_antiguos"]))}.</p>'
-             if r.get("datos_antiguos") else "")
-    return f'<div class="pdet"><p class="frase">{esc(r["frase"])}</p>{mot}{viejo}<div class="dgrid">{bloques}</div></div>'
+        mot = ('<div class="dblk wide"><h4>Probabilidades y escenarios</h4><p class="small">Este país no está en el motor '
+               'de escenarios (que usa 14 países con historia desde 1870); solo en el termómetro y el nowcast.</p></div>')
+    t2 = ((s.get("termometro") or {}).get("paises") or {}).get(c) or {}
+    sal = (t2.get("salida") or t2.get("T2") or {}) if isinstance(t2, dict) else {}
+    rec = ""
+    if (t2.get("estado") or {}).get("en_recesion"):
+        rec = (f'<p><strong>En recesión según el fechado trimestral.</strong> {esc(json.dumps(sal, ensure_ascii=False)) if sal else ""}</p>')
+    viejo = (f'<p class="small">▲ Datos con retraso: {esc(", ".join(r["datos_antiguos"]))}.</p>' if r.get("datos_antiguos") else "")
+    nota = f'<p class="small">▲ {esc(r["nota"])}</p>' if r.get("nota") else ""
+    return (f'<div class="pdet"><p class="frase">{esc(r["frase"])}</p>{nota}{viejo}{rec}'
+            f'<div class="dgrid">{mot}{fmi}{html_bl}</div>{nota_din}</div>')
 
 
 def guia() -> str:
@@ -351,8 +425,8 @@ border:1px solid var(--border);background:var(--page)}
 .chip.c-verde{box-shadow:inset 3px 0 0 var(--good)}.chip.c-ambar{box-shadow:inset 3px 0 0 var(--warn)}.chip.c-rojo{box-shadow:inset 3px 0 0 var(--crit)}
 .phead{display:grid;grid-template-columns:150px 1fr;gap:8px;font-size:12px;color:var(--ink2);font-weight:600;padding:0 0 6px;border-bottom:1px solid var(--grid)}
 .phead .cells span{white-space:nowrap}
-.cells{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:4px;align-items:center}
-.cell .chip{max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.cells{display:grid;grid-template-columns:.8fr .7fr 1fr 1.25fr 1.2fr .8fr .8fr 1fr;gap:4px;align-items:center}
+.cell .chip{white-space:normal;line-height:1.25;padding:2px 7px;font-variant-numeric:tabular-nums}
 details.pais{border-bottom:1px solid var(--grid)}details.pais>summary{display:grid;grid-template-columns:150px 1fr;gap:8px;
 padding:8px 0;cursor:pointer;list-style:none;align-items:center}details.pais>summary::-webkit-details-marker{display:none}
 details.pais>summary:hover{background:var(--hl)}details.pais[open]>summary{background:var(--hl)}
@@ -360,7 +434,7 @@ details.pais>summary:hover{background:var(--hl)}details.pais[open]>summary{backg
 .frase1{grid-column:1/-1;font-size:12.5px;color:var(--ink2);display:none}
 .pdet{padding:6px 4px 14px}.frase{font-size:15px}
 .dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px}
-.dblk{border:1px solid var(--grid);border-radius:6px;padding:6px 10px}.dblk h4{margin:4px 0}.dblk td{padding:4px 6px}
+.dblk{border:1px solid var(--grid);border-radius:6px;padding:6px 10px}.dblk.wide{grid-column:1/-1}.dblk td:nth-child(2),.dblk td:nth-child(3){white-space:nowrap}.dblk h4{margin:4px 0}.dblk td{padding:4px 6px}
 .cambios{margin:4px 0;padding-left:20px}.cambios li{margin:2px 0}
 dl.glos dt{font-weight:600;margin-top:8px}dl.glos dd{margin:2px 0 0 0;color:var(--ink2)}
 @media (max-width:860px){.phead{display:none}details.pais>summary{grid-template-columns:1fr}
