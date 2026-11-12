@@ -16,6 +16,7 @@ validate: regime      ## docs/phase1_validation.md
 
 weekly: regime        ## obsidian/Reports/AAAA-MM-DD_semanal.md + _signal.json
 	$(PY) -m src.report.weekly
+	$(PY) -m src.report.panel || echo "AVISO panel no generado"
 
 clean-warehouse:
 	rm -f data/warehouse.duckdb data/warehouse.tmp.duckdb

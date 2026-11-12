@@ -1,0 +1,152 @@
+{
+  "documento": "Atlas régimen → activos para el panel (extracto en claro; NO añade resultados)",
+  "version": "1.0 (2026-11-05)",
+  "fuentes": {
+    "ATLAS": "docs/int/ATLAS_regimenes.md v1.0 (2026-10-26): INT-3, INT-3b/3c, INT-3d, INT-4 y §8 versión operable",
+    "INT14": "research/int/int14_resultado.md (commit 609475c; placebo corregido cadcba1)",
+    "INT12": "research/int/int12_resultado.md (commit dec66c1)",
+    "INT6": "research/int/int6_resultado.md (commit 12f6307)"
+  },
+  "muestra": "14 países ricos (JST), 1870-2004, rentabilidades REALES anuales salvo que se diga otra cosa; nada ≥ 2005 (periodo bloqueado). Sin costes ni impuestos.",
+  "leyenda_estado": {
+    "establecido": "cumple todos los criterios de su prerregistro en la corrida única",
+    "probable": "signo esperado y pasa la sensibilidad robusta, pero no todos los criterios oficiales",
+    "no establecido": "ni lo uno ni lo otro (no quiere decir que no exista)",
+    "descriptivo": "no se contrastó: media o reparto sin inferencia"
+  },
+  "aviso_etiqueta": "Las etiquetas de régimen de INT-3 son ex post (ventana centrada): describen dónde se estuvo, no lo que se sabía a tiempo. La fila «a tiempo» de cada régimen es la versión operable (ATLAS §8), descriptiva y declarada a posteriori.",
+  "regimenes": [
+    {
+      "id": "estanflacion",
+      "nombre": "Estanflación",
+      "definicion": "crecimiento por debajo de la tendencia e inflación alta",
+      "filas": [
+        {"activo": "Bolsa", "efecto": "−8,7 pp/año", "ic": "[−15,0; −2,4]", "estado": "establecido", "lado": "sufre",
+         "nota": "grande y en 14/14 países, pero desaparece si solo se conoce el régimen del año anterior", "fuente": "ATLAS §1 (INT-3 Q1)"},
+        {"activo": "Bolsa, con lo que se sabe a tiempo (inflación > 3 % y brecha < 0 el año anterior)", "efecto": "−11,9 pp", "ic": "[−17,9; −5,8]", "estado": "descriptivo", "lado": "sufre",
+         "nota": "lo único que pasa Holm con datos conocidos a tiempo; 81 país-años, dominado por los años 70; con un año más de retraso −7,2 y no significativo: indicio fuerte, no regla", "fuente": "ATLAS §8"},
+        {"activo": "Por qué", "efecto": "dividendo real −8,3 pp", "ic": "—", "estado": "descriptivo", "lado": "mecanismo",
+         "nota": "la inflación se come el dividendo; la bolsa NO se abarata más (valoración +1,6, n. s.)", "fuente": "ATLAS §2 (INT-3c)"}
+      ]
+    },
+    {
+      "id": "inflacion_alta",
+      "nombre": "Inflación alta",
+      "definicion": "sobrecalentamiento + estanflación (inflación por encima del umbral)",
+      "filas": [
+        {"activo": "Bonos", "efecto": "−10,1 pp/año", "ic": "[−13,9; −6,3]", "estado": "establecido", "lado": "sufre",
+         "nota": "el más sólido; sobrevive con el régimen del año anterior (−3,4)", "fuente": "ATLAS §1 (INT-3 Q2)"},
+        {"activo": "Letras (tipo corto)", "efecto": "−7,7 pp/año", "ic": "[−10,9; −4,6]", "estado": "probable", "lado": "sufre",
+         "nota": "muy sólido con Driscoll-Kraay; falla solo el placebo oficial (autocorrelación)", "fuente": "ATLAS §1 (INT-3 Q4)"},
+        {"activo": "Vivienda frente a bolsa", "efecto": "+6,2 pp/año", "ic": "[+2,0; +10,4]", "estado": "establecido", "lado": "aguanta",
+         "nota": "el precio de la vivienda sigue a la inflación; solo 10/14 países sin el choque común del año", "fuente": "ATLAS §1 (INT-3 Q6)"},
+        {"activo": "Bonos, con lo que se sabe a tiempo (inflación > 3 % el año anterior)", "efecto": "−6,2 pp", "ic": "[−10,0; −2,4]", "estado": "descriptivo", "lado": "sufre",
+         "nota": "signo esperado en 14/14 países pero no pasa Holm; en 1950-1999 casi desaparece (−1,4)", "fuente": "ATLAS §8"},
+        {"activo": "Letras, a tiempo (inflación > 3 %)", "efecto": "−5,1 pp", "ic": "[−8,0; −2,3]", "estado": "descriptivo", "lado": "sufre",
+         "nota": "no pasa Holm; en 1950-1999 −0,8", "fuente": "ATLAS §8"},
+        {"activo": "Bolsa, a tiempo (inflación > 3 %)", "efecto": "−5,8 pp", "ic": "[−10,4; −1,2]", "estado": "descriptivo", "lado": "sufre",
+         "nota": "no pasa Holm; 13/14 países", "fuente": "ATLAS §8"},
+        {"activo": "Oro (moneda local)", "efecto": "−6,0 pp/año", "ic": "[−9,5; −2,6]", "estado": "no establecido", "lado": "no se sabe",
+         "nota": "signo contrario por el precio fijo en dólares hasta 1971; en dólares 1972-1999 −0,4 [−23; +22]: no sabemos si protege", "fuente": "ATLAS §1 (INT-3b B3)"},
+        {"activo": "Materias primas (AQR, mundial)", "efecto": "+0,7 pp/año", "ic": "[−13,6; +15,0]", "estado": "no establecido", "lado": "no se sabe",
+         "nota": "cambia de signo según la época (+11,6 en 1878-1949, −10,9 en 1950-1999)", "fuente": "ATLAS §1 (INT-3b B1)"}
+      ]
+    },
+    {
+      "id": "recesion",
+      "nombre": "Recesión",
+      "definicion": "años de caída del PIB real (fechado JST)",
+      "filas": [
+        {"activo": "Bolsa", "efecto": "−5,5 pp/año", "ic": "[−10,2; −0,8]", "estado": "establecido (frágil)", "lado": "sufre",
+         "nota": "el más débil de los establecidos: depende de las guerras; en 1950-2004 solo −1,9", "fuente": "ATLAS §1 (INT-3 Q5)"},
+        {"activo": "Bonos frente a letras", "efecto": "+1,2 pp/año", "ic": "[+0,1; +2,2]", "estado": "probable", "lado": "aguanta",
+         "nota": "signo esperado en 12/14 países; falla solo Holm-2", "fuente": "ATLAS §1 (INT-3d C3)"},
+        {"activo": "Coste de esperar a confirmar la SALIDA (bolsa − letras)", "efecto": "+2,8 pp de rebote perdido", "ic": "[+0,1; +5,4]", "estado": "probable", "lado": "mecanismo",
+         "nota": "13/14 países; la salida la anuncia sobre todo la bolsa", "fuente": "ATLAS §3 (INT-3d)"},
+        {"activo": "¿Se ve venir la entrada? (termómetro T1)", "efecto": "+0,20 AUC sobre el listón", "ic": "[+0,12; +0,27]", "estado": "establecido", "lado": "mecanismo",
+         "nota": "curva, curvas invertidas en otros países y bolsa; en vivo no superó su puerta y solo se muestran indicadores", "fuente": "ATLAS §4 (INT-4)"},
+        {"activo": "Materias primas (recesión mundial)", "efecto": "−17,4 pp/año", "ic": "[−37,1; +2,2]", "estado": "no establecido", "lado": "no se sabe",
+         "nota": "indicio; pocos años de recesión mundial", "fuente": "ATLAS §1 (INT-3b B2)"},
+        {"activo": "Recesión financiera frente a normal (bolsa)", "efecto": "+1,4 pp/año", "ic": "[−5,9; +8,7]", "estado": "no establecido", "lado": "no se sabe",
+         "nota": "contra lo esperado; sin potencia (IC ± 9-10 pp)", "fuente": "ATLAS §1 (Q5b)"},
+        {"activo": "Crédito − bono del Estado (EE. UU., R. U.)", "efecto": "−0,7 pp/año", "ic": "[−1,9; +0,5]", "estado": "no establecido", "lado": "no se sabe",
+         "nota": "dos países; efecto pequeño", "fuente": "ATLAS §1 (INT-3b B4)"}
+      ]
+    },
+    {
+      "id": "crecimiento_bajo",
+      "nombre": "Desinflación / crecimiento bajo",
+      "definicion": "crecimiento bajo con inflación baja o bajando",
+      "filas": [
+        {"activo": "Bonos (etiqueta ex post)", "efecto": "+7,9 pp/año", "ic": "[+5,9; +9,9]", "estado": "probable", "lado": "gana",
+         "nota": "muy sólido como descripción de lo que pasó; falla solo el placebo oficial", "fuente": "ATLAS §1 (INT-3 Q3)"},
+        {"activo": "Bonos, con lo que se sabe a tiempo (brecha < 0 e inflación bajando)", "efecto": "−0,8 pp", "ic": "[−7,1; +5,5]", "estado": "descriptivo", "lado": "no se sabe",
+         "nota": "el efecto DESAPARECE con lo que se sabe a tiempo (6/12 países): no se pudo aprovechar", "fuente": "ATLAS §8"},
+        {"activo": "Por qué (bonos)", "efecto": "capital +2,5 pp", "ic": "—", "estado": "establecido", "lado": "mecanismo",
+         "nota": "bajan los tipos y sube el precio del bono (C4, 14/14)", "fuente": "ATLAS §2 (INT-3c C4)"},
+        {"activo": "Crédito corporativo (real)", "efecto": "+7,3 pp (media)", "ic": "—", "estado": "descriptivo", "lado": "gana",
+         "nota": "se comporta como un bono", "fuente": "ATLAS §1"}
+      ]
+    },
+    {
+      "id": "expansion",
+      "nombre": "Expansión",
+      "definicion": "crecimiento alto e inflación baja (el «Goldilocks» del cuadrante mensual se le parece)",
+      "filas": [
+        {"activo": "Ningún activo", "efecto": "—", "ic": "—", "estado": "descriptivo", "lado": "no se sabe",
+         "nota": "no se contrastó para ningún activo (no había mecanismo claro); solo medias", "fuente": "ATLAS §1"},
+        {"activo": "Materias primas (media)", "efecto": "+10,4 pp", "ic": "—", "estado": "descriptivo", "lado": "no se sabe",
+         "nota": "media por cuadrante, sin inferencia", "fuente": "ATLAS §1"},
+        {"activo": "Oro (moneda local, media)", "efecto": "+3,0 pp", "ic": "—", "estado": "descriptivo", "lado": "no se sabe",
+         "nota": "mismo problema del precio fijo hasta 1971", "fuente": "ATLAS §1"}
+      ]
+    },
+    {
+      "id": "sobrecalentamiento",
+      "nombre": "Sobrecalentamiento",
+      "definicion": "crecimiento alto e inflación alta (parte de «inflación alta»: ver esa tarjeta)",
+      "filas": [
+        {"activo": "Bonos, letras, vivienda − bolsa", "efecto": "ver «Inflación alta»", "ic": "—", "estado": "descriptivo", "lado": "mecanismo",
+         "nota": "el atlas solo contrasta inflación alta en conjunto; por separado, solo medias", "fuente": "ATLAS §1"},
+        {"activo": "Crédito corporativo (real, media)", "efecto": "−5,5 pp", "ic": "—", "estado": "descriptivo", "lado": "sufre",
+         "nota": "media por cuadrante, sin inferencia", "fuente": "ATLAS §1"},
+        {"activo": "Oro (moneda local, media)", "efecto": "−3,9 pp", "ic": "—", "estado": "descriptivo", "lado": "no se sabe",
+         "nota": "precio fijo hasta 1971", "fuente": "ATLAS §1"}
+      ]
+    },
+    {
+      "id": "crisis_bancaria",
+      "nombre": "Crisis bancaria",
+      "definicion": "inicio de crisis bancaria sistémica (JST)",
+      "filas": [
+        {"activo": "Vivienda real, 1-3 años después", "efecto": "−6,7 pp", "ic": "IC 90 % [−13,3; −0,5]", "estado": "probable", "lado": "sufre",
+         "nota": "«establecido tras corrección declarada» (p Holm 0,042, justo en el límite) y MDE optimista: tómese como probable, no como hecho", "fuente": "INT-14 H1"},
+        {"activo": "Bolsa real, año siguiente", "efecto": "−0,6 pp", "ic": "IC 90 % [−4,2; +3,8]", "estado": "no establecido", "lado": "no se sabe",
+         "nota": "63 crisis; nada distinguible de lo normal", "fuente": "INT-14 H2"},
+        {"activo": "¿Se ve venir? (Δ5 años crédito/PIB)", "efecto": "+0,113 AUC", "ic": "[−0,007; +0,231]", "estado": "no establecido", "lado": "mecanismo",
+         "nota": "pasa Holm pero no todos los criterios; se sigue en vivo (registro K1)", "fuente": "INT-6 K1"}
+      ]
+    },
+    {
+      "id": "volatilidad",
+      "nombre": "Picos de volatilidad",
+      "definicion": "pico de volatilidad de la bolsa de EE. UU.",
+      "filas": [
+        {"activo": "Bolsa EE. UU., 12 meses después", "efecto": "+4,0 pp", "ic": "IC 90 % [−4,6; +12,9]", "estado": "no establecido", "lado": "no se sabe",
+         "nota": "16 picos; nada distinguible de lo normal", "fuente": "INT-14 H3"},
+        {"activo": "Prever la volatilidad del mes siguiente (HAR diario frente a σ̂ de 12 meses)", "efecto": "QLIKE −34,3 %", "ic": "t NW 4,38", "estado": "establecido", "lado": "mecanismo",
+         "nota": "predice la VOLATILIDAD, no la rentabilidad; es la base de B1′ en la cartera", "fuente": "INT-12 C1"},
+        {"activo": "Oro frente al tipo real (EE. UU., mensual 1973-2004)", "efecto": "−1,35 % de oro por pp de subida", "ic": "[−2,07; −0,63]", "estado": "establecido", "lado": "mecanismo",
+         "nota": "relación transversal (no es un régimen): r = −0,19, débil", "fuente": "INT-6 G2"}
+      ]
+    }
+  ],
+  "no_sabemos": [
+    "Si el oro o las materias primas protegen contra la inflación",
+    "Qué activo gana en expansión y en sobrecalentamiento (no se contrastó)",
+    "Si las recesiones financieras son peores para los activos (sin potencia)",
+    "Si se anticipan los giros de inflación (T3/T4 no establecidos)",
+    "Si todo esto sigue valiendo en 2005-2020 (periodo bloqueado, sin mirar)",
+    "Si merece la pena actuar después de costes e impuestos (el paper trading lo irá viendo)"
+  ]
+}

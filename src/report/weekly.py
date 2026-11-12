@@ -255,14 +255,24 @@ def md_liquidez_credito(s: dict) -> str:
     return LV.markdown(lc, tit)
 
 
+def _abanicos(r: dict) -> dict:
+    """p5 / p50 / p95 de cada activo (rejilla 1..99 de int11_v3_hoy) para el panel (src/report/panel.py)."""
+    q = r.get("cuantiles_1_99") or {}
+    return {a: {"p5": v[4], "p50": v[49], "p95": v[94]} for a, v in q.items() if len(v) == 99}
+
+
 def escenarios(today: date) -> dict:
     from scripts import int11_v3_hoy as H  # import tardío: tarda ≈ 10 s y no debe tumbar el reporte
     o = H.emitir(today.isoformat(), exigir_limpio=False)
     return {"emision": o["emision"], "ventana": o["ventana_objetivo"], "procedencia": o["procedencia"],
             "motor": o.get("motor"), "aviso": o["aviso"],
-            "paises": {c: {k: r.get(k) for k in ("regimen_dominante", "p_caida_bolsa_20", "p_inflacion_5",
-                                                 "dependencia_hoy", "dependencia_por_regimen")}
+            "paises": {c: {**{k: r.get(k) for k in ("regimen_dominante", "p_caida_bolsa_20", "p_inflacion_5",
+                                                    "dependencia_hoy", "dependencia_por_regimen", "pesos_regimen",
+                                                    "cerca_umbral")},
+                           "abanicos": _abanicos(r), "estado": {k: (r.get("estado") or {}).get(k)
+                                                               for k in ("mes_ipc", "inflacion", "brecha")}}
                        for c, r in o["paises"].items()},
+            "acierto_medido_fase_D": o.get("acierto_medido_fase_D"),
             "dependencia_descriptiva_2004": o.get("dependencia_descriptiva_2004"), "md": H.markdown(o)}
 
 
