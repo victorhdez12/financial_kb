@@ -776,3 +776,9 @@ Las entradas más recientes van arriba. Ver también [[Proyecto/Estado del proye
 - **Dinero:** USA M2 (FRED, nominal y real), euro M3/M1/préstamos (BCE, común al área), resto dinero amplio FMI (`src/ingest/imf_mfs.py`, nuevo; GBR y CHE no publicados; JPN/NOR con retraso). Etiqueta: descriptivo (INT-6: M2 no anticipa).
 - **«Mis activos»** (`src/ingest/yahoo_precios.py` → `~/financial_archive/mercados/` fuera de git; `src/report/mis_activos.py`; pestaña `src/report/panel_activos.py`): 29 activos (6 acciones, agro/pesticidas CTVA FMC BAYN MOO, oro GLD GDX NEM, Brent/WTI, 11 ETF sectoriales, SPY QQQ TLT VGK). Rentabilidades, volatilidad, caída desde máximo, beta; por cuadrante de EE. UU.; simulación A (bootstrap propio) y B (motor INT-11 USA + beta, sin alfa). Detector de movimientos > 15 % en 10 días; CTVA: «split» 6,665:1 de Yahoo y −20 % el 12-nov (posible escisión) → no fiable hasta confirmar. Precios diarios en `make daily`; panel regenerado también a diario.
 - Ojo: `src.warehouse.build` borra `regime_monthly` → tras reconstruir a mano, correr `src.regime.run` (lo hace `make daily`).
+
+## 2026-11-12 (noche 3) — Primera semanal completa con lo de hoy
+
+- `scripts/actualizar.sh semanal` (20:35–22:17, 101 min, RC 0, «con avisos»). Fuentes nuevas OK: `imf_mfs` 6 series (sin GBR/CHE), `imf_weo` 1221 series (7 países añadidos), `yahoo_precios` 29 activos sin fallos.
+- Signal `2026-11-12_signal.json` trae `pulso_paises` (18 países); panel regenerado sin «error al generar»; auditoría 0 críticas.
+- Fallos: `cycle_rtdsm` (ya fallaba el 10-nov) y `wb_wdi`, cortado a mano tras 21 min colgado en una conexión (la API respondía); anual, se usan los datos del 10-nov. Pendiente: relanzar `wb_wdi` aparte y poner timeout total a `http_get`.
