@@ -40,7 +40,7 @@ Resumen para el usuario. El detalle está en la [[Proyecto/Bitácora]] y en el [
 | cuándo | qué |
 |---|---|
 | dom 8-nov-2026 | primer reporte semanal con 5e y 5f: revisarlo |
-| mediados nov 2026 | panel v1 |
+| 12-nov-2026 | ✅ panel v1 hecho (`~/financial_archive/panel/index.html`) |
 | 22 o 29-nov-2026 | primera emisión del motor v3.1 (encender el Mac) |
 | fin nov 2026 | **panel pulido = producto** |
 | dom 6-dic-2026 | primeras decisiones B0/B1/B1′ y predicciones E1/E1b (encender el Mac) |
