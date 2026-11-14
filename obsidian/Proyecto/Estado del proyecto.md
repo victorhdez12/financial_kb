@@ -36,7 +36,7 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Agentes de la fase:** Constructor · Investigador de relaciones · **Validador independiente** · **Reportero** (ver [[Proyecto/Agentes]]). Informe: [[Reports/Fase 3/Informe de resultados]].
 
-**▶ Retomar (12-nov, noche 3):** panel con Países (preciso, previsiones FMI, escenarios por activo, dinero) y «Mis activos» (29 activos, simulaciones A/B); diario. CTVA confirmada (escisión Vylor 1-oct). Agentes 14-nov: blindaje ingesta + ensayo INT-11 20-nov. Luego: Validador del panel. ⚠️ Antes del 20-nov: commitear la semanal del 15-nov (si no, INT-11 aborta por árbol sucio). Bloqueado ≥ 2005 intacto (opción A). Semanal completa OK (22:17). 14-nov: timeout total en `http_get` hecho y `wb_wdi` relanzado OK. `cycle_rtdsm` arreglado (fechas mal formadas en .xlsx de la Fed de Filadelfia).
+**▶ Retomar (12-nov, noche 3):** panel con Países (preciso, previsiones FMI, escenarios por activo, dinero) y «Mis activos» (29 activos, simulaciones A/B); diario. CTVA confirmada (escisión Vylor 1-oct). 14-nov: panel con 11 pestañas (Hoy, Qué hacer, Manos fuertes, Verificación nuevas), ingesta blindada, ensayo INT-11 OK. Siguiente: Validador del panel. ⚠️ Antes del 20-nov: commitear la semanal del 15-nov (si no, INT-11 aborta por árbol sucio). Bloqueado ≥ 2005 intacto (opción A). Semanal completa OK (22:17). 14-nov: timeout total en `http_get` hecho y `wb_wdi` relanzado OK. `cycle_rtdsm` arreglado (fechas mal formadas en .xlsx de la Fed de Filadelfia).
 
 ## ▶ Retomar aquí (26-oct, RECONDUCCIÓN: líneas A y B)
 
