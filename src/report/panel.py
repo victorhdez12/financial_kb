@@ -27,6 +27,7 @@ from src.report import panel_activos as PA
 from src.report import panel_manos_fuertes as PMF
 from src.report import panel_paises as PP
 from src.report import panel_que_hacer as QH
+from src.verif import panel_verif as PV
 from src.warehouse import db
 
 REPO = db.REPO
@@ -968,7 +969,7 @@ var n=d==='dark'?'light':'dark';root.setAttribute('data-theme',n);try{localStora
 """
 
 PESTANAS = [("paises", "Países"), ("quehacer", "Qué hacer"), ("hoy", "Hoy (EE. UU. y recesión)"), ("escenarios", "Escenarios 12 meses"), ("activos", "Mis activos"), ("atlas", "Qué funciona en cada régimen"),
-            ("cartera", "Mi cartera"), ("estado", "Estado y avisos")]
+            ("cartera", "Mi cartera"), ("estado", "Estado y avisos"), ("verificacion", "Verificación")]
 PESTANAS.insert(PESTANAS.index(("activos", "Mis activos")) + 1, ("manos", "Manos fuertes"))
 
 
@@ -989,7 +990,8 @@ def construir(s: dict, hoy: date | None = None) -> str:
     av = avisos_datos(s, hoy)
     secciones = {"quehacer": seccion_segura(QH.sec_que_hacer, s, es), "activos": seccion_segura(PA.sec_activos, s, PP.pulso_desde(s)), "paises": seccion_segura(PP.sec_paises, s, es), "hoy": seccion_segura(sec_hoy, s, es), "escenarios": seccion_segura(sec_escenarios, s, es, fuente_es),
                  "atlas": seccion_segura(sec_atlas, s, es), "cartera": seccion_segura(sec_cartera, s, reg),
-                 "estado": seccion_segura(sec_estado, s, reg, hoy) + PP.glosario_html()}
+                 "estado": seccion_segura(sec_estado, s, reg, hoy) + PP.glosario_html(),
+                 "verificacion": seccion_segura(PV.sec_verificacion)}
     secciones["manos"] = seccion_segura(PMF.sec_manos_fuertes, hoy)
     nav = "".join(f'<button type="button" role="tab" data-t="{k}" aria-controls="{k}">{esc(v)}'
                   + (f" ({len(av)})" if k == "estado" and av else "") + "</button>" for k, v in PESTANAS)
