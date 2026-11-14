@@ -49,7 +49,11 @@ INGEST := fred_extended alfred_vintages fred_us fed_yieldcurve us_treasury nyfed
 .PHONY: ingest audit data ingest-daily daily semanal verif
 
 # Fuentes con datos diarios o semanales (actualización diaria automática, ver scripts/actualizar.sh)
-INGEST_DAILY := yahoo_precios fred_extended fed_yieldcurve us_liquidity nyfed_repo ecb bundesbank cboe cboe_vx atl_mpt umich
+# alfred_vintages (≈ 16 s: vintages de M2, IPC, paro, nóminas…; detecta publicaciones y revisiones en la pestaña «Hoy»)
+# y eurostat (≈ 2 min: paro de la zona euro) se añadieron el 14-nov-2026 para que los datos clave salgan el día que se
+# publican y no el domingo.
+INGEST_DAILY := yahoo_precios fred_extended fed_yieldcurve us_liquidity nyfed_repo ecb bundesbank cboe cboe_vx atl_mpt umich \
+                alfred_vintages eurostat
 
 ingest:               ## descarga/actualiza todas las fuentes curadas (lento; idempotente)
 	@for s in $(INGEST); do echo "== $$s"; $(PY) -m src.ingest.$$s || echo "FALLO $$s"; done
