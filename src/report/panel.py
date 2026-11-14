@@ -25,6 +25,7 @@ from pathlib import Path
 
 from src.report import panel_activos as PA
 from src.report import panel_paises as PP
+from src.report import panel_que_hacer as QH
 from src.warehouse import db
 
 REPO = db.REPO
@@ -965,7 +966,7 @@ var n=d==='dark'?'light':'dark';root.setAttribute('data-theme',n);try{localStora
 })();
 """
 
-PESTANAS = [("paises", "Países"), ("hoy", "Hoy (EE. UU. y recesión)"), ("escenarios", "Escenarios 12 meses"), ("activos", "Mis activos"), ("atlas", "Qué funciona en cada régimen"),
+PESTANAS = [("paises", "Países"), ("quehacer", "Qué hacer"), ("hoy", "Hoy (EE. UU. y recesión)"), ("escenarios", "Escenarios 12 meses"), ("activos", "Mis activos"), ("atlas", "Qué funciona en cada régimen"),
             ("cartera", "Mi cartera"), ("estado", "Estado y avisos")]
 
 
@@ -984,7 +985,7 @@ def construir(s: dict, hoy: date | None = None) -> str:
         fr = []
     res = ("<ol>" + "".join(f"<li>{_md_negrita(f)}</li>" for f in fr) + "</ol>") if fr else f"<p>{ND}</p>"
     av = avisos_datos(s, hoy)
-    secciones = {"activos": seccion_segura(PA.sec_activos, s, PP.pulso_desde(s)), "paises": seccion_segura(PP.sec_paises, s, es), "hoy": seccion_segura(sec_hoy, s, es), "escenarios": seccion_segura(sec_escenarios, s, es, fuente_es),
+    secciones = {"quehacer": seccion_segura(QH.sec_que_hacer, s, es), "activos": seccion_segura(PA.sec_activos, s, PP.pulso_desde(s)), "paises": seccion_segura(PP.sec_paises, s, es), "hoy": seccion_segura(sec_hoy, s, es), "escenarios": seccion_segura(sec_escenarios, s, es, fuente_es),
                  "atlas": seccion_segura(sec_atlas, s, es), "cartera": seccion_segura(sec_cartera, s, reg),
                  "estado": seccion_segura(sec_estado, s, reg, hoy) + PP.glosario_html()}
     nav = "".join(f'<button type="button" role="tab" data-t="{k}" aria-controls="{k}">{esc(v)}'
@@ -994,7 +995,7 @@ def construir(s: dict, hoy: date | None = None) -> str:
     return f"""<!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex"><title>Panel macro personal</title>
-<style>{CSS}{PP.CSS}{PA.CSS}</style></head>
+<style>{CSS}{PP.CSS}{PA.CSS}{QH.CSS}</style></head>
 <body>
 <header><div class="top"><div><h1>Panel macro personal</h1>
 <p class="muted">Reporte semanal del {esc(s.get("asof") or "—")} · panel generado el {esc(datetime.now().strftime("%Y-%m-%d %H:%M"))}</p></div>
@@ -1007,7 +1008,7 @@ def construir(s: dict, hoy: date | None = None) -> str:
 <main>{cuerpo}</main>
 <footer>{esc(AVISO_GENERAL)} Generado por src/report/panel.py a partir de obsidian/Reports/{esc(s.get("asof") or "—")}_signal.json.</footer>
 <div id="tip" role="tooltip"></div>
-<script>{JS}{PP.JS}{PA.JS}</script>
+<script>{JS}{PP.JS}{PA.JS}{QH.JS}</script>
 </body></html>"""
 
 
