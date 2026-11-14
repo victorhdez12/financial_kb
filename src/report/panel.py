@@ -24,6 +24,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 from src.report import panel_activos as PA
+from src.report import panel_manos_fuertes as PMF
 from src.report import panel_paises as PP
 from src.warehouse import db
 
@@ -967,6 +968,7 @@ var n=d==='dark'?'light':'dark';root.setAttribute('data-theme',n);try{localStora
 
 PESTANAS = [("paises", "Países"), ("hoy", "Hoy (EE. UU. y recesión)"), ("escenarios", "Escenarios 12 meses"), ("activos", "Mis activos"), ("atlas", "Qué funciona en cada régimen"),
             ("cartera", "Mi cartera"), ("estado", "Estado y avisos")]
+PESTANAS.insert(PESTANAS.index(("activos", "Mis activos")) + 1, ("manos", "Manos fuertes"))
 
 
 def construir(s: dict, hoy: date | None = None) -> str:
@@ -987,6 +989,7 @@ def construir(s: dict, hoy: date | None = None) -> str:
     secciones = {"activos": seccion_segura(PA.sec_activos, s, PP.pulso_desde(s)), "paises": seccion_segura(PP.sec_paises, s, es), "hoy": seccion_segura(sec_hoy, s, es), "escenarios": seccion_segura(sec_escenarios, s, es, fuente_es),
                  "atlas": seccion_segura(sec_atlas, s, es), "cartera": seccion_segura(sec_cartera, s, reg),
                  "estado": seccion_segura(sec_estado, s, reg, hoy) + PP.glosario_html()}
+    secciones["manos"] = seccion_segura(PMF.sec_manos_fuertes, hoy)
     nav = "".join(f'<button type="button" role="tab" data-t="{k}" aria-controls="{k}">{esc(v)}'
                   + (f" ({len(av)})" if k == "estado" and av else "") + "</button>" for k, v in PESTANAS)
     cuerpo = "".join(f'<section id="{k}" role="tabpanel" aria-label="{esc(v)}"><h2>{esc(v)}</h2>{PP.intro(k)}{secciones[k]}</section>'
@@ -994,7 +997,7 @@ def construir(s: dict, hoy: date | None = None) -> str:
     return f"""<!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex"><title>Panel macro personal</title>
-<style>{CSS}{PP.CSS}{PA.CSS}</style></head>
+<style>{CSS}{PP.CSS}{PA.CSS}{PMF.CSS}</style></head>
 <body>
 <header><div class="top"><div><h1>Panel macro personal</h1>
 <p class="muted">Reporte semanal del {esc(s.get("asof") or "—")} · panel generado el {esc(datetime.now().strftime("%Y-%m-%d %H:%M"))}</p></div>
