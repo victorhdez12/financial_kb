@@ -45,7 +45,7 @@ INGEST := fred_extended alfred_vintages fred_us fed_yieldcurve us_treasury nyfed
           cycle_nyfed cycle_rtdsm cycle_spf umich \
           ecb eurostat bde ine bundesbank ifo zew \
           cycle_bis bis_ext oecd oecd_qna oecd_vivienda aqr_clr imf_weo imf_ifs imf_gdd imf_hpdd imf_mfs yahoo_precios wb_wdi jst_macrohistory boe_millennium_uk boe_rates cycle_worldorder \
-          events_nber events_wars events_financial_crises events_gpr events_curated
+          events_nber events_wars events_financial_crises events_gpr events_curated sec_insiders
 .PHONY: ingest audit data ingest-daily daily semanal
 
 # Fuentes con datos diarios o semanales (actualización diaria automática, ver scripts/actualizar.sh)
