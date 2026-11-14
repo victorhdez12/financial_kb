@@ -21,6 +21,8 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
+from src.ingest import _http
+
 try:
     from dotenv import load_dotenv
 
@@ -109,29 +111,42 @@ def session() -> requests.Session:
     return _SESSION
 
 
+def _get(url: str, *, stream: bool, timeout: int) -> requests.Response:
+    # Non-streamed bodies get a total download deadline; streamed ones are bounded by
+    # the caller (sec_download checks its own deadline while writing to disk).
+    if stream:
+        return session().get(url, stream=True, timeout=timeout)
+    return _http.get(url, session=session(), timeout=timeout)
+
+
 def sec_get(url: str, *, stream: bool = False, timeout: int = 90) -> requests.Response:
     """Rate-limited GET against sec.gov / data.sec.gov (<= 5 req/s)."""
     _LIMITER.wait()
-    r = session().get(url, stream=stream, timeout=timeout)
+    r = _get(url, stream=stream, timeout=timeout)
     if r.status_code == 403 and b"Request Rate Threshold" in (r.content[:2000] if not stream else b""):
         time.sleep(600)  # SEC throttling block: back off 10 minutes
         _LIMITER.wait()
-        r = session().get(url, stream=stream, timeout=timeout)
+        r = _get(url, stream=stream, timeout=timeout)
     r.raise_for_status()
     return r
 
 
 def sec_download(url: str, dest: Path, *, log: logging.Logger | None = None,
-                 chunk: int = 1 << 20) -> Path:
-    """Stream a (large) file to dest atomically. Single request -> rate limiter once."""
+                 chunk: int = 1 << 20, max_seconds: float = 7200) -> Path:
+    """Stream a (large) file to dest atomically. Single request -> rate limiter once.
+    The whole transfer must finish within `max_seconds` (the per-read timeout alone
+    would let a slow trickle run forever)."""
     dest.parent.mkdir(parents=True, exist_ok=True)
     tmp = dest.with_suffix(dest.suffix + ".part")
+    deadline = time.monotonic() + max_seconds
     with sec_get(url, stream=True, timeout=600) as r:
         total = 0
         with open(tmp, "wb") as fh:
             for block in r.iter_content(chunk):
                 fh.write(block)
                 total += len(block)
+                if time.monotonic() > deadline:
+                    raise requests.Timeout(f"total download time > {max_seconds:.0f}s for {url}")
     tmp.replace(dest)
     if log:
         log.info("downloaded %s (%.1f MB)", dest.name, total / 1e6)

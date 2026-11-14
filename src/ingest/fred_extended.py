@@ -26,6 +26,8 @@ import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
 import requests
+
+from src.ingest import _http
 from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -168,7 +170,7 @@ class Fred:
             self._last = time.time()
             self.n_requests += 1
             try:
-                r = self.s.get(f"{API}/{endpoint}", params=params, timeout=60)
+                r = _http.get(f"{API}/{endpoint}", session=self.s, params=params, timeout=60)
             except requests.RequestException as e:  # never log the URL (contains key)
                 log.warning("%s network error (%s), retry %d", endpoint, type(e).__name__, attempt)
                 time.sleep(2 * (attempt + 1))

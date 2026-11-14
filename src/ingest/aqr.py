@@ -18,6 +18,7 @@ import re
 import openpyxl
 import pandas as pd
 
+from src.ingest._xlsx import xlsx_source
 from src.ingest._extlong_common import CatalogWriter, download, log, raw_dir
 
 SOURCE = "aqr"
@@ -81,7 +82,7 @@ def main() -> None:
                 log.error("skip %s: %s", stem, e)
                 continue
             log.warning("%s download failed (%s); cached", stem, e)
-        wb = openpyxl.load_workbook(dest, read_only=True, data_only=True)
+        wb = openpyxl.load_workbook(xlsx_source(dest), read_only=True, data_only=True)
         sheets = [(wb.worksheets[0].title, sid0, label)]
         if extras:
             sheets += [(s, f"aqr{k}", f"AQR country {s} factor") for s, k in EXTRA.items() if s in wb.sheetnames]

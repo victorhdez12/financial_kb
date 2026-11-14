@@ -12,6 +12,8 @@ from pathlib import Path
 import pandas as pd
 import requests
 
+from src.ingest._http import get_with_deadline as _get_with_deadline
+
 try:
     from dotenv import load_dotenv
 
@@ -62,24 +64,6 @@ _MAGIC = {
     "zip": [b"PK\x03\x04"],
     "dta": [b"<stata_dta>", b"\x72", b"\x73", b"\x71"],
 }
-
-
-def _get_with_deadline(url: str, headers: dict, timeout: float, total: float) -> requests.Response:
-    """GET whose whole download must finish within `total` seconds (requests' `timeout`
-    only bounds each socket read, so a slow trickle could hang forever)."""
-    deadline = time.monotonic() + total
-    r = requests.get(url, headers=headers, timeout=timeout, allow_redirects=True, stream=True)
-    try:
-        buf = bytearray()
-        for chunk in r.iter_content(chunk_size=65536):
-            buf.extend(chunk)
-            if time.monotonic() > deadline:
-                raise requests.Timeout(f"total download time > {total:.0f}s for {url}")
-        r._content = bytes(buf)
-        r._content_consumed = True
-    finally:
-        r.close()
-    return r
 
 
 def http_get(url: str, *, timeout: int = 120, retries: int = 3, total: float | None = None) -> requests.Response:

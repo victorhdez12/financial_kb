@@ -3,12 +3,16 @@ import argparse
 from pathlib import Path
 import pandas as pd
 
+from src.ingest._xlsx import read_excel_tolerant
+
 
 def read_any(path: Path) -> pd.DataFrame:
     ext = path.suffix.lower()
     if ext == '.csv':
         return pd.read_csv(path)
-    if ext in {'.xlsx', '.xls'}:
+    if ext == '.xlsx':
+        return read_excel_tolerant(path)
+    if ext == '.xls':
         return pd.read_excel(path)
     if ext == '.parquet':
         return pd.read_parquet(path)

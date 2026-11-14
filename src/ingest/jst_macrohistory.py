@@ -11,6 +11,7 @@ import re
 
 import pandas as pd
 
+from src.ingest._xlsx import read_excel_tolerant
 from src.ingest._extlong_common import CatalogWriter, download, events_dir, find_link, log, raw_dir
 
 SOURCE = "jst_macrohistory"
@@ -107,7 +108,7 @@ def fetch():
 def main() -> None:
     url, path = fetch()
     version = re.search(r"R\d+", path.name).group(0) if re.search(r"R\d+", path.name) else "?"
-    d = pd.read_excel(path)
+    d = read_excel_tolerant(path)
     d["date"] = pd.to_datetime(d["year"].astype(int).astype(str) + "-01-01")
     cw = CatalogWriter(SOURCE, url=url, license=LICENSE)
     for iso, g in d.groupby("iso"):

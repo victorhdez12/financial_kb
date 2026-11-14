@@ -16,8 +16,8 @@ import time
 from pathlib import Path
 
 import pandas as pd
-import requests
 
+from src.ingest import _http
 from src.ingest._extlong_common import UA, CatalogWriter, log, raw_dir  # noqa: F401
 
 TODAY = pd.Timestamp(dt.date.today())
@@ -37,7 +37,7 @@ def cached_get(url: str, dest: Path, *, max_age_hours: float = 20, timeout: int 
     h.update(headers or {})
     for i in range(retries):
         try:
-            r = requests.get(url, headers=h, timeout=timeout)
+            r = _http.get(url, headers=h, timeout=timeout)
             if r.status_code == 404 and allow_404:
                 return None
             r.raise_for_status()

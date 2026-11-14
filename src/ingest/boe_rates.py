@@ -24,6 +24,7 @@ import zipfile
 
 import pandas as pd
 
+from src.ingest._xlsx import excel_file_tolerant
 from src.ingest._extlong_common import CatalogWriter, download, log, raw_dir
 
 SOURCE = "boe_rates"
@@ -52,7 +53,7 @@ def ois_3m_daily(zbytes: bytes) -> pd.Series:
         for name in sorted(z.namelist()):
             if not (name.startswith("OIS") and name.endswith(".xlsx")):
                 continue
-            x = pd.ExcelFile(io.BytesIO(z.read(name)))
+            x = excel_file_tolerant(z.read(name))
             hoja = next((h for h in x.sheet_names if "spot, short end" in h), None)
             if hoja is None:
                 log.info("boe_rates: %s without short-end spot sheet, skipped", name)

@@ -28,6 +28,7 @@ from pathlib import Path
 import pandas as pd
 import requests
 
+from . import _http
 from ._extlong_common import CatalogWriter, log, raw_dir
 
 SRC = "imf_weo"
@@ -77,7 +78,7 @@ def fetch_imf(url: str, dest: Path, refresh: bool, min_age_hours: float = 20, ac
                 h["Accept"] = accept
             for k in range(3):
                 try:
-                    r = requests.get(url, headers=h, timeout=600)
+                    r = _http.get(url, headers=h, timeout=600)
                     r.raise_for_status()
                     break
                 except requests.RequestException:
@@ -139,7 +140,7 @@ def main(refresh: bool = False) -> None:
     # vintage: publication date from a one-series CSV call (dataset-level attribute)
     pub = None
     try:
-        r = requests.get(API + "data/dataflow/IMF.RES/WEO/+/USA.NGDP_RPCH.A?attributes=all&measures=all",
+        r = _http.get(API + "data/dataflow/IMF.RES/WEO/+/USA.NGDP_RPCH.A?attributes=all&measures=all",
                          headers={"User-Agent": UA, "Accept": "application/vnd.sdmx.data+csv;version=2.0.0"}, timeout=120)
         hdr = pd.read_csv(io.StringIO(r.text), nrows=1)
         pub = str(hdr["PUBLICATION_DATE"].iloc[0])[:10]

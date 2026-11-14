@@ -10,6 +10,7 @@ import re
 
 import pandas as pd
 
+from src.ingest._xlsx import read_excel_tolerant
 from src.ingest._extlong_common import CatalogWriter, download, find_link, log, raw_dir
 
 SOURCE = "wb_pinksheet"
@@ -51,7 +52,7 @@ def category_for(name: str) -> str:
 
 
 def load_prices(path) -> list[tuple[str, str, str, pd.Series]]:
-    d = pd.read_excel(path, sheet_name="Monthly Prices", header=None)
+    d = read_excel_tolerant(path, sheet_name="Monthly Prices", header=None)
     hdr_row = d.index[d.iloc[:, 1].astype(str).str.contains("Crude oil", na=False)][0]
     names, units = d.iloc[hdr_row], d.iloc[hdr_row + 1]
     body = d.iloc[hdr_row + 2:]
@@ -70,7 +71,7 @@ def load_prices(path) -> list[tuple[str, str, str, pd.Series]]:
 
 
 def load_indices(path) -> list[tuple[str, str, str, pd.Series]]:
-    d = pd.read_excel(path, sheet_name="Monthly Indices", header=None)
+    d = read_excel_tolerant(path, sheet_name="Monthly Indices", header=None)
     first = d.index[d[0].astype(str).str.fullmatch(r"\d{4}M\d{2}")][0]
     hdr = d.iloc[4:first, 1:]
     body = d.iloc[first:]

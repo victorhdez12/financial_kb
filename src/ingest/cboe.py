@@ -18,8 +18,8 @@ import json
 from concurrent.futures import ThreadPoolExecutor
 
 import pandas as pd
-import requests
 
+from src.ingest import _http
 from src.ingest._extlong_common import CatalogWriter, UA, download, log, raw_dir
 
 SOURCE = "cboe"
@@ -92,7 +92,7 @@ def _daily_json(day: pd.Timestamp, cache) -> dict | None:
     if f.exists():
         return json.loads(f.read_text()) if f.stat().st_size > 2 else None
     try:
-        r = requests.get(DAILY.format(f"{day:%Y-%m-%d}"), headers={"User-Agent": UA}, timeout=60)
+        r = _http.get(DAILY.format(f"{day:%Y-%m-%d}"), headers={"User-Agent": UA}, timeout=60)
     except Exception as e:  # noqa: BLE001
         log.warning("daily pc %s: %s", day.date(), e)
         return None

@@ -21,8 +21,8 @@ import json
 import time
 
 import pandas as pd
-import requests
 
+from src.ingest import _http
 from src.ingest._extlong_common import UA, CatalogWriter, http_get, log, raw_dir
 from src.ingest.fred_extended import Fred
 
@@ -39,7 +39,7 @@ def cached_text(url: str, name: str, *, hours: float = 20, params: dict | None =
     p = raw_dir(SOURCE) / name
     if p.exists() and (time.time() - p.stat().st_mtime) / 3600 < hours:
         return p.read_text(encoding="utf-8-sig")
-    r = requests.get(url, params=params, headers={"User-Agent": UA}, timeout=120)
+    r = _http.get(url, params=params, headers={"User-Agent": UA}, timeout=120)
     r.raise_for_status()
     p.write_bytes(r.content)
     log.info("downloaded %s (%d bytes)", name, len(r.content))

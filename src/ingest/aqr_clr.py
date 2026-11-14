@@ -21,6 +21,7 @@ import json
 import openpyxl
 import pandas as pd
 
+from src.ingest._xlsx import xlsx_source
 from src.ingest._extlong_common import CatalogWriter, download, log, raw_dir
 
 SOURCE = "aqr_clr"
@@ -56,7 +57,7 @@ def _fecha(v):
 
 
 def leer(path) -> pd.DataFrame:
-    ws = openpyxl.load_workbook(path, read_only=True, data_only=True).worksheets[0]
+    ws = openpyxl.load_workbook(xlsx_source(path), read_only=True, data_only=True).worksheets[0]
     rows = list(ws.iter_rows(values_only=True))
     i0 = next(i for i, r in enumerate(rows) if _fecha(r[0]) is not None)
     hdr = rows[i0 - 1]

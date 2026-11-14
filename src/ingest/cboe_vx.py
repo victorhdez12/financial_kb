@@ -28,8 +28,8 @@ from concurrent.futures import ThreadPoolExecutor
 
 import numpy as np
 import pandas as pd
-import requests
 
+from src.ingest import _http
 from src.ingest._extlong_common import CatalogWriter, UA, log, raw_dir
 
 SOURCE = "cboe_vx"
@@ -62,7 +62,7 @@ def _get(url: str, dest, *, final: bool) -> bytes | None:
         return dest.read_bytes()
     for i in range(3):
         try:
-            r = requests.get(url, headers={"User-Agent": UA}, timeout=60)
+            r = _http.get(url, headers={"User-Agent": UA}, timeout=60)
             break
         except Exception as e:  # noqa: BLE001
             if i == 2:

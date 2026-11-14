@@ -24,6 +24,8 @@ from urllib.parse import urlparse
 import pandas as pd
 import requests
 
+from src.ingest._http import get_with_deadline as _get_with_deadline
+
 try:
     from dotenv import load_dotenv
 
@@ -83,24 +85,6 @@ def _headers(url: str) -> dict:
         ua = os.environ.get("SEC_USER_AGENT") or "financial_kb research"
         return {"User-Agent": ua, "Accept-Encoding": "gzip, deflate"}
     return {"User-Agent": BROWSER_UA, "Accept": "*/*", "Accept-Language": "en-US,en;q=0.9"}
-
-
-def _get_with_deadline(url: str, headers: dict, timeout: float, total: float) -> requests.Response:
-    """GET whose whole download must finish within `total` seconds (requests' `timeout`
-    only bounds each socket read, so a slow trickle could hang forever)."""
-    deadline = time.monotonic() + total
-    r = requests.get(url, headers=headers, timeout=timeout, allow_redirects=True, stream=True)
-    try:
-        buf = bytearray()
-        for chunk in r.iter_content(chunk_size=65536):
-            buf.extend(chunk)
-            if time.monotonic() > deadline:
-                raise requests.Timeout(f"total download time > {total:.0f}s for {url}")
-        r._content = bytes(buf)
-        r._content_consumed = True
-    finally:
-        r.close()
-    return r
 
 
 def http_get(url: str, *, retries: int = 3, timeout: int = 60, total: float | None = None) -> requests.Response:

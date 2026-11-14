@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import pandas as pd
 
+from src.ingest._xlsx import read_excel_tolerant
 from src.ingest._extlong_common import CatalogWriter, download, find_link, log, raw_dir
 
 SOURCE = "clev_inflexp"
@@ -27,7 +28,7 @@ NOTE = ("Cleveland Fed model output (Haubrich, Pennacchi & Ritchken 2012); month
 
 
 def _sheet(path, name: str) -> pd.DataFrame:
-    d = pd.read_excel(path, sheet_name=name)
+    d = read_excel_tolerant(path, sheet_name=name)
     d.columns = [str(c).strip() for c in d.columns]
     d = d.set_index(pd.to_datetime(d.iloc[:, 0], errors="coerce")).iloc[:, 1:]
     return d[d.index.notna()].apply(pd.to_numeric, errors="coerce")

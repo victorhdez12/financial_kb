@@ -22,6 +22,7 @@ import zipfile
 
 import pandas as pd
 
+from src.ingest._xlsx import read_excel_tolerant
 from src.ingest._events_common import download, iso3, log, raw_dir, write_events
 
 LV_URLS = [
@@ -58,7 +59,7 @@ def laeven_valencia(raw) -> list[dict]:
     rows: list[dict] = []
 
     # banking crises with end dates and costs
-    res = pd.read_excel(io.BytesIO(xb), sheet_name="Crisis Resolution and Outcomes", header=0)
+    res = read_excel_tolerant(io.BytesIO(xb), sheet_name="Crisis Resolution and Outcomes", header=0)
     res.columns = ["country", "start", "end", "output_loss", "fiscal_cost", "fiscal_cost_net",
                    "fiscal_cost_fin_assets", "peak_liquidity", "liquidity_support", "peak_npl",
                    "debt_increase"]
@@ -83,7 +84,7 @@ def laeven_valencia(raw) -> list[dict]:
                       + ("; end 'ongoing' at 2017" if ey is None else "")),
         })
 
-    yrs = pd.read_excel(io.BytesIO(xb), sheet_name="Crisis Years", header=None).iloc[2:]
+    yrs = read_excel_tolerant(io.BytesIO(xb), sheet_name="Crisis Years", header=None).iloc[2:]
     yrs.columns = ["country", "banking", "currency", "sov_debt", "sov_restructuring"]
     kinds = {
         "banking": ("banking_crisis", "Systemic banking crisis"),
@@ -117,7 +118,7 @@ def laeven_valencia(raw) -> list[dict]:
 
 def reinhart_rogoff(raw) -> list[dict]:
     f = download(RR_URLS, raw / "20160923_global_crisis_data.xlsx", "xlsx", max_age_hours=24 * 90)
-    d = pd.read_excel(f)
+    d = read_excel_tolerant(f)
     d.columns = [str(c).strip() for c in d.columns]
     d = d.iloc[1:].copy()
     d = d[pd.to_numeric(d["Year"], errors="coerce").notna()]

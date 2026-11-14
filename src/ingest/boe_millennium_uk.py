@@ -11,6 +11,7 @@ import re
 
 import pandas as pd
 
+from src.ingest._xlsx import read_excel_tolerant
 from src.ingest._extlong_common import CatalogWriter, download, log, raw_dir
 
 SOURCE = "boe_millennium_uk"
@@ -106,7 +107,7 @@ def main() -> None:
         download(URL, dest, "xlsx")
     cw = CatalogWriter(SOURCE, url=URL, license=LICENSE)
 
-    a = pd.read_excel(dest, sheet_name="A1. Headline series", header=None)
+    a = read_excel_tolerant(dest, sheet_name="A1. Headline series", header=None)
     meta = columns_meta(a, 1)
     yrs = pd.to_numeric(a[0], errors="coerce")
     rows = a[yrs.notna() & yrs.between(1000, 2100)]
@@ -121,7 +122,7 @@ def main() -> None:
                country="GBR", transform_notes=f"BoE millennium v3.1 sheet A1 <- {meta.worksheet[c]}; "
                                               f"{meta.notes[c][:200]}")
 
-    m = pd.read_excel(dest, sheet_name="M1. Mthly headline series", header=None)
+    m = read_excel_tolerant(dest, sheet_name="M1. Mthly headline series", header=None)
     meta = columns_meta(m, 2)
     yrs = pd.to_numeric(m[0], errors="coerce")
     ok = yrs.notna() & m[1].isin(MONTHS.keys())

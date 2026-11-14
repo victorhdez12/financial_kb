@@ -20,6 +20,7 @@ import warnings
 
 import pandas as pd
 
+from ._xlsx import excel_file_tolerant, read_excel_tolerant
 from ._extlong_common import CatalogWriter, download, log, raw_dir
 
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -82,14 +83,14 @@ def _qdate(year, q) -> pd.Timestamp:
 
 
 def _std_sheet(path, sheet) -> pd.DataFrame:
-    d = pd.read_excel(path, sheet_name=sheet)
+    d = read_excel_tolerant(path, sheet_name=sheet)
     d = d.dropna(subset=["YEAR", "QUARTER"])
     d.index = [_qdate(y, q) for y, q in zip(d["YEAR"], d["QUARTER"])]
     return d.drop(columns=["YEAR", "QUARTER"])
 
 
 def _disp_sheet(path, sheet) -> pd.DataFrame:
-    raw = pd.read_excel(path, sheet_name=sheet, header=None)
+    raw = read_excel_tolerant(path, sheet_name=sheet, header=None)
     hdr = raw.index[raw[0].astype(str).str.startswith("Survey_Date")][0]
     d = raw.iloc[hdr + 1:].copy()
     d.columns = raw.iloc[hdr].astype(str)
@@ -107,7 +108,7 @@ def main(refresh: bool = False) -> None:
 
     # 1) median & mean levels
     for fname, stat in (("medianLevel.xlsx", "med"), ("meanLevel.xlsx", "mean")):
-        xl = pd.ExcelFile(rd / fname)
+        xl = excel_file_tolerant(rd / fname)
         for var, (desc, cat, units) in VARS.items():
             if var not in xl.sheet_names:
                 continue
@@ -125,7 +126,7 @@ def main(refresh: bool = False) -> None:
                        transform_notes=f"{fname} sheet {var} col {col}; {note}")
 
     # 2) median growth (q/q saar, annual-average growth)
-    xl = pd.ExcelFile(rd / "medianGrowth.xlsx")
+    xl = excel_file_tolerant(rd / "medianGrowth.xlsx")
     for sheet in xl.sheet_names:
         var = sheet.split("_")[0]
         desc, cat, _ = VARS.get(var, (sheet, "growth", ""))
@@ -144,7 +145,7 @@ def main(refresh: bool = False) -> None:
     # 3) dispersion (75th - 25th percentile), all three files
     for fname in ("Dispersion_1.xlsx", "Dispersion_2.xlsx", "Dispersion_3.xlsx"):
         dnum = fname[-6]
-        xl = pd.ExcelFile(rd / fname)
+        xl = excel_file_tolerant(rd / fname)
         for sheet in xl.sheet_names:
             var = sheet.upper()
             if var not in VARS:
@@ -171,7 +172,7 @@ def main(refresh: bool = False) -> None:
                transform_notes=f"prob.xlsx RECESS{i}; RECESS2 = Anxious Index; {note}")
 
     # 5) anxious index (official file)
-    raw = pd.read_excel(rd / "anxious_index_chart.xlsx", sheet_name="Data", header=None)
+    raw = read_excel_tolerant(rd / "anxious_index_chart.xlsx", sheet_name="Data", header=None)
     hdr = raw.index[raw[0].astype(str).str.contains("Obs Year", na=False)][0]
     a = raw.iloc[hdr + 1:, :3].dropna()
     a.index = [_qdate(y, q) for y, q in zip(a[0], a[1])]

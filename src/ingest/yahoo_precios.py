@@ -18,7 +18,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import pandas as pd
-import requests
+
+from src.ingest import _http
 
 log = logging.getLogger("yahoo_precios")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -56,7 +57,7 @@ def salida() -> Path:
 def descargar(t: str) -> tuple[pd.Series, dict]:
     for k in range(3):
         try:
-            r = requests.get(URL.format(t=t), headers={"User-Agent": UA}, timeout=60)
+            r = _http.get(URL.format(t=t), headers={"User-Agent": UA}, timeout=60)
             r.raise_for_status()
             res = r.json()["chart"]["result"][0]
             break

@@ -13,6 +13,7 @@ import time
 
 import pandas as pd
 
+from src.ingest import _http
 from src.ingest._extlong_common import CatalogWriter, http_get, log, raw_dir, validate_bytes
 
 SOURCE = "nber_macrohistory"
@@ -150,13 +151,13 @@ def prefetch(ids: list[str], workers: int = 6) -> None:
         ch = re.search(r"\d{2}", sid).group(0)
         for attempt in range(3):
             try:
-                r = sess.get(BASE.format(ch=ch, sid=sid), timeout=60)
+                r = _http.get(BASE.format(ch=ch, sid=sid), session=sess, timeout=60)
                 if r.status_code == 404:
                     return sid
                 r.raise_for_status()
                 if r.content.lstrip()[:15].lower().startswith((b"<!doctype", b"<html")):
                     return sid
-                d = sess.get(DOC.format(ch=ch, sid=sid), timeout=60)
+                d = _http.get(DOC.format(ch=ch, sid=sid), session=sess, timeout=60)
                 if d.ok:
                     (rd / f"{sid}.txt").write_text(d.text)
                 (rd / f"{sid}.dat").write_bytes(r.content)

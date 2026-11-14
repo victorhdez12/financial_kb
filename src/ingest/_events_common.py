@@ -12,7 +12,8 @@ import time
 from pathlib import Path
 
 import pandas as pd
-import requests
+
+from src.ingest import _http
 
 try:
     from dotenv import load_dotenv
@@ -96,7 +97,7 @@ def download(urls: str | list[str], dest: Path, kind: str, *, max_age_hours: flo
     for url in urls:
         for attempt in range(3):
             try:
-                r = requests.get(url, headers={"User-Agent": UA}, timeout=180)
+                r = _http.get(url, headers={"User-Agent": UA}, timeout=180)
                 r.raise_for_status()
                 validate_bytes(r.content, kind)
                 tmp = dest.with_suffix(dest.suffix + ".part")

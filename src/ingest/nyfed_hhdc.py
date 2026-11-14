@@ -17,6 +17,7 @@ import re
 
 import pandas as pd
 
+from src.ingest._xlsx import excel_file_tolerant
 from src.ingest._extlong_common import CatalogWriter, download, log, raw_dir
 
 SOURCE = "nyfed_hhdc"
@@ -94,7 +95,7 @@ def main() -> None:
     path, q = latest_workbook()
     log.info("using %s", path.name)
     cw = CatalogWriter(SOURCE, url=PAGE, license=LICENSE)
-    x = pd.ExcelFile(path)
+    x = excel_file_tolerant(path)
     seen = set()
     for sheet, (prefix, cat) in PAGES.items():
         if sheet not in x.sheet_names:
