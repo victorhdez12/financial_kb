@@ -678,7 +678,7 @@ def sec_escenarios(s: dict, es: dict | None, fuente: str) -> str:
             f'<div class="pais-blk" data-pais="{esc(c)}"{"" if c == defecto else " hidden"}>'
             f'<div class="card"><h3>{esc(NOMBRE_PAIS.get(c, c))}: rentabilidad real a 12 meses (p5 · p50 · p95)</h3>'
             f'<p>Estado de partida: <strong>{esc(REGIMEN_NOMBRE.get(r.get("regimen_dominante"), r.get("regimen_dominante") or "—"))}</strong>'
-            f' ({esc(pes_t or "—")}; IPC 12 m {pct(est.get("inflacion"), 2)} a {esc(str(est.get("mes_ipc") or "—")[:7])}, '
+            f' ({esc(pes_t or "—")}; IPC media 12 m frente a los 12 previos {pct(est.get("inflacion"), 2)} hasta {esc(str(est.get("mes_ipc") or "—")[:7])}, '
             f'brecha per cápita {pct(est.get("brecha"), 1)}).{cerca}</p>'
             + svg_rangos(filas, -0.4, 0.8, f"Abanico de {c}") +
             f'<p class="small">Barra = abanico nominal del 90 % (p5-p95); punto = mediana. Acierto medido del p5-p95 en '
