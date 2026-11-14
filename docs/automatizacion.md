@@ -5,7 +5,7 @@ El proyecto está en `~/Proyectos/financial_kb` (fuera del Escritorio: macOS blo
 
 | Tarea | Cuándo | Qué hace (`scripts/actualizar.sh`) |
 |---|---|---|
-| `com.financialkb.diario` | lun-sáb 7:30 | `make daily`: fuentes diarias (`INGEST_DAILY` del Makefile: fred_extended, fed_yieldcurve, us_liquidity, nyfed_repo, ecb) + warehouse + régimen |
+| `com.financialkb.diario` | lun-sáb 7:30 | `make daily`: fuentes diarias (`INGEST_DAILY` del Makefile: yahoo_precios, fred_extended, fed_yieldcurve, us_liquidity, nyfed_repo, ecb, bundesbank, cboe, cboe_vx, atl_mpt, umich, alfred_vintages, eurostat) + warehouse + régimen |
 | `com.financialkb.semanal` | domingo 7:00 | `make semanal`: todas las fuentes (`INGEST`) + warehouse + régimen + auditoría + reporte semanal en `obsidian/Reports/` |
 
 - Si el Mac está apagado o dormido a esa hora, launchd la lanza al despertar.

@@ -24,6 +24,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 from src.report import panel_activos as PA
+from src.report import panel_hoy as PH
 from src.report import panel_paises as PP
 from src.warehouse import db
 
@@ -943,7 +944,7 @@ tabs.forEach(function(b){b.addEventListener('click',function(){show(b.dataset.t)
 var h=(location.hash||'').slice(1);
 var dp=h&&!secs.some(function(s){return s.id===h})?document.getElementById(h):null;
 if(dp&&dp.closest('main>section')){show(dp.closest('main>section').id);dp.open=true;setTimeout(function(){dp.scrollIntoView()},0)}
-else{show(secs.some(function(s){return s.id===h})?h:'paises')}
+else{show(secs.some(function(s){return s.id===h})?h:secs[0].id)}
 document.addEventListener('click',function(e){var a=e.target.closest('a[href^="#atlas-"]');if(a){show('atlas');}});
 var sel=document.getElementById('pais');
 function pais(c){[].forEach.call(document.querySelectorAll('.pais-blk'),function(d){d.hidden=d.dataset.pais!==c});
@@ -965,7 +966,7 @@ var n=d==='dark'?'light':'dark';root.setAttribute('data-theme',n);try{localStora
 })();
 """
 
-PESTANAS = [("paises", "Países"), ("hoy", "Hoy (EE. UU. y recesión)"), ("escenarios", "Escenarios 12 meses"), ("activos", "Mis activos"), ("atlas", "Qué funciona en cada régimen"),
+PESTANAS = [("diario", "Hoy"), ("paises", "Países"), ("hoy", "EE. UU. y recesión"), ("escenarios", "Escenarios 12 meses"), ("activos", "Mis activos"), ("atlas", "Qué funciona en cada régimen"),
             ("cartera", "Mi cartera"), ("estado", "Estado y avisos")]
 
 
@@ -984,7 +985,7 @@ def construir(s: dict, hoy: date | None = None) -> str:
         fr = []
     res = ("<ol>" + "".join(f"<li>{_md_negrita(f)}</li>" for f in fr) + "</ol>") if fr else f"<p>{ND}</p>"
     av = avisos_datos(s, hoy)
-    secciones = {"activos": seccion_segura(PA.sec_activos, s, PP.pulso_desde(s)), "paises": seccion_segura(PP.sec_paises, s, es), "hoy": seccion_segura(sec_hoy, s, es), "escenarios": seccion_segura(sec_escenarios, s, es, fuente_es),
+    secciones = {"diario": seccion_segura(PH.sec_hoy_diario, s, hoy), "activos": seccion_segura(PA.sec_activos, s, PP.pulso_desde(s)), "paises": seccion_segura(PP.sec_paises, s, es), "hoy": seccion_segura(sec_hoy, s, es), "escenarios": seccion_segura(sec_escenarios, s, es, fuente_es),
                  "atlas": seccion_segura(sec_atlas, s, es), "cartera": seccion_segura(sec_cartera, s, reg),
                  "estado": seccion_segura(sec_estado, s, reg, hoy) + PP.glosario_html()}
     nav = "".join(f'<button type="button" role="tab" data-t="{k}" aria-controls="{k}">{esc(v)}'
@@ -1017,8 +1018,9 @@ def generar(signal_path: Path | None = None, out_dir: Path | None = None, hoy: d
     if sp is None:
         raise FileNotFoundError(f"no hay ningún *_signal.json en {REPORTS}")
     s = json.loads(Path(sp).read_text())
-    doc = construir(s, hoy)
     out = Path(out_dir) if out_dir else salida_dir()
+    PH.ESTADO_DIR = out  # estado de «Datos nuevos» junto al panel (fuera de git)
+    doc = construir(s, hoy)
     out.mkdir(parents=True, exist_ok=True)
     idx = out / "index.html"
     idx.write_text(doc, encoding="utf-8")
