@@ -145,6 +145,7 @@ def p_cola_normal(centro: float, sd: float, umbral: float = 5.0) -> float:
 def error_previsiones(prev: pd.Series, ipc: pd.Series, hasta: pd.Timestamp = ERROR_HASTA) -> dict | None:
     """Error de una previsión de inflación a 1 año: realizada (IPC 12 m, 12 meses después) − prevista, con previsiones
     hechas ≤ `hasta`. prev en pp, mensual (índice = mes de la previsión); ipc = índice de precios mensual."""
+    ipc = ipc.resample("MS").last()          # por calendario: un mes ausente no desplaza la comparación
     infl = (ipc / ipc.shift(12) - 1) * 100
     fut = infl.shift(-12)
     p = prev.groupby(prev.index.to_period("M")).last()
@@ -251,9 +252,10 @@ def datos_consenso() -> dict:
                 if f["error"]:
                     f["p_mayor_5"] = p_cola_normal(f["valor"], f["error"]["rmse"])
             out["fuentes"].append(f)
-        a = (ipc / ipc.shift(12) - 1).dropna()
+        from src.report.panel_hoy import yoy
+        a = yoy(ipc)   # por calendario (oct-2025 no se publicó: sin esto oct-2026 se comparaba con sep-2025)
         if len(a):
-            out["ipc"] = {"valor": float(100 * a.iloc[-1]), "mes": str(a.index[-1].date())[:7]}
+            out["ipc"] = {"valor": float(a.iloc[-1]), "mes": str(a.index[-1].date())[:7]}
         return out
     finally:
         con.close()
@@ -504,7 +506,9 @@ def sec_consenso(es: dict | None) -> str:
         filas.append([esc(f["nombre"]), f"{num(f['valor'], 2)} % <span class='muted'>({esc(f['fecha'][:7])})</span>",
                       pct(f.get("p_mayor_5")) if f.get("p_mayor_5") is not None else "—",
                       (f"error típico {num(er['rmse'], 2)} pp (sesgo {num(er['sesgo'], 2, ' pp', True)}), {er['n']} previsiones "
-                       f"{esc(er['desde'])} → {esc(er['hasta'])}" if er else
+                       f"{esc(er['desde'])} → {esc(er['hasta'])}"
+                       + (" (serie histórica reconstruida con el modelo actual, no previsiones hechas en su día: "
+                          "el error en tiempo real pudo ser mayor)" if f["id"] == "EXPINF1YR" else "") if er else
                        "media de 5 años: no es una previsión a 12 meses")])
     ac = P.acierto_int11().get("infl5") or {}
     cle = next((f for f in fu if f["id"] == "EXPINF1YR"), {})

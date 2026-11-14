@@ -29,7 +29,7 @@ ACTIVOS = {
     "GOOGL": ("Alphabet (Google)", "Acciones"), "MSFT": ("Microsoft", "Acciones"), "META": ("Meta Platforms", "Acciones"),
     "UBER": ("Uber", "Acciones"), "CHTR": ("Charter Communications", "Acciones"),
     "UNH": ("UnitedHealth", "Acciones"),
-    "CTVA": ("Corteva (semillas y fitosanitarios)", "Agro / pesticidas"), "FMC": ("FMC (fitosanitarios)", "Agro / pesticidas"),
+    "CTVA": ("Corteva (fitosanitarios; semillas escindidas en Vylor el 1-oct-2026)", "Agro / pesticidas"), "FMC": ("FMC (fitosanitarios)", "Agro / pesticidas"),
     "BAYN.DE": ("Bayer (EUR)", "Agro / pesticidas"), "MOO": ("ETF agronegocio (VanEck MOO)", "Agro / pesticidas"),
     "GLD": ("Oro (ETF GLD)", "Oro y materias primas"), "GDX": ("Mineras de oro (ETF GDX)", "Oro y materias primas"),
     "NEM": ("Newmont (minera de oro)", "Oro y materias primas"),

@@ -684,7 +684,7 @@ def sec_escenarios(s: dict, es: dict | None, fuente: str) -> str:
             f' ({esc(pes_t or "—")}; IPC media 12 m frente a los 12 previos {pct(est.get("inflacion"), 2)} hasta {esc(str(est.get("mes_ipc") or "—")[:7])}, '
             f'brecha per cápita {pct(est.get("brecha"), 1)}).{cerca}</p>'
             + svg_rangos(filas, -0.4, 0.8, f"Abanico de {c}") +
-            f'<p class="small">Barra = abanico nominal del 90 % (p5-p95); punto = mediana. Acierto medido del p5-p95 en '
+            f'<p class="small">Barra = abanico del 90 % (p5-p95) de la rentabilidad real; punto = mediana. Acierto medido del p5-p95 en '
             f'{esc(c)} (desarrollo, sin sus propios datos, 1876-2004): {esc(cub_txt or "no disponible")}; global '
             f'{pct(acf.get("global"), 1)}. Moneda local, real.</p></div>'
             f'<div class="card"><h3>Probabilidades de {esc(NOMBRE_PAIS.get(c, c))}</h3>{tiles}</div>'

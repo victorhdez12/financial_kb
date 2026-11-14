@@ -204,7 +204,7 @@ def _detalle(c: str, r: dict, m: dict, reg_t: str, s: dict, es: dict | None = No
                        ("IPC nacional a/a (OCDE)", n(inf.get("ipc_aa")), inf.get("mes")),
                        ("IPCA a/a (BCE)", n(inf.get("hicp_aa")), inf.get("mes_hicp")),
                        ("IPC media 12 meses (la del motor)" + (" · 1 mes interpolado" if inf.get("huecos_media_12m") else ""),
-                        n(inf.get("ipc_media_12m")), inf.get("mes")),
+                        n(inf.get("ipc_media_12m")), inf.get("mes_media_12m", "")),  # su mes es el del índice, no el del a/a
                        ("Subyacente a/a (OCDE)", n(inf.get("subyacente_aa")), inf.get("mes_sub")),
                        ("Subyacente IPCA a/a (BCE)", n(inf.get("hicp_sub_aa")), inf.get("mes_hicp_sub")),
                        (term("percentil") + " del IPC en su historia", pct(inf.get("pct_ipc"), inf.get("pct_ipc_desde")), "")]),

@@ -22,6 +22,7 @@ import math
 from datetime import date, timedelta
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 from src.regime.credit import THRESHOLDS
@@ -79,12 +80,24 @@ def delta(x: pd.Series, desfase: pd.DateOffset) -> float | None:
 
 
 def yoy(x: pd.Series) -> pd.Series:
-    """Variación a/a (%) de una serie mensual (o de cualquier frecuencia, comparando con 12 meses antes as-of)."""
+    """Variación a/a (%) frente al MISMO mes del año anterior (por calendario, no por posición).
+
+    Un único mes ausente en el interior (p. ej. el IPC de EE. UU. de oct-2025, cierre del Gobierno) se rellena por
+    interpolación log-lineal SOLO como base de comparación (como `bolsa_vivo.ipc_con_huecos`); el mes ausente no
+    tiene a/a propio. Antes se desplazaba por posición tras quitar el hueco y de nov-2025 en adelante se comparaba
+    con 13 meses antes (IPC oct-2026 4,1 % en vez de 3,9 %)."""
     x = x.dropna()
     if x.empty:
         return x
-    m = x.resample("MS").last().dropna()
-    return (100 * (m / m.shift(12) - 1)).dropna()
+    m = x.resample("MS").last()
+    base = m
+    falta = m.isna()
+    suelto = falta & ~falta.shift(1, fill_value=False) & ~falta.shift(-1, fill_value=False)
+    if suelto.any() and m.dropna().gt(0).all():
+        rell = np.exp(np.log(m).interpolate(limit_area="inside"))
+        base = m.where(~suelto, rell)
+    y = 100 * (m / base.shift(12) - 1)
+    return y[m.notna()].dropna()
 
 
 def caida_desde_max(x: pd.Series, dias: int = 365) -> pd.Series:

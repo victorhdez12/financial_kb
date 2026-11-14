@@ -30,6 +30,24 @@ def test_yoy_y_m2_real():
     assert abs(r.iloc[-1] - (1.05 / 1.02 - 1) * 100) < 1e-9
 
 
+def test_yoy_por_calendario_con_mes_ausente():
+    """IPC de EE. UU.: oct-2025 no se publicó. El a/a de oct-2026 compara con oct-2025 (interpolado, solo como base),
+    nunca con sep-2025 (13 meses); el mes ausente no tiene a/a propio. Antes salía 4,1 % en vez de 3,9 %."""
+    idx = pd.date_range("2024-01-01", "2026-10-01", freq="MS")
+    x = pd.Series(100 * 1.03 ** (np.arange(len(idx)) / 12), index=idx)
+    x[pd.Timestamp("2025-10-01")] = np.nan
+    y = PH.yoy(x)
+    assert pd.Timestamp("2025-10-01") not in y.index
+    for t in ("2025-11-01", "2026-09-01", "2026-10-01"):
+        assert abs(y[pd.Timestamp(t)] - 3.0) < 1e-9, t
+    # dos meses seguidos ausentes: no se inventa la base
+    x2 = x.copy()
+    x2[pd.Timestamp("2025-09-01")] = np.nan
+    y2 = PH.yoy(x2)
+    assert pd.Timestamp("2026-09-01") not in y2.index and pd.Timestamp("2026-10-01") not in y2.index
+    assert abs(y2[pd.Timestamp("2026-08-01")] - 3.0) < 1e-9
+
+
 def test_semaforos_umbrales():
     d = lambda v: pd.Series([v], index=[pd.Timestamp("2026-11-13")])  # noqa: E731
     assert PH.regla_vix(d(31))[0] == "rojo" and PH.regla_vix(d(22))[0] == "ambar" and PH.regla_vix(d(15))[0] == "verde"
