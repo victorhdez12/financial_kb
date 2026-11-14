@@ -982,13 +982,19 @@ def construir(s: dict, hoy: date | None = None) -> str:
         es, fuente_es = escenarios_completos(s)
     except Exception:  # noqa: BLE001
         es, fuente_es = None, "no disponible"
-    reg = registros(hoy)
+    try:
+        reg = registros(hoy)
+    except Exception:  # noqa: BLE001
+        reg = {}
     try:
         fr = resumen(s, es)
     except Exception:  # noqa: BLE001
         fr = []
     res = ("<ol>" + "".join(f"<li>{_md_negrita(f)}</li>" for f in fr) + "</ol>") if fr else f"<p>{ND}</p>"
-    av = avisos_datos(s, hoy)
+    try:
+        av = avisos_datos(s, hoy)
+    except Exception:  # noqa: BLE001
+        av = []
     secciones = {"diario": seccion_segura(PH.sec_hoy_diario, s, hoy), "quehacer": seccion_segura(QH.sec_que_hacer, s, es), "activos": seccion_segura(PA.sec_activos, s, PP.pulso_desde(s)), "paises": seccion_segura(PP.sec_paises, s, es), "hoy": seccion_segura(sec_hoy, s, es), "escenarios": seccion_segura(sec_escenarios, s, es, fuente_es),
                  "atlas": seccion_segura(sec_atlas, s, es), "cartera": seccion_segura(sec_cartera, s, reg),
                  "estado": seccion_segura(sec_estado, s, reg, hoy) + PP.glosario_html(),
