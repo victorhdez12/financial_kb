@@ -25,6 +25,7 @@ from pathlib import Path
 
 from src.report import panel_activos as PA
 from src.report import panel_paises as PP
+from src.verif import panel_verif as PV
 from src.warehouse import db
 
 REPO = db.REPO
@@ -966,7 +967,7 @@ var n=d==='dark'?'light':'dark';root.setAttribute('data-theme',n);try{localStora
 """
 
 PESTANAS = [("paises", "Países"), ("hoy", "Hoy (EE. UU. y recesión)"), ("escenarios", "Escenarios 12 meses"), ("activos", "Mis activos"), ("atlas", "Qué funciona en cada régimen"),
-            ("cartera", "Mi cartera"), ("estado", "Estado y avisos")]
+            ("cartera", "Mi cartera"), ("estado", "Estado y avisos"), ("verificacion", "Verificación")]
 
 
 def construir(s: dict, hoy: date | None = None) -> str:
@@ -986,7 +987,8 @@ def construir(s: dict, hoy: date | None = None) -> str:
     av = avisos_datos(s, hoy)
     secciones = {"activos": seccion_segura(PA.sec_activos, s, PP.pulso_desde(s)), "paises": seccion_segura(PP.sec_paises, s, es), "hoy": seccion_segura(sec_hoy, s, es), "escenarios": seccion_segura(sec_escenarios, s, es, fuente_es),
                  "atlas": seccion_segura(sec_atlas, s, es), "cartera": seccion_segura(sec_cartera, s, reg),
-                 "estado": seccion_segura(sec_estado, s, reg, hoy) + PP.glosario_html()}
+                 "estado": seccion_segura(sec_estado, s, reg, hoy) + PP.glosario_html(),
+                 "verificacion": seccion_segura(PV.sec_verificacion)}
     nav = "".join(f'<button type="button" role="tab" data-t="{k}" aria-controls="{k}">{esc(v)}'
                   + (f" ({len(av)})" if k == "estado" and av else "") + "</button>" for k, v in PESTANAS)
     cuerpo = "".join(f'<section id="{k}" role="tabpanel" aria-label="{esc(v)}"><h2>{esc(v)}</h2>{PP.intro(k)}{secciones[k]}</section>'

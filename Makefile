@@ -46,7 +46,7 @@ INGEST := fred_extended alfred_vintages fred_us fed_yieldcurve us_treasury nyfed
           ecb eurostat bde ine bundesbank ifo zew \
           cycle_bis bis_ext oecd oecd_qna oecd_vivienda aqr_clr imf_weo imf_ifs imf_gdd imf_hpdd imf_mfs yahoo_precios wb_wdi jst_macrohistory boe_millennium_uk boe_rates cycle_worldorder \
           events_nber events_wars events_financial_crises events_gpr events_curated
-.PHONY: ingest audit data ingest-daily daily semanal
+.PHONY: ingest audit data ingest-daily daily semanal verif
 
 # Fuentes con datos diarios o semanales (actualización diaria automática, ver scripts/actualizar.sh)
 INGEST_DAILY := yahoo_precios fred_extended fed_yieldcurve us_liquidity nyfed_repo ecb bundesbank cboe cboe_vx atl_mpt umich
@@ -62,7 +62,10 @@ data: ingest warehouse regime audit   ## ciclo completo de la fase de datos
 ingest-daily:         ## solo las fuentes diarias (minutos)
 	@for s in $(INGEST_DAILY); do echo "== $$s"; $(PY) -m src.ingest.$$s || echo "FALLO $$s"; done
 
-daily: ingest-daily warehouse regime   ## actualización diaria (launchd, lun-sáb) + panel web
+verif:                ## registro de verificación a corto plazo (docs/verif/metodo_v1.md; segundos, idempotente)
+	$(PY) scripts/verif_registrar.py || echo "AVISO verif no actualizada"
+
+daily: ingest-daily warehouse regime verif   ## actualización diaria (launchd, lun-sáb) + verificación + panel web
 	$(PY) -m src.report.panel || echo "AVISO panel no generado"
 
-semanal: data weekly  ## actualización completa + auditoría + reporte (launchd, domingo)
+semanal: data verif weekly  ## actualización completa + auditoría + reporte (launchd, domingo)
