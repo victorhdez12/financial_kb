@@ -12,6 +12,11 @@ confirmado". El registro en vivo NO se activa aquí (falta fijar la fuente de bo
 SERIE NUEVA (`SERIE_VIVO`, carpeta propia), que no se mezcla con ninguna emisión de v3.
 
 Uso: .venv/bin/python -m scripts.int11_v3_hoy [AAAA-MM-DD] [--v3]   → research/int/int11_v3_hoy.{json,md}
+     ... [AAAA-MM-DD] --registro         → SOLO research/int/int11_v3_1_vivo/AAAA-MM.json (+ índice; nunca sobrescribe)
+     ... [AAAA-MM-DD] --ensayo [--hoy=AAAA-MM-DD]  → ENSAYO del registro (simulacro de la emisión de launchd): mismas
+           comprobaciones (fecha ± 3 días, árbol limpio, mes libre) ANOTADAS sin abortar, emisión completa y resumen de
+           lo que se habría registrado; NO escribe nada. `--hoy` simula el día de la emisión solo para la comprobación
+           de fecha (los datos son los del warehouse de hoy).
 """
 from __future__ import annotations
 
@@ -110,10 +115,20 @@ def pais_escenario(gen: E.Generador, c: str, e: dict, semilla: int) -> dict:
             "cerca_umbral": bool(abs(e["inflacion"] - E.UMBRAL_INFL) < CERCA_INFL or abs(e["brecha"]) < CERCA_BRECHA)}
 
 
-def emitir(fecha: str, exigir_limpio: bool = True, motor: str = "v3.1", registro: bool = False) -> dict:
+def emitir(fecha: str, exigir_limpio: bool = True, motor: str = "v3.1", registro: bool = False,
+           ensayo: bool = False, hoy: str | None = None) -> dict:
     """`exigir_limpio=False` solo para el reporte semanal (descriptivo; la procedencia anota si el árbol estaba limpio).
-    `motor`: "v3.1" (por defecto) o "v3" (imputación independiente; solo para comparar)."""
-    if registro:   # registro en vivo (D8/D9 aprobados 5-nov-2026): solo v3.1, fecha = hoy ± 3 días, árbol limpio
+    `motor`: "v3.1" (por defecto) o "v3" (imputación independiente; solo para comparar).
+    `ensayo` (implica registro): las comprobaciones del registro se ANOTAN en `ensayo` en lugar de abortar; no escribe.
+    `hoy` (solo ensayo): día simulado para la comprobación de fecha."""
+    chequeos = None
+    if ensayo:
+        if motor != "v3.1":
+            raise SystemExit("el registro en vivo es solo de la serie v3.1")
+        registro = True
+        chequeos = RV.comprobaciones_ensayo(fecha, VIVO_V3_1, hoy=hoy)
+        proc = chequeos.pop("procedencia")
+    elif registro:   # registro en vivo (D8/D9 aprobados 5-nov-2026): solo v3.1, fecha = hoy ± 3 días, árbol limpio
         if motor != "v3.1":
             raise SystemExit("el registro en vivo es solo de la serie v3.1")
         RV.comprobar_fecha(fecha)
@@ -148,6 +163,7 @@ def emitir(fecha: str, exigir_limpio: bool = True, motor: str = "v3.1", registro
             "serie_registro": SERIE_VIVO if motor == "v3.1" else "int11_v3",
             **({"entradas": entradas, "fuente_bolsa_evaluacion": "docs/int/INT11_fuente_bolsa_vivo.md (A1-A7 aprobadas)"}
                if registro else {}),
+            **({"ensayo": chequeos} if ensayo else {}),
             "dependencia_descriptiva_2004": descriptiva_regimen(), "config": str(gen.cfg), "emision": est["emision"],
             "corte_datos": est["corte"], "ventana_objetivo": est["ventana_objetivo"], "kappa": gen.kappa,
             "kappa_en_borde": gen.kappa_en_borde, "acierto_medido_fase_D": ac, "paises": paises,
@@ -280,6 +296,18 @@ def main() -> None:
     warnings.filterwarnings("ignore", category=RuntimeWarning)
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     fecha = args[0] if args else str(pd.Timestamp.today().date())
+    if "--ensayo" in sys.argv:       # simulacro de la emisión de launchd: NO escribe nada
+        from src.report import bolsa_vivo as B
+        hoy = next((a.split("=", 1)[1] for a in sys.argv if a.startswith("--hoy=")), None)
+        o = emitir(fecha, ensayo=True, hoy=hoy)
+        r = RV.resumen_ensayo(o, VIVO_V3_1, B.plan_evaluacion(o["ventana_objetivo"]))
+        r["corte_datos"] = o["corte_datos"]
+        r["ultimo_dato_por_pais"] = {c: {k: x["estado"].get(k) for k in ("mes_ipc", "trimestre_pib")
+                                         if k in x["estado"]} for c, x in o["paises"].items()}
+        print(json.dumps(r, ensure_ascii=False, indent=1, default=str))
+        if o["ensayo"]["abortaria"]:
+            print("ENSAYO: la emisión real ABORTARÍA:", *o["ensayo"]["abortaria"], sep="\n  - ")
+        return
     if "--registro" in sys.argv:     # SOLO research/int/int11_v3_1_vivo/AAAA-MM.json (no reescribe la salida "hoy")
         o = emitir(fecha, registro=True)
         print("registro:", RV.registrar(o, VIVO_V3_1))
