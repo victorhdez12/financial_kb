@@ -782,3 +782,10 @@ Las entradas más recientes van arriba. Ver también [[Proyecto/Estado del proye
 - `scripts/actualizar.sh semanal` (20:35–22:17, 101 min, RC 0, «con avisos»). Fuentes nuevas OK: `imf_mfs` 6 series (sin GBR/CHE), `imf_weo` 1221 series (7 países añadidos), `yahoo_precios` 29 activos sin fallos.
 - Signal `2026-11-12_signal.json` trae `pulso_paises` (18 países); panel regenerado sin «error al generar»; auditoría 0 críticas.
 - Fallos: `cycle_rtdsm` (ya fallaba el 10-nov) y `wb_wdi`, cortado a mano tras 21 min colgado en una conexión (la API respondía); anual, se usan los datos del 10-nov. Pendiente: relanzar `wb_wdi` aparte y poner timeout total a `http_get`.
+
+## 2026-11-14 — Timeout total en `http_get`; `wb_wdi` relanzado
+
+- `http_get` (`src/ingest/_extlong_common.py` y `texts_common.py`): descarga en streaming con plazo total (por defecto máx(4×timeout, 300 s)); antes `timeout` solo limitaba cada lectura y una conexión lenta podía colgar la semanal.
+- `wb_wdi --refresh`: 5,5 min sin colgarse, 375 series; 502 del Banco Mundial en 2 indicadores (FI.RES.TOTL.MO, GC.DOD.TOTL.GD.ZS) → caché del 10-nov. Tests ingest OK.
+- Sin ejecuciones automáticas el 13-14 nov (Mac apagado); se recuperan al encender.
+- Pendiente: `cycle_rtdsm` (falla desde 10-nov), escisión CTVA, feedback del usuario sobre el panel.

@@ -64,11 +64,30 @@ _MAGIC = {
 }
 
 
-def http_get(url: str, *, timeout: int = 120, retries: int = 3) -> requests.Response:
+def _get_with_deadline(url: str, headers: dict, timeout: float, total: float) -> requests.Response:
+    """GET whose whole download must finish within `total` seconds (requests' `timeout`
+    only bounds each socket read, so a slow trickle could hang forever)."""
+    deadline = time.monotonic() + total
+    r = requests.get(url, headers=headers, timeout=timeout, allow_redirects=True, stream=True)
+    try:
+        buf = bytearray()
+        for chunk in r.iter_content(chunk_size=65536):
+            buf.extend(chunk)
+            if time.monotonic() > deadline:
+                raise requests.Timeout(f"total download time > {total:.0f}s for {url}")
+        r._content = bytes(buf)
+        r._content_consumed = True
+    finally:
+        r.close()
+    return r
+
+
+def http_get(url: str, *, timeout: int = 120, retries: int = 3, total: float | None = None) -> requests.Response:
+    total = total if total is not None else max(4 * timeout, 300)
     last = None
     for i in range(retries):
         try:
-            r = requests.get(url, headers={"User-Agent": UA}, timeout=timeout, allow_redirects=True)
+            r = _get_with_deadline(url, {"User-Agent": UA}, timeout, total)
             r.raise_for_status()
             return r
         except Exception as e:  # noqa: BLE001
