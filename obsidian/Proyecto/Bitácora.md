@@ -791,4 +791,5 @@ Las entradas más recientes van arriba. Ver también [[Proyecto/Estado del proye
 - `cycle_rtdsm` arreglado: la Fed de Filadelfia publica desde ~30-oct los .xlsx con fecha mal formada en docProps (`T 9:58`) y openpyxl fallaba; `_read_xlsx` la corrige en memoria (raw intacto). 16 series, vintages hasta oct-2026.
 - CTVA: escisión confirmada (Vylor VYLR, 1:1, 1-oct-2026); nota del panel actualizada; la caída del 12-nov no es la escisión.
 - Pendiente: feedback del usuario sobre el panel.
+- Suite completa: 795 tests OK (17 min) con los arreglos de hoy.
 - Agentes en marcha (14-nov, worktrees `.claude/worktrees`): **blindaje ingesta** (plazo total en todas las llamadas HTTP + lector .xlsx tolerante común + tests) y **ensayo en seco de la emisión INT-11 del ≈20-nov** (sin tocar el registro). Pendiente después: Validador del panel/«Mis activos».
