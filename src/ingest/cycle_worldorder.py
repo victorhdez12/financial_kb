@@ -21,6 +21,8 @@ import warnings
 import pandas as pd
 import requests
 
+from src.ingest._xlsx import read_excel_tolerant
+from . import _http
 from ._extlong_common import CatalogWriter, download, log, raw_dir, validate_bytes
 
 warnings.filterwarnings("ignore")
@@ -43,7 +45,7 @@ SIPRI_COUNTRIES = {
 
 
 def _get(url, ua="python-requests/2.34 (financial_kb research)") -> bytes:
-    r = requests.get(url, headers={"User-Agent": ua}, timeout=180, allow_redirects=True)
+    r = _http.get(url, headers={"User-Agent": ua}, timeout=180, allow_redirects=True)
     r.raise_for_status()
     return r.content
 
@@ -57,7 +59,7 @@ def maddison(refresh=False):
         dest.write_bytes(b)
     cw = CatalogWriter("maddison", url=MADDISON_PAGE,
                        license="CC BY 4.0; cite Bolt & van Zanden (2024) Maddison Project Database 2023")
-    d = pd.read_excel(dest, sheet_name="Full data")
+    d = read_excel_tolerant(dest, sheet_name="Full data")
     for (iso, country), g in d.groupby(["countrycode", "country"]):
         idx = [dt.date(int(y), 1, 1) for y in g["year"]]
         gdppc = pd.Series(g["gdppc"].values, index=idx)
@@ -73,7 +75,7 @@ def maddison(refresh=False):
                transform_notes="derived gdppc*pop/1e6; " + note)
     # The sheet has two blocks side by side with the same region names: GDP per capita, then population
     # (block titles in row 0; region names in row 1, except the World column whose name is in row 0).
-    reg = pd.read_excel(dest, sheet_name="Regional data", header=None)
+    reg = read_excel_tolerant(dest, sheet_name="Regional data", header=None)
     titles, names = reg.iloc[0].tolist(), reg.iloc[1].tolist()
     body = reg.iloc[2:]
     body = body[pd.to_numeric(body[0], errors="coerce").notna()]
@@ -153,7 +155,7 @@ def sipri(refresh=False):
     rd = raw_dir("sipri")
     page_link = None
     try:
-        html = requests.get(SIPRI_PAGE, headers={"User-Agent": "Mozilla/5.0"}, timeout=60).text
+        html = _http.get(SIPRI_PAGE, headers={"User-Agent": "Mozilla/5.0"}, timeout=60).text
         m = re.search(r'href="([^"]*SIPRI-Milex-data-[^"]+\.xlsx)"', html)
         if m:
             page_link = requests.compat.urljoin("https:", m.group(1)) if m.group(1).startswith("//") else \
@@ -169,7 +171,7 @@ def sipri(refresh=False):
               "Share of GDP": ("share_gdp", "% of GDP"),
               "Share of Govt. spending": ("share_govt", "% of general govt expenditure")}
     for sheet, (tag, units) in sheets.items():
-        raw = pd.read_excel(dest, sheet_name=sheet, header=None)
+        raw = read_excel_tolerant(dest, sheet_name=sheet, header=None)
         hdr = raw.index[raw[0].astype(str).str.strip() == "Country"][0]
         cols = raw.iloc[hdr].tolist()
         body = raw.iloc[hdr + 1:]
@@ -187,7 +189,7 @@ def sipri(refresh=False):
             cw.add(f"sipri_{code}_{tag}", s, name=f"SIPRI military expenditure ({units}), {nm}",
                    category="geopolitics", frequency="A", units=units, country=nm,
                    transform_notes=f"sheet '{sheet}'; '...'/'xxx' -> NaN", url=url)
-    raw = pd.read_excel(dest, sheet_name="Regional totals", header=None)
+    raw = read_excel_tolerant(dest, sheet_name="Regional totals", header=None)
     hdr = raw.index[raw[0].astype(str).str.strip() == "Region"][0]
     cols = raw.iloc[hdr].tolist()
     for _, row in raw.iloc[hdr + 1:].iterrows():

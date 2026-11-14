@@ -22,8 +22,8 @@ from datetime import date
 from pathlib import Path
 
 import pandas as pd
-import requests
 
+from src.ingest import _http
 from src.ingest import wb_pinksheet
 from src.ingest._extlong_common import UA, CatalogWriter, download, log, raw_dir
 
@@ -41,7 +41,7 @@ def fetch_measuringworth() -> Path:
     form = {"london": "on", "goldsilver": "on", "newyork": "on", "us": "on", "British": "on",
             "year_source": "1257", "year_result": str(date.today().year)}
     try:
-        r = requests.post(MW_URL, data=form, headers={"User-Agent": UA}, timeout=120)
+        r = _http.post(MW_URL, data=form, headers={"User-Agent": UA}, timeout=120)
         r.raise_for_status()
         if "New York Market Price" not in r.text or r.text.count("<tr>") < 100:
             raise ValueError("MeasuringWorth response has no data table")

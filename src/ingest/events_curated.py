@@ -19,6 +19,7 @@ import time
 
 import requests
 
+from src.ingest import _http
 from src.ingest._events_common import log, write_events
 
 W = "https://en.wikipedia.org/wiki/"
@@ -382,7 +383,7 @@ def check_urls(rows: list[dict]) -> list[str]:
     s.headers["User-Agent"] = "financial_kb research bot"
     for url in sorted({r["url"] for r in rows}):
         try:
-            r = s.get(url, timeout=30, allow_redirects=True)
+            r = _http.get(url, session=s, timeout=30, allow_redirects=True)
             ok = r.status_code == 200
         except Exception:  # noqa: BLE001
             ok = False

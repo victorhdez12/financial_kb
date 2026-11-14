@@ -20,8 +20,8 @@ import time
 from datetime import date
 
 import pandas as pd
-import requests
 
+from . import _http
 from ._extlong_common import UA, CatalogWriter, log, raw_dir
 
 SRC = "measuringworth"
@@ -43,7 +43,7 @@ def fetch(name: str, refresh: bool) -> str:
     fresh = dest.exists() and (time.time() - dest.stat().st_mtime) / 3600 < 24 * 7
     if refresh or not fresh:
         try:
-            r = requests.post(url, data=form, headers={"User-Agent": UA}, timeout=120)
+            r = _http.post(url, data=form, headers={"User-Agent": UA}, timeout=120)
             r.raise_for_status()
             if r.text.count("<tr>") < 100:
                 raise ValueError("no data table in MW response")

@@ -12,12 +12,12 @@ Raw: $FIN_DATA_ROOT/raw/ifo/gsk-e-YYYYMM.xlsx   Curated: curated/ifo/ifo_*.parqu
 """
 from __future__ import annotations
 
-import io
 import re
 
 import openpyxl
 import pandas as pd
 
+from src.ingest._xlsx import xlsx_source
 from src.ingest._europe_common import CatalogWriter, add_series, cached_get, log, raw_dir
 
 SOURCE = "ifo"
@@ -56,7 +56,7 @@ def rows(ws):
 
 def main() -> pd.DataFrame:
     content, ym = get_file()
-    wb = openpyxl.load_workbook(io.BytesIO(content), data_only=True)
+    wb = openpyxl.load_workbook(xlsx_source(content), data_only=True)
     cw = CatalogWriter(SOURCE, url=PAGE, license=LICENSE)
     note = f"ifo file gsk-e-{ym}.xlsx. Monthly, dated at month start (survey month)."
     df = rows(wb.worksheets[0])

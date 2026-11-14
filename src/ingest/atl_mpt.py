@@ -24,6 +24,7 @@ import re
 import numpy as np
 import pandas as pd
 
+from src.ingest._xlsx import read_excel_tolerant
 from src.ingest._extlong_common import CatalogWriter, download, find_link, log, raw_dir
 
 SOURCE = "atl_mpt"
@@ -48,7 +49,7 @@ def _mid(rng: str) -> float:
 def run() -> pd.DataFrame:
     url = find_link(PAGE, r"mpt_histdata\.xlsx") or FALLBACK
     p = download(url, raw_dir(SOURCE) / "mpt_histdata.xlsx", "xlsx", min_age_hours=20)
-    d = pd.read_excel(p, sheet_name="DATA")
+    d = read_excel_tolerant(p, sheet_name="DATA")
     d = d[d["field"].isin(FIELDS)].copy()
     d["date"] = pd.to_datetime(d["date"])
     d["h"] = (pd.to_datetime(d["reference_start"]) - d["date"]).dt.days

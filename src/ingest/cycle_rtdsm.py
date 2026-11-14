@@ -20,6 +20,7 @@ import warnings
 import numpy as np
 import pandas as pd
 
+from ._xlsx import read_excel_tolerant
 from ._extlong_common import CATALOG_COLS, curated_dir, download, log, raw_dir
 
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -102,28 +103,6 @@ def _to_long(mat: pd.DataFrame, sid: str) -> pd.DataFrame:
     return df
 
 
-def _read_xlsx(path, **kw) -> pd.DataFrame:
-    """pd.read_excel tolerant to the Philadelphia Fed's malformed docProps dates
-    ("2026-10-30T 9:58:23", unpadded hour, since ~oct-2026), which openpyxl rejects.
-    Fixes the metadata in memory only; the raw file on disk stays byte-identical."""
-    import io, re, zipfile
-    zin = zipfile.ZipFile(path)
-    core = "docProps/core.xml"
-    if core not in zin.namelist():
-        return pd.read_excel(path, **kw)
-    txt = zin.read(core).decode("utf-8")
-    fixed = re.sub(r"T ?(\d):", r"T0\1:", txt)
-    if fixed == txt:
-        return pd.read_excel(path, **kw)
-    buf = io.BytesIO()
-    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zout:
-        for item in zin.infolist():
-            data = fixed.encode("utf-8") if item.filename == core else zin.read(item.filename)
-            zout.writestr(item, data)
-    buf.seek(0)
-    return pd.read_excel(buf, **kw)
-
-
 def main(refresh: bool = False) -> None:
     rd = raw_dir(SRC)
     out = curated_dir(SRC)
@@ -132,7 +111,7 @@ def main(refresh: bool = False) -> None:
         download(f"{BASE}/{f}", rd / f, "xlsx", min_age_hours=age)
     cat = []
     for f, (sid, name, catg, freq, units) in VINTAGES.items():
-        mat = _read_xlsx(rd / f, sheet_name=0)
+        mat = read_excel_tolerant(rd / f, sheet_name=0)
         df = _to_long(mat, sid)
         df.to_parquet(out / f"{sid}.parquet", index=False)
         cat.append(dict(series_id=sid, source=SRC, name=name, category=catg, frequency=freq, units=units,
@@ -146,7 +125,7 @@ def main(refresh: bool = False) -> None:
                         first_vintage=str(df.realtime_start.min()), last_vintage=str(df.realtime_start.max())))
         log.info("%s: %d rows, %d vintages", sid, len(df), mat.shape[1] - 1)
     for f, (sid, name, catg, freq, units) in RELEASES.items():
-        raw = _read_xlsx(rd / f, sheet_name="DATA", header=None)
+        raw = read_excel_tolerant(rd / f, sheet_name="DATA", header=None)
         hdr = raw.index[raw[0].astype(str).str.strip() == "Date"][0]
         d = raw.iloc[hdr + 1:].dropna(subset=[0])
         d.index = [_obs_date(x) for x in d[0]]
