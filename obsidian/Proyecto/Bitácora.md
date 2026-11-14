@@ -788,4 +788,7 @@ Las entradas más recientes van arriba. Ver también [[Proyecto/Estado del proye
 - `http_get` (`src/ingest/_extlong_common.py` y `texts_common.py`): descarga en streaming con plazo total (por defecto máx(4×timeout, 300 s)); antes `timeout` solo limitaba cada lectura y una conexión lenta podía colgar la semanal.
 - `wb_wdi --refresh`: 5,5 min sin colgarse, 375 series; 502 del Banco Mundial en 2 indicadores (FI.RES.TOTL.MO, GC.DOD.TOTL.GD.ZS) → caché del 10-nov. Tests ingest OK.
 - Sin ejecuciones automáticas el 13-14 nov (Mac apagado); se recuperan al encender.
-- Pendiente: `cycle_rtdsm` (falla desde 10-nov), escisión CTVA, feedback del usuario sobre el panel.
+- `cycle_rtdsm` arreglado: la Fed de Filadelfia publica desde ~30-oct los .xlsx con fecha mal formada en docProps (`T 9:58`) y openpyxl fallaba; `_read_xlsx` la corrige en memoria (raw intacto). 16 series, vintages hasta oct-2026.
+- CTVA: escisión confirmada (Vylor VYLR, 1:1, 1-oct-2026); nota del panel actualizada; la caída del 12-nov no es la escisión.
+- Pendiente: feedback del usuario sobre el panel.
+- Agentes en marcha (14-nov, worktrees `.claude/worktrees`): **blindaje ingesta** (plazo total en todas las llamadas HTTP + lector .xlsx tolerante común + tests) y **ensayo en seco de la emisión INT-11 del ≈20-nov** (sin tocar el registro). Pendiente después: Validador del panel/«Mis activos».

@@ -36,9 +36,10 @@ N_SIM = 20000
 BLOQUE = 6
 MIN_MESES = 60
 NOTAS = {
-    "CTVA": "Corteva está separándose en dos empresas (anunciado en 2025); Yahoo registró un «split» 6,665:1 en "
-            "oct-2026 que reescala toda su historia, y la caída del 12-nov puede ser la escisión y no una pérdida: "
-            "sus rentabilidades recientes y simulaciones no son fiables hasta confirmarlo.",
+    "CTVA": "Corteva escindió su negocio de semillas (Vylor, VYLR) el 1-oct-2026, 1 acción VYLR por cada CTVA; "
+            "desde entonces CTVA es solo protección de cultivos. Yahoo lo ajustó como «split» 6,665:1, que reescala "
+            "toda su historia: las rentabilidades anteriores a oct-2026 son de la empresa entera, no de la actual. "
+            "La caída del 12-nov no es la escisión.",
     "BZ=F": "Futuro de 1.er vencimiento encadenado: no es invertible tal cual (los cambios de contrato meten saltos).",
     "CL=F": "Futuro de 1.er vencimiento encadenado: no es invertible tal cual; cerró en negativo el 20-abr-2020.",
     "BAYN.DE": "Cotiza en euros: sin simulación enlazada al motor (que es de la bolsa de EE. UU. en dólares).",
