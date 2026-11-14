@@ -121,7 +121,7 @@ def _ins_tiles(a: dict) -> str:
             continue
         t.append(f'<div class="tile"><span class="muted">{etq} (hasta {_fd(a["hasta"])})</span>'
                  f'<strong>{n(v["amplitud"], 0, " %")}</strong>'
-                 f'<span class="small">de las empresas con operaciones de directivos tuvo alguna compra '
+                 f'<span class="small">«amplitud»: empresas con compras de directivos frente a empresas con compras + empresas con ventas (una empresa con las dos cuenta dos veces) '
                  f'({int(v["empresas_compra"])} con compras, {int(v["empresas_venta"])} con ventas). '
                  f'Media histórica {n(v["media_amplitud"], 0, " %")}; percentil {n(v["p_amplitud"], 0, "")} '
                  f'de {int(v["n_hist"])} ventanas desde {_fd(a["desde"])[-4:]}.</span>'

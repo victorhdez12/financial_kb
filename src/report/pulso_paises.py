@@ -396,7 +396,7 @@ def pais(con, iso: str, hoy: pd.Timestamp, bund: pd.Series) -> dict:
                         "weo_crec_año": crec_weo},
         "inflacion": {"general": gen, "general_fuente": fuente_gen, "general_mes": _mes(f_gen),
                       "ipc_aa": ipc_v, "mes": _mes(f_ipc), "hicp_aa": hicp_v, "mes_hicp": _mes(f_hicp),
-                      "ipc_media_12m": m12, "huecos_media_12m": huecos12,
+                      "ipc_media_12m": m12, "huecos_media_12m": huecos12, "mes_media_12m": _mes(idx.index[-1] if len(idx) else None),
                       "subyacente_aa": sub_v, "mes_sub": _mes(f_sub), "hicp_sub_aa": hsub_v, "mes_hicp_sub": _mes(f_hsub),
                       "pct_ipc": pct_ipc[0], "pct_ipc_desde": pct_ipc[1]},
         "empleo": {"paro": paro_v, "mes": _mes(f_paro), "delta_12m": d_paro, "delta_meses": paro_ref, "pct_paro": pct_paro[0],
