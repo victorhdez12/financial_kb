@@ -26,6 +26,7 @@ import numpy as np
 import pandas as pd
 
 from src.regime.credit import THRESHOLDS
+from src.report import _percentil as PC
 from src.report import liquidez_vivo as LV
 from src.report import pulso_paises as PUL
 from src.warehouse import db
@@ -59,11 +60,8 @@ def fnum(v, dec: int = 1, signo: bool = False) -> str:
 
 # ----------------------------------------------------------------------------------------------- cálculo puro
 def percentil(x: pd.Series, min_obs: int = 24) -> float | None:
-    """Percentil (0-100) del último valor en toda su historia (proporción de valores ≤ el último)."""
-    x = x.dropna()
-    if len(x) < min_obs:
-        return None
-    return round(float((x <= x.iloc[-1]).mean() * 100), 0)
+    """Percentil (0-100) del último valor en toda su historia, a su frecuencia nativa (definición común: _percentil)."""
+    return PC.percentil(x, min_obs=min_obs)
 
 
 def en(x: pd.Series, t: pd.Timestamp) -> float | None:
@@ -351,7 +349,7 @@ def ficha(clave: str, x: pd.Series) -> dict:
     if x.empty:
         return d
     d.update(valor=float(x.iloc[-1]), fecha=x.index[-1].date().isoformat(), percentil=percentil(x),
-             desde=f"{x.index[0]:%Y}")
+             desde=f"{x.index[0]:%Y-%m}")
     if len(x) >= 2:
         d["anterior"] = float(x.iloc[-2])
         d["cambio"] = d["valor"] - d["anterior"]
@@ -614,13 +612,14 @@ def tile(f: dict, spark: str) -> str:
     unid = "pp" if f["unidad"] in ("%", "pp") else f["unidad"]
     cambio = fnum(f["cambio"], f["dec"], True) + (f" {unid}" if unid else "") if f["cambio"] is not None else "—"
     pc = f"p{int(f['percentil'])}" if f["percentil"] is not None else "p—"
+    pce = PC.etiqueta(f["percentil"], f["desde"])
     tip = (f"{f['etiqueta']}: {NCOL[f['color']]} ({f['estado']}). Regla: {f['regla']} — {f['origen']}. "
            f"Percentil {pc} en su historia desde {f['desde']}. Series: {', '.join(f['series'])}.")
     fija = ' <span class="muted">· regla fija, no validada</span>' if f["fija"] else ""
     return (f'<div class="tile t-{f["color"]}" tabindex="0" data-tip="{esc(tip)}"><span class="tl">{esc(f["etiqueta"])}</span>'
             f'<span>{chip(f["color"], NCOL[f["color"]] + " · " + f["estado"])}{fija}</span>'
             f'<strong class="v">{esc(_fmt_val(f))}</strong>'
-            f'<span class="small">dato del {esc(f["fecha"])} · Δ {esc(cambio)} vs anterior · {pc} (desde {esc(f["desde"])})</span>'
+            f'<span class="small">dato del {esc(f["fecha"])} · Δ {esc(cambio)} vs anterior · {esc(pce)}</span>'
             f'{spark}</div>')
 
 

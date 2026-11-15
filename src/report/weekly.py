@@ -13,6 +13,7 @@ import pandas as pd
 
 from src.regime.credit import THRESHOLDS
 from src.report.analogs import find_analogs
+from src.report import _percentil as PC
 from src.report import liquidez_vivo as LV
 from src.report import pulso_paises as PP
 from src.paper import informe as PI
@@ -75,25 +76,55 @@ def load() -> tuple[pd.DataFrame, dict]:
 
 
 def percentile(col: pd.Series) -> float | None:
-    s = col.dropna()
-    if len(s) < 24:
-        return None
-    return round(float((s <= s.iloc[-1]).mean() * 100), 0)
+    """Percentil de la última fila en toda la columna mensual (definición común: _percentil)."""
+    return PC.percentil(col.reset_index(drop=True))
 
 
-def indicator_rows(rm: pd.DataFrame, meta: dict) -> list[dict]:
+# columnas de regime_monthly que son el NIVEL de una serie diaria/semanal (sin transformar): su percentil se calcula
+# sobre la serie nativa si su historia es igual de larga, para que cuadre con «Hoy» y con la tabla de liquidez
+NIVEL_NATIVO = {"t5yie", "dfii10", "curve", "baa_spread", "hy_oas", "vix", "nfci", "stlfsi"}
+
+
+def _base_percentil(rm: pd.DataFrame, col: str, nativa: pd.Series | None) -> tuple[float | None, str, str]:
+    """(percentil, base, desde YYYY-MM). Regla única: la historia más larga disponible; a igual historia (≤ 1 mes de
+    diferencia en el inicio), la frecuencia nativa de la serie en vez del muestreo mensual de regime_monthly."""
+    mensual = pd.Series(rm[col].values, index=pd.to_datetime(rm["date"])).dropna()
+    cutoff = pd.Timestamp(rm["cutoff"].iloc[-1])
+    if nativa is not None:
+        nat = PC.base(nativa, hasta=cutoff)
+        if (len(nat) and nat.index[0] <= mensual.index[0] + pd.Timedelta(days=31)
+                and abs(float(nat.iloc[-1]) - float(mensual.iloc[-1])) < 1e-6):
+            return PC.percentil(nat), "nativa", f"{nat.index[0]:%Y-%m}"
+    return PC.percentil(mensual), "mensual", f"{mensual.index[0]:%Y-%m}"
+
+
+def indicator_rows(rm: pd.DataFrame, meta: dict, nativas: dict[str, pd.Series] | None = None) -> list[dict]:
+    """`nativas`: {columna: serie nativa del warehouse} para las columnas de NIVEL_NATIVO (si falta, base mensual)."""
     rows = []
     cutoff = pd.Timestamp(rm["cutoff"].iloc[-1]).date()
     for label, col, unit, feat in INDICATORS:
         if col not in rm or pd.isna(rm[col].iloc[-1]):
             continue
         src = meta["sources"].get(feat or "", {})
+        p, base, desde = _base_percentil(rm, col, (nativas or {}).get(col))
         rows.append({"indicador": label, "valor": r(rm[col].iloc[-1]), "unidad": unit,
                      "serie": src.get("series_id") or "derivado",
                      "fecha_dato": src.get("last_obs") or str(cutoff),
-                     "percentil_hist": percentile(rm[col]),
-                     "desde": f"{rm.loc[rm[col].notna(), 'date'].iloc[0]:%Y}"})
+                     "percentil_hist": p, "percentil_base": base, "desde": desde})
     return rows
+
+
+def series_nativas(con, meta: dict) -> dict[str, pd.Series]:
+    """Series nativas (warehouse) de las columnas de NIVEL_NATIVO, según las fuentes de regime_meta."""
+    out = {}
+    for _, col, _, feat in INDICATORS:
+        sid = meta["sources"].get(feat or "", {}).get("series_id")
+        if col in NIVEL_NATIVO and sid:
+            try:
+                out[col] = db.series(con, sid)
+            except Exception:  # noqa: BLE001 — sin serie nativa, base mensual
+                pass
+    return out
 
 
 def snapshot(row: pd.Series) -> dict:
@@ -115,7 +146,8 @@ def credit_block(last: pd.Series) -> dict:
             "hy_oas_d3": r(last["hy_oas_d3"]), "indicators": ind}
 
 
-def build_signal(rm: pd.DataFrame, meta: dict, analogs: list, analog_meta: dict) -> dict:
+def build_signal(rm: pd.DataFrame, meta: dict, analogs: list, analog_meta: dict,
+                 nativas: dict[str, pd.Series] | None = None) -> dict:
     last = rm.iloc[-1]
     ago = lambda k: snapshot(rm.iloc[-1 - k])  # noqa: E731
     return {
@@ -137,7 +169,7 @@ def build_signal(rm: pd.DataFrame, meta: dict, analogs: list, analog_meta: dict)
                       "m2_minus_gdp": r(last["m2_minus_gdp"]), "net_liquidity_bn": r(last["net_liquidity"], 0),
                       "net_liq_yoy": r(last["net_liq_yoy"]), "dfii10": r(last["dfii10"]), "nfci": r(last["nfci"])},
         "credit": credit_block(last),
-        "indicators": indicator_rows(rm, meta),
+        "indicators": indicator_rows(rm, meta, nativas),
         "analogs": analogs, "analog_method": analog_meta,
         "disclaimer": DISCLAIMER,
     }
@@ -328,7 +360,7 @@ disparada: {'sí' if r_['sahm_trigger'] else 'no'}), inflación **{r_['I_state']
 
 ## 2. Indicadores clave
 
-{table(s['indicators'], ['indicador', 'valor', 'unidad', 'fecha_dato', 'percentil_hist', 'desde', 'serie'])}
+{table(s['indicators'], ['indicador', 'valor', 'unidad', 'fecha_dato', 'percentil_hist', 'percentil_base', 'desde', 'serie'])}
 
 Percentil: posición del valor actual en la historia mensual disponible (desde la columna "desde").
 
@@ -371,8 +403,9 @@ def main(today: date | None = None) -> None:
     rm, meta = load()
     con = db.connect()
     analogs, analog_meta = find_analogs(con, rm)
+    nativas = series_nativas(con, meta)
     con.close()
-    signal = build_signal(rm, meta, analogs, analog_meta)
+    signal = build_signal(rm, meta, analogs, analog_meta, nativas)
     lectura, origin = reading(signal)
     # Termómetro informativo (docs/int/TERMOMETRO_diseno_v1.md): después de la lectura, para que no la condicione; si
     # falla, el reporte sale igual y lo dice.

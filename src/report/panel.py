@@ -23,6 +23,7 @@ import os
 from datetime import date, datetime
 from pathlib import Path
 
+from src.report import _percentil as PC
 from src.report import panel_activos as PA
 from src.report import panel_manos_fuertes as PMF
 from src.report import panel_hoy as PH
@@ -562,10 +563,17 @@ def sec_hoy(s: dict, es: dict | None) -> str:
     # indicadores clave
     ind = s.get("indicators") or []
     if ind:
+        # base del percentil visible: «nativa» = la misma que «Hoy» y la tabla de liquidez; «mensual» = la columna
+        # mensual de regime_monthly (más historia). Los signals anteriores al 15-nov-2026 no traen la base: eran mensuales.
         filas = [[esc(r.get("indicador")), num(r.get("valor"), 2) + (" " + esc(r.get("unidad")) if r.get("unidad") else ""),
-                  esc(r.get("fecha_dato") or "—"), num(r.get("percentil_hist"), 0), esc(r.get("desde") or "—")] for r in ind]
+                  esc(r.get("fecha_dato") or "—"),
+                  esc(PC.etiqueta(r.get("percentil_hist"), r.get("desde"),
+                                  frecuencia=r.get("percentil_base", "mensual")))] for r in ind]
         out.append('<details class="card"><summary><h3>Indicadores clave de EE. UU.</h3></summary>'
-                   + tabla(["indicador", "valor", "fecha del dato", "percentil histórico", "desde"], filas, "num") + "</details>")
+                   '<p class="note">Percentil = % de su historia con un valor ≤ el actual, hasta la fecha del dato. '
+                   '«mensual desde …»: un dato por mes (historia más larga que la serie diaria); sin «mensual», la '
+                   'serie a su frecuencia nativa, como en «Hoy» y en la tabla de liquidez.</p>'
+                   + tabla(["indicador", "valor", "fecha del dato", "percentil (base)"], filas, "num") + "</details>")
     return "\n".join(out)
 
 
@@ -615,7 +623,8 @@ def sec_liquidez(s: dict) -> str:
         "<p>Ninguna de las divergencias de la lista fija se da esta semana.</p>"
     return ('<div class="card"><h3>Liquidez y crédito (EE. UU., descriptivo)</h3>'
             f'<p class="note">{esc(lc.get("aviso", ""))}</p>{base}<div class="tiles">{"".join(tiles)}</div>'
-            + tabla(["crédito y volatilidad", "nivel", "Δ 1 mes", "Δ 3 meses", "percentil en su historia", "desde", "dato"], filas, "num")
+            + tabla(["crédito y volatilidad", "nivel", "Δ 1 mes", "Δ 3 meses", "percentil (toda su historia, frecuencia nativa)",
+                     "desde", "dato"], filas, "num")
             + "<h4>Movimiento del 10 años</h4>"
             + tabla(["plazo", "Δ 10 años", "tipo real", "inflación implícita", "prima por plazo (ACM)", "expectativas (ACM)"], dzt, "num")
             + f"<h4>Divergencias (lista fija, solo signos)</h4>{divt}</div>")

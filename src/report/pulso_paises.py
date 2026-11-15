@@ -29,6 +29,8 @@ from datetime import date
 import numpy as np
 import pandas as pd
 
+from src.report import _percentil as PC
+
 PAISES = ["USA", "DEU", "FRA", "ITA", "ESP", "GBR", "JPN", "NLD", "BEL", "PRT", "IRL", "FIN", "SWE", "DNK", "NOR",
           "CHE", "CAN", "AUS"]
 EURO = {"DEU", "FRA", "ITA", "ESP", "NLD", "BEL", "PRT", "IRL", "FIN"}
@@ -98,10 +100,10 @@ def _dif(s: pd.Series, meses: int):
 
 
 def _pct_hist(s: pd.Series, v):
-    """(percentil 0-100 del valor de hoy frente a toda la historia de la serie, año de inicio) — descriptivo."""
-    if v is None or len(s) < 24:
-        return None, None
-    return int(round(100 * float((s < v).mean()))), int(s.index[0].year)
+    """(percentil 0-100 del valor de hoy frente a toda la historia de la serie, año de inicio) — descriptivo.
+    Definición común del panel (_percentil): proporción de observaciones ≤ el valor (antes era < estricto)."""
+    p = None if v is None else PC.percentil(s, v)
+    return (None, None) if p is None else (int(p), int(s.dropna().index[0].year))
 
 
 def _f(ts) -> str | None:
