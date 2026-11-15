@@ -76,7 +76,9 @@ def sec_activos(s: dict, pul: dict | None) -> str:
                 + "".join(f"<td>{chip(_c(r.get(k)), n(r.get(k), 1, ' %', True).replace('<span class=\"nd\">s/d</span>', 's/d'))}</td>"
                           for k in ("r_1m", "r_ytd", "r_12m"))
                 + f"<td>{n(r.get('vol_1a'), 0)}</td><td>{n(r.get('caida_max52'), 0, ' %', True)}</td>"
-                f"<td>{n(r.get('beta_3a'), 2, '')}</td><td>{_rango(r.get('sim_historia'))}</td><td>{_rango(r.get('sim_motor'))}</td></tr>")
+                f"<td>{n(r.get('beta_3a'), 2, '')}</td>"
+                + (f"<td colspan='2' class='nd'>{esc(r['historia_insuficiente'])}</td></tr>" if r.get("historia_insuficiente")
+                   else f"<td>{_rango(r.get('sim_historia'))}</td><td>{_rango(r.get('sim_motor'))}</td></tr>"))
         filas_g.append(f"<tr class='grp'><th colspan='10'>{esc(gr)}</th></tr>" + "".join(filas))
     tabla = (f"<div class='tw'><table class='num act'><thead><tr><th>Activo</th><th>Precio <span class='muted'>({esc(fecha_comun)})</span></th><th>1 mes</th><th>En el año</th>"
              "<th>12 meses</th><th data-tip='Volatilidad anualizada del último año (diaria)'>Volat. 1 a</th>"
@@ -131,7 +133,7 @@ def _ficha(t: str, r: dict) -> str:
 <th>% meses +</th><th>Meses</th></tr></thead><tbody>{cuad}</tbody></table>
 <p class="small">Hoy: Goldilocks. Medias de meses pasados de este activo, sin contrastar: con pocos meses, ruido.</p></div>
 <div class="dblk wide"><h4>Simulación a 12 meses (nominal, {esc(r.get("moneda") or "")})</h4><table class="num"><thead><tr><th>Modelo</th><th>Mediana</th>
-<th>{term("p5-p95", "Rango 90 %")}</th><th>Rango 50 %</th><th>P(perder)</th><th>P(caer ≥ 20 %)</th></tr></thead><tbody>{sims or "<tr><td colspan=6 class=nd>sin historia suficiente</td></tr>"}</tbody></table>
+<th>{term("p5-p95", "Rango 90 %")}</th><th>Rango 50 %</th><th>P(perder)</th><th>P(caer ≥ 20 %)</th></tr></thead><tbody>{sims or f"<tr><td colspan=6 class=nd>{esc(r.get('historia_insuficiente') or 'sin historia suficiente')}</td></tr>"}</tbody></table>
 <p class="small">No validado. Una acción individual puede salirse de cualquier rango por noticias propias (resultados, juicios, escisiones).</p></div>
 </div></div></details>'''
 

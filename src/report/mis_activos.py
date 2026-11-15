@@ -20,6 +20,10 @@ Por activo:
    Ambas dan p5 / p25 / p50 / p75 / p95, P(pérdida) y P(caída ≥ 20 %).
 Petróleo (BZ=F, CL=F): precio del futuro de 1.er vencimiento encadenado (no invertible tal cual; los cambios de
 contrato meten saltos) y se usan solo cierres de mes positivos (el WTI cerró en negativo el 20-abr-2020).
+Historia corta (menos de MIN_DIAS sesiones, p. ej. VYLR, que cotiza desde el 1-oct-2026): solo precio y las rentabilidades
+cuya fecha de partida existe; sin volatilidad de 1 año, caída desde máximo de 52 semanas, beta, cuadrantes ni
+simulaciones (se muestra «historia insuficiente (desde …)»). No se inventa historia anterior. Con menos de
+MIN_DIAS_PRECIO sesiones no se muestra nada.
 """
 from __future__ import annotations
 
@@ -35,11 +39,17 @@ SEMILLA = 20261112
 N_SIM = 20000
 BLOQUE = 6
 MIN_MESES = 60
+MIN_DIAS = 260        # ~1 año de sesiones: por debajo, «historia corta» (sin volatilidad 1 a, beta, cuadrantes ni sims)
+MIN_DIAS_PRECIO = 5   # por debajo ni siquiera se enseña el precio
 NOTAS = {
     "CTVA": "Corteva escindió su negocio de semillas (Vylor, VYLR) el 1-oct-2026, 1 acción VYLR por cada CTVA; "
             "desde entonces CTVA es solo protección de cultivos. Yahoo lo ajustó como «split» 6,665:1, que reescala "
             "toda su historia: las rentabilidades anteriores a oct-2026 son de la empresa entera, no de la actual. "
-            "La caída del 12-nov no es la escisión.",
+            "La caída del 12-nov no es la escisión. CTVA + VYLR (1 por acción) = la Corteva anterior a la escisión "
+            "(el panel no construye la serie combinada).",
+    "VYLR": "Vylor: negocio de semillas escindido de Corteva (CTVA) el 1-oct-2026, 1 VYLR por cada CTVA. Cotiza desde "
+            "entonces: sin historia propia anterior (no se reconstruye). Quien tenía CTVA antes de la escisión tiene ahora "
+            "CTVA + VYLR, que juntas equivalen a la Corteva anterior.",
     "BZ=F": "Futuro de 1.er vencimiento encadenado: no es invertible tal cual (los cambios de contrato meten saltos).",
     "CL=F": "Futuro de 1.er vencimiento encadenado: no es invertible tal cual; cerró en negativo el 20-abr-2020.",
     "BAYN.DE": "Cotiza en euros: sin simulación enlazada al motor (que es de la bolsa de EE. UU. en dólares).",
@@ -93,6 +103,19 @@ def _mercado_motor(escenarios: dict | None, infl_fmi: float | None, n: int, rng)
     return (1 + real) * (1 + (infl_fmi or 0) / 100) - 1
 
 
+def _corta(t: str, s: pd.Series, m: dict, f: pd.Timestamp) -> dict:
+    """Activo con menos de ~1 año de historia: precio y rentabilidades con base real; nada estadístico."""
+    txt = f"historia insuficiente (desde {s.index[0].date()})"
+    avisos = [f"{txt}: {len(s)} sesiones. Sin volatilidad de 1 año, beta, cuadrantes ni simulaciones."]
+    if t in NOTAS:
+        avisos.append(NOTAS[t])
+    return {**m, "precio": float(s.iloc[-1]), "fecha": str(f.date()),
+            "r_1m": _ret(s, f - pd.DateOffset(months=1)), "r_3m": _ret(s, f - pd.DateOffset(months=3)),
+            "r_ytd": _ret(s, pd.Timestamp(f.year - 1, 12, 31)), "r_12m": _ret(s, f - pd.DateOffset(years=1)),
+            "r_3a_anual": None, "vol_1a": None, "caida_max52": None, "historia_insuficiente": txt,
+            "sesiones": int(len(s)), "avisos": avisos}
+
+
 def analizar(con=None, hoy: date | None = None, escenarios: dict | None = None, infl_usa: float | None = None,
              rf: float | None = None) -> dict:
     pp = DIR / "precios_diarios.parquet"
@@ -117,10 +140,14 @@ def analizar(con=None, hoy: date | None = None, escenarios: dict | None = None, 
     for t, m in meta["activos"].items():
         s = P[t].dropna() if t in P else pd.Series(dtype=float)
         s = s[s > 0]
-        if len(s) < 260:
-            out[t] = {**m, "error": "historia insuficiente"}
+        if len(s) < MIN_DIAS_PRECIO:
+            desde = f" (desde {s.index[0].date()})" if len(s) else ""
+            out[t] = {**m, "error": f"historia insuficiente{desde}"}
             continue
         f = s.index[-1]
+        if len(s) < MIN_DIAS:
+            out[t] = _corta(t, s, m, f)
+            continue
         d = np.log(s).diff().dropna()
         ult1a = d[d.index > f - pd.DateOffset(years=1)]
         r = {**m, "precio": float(s.iloc[-1]), "fecha": str(f.date()),
