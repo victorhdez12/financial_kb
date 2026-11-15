@@ -808,3 +808,7 @@ Las entradas más recientes van arriba. Ver también [[Proyecto/Estado del proye
 - **Validador del panel ⚠️ fusionado** (`27eb6b2`, `docs/validation/2026-11-14_panel.md`): 36 cifras recalculadas, 6 fallaban → corregidas. Grave H1: `yoy` de «Hoy» comparaba con 13 meses antes desde nov-2025 (falta oct-2025) → IPC EE. UU. 4,1 → **3,9 %**, subyacente 2,9 → 2,8, M2 real 1,6 → 1,9 (también en «Qué hacer»). Medios: fecha IPC media 12 m en Países, % directivos con compras 27/33 %, «nominal»→«real» en escenarios, Cleveland P(>5 %) ≈6 % marcado optimista (serie reconstruida), nombre CTVA. Bien: retrospectivo de verificación pseudo-tiempo-real exacto, COT, B1, correlaciones, Mis activos sin fuga.
 - Mío tras la validación: `registros()`/`avisos_datos()` protegidos (un fallo ya no tumba el panel); `cftc_cot` en INGEST_DAILY (16 s; COT del 10-nov entra en la próxima diaria). Panel real regenerado.
 - Decisiones pendientes del usuario: (1) unificar cálculo de percentiles (HY OAS sale p70/p74/p79 según tabla); (3) añadir VYLR a «Mis activos»; (4) rehacer simulación B con la inflación del motor y sin cortar colas p1/p99.
+
+## 2026-11-15 — Decisiones del panel en paralelo
+
+- Usuario aprobó (1) unificar percentiles, (2) VYLR en «Mis activos», (3) simulación B con inflación del motor y sin recorte p1/p99. Tres agentes en worktrees `.claude/worktrees` (sin push; reviso y fusiono). Pendiente: (4) deriva OCDE CLI FRA/ITA; commitear la semanal del 15-nov antes del 20-nov.
