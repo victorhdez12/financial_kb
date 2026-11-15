@@ -44,9 +44,10 @@ def test_mis_activos_simulacion_reproducible():
     assert np.allclose(a, 0.12)                              # 12 meses de +1 % log
     s = MA._resumen(np.expm1(a))
     assert s["p_perdida"] == 0 and abs(s["p50"] - np.expm1(0.12)) < 1e-12
-    es = {"paises": {"USA": {"cuantiles_1_99": {"bolsa": list(np.linspace(-0.3, 0.4, 99))}}}}
-    m = MA._mercado_motor(es, 2.0, 5000, np.random.default_rng(2))
-    assert m.min() >= (1 - 0.3) * 1.02 - 1 - 1e-9 and m.max() <= 1.4 * 1.02 - 1 + 1e-9
+    # B: bolsa nominal = real + inflación de la MISMA trayectoria del motor (antes: rejilla p1-p99 + FMI fija)
+    b, pi = np.linspace(-0.6, 1.5, 999), np.linspace(0.10, -0.02, 999)
+    m = MA.mercado_motor({"bolsa_real": b, "inflacion_log": pi})
+    assert np.allclose(np.expm1(m["l_nom"]), (1 + b) * np.exp(pi) - 1) and m["recortadas"] == 0
 
 
 def test_pulso_por_fecha_no_por_posicion():
