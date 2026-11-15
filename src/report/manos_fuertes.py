@@ -67,8 +67,9 @@ def _serie_pct(con, slug: str, clave: str) -> pd.Series:
 
 
 def percentil(x: pd.Series, v: float) -> float | None:
-    x = x.dropna()
-    return None if x.empty else float(100 * (x <= v).mean())
+    """Proporción de x ≤ v, sin redondear (definición común: _percentil; la ventana la pone quien llama)."""
+    from src.report import _percentil as PC
+    return PC.percentil(x, v, min_obs=1, dec=None)
 
 
 def senal(p3: float | None, ph: float | None) -> str | None:
@@ -88,7 +89,7 @@ def resumen_serie(s: pd.Series) -> dict | None:
         return None
     v = float(s.iloc[-1])
     w3 = s.iloc[-VENTANA_3A:]
-    p3, ph = percentil(w3, v), percentil(s, v)
+    p3, ph = percentil(w3, v), percentil(s, v)   # ventana intencionada: 3 años (156 semanas) y toda la historia
     f = s.index[-1]
     return {"fecha": str(f.date()), "publicado": str((f + pd.Timedelta(days=3)).date()), "valor": v,
             "d1": v - float(s.iloc[-2]), "d4": v - float(s.iloc[-5]) if len(s) >= 5 else None,

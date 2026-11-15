@@ -22,6 +22,7 @@ from datetime import date
 import numpy as np
 import pandas as pd
 
+from src.report import _percentil as PC
 from src.warehouse import db
 
 TITULO = "## 5e. Liquidez y crédito (EE. UU., descriptivo)"
@@ -123,10 +124,8 @@ def _cambio(s: pd.Series, desfase: pd.DateOffset) -> float | None:
 
 
 def _percentil(s: pd.Series) -> float | None:
-    s = s.dropna()
-    if len(s) < 24:
-        return None
-    return round(float((s <= s.iloc[-1]).mean() * 100), 0)
+    """Toda la historia, frecuencia nativa (definición común: _percentil)."""
+    return PC.percentil(s)
 
 
 S4, S13 = pd.DateOffset(weeks=4), pd.DateOffset(weeks=13)
