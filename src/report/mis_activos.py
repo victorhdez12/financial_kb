@@ -9,15 +9,28 @@ Por activo:
    semanal, 3 años).
 2. Comportamiento por cuadrante mensual de EE. UU. (regime_monthly, point-in-time): rentabilidad mensual media
    anualizada (×12) y % de meses positivos, con el número de meses. Pocos meses → poco fiable (se marca).
-3. Dos simulaciones a 12 meses (rentabilidad NOMINAL en la moneda del activo), con semilla fija:
-   A «historia propia»: bootstrap estacionario de bloques (media 6 meses) de sus rentabilidades mensuales desde que
-     cotiza. Arrastra la tendencia pasada: un activo que subió mucho «hereda» esa subida (sesgo optimista declarado).
-   B «enlazada al motor» (solo activos en USD): modelo de mercado sin alfa,
-     r = rf + β·(r_mercado − rf) + ε, con r_mercado = escenarios de la bolsa de EE. UU. del motor INT-11 (real, se le
-     suma la inflación prevista por el FMI para el año siguiente), rf = letra a 3 meses (DTB3) y ε = suma de 12
-     residuos mensuales remuestreados de los últimos 10 años. Sin alfa: no supone que lo que batió al mercado lo siga
-     haciendo.
-   Ambas dan p5 / p25 / p50 / p75 / p95, P(pérdida) y P(caída ≥ 20 %).
+3. Dos simulaciones a 12 meses con semilla fija (cada una con su propio generador aleatorio):
+   A «historia propia» (rentabilidad NOMINAL en la moneda del activo): bootstrap estacionario de bloques (media
+     6 meses) de sus rentabilidades mensuales desde que cotiza. Arrastra la tendencia pasada: un activo que subió mucho
+     «hereda» esa subida (sesgo optimista declarado).
+   B «enlazada al motor» (solo activos en USD): modelo de mercado sin alfa sobre CADA TRAYECTORIA del motor INT-11
+     v3.1 de EE. UU. (bolsa real e inflación conjuntas; la emisión del signal se reproduce en solo lectura con la misma
+     llamada, semilla y estado que scripts/int11_v3_hoy.py y se comprueba contra los cuantiles publicados):
+       log(1 + mercado nominal) = log(1 + bolsa real) + π   (π = inflación de ESA trayectoria, Δlog del IPC medio)
+       log(1 + activo nominal) = rf + β·(mercado nominal − rf) + ε
+       log(1 + activo real)    = log(1 + activo nominal) − π   (misma π: real y nominal son coherentes por trayectoria)
+     rf = letra a 3 meses (DTB3), β y ε (suma de 12 residuos mensuales remuestreados) de los últimos 10 años hasta el
+     último precio. Sin alfa: no supone que lo que batió al mercado lo siga haciendo. Se usan TODAS las trayectorias
+     del motor (sin rejilla p1-p99 ni recorte de colas); si alguna bolsa real ≤ −100 % hubiera que acotarla para el
+     logaritmo, se cuenta y se rotula.
+     B′ (informativa): igual, con una segunda beta a la inflación mensual del IPC de EE. UU. (CPIAUCSL), estimada
+     con los meses cuyo IPC ya estaba publicado en la fecha del último precio (mes + 1 mes + 15 días ≤ fecha).
+     Rentabilidad real = nominal − π de la misma trayectoria. Beta mensual aplicada a la inflación anual del motor
+     (aproximación declarada); su error típico va en la ficha.
+   Todas dan p5 / p25 / p50 / p75 / p95 (y mínimo, p1, p99, máximo informativos), P(pérdida) y P(caída ≥ 20 %).
+   Supuestos que quedan (declarados): la inflación del motor es la del IPC medio de la ventana del motor (12 meses
+   desde el mes siguiente a su emisión), no la de diciembre a diciembre del activo; residuos i. i. d. (sin bloques);
+   β con rentabilidades brutas (no en exceso).
 Petróleo (BZ=F, CL=F): precio del futuro de 1.er vencimiento encadenado (no invertible tal cual; los cambios de
 contrato meten saltos) y se usan solo cierres de mes positivos (el WTI cerró en negativo el 20-abr-2020).
 Historia corta (menos de MIN_DIAS sesiones, p. ej. VYLR, que cotiza desde el 1-oct-2026): solo precio y las rentabilidades
@@ -86,21 +99,76 @@ def _bootstrap(r: np.ndarray, n: int, h: int, rng) -> np.ndarray:
 
 
 def _resumen(ret_simple: np.ndarray) -> dict:
-    q = np.percentile(ret_simple, [5, 25, 50, 75, 95])
-    return {"p5": q[0], "p25": q[1], "p50": q[2], "p75": q[3], "p95": q[4],
-            "p_perdida": float((ret_simple < 0).mean()), "p_caida20": float((ret_simple <= -0.20).mean())}
+    """Distribución COMPLETA (sin recortar colas): p5…p95 y, informativos, mínimo, p1, p99 y máximo."""
+    x = np.asarray(ret_simple, float)
+    q = np.percentile(x, [1, 5, 25, 50, 75, 95, 99])
+    return {"p5": q[1], "p25": q[2], "p50": q[3], "p75": q[4], "p95": q[5],
+            "min": float(x.min()), "p1": q[0], "p99": q[6], "max": float(x.max()),
+            "p_perdida": float((x < 0).mean()), "p_caida20": float((x <= -0.20).mean()), "n": int(len(x))}
 
 
-def _mercado_motor(escenarios: dict | None, infl_fmi: float | None, n: int, rng):
-    """Muestras de la rentabilidad NOMINAL de la bolsa de EE. UU. a 12 m a partir de la rejilla 1..99 del motor."""
+# ---------------------------------------------------------------- trayectorias del motor INT-11 v3.1 (solo lectura)
+def trayectorias_motor(emision: str, con=None, ref: dict | None = None, pais: str = "USA", tol: float = 1e-3) -> dict:
+    """Reproduce en SOLO LECTURA la emisión `emision` del motor INT-11 v3.1 para `pais` con la misma llamada que
+    `scripts.int11_v3_hoy.pais_escenario` (Config.v3_1 ajustado con las filas ≤ 2004, estado móvil de esa fecha,
+    pertenencia suave, 200 lotes × POR_LOTE, semilla SEED + índice del país) y devuelve sus trayectorias CONJUNTAS:
+    bolsa real simple e inflación (Δlog del IPC medio) de la ventana de 12 meses. No escribe nada ni toca el motor.
+
+    `ref` = {percentil: valor} de la bolsa real publicada (signal o research/int/int11_v3_hoy.json): se comprueba que
+    la reproducción coincide (máx. |dif| ≤ tol); si no, se devuelve igualmente y se rotula."""
+    from scripts import int11_v3_hoy as H
+    from scripts.int11_corrida import NUCLEO
+    from scripts.int11_v3_corrida import cargar_real_v3
+    from src.intl import data as D
+    from src.intl import escenarios as E
+    from src.report import escenarios_vivo as V
+    cerrar = con is None
+    con = con or D.connect()
     try:
-        q = escenarios["paises"]["USA"]["cuantiles_1_99"]["bolsa"]
-    except (KeyError, TypeError):
+        filas = cargar_real_v3(con)
+        if filas["año"].max() > 2004:
+            raise D.FactorCutoffError("filas > 2004")
+        gen = E.Generador(E.Config.v3_1()).ajustar(filas)
+        est = V.estado_actual_movil(con, emision)
+    finally:
+        if cerrar:
+            con.close()
+    e = est["paises"][pais]
+    if e.get("regimen") is None:
+        raise ValueError(f"motor: {pais} sin estado")
+    esc = gen.simular_suave(pais, e["inflacion"], e["brecha"], horizonte=1, n_lotes=200, por_lote=H.POR_LOTE,
+                            semilla=H.SEED + list(NUCLEO).index(pais))
+    b = esc.rent[:, 0, list(esc.activos).index("bolsa")]
+    pi = esc.inflacion[:, 0]
+    ok = np.isfinite(b) & np.isfinite(pi)
+    comp = None
+    if ref:
+        ps = sorted(int(k) for k in ref)
+        dif = float(np.max(np.abs(np.percentile(b[ok], ps) - np.array([ref[k] if k in ref else ref[str(k)]
+                                                                         for k in ps], float))))
+        comp = {"max_dif": dif, "coincide": dif <= tol, "percentiles": len(ps)}
+    return {"bolsa_real": b[ok], "inflacion_log": pi[ok], "emision": est["emision"], "corte": est["corte"],
+            "ventana": est["ventana_objetivo"], "estado": {k: e.get(k) for k in ("mes_ipc", "inflacion", "brecha")},
+            "descartadas": int((~ok).sum()), "comprobacion": comp}
+
+
+def _cpi_mensual(con) -> pd.Series | None:
+    """Inflación mensual Δlog del IPC de EE. UU. (CPIAUCSL), solo entre meses CONSECUTIVOS (el hueco de oct-2025 no
+    genera un Δ de dos meses). Índice: fin de mes."""
+    if con is None:
         return None
-    q = np.asarray(q, float)
-    u = rng.uniform(0.01, 0.99, n)
-    real = np.interp(u, np.arange(1, 100) / 100, q)
-    return (1 + real) * (1 + (infl_fmi or 0) / 100) - 1
+    try:
+        df = con.execute("select date, value from obs_latest where series_id = 'CPIAUCSL' and value is not null "
+                         "order by date").fetchdf()
+    except Exception:  # noqa: BLE001
+        return None
+    if df.empty:
+        return None
+    c = pd.Series(df["value"].astype(float).values, index=pd.DatetimeIndex(df["date"]).to_period("M"))
+    o = np.array([p.ordinal for p in c.index])
+    d = np.log(c).diff()[np.r_[False, np.diff(o) == 1]]
+    d.index = d.index.to_timestamp(how="end").normalize()
+    return d.dropna()
 
 
 def _corta(t: str, s: pd.Series, m: dict, f: pd.Timestamp) -> dict:
@@ -116,8 +184,63 @@ def _corta(t: str, s: pd.Series, m: dict, f: pd.Timestamp) -> dict:
             "sesiones": int(len(s)), "avisos": avisos}
 
 
-def analizar(con=None, hoy: date | None = None, escenarios: dict | None = None, infl_usa: float | None = None,
-             rf: float | None = None) -> dict:
+def ipc_publicado(pi_m: pd.Series, f: pd.Timestamp) -> pd.Series:
+    """Meses de IPC ya publicados en la fecha f (regla conservadora: el IPC del mes m sale antes del día 15 de m + 1)."""
+    pub = (pi_m.index.to_period("M") + 1).to_timestamp() + pd.Timedelta(days=14)
+    return pi_m[pub <= f]
+
+
+def betas(a_m: pd.Series, m_m: pd.Series, f: pd.Timestamp, pi_m: pd.Series | None = None, anos: int = 10) -> dict | None:
+    """β de mercado (y, si hay `pi_m`, β a la inflación en una regresión con las dos) con rentabilidades mensuales
+    log de la ventana (f − anos, f]. SIN FUGA: nada posterior a f; el IPC solo con los meses publicados en f."""
+    j = pd.concat([a_m, m_m], axis=1, keys=["a", "m"]).dropna()
+    j = j[(j.index > f - pd.DateOffset(years=anos)) & (j.index <= f + pd.offsets.MonthEnd(0))]
+    if len(j) < MIN_MESES:
+        return None
+    b = float(np.cov(j["a"], j["m"])[0, 1] / np.var(j["m"], ddof=1))
+    res = (j["a"] - j["a"].mean()) - b * (j["m"] - j["m"].mean())
+    out = {"beta": b, "res": res.values, "meses": int(len(j)), "hasta": str(j.index.max().date())}
+    if pi_m is not None:
+        k = j.join(ipc_publicado(pi_m, f).rename("pi"), how="inner")
+        if len(k) >= MIN_MESES:
+            X = np.column_stack([np.ones(len(k)), k["m"], k["pi"]])
+            coef, *_ = np.linalg.lstsq(X, k["a"].values, rcond=None)
+            e = k["a"].values - X @ coef
+            s2 = float(e @ e) / (len(k) - 3)
+            se = np.sqrt(np.diag(s2 * np.linalg.inv(X.T @ X)))
+            out["inflacion"] = {"beta_m": float(coef[1]), "beta_pi": float(coef[2]), "se_pi": float(se[2]),
+                                "res": e - e.mean(), "pi_media_anual": float(k["pi"].mean() * 12),
+                                "meses": int(len(k)), "ipc_hasta": str(k.index.max().date())[:7]}
+    return out
+
+
+def mercado_motor(motor: dict) -> dict:
+    """log(1 + bolsa nominal) por trayectoria = log(1 + bolsa real) + π de la misma trayectoria. Si alguna bolsa real
+    fuera ≤ −100 % (log indefinido) se acota a −99,9 % y se CUENTA (rótulo «recorte por estabilidad numérica»)."""
+    b = np.asarray(motor["bolsa_real"], float)
+    pi = np.asarray(motor["inflacion_log"], float)
+    malas = b <= -0.999
+    lb = np.log1p(np.where(malas, -0.999, b))
+    return {"l_real": lb, "pi": pi, "l_nom": lb + pi, "recortadas": int(malas.sum())}
+
+
+def sim_motor(bt: dict, mk: dict, rf: float, rng, con_inflacion: bool = False) -> dict:
+    """Devuelve los LOG de la rentabilidad a 12 m del activo por trayectoria del motor: nominal y real (= nominal − π de
+    esa misma trayectoria). rf en % anual."""
+    lrf = np.log1p(rf / 100)
+    n_ = len(mk["l_nom"])
+    if con_inflacion:
+        x = bt["inflacion"]
+        eps = x["res"][rng.integers(0, len(x["res"]), (n_, 12))].sum(axis=1)
+        l_nom = lrf + x["beta_m"] * (mk["l_nom"] - lrf) + x["beta_pi"] * (mk["pi"] - x["pi_media_anual"]) + eps
+    else:
+        eps = bt["res"][rng.integers(0, len(bt["res"]), (n_, 12))].sum(axis=1)
+        l_nom = lrf + bt["beta"] * (mk["l_nom"] - lrf) + eps
+    return {"l_nom": l_nom, "l_real": l_nom - mk["pi"]}
+
+
+def analizar(con=None, hoy: date | None = None, motor: dict | None = None, rf: float | None = None) -> dict:
+    """`motor`: salida de `trayectorias_motor` (o un dict con bolsa_real / inflacion_log); None → sin simulación B."""
     pp = DIR / "precios_diarios.parquet"
     if not pp.exists():
         return {"error": "sin precios (src/ingest/yahoo_precios.py no se ha ejecutado)"}
@@ -131,10 +254,12 @@ def analizar(con=None, hoy: date | None = None, escenarios: dict | None = None, 
             reg = reg.set_index(pd.DatetimeIndex(reg["date"]).to_period("M"))["quadrant"]
         except Exception:  # noqa: BLE001
             reg = None
+    pi_m = _cpi_mensual(con)
     spy = P["SPY"].dropna() if "SPY" in P else None
     spy_m = _mensual(spy) if spy is not None else None
-    rng = np.random.default_rng(SEMILLA)
-    mkt = _mercado_motor(escenarios, infl_usa, N_SIM, rng)
+    rng = np.random.default_rng(SEMILLA)                 # A
+    rng_b = np.random.default_rng([SEMILLA, 2])          # B y B′ (independiente: B no altera la semilla de A)
+    mk = mercado_motor(motor) if motor is not None else None
     rf = rf if rf is not None else 0.0
     out = {}
     for t, m in meta["activos"].items():
@@ -189,19 +314,30 @@ def analizar(con=None, hoy: date | None = None, escenarios: dict | None = None, 
             la = _bootstrap(mm.values, N_SIM, 12, rng)
             r["sim_historia"] = {**_resumen(np.expm1(la)), "meses_historia": int(len(mm)),
                                  "desde": str(mm.index[0].date())[:7]}
-        # simulación B (enlazada al motor), solo USD y con SPY
-        if mkt is not None and m.get("moneda") == "USD" and spy_m is not None and t != "SPY":
-            j = pd.concat([mm, spy_m], axis=1, keys=["a", "m"]).dropna()
-            j = j[j.index > f - pd.DateOffset(years=10)]
-            if len(j) >= MIN_MESES:
-                b = float(np.cov(j["a"], j["m"])[0, 1] / np.var(j["m"], ddof=1))
-                res = (j["a"] - j["a"].mean()) - b * (j["m"] - j["m"].mean())
-                eps = res.values[rng.integers(0, len(res), (N_SIM, 12))].sum(axis=1)
-                lr = np.log1p(rf / 100) + b * (np.log1p(mkt) - np.log1p(rf / 100)) + eps
-                r["sim_motor"] = {**_resumen(np.expm1(lr)), "beta_10a": b, "meses": int(len(j)),
-                                  "vol_idio_anual": float(res.std(ddof=1) * np.sqrt(12) * 100)}
+        # simulación B (enlazada al motor, trayectoria a trayectoria), solo USD
+        if mk is not None and m.get("moneda") == "USD" and spy_m is not None:
+            bt = betas(mm, spy_m, f, pi_m)
+            if bt is not None:
+                x = sim_motor(bt, mk, rf, rng_b)
+                r["sim_motor"] = {**_resumen(np.expm1(x["l_nom"])), "real": _resumen(np.expm1(x["l_real"])),
+                                  "beta_10a": bt["beta"], "meses": bt["meses"], "hasta": bt["hasta"],
+                                  "vol_idio_anual": float(bt["res"].std(ddof=1) * np.sqrt(12) * 100),
+                                  "recortadas": mk["recortadas"]}
+                if "inflacion" in bt:
+                    xi = sim_motor(bt, mk, rf, rng_b, con_inflacion=True)
+                    bi = bt["inflacion"]
+                    r["sim_motor_infl"] = {**_resumen(np.expm1(xi["l_nom"])), "real": _resumen(np.expm1(xi["l_real"])),
+                                           **{k: bi[k] for k in ("beta_m", "beta_pi", "se_pi", "pi_media_anual",
+                                                                 "meses", "ipc_hasta")}}
         out[t] = r
+    sup = {"rf_3m": rf, "n_sim": N_SIM, "semilla": SEMILLA, "bloque_meses": BLOQUE}
+    if motor is not None:
+        sup["motor"] = {"emision": motor.get("emision"), "corte": motor.get("corte"), "ventana": motor.get("ventana"),
+                        "estado": motor.get("estado"), "comprobacion": motor.get("comprobacion"),
+                        "trayectorias": int(len(mk["l_nom"])), "recortadas": mk["recortadas"],
+                        "inflacion": _resumen(np.expm1(mk["pi"])), "bolsa_real": _resumen(np.expm1(mk["l_real"])),
+                        "bolsa_nominal": _resumen(np.expm1(mk["l_nom"])),
+                        "corr_bolsa_inflacion": float(np.corrcoef(mk["l_real"], mk["pi"])[0, 1])}
     return {"fecha": str(hoy_ts.date()), "descarga": meta.get("descarga"), "fuente": meta.get("fuente"),
-            "activos": out, "supuestos": {"rf_3m": rf, "inflacion_usa_fmi": infl_usa, "n_sim": N_SIM, "semilla": SEMILLA,
-                                          "bloque_meses": BLOQUE},
+            "activos": out, "supuestos": sup,
             "aviso": "Descriptivo y no validado; no es una recomendación de compra o venta."}
