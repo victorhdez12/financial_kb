@@ -12,7 +12,15 @@ El proyecto está en `~/Proyectos/financial_kb` (fuera del Escritorio: macOS blo
 - Resultado de cada ejecución: una línea en `obsidian/Proyecto/Actualizaciones.md` (estado, duración, fuentes con fallo, críticas de la auditoría, régimen) y el log en `~/financial_archive/logs/` (se borran a los 60 días).
 - Raw de la OCDE (`oecd`, `oecd_qna`, en la semanal): además de sobrescribir `raw/<fuente>/*.csv`, cada descarga nueva se archiva comprimida y fechada en `raw/<fuente>/archivo/` (índice `indice.jsonl` con sha256; las idénticas no se duplican). Retención: todo lo de los últimos 730 días y, antes, la primera copia de cada mes (`src/ingest/_archivo_raw.py`; motivo: la OCDE revisa en origen, `docs/int/INT8b_nowcast.md` §6).
 - Si alguna fuente falla o la auditoría tiene críticas: notificación de macOS. Las fuentes que fallan no paran el resto (se queda el último dato bueno).
-- No hace commits (los datos no van a git).
+- No commitea datos (no van a git). Excepciones: la verificación diaria commitea y sube `research/verif/*.jsonl`
+  (registro append-only), y desde el 17-nov-2026 la semanal commitea **sin push** solo sus informes
+  (`obsidian/Reports/*_semanal.md`, `*_signal.json`, `docs/data/audit_*_series.csv`; `scripts/commit_informes.sh`) para
+  que los registros en vivo que exigen árbol limpio no aborten (`docs/int/ENSAYO_cierre_nov2026.md`). Los sube el
+  siguiente registro que haga push.
+- Un lock de más de 4 h se considera huérfano (Mac apagado a la fuerza) y se quita.
+- Registros en vivo: `com.financialkb.paper` (10:00 + al encender; `scripts/paper_mensual.sh`: E1/E1b, K1v, B1′, B1
+  desde el día 3; espera a la diaria y no corre con una actualización en marcha ni fuera de `main`) y
+  `com.financialkb.int11vivo` (10:30 + al encender; INT-11 desde el día 20). Plists en `scripts/launchd/`.
 
 ## Mac apagado a la hora de la cita (14-oct)
 launchd recupera una cita perdida si el Mac estaba en **reposo**, pero **no si estaba apagado** (el 14-oct arrancó a las 8:06 y la diaria de las 7:30 no se ejecutó).
