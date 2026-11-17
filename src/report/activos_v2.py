@@ -379,8 +379,9 @@ def _num_corto(v: float | None, dec: int = 1) -> str:
 
 
 def grafico(px: pd.Series | None, vol: pd.Series | None, marcas: pd.DataFrame | None, medias: dict | None,
-            moneda: str = "", titulo: str = "") -> str:
-    """SVG: precio (línea) con compras ▲ verdes y ventas ▼ rojas (huecas = con plan 10b5-1) y volumen (barras) debajo."""
+            moneda: str = "", titulo: str = "", flujos: list[dict] | None = None) -> str:
+    """SVG: precio (línea) con compras ▲ verdes y ventas ▼ rojas (huecas = con plan 10b5-1) y volumen (barras) debajo.
+    `flujos` (alertas, src/report/alertas.marcas): ◆ volumen anormal y ■ institucional/recompra sobre el precio."""
     if px is None or len(px.dropna()) < 2:
         return '<p class="nd">s/d (sin precios para el gráfico)</p>'
     px = px.dropna()
@@ -435,6 +436,17 @@ def grafico(px: pd.Series | None, vol: pd.Series | None, marcas: pd.DataFrame | 
                 path = f"M{cx:.1f},{cy + s:.1f} L{cx + s:.1f},{cy - s * .8:.1f} L{cx - s:.1f},{cy - s * .8:.1f} Z"
                 cls = "av-vp" if r["cat"] == "venta_plan" else "av-v"
             p.append(f'<path class="{cls}" d="{path}"><title>{tip}</title></path>')
+    for fl in flujos or []:   # alertas de flujos (otro símbolo que los directivos)
+        f = pd.Timestamp(fl["fecha"])
+        if not (x0 <= f <= x1) or fl.get("precio") is None:
+            continue
+        cx, cy = X(f), min(max(Y(float(fl["precio"])), T), T + HP)
+        s = 6.5 if fl.get("fuerte") else 4.5
+        if fl.get("forma") == "rombo":
+            path = f"M{cx:.1f},{cy - s:.1f} L{cx + s:.1f},{cy:.1f} L{cx:.1f},{cy + s:.1f} L{cx - s:.1f},{cy:.1f} Z"
+        else:
+            path = f"M{cx - s * .8:.1f},{cy - s * .8:.1f} h{1.6 * s:.1f} v{1.6 * s:.1f} h{-1.6 * s:.1f} Z"
+        p.append(f'<path class="{esc(fl.get("cls") or "al-mn")}" d="{path}"><title>{esc(fl.get("tip") or "")}</title></path>')
     # volumen
     yv0 = T + HP + G
     if vol is not None and len(vol.dropna()):
@@ -624,7 +636,14 @@ def ficha_v2(t: str, r: dict, X: dict | None, hoy: date | None = None) -> str:
         marcas = ops if ops is not None and len(ops) else None
         tit = (f"{r.get('nombre', t)}: precio de cierre de 12 meses" + (" con compras y ventas de directivos" if marcas is not None else "")
                + " y volumen diario")
-        g = grafico(c.get("serie_px"), c.get("serie_vol"), marcas, c.get("medias"), mon, tit)
+        R = X.get("alertas")
+        fl = []
+        if R:
+            from src.report import alertas as AL
+            fl = AL.marcas((R.get("activos") or {}).get(t))
+        if fl:
+            tit += " · alertas de flujos (◆ volumen, ■ institucional/recompra)"
+        g = grafico(c.get("serie_px"), c.get("serie_vol"), marcas, c.get("medias"), mon, tit, fl)
         nota = ("<p class='small'>Cierre ajustado solo por splits (no por dividendos: así se compara con el precio de los "
                 "Form 4).</p>") if c["accion"] else ""
         p.append(f'<div class="dblk wide av"><h4>Precio y volumen (12 meses)'
@@ -632,6 +651,12 @@ def ficha_v2(t: str, r: dict, X: dict | None, hoy: date | None = None) -> str:
                  + html_volumen(c.get("vol"), mon, c.get("error_vol"), c.get("descarga_volumen")) + "</div>")
     except Exception as e:  # noqa: BLE001
         p.append(f'<div class="dblk wide"><p class="nd">Gráfico/volumen: s/d ({esc(type(e).__name__)}).</p></div>')
+    if "alertas" in X:   # sección «Flujos fuertes» (src/report/alertas.py; descriptiva)
+        try:
+            from src.report import alertas as AL
+            p.append(AL.ficha_flujos(t, X.get("alertas")))
+        except Exception as e:  # noqa: BLE001
+            p.append(f'<div class="dblk wide"><h4>Flujos fuertes</h4><p class="nd">s/d ({esc(type(e).__name__)}).</p></div>')
     if c["accion"]:
         for tit, fn in (("Directivos (SEC Form 4): compras y ventas en mercado abierto", lambda: html_directivos(c, mon, precio)),
                         ("Grandes gestoras (SEC 13F, trimestral) · aproximación", lambda: html_13f(c, mon)),

@@ -25,6 +25,7 @@ from pathlib import Path
 
 from src.report import _percentil as PC
 from src.report import _ui as UI
+from src.report import alertas as AL
 from src.report import panel_activos as PA
 from src.report import panel_manos_fuertes as PMF
 from src.report import panel_hoy as PH
@@ -993,6 +994,11 @@ PESTANAS = [("diario", "Hoy"), ("quehacer", "Qué hacer"), ("paises", "Países")
 PESTANAS.insert(PESTANAS.index(("activos", "Mis activos")) + 1, ("manos", "Manos fuertes"))
 
 
+def _alertas_hoy(hoy: date | None = None) -> str:
+    """Bloque «Alertas» arriba en «Hoy» (src/report/alertas.py; descriptivo)."""
+    return AL.bloque_alertas(AL.calcular_seguro(None, hoy), "hoy")
+
+
 def construir(s: dict, hoy: date | None = None) -> str:
     """HTML completo a partir de un signal (dict). No escribe nada."""
     hoy = hoy or date.today()
@@ -1014,7 +1020,7 @@ def construir(s: dict, hoy: date | None = None) -> str:
         av = avisos_datos(s, hoy)
     except Exception:  # noqa: BLE001
         av = []
-    secciones = {"diario": seccion_segura(PH.sec_hoy_diario, s, hoy), "quehacer": seccion_segura(QH.sec_que_hacer, s, es), "activos": seccion_segura(PA.sec_activos, s, PP.pulso_desde(s)), "paises": seccion_segura(PP.sec_paises, s, es), "hoy": seccion_segura(sec_hoy, s, es), "escenarios": seccion_segura(sec_escenarios, s, es, fuente_es),
+    secciones = {"diario": seccion_segura(_alertas_hoy, hoy) + seccion_segura(PH.sec_hoy_diario, s, hoy), "quehacer": seccion_segura(QH.sec_que_hacer, s, es), "activos": seccion_segura(PA.sec_activos, s, PP.pulso_desde(s)), "paises": seccion_segura(PP.sec_paises, s, es), "hoy": seccion_segura(sec_hoy, s, es), "escenarios": seccion_segura(sec_escenarios, s, es, fuente_es),
                  "atlas": seccion_segura(sec_atlas, s, es), "cartera": seccion_segura(sec_cartera, s, reg),
                  "estado": seccion_segura(sec_estado, s, reg, hoy) + PP.glosario_html(),
                  "verificacion": seccion_segura(PV.sec_verificacion)}
@@ -1041,7 +1047,7 @@ def construir(s: dict, hoy: date | None = None) -> str:
 <footer>{esc(AVISO_GENERAL)} Generado por src/report/panel.py a partir de obsidian/Reports/{esc(s.get("asof") or "—")}_signal.json.</footer>
 <div id="tip" role="tooltip"></div>
 {UI.extras_body()}
-<script>{JS}{PP.JS}{PA.JS}{QH.JS}{UI.JS}</script>
+<script>{JS}{PP.JS}{PA.JS}{QH.JS}{UI.JS}{AL.JS}</script>
 </body></html>"""
 
 

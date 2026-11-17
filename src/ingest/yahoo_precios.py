@@ -9,7 +9,9 @@ Guarda `precios_diarios.parquet` (columnas = tickers, cierre AJUSTADO por divide
 `mercados/volumen/` (añadido el 17-nov-2026 para la ficha v2, docs/panel/activos_v2.md): `volumen_diario.parquet`
 (acciones/participaciones negociadas por sesión; en futuros, contratos del 1.er vencimiento), `cierre_diario.parquet`
 (cierre ajustado SOLO por splits, no por dividendos: es el que se compara con los precios de los Form 4) y
-`splits.json` (fecha y factor de cada split según Yahoo).
+`splits.json` (fecha y factor de cada split según Yahoo). Desde el 17-nov-2026 (alertas, docs/panel/alertas_v1.md)
+también `apertura_diario.parquet`, `alto_diario.parquet` y `bajo_diario.parquet` (OHLC de la misma petición, en la
+misma escala que `cierre_diario`: ajustados solo por splits).
 Uso: .venv/bin/python -m src.ingest.yahoo_precios [--solo-volumen]   (--solo-volumen: no reescribe los precios)
 """
 from __future__ import annotations
@@ -94,7 +96,8 @@ def descargar_detalle(t: str) -> tuple[pd.Series, dict, dict]:
                "factor": float(v["numerator"]) / float(v["denominator"])}
               for v in ((res.get("events") or {}).get("splits") or {}).values()
               if v.get("numerator") and v.get("denominator")]
-    extra = {"volumen": _serie(q.get("volume")), "cierre": _serie(q.get("close")),
+    extra = {"volumen": _serie(q.get("volume")), "cierre": _serie(q.get("close")), "apertura": _serie(q.get("open")),
+             "alto": _serie(q.get("high")), "bajo": _serie(q.get("low")),
              "splits": sorted(splits, key=lambda x: x["fecha"])}
     return s, extra_meta(m, adj), extra
 
@@ -104,11 +107,14 @@ def extra_meta(m: dict, adj) -> dict:
             "ajustado": adj is not None}
 
 
-def guardar_volumen(d: Path, vol: dict, cie: dict, spl: dict) -> None:
+def guardar_volumen(d: Path, vol: dict, cie: dict, spl: dict, ohlc: dict | None = None) -> None:
     dv = d / "volumen"
     dv.mkdir(parents=True, exist_ok=True)
     pd.DataFrame(vol).sort_index().to_parquet(dv / "volumen_diario.parquet")
     pd.DataFrame(cie).sort_index().to_parquet(dv / "cierre_diario.parquet")
+    for k, x in (ohlc or {}).items():   # apertura / alto / bajo (alertas de volumen: dónde cerró en el rango del día)
+        if x:
+            pd.DataFrame(x).sort_index().to_parquet(dv / f"{k}_diario.parquet")
     (dv / "splits.json").write_text(json.dumps({"descarga": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                                                 "fuente": "Yahoo Finance (v8 chart: volume, close, events=split)",
                                                 "splits": spl}, ensure_ascii=False, indent=1))
@@ -118,11 +124,14 @@ def main(solo_volumen: bool = False) -> None:
     """solo_volumen=True: descarga igual pero escribe solo mercados/volumen/ (no toca precios_diarios ni activos.json)."""
     cols, meta, fallos = {}, {}, []
     vol, cie, spl = {}, {}, {}
+    ohlc: dict[str, dict] = {"apertura": {}, "alto": {}, "bajo": {}}
     for t, (nom, grupo) in ACTIVOS.items():
         try:
             s, m, ex = descargar_detalle(t)
             cols[t] = s
             vol[t], cie[t], spl[t] = ex["volumen"], ex["cierre"], ex["splits"]
+            for k in ohlc:
+                ohlc[k][t] = ex[k]
             meta[t] = {"nombre": nom, "grupo": grupo, **m, "desde": str(s.index[0].date()), "hasta": str(s.index[-1].date())}
             log.info("%s: %d días %s → %s", t, len(s), s.index[0].date(), s.index[-1].date())
         except Exception as e:  # noqa: BLE001
@@ -138,7 +147,7 @@ def main(solo_volumen: bool = False) -> None:
                                                     "fuente": "Yahoo Finance (v8 chart, cierre ajustado)",
                                                     "activos": meta, "fallos": fallos}, ensure_ascii=False, indent=1))
     try:  # volumen y cierre sin ajuste de dividendos (ficha v2); un fallo aquí no tumba los precios
-        guardar_volumen(d, vol, cie, spl)
+        guardar_volumen(d, vol, cie, spl, ohlc)
     except Exception as e:  # noqa: BLE001
         log.error("volumen: FALLO %s", e)
     log.info("yahoo_precios: %d activos, %d fallos → %s", len(cols), len(fallos), d)
