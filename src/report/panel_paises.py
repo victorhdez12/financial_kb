@@ -313,6 +313,9 @@ def guia() -> str:
 de datos.</li>
 <li><strong>Mi cartera:</strong> qué haría cada versión de tu cartera de seguimiento este mes.</li>
 <li><strong>Estado y avisos:</strong> cuánto fiarte de cada herramienta, datos con problemas y el glosario.</li>
+<li><strong>En cada pestaña</strong>, el recuadro «Qué significa esto para ti» resume en lenguaje llano qué mirar.</li>
+<li><strong>Gráficos:</strong> pulsa (o toca) cualquier gráfico, minigráfico o abanico para verlo en grande; se cierra
+con Esc, tocando fuera o con «Cerrar». El panel recuerda la última pestaña que abriste.</li>
 </ol>
 <p class="small">Cuánto fiarte: <span class="badge b-ok"><span>●</span> establecido</span> = superó su prueba con datos
 hasta 2004 · <span class="badge b-warn"><span>◐</span> frágil</span> = la superó por poco ·

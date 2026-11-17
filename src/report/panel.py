@@ -24,6 +24,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 from src.report import _percentil as PC
+from src.report import _ui as UI
 from src.report import panel_activos as PA
 from src.report import panel_manos_fuertes as PMF
 from src.report import panel_hoy as PH
@@ -951,13 +952,21 @@ footer{padding:16px;color:var(--muted);font-size:12.5px}
 JS = """
 (function(){
 var tabs=[].slice.call(document.querySelectorAll('nav.tabs button')),secs=[].slice.call(document.querySelectorAll('main>section'));
-function show(id){tabs.forEach(function(b){b.setAttribute('aria-selected',b.dataset.t===id?'true':'false')});
-secs.forEach(function(s){s.hidden=s.id!==id});try{history.replaceState(null,'','#'+id)}catch(e){}}
-tabs.forEach(function(b){b.addEventListener('click',function(){show(b.dataset.t)})});
+var nw=document.querySelector('.navwrap');
+function show(id,ir,sinHash){tabs.forEach(function(b){var on=b.dataset.t===id;b.setAttribute('aria-selected',on?'true':'false');
+b.tabIndex=on?0:-1;var nv=b.parentNode;if(on&&nv&&nv.scrollWidth>nv.clientWidth+2){nv.scrollLeft=Math.max(0,b.offsetLeft-nv.offsetLeft-(nv.clientWidth-b.offsetWidth)/2)}});
+secs.forEach(function(s){s.hidden=s.id!==id});if(!sinHash){try{history.replaceState(null,'','#'+id)}catch(e){}}
+try{localStorage.setItem('panel_pestana',id)}catch(e){}
+var mn=document.querySelector('main');
+if(ir&&nw&&mn&&nw.getBoundingClientRect().top<=0){try{scrollTo(0,Math.max(0,mn.offsetTop-nw.offsetHeight))}catch(e){}}}
+tabs.forEach(function(b,i){b.addEventListener('click',function(){show(b.dataset.t,true)});
+b.addEventListener('keydown',function(e){var j=e.key==='ArrowRight'?i+1:e.key==='ArrowLeft'?i-1:null;if(j===null)return;
+j=(j+tabs.length)%tabs.length;e.preventDefault();tabs[j].focus();show(tabs[j].dataset.t,true)})});
 var h=(location.hash||'').slice(1);
 var dp=h&&!secs.some(function(s){return s.id===h})?document.getElementById(h):null;
 if(dp&&dp.closest('main>section')){show(dp.closest('main>section').id);dp.open=true;setTimeout(function(){dp.scrollIntoView()},0)}
-else{show(secs.some(function(s){return s.id===h})?h:secs[0].id)}
+else{var ul=null;try{ul=localStorage.getItem('panel_pestana')}catch(e){}
+show(secs.some(function(s){return s.id===h})?h:(ul&&secs.some(function(s){return s.id===ul})?ul:secs[0].id),false,!h)}
 document.addEventListener('click',function(e){var a=e.target.closest('a[href^="#atlas-"]');if(a){show('atlas');}});
 var sel=document.getElementById('pais');
 function pais(c){[].forEach.call(document.querySelectorAll('.pais-blk'),function(d){d.hidden=d.dataset.pais!==c});
@@ -1010,27 +1019,29 @@ def construir(s: dict, hoy: date | None = None) -> str:
                  "estado": seccion_segura(sec_estado, s, reg, hoy) + PP.glosario_html(),
                  "verificacion": seccion_segura(PV.sec_verificacion)}
     secciones["manos"] = seccion_segura(PMF.sec_manos_fuertes, hoy)
-    nav = "".join(f'<button type="button" role="tab" data-t="{k}" aria-controls="{k}">{esc(v)}'
-                  + (f" ({len(av)})" if k == "estado" and av else "") + "</button>" for k, v in PESTANAS)
-    cuerpo = "".join(f'<section id="{k}" role="tabpanel" aria-label="{esc(v)}"><h2>{esc(v)}</h2>{PP.intro(k)}{secciones[k]}</section>'
-                     for k, v in PESTANAS)
+    nav = "".join(UI.nav_boton(k, v, f" ({len(av)})" if k == "estado" and av else "") for k, v in PESTANAS)
+    cuerpo = "".join(f'<section id="{k}" role="tabpanel" aria-label="{esc(v)}">{UI.titulo_pestana(k, v)}{UI.para_ti(k)}'
+                     f'{PP.intro(k)}{secciones[k]}</section>' for k, v in PESTANAS)
     return f"""<!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex"><title>Panel macro personal</title>
-<style>{CSS}{PP.CSS}{PA.CSS}{QH.CSS}{PMF.CSS}</style></head>
+<style>{CSS}{PP.CSS}{PA.CSS}{QH.CSS}{PMF.CSS}{UI.CSS}</style></head>
 <body>
 <header><div class="top"><div><h1>Panel macro personal</h1>
 <p class="muted">Reporte semanal del {esc(s.get("asof") or "—")} · panel generado el {esc(datetime.now().strftime("%Y-%m-%d %H:%M"))}</p></div>
 <button type="button" class="themebtn" id="theme" aria-label="Cambiar entre modo claro y oscuro">Claro / oscuro</button></div>
 <p class="disc"><strong>No es asesoramiento.</strong> {esc(AVISO_GENERAL)} Cada probabilidad lleva su acierto medido en el pasado y está {NO_OOS}.</p>
 {PP.guia()}
+{UI.leyenda_colores()}
 <div class="resumen"><h3>Resumen de la semana <span class="muted">(reglas fijas, sin IA)</span></h3>{res}
 <details><summary><strong>Qué ha cambiado esta semana</strong></summary>{seccion_segura(PP.cambios_semana, s, REPORTS)}</details></div>
-<nav class="tabs" role="tablist">{nav}</nav></header>
+</header>
+<div class="navwrap"><nav class="tabs" role="tablist" aria-label="Pestañas del panel">{nav}</nav></div>
 <main>{cuerpo}</main>
 <footer>{esc(AVISO_GENERAL)} Generado por src/report/panel.py a partir de obsidian/Reports/{esc(s.get("asof") or "—")}_signal.json.</footer>
 <div id="tip" role="tooltip"></div>
-<script>{JS}{PP.JS}{PA.JS}{QH.JS}</script>
+{UI.extras_body()}
+<script>{JS}{PP.JS}{PA.JS}{QH.JS}{UI.JS}</script>
 </body></html>"""
 
 
