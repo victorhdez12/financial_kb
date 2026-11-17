@@ -572,7 +572,8 @@ def sec_hoy(s: dict, es: dict | None) -> str:
         out.append('<details class="card"><summary><h3>Indicadores clave de EE. UU.</h3></summary>'
                    '<p class="note">Percentil = % de su historia con un valor ≤ el actual, hasta la fecha del dato. '
                    '«mensual desde …»: un dato por mes (historia más larga que la serie diaria); sin «mensual», la '
-                   'serie a su frecuencia nativa, como en «Hoy» y en la tabla de liquidez.</p>'
+                   'serie a su frecuencia nativa, como en «Hoy» y en la tabla de liquidez. Calculado al corte del signal semanal '
+                   f'({esc(str(s.get("asof"))[:10])}); «Hoy» usa el último dato diario, así que entre semana pueden diferir.</p>'
                    + tabla(["indicador", "valor", "fecha del dato", "percentil (base)"], filas, "num") + "</details>")
     return "\n".join(out)
 
@@ -623,7 +624,7 @@ def sec_liquidez(s: dict) -> str:
         "<p>Ninguna de las divergencias de la lista fija se da esta semana.</p>"
     return ('<div class="card"><h3>Liquidez y crédito (EE. UU., descriptivo)</h3>'
             f'<p class="note">{esc(lc.get("aviso", ""))}</p>{base}<div class="tiles">{"".join(tiles)}</div>'
-            + tabla(["crédito y volatilidad", "nivel", "Δ 1 mes", "Δ 3 meses", "percentil (toda su historia, frecuencia nativa)",
+            + tabla(["crédito y volatilidad", "nivel", "Δ 1 mes", "Δ 3 meses", f"percentil (toda su historia, frecuencia nativa; corte del signal {esc(str(s.get('asof'))[:10])})",
                      "desde", "dato"], filas, "num")
             + "<h4>Movimiento del 10 años</h4>"
             + tabla(["plazo", "Δ 10 años", "tipo real", "inflación implícita", "prima por plazo (ACM)", "expectativas (ACM)"], dzt, "num")

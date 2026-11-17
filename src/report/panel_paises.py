@@ -401,6 +401,9 @@ def cambios_semana(s: dict, carpeta: Path) -> str:
             continue
         k = r.get("indicador")
         pa, pb = (ia.get(k) or {}).get("percentil_hist"), r.get("percentil_hist")
+        ba, bb = (ia.get(k) or {}).get("percentil_base"), r.get("percentil_base")
+        if ba is not None and bb is not None and ba != bb:   # bases distintas (mensual vs nativa): no comparables
+            continue
         if pa is not None and pb is not None and abs(pb - pa) >= 15:   # salto grande frente a su historia
             out.append(f"<li>{esc(k)}: percentil {pa:.0f} → <strong>{pb:.0f}</strong></li>")
     fa = esc(str(prev.get("asof"))[:10])

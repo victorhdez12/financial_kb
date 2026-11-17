@@ -84,12 +84,10 @@ def test_frecuencia_mensual_ultimo_de_cada_mes():
     assert m.iloc[-1] == s.iloc[-1]
 
 
-@pytest.mark.xfail(strict=True, reason="HALLAZGO: valor NaN da 0 en vez de None (insiders: act['amplitud'] NaN)")
 def test_valor_nan_no_da_cero():
     assert PC.percentil(_d(range(1, 31)), float("nan")) is None
 
 
-@pytest.mark.xfail(strict=True, reason="HALLAZGO menor: ventana=0 (int) devuelve TODA la historia (iloc[-0:])")
 def test_ventana_cero_no_es_toda_la_historia():
     assert PC.calcular(_d(range(1, 31)), ventana=0, min_obs=1).n == 0
 

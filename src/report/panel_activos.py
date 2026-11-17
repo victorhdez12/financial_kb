@@ -108,7 +108,8 @@ def sec_activos(s: dict, pul: dict | None) -> str:
              "<th data-tip='Simulación A: su propia historia (bootstrap). Mediana y rango 90 %'>12 m · historia</th>"
              "<th data-tip='Simulación B: cada trayectoria del motor (bolsa de EE. UU. e inflación conjuntas), beta del activo, sin alfa. NOMINAL en USD. Mediana y rango 90 %; la real y las colas, en la ficha'>12 m · motor<br><span class='muted'>(nominal)</span></th>"
              f"</tr></thead><tbody>{''.join(filas_g)}</tbody></table></div>")
-    fichas = "".join(_ficha(t, r) for t, r in A.items() if "error" not in r)
+    hoy_q = (s.get("regime") or {}).get("quadrant")
+    fichas = "".join(_ficha(t, r, hoy_q) for t, r in A.items() if "error" not in r)
     return f'''<div class="intro"><p><strong>Tus acciones, ETF y materias primas.</strong> Cómo van, cuánto riesgo tienen,
 cómo se comportaron en cada situación de EE. UU. y dos simulaciones a 12 meses. Pulsa un activo para su ficha.</p>
 <p class="small">En la tabla, las simulaciones son <strong>rentabilidades nominales en la moneda del activo</strong>:
@@ -143,7 +144,7 @@ def _texto_b(sup: dict) -> str:
             f" = nominal − la misma inflación. Distribución completa, {rec}.")
 
 
-def _ficha(t: str, r: dict) -> str:
+def _ficha(t: str, r: dict, hoy_q: str | None = None) -> str:
     pc = r.get("por_cuadrante") or {}
     cuad = "".join(f"<tr><td>{esc(q)}</td><td><strong>{n((pc.get(q) or {}).get('anual'), 1, ' %', True)}</strong></td>"
                    f"<td>{n((pc.get(q) or {}).get('positivos'), 0)}</td><td>{(pc.get(q) or {}).get('meses', '—')}"
@@ -171,7 +172,7 @@ def _ficha(t: str, r: dict) -> str:
         sims += (f"<tr><td>{tit}<br><span class='muted'>{esc(extra)}</span></td>"
                  f"<td><strong>{n(100 * y['p50'], 0, ' %', True)}</strong></td><td>{n(100 * y['p5'], 0, ' %', True)} a {n(100 * y['p95'], 0, ' %', True)}</td>"
                  f"<td>{n(100 * y['p25'], 0, ' %', True)} a {n(100 * y['p75'], 0, ' %', True)}</td>"
-                 f"<td class='muted'>{n(100 * y['min'], 0, '', True)} · {n(100 * y['p1'], 0, '', True)} · {n(100 * y['p99'], 0, ' %', True)}</td>"
+                 f"<td class='muted'>{n(100 * y['min'], 0, '', True)} · {n(100 * y['p1'], 0, '', True)} · {n(100 * y['p99'], 0, '', True)} · {n(100 * y.get('max'), 0, ' %', True) if y.get('max') is not None else 's/d'}</td>"
                  f"<td>{n(100 * y['p_perdida'], 0)}</td><td>{n(100 * y['p_caida20'], 0)}</td></tr>")
     avisos = "".join(f"<p class='small'>▲ {esc(a)}</p>" for a in r.get("avisos") or [])
     return f'''<details class="card pais" id="act-{esc(t)}"><summary><span class="pn">{esc(r["nombre"])} <span class="muted">{esc(t)} · {esc(r.get("grupo"))}</span></span></summary>
@@ -187,9 +188,9 @@ def _ficha(t: str, r: dict) -> str:
 </tbody></table></div>
 <div class="dblk"><h4>En cada situación de EE. UU. ({term("cuadrante")})</h4><table class="num"><thead><tr><th></th><th>Rent. anualizada</th>
 <th>% meses +</th><th>Meses</th></tr></thead><tbody>{cuad}</tbody></table>
-<p class="small">Hoy: Goldilocks. Medias de meses pasados de este activo, sin contrastar: con pocos meses, ruido.</p></div>
+<p class="small">Hoy: {esc(hoy_q or "s/d")} (cuadrante mensual del signal). Medias de meses pasados de este activo, sin contrastar: con pocos meses, ruido.</p></div>
 <div class="dblk wide"><h4>Simulación a 12 meses ({esc(r.get("moneda") or "")}; nominal salvo las filas «real»)</h4><table class="num"><thead><tr><th>Modelo</th><th>Mediana</th>
-<th>{term("p5-p95", "Rango 90 %")}</th><th>Rango 50 %</th><th data-tip='Colas completas, sin recortar (informativo: con una sola historia y un motor no validado, poco fiables)'>Mín · p1 · p99</th><th>P(perder)</th><th>P(caer ≥ 20 %)</th></tr></thead><tbody>{sims or f"<tr><td colspan=7 class=nd>{esc(r.get('historia_insuficiente') or 'sin historia suficiente')}</td></tr>"}</tbody></table>
+<th>{term("p5-p95", "Rango 90 %")}</th><th>Rango 50 %</th><th data-tip='Colas completas, sin recortar (informativo: con una sola historia y un motor no validado, poco fiables)'>Mín · p1 · p99 · Máx</th><th>P(perder)</th><th>P(caer ≥ 20 %)</th></tr></thead><tbody>{sims or f"<tr><td colspan=7 class=nd>{esc(r.get('historia_insuficiente') or 'sin historia suficiente')}</td></tr>"}</tbody></table>
 <p class="small">No validado. La inflación de las filas «real» y de B es la que simula el motor para EE. UU. en cada trayectoria (no una previsión fija). Una acción individual puede salirse de cualquier rango por noticias propias (resultados, juicios, escisiones).</p></div>
 </div></div></details>'''
 

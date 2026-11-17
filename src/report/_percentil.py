@@ -60,7 +60,7 @@ def base(s: pd.Series, *, hasta=None, ventana=None, frecuencia: str | None = Non
     if x.empty or ventana is None:
         return x
     if isinstance(ventana, int):
-        return x.iloc[-ventana:]
+        return x.iloc[-ventana:] if ventana > 0 else x.iloc[:0]
     return x[x.index > x.index[-1] - ventana]
 
 
@@ -72,6 +72,8 @@ def calcular(s: pd.Series, valor: float | None = None, *, hasta=None, ventana=No
     if len(x) < max(min_obs, 1):
         return Percentil(None, x.index[0] if len(x) else None, len(x), frec, vent)
     v = float(x.iloc[-1]) if valor is None else float(valor)
+    if v != v:   # valor NaN → sin percentil (antes daba 0)
+        return Percentil(None, x.index[0], len(x), frec, vent)
     return Percentil(float(100 * (x <= v).mean()), x.index[0], len(x), frec, vent)
 
 
