@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 from datetime import date
 
+from src.report import activos_v2 as AV
 from src.report import mis_activos as MA
 from src.report.panel_paises import chip, esc, n, term
 
@@ -109,7 +110,8 @@ def sec_activos(s: dict, pul: dict | None) -> str:
              "<th data-tip='Simulación B: cada trayectoria del motor (bolsa de EE. UU. e inflación conjuntas), beta del activo, sin alfa. NOMINAL en USD. Mediana y rango 90 %; la real y las colas, en la ficha'>12 m · motor<br><span class='muted'>(nominal)</span></th>"
              f"</tr></thead><tbody>{''.join(filas_g)}</tbody></table></div>")
     hoy_q = (s.get("regime") or {}).get("quadrant")
-    fichas = "".join(_ficha(t, r, hoy_q) for t, r in A.items() if "error" not in r)
+    v2 = AV.cargar_seguro()   # volumen, Form 4, 13F y analistas (fuera de git); si falla, «s/d» en cada ficha
+    fichas = "".join(_ficha(t, r, hoy_q, v2) for t, r in A.items() if "error" not in r)
     return f'''<div class="intro"><p><strong>Tus acciones, ETF y materias primas.</strong> Cómo van, cuánto riesgo tienen,
 cómo se comportaron en cada situación de EE. UU. y dos simulaciones a 12 meses. Pulsa un activo para su ficha.</p>
 <p class="small">En la tabla, las simulaciones son <strong>rentabilidades nominales en la moneda del activo</strong>:
@@ -144,7 +146,7 @@ def _texto_b(sup: dict) -> str:
             f" = nominal − la misma inflación. Distribución completa, {rec}.")
 
 
-def _ficha(t: str, r: dict, hoy_q: str | None = None) -> str:
+def _ficha(t: str, r: dict, hoy_q: str | None = None, v2: dict | None = None) -> str:
     pc = r.get("por_cuadrante") or {}
     cuad = "".join(f"<tr><td>{esc(q)}</td><td><strong>{n((pc.get(q) or {}).get('anual'), 1, ' %', True)}</strong></td>"
                    f"<td>{n((pc.get(q) or {}).get('positivos'), 0)}</td><td>{(pc.get(q) or {}).get('meses', '—')}"
@@ -192,10 +194,10 @@ def _ficha(t: str, r: dict, hoy_q: str | None = None) -> str:
 <div class="dblk wide"><h4>Simulación a 12 meses ({esc(r.get("moneda") or "")}; nominal salvo las filas «real»)</h4><table class="num"><thead><tr><th>Modelo</th><th>Mediana</th>
 <th>{term("p5-p95", "Rango 90 %")}</th><th>Rango 50 %</th><th data-tip='Colas completas, sin recortar (informativo: con una sola historia y un motor no validado, poco fiables)'>Mín · p1 · p99 · Máx</th><th>P(perder)</th><th>P(caer ≥ 20 %)</th></tr></thead><tbody>{sims or f"<tr><td colspan=7 class=nd>{esc(r.get('historia_insuficiente') or 'sin historia suficiente')}</td></tr>"}</tbody></table>
 <p class="small">No validado. La inflación de las filas «real» y de B es la que simula el motor para EE. UU. en cada trayectoria (no una previsión fija). Una acción individual puede salirse de cualquier rango por noticias propias (resultados, juicios, escisiones).</p></div>
-</div></div></details>'''
+{AV.ficha_v2(t, r, v2)}</div></div></details>'''
 
 
-CSS = """
+CSS = AV.CSS + """
 table.act td,table.act th{white-space:nowrap;padding:6px 6px}table.act td:first-child{white-space:normal;min-width:180px}table.act tr.grp th{background:var(--hl);color:var(--ink);font-size:13px}
 .actlink{color:var(--ink);text-decoration:none;font-weight:600}.actlink:hover{text-decoration:underline}
 """
