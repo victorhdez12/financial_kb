@@ -9,6 +9,7 @@ import json
 from datetime import date
 
 from src.report import activos_v2 as AV
+from src.report import alertas as AL
 from src.report import mis_activos as MA
 from src.report.panel_paises import chip, esc, n, term
 
@@ -111,6 +112,9 @@ def sec_activos(s: dict, pul: dict | None) -> str:
              f"</tr></thead><tbody>{''.join(filas_g)}</tbody></table></div>")
     hoy_q = (s.get("regime") or {}).get("quadrant")
     v2 = AV.cargar_seguro()   # volumen, Form 4, 13F y analistas (fuera de git); si falla, «s/d» en cada ficha
+    R = AL.calcular_seguro(v2)   # alertas de flujos (descriptivas; si fallan, «s/d»)
+    if v2 is not None:
+        v2 = {**v2, "alertas": R}
     fichas = "".join(_ficha(t, r, hoy_q, v2) for t, r in A.items() if "error" not in r)
     return f'''<div class="intro"><p><strong>Tus acciones, ETF y materias primas.</strong> Cómo van, cuánto riesgo tienen,
 cómo se comportaron en cada situación de EE. UU. y dos simulaciones a 12 meses. Pulsa un activo para su ficha.</p>
@@ -118,6 +122,7 @@ cómo se comportaron en cada situación de EE. UU. y dos simulaciones a 12 meses
 «mediana (rango del 90 %)». <strong>A · historia</strong> remuestrea su propia historia (si subió mucho en el pasado,
 arrastra esa subida: optimista). {_texto_b(sup)} Ninguna está validada: <strong>no son recomendaciones</strong>. Precios: Yahoo
 Finance, cierre ajustado ({esc(str(d.get("descarga"))[:16])} UTC); el último precio puede ser del día en curso.</p></div>
+{AL.bloque_alertas(R, "activos")}
 <div class="card">{tabla}</div>
 <h3>Fichas</h3>{fichas}
 <details class="card"><summary><h3>Cómo se calcula</h3></summary><p class="small">{esc(MA.__doc__)}</p></details>'''
@@ -197,7 +202,7 @@ def _ficha(t: str, r: dict, hoy_q: str | None = None, v2: dict | None = None) ->
 {AV.ficha_v2(t, r, v2)}</div></div></details>'''
 
 
-CSS = AV.CSS + """
+CSS = AV.CSS + AL.CSS + """
 table.act td,table.act th{white-space:nowrap;padding:6px 6px}table.act td:first-child{white-space:normal;min-width:180px}table.act tr.grp th{background:var(--hl);color:var(--ink);font-size:13px}
 .actlink{color:var(--ink);text-decoration:none;font-weight:600}.actlink:hover{text-decoration:underline}
 """

@@ -18,6 +18,10 @@ Tests: `tests/test_activos_v2.py` (datos sintéticos, sin red).
 
 `yahoo_precios --solo-volumen` descarga igual pero solo escribe `mercados/volumen/` (no toca los precios).
 
+Alertas de flujos (17-nov-2026, `docs/panel/alertas_v1.md`): `yahoo_precios` guarda también apertura/máximo/mínimo
+(`mercados/volumen/{apertura,alto,bajo}_diario.parquet`) y `sec_form4_detalle` la columna `owned_after` (acciones tras
+la operación). Ningún cálculo de esta ficha cambia; la ficha gana la sección «Flujos fuertes» y marcas ◆/■ en el gráfico.
+
 SEC: User-Agent **genérico** de cliente (`financial-kb-panel/1.0 research-client contact@example.org`, sin datos del
 usuario), ≤ 5 peticiones/s (limitador común de `sec_common`; el límite de la SEC es 10/s) y plazo total por descarga
 (`_http.get(total=…)`).

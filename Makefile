@@ -46,7 +46,7 @@ INGEST := fred_extended alfred_vintages fred_us fed_yieldcurve us_treasury nyfed
           ecb eurostat bde ine bundesbank ifo zew \
           cycle_bis bis_ext oecd oecd_qna oecd_vivienda aqr_clr imf_weo imf_ifs imf_gdd imf_hpdd imf_mfs yahoo_precios wb_wdi jst_macrohistory boe_millennium_uk boe_rates cycle_worldorder \
           events_nber events_wars events_financial_crises events_gpr events_curated sec_insiders \
-          sec_form4_detalle sec_13f yahoo_analistas
+          sec_form4_detalle sec_13f yahoo_analistas sec_flujos sec_recompras finra_short
 .PHONY: ingest audit data ingest-daily daily semanal verif
 
 # Fuentes con datos diarios o semanales (actualización diaria automática, ver scripts/actualizar.sh)
@@ -55,8 +55,11 @@ INGEST := fred_extended alfred_vintages fred_us fed_yieldcurve us_treasury nyfed
 # publican y no el domingo.
 # yahoo_analistas (≈ 7 s) y sec_form4_detalle (≈ 25 s; solo pide a la SEC los Form 4 nuevos) se añadieron el 17-nov-2026
 # (ficha v2 de «Mis activos», docs/panel/activos_v2.md); sec_13f (~100 MB por trimestre nuevo) va solo en la semanal.
+# Alertas de flujos (17-nov-2026, docs/panel/alertas_v1.md): sec_flujos (13D/13G + fechas de resultados, ≈ 35 s la 1.ª
+# vez, luego ≈ 5 s), sec_recompras (XBRL companyfacts, ≈ 5 s) y finra_short (volumen en corto diario, 1 fichero por
+# sesión nueva) son rápidas → diarias.
 INGEST_DAILY := yahoo_precios fred_extended fed_yieldcurve us_liquidity nyfed_repo ecb bundesbank cboe cboe_vx atl_mpt umich \
-                alfred_vintages eurostat cftc_cot yahoo_analistas sec_form4_detalle
+                alfred_vintages eurostat cftc_cot yahoo_analistas sec_form4_detalle sec_flujos sec_recompras finra_short
 
 ingest:               ## descarga/actualiza todas las fuentes curadas (lento; idempotente)
 	@for s in $(INGEST); do echo "== $$s"; $(PY) -m src.ingest.$$s || echo "FALLO $$s"; done

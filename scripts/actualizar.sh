@@ -8,6 +8,9 @@
 #     si no, si hoy es lun-sáb, ya son las 7:30 y la diaria de hoy no está hecha -> diaria; si no, nada.
 # Deja el log en ~/financial_archive/logs/, apunta el resultado en obsidian/Proyecto/Actualizaciones.md
 # y avisa con una notificación de macOS si alguna fuente falla o la auditoría encuentra algo crítico.
+# Tras la actualización, otra notificación si hay ALERTAS FUERTES NUEVAS de flujos en «Mis activos» (src/report/alertas.py,
+# docs/panel/alertas_v1.md; nunca la misma alerta dos veces). Desactivar: FIN_ALERTAS_NOTIFICAR=0 o
+# {"notificar": false} en ~/financial_archive/config/alertas.json (fuera de git).
 set -u
 MODO="${1:-diario}"
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
@@ -99,6 +102,12 @@ PY
 
 if [ "$ESTADO" != "✅ ok" ]; then
   /usr/bin/osascript -e "display notification \"$MODO: $ESTADO ${FALLOS}\" with title \"financial_kb\"" 2>/dev/null || true
+fi
+# Alertas fuertes nuevas de flujos (descriptivas): el texto lo da Python (sin comillas dobles); vacío = nada nuevo
+ALERTAS="$("$REPO/.venv/bin/python" -m src.report.alertas --notificar 2>>"$LOG" | tail -1)"
+if [ -n "$ALERTAS" ]; then
+  echo "$(date) alertas notificadas: $ALERTAS" >> "$LOG"
+  /usr/bin/osascript -e "display notification \"$ALERTAS\" with title \"financial_kb · alertas\"" 2>/dev/null || true
 fi
 # Logs de más de 60 días fuera
 find "$LOGDIR" -name '*.log' -mtime +60 -delete 2>/dev/null

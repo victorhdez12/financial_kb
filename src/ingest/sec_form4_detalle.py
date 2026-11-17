@@ -14,6 +14,8 @@ Dos capas (las mismas fuentes públicas de la SEC):
 2. Form 4 presentados después del último trimestre publicado: XML de EDGAR (lista data.sec.gov/submissions del emisor
    + un XML por presentación; el XML crudo se guarda en sec_form4/xml/ y no se vuelve a pedir).
 
+«owned_after» (añadido el 17-nov-2026 para las alertas, docs/panel/alertas_v1.md) = acciones que conserva tras la línea
+(SHRS_OWND_FOLWNG_TRANS / sharesOwnedFollowingTransaction): sirve para el % de su tenencia que vende.
 Plan 10b5-1: casilla AFF10B5ONE del Form 4 (desde abr-2023) o una nota al pie DE ESA LÍNEA que mencione «10b5-1».
 SEC: User-Agent genérico de cliente (sin datos personales), ≤ 5 peticiones/s (límite de la SEC: 10/s; el limitador es
 el de src/ingest/sec_common, común a todo el proceso) y plazo total por descarga (_http).
@@ -39,7 +41,7 @@ from src.ingest.sec_common import _LIMITER, get_logger
 
 UA = "financial-kb-panel/1.0 research-client contact@example.org"   # genérico: sin datos del usuario
 COLS = ["accession", "filing_date", "trans_date", "issuer_cik", "ticker", "owner_cik", "owner_name", "title",
-        "director", "officer", "ten_pct", "code", "acq_disp", "shares", "price", "plan_10b5_1", "fuente"]
+        "director", "officer", "ten_pct", "code", "acq_disp", "shares", "price", "plan_10b5_1", "fuente", "owned_after"]
 RE_PLAN = re.compile(r"10b5-?1", re.I)
 log = get_logger("sec_form4_detalle")
 _S: requests.Session | None = None
@@ -134,7 +136,8 @@ def parse_zip(path: Path, ciks: dict[str, str]) -> pd.DataFrame:
         "shares": pd.to_numeric(d["TRANS_SHARES"], errors="coerce"),
         "price": pd.to_numeric(d["TRANS_PRICEPERSHARE"], errors="coerce"),
         "plan_10b5_1": d["AFF10B5ONE"].isin(["1", "true", "True"]).values | pd.Series(plan_nota, index=d.index).values,
-        "fuente": path.stem})
+        "fuente": path.stem,
+        "owned_after": pd.to_numeric(d["SHRS_OWND_FOLWNG_TRANS"], errors="coerce") if "SHRS_OWND_FOLWNG_TRANS" in d else None})
     return out[COLS]
 
 
@@ -170,7 +173,9 @@ def parse_xml(xml: str, accession: str, filing_date: str, ticker: str) -> list[d
                     "acq_disp": _txt(t, "transactionAmounts/transactionAcquiredDisposedCode/value"),
                     "shares": sh, "price": pr,
                     "plan_10b5_1": casilla or any(RE_PLAN.search(notas.get(i, "") or "") for i in ids),
-                    "fuente": "form4_xml"})
+                    "fuente": "form4_xml",
+                    "owned_after": pd.to_numeric(_txt(t, "postTransactionAmounts/sharesOwnedFollowingTransaction/value"),
+                                                 errors="coerce")})
     return out
 
 
@@ -214,7 +219,9 @@ def normalizar(d: pd.DataFrame) -> pd.DataFrame:
     d = d.copy()
     for c in ("filing_date", "trans_date"):
         d[c] = pd.to_datetime(d[c], errors="coerce")
-    for c in ("shares", "price"):
+    for c in ("shares", "price", "owned_after"):
+        if c not in d:
+            d[c] = float("nan")
         d[c] = pd.to_numeric(d[c], errors="coerce")
     for c in ("director", "officer", "ten_pct", "plan_10b5_1"):
         d[c] = d[c].fillna(False).astype(bool)
