@@ -47,15 +47,23 @@ esac
 
 # Evita dos ejecuciones a la vez (la semanal puede tardar)
 LOCK="$LOGDIR/.actualizar.lock"
+# Lock huérfano (Mac apagado a la fuerza a mitad de una actualización: el trap no llega a borrarlo). Sin esto, nada
+# volvía a actualizarse y el paper/E1/INT-11 esperaban a una actualización que no existe. La semanal dura < 2 h.
+if [ -d "$LOCK" ] && [ -n "$(find "$LOCK" -maxdepth 0 -mmin +240 2>/dev/null)" ]; then
+  echo "$(date) lock de más de 4 h (huérfano): lo quito" >> "$LOG"; rmdir "$LOCK" 2>/dev/null
+fi
 if ! mkdir "$LOCK" 2>/dev/null; then
   echo "$(date) ya hay una actualización en marcha; salgo" >> "$LOG"; exit 0
 fi
 trap 'rmdir "$LOCK"' EXIT
 
 INICIO=$(date +%s)
-make "$OBJ" > "$LOG" 2>&1
+make "$OBJ" >> "$LOG" 2>&1   # >>: conserva el aviso del lock huérfano (el log es nuevo en cada corrida)
 RC=$?
 DUR=$(( ($(date +%s) - INICIO) / 60 ))
+# La semanal deja informes nuevos en obsidian/Reports y docs/data: commitearlos (solo esos, sin push) para que los
+# registros en vivo que exigen árbol limpio (E1/B1′/B1 el día 3, INT-11 el día 20) no aborten (ensayo 17-nov).
+[ "$MODO" = semanal ] && bash "$REPO/scripts/commit_informes.sh" "$REPO" >> "$LOG" 2>&1
 # Marca de hecho (la usa el modo pendiente); la semanal también cubre la diaria
 if [ $RC -eq 0 ]; then echo "$HOY" > "$LOGDIR/.hecho_$MODO"; [ "$MODO" = semanal ] && echo "$HOY" > "$LOGDIR/.hecho_diario"; fi
 
