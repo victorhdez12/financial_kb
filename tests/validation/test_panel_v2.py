@@ -134,9 +134,6 @@ def test_ningun_dato_de_terceros_en_git():
 
 
 # --------------------------------------------------------------------------------------------- HALLAZGOS
-@pytest.mark.xfail(strict=True, reason="H1: run() hace drop_duplicates() sobre todas las columnas y borra líneas "
-                                       "idénticas legítimas del MISMO Form 4 (p. ej. dos ventas de 82 acciones al mismo "
-                                       "precio desde dos cuentas): 168 líneas de zips + 15 de XML perdidas el 17-nov")
 def test_form4_conserva_lineas_identicas_de_un_mismo_formulario(tmp_path, monkeypatch):
     monkeypatch.setenv("FIN_DATA_ROOT", str(tmp_path))
     fila = {"accession": "x1", "filing_date": "2026-11-03", "trans_date": "2026-11-01", "issuer_cik": "1", "ticker": "AAA",
@@ -149,9 +146,6 @@ def test_form4_conserva_lineas_identicas_de_un_mismo_formulario(tmp_path, monkey
     assert len(d) == 2 and d["shares"].sum() == 164
 
 
-@pytest.mark.xfail(strict=True, reason="H2: un 13F con el VALOR en miles (acciones correctas) se descarta entero como "
-                                       "«error de unidades»: la gestora sale «—» ese trimestre y «sin dato previo» el "
-                                       "siguiente (Van Eck en NEM, JPMorgan en UNH/MSFT, Norges en NEM/MSFT…)")
 def test_13f_valor_en_miles_no_convierte_la_posicion_en_sin_dato_previo():
     per = pd.to_datetime(["2026-03-31", "2026-06-30"])
     pos = pd.DataFrame([{"ticker": "AAA", "period": per[0], "cik": "1", "gestor": "Fondo", "shares": 36e6, "value": 36e6 * 108 / 1000,
@@ -165,9 +159,6 @@ def test_13f_valor_en_miles_no_convierte_la_posicion_en_sin_dato_previo():
     assert not ch["nueva"] and abs(ch["pct"] + 100 * 4 / 36) < 1e-6
 
 
-@pytest.mark.xfail(strict=True, reason="H3: con un enlace #act-XXX/#pais-XXX, show() reescribe el hash a #<pestaña> con "
-                                       "replaceState; al terminar la carga el navegador salta a la pestaña y la ficha "
-                                       "queda fuera de pantalla (Chrome headless: #act-CTVA a 3 410 px; en main, 0 px)")
 def test_enlace_directo_no_reescribe_el_hash():
     m = re.search(r"if\(dp&&dp\.closest\('main>section'\)\)\{show\(([^)]*\)[^)]*)\)", P.JS)
     assert m, "no se encuentra la rama del enlace directo"

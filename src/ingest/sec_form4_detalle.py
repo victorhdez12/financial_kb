@@ -227,9 +227,13 @@ def run(meses: int = 24) -> dict:
     zips = sorted((root() / "raw" / "sec_form345").glob("*_form345.zip"))
     zips = [z for z in zips if pd.Period(z.stem[:6].replace("q", "Q"), "Q").end_time >= desde]
     frames = []
+    vistos: set = set()
     for z in zips:
         try:
-            frames.append(parse_zip(z, ciks))
+            f = parse_zip(z, ciks)
+            f = f[~f["accession"].isin(vistos)]   # un formulario repetido en otro zip trimestral entra una sola vez
+            vistos |= set(f["accession"])
+            frames.append(f)
         except Exception as e:  # noqa: BLE001
             log.warning("%s: %s", z.name, e)
     base = normalizar(pd.concat(frames, ignore_index=True)) if frames else pd.DataFrame(columns=COLS)
@@ -238,7 +242,8 @@ def run(meses: int = 24) -> dict:
     rec = normalizar(capa_xml(ciks, hasta_zip))
     rec = rec[~rec["accession"].isin(set(base["accession"]))]
     d = pd.concat([x for x in (base, rec) if len(x)], ignore_index=True) if len(base) or len(rec) else base
-    d = d[d["filing_date"] >= desde].drop_duplicates().sort_values(["ticker", "trans_date"])
+    # sin drop_duplicates: dos líneas idénticas de un mismo Form 4 son operaciones reales (p. ej. «By spouse»)
+    d = d[d["filing_date"] >= desde].sort_values(["ticker", "trans_date"], kind="stable")
     out = salida()
     d.to_parquet(out / "operaciones.parquet", index=False)
     meta = {"actualizado_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"), "desde": str(desde.date()),

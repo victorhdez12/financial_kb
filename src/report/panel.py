@@ -964,7 +964,7 @@ b.addEventListener('keydown',function(e){var j=e.key==='ArrowRight'?i+1:e.key===
 j=(j+tabs.length)%tabs.length;e.preventDefault();tabs[j].focus();show(tabs[j].dataset.t,true)})});
 var h=(location.hash||'').slice(1);
 var dp=h&&!secs.some(function(s){return s.id===h})?document.getElementById(h):null;
-if(dp&&dp.closest('main>section')){show(dp.closest('main>section').id);dp.open=true;setTimeout(function(){dp.scrollIntoView()},0)}
+if(dp&&dp.closest('main>section')){show(dp.closest('main>section').id,false,true);dp.open=true;setTimeout(function(){dp.scrollIntoView()},0)}
 else{var ul=null;try{ul=localStorage.getItem('panel_pestana')}catch(e){}
 show(secs.some(function(s){return s.id===h})?h:(ul&&secs.some(function(s){return s.id===ul})?ul:secs[0].id),false,!h)}
 document.addEventListener('click',function(e){var a=e.target.closest('a[href^="#atlas-"]');if(a){show('atlas');}});

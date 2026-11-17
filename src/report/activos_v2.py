@@ -235,7 +235,10 @@ def resumen_13f(pos: pd.DataFrame, cierre: pd.Series | None, n_top: int = 10, n_
                for p in pers}
         ref = d["period"].map(fin)
         imp = d["value"] / d["shares"]
-        d = d[ref.isna() | ((imp / ref - 1).abs() <= TOL_PRECIO)]
+        ok = ref.isna() | ((imp / ref - 1).abs() <= TOL_PRECIO)
+        miles = ~ok & ((1000 * imp / ref - 1).abs() <= TOL_PRECIO)   # valor declarado en miles, acciones bien
+        d.loc[miles, "value"] = d.loc[miles, "value"] * 1000
+        d = d[ok | miles]
     if d.empty:
         return None
     pv = d.pivot_table(index="cik", columns="period", values="shares", aggfunc="sum")
@@ -249,7 +252,7 @@ def resumen_13f(pos: pd.DataFrame, cierre: pd.Series | None, n_top: int = 10, n_
     for k in top:
         cambios = []
         for a, b in zip(pers[:-1], pers[1:]):
-            sa, sb = pv.at[k, a] if a in pv else np.nan, pv.at[k, b]
+            sa, sb = (pv.at[k, a] if a in pv else np.nan), (pv.at[k, b] if b in pv else np.nan)
             if np.isnan(sb):
                 cambios.append(None)
                 continue
@@ -263,6 +266,8 @@ def resumen_13f(pos: pd.DataFrame, cierre: pd.Series | None, n_top: int = 10, n_
     # cambio agregado solo con gestores presentes en los dos trimestres (si no, entra quien empieza a declarar)
     agg = []
     for a, b in zip(pers[:-1], pers[1:]):
+        if a not in pv or b not in pv:   # trimestre sin líneas válidas
+            continue
         both = pv[[a, b]].dropna()
         ds = both[b] - both[a]
         agg.append({"periodo": str(pd.Timestamp(b).date()), "gestores_comunes": int(len(both)),
