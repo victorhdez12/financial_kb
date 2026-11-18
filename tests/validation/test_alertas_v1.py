@@ -106,14 +106,12 @@ def test_notificacion_no_escribe_fuera_del_archivo_y_respeta_config(tmp_path, mo
         ["alertas/notificadas.json", "config/alertas.json"]
 
 
-@pytest.mark.xfail(strict=True, reason="H3: mensaje() quita etiquetas pero no deshace entidades HTML (&amp;)")
 def test_mensaje_sin_entidades_html():
     m = AL.mensaje([_ev("a", "JPMORGAN CHASE &amp; CO baja su posición. Resto")])
     assert "&amp;" not in m and "JPMORGAN CHASE & CO" in m
 
 
 # ------------------------------------------------------------------------------------------ historia descriptiva
-@pytest.mark.xfail(strict=True, reason="H2: «≈ al año» divide por 10 años aunque el activo tenga menos historia")
 def test_historia_alertas_por_anio_con_historia_corta():
     rng = np.random.default_rng(3)
     ix = pd.bdate_range(end=HOY, periods=5 * 252)
@@ -139,3 +137,12 @@ def test_fuentes_nuevas_rotas_dan_sd(monkeypatch):
     assert {"13dg", "form4", "13f"} <= set(a["errores"])
     html = AL.bloque_alertas(R) + AL.ficha_flujos("UBER", R)
     assert "s/d" in html and "Flujos fuertes" in html
+
+
+def test_h1_pct_de_una_forma_de_tenencia_no_sube_a_fuerte():
+    """Venta del 100 % de un fondo (tenencia indirecta) por 12,8 M$: moderada, no fuerte (Validador 17-nov, H1)."""
+    U = AL.UMBRALES
+    (pa, ia), (pb, ib) = U["f4_venta_pct"]
+    a, b = U["f4_venta"]
+    imp = 12.8e6
+    assert ib <= imp < b and a <= imp   # el caso real cae entre el umbral por % y el de importe fuerte

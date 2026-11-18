@@ -267,3 +267,10 @@ cualquier día.
 - **Recompras.** Si una empresa cambia el concepto XBRL a mitad de año, el trimestre derivado puede faltar. Alphabet
   declara 0 $ de recompra en 2026; el dato es de su 10-Q, no un error del cálculo.
 - **Nada de esto se ha contrastado como predictor en el proyecto.**
+
+## Enmienda v1.1 (18-nov-2026, antes de fusionar; por la validación `docs/validation/2026-11-17_alertas_v1.md`)
+
+- **H1:** el % vendido por un directivo se calcula sobre `owned_after` de *esa forma de tenencia* (directa, fondo, fideicomiso), no sobre su tenencia total. Por eso el % ya **no sube una venta a «fuerte»**: como mucho la deja en «moderada» (regla `f4_venta_pct`); «fuerte» solo por importe (≥ 50 M$). Rótulo: «% de esa forma de tenencia». Umbrales numéricos sin cambios; el cambio no se decidió mirando rendimientos posteriores.
+- **H2:** «≈ alertas al año» divide entre los años reales de historia del activo (antes, siempre entre 10).
+- **H3:** la notificación deshace entidades HTML y no corta la frase en «Inc.», «Corp.», «Co.»…
+- **H4 (documentado, sin cambio):** la alerta se apunta como notificada antes de que `actualizar.sh` la muestre; si la notificación falla, no se repite (sigue en el panel).
