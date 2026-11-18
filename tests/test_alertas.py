@@ -119,7 +119,7 @@ def test_form4_filtros():
     assert set(ev) == {"1", "6", "7", "8"}
     assert ev["1"]["fuerza"] == 2 and "COMPRA" in ev["1"]["frase"] and "10 %" in ev["1"]["frase"]
     assert ev["6"]["fuerza"] == 1 and "SIN plan" in ev["6"]["frase"]
-    assert ev["7"]["fuerza"] == 1 and "50 % de lo que tenía" in ev["7"]["frase"]
+    assert ev["7"]["fuerza"] == 1 and "50 % de esa forma de tenencia" in ev["7"]["frase"]
     assert ev["8"]["fuerza"] == 2
     assert all(e["fecha"] == pd.Timestamp("2026-11-12") for e in ev.values())   # fecha = cuando se hizo público
 

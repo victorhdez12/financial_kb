@@ -277,7 +277,8 @@ def historico_volumen(d: pd.DataFrame, esp: dict, anios: int = 10) -> dict | Non
     desde = d.index[-1] - pd.DateOffset(years=anios)
     m = (d.index >= desde) & (d["nivel"] > 0) & ~d.index.isin(list(esp))
     ev = d[m]
-    out = {"desde": str(d.index[d.index >= desde][0].date()), "n": int(len(ev)), "anios": anios,
+    ini = d.index[d.index >= desde][0]
+    out = {"desde": str(ini.date()), "n": int(len(ev)), "anios": (d.index[-1] - ini).days / 365.25,   # años reales
            "por_anio": {int(y): int(k) for y, k in ev.index.year.value_counts().sort_index().items()},
            "clases": {}, "base": {}}
     base_ix = d.index[d.index >= desde]
@@ -462,6 +463,8 @@ def eventos_form4(t: str, ops: pd.DataFrame | None, splits: list | None, cierre:
         imp, acc = float(g["importe"].sum()), float(g["acciones_aj"].sum())
         resto = g["owned_aj"].dropna()
         pct = acc / (acc + float(resto.iloc[-1])) if cat == "venta" and len(resto) and acc + float(resto.iloc[-1]) > 0 else None
+        # «owned_after» es la tenencia de ESA forma (directa, fondo, fideicomiso…), no la total: el % no sube a «fuerte»
+        # (Validador 17-nov, H1: Andreessen/a16z Fund VIII salía «100 % de lo que tenía»)
         cg = str(g["cargo"].iloc[0])
         quien = esc(f"{g['owner_name'].iloc[0]} ({cg}{'; propietario > 10 %' if g['ten_pct'].any() and 'accionista' not in cg else ''})")
         px = imp / acc if acc else None
@@ -473,10 +476,10 @@ def eventos_form4(t: str, ops: pd.DataFrame | None, splits: list | None, cierre:
         else:
             a, b = U["f4_venta"]
             (pa, ia), (pb, ib) = U["f4_venta_pct"]
-            fz = 2 if imp >= b or (pct is not None and pct >= pb and imp >= ib) else \
-                1 if imp >= a or (pct is not None and pct >= pa and imp >= ia) else 0
+            fz = 2 if imp >= b else \
+                1 if imp >= a or (pct is not None and pct >= pa and imp >= ia) or (pct is not None and pct >= pb and imp >= ib) else 0
             txt = (f"{quien} vende SIN plan 10b5-1 {AV._num_corto(acc)} acciones a {n(px, 2, '')} (≈ {AV._num_corto(imp)} $"
-                   + (f"; {n(100 * pct, 0, ' %')} de lo que tenía" if pct is not None else "") + ")")
+                   + (f"; {n(100 * pct, 0, ' %')} de esa forma de tenencia" if pct is not None else "") + ")")
             dirc = -1
         if fz == 0:
             continue
@@ -938,10 +941,13 @@ def nuevas_para_notificar(eventos: list[dict], estado: dict, hoy: pd.Timestamp, 
 
 
 def mensaje(nuevas: list[dict], max_items: int = 3) -> str:
+    import html as _html
     import re
     partes = []
     for e in nuevas[:max_items]:
-        txt = re.sub(r"<[^>]+>", "", e["frase"]).split(". ")[0]
+        txt = _html.unescape(re.sub(r"<[^>]+>", "", e["frase"]))
+        # primera frase, sin cortar en abreviaturas de sociedades («Inc.», «Corp.», «Co.», «Ltd.»…)
+        txt = re.split(r"(?<!\bInc)(?<!\bCorp)(?<!\bCo)(?<!\bLtd)(?<!\bPlc)(?<!\bLLC)(?<!\bL\.P)(?<!\bN\.V)(?<!\bS\.A)\. ", txt)[0]
         partes.append(f"{e['ticker']}: {txt}")
     m = f"{len(nuevas)} alerta{'s' if len(nuevas) != 1 else ''} fuerte{'s' if len(nuevas) != 1 else ''}: " + " · ".join(partes)
     if len(nuevas) > max_items:
@@ -963,6 +969,8 @@ def notificar(hoy: date | None = None, estado_path: Path | None = None) -> str:
     nuevas = nuevas_para_notificar(R["eventos"], est, h)
     if not nuevas:
         return ""
+    # se apunta ANTES de que actualizar.sh la muestre con osascript: si la notificación falla, esa alerta no se repite
+    # (sigue visible en el panel). Elegido a propósito para no avisar dos veces (Validador 17-nov, H4).
     for e in nuevas:
         est[e["clave"]] = str(h.date())
     est = {k: v for k, v in est.items() if pd.Timestamp(v) > h - pd.Timedelta(days=400)}
