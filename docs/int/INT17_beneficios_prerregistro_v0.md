@@ -52,7 +52,7 @@ depende_de: docs/int/E1_prerregistro_v1.md (listón E1, coeficientes congelados 
 
 **Mitigación (todo fijado antes de cruzar nada):** (M1) una variable principal, una secundaria con Holm-2, un objetivo,
 un horizonte, una transformación; sin búsqueda de ventanas ni retrasos; (M2) potencia con el efecto a la mitad (§7) y
-veredicto escrito antes; (M3) solo métricas fuera de muestra con walk-forward y embargo de 12 meses; (M4) placebos (§9);
+veredicto escrito antes; (M3) solo métricas fuera de muestra con walk-forward y embargo de 24 meses; (M4) placebos (§9);
 (M5) D por episodio y por mitades (1962-79 / 1980-2003) para que no decida un solo episodio; (M6) procedencia y puerta.
 
 ## 3. Datos (todo "as of" en el último día del mes M; NADA ≥ 2005)
@@ -98,9 +98,12 @@ veredicto escrito antes; (M3) solo métricas fuera de muestra con walk-forward y
   la tasa base es el listón ingenuo.)
 - **L (listón):** logit(y ~ `s_E1`). **A (candidato):** logit(y ~ `s_E1` + `prof_yoy`). **A2 (S1):** logit(y ~ `s_E1` +
   `margen_caida8`). Anidados; `src/intl/int4.logit_fit` sin penalizar, rasgos estandarizados con las filas de ajuste.
-- **Walk-forward:** re-estimación cada enero con ventana creciente desde 1955-08 y **embargo de 12 meses** (solo filas
-  cuyo objetivo ya se cerró: M + 12 ≤ origen); predicción de los 12 orígenes de ese año. Primer año de evaluación = el
-  primer enero con ≥ 2 entradas NBER en las filas de ajuste (1962). Mismas filas y calendario para P0, L, A y A2.
+- **Walk-forward:** re-estimación cada enero con ventana creciente desde 1955-08 y **embargo de 24 meses** (12 del
+  horizonte + 12 del retraso con que el NBER anuncia el pico: fila M usable en el enero Y si M + 24 ≤ Y-01); predicción
+  de los 12 orígenes de ese año. Primer año de evaluación = el primer enero con ≥ 2 entradas NBER distintas en las filas
+  de ajuste (sale 1962). Mismas filas y calendario para P0, L, A y A2.
+- *Historia (declarada, sin datos reales):* el borrador commiteado (f995cc4) decía embargo de 12 meses; se subió a 24
+  antes de la primera tirada de la potencia, al escribir el calendario (la etiqueta NBER no se conoce en tiempo real).
 
 ## 6. Métricas y contraste
 - **Principal:** D = media(ℓ_L − ℓ_A) sobre las predicciones apiladas de la evaluación (ℓ = −log verosimilitud, nats
