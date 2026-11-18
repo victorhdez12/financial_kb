@@ -518,7 +518,9 @@ def sec_hoy(s: dict, es: dict | None) -> str:
         f'tipo real {num(dc.get("real_ff"), 2, " pp")}, utilización {num(dc.get("tcu"), 1, " %")}.</p>' if dc else f"<p>{ND}</p>") +
         '</div><div class="card"><h3>Ciclo largo</h3>' + (
         f'<p class="big">{esc(lc.get("stage"))}</p><p class="small">Alertas: {esc((lc.get("flags") or "ninguna").replace("_", " "))}. '
-        f'Deuda/PIB {num(lc.get("debt_gdp"), 1, " %")}, déficit/PIB {num(lc.get("deficit_gdp"), 1, " %")}, '
+        f'Deuda federal/PIB {num(lc.get("debt_gdp"), 1, " %")} <span class="muted" data-tip="Deuda pública federal total '
+        f'(FRED GFDEGDQ188S). «Países» enseña la deuda bruta de todas las administraciones (FMI WEO), por eso es más '
+        f'alta.">(FRED; en «Países», todas las administraciones, FMI)</span>, déficit/PIB {num(lc.get("deficit_gdp"), 1, " %")}, '
         f'intereses/ingresos federales {num(lc.get("fed_interest_receipts_pct"), 1, " %")}, crédito privado/PIB '
         f'{num(lc.get("private_credit_gdp"), 1, " %")}.</p>' if lc else f"<p>{ND}</p>") + "</div></div>")
     # termómetro + nowcast
@@ -965,7 +967,7 @@ b.addEventListener('keydown',function(e){var j=e.key==='ArrowRight'?i+1:e.key===
 j=(j+tabs.length)%tabs.length;e.preventDefault();tabs[j].focus();show(tabs[j].dataset.t,true)})});
 var h=(location.hash||'').slice(1);
 var dp=h&&!secs.some(function(s){return s.id===h})?document.getElementById(h):null;
-if(dp&&dp.closest('main>section')){show(dp.closest('main>section').id,false,true);dp.open=true;setTimeout(function(){dp.scrollIntoView()},0)}
+if(dp&&dp.closest('main>section')){show(dp.closest('main>section').id,false,true);dp.open=true;var irA=function(){dp.scrollIntoView()};setTimeout(irA,0);addEventListener('load',function(){setTimeout(irA,30)})}
 else{var ul=null;try{ul=localStorage.getItem('panel_pestana')}catch(e){}
 show(secs.some(function(s){return s.id===h})?h:(ul&&secs.some(function(s){return s.id===ul})?ul:secs[0].id),false,!h)}
 document.addEventListener('click',function(e){var a=e.target.closest('a[href^="#atlas-"]');if(a){show('atlas');}});
@@ -1051,12 +1053,30 @@ def construir(s: dict, hoy: date | None = None) -> str:
 </body></html>"""
 
 
+def refrescar_pulso(s: dict, hoy: date) -> dict:
+    """El semáforo de países (descriptivo, reglas fijas) se recalcula con el warehouse del día, como «Hoy» y «Mis
+    activos»: así «Países» y «Hoy» enseñan el mismo dato más reciente (prueba de uso 17-nov, M1). Si falla, se queda
+    el del signal semanal."""
+    try:
+        from src.report import pulso_paises as PUL
+        con = db.connect(read_only=True)
+        try:
+            p = PUL.pulso(con, hoy)
+        finally:
+            con.close()
+        if not (p.get("paises") and any("error" not in v for v in p["paises"].values())):
+            return s
+        return {**s, "pulso_paises": {**p, "origen": "warehouse del día (recalculado al generar el panel)"}}
+    except Exception:  # noqa: BLE001
+        return s
+
+
 def generar(signal_path: Path | None = None, out_dir: Path | None = None, hoy: date | None = None) -> Path:
     """Escribe index.html y panel_AAAA-MM-DD.html; devuelve la ruta de index.html."""
     sp = signal_path or ultimo_signal()
     if sp is None:
         raise FileNotFoundError(f"no hay ningún *_signal.json en {REPORTS}")
-    s = json.loads(Path(sp).read_text())
+    s = refrescar_pulso(json.loads(Path(sp).read_text()), hoy or date.today())
     out = Path(out_dir) if out_dir else salida_dir()
     PH.ESTADO_DIR = out  # estado de «Datos nuevos» junto al panel (fuera de git)
     doc = construir(s, hoy)

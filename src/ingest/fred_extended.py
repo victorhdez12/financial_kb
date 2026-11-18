@@ -1,6 +1,6 @@
 """Extended FRED universe -> curated/fred (docs/DATA_CONTRACT.md).
 
-    .venv/bin/python -m src.ingest.fred_extended            # incremental (reuse raw < 20h old)
+    .venv/bin/python -m src.ingest.fred_extended            # incremental (reuse raw < 6h old)
     .venv/bin/python -m src.ingest.fred_extended --refresh  # force re-download
 
 * Legacy series in $FIN_DATA_ROOT/macro/fred/*.csv (+ .metadata.json) are re-normalised,
@@ -298,7 +298,7 @@ def load_legacy(legacy_dir: Path, out: Path) -> dict[str, dict]:
 def fetch_series(fred: Fred, sid: str, raw: Path, refresh: bool, meta: dict | None = None):
     """Return (meta, observations) for sid, using raw cache if fresh."""
     p_obs, p_meta = raw / f"{sid}.observations.json", raw / f"{sid}.series.json"
-    fresh = p_obs.exists() and p_meta.exists() and (time.time() - p_obs.stat().st_mtime) < 20 * 3600
+    fresh = p_obs.exists() and p_meta.exists() and (time.time() - p_obs.stat().st_mtime) < 6 * 3600  # 6 h (antes 20 h): una ejecución por la tarde ya no deja sin el cierre del día a la diaria de la mañana siguiente (prueba de uso 17-nov, M2)
     if fresh and not refresh:
         return json.loads(p_meta.read_text())["seriess"][0], json.loads(p_obs.read_text())["observations"]
     if meta is None:

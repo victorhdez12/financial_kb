@@ -80,7 +80,7 @@ PARA_TI = {
     ],
     "atlas": [
         "Qué tal les fue a la bolsa, los bonos, las letras, la vivienda y el oro en cada situación económica, con más de "
-        "un siglo de datos de 18 países.",
+        "un siglo de datos de los países ricos de la base histórica JST (cuántos y qué años, abajo).",
         "Las tarjetas resaltadas son las que corresponden a la situación de hoy.",
         "Cada cifra dice cuánto fiarte de ella: «establecido», «frágil» o solo «descriptivo».",
         "Sirve para saber qué suele aguantar mejor cuando la economía cambia de fase.",
@@ -177,6 +177,8 @@ abbr.term{text-decoration-color:var(--s1);text-decoration-thickness:1.5px}
 abbr.term:hover,abbr.term:focus{background:var(--hl);border-radius:3px;outline:none}
 /* gráficos ampliables */
 .zwrap{position:relative}
+/* abanicos de «Qué hacer»: las etiquetas p95 van arriba a la derecha → el botón «Ampliar» se pone encima (B3) */
+.qh-cel .zwrap{padding-top:30px}
 [data-zoomable]{cursor:zoom-in}
 svg[data-zoomable]:hover,img[data-zoomable]:hover,.segbar[data-zoomable]:hover{outline:1px dashed var(--axis);outline-offset:3px;border-radius:4px}
 .zbtn{position:absolute;top:2px;right:2px;font:inherit;font-size:12.5px;line-height:1;padding:5px 8px;border-radius:6px;
@@ -210,6 +212,12 @@ border:1px solid var(--axis);background:var(--surface);color:var(--s1);cursor:po
 .arriba{position:fixed;right:16px;bottom:16px;z-index:25;font:inherit;font-size:14px;padding:8px 14px;border-radius:999px;
 border:1px solid var(--axis);background:var(--surface);color:var(--ink);cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.2)}
 .arriba:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+/* saltos a fichas (#act-, #pais-, #atlas-): que la barra fija no tape el título (B1, prueba de uso 17-nov) */
+main [id],main details{scroll-margin-top:calc(var(--navh,110px) + 8px)}
+/* móvil: nada sale por la derecha (M3): insignias y chips se parten; tablas anchas con scroll propio */
+.tw-auto{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+.dblk,.dgrid>*,.grid2>*{min-width:0}
+@media (max-width:700px){.badge,.chip{white-space:normal;max-width:100%;line-height:1.3}main{overflow-wrap:anywhere}}
 /* móvil */
 @media (max-width:600px){body{font-size:15.5px}header,main,footer{padding:0 12px}h1{font-size:20px}
 h2{font-size:19px}h2 .h2d{font-size:13px}.card{padding:12px 12px}.tiles{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
@@ -290,6 +298,13 @@ main.addEventListener('click',function(e){var z=e.target.closest('[data-zoomable
 if(e.target.closest('a,button,select,input,label')&&!e.target.closest('svg'))return;
 if(z.closest('summary')){e.preventDefault()}
 abrir(z)});
+/* tablas: si no van ya dentro de un contenedor con scroll, se envuelven en uno (sin scroll horizontal de página) */
+[].forEach.call(main.querySelectorAll('table'),function(t){var p=t.parentElement;if(!p||p.closest('#zoom'))return;
+if(p.classList.contains('tw')||p.classList.contains('tw-auto')||getComputedStyle(p).overflowX!=='visible')return;
+var w=document.createElement('div');w.className='tw-auto';p.insertBefore(w,t);w.appendChild(t)});
+/* altura de la barra fija → scroll-margin-top de los destinos de enlace */
+var nwb=document.querySelector('.navwrap');function navh(){if(nwb)document.documentElement.style.setProperty('--navh',nwb.offsetHeight+'px')}
+navh();addEventListener('resize',navh);
 /* tablas largas: se pliegan a partir de la fila 15 (si no van ya dentro de un desplegable y no agrupan filas) */
 [].forEach.call(main.querySelectorAll('table'),function(t){if(t.closest('details')||t.querySelector('[rowspan]')||t.hasAttribute('data-no-plegar'))return;
 var b=t.tBodies[0];if(!b)return;var rs=[].slice.call(b.rows);if(rs.length<=40)return;

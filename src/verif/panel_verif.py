@@ -28,6 +28,8 @@ def esc(x) -> str:
 def _n(v, dec=2, signo=False):
     if v is None:
         return '<span class="nd">—</span>'
+    if v == v and round(v, dec) == 0:   # sin «−0,00»
+        v = 0.0
     s = f"{v:+.{dec}f}" if signo else f"{v:.{dec}f}"
     return s.replace(".", ",").replace("-", "−")
 

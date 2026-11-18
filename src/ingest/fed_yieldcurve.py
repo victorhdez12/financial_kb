@@ -59,7 +59,7 @@ def main() -> None:
     cw = CatalogWriter(SOURCE, url=BASE, license=LICENSE)
     rd = raw_dir(SOURCE)
     for fname, (kind, pat) in FILES.items():
-        p = download(BASE + fname, rd / fname, "csv", min_age_hours=20)
+        p = download(BASE + fname, rd / fname, "csv", min_age_hours=6)  # 6 h (antes 20 h): una ejecución por la tarde ya no deja sin el cierre del día a la diaria de la mañana siguiente (prueba de uso 17-nov, M2)
         df = read_gsw(p)
         cols = [c for c in df.columns if pat.match(c)]
         log.info("%s: %d rows %s..%s, %d series", fname, len(df), df.index.min().date(),

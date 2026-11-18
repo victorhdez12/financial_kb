@@ -13,7 +13,8 @@ Precisión (revisión del 12-nov):
   una serie con un mes ausente (EE. UU., cierre del Gobierno de oct-2025) no desplaza la comparación; si falta la
   fecha de referencia, el dato sale «s/d»;
 - el diferencial frente a Alemania se calcula con el MISMO mes en los dos bonos;
-- inflación general: el dato MÁS RECIENTE entre el IPC nacional (OCDE) y el IPCA (BCE, 8 países del euro); se
+- inflación general: el dato MÁS RECIENTE entre el IPC nacional (OCDE), el IPCA (BCE, países del euro) y, en EE. UU.,
+  el IPC del BLS (CPIAUCSL, el mismo de «Hoy»); se
   enseñan los dos con su mes. Media de 12 meses (la del motor) con el índice OCDE; un único mes ausente se interpola
   (como INT-11) y se declara;
 - deuda y saldo públicos: IMF WEO, proyección del año en curso de la última edición (se dice «previsión»).
@@ -34,7 +35,7 @@ from src.report import _percentil as PC
 PAISES = ["USA", "DEU", "FRA", "ITA", "ESP", "GBR", "JPN", "NLD", "BEL", "PRT", "IRL", "FIN", "SWE", "DNK", "NOR",
           "CHE", "CAN", "AUS"]
 EURO = {"DEU", "FRA", "ITA", "ESP", "NLD", "BEL", "PRT", "IRL", "FIN"}
-BCE = {"DEU": "de", "FRA": "fr", "ITA": "it", "ESP": "es", "NLD": "nl", "PRT": "pt", "IRL": "ie"}
+BCE = {"DEU": "de", "FRA": "fr", "ITA": "it", "ESP": "es", "NLD": "nl", "PRT": "pt", "IRL": "ie", "BEL": "be", "FIN": "fi"}
 NOMBRE = {"BEL": "Bélgica", "DEU": "Alemania", "DNK": "Dinamarca", "ESP": "España", "FIN": "Finlandia",
           "FRA": "Francia", "GBR": "Reino Unido", "ITA": "Italia", "JPN": "Japón", "NLD": "Países Bajos",
           "NOR": "Noruega", "PRT": "Portugal", "SWE": "Suecia", "USA": "EE. UU.", "AUS": "Australia", "CHE": "Suiza",
@@ -226,6 +227,8 @@ def _color_cli(v, d3):
 def _fmt(v, dec=1, suf=" %", signo=False):
     if v is None:
         return "s/d"
+    if v == v and round(v, dec) == 0:   # sin «−0,0»
+        v = 0.0
     s = f"{v:+.{dec}f}" if signo else f"{v:.{dec}f}"
     return s.replace(".", ",").replace("-", "−") + suf
 
@@ -271,6 +274,29 @@ def _dinero(con, iso: str, hoy: pd.Timestamp) -> dict:
             "nota": "con retraso" if (hoy - f).days > DIAS_VIEJO else None}
 
 
+MESES_CURVA_COMUN = 3   # tipo a 3 meses y bono a 10 años de meses distintos: se usa el último mes común si es reciente
+
+
+def tipo_3m(con, iso: str, r3: pd.Series, hoy: pd.Timestamp) -> tuple[pd.Series, str | None]:
+    """Tipo a 3 meses de la OCDE; en GBR (la OCDE dejó de publicarlo tras 2026-02) con el MISMO empalme declarado del
+    termómetro (OIS SONIA 3 m del BoE, `termometro_vivo.empalmar`; docs/int/GBR_3m_sustituto.md). Devuelve (serie,
+    texto de la fuente si hay empalme)."""
+    from src.report import termometro_vivo as TV   # import tardío (pesado)
+    if iso not in TV.SUSTITUTOS_3M:
+        return r3, None
+    sid, etiqueta = TV.SUSTITUTOS_3M[iso]
+    serie, info = TV.empalmar(r3, _serie(con, sid, hoy))
+    return (serie, f"OCDE hasta {r3.index.max():%Y-%m}; después {etiqueta}") if info else (r3, None)
+
+
+def ipc_bls_usa(con, hoy: pd.Timestamp):
+    """IPC general a/a de EE. UU. (CPIAUCSL, BLS vía FRED) con el MISMO cálculo que la ficha de «Hoy»
+    (`panel_hoy.yoy`: por calendario; un mes suelto ausente, oct-2025, solo se interpola como base)."""
+    from src.report.panel_hoy import yoy   # import tardío: panel_hoy importa este módulo
+    y = yoy(_serie(con, "CPIAUCSL", hoy))
+    return _ult(y)
+
+
 # ---------------------------------------------------------------- un país
 def pais(con, iso: str, hoy: pd.Timestamp, bund: pd.Series) -> dict:
     c = iso.lower()
@@ -295,6 +321,10 @@ def pais(con, iso: str, hoy: pd.Timestamp, bund: pd.Series) -> dict:
         gen, f_gen, fuente_gen = hicp_v, f_hicp, "IPCA (BCE)"
     else:
         gen, f_gen, fuente_gen = ipc_v, f_ipc, "IPC (OCDE)"
+    if iso == "USA":   # mismo dato que «Hoy» (BLS vía FRED) si es más reciente que el de la OCDE (prueba de uso 17-nov, M1)
+        bls_v, f_bls = ipc_bls_usa(con, hoy)
+        if bls_v is not None and (f_gen is None or f_bls > f_gen):
+            gen, f_gen, fuente_gen = bls_v, f_bls, "IPC (BLS)"
     m12, huecos12 = _media12(idx)
 
     paro = _serie(con, f"oecd_unemp_{c}", hoy)
@@ -309,8 +339,17 @@ def pais(con, iso: str, hoy: pd.Timestamp, bund: pd.Series) -> dict:
     d3_r10 = _dif(r10, 3)
     bund_mismo = _en(bund, f_r10) if f_r10 is not None else None
     dif = (r10_v - bund_mismo) if (iso in EURO - {"DEU"} and r10_v is not None and bund_mismo is not None) else None
+    r3, r3_fuente = tipo_3m(con, iso, r3, hoy)
     r3_mismo = _en(r3, f_r10) if f_r10 is not None else None
     curva = (r10_v - r3_mismo) if (r10_v is not None and r3_mismo is not None) else None
+    f_r3 = f_r10 if r3_mismo is not None else None
+    if r3_mismo is None and f_r10 is not None:   # JPN: el 3 m de la OCDE va un mes por detrás del 10 años → último mes común
+        comun = r3.index.intersection(r10.index)
+        comun = comun[(comun <= f_r10) & (comun >= f_r10 - pd.DateOffset(months=MESES_CURVA_COMUN))]
+        if len(comun):
+            f_r3 = comun.max()
+            r3_mismo = float(r3[f_r3])
+            curva = float(r10[f_r3]) - r3_mismo
     # r − g aproximado: tipo a 10 años − (PIB real a/a + IPC a/a del último trimestre con PIB)
     ipc_trim = _en(ipc, f_pib + pd.DateOffset(months=2)) if f_pib is not None else None
     nominal = (a + ipc_trim) if (a is not None and ipc_trim is not None) else None
@@ -403,7 +442,8 @@ def pais(con, iso: str, hoy: pd.Timestamp, bund: pd.Series) -> dict:
                       "pct_ipc": pct_ipc[0], "pct_ipc_desde": pct_ipc[1]},
         "empleo": {"paro": paro_v, "mes": _mes(f_paro), "delta_12m": d_paro, "delta_meses": paro_ref, "pct_paro": pct_paro[0],
                    "pct_paro_desde": pct_paro[1]},
-        "tipos": {"corto_3m": r3_mismo, "largo_10a": r10_v, "mes": _mes(f_r10), "delta_3m_10a": d3_r10,
+        "tipos": {"corto_3m": r3_mismo, "mes_corto": _mes(f_r3), "fuente_corto": r3_fuente,
+                  "largo_10a": r10_v, "mes": _mes(f_r10), "delta_3m_10a": d3_r10,
                   "dif_alemania": dif, "curva_10a_3m": curva, "r_menos_g": r_g, "pct_10a": pct_10[0],
                   "pct_10a_desde": pct_10[1]},
         "fiscal": {"deuda_pib": deuda, "saldo_pib": saldo, "saldo_primario_pib": prim, "intereses_pib": intereses,

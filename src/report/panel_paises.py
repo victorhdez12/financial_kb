@@ -12,6 +12,8 @@ src/report/pulso_paises.py (descriptivo, reglas fijas no validadas).
 """
 from __future__ import annotations
 
+import re
+
 import html
 import json
 from pathlib import Path
@@ -77,6 +79,8 @@ def n(v, dec=1, suf=" %", signo=False) -> str:
         v = float(v)
     except (TypeError, ValueError):
         return esc(v)
+    if v == v and round(v, dec) == 0:   # sin «−0,0» (prueba de uso 17-nov, B8)
+        v = 0.0
     s = f"{v:+,.{dec}f}" if signo else f"{v:,.{dec}f}"
     return s.replace(",", "X").replace(".", ",").replace("X", ".").replace("-", "−") + suf
 
@@ -175,13 +179,40 @@ def sec_paises(s: dict, es: dict | None) -> str:
 que la resume (reglas fijas). <strong>Pulsa un país</strong> para ver la explicación en frases, qué se espera (FMI), sus
 probabilidades y escenarios, el dinero y todas las cifras con su fecha.</p>
 <p class="small">Leyenda: {leyenda}. Pasa el ratón por una cifra o por el título de una columna para ver qué es y de
-qué mes es el dato.</p></div>
+qué mes es el dato.{f' Semáforo calculado con los datos del {esc(pul["fecha"])}.' if pul.get("fecha") else ""}</p></div>
 <div class="card ptabla"><div class="phead"><span>País</span><span class="cells">{cab}<span data-tip="nowcast descriptivo o fechado trimestral">Recesión</span></span></div>
 {"".join(filas)}</div>
 <details class="card"><summary><h3>¿Cómo se decide cada color?</h3></summary>
 <p class="small">{esc(pul.get("aviso"))}</p><ul class="small">{"".join(f"<li><strong>{esc(CAB[k][0])}:</strong> {esc(pul['reglas'].get(k, ''))}</li>" for k in CAB)}
 <li><strong>Recesión:</strong> rojo si el fechado trimestral marca recesión; si no, la banda del {term("nowcast")}
 (bajo / medio / alto) frente a 1960-2004.</li></ul></details>'''
+
+
+EURO_PANEL = {"DEU", "FRA", "ITA", "ESP", "NLD", "BEL", "PRT", "IRL", "FIN"}
+# huecos de la fuente (no de la ingesta), comprobados el 17-nov-2026 con el warehouse: (país, inicio de la etiqueta) → texto
+NO_PUBLICA = {
+    **{(c, "CLI"): "la OCDE no publica el CLI de este país" for c in ("NLD", "BEL", "PRT", "IRL", "FIN", "SWE", "DNK", "NOR", "CHE")},
+    ("CHE", "Tasa de paro"): "la OCDE no publica el paro armonizado mensual de Suiza",
+    ("CHE", "Cambio en"): "la OCDE no publica el paro armonizado mensual de Suiza",
+    ("CHE", "percentil del paro"): "la OCDE no publica el paro armonizado mensual de Suiza",
+    ("AUS", "Producción industrial"): "Australia no publica producción industrial mensual",
+    ("AUS", "percentil del IPC"): "IPC mensual de Australia solo desde 2024: historia corta",
+    ("NOR", "Confianza del consumidor"): "la OCDE no publica la confianza del consumidor de Noruega",
+    ("GBR", "dinero amplio"): "el FMI no publica el dinero amplio del Reino Unido",
+    ("CHE", "dinero amplio"): "el FMI no publica el dinero amplio de Suiza en esta serie",
+}
+
+
+def _sin_dato(c: str, fila: tuple) -> tuple:
+    """Si la cifra es «s/d» y la fuente no la publica para el país, lo dice en la columna de la fecha."""
+    a, b, f = fila
+    if "s/d" not in str(b) or (f and str(f).strip() not in ("—", "-", "None")):
+        return fila
+    txt = re.sub(r"<[^>]+>", "", str(a))
+    for (pais, ini), motivo in NO_PUBLICA.items():
+        if pais == c and (txt.startswith(ini) or ini.lower() in txt.lower()):
+            return a, b, motivo
+    return fila
 
 
 def _tabla(filas) -> str:
@@ -194,6 +225,10 @@ def _detalle(c: str, r: dict, m: dict, reg_t: str, s: dict, es: dict | None = No
     cr, inf, em, ti, fi, bo, vi, co, di = (r.get(k) or {} for k in ("crecimiento", "inflacion", "empleo", "tipos",
                                                                     "fiscal", "bolsa", "vivienda", "confianza", "dinero"))
     fi_año = f"{fi.get('año')}{' (previsión FMI)' if fi.get('proyeccion') else ''}"
+    # filas que nunca tendrán dato se ocultan (IPCA fuera del euro, diferencial de Alemania consigo misma o fuera del
+    # euro); los huecos porque la fuente no lo publica se rotulan (prueba de uso 17-nov, B2)
+    euro = bool(r.get("euro")) or c in EURO_PANEL
+    mes3 = ti.get("mes_corto") or ti.get("mes")
     pct = lambda v, d: (n(v, 0, "") + (f" (desde {d})" if d else "")) if v is not None else n(None)  # noqa: E731
     bloques = [
         ("Crecimiento", [("PIB real " + term("a/a"), n(cr.get("pib_aa"), signo=True), cr.get("trimestre")),
@@ -202,21 +237,24 @@ def _detalle(c: str, r: dict, m: dict, reg_t: str, s: dict, es: dict | None = No
                          ("Producción industrial a/a", n(cr.get("ip_aa"), signo=True), cr.get("ip_mes"))]),
         ("Inflación", [("Inflación general (" + esc(inf.get("general_fuente")) + ")", n(inf.get("general")), inf.get("general_mes")),
                        ("IPC nacional a/a (OCDE)", n(inf.get("ipc_aa")), inf.get("mes")),
-                       ("IPCA a/a (BCE)", n(inf.get("hicp_aa")), inf.get("mes_hicp")),
+                       ("IPCA a/a (BCE)", n(inf.get("hicp_aa")), inf.get("mes_hicp")) if euro else None,
                        ("IPC media 12 meses (la del motor)" + (" · 1 mes interpolado" if inf.get("huecos_media_12m") else ""),
                         n(inf.get("ipc_media_12m")), inf.get("mes_media_12m", "")),  # su mes es el del índice, no el del a/a
                        ("Subyacente a/a (OCDE)", n(inf.get("subyacente_aa")), inf.get("mes_sub")),
-                       ("Subyacente IPCA a/a (BCE)", n(inf.get("hicp_sub_aa")), inf.get("mes_hicp_sub")),
+                       ("Subyacente IPCA a/a (BCE)", n(inf.get("hicp_sub_aa")), inf.get("mes_hicp_sub")) if euro else None,
                        (term("percentil") + " del IPC en su historia", pct(inf.get("pct_ipc"), inf.get("pct_ipc_desde")), "")]),
         ("Empleo", [("Tasa de paro", n(em.get("paro")), em.get("mes")),
                     (f"Cambio en {em.get('delta_meses', 12)} meses" + (" (el mes de hace 12 no se publicó)" if em.get("delta_meses") == 13 else ""),
                      n(em.get("delta_12m"), 1, " pp", True), ""),
                     (term("percentil") + " del paro en su historia", pct(em.get("pct_paro"), em.get("pct_paro_desde")), "")]),
-        ("Tipos y bonos", [("Tipo a 3 meses (mismo mes)", n(ti.get("corto_3m"), 2), ti.get("mes")),
+        ("Tipos y bonos", [("Tipo a 3 meses" + (" (mismo mes)" if mes3 == ti.get("mes") else "")
+                            + (f' <span class="muted">({esc(ti["fuente_corto"])})</span>' if ti.get("fuente_corto") else ""),
+                            n(ti.get("corto_3m"), 2), mes3),
                            ("Bono a 10 años", n(ti.get("largo_10a"), 2), ti.get("mes")),
                            ("Cambio del 10 años en 3 meses", n(ti.get("delta_3m_10a"), 2, " pp", True), ""),
-                           (term("diferencial") + " con Alemania (mismo mes)", n(ti.get("dif_alemania"), 2, " pp", True), ti.get("mes")),
-                           (term("curva") + " 10a − 3m", n(ti.get("curva_10a_3m"), 2, " pp", True), ti.get("mes")),
+                           (term("diferencial") + " con Alemania (mismo mes)", n(ti.get("dif_alemania"), 2, " pp", True), ti.get("mes"))
+                           if euro and c != "DEU" else None,
+                           (term("curva") + " 10a − 3m", n(ti.get("curva_10a_3m"), 2, " pp", True), mes3),
                            (term("r − g") + " (aprox.)", n(ti.get("r_menos_g"), 1, " pp", True), ""),
                            (term("percentil") + " del 10 años en su historia", pct(ti.get("pct_10a"), ti.get("pct_10a_desde")), "")]),
         ("Cuentas públicas", [("Deuda pública bruta / PIB", n(fi.get("deuda_pib"), 0), fi_año),
@@ -236,7 +274,7 @@ def _detalle(c: str, r: dict, m: dict, reg_t: str, s: dict, es: dict | None = No
                        ("Confianza empresarial (OCDE)", n(co.get("empresas"), 1, ""), ""),
                        ("Confianza del consumidor (OCDE)", n(co.get("consumidores"), 1, ""), "")]),
     ]
-    html_bl = "".join(f'<div class="dblk"><h4>{t}</h4>{_tabla([f for f in fs if f])}</div>' for t, fs in bloques)
+    html_bl = "".join(f'<div class="dblk"><h4>{t}</h4>{_tabla([_sin_dato(c, f) for f in fs if f])}</div>' for t, fs in bloques)
     nota_din = (f'<p class="small">Dinero: {esc(di.get("nota"))}. ' if di.get("nota") else '<p class="small">') + \
         "El dinero es descriptivo: en nuestras pruebas (INT-6, 1870-2004) su crecimiento no anticipó la inflación ni la bolsa.</p>"
 
@@ -334,7 +372,7 @@ INTRO = {
     "escenarios": ("Qué rango de rentabilidad real a 12 meses es razonable para cada activo y país.",
                    "Elige el país. Cada barra es un abanico del 90 % (p5-p95) y el punto la mediana. Debajo, la "
                    "probabilidad de una caída fuerte de la bolsa y de inflación alta, con su acierto medido."),
-    "atlas": ("Qué activos fueron mejor o peor en cada situación económica (1870-2004, 18 países).",
+    "atlas": ("Qué activos fueron mejor o peor en cada situación económica (1870-2004, 14 países ricos de la base JST).",
               "Las tarjetas resaltadas son las de la situación actual. Cada cifra dice si está establecida o es solo "
               "descriptiva."),
     "cartera": ("Qué haría tu cartera de seguimiento (B0, B1, B1′) este mes.",

@@ -54,8 +54,11 @@ def esc(x) -> str:
 def fnum(v, dec: int = 1, signo: bool = False) -> str:
     if v is None or (isinstance(v, float) and not math.isfinite(v)):
         return "—"
+    if round(v, dec) == 0:   # sin «−0,00» (prueba de uso 17-nov, B8)
+        v = 0.0
     t = f"{v:+,.{dec}f}" if signo else f"{v:,.{dec}f}"
-    return t.replace(",", " ").replace(".", ",").replace("-", "−")
+    # separador de miles «.» como en el resto del panel (antes espacio fino aquí y «5.844» en EE. UU. y recesión)
+    return t.replace(",", "X").replace(".", ",").replace("X", ".").replace("-", "−")
 
 
 # ----------------------------------------------------------------------------------------------- cálculo puro
@@ -296,6 +299,52 @@ INDICADORES = [
 ]
 
 
+# fichas de mercado (series diarias de FRED): FRED publica el cierre del día D al día siguiente (≈ 14-16 h en España), y la
+# ingesta diaria corre a las 7:25, así que van 1-2 días hábiles por detrás de «Mis activos» (Yahoo). Prueba de uso 17-nov, M2.
+DIARIAS = ("vix", "hy", "ig", "c10_3m", "c10_2a", "t5yie", "dolar", "wti", "sp500")
+
+
+def ultimo_habil(hoy: date) -> date:
+    """Último día laborable (lun-vie) anterior a `hoy` (sin calendario de festivos de EE. UU.)."""
+    d = hoy - timedelta(days=1)
+    while d.weekday() >= 5:
+        d -= timedelta(days=1)
+    return d
+
+
+def caida_spy_yahoo(hoy: date) -> tuple[float, str] | None:
+    """Caída del SPY (Yahoo, ajustado por dividendos) desde su máximo de 12 meses con el último cierre ≤ hoy, el mismo
+    dato que la ficha de SPY de «Mis activos». None si no hay precios locales."""
+    try:
+        px = pd.read_parquet(db.DATA_ROOT / "mercados" / "precios_diarios.parquet")
+        x = px["SPY"].dropna()
+        x.index = pd.to_datetime(x.index)
+        x = x[x.index <= pd.Timestamp(hoy)]
+        c = caida_desde_max(x)
+        return (float(c.iloc[-1]), c.index[-1].date().isoformat()) if len(c) else None
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def nota_mercados(fichas: list[dict], hoy: date, spy: tuple[float, str] | None = None) -> str:
+    """Aviso si las fichas de mercado no llegan al último día hábil (con el dato de SPY de «Mis activos» si es más reciente)."""
+    fs = [f["fecha"] for f in fichas if f["clave"] in DIARIAS and f.get("fecha")]
+    if not fs:
+        return ""
+    ult, hab = max(fs), ultimo_habil(hoy).isoformat()
+    if ult >= hab:
+        return ""
+    extra = ""
+    if spy and spy[1] > ult:
+        extra = (f" Con el cierre del {spy[1]} (SPY en Yahoo, el de «Mis activos»), la caída del S&amp;P 500 desde su "
+                 f"máximo de 12 meses es <strong>{esc(fnum(spy[0], 1))} %</strong>.")
+    return (f'<p class="note aviso-mercados"><span class="chip c-ambar"><span aria-hidden="true">▲</span>mercados al '
+            f'{esc(ult)}</span> Las fichas de mercado (VIX, crédito, curvas, dólar, petróleo, S&amp;P 500) llegan hasta el '
+            f'<strong>{esc(ult)}</strong>; el último día hábil fue el {esc(hab)}. FRED publica cada cierre al día siguiente '
+            f'por la tarde (hora de España) y la ingesta diaria corre a primera hora, así que van 1-2 días hábiles por '
+            f'detrás de «Mis activos» (Yahoo).{extra}</p>')
+
+
 def serie_indicador(clave: str, raw: dict[str, pd.Series], liq: pd.Series | None = None) -> pd.Series:
     """Serie que muestra cada indicador (transformada) a partir de las series en bruto."""
     g = lambda s: raw.get(s, pd.Series(dtype=float))  # noqa: E731
@@ -353,6 +402,8 @@ def ficha(clave: str, x: pd.Series) -> dict:
     if len(x) >= 2:
         d["anterior"] = float(x.iloc[-2])
         d["cambio"] = d["valor"] - d["anterior"]
+    if clave in ("paro", "ea_paro"):   # la regla mira 12 meses: la ficha lo enseña (prueba de uso 17-nov, B9)
+        d["cambio12"] = delta(x, pd.DateOffset(months=12))
     return d
 
 
@@ -368,8 +419,10 @@ def novedades_estado(ultimas: pd.DataFrame, estado: dict, hoy: date, publicado: 
     """
     excluir = excluir or set()
     prev = (estado or {}).get("series") or {}
+    # los eventos guardados de días anteriores también se excluyen si la serie ya sale por vintages ALFRED (si no,
+    # PPIACO salía dos veces: «vintage ALFRED» y «fecha de actualización de FRED»; prueba de uso 17-nov, B7)
     eventos = [e for e in (estado or {}).get("eventos") or []
-               if (hoy - date.fromisoformat(e["detectado"])).days <= DIAS_NUEVO]
+               if (hoy - date.fromisoformat(e["detectado"])).days <= DIAS_NUEVO and e.get("series_id") not in excluir]
     nuevo = {}
     sembrar = not prev
     for r in ultimas.itertuples(index=False):
@@ -565,7 +618,8 @@ def avisos_reporte(s: dict) -> list[tuple[str, str]]:
     tv = ((s or {}).get("termometro") or {}).get("paises") or {}
     rec = [c for c, p in tv.items() if (p.get("estado") or {}).get("en_recesion")]
     if rec:
-        out.append(("ambar", "Termómetro: en recesión según el fechado trimestral: " + ", ".join(
+        # rojo, como la columna «Recesión» de «Países» (panel_paises._banda_recesion; prueba de uso 17-nov, B4)
+        out.append(("rojo", "Termómetro: en recesión según el fechado trimestral: " + ", ".join(
             PUL.NOMBRE.get(c, c) for c in rec) + "."))
     ag = (((s or {}).get("nowcast") or {}).get("agregado") or {})
     if ag.get("paises_alto"):
@@ -619,7 +673,9 @@ def tile(f: dict, spark: str) -> str:
     return (f'<div class="tile t-{f["color"]}" tabindex="0" data-tip="{esc(tip)}"><span class="tl">{esc(f["etiqueta"])}</span>'
             f'<span>{chip(f["color"], NCOL[f["color"]] + " · " + f["estado"])}{fija}</span>'
             f'<strong class="v">{esc(_fmt_val(f))}</strong>'
-            f'<span class="small">dato del {esc(f["fecha"])} · Δ {esc(cambio)} vs anterior · {esc(pce)}</span>'
+            f'<span class="small">dato del {esc(f["fecha"])} · Δ {esc(cambio)} vs anterior'
+            + (f' · <strong>Δ 12 meses {esc(fnum(f["cambio12"], f["dec"], True))} pp</strong> (la de la regla)'
+               if f.get("cambio12") is not None else "") + f' · {esc(pce)}</span>'
             f'{spark}</div>')
 
 
@@ -689,7 +745,8 @@ def sec_hoy_diario(s: dict, hoy: date | None = None, estado_dir: Path | None = N
                '<p class="note">Valor y fecha del último dato, cambio frente al dato anterior, percentil del valor en '
                'toda su historia (p90 = más alto que el 90 % de su historia) y la línea de los últimos 24 meses. '
                'Pasa el ratón o el foco por una ficha para ver la regla del color y su origen. Las series se '
-               'actualizan a diario (ingesta diaria) cuando la fuente publica.</p>' + "".join(bloques) + "</div>")
+               'actualizan a diario (ingesta diaria) cuando la fuente publica.</p>'
+               + nota_mercados(fichas, hoy, caida_spy_yahoo(hoy)) + "".join(bloques) + "</div>")
     out.append(f'<div class="card"><h3>Datos nuevos publicados (últimos {DIAS_NUEVO} días)</h3>'
                '<p class="note">Series mensuales, semanales o trimestrales cuyo último dato cambió. Primero las '
                'series clave (★), luego el resto por fecha. «Revisado» compara el dato anterior con su valor en la '

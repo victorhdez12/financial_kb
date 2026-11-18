@@ -16,7 +16,7 @@ Scripts (idempotentes, `.venv/bin/python -m src.ingest.<fuente>`): `src/ingest/c
 
 ## 1. CFTC Commitments of Traders (`cftc_cot`)
 
-Descarga: zips históricos de `cftc.gov/files/dea/history/` (`deacot1986_2016` + anuales 2017-2026 para Legacy; `fin_fut_txt_2006_2016` + `fut_fin_txt_AAAA` para TFF; `fut_disagg_txt_hist_2006_2016` + `fut_disagg_txt_AAAA` para Disaggregated). Solo futuros (no "futuros y opciones"), columnas "All". El zip del año en curso se vuelve a bajar si tiene más de 20 h. Los contratos se identifican por **código CFTC**, no por nombre (el nombre y el mercado cambian dentro de un mismo código: IMM -> CME, "Long-term UST bonds" -> "Ultra", etc.; no es un empalme).
+Descarga: zips históricos de `cftc.gov/files/dea/history/` (`deacot1986_2016` + anuales 2017-2026 para Legacy; `fin_fut_txt_2006_2016` + `fut_fin_txt_AAAA` para TFF; `fut_disagg_txt_hist_2006_2016` + `fut_disagg_txt_AAAA` para Disaggregated). Solo futuros (no "futuros y opciones"), columnas "All". El zip del año en curso se vuelve a bajar si tiene más de 4 h (20 h hasta el 17-nov-2026: con la publicación retrasada a un lunes por festivo, la copia de la tarde se reutilizaba a la mañana siguiente). Los contratos se identifican por **código CFTC**, no por nombre (el nombre y el mercado cambian dentro de un mismo código: IMM -> CME, "Long-term UST bonds" -> "Ultra", etc.; no es un empalme).
 
 **Retardo (importante para point-in-time):** `date` es la fecha "as of" del martes. El informe se publica el **viernes a las 15:30 ET**, es decir, **+3 días** (+4 si hay festivo el lunes). Una serie CFTC no era conocida antes de `date + 3`. Está anotado en `transform_notes` de cada serie.
 

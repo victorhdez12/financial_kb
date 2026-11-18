@@ -116,7 +116,8 @@ for item, lab, nm in [("000000", "headline", "overall index"), ("XEF000", "core"
                       ("NRGY00", "energy", "energy"), ("FOOD00", "food", "food incl. alcohol and tobacco"),
                       ("FOODUN", "food_unprocessed", "unprocessed food"), ("XE0000", "ex_energy", "excluding energy")]:
     add(f"ecb_hicp_{lab}_yoy_ea_m", "HICP", f"M.U2.N.{item}.4D0.ANR", f"HICP {nm}, annual rate, euro area", "inflation", "M", "% y/y", "EA", False, HICP_NOTE)
-for c in ["ES", "DE", "FR", "IT", "NL", "PT", "GR", "IE"]:
+# BE y FI añadidos el 17-nov-2026 (panel «Países»: eran los dos países del euro del panel sin IPCA; el BCE sí los publica)
+for c in ["ES", "DE", "FR", "IT", "NL", "PT", "GR", "IE", "BE", "FI"]:
     add(f"ecb_hicp_headline_yoy_{c.lower()}_m", "HICP", f"M.{c}.N.000000.4D0.ANR", f"HICP overall index, annual rate, {c}", "inflation", "M", "% y/y", c, False, HICP_NOTE)
     add(f"ecb_hicp_core_yoy_{c.lower()}_m", "HICP", f"M.{c}.N.XEF000.4D0.ANR", f"HICP excl. energy, food, alcohol & tobacco, annual rate, {c}", "inflation", "M", "% y/y", c, False, HICP_NOTE)
 

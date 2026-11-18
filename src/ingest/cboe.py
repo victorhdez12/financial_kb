@@ -124,7 +124,7 @@ def run() -> pd.DataFrame:
                        license=LICENSE)
     for key, (sid, name, cat, note) in INDICES.items():
         try:
-            p = download(BASE.format(key), raw / f"{key}_History.csv", "csv", min_age_hours=20)
+            p = download(BASE.format(key), raw / f"{key}_History.csv", "csv", min_age_hours=6)  # 6 h (antes 20 h): una ejecución por la tarde ya no deja sin el cierre del día a la diaria de la mañana siguiente (prueba de uso 17-nov, M2)
         except Exception as e:  # noqa: BLE001
             log.warning("%s unavailable: %s", key, e)
             continue

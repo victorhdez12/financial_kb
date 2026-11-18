@@ -99,7 +99,9 @@ def sec_activos(s: dict, pul: dict | None) -> str:
                 + "".join(f"<td>{chip(_c(r.get(k)), n(r.get(k), 1, ' %', True).replace('<span class=\"nd\">s/d</span>', 's/d'))}</td>"
                           for k in ("r_1m", "r_ytd", "r_12m"))
                 + f"<td>{n(r.get('vol_1a'), 0)}</td><td>{n(r.get('caida_max52'), 0, ' %', True)}</td>"
-                f"<td>{n(r.get('beta_3a'), 2, '')}</td>"
+                + (f"<td class='muted' data-tip='SPY es la referencia del S&amp;P 500: su beta es 1 por definición'>1 (ref.)</td>"
+                   if t == "SPY" else f"<td>{n(r.get('beta_3a'), 2, '')}</td>")
+                + ""
                 + (f"<td colspan='2' class='nd'>{esc(r['historia_insuficiente'])}</td></tr>" if r.get("historia_insuficiente")
                    else f"<td>{_rango(r.get('sim_historia'))}</td><td>{_rango(r.get('sim_motor'))}</td></tr>"))
         filas_g.append(f"<tr class='grp'><th colspan='10'>{esc(gr)}</th></tr>" + "".join(filas))
@@ -191,7 +193,7 @@ def _ficha(t: str, r: dict, hoy_q: str | None = None, v2: dict | None = None) ->
 <tr><td>3 años (anualizado)</td><td><strong>{n(r.get("r_3a_anual"), 1, " %", True)}</strong></td></tr>
 <tr><td>Volatilidad 1 año</td><td><strong>{n(r.get("vol_1a"), 0)}</strong></td></tr>
 <tr><td>Caída desde máximo 52 semanas</td><td><strong>{n(r.get("caida_max52"), 1, " %", True)}</strong></td></tr>
-<tr><td>Beta / correlación con S&amp;P 500 (3 años)</td><td><strong>{n(r.get("beta_3a"), 2, "")} / {n(r.get("corr_3a"), 2, "")}</strong></td></tr>
+{"" if t == "SPY" else f'<tr><td>Beta / correlación con S&amp;P 500 (3 años)</td><td><strong>{n(r.get("beta_3a"), 2, "")} / {n(r.get("corr_3a"), 2, "")}</strong></td></tr>'}
 </tbody></table></div>
 <div class="dblk"><h4>En cada situación de EE. UU. ({term("cuadrante")})</h4><table class="num"><thead><tr><th></th><th>Rent. anualizada</th>
 <th>% meses +</th><th>Meses</th></tr></thead><tbody>{cuad}</tbody></table>

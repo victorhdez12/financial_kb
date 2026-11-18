@@ -4,7 +4,7 @@
 
 Three report families, futures-only, "All" (old+other crop years) columns, from the public
 historical-compressed zips on cftc.gov (full history + yearly files; current year re-downloaded
-when older than 20 h):
+when older than CURRENT_YEAR_MAX_AGE_H = 4 h):
 * Legacy (deacot*, 1986+):      non-commercial / commercial net positions + open interest
 * TFF (fut_fin_txt, 2006+):     dealer, asset manager, leveraged-funds net positions (financials)
 * Disaggregated (fut_disagg_txt, 2006+): managed money, producer/merchant net (commodities)
@@ -73,13 +73,24 @@ def norm(c: str) -> str:
     return re.sub(r"[^a-z0-9]", "", c.lower())
 
 
+# Current-year file: re-download if older than 4 h. It was 20 h until 2026-11-17: the release of the
+# 2026-11-10 report was delayed by Veterans Day to Monday 16-nov 20:34 UTC; a copy fetched at 18:15 UTC that
+# day was reused by the 17-nov morning run (13 h old) and the warehouse stayed on 2026-11-03 for a week.
+CURRENT_YEAR_MAX_AGE_H = 4
+
+
+def max_age_hours(name: str, this_year: int = THIS_YEAR) -> float:
+    """Cache age for a CFTC zip: past years are frozen (1 year), the current year is short-lived."""
+    return 24 * 365 if not name.endswith(str(this_year)) else CURRENT_YEAR_MAX_AGE_H
+
+
 def load_family(fam: str) -> pd.DataFrame:
     hist, yearly = FILES[fam]
     names = hist + [yearly.format(y) for y in range(FIRST_YEAR_YEARLY, THIS_YEAR + 1)]
     frames = []
     rd = raw_dir(SOURCE)
     for n in names:
-        age = 24 * 365 if not n.endswith(str(THIS_YEAR)) else 20
+        age = max_age_hours(n)
         try:
             z = download(HIST.format(n), rd / f"{n}.zip", "zip", min_age_hours=age)
         except Exception as e:  # noqa: BLE001
