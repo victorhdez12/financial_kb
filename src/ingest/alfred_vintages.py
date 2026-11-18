@@ -2,6 +2,7 @@
 
     .venv/bin/python -m src.ingest.alfred_vintages            # download/refresh all
     .venv/bin/python -m src.ingest.alfred_vintages --refresh
+    .venv/bin/python -m src.ingest.alfred_vintages --only CPATAX   # one series, catalog merged
 
 Uses fred/series/observations with realtime_start=1776-07-04, realtime_end=9999-12-31
 (output_type=1, "observations by real-time period"): each row is a (date, value) pair valid
@@ -32,11 +33,14 @@ from src.ingest.fred_extended import LICENSE, Fred, data_root
 SOURCE = "alfred"
 SERIES = ["GDPC1", "PAYEMS", "CPIAUCSL", "INDPRO", "UNRATE", "PCEPILFE", "CPILFESL",
           # added 2026-10 (inputs of src/regime/features.py with revisions)
-          "ICSA", "TCU", "M2SL", "PPIACO", "GDP", "PCEPI", "CFNAI"]
+          "ICSA", "TCU", "M2SL", "PPIACO", "GDP", "PCEPI", "CFNAI",
+          # added 2026-11-18 (INT-17 power test: aggregate NIPA profits -> recession; description only)
+          "CPATAX"]
 CATEGORY = {"GDPC1": "growth", "INDPRO": "growth", "PAYEMS": "employment",
             "UNRATE": "employment", "CPIAUCSL": "inflation", "PCEPILFE": "inflation",
             "CPILFESL": "inflation", "ICSA": "employment", "TCU": "growth", "M2SL": "money",
-            "PPIACO": "inflation", "GDP": "growth", "PCEPI": "inflation", "CFNAI": "growth"}
+            "PPIACO": "inflation", "GDP": "growth", "PCEPI": "inflation", "CFNAI": "growth",
+            "CPATAX": "profits"}
 SCHEMA = pa.schema([("date", pa.date32()), ("value", pa.float64()),
                     ("realtime_start", pa.date32()), ("realtime_end", pa.date32()),
                     ("series_id", pa.string()), ("source", pa.string())])
@@ -85,14 +89,15 @@ def normalise(obs: list[dict], sid: str) -> pd.DataFrame:
     return out.sort_values(["date", "realtime_start"]).reset_index(drop=True)
 
 
-def run(refresh: bool = False) -> pd.DataFrame:
+def run(refresh: bool = False, only: list[str] | None = None) -> pd.DataFrame:
+    """Download all SERIES (or only `only`, merging their rows into the existing catalog)."""
     raw = data_root() / "raw" / SOURCE
     out = curated_dir()
     raw.mkdir(parents=True, exist_ok=True)
     out.mkdir(parents=True, exist_ok=True)
     fred = Fred()
     rows = []
-    for sid in SERIES:
+    for sid in (only or SERIES):
         meta, obs = download(fred, sid, raw, refresh)
         df = normalise(obs, sid)
         tbl = pa.Table.from_pandas(df, schema=SCHEMA, preserve_index=False)
@@ -113,6 +118,10 @@ def run(refresh: bool = False) -> pd.DataFrame:
         log.info("%s: %d rows, %d vintages, %s..%s", sid, len(df), rows[-1]["n_vintages"],
                  rows[-1]["first_vintage"], rows[-1]["last_vintage"])
     cat = pd.DataFrame(rows, columns=CATALOG_COLS)
+    p_cat = out / "_catalog.csv"
+    if only and p_cat.exists():
+        old = pd.read_csv(p_cat)
+        cat = pd.concat([old[~old["series_id"].isin(cat["series_id"])], cat], ignore_index=True)
     cat.to_csv(out / "_catalog.csv", index=False)
     return cat
 
@@ -149,7 +158,9 @@ def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     ap = argparse.ArgumentParser()
     ap.add_argument("--refresh", action="store_true")
-    run(refresh=ap.parse_args().refresh)
+    ap.add_argument("--only", nargs="+", help="subset of SERIES (catalog rows merged)")
+    a = ap.parse_args()
+    run(refresh=a.refresh, only=a.only)
 
 
 if __name__ == "__main__":

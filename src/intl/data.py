@@ -62,6 +62,8 @@ FAMILIAS: dict[str, str] = {
     r"shiller_(cape|real_price|real_earnings|real_dividend|real_stock_tr_ret_m)": "Shiller ie_data (EE. UU., mensual)",
     # P-DEV-INT12 v1.0 (docs/int/INT12_prerregistro_v1.md §1): mercado de EE. UU. diario, letra y tipo largo de Shiller
     r"aqr_mkt_usa_d|TB3MS|shiller_gs10": "INT-12: AQR mercado EE. UU. diario (CRSP), FRED TB3MS, Shiller tipo largo",
+    # P-DEV-INT17 (docs/int/INT17_beneficios_prerregistro_v0.md §3): beneficios NIPA, deflactor y PIB nominal, trimestral
+    r"CPATAX|GDPDEF|GDP": "INT-17: FRED beneficios después de impuestos con IVA/CCAdj, deflactor del PIB, PIB nominal",
 }
 _RX = [re.compile(f"^(?:{p})$") for p in FAMILIAS]
 
