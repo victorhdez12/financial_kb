@@ -1,0 +1,36 @@
+{
+ "documento": "Mapeo de tramos del paper trading (B0/B1/B1′) a ETFs de EE. UU. para el espejo de ejecución en Alpaca PAPER (docs/broker/alpaca.md §4)",
+ "version": "1.0 (2026-11-18)",
+ "nota": "Solo para medir ejecución (deslizamiento, fracciones, costes) en una cuenta SIMULADA. No cambia la valoración del paper teórico (docs/factors/paper_trading.md §4, proxies en EUR). Cambiar este fichero abre una versión nueva del espejo: sube 'version' y cada línea de espejo.jsonl la lleva.",
+ "tramos": {
+  "rv": {
+   "etf": "URTH",
+   "por_que": "iShares MSCI World: el mismo índice que el instrumento tipo de la spec (ETF UCITS MSCI World). Fraccionable en Alpaca.",
+   "alternativa": "VT (más líquido, pero incluye emergentes: no es el universo de la spec)",
+   "diferencia_declarada": "en USD y distribución, no UCITS de acumulación en EUR"
+  },
+  "rf": {
+   "etf": "IEI",
+   "por_que": "iShares 3-7 Year Treasury: duración ≈ 4,5-5, la más próxima a 'deuda pública, duración ≈ 5' de la spec entre ETFs líquidos de EE. UU.",
+   "alternativa": "IEF (7-10 años, duración ≈ 7, más líquido)",
+   "diferencia_declarada": "Tesoro de EE. UU. en USD, no deuda pública euro: el tipo de interés y la divisa no son los del Bund 5 años del paper teórico"
+  },
+  "oro": {
+   "etf": "GLD",
+   "por_que": "SPDR Gold Shares: oro físico, el ETF de oro más líquido (equivale al ETC de oro físico de la spec).",
+   "alternativa": "IAU / GLDM (más baratos, menos volumen)",
+   "diferencia_declarada": "en USD"
+  }
+ },
+ "liquidez": {
+  "colchon": 0.005,
+  "por_que": "B0/B1/B1′ no tienen tramo de liquidez: los pesos suman 1. Se deja un 0,5 % del valor en efectivo de la cuenta para absorber deslizamiento y redondeos (no se compra BIL/SGOV)."
+ },
+ "ordenes": {
+  "min_orden_usd": 10.0,
+  "decimales_fraccion": 4,
+  "margen_limit": 0.005,
+  "minutos_antes_cierre_sin_mercado": 15,
+  "espera_ejecucion_s": 60
+ }
+}
