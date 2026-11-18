@@ -1,7 +1,7 @@
 ---
 documento: P-DEV-INT17 — ¿los beneficios empresariales agregados (NIPA) anticipan la recesión de EE. UU. a 12 meses, con contenido incremental sobre E1? Diseño + potencia + borrador de prerregistro
 version: 0.1 (borrador, 2026-11-18). Diseño (§0-§6, §8-§10) escrito y commiteado ANTES de escribir y correr la potencia; §7 se rellena con la salida del script
-estado: BORRADOR. Solo diseño y potencia con señal plantada. Ningún rasgo de beneficios se ha cruzado con la etiqueta NBER (ni con ninguna otra); ningún dato ≥ 2005 leído.
+estado: BORRADOR, POTENCIA HECHA (§7): sin potencia (0,14-0,29 con el efecto realista) → recomendado cerrar sin correr. Solo diseño y potencia con señal plantada. Ningún rasgo de beneficios se ha cruzado con la etiqueta NBER (ni con ninguna otra); ningún dato ≥ 2005 leído.
 potencia: scripts/int17_potencia.py → research/int/int17_potencia.json (§7)
 nace_de: docs/int/INFORME_10k_2026-11-18.md §4, prioridad 2; plan aprobado 18-nov (Estado «▶ Retomar (18-nov)», línea B)
 depende_de: docs/int/E1_prerregistro_v1.md (listón E1, coeficientes congelados research/int/e1_modelos.json sha256 227ffa8c…),
@@ -115,17 +115,66 @@ veredicto escrito antes; (M3) solo métricas fuera de muestra con walk-forward y
   D por episodio y por mitades; signo de β̂(`prof_yoy`) en los ajustes anuales; calibración de A.
 
 ## 7. Potencia (antes que nada)
-*Pendiente: se rellena con la salida de `scripts/int17_potencia.py` (commit con árbol limpio). Método fijado antes:*
+**Corrida:** `scripts/int17_potencia.py` (commit 03fe2a7, árbol limpio, 2026-11-18T10:04Z, 164 s, 800 réplicas por
+punto, bootstrap 300) → `research/int/int17_potencia.json`. **Método (fijado antes):**
 estructura de eventos **real** (filas en riesgo y entradas NBER 1955-08 … 2003-12) y rasgos **simulados**: `x1` = índice
 E1 (a·y + u, AUC poblacional del listón 0,80 central, rejilla 0,70-0,90; la curva sola para el NBER a 6-12 meses da
 ≈ 0,80-0,90 dentro de muestra según INT-8 §2), `x2` = beneficios (b_e·y + λ·x1 + w: λ da la colinealidad con E1 sin
 añadir información, b_e = b + τ·N(0,1) por entrada = heterogeneidad entre episodios), u AR(1) mensual φ 0,95 (como E1),
-w trimestral AR(1) con la persistencia **medida en la propia serie** (sin la etiqueta) y mantenida 3 meses, más el ruido
-de revisión medido. Walk-forward idéntico a §5. Contraste con el valor crítico de la nula simulada (b = 0, ≈ placebo P1)
+w trimestral AR(1) con la persistencia **medida en la propia serie** (sin la etiqueta) y mantenida 3 meses (el ruido
+de revisión no se simula aparte: el efecto se define sobre el rasgo publicado). Walk-forward idéntico a §5. Contraste con el valor crítico de la nula simulada (b = 0, ≈ placebo P1)
 y, aparte, el bootstrap por bloques (tamaño real y potencia). Efecto plantado en ΔAUC poblacional del oráculo:
 **realista +0,04** (la mitad del optimista, maldición del ganador, como INT-15), **optimista +0,08**; se da también en
 nats. **Umbral del proyecto: potencia ≥ 0,80** (MDE al 80 % en todos los documentos de potencia). Si con el efecto
 realista no llega, **se cierra sin correr** (como INT-8, INT-15, INT-16).
+
+**Datos (descripción, ninguna etiqueta cruzada; `datos` del JSON):**
+- `CPATAX`, `GDPDEF`, `GDP`: 1947T1-2004T4 (232 trimestres) en el warehouse (última añada). Índice E1 de EE. UU.:
+  1955-08 … 2004-12 (593 meses), AR(1) mensual 0,944.
+- **ALFRED `CPATAX`** (ingestado hoy: `src/ingest/alfred_vintages.py --only CPATAX`, 378 añadas, la primera
+  1980-12-23; 207 añadas ≤ 2004). Retraso de la primera publicación (97 trimestres 1980-2004): mínimo 48 días, mediana
+  59, p90 87, máximo 111 (un T3); T4 mediana 86 / máximo 93. La regla de 4 meses de antes de 1981 los cubre todos.
+- **Revisiones grandes:** interanual real en su primera publicación frente a la última añada (1982-2004, 92 trimestres):
+  dt 0,129 frente a 0,107, dt de la revisión 0,127, **correlación 0,44**. En la rejilla mensual 1981-2003, el rasgo
+  "as of" (ALFRED) y el de la última añada correlan 0,45. Lo que se ve hoy de los beneficios de 1981-2004 no es lo que
+  se veía entonces: el rasgo en tiempo real es mucho más ruidoso que el revisado.
+- Persistencia: `prof_yoy` trimestral AR(1) 0,75 (dt 0,134); `margen_caida8` AR(1) 0,80 (media −0,079).
+
+**Eventos (solo `USREC`; `eventos` del JSON):** 581 orígenes 1955-08 … 2003-12, 498 en riesgo, 96 positivos; 8 entradas
+(1957-09, 1960-05, 1970-01, 1973-12, 1980-02, 1981-08, 1990-08, 2001-04). Evaluación 1962-2003: 439 filas, 72 positivos
+(16,4 %), **6 entradas** (1970, 1973, 1980, 1981, 1990, 2001).
+
+**Potencia del contraste principal (D, unilateral 5 %, crítico de la nula simulada):**
+
+| escenario | potencia si +0,04 (realista) | ídem Holm-2 (2,5 %) | potencia si +0,08 (optimista) | MDE 80 % | P(D > 0) si +0,04 / sin efecto |
+|---|---|---|---|---|---|
+| **central** (AUC listón 0,80, τ 0,25, corr. con E1 0,3) | **0,22** | 0,14 | **0,36** | no se alcanza (0,50 con +0,16) | 0,28 / 0,10 |
+| τ 0 | 0,25 | 0,19 | 0,41 | no (0,52 con +0,16) | 0,30 / — |
+| τ 0,5 | 0,21 | 0,16 | 0,41 | no | 0,26 / — |
+| corr. con E1 0 | 0,27 | 0,20 | 0,38 | no | 0,32 / — |
+| corr. con E1 0,6 | 0,21 | 0,16 | 0,35 | no | 0,28 / — |
+| AUC listón 0,70 | 0,14 | 0,10 | 0,25 | no (0,51 con +0,20) | 0,24 / — |
+| AUC listón 0,90 | 0,29 | 0,18 | 0,46 | no (+0,08 es el máximo posible) | 0,39 / — |
+
+- **Bootstrap por bloques (24 m) como contraste:** tamaño real 0,3-1 % (nominal 5 %) y potencia 0,03-0,10 con +0,04:
+  inservible como inferencia con 6 entradas (confirma que el p tiene que salir del placebo).
+- **Sensibilidades (no principales, declaradas tras ver la simulación, sin datos reales):** con las probabilidades
+  recortadas a [0,01; 0,99] la potencia con +0,04 sube a 0,17-0,42 (MDE 0,14-0,16 donde se alcanza); con el ΔAUC de índice, 0,22-0,45
+  (MDE 0,13-0,15 donde se alcanza). Ninguna llega a 0,8 con el efecto realista ni con el optimista.
+- **Bajo la nula, D medio ≈ −0,10 nats** (coste de estimar un coeficiente más con 2-6 entradas en el ajuste): sin
+  efecto, D > 0 solo el ≈ 10 % de las veces. Y **el propio listón E1 es peor que la climatología P0 en log-loss en
+  41-62 % de las réplicas**: con 6 episodios, el logit recalibrado cada enero da probabilidades extremas.
+- **Paquete completo de §8** (p < 0,05, ΔBrier < 0, D > 0 en las dos mitades) con +0,04: 0,08-0,19.
+- **Historia del script (declarada):** la primera prueba (`--prueba`, 40 réplicas, sin escribir nada) usaba un Newton
+  sin búsqueda lineal que se atascaba con separación casi completa; se cambió por `src/intl/int4.logit_fit` (el del
+  diseño, §5) antes de la tirada con puerta. También antes se añadieron las dos sensibilidades y se quitaron de la
+  rejilla los efectos imposibles (AUC del oráculo > 1).
+
+**Lectura honesta:** con 6 entradas NBER en la evaluación, **la potencia para el efecto realista es 0,14-0,29** (0,10-
+0,20 con Holm-2) y para el optimista 0,25-0,46; ni un ΔAUC poblacional de +0,16 llega a 0,8. Es la misma razón de
+INT-8 (O4 NBER: MDE ΔAUC ≈ 0,31), E1 e INT-15: muchas filas, poca información. Además, el rasgo en tiempo real se
+parece poco al revisado (correlación 0,44), lo que hace aún más improbable un efecto incremental grande en la corrida
+PIT. **Veredicto: sin potencia. Recomendación: cerrar sin correr el contraste real.**
 
 ## 8. Criterios (O1, fijados antes)
 - **Establecido (todos):** (i) p del placebo P1 < α de Holm-2; (ii) D > 0 y ΔBrier < 0; (iii) β̂(`prof_yoy`) < 0 en
@@ -150,5 +199,13 @@ realista no llega, **se cierra sin correr** (como INT-8, INT-15, INT-16).
 este documento congelado (v1.0) y de `e1_modelos.json`, se niega si la salida existe, solo ≤ 2004; una corrida;
 entrada en `research/trial_log.md`; Validador independiente.
 
-## 11. Decisiones pendientes del usuario
-*Se completan con la potencia (§7).*
+## 11. Decisiones pendientes del usuario (con mi recomendación)
+1. **¿Correr INT-17 con ≤ 2004?** **Recomendado: NO; cerrar sin correr** (potencia 0,14-0,29 < 0,8 con el efecto
+   realista; el resultado más probable, "no establecido", no cambiaría ninguna decisión: B1 no usa el nowcast). Correrlo
+   gastaría el único cruce limpio beneficios NIPA → NBER ≤ 2004 sin poder interpretarlo. Alternativa: correrlo como
+   **refutación** (solo D ≤ 0 informa; P(D ≤ 0) es 0,72 con +0,04 frente a 0,90 sin efecto: casi nada).
+2. **¿Registro en vivo** junto a E1? Recomendado no: ≈ 1 recesión NBER cada 6-8 años; décadas sin respuesta.
+3. **Descriptivo en el reporte** (interanual real de `CPATAX` y su percentil histórico, sin probabilidad ni regla):
+   opcional, barato; avisar de que la primera publicación se revisa mucho (correlación 0,44 con la última añada).
+4. Si, aun así, se quisiera correr: aprobar §3-§9, pasar a v1.0 con hora y escribir `scripts/int17_corrida.py`.
+5. El bloqueado ≥ 2005 queda intacto en todos los casos (ni para contar recesiones).
