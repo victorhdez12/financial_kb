@@ -36,7 +36,13 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Agentes de la fase:** Constructor · Investigador de relaciones · **Validador independiente** · **Reportero** (ver [[Proyecto/Agentes]]). Informe: [[Reports/Fase 3/Informe de resultados]].
 
-**▶ Retomar (15-nov):** fusionados percentiles unificados, VYLR y simulación B nueva (ver Bitácora 15-nov). Pendiente: commitear semanal del 15-nov antes del 20-nov.
+**▶ Retomar (18-nov):** en main: panel v2 (gráficos ampliables, UX), «Mis activos» v2 (volumen, Form 4, 13F, analistas), alertas de flujos v1.1, Alpaca PAPER (espera claves del usuario), informe 10-K (`docs/int/INFORME_10k_2026-11-18.md`), análisis caída 18-nov. **Plan aprobado (18-nov):**
+- **Línea A (paper):** 30-nov/3-dic primer cierre con B1′; espejo Alpaca en dry-run en ese cierre; con claves, ejecuta en la cuenta paper desde el cierre de diciembre; el informe mensual 5f añade coste de ejecución (deslizamiento, fracciones) frente al teórico. Borrador **B2 «compra en caídas»** (prerregistro antes del primer dato; no cambia B0/B1/B1′).
+- **Producto (dic):** ficha de fundamentales XBRL (primera versión presentada, descriptiva) en «Mis activos».
+- **Línea B (dic-ene):** prueba de potencia «beneficios agregados NIPA → recesión 12 m» con ≤ 2004, prerregistrada; sin potencia → se cierra sin correr; bloqueado ≥ 2005 intacto.
+- **Fase de factores (2027):** 10-K por secciones con citas verificadas para el Analista de empresas; factores de JKP/French/AQR (no construirlos).
+
+**(anterior)** **▶ Retomar (15-nov):** fusionados percentiles unificados, VYLR y simulación B nueva (ver Bitácora 15-nov). Pendiente: commitear semanal del 15-nov antes del 20-nov.
 
 **(anterior) ▶ Retomar (12-nov, noche 3):** panel con Países (preciso, previsiones FMI, escenarios por activo, dinero) y «Mis activos» (29 activos, simulaciones A/B); diario. CTVA confirmada (escisión Vylor 1-oct). 14-nov: panel con 11 pestañas (Hoy, Qué hacer, Manos fuertes, Verificación nuevas), ingesta blindada, ensayo INT-11 OK. Siguiente: Validador del panel. ⚠️ Antes del 20-nov: commitear la semanal del 15-nov (si no, INT-11 aborta por árbol sucio). Bloqueado ≥ 2005 intacto (opción A). Semanal completa OK (22:17). 14-nov: timeout total en `http_get` hecho y `wb_wdi` relanzado OK. `cycle_rtdsm` arreglado (fechas mal formadas en .xlsx de la Fed de Filadelfia).
 
