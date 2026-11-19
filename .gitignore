@@ -41,3 +41,8 @@ research/int/hpo_int11/cache_*/
 alpaca.env
 *alpaca*.env
 espejo.jsonl
+
+# Diagnósticos automáticos (docs/panel/diagnosticos_v0.md): las notas y el registro de aciertos los escribe la diaria;
+# fuera de git para no ensuciar el árbol que exigen los registros en vivo (E1/B1/B1′ el día 3, INT-11 el día 20)
+obsidian/Diagnosticos/*.md
+research/diag/aciertos.jsonl

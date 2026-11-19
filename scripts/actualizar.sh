@@ -116,6 +116,11 @@ for P in "" B1P B0; do
     "$REPO/.venv/bin/python" -m src.broker.espejo --seguimiento ${P:+--perfil $P}; } \
     >> "$LOGDIR/$(date +%Y-%m-%d)_alpaca.log" 2>&1 || true
 done
+# Diagnósticos automáticos (docs/panel/diagnosticos_v0.md): disparadores + nota con claude -p (tope 3/semana). Nunca
+# afecta a la diaria ni a su código de salida (|| true; el exit de abajo es $RC de make). FIN_DIAG=0 lo apaga.
+if [ "${FIN_DIAG:-1}" != 0 ]; then
+  bash "$REPO/scripts/diagnostico.sh" >> "$LOGDIR/$(date +%Y-%m-%d)_diag.log" 2>&1 || true
+fi
 # Logs de más de 60 días fuera
 find "$LOGDIR" -name '*.log' -mtime +60 -delete 2>/dev/null
 exit $RC
