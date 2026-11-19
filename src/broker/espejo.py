@@ -1,4 +1,4 @@
-"""Espejo de ejecución en Alpaca PAPER de las carteras del paper trading (B0, B1, B1′ y S1). SOLO cuenta simulada.
+"""Espejo de ejecución en Alpaca PAPER de las carteras del paper trading (B0, B1, B1′, S1 y D1). SOLO cuenta simulada.
 
 Qué hace: lee la decisión registrada (research/paper/decisiones.jsonl para B0/B1, decisiones_b1prima.jsonl para B1′;
 SOLO LECTURA, nunca los modifica ni los sustituye), traduce los pesos por tramo (rv/rf/oro) a ETFs de EE. UU. con
@@ -9,6 +9,11 @@ S1 (docs/factors/S1_rotacion_sectorial_spec.md §6): pesos por ETF (núcleo `mkt
 research/paper/decisiones_s1.jsonl con su propio mapeo versionado `config/alpaca_etfs_s1.json`. Solo opera cuando la
 decisión dice `opera` (cambió el cuadrante) o la cuenta aún no tiene ninguna posición de S1 (arranque); si no, deja que
 los pesos deriven, como la regla. B0/B1/B1′ no cambian (sus decisiones no llevan `opera`: siempre se rebalancean).
+
+D1 (docs/factors/D1_tendencia_diaria_spec.md §6): decisión DIARIA en research/paper/decisiones_d1.jsonl, pesos por ETF
+(SPY/VEA/TLT/GLD/DBC) con `config/alpaca_etfs_d1.json`. Los pesos suman ≤ 100 % (el resto, efectivo en la cuenta:
+`permite_efectivo`). Misma lógica de `opera` que S1 y, además, la banda de no operar del mapeo (`banda_no_operar`,
+3 pp): no se envía la orden de un ETF cuyo peso real en la cuenta ya está a menos de la banda del objetivo.
 
 Reglas:
 - `--dry-run` por defecto: calcula, imprime y apunta el plan; no envía nada. `--ejecutar` envía órdenes a la cuenta
@@ -47,9 +52,14 @@ REPO = A.REPO
 LOG_B1 = REPO / "research" / "paper" / "decisiones.jsonl"
 LOG_B1P = REPO / "research" / "paper" / "decisiones_b1prima.jsonl"
 LOG_S1 = REPO / "research" / "paper" / "decisiones_s1.jsonl"
-CARTERAS = {"B0": (LOG_B1, "b0"), "B1": (LOG_B1, "b1"), "B1P": (LOG_B1P, "b1prima"), "S1": (LOG_S1, "s1")}
-MAPEOS = {"S1": REPO / "config" / "alpaca_etfs_s1.json"}       # el resto: config/alpaca_etfs.json
-COSTE_TEORICO_PB = {"rv": 10.0, "rf": 10.0, "oro": 20.0}   # docs/factors/paper_trading.md §4 (por lado)
+LOG_D1 = REPO / "research" / "paper" / "decisiones_d1.jsonl"
+CARTERAS = {"B0": (LOG_B1, "b0"), "B1": (LOG_B1, "b1"), "B1P": (LOG_B1P, "b1prima"), "S1": (LOG_S1, "s1"),
+            "D1": (LOG_D1, "d1")}
+MAPEOS = {"S1": REPO / "config" / "alpaca_etfs_s1.json",
+          "D1": REPO / "config" / "alpaca_etfs_d1.json"}       # el resto: config/alpaca_etfs.json
+COSTE_TEORICO_PB = {"rv": 10.0, "rf": 10.0, "oro": 20.0,   # docs/factors/paper_trading.md §4 (por lado)
+                    # D1 (spec §2.5): 5 pb en ETFs de bolsa, bonos y oro; 10 pb en materias primas
+                    "us": 5.0, "xus": 5.0, "bonos": 5.0, "mp": 10.0}
 ESTADOS_FINALES = {"filled", "canceled", "expired", "rejected", "done_for_day", "replaced"}
 
 
@@ -79,7 +89,7 @@ def decision(cartera: str, cierre: str | None = None, *, logs: dict | None = Non
     el registro lo lleva (S1)."""
     cartera = A.normaliza_perfil(cartera)
     if cartera not in (logs or CARTERAS):
-        raise ValueError(f"cartera desconocida {cartera!r}: B0, B1, B1P (B1′) o S1")
+        raise ValueError(f"cartera desconocida {cartera!r}: B0, B1, B1P (B1′), S1 o D1")
     ruta, clave = (logs or CARTERAS)[cartera]
     filas = [d for d in _jsonl(Path(ruta)) if clave in d]
     if cierre:
@@ -148,7 +158,10 @@ def tipo_orden(mercado: dict, cfg: dict) -> str:
 
 
 def pesos_etf(pesos: dict[str, float], mapeo: dict) -> dict[str, tuple[str, float]]:
-    if any(w < 0 for w in pesos.values()) or abs(sum(pesos.values()) - 1) > 1e-6:
+    """Con `permite_efectivo` (D1) los pesos pueden sumar menos de 1 (el resto queda en efectivo); nunca más de 1."""
+    suma = sum(pesos.values())
+    mal = suma > 1 + 1e-6 if mapeo.get("permite_efectivo") else abs(suma - 1) > 1e-6
+    if any(w < 0 for w in pesos.values()) or mal:
         raise ValueError(f"pesos no válidos (negativos o no suman 1): {pesos}")
     out: dict[str, tuple[str, float]] = {}
     for tramo, w in pesos.items():
@@ -168,6 +181,7 @@ def calcular_ordenes(pesos: dict[str, float], mapeo: dict, *, equity: float, efe
     colchon = float(mapeo.get("liquidez", {}).get("colchon", 0.0))
     dec, minimo, margen = int(cfg.get("decimales_fraccion", 4)), float(cfg.get("min_orden_usd", 10)), \
         float(cfg.get("margen_limit", 0.005))
+    banda = float(cfg.get("banda_no_operar", 0.0))           # D1: 3 pp; el resto de carteras, 0 (sin efecto)
     objetivo = pesos_etf(pesos, mapeo)
     simbolos = sorted(set(objetivo) | {s for s, q in posiciones.items() if abs(q) > 0})
     faltan = [s for s in simbolos if not precios.get(s) or precios[s] <= 0]
@@ -184,6 +198,11 @@ def calcular_ordenes(pesos: dict[str, float], mapeo: dict, *, equity: float, efe
         actual = q * p
         delta = w * invertible - actual
         frac = bool(fraccionable.get(s, False))
+        if banda > 0 and abs(delta) < banda * equity - 1e-9:
+            if abs(delta) >= minimo:
+                omitidas.append(Orden(s, tramo, "sell" if delta < 0 else "buy", 0.0, tipo, None, p, 0.0, w,
+                                      actual / equity))
+            continue
         if delta < 0:
             qv = q if w == 0 else min(q, redondea_qty(-delta / p, frac, dec))
             o = Orden(s, tramo, "sell", qv, tipo, precio_limit(p, "sell", margen) if tipo == "limit" else None,
@@ -220,13 +239,15 @@ def calcular_ordenes(pesos: dict[str, float], mapeo: dict, *, equity: float, efe
 
 
 def sin_operar(pesos: dict[str, float], mapeo: dict, equity: float, efectivo: float) -> dict:
-    """Resumen de un mes sin operaciones (S1 sin cambio de cuadrante: los pesos derivan, como en la regla)."""
+    """Resumen de un periodo sin operaciones (S1 sin cambio de cuadrante; D1 sin activos que crucen la banda): los
+    pesos derivan, como en la regla."""
     objetivo = pesos_etf(pesos, mapeo)
     colchon = float(mapeo.get("liquidez", {}).get("colchon", 0.0))
     return {"tipo_orden": "ninguna", "equity": equity, "efectivo": efectivo, "invertible": round(equity * (1 - colchon), 2),
             "escala_compras": 1.0, "rotacion": 0.0, "coste_teorico_usd": 0.0, "omitidas": [],
             "pesos_objetivo_etf": {s: round(w, 6) for s, (_, w) in objetivo.items()},
-            "sin_operar": "sin cambio de cuadrante: se mantienen las posiciones (los pesos derivan)"}
+            "sin_operar": "la decisión no opera (S1: sin cambio de cuadrante; D1: nada cruza la banda): se mantienen "
+                          "las posiciones (los pesos derivan)"}
 
 
 def deslizamiento_pb(lado: str, precio: float | None, ref: float | None) -> float | None:
@@ -433,8 +454,8 @@ def _imprime(p: dict) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(description="Espejo de ejecución en Alpaca PAPER de B0/B1/B1′/S1 (solo simulado)")
-    ap.add_argument("--cartera", help="B0, B1, B1P (B1′) o S1")
+    ap = argparse.ArgumentParser(description="Espejo de ejecución en Alpaca PAPER de B0/B1/B1′/S1/D1 (solo simulado)")
+    ap.add_argument("--cartera", help="B0, B1, B1P (B1′), S1 o D1")
     ap.add_argument("--cierre", help="AAAA-MM-DD; por defecto la última decisión registrada")
     ap.add_argument("--perfil", default=None, help="perfil de alpaca.env; por defecto el de la cartera o el general")
     g = ap.add_mutually_exclusive_group()
