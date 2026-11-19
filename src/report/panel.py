@@ -28,6 +28,7 @@ from src.report import _ui as UI
 from src.report import alertas as AL
 from src.report import panel_activos as PA
 from src.report import panel_alpaca as PAL
+from src.report import panel_competicion as PCO
 from src.report import panel_manos_fuertes as PMF
 from src.report import panel_hoy as PH
 from src.report import panel_paises as PP
@@ -1031,7 +1032,7 @@ def construir(s: dict, hoy: date | None = None) -> str:
     except Exception:  # noqa: BLE001
         av = []
     secciones = {"diario": seccion_segura(_alertas_hoy, hoy) + seccion_segura(PH.sec_hoy_diario, s, hoy), "quehacer": seccion_segura(QH.sec_que_hacer, s, es), "activos": seccion_segura(PA.sec_activos, s, PP.pulso_desde(s)), "paises": seccion_segura(PP.sec_paises, s, es), "hoy": seccion_segura(sec_hoy, s, es), "escenarios": seccion_segura(sec_escenarios, s, es, fuente_es),
-                 "atlas": seccion_segura(sec_atlas, s, es), "cartera": seccion_segura(sec_cartera, s, reg) + seccion_segura(_alpaca),
+                 "atlas": seccion_segura(sec_atlas, s, es), "cartera": seccion_segura(sec_cartera, s, reg) + seccion_segura(PCO.sec_competicion, s) + seccion_segura(_alpaca),
                  "estado": seccion_segura(sec_estado, s, reg, hoy) + PP.glosario_html(),
                  "verificacion": seccion_segura(PV.sec_verificacion)}
     secciones["manos"] = seccion_segura(PMF.sec_manos_fuertes, hoy)

@@ -1,7 +1,8 @@
 ---
 documento: C1 «Claude gestor» — cartera discrecional diaria gestionada por un agente, en Alpaca PAPER
 version: 1.0 APROBADA (2026-11-19) — mandato v1; cambiarlo = nueva versión declarada
-estado: diseño; nada construido.
+estado: CONSTRUIDO (2026-11-19, rama del Constructor; pendiente del Validador), NO activado: faltan claves `_C1`,
+  `research/paper/C1_ACTIVO` y cargar el plist. Piezas en §6.
 ---
 
 # C1: Claude como gestor diario (experimento hacia delante)
@@ -49,3 +50,19 @@ estado: diseño; nada construido.
 ## 5. Requisitos del usuario
 - Segundo usuario de Alpaca (otro correo) con cuentas paper para **D1** y **C1**; claves en `alpaca.env` con
   sufijos `_D1` y `_C1` (el código distingue el usuario por las claves, no hace falta nada más).
+
+## 6. Construcción (2026-11-19)
+| pieza | dónde |
+|---|---|
+| paquete del día (sin IA, con hash) | `src/paper/c1_paquete.py` |
+| mandato `c1-v1` y formato JSON de salida | `config/c1_mandato_v1.md` (su sha256 va en cada línea del registro) |
+| explicador | `scripts/c1_gestor.sh explicar DIR`: `claude -p --restricted --tools "" --strict-mcp-config --output-format json`, mandato como system prompt, paquete por stdin, entorno mínimo sin `ALPACA_*`, carpeta fuera del repo; plazo 10 min desde `src/paper/c1.py` |
+| guardia (§3) | `src/broker/c1_guardia.py` (tests `tests/test_c1_guardia.py`) |
+| ciclo, ejecución y registro | `src/paper/c1.py` → `research/paper/decisiones_c1.jsonl` (una línea por día; exige `C1_ACTIVO`, árbol limpio, claves `_C1`, mercado abierto; commit y push) |
+| automatización (no instalada) | `scripts/c1_gestor.sh` + `scripts/launchd/com.financialkb.c1.plist` (20:30, lun-vie) |
+| Competición | `src/report/panel_competicion.py`, en «Mi cartera» |
+- Ensayo (sin registrar): `.venv/bin/python -m src.paper.c1 [--simulada]` guarda paquete, prompt, salida y línea en
+  `~/financial_archive/c1/ensayos/`. Sin claves de C1: cuenta ficticia de 100 000 $ y solo acciones/ETFs de «Mis
+  activos» validables (precio = cierre del warehouse).
+- Declarado: la salida se admite también envuelta en un único bloque ```json; las compras de mercado se estiman al
+  precio de referencia + 1 %; las ventas del día no liberan efectivo; >20 órdenes = ese día no opera.
