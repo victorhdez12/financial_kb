@@ -154,6 +154,8 @@ def _forma(o) -> tuple[dict | None, str | None]:
         return None, "hay que dar exactamente uno de 'cantidad' o 'importe_usd'"
     if cant is not None and cant <= 0 or imp is not None and imp <= 0:
         return None, "cantidad o importe ≤ 0"
+    if cant is not None and math.floor(cant * 1e9 + 1e-6) <= 0:
+        return None, "cantidad < 1e-9 (se truncaría a 0)"
     if imp is not None:
         if o["lado"] != "compra" or o["clase"] == "opcion" or tipo != "mercado":
             return None, "'importe_usd' solo en compras de mercado de acciones o cripto (las ventas van por cantidad)"
@@ -165,6 +167,9 @@ def _forma(o) -> tuple[dict | None, str | None]:
         lim = _num(lim)
         if lim is None or lim <= 0:
             return None, "orden límite sin 'precio_limite' > 0"
+        lim = precio_tick(lim, o["lado"])          # el coste se acota con el precio que de verdad se envía
+        if lim <= 0:
+            return None, "precio_limite demasiado pequeño (redondeado a 0)"
     elif o.get("precio_limite") is not None:
         return None, "'precio_limite' solo en órdenes límite"
     else:
@@ -259,6 +264,30 @@ def validar(texto: str | None, estado: EstadoCuenta | None, *, parada: bool | No
 
 
 # --------------------------------------------------------------------------- cuerpo de la orden para Alpaca
+def _decimales_precio(p: float) -> int:
+    return 2 if p >= 1 else 4
+
+
+def precio_tick(p: float, lado: str) -> float:
+    """Precio límite al decimal que se envía a Alpaca (2 decimales desde 1 $, 4 por debajo). Las compras se redondean
+    HACIA ABAJO: así el coste estimado por la guardia nunca es menor que el máximo que puede costar la orden enviada
+    (antes se estimaba con el precio sin redondear y el texto enviado podía redondear al alza)."""
+    k = 10 ** _decimales_precio(p)
+    return (math.floor(p * k + 1e-9) if lado == "compra" else round(p * k)) / k
+
+
+def texto_precio(p: float) -> str:
+    return f"{p:.{_decimales_precio(p)}f}"
+
+
+def texto_qty(q: float) -> str:
+    """Cantidad truncada a 9 decimales, sin ceros ni punto finales («10.» o «0.» no son cantidades válidas)."""
+    t = f"{math.floor(q * 1e9 + 1e-6) / 1e9:.9f}".rstrip("0").rstrip(".")
+    if float(t) <= 0:
+        raise ValueError(f"cantidad {q!r} se trunca a 0")
+    return t
+
+
 def cuerpo_alpaca(n: dict, client_order_id: str) -> dict:
     """Cuerpo de POST /v2/orders para una orden VÁLIDA de la guardia. Opciones: siempre buy_to_open / sell_to_close."""
     c: dict = {"symbol": n.get("simbolo_alpaca") or n["simbolo"], "side": LADOS[n["lado"]], "type": TIPOS[n["tipo"]],
@@ -267,9 +296,9 @@ def cuerpo_alpaca(n: dict, client_order_id: str) -> dict:
         c["notional"] = f"{n['importe_usd']:.2f}"
     else:
         q = n["cantidad"]
-        c["qty"] = str(int(q)) if q == int(q) else f"{math.floor(q * 1e9) / 1e9:.9f}".rstrip("0")
+        c["qty"] = texto_qty(q)
     if n["tipo"] == "limite":
-        c["limit_price"] = f"{n['precio_limite']:.2f}" if n["precio_limite"] >= 1 else f"{n['precio_limite']:.4f}"
+        c["limit_price"] = texto_precio(n["precio_limite"])
     if n["clase"] == "opcion":
         c["position_intent"] = "buy_to_open" if n["lado"] == "compra" else "sell_to_close"
     return c

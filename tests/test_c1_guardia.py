@@ -240,3 +240,42 @@ def test_comprobar_cliente_solo_paper():
     c.base = "https://api.alpaca.markets"   # aunque alguien lo cambie después
     with pytest.raises(A.EndpointNoPermitido):
         G.comprobar_cliente(c)
+
+
+# ------------------------------------------------------------------ regresiones del Validador (19-nov)
+def test_validador_precio_limite_de_compra_se_redondea_hacia_abajo_antes_de_acotar_el_coste():
+    # 98 × 102,049 = 10 000,80 > 10 000 $; redondeado al alza (102,05) se enviaría aún más. Hacia abajo: 102,04 → 9 999,92
+    v = val([orden(importe_usd=None, cantidad=98, tipo="limite", precio_limite=102.049)])
+    assert len(v.validas) == 1 and v.validas[0]["precio_limite"] == 102.04
+    c = G.cuerpo_alpaca(v.validas[0], "c1-x-00")
+    assert c["limit_price"] == "102.04" and float(c["limit_price"]) * 98 <= 10_000.0
+    # el coste estimado es exactamente el del precio enviado
+    v = val([orden(importe_usd=None, cantidad=1, tipo="limite", precio_limite=0.123456)])
+    assert G.cuerpo_alpaca(v.validas[0], "c1-x-00")["limit_price"] == "0.1234"
+    assert val([orden(importe_usd=None, cantidad=1, tipo="limite", precio_limite=0.00004)]).validas == []
+
+
+def test_validador_qty_sin_punto_final_ni_cero():
+    v = val([orden(lado="venta", importe_usd=None, cantidad=10.0000000001)], estado(posiciones={"SPY": 10}))
+    assert G.cuerpo_alpaca(v.validas[0], "c1-x-00")["qty"] == "10"
+    v = val([orden(lado="venta", importe_usd=None, cantidad=0.5)], estado(posiciones={"SPY": 10}))
+    assert G.cuerpo_alpaca(v.validas[0], "c1-x-00")["qty"] == "0.5"
+    v = val([orden(lado="venta", importe_usd=None, cantidad=1e-10)], estado(posiciones={"SPY": 10}))
+    assert v.validas == [] and "trunc" in v.rechazadas[0]["motivo"]
+
+
+def test_validador_adversos_apalancamiento_y_cortos():
+    # muchas compras pequeñas: nunca pasan del efectivo
+    v = val([orden(importe_usd=990.0)] * 15)
+    assert len(v.validas) == 10 and v.compras_estimadas_usd <= 10_000.0
+    # ventas repetidas del mismo símbolo (también con BTC/USD frente a BTCUSD): no más de lo que hay
+    v = val([orden(lado="venta", importe_usd=None, cantidad=3)] * 4, estado(posiciones={"SPY": 10}))
+    assert sum(x["cantidad"] for x in v.validas) <= 10
+    v = val([orden(simbolo="BTC/USD", clase="cripto", lado="venta", importe_usd=None, cantidad=0.6),
+             orden(simbolo="BTCUSD", clase="cripto", lado="venta", importe_usd=None, cantidad=0.6)],
+            estado(posiciones={"BTCUSD": 1.0}))
+    assert len(v.validas) == 1
+    # las ventas del día no liberan efectivo para compras
+    v = val([orden(lado="venta", importe_usd=None, cantidad=10), orden(importe_usd=15_000.0)],
+            estado(posiciones={"SPY": 10}))
+    assert [x["lado"] for x in v.validas] == ["venta"]
