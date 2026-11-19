@@ -842,3 +842,8 @@ Las entradas más recientes van arriba. Ver también [[Proyecto/Estado del proye
 - Prerregistro v0.1 primero (`docs/int/INT17_beneficios_prerregistro_v0.md`, f995cc4), después potencia (`scripts/int17_potencia.py`, 03fe2a7 limpio → `research/int/int17_potencia.json`). Ningún rasgo cruzado con la etiqueta; bloqueado ≥ 2005 intacto.
 - Variable principal: interanual real de `CPATAX` (IVA/CCAdj, deflactor PIB), ALFRED desde 1981 (ingestado CPATAX, 378 añadas) y regla de 4 meses antes; secundaria (Holm-2): caída del margen sobre PIB frente a su máximo de 8 trimestres. Listón: índice E1 congelado; walk-forward anual, embargo 24 m; principal Δlog-loss.
 - 6 entradas NBER en la evaluación 1962-2003 → potencia 0,14-0,29 con el efecto realista (+0,04 ΔAUC), 0,25-0,46 con +0,08; sin MDE al 80 %. Primera publicación de beneficios correla 0,44 con la revisada. **Recomendación: cerrar sin correr** (decide el usuario).
+
+## 2026-11-19 — Alpaca B1 declarada y curso «Invirtiendo en alpha» en Obsidian
+
+- **Alpaca PAPER:** conexión comprobada (cuenta …4JGR, 100 000 $ simulados). Declarada la cartera B1 en el perfil por defecto (`ALPACA_CARTERA=B1` en `alpaca.env`, fuera de git). Simulación del espejo con la decisión del cierre 31-oct (70 % RV / 15 % RF / 15 % oro): 3 compras limit (URTH, IEI, GLD), nada enviado. Sigue sin instalar el enganche automático (§7 de `docs/broker/alpaca.md`).
+- **Curso → reglas:** nueva carpeta `Curso/` (índice, lecciones, reglas) y plantilla `Templates/Regla`. Prueba con M2-C10 «Costes de cambio»: 4 reglas (R-FOSO-01..04). Son reglas de análisis de empresas (fosos), no macro; R-FOSO-04 (el foso tiene que verse en margen bruto y ROIC) se puede usar como filtro descriptivo en la ficha XBRL, pero no probar con ≤ 2004 (XBRL empieza ≈ 2009).
