@@ -1,0 +1,378 @@
+{
+ "documento": "S1 paso 2: señal PIT del cuadrante y periodo de puntuación (sin rentabilidades)",
+ "spec": "docs/factors/S1_rotacion_sectorial_spec.md v1.0 (commit 7a0b1a3)",
+ "generado": "2026-11-19T06:25:22+00:00",
+ "git_head_codigo": "d8e665d84250a6003d19f996dc89f3d15c65dde7",
+ "codigo": "src/regime/features.build_panel + src/regime/run.classify_all (src/regime/classify.py), rejilla month_grid(today=2004-12-31), recorte START de src/regime/run.py",
+ "csv": "research/factors/s1_senal.csv",
+ "csv_sha256": "53877fcef0a9ba90ab2927f2d065979c7cde425ca51f8d85415d8a3024c65d60",
+ "coincide_con_regime_monthly_vivo": true,
+ "meses_distintos_de_regime_monthly": [],
+ "primer_cuadrante": "1950-01-31",
+ "puntuacion": {
+  "desde": "1950-02",
+  "hasta": "2004-12",
+  "motivo": "primer cuadrante PIT no nulo del clasificador en vivo (la tabla viva empieza en START = 1950-01-31; antes no hay cuadrante publicado por el código en vivo); industrias y mercado de Ken French existen desde 1926-07, no limitan"
+ },
+ "placebos": {
+  "n": 1000,
+  "bloque_meses": 12,
+  "semilla": 20261119,
+  "rng": "numpy.random.default_rng"
+ },
+ "modo_vintage": {
+  "mixed": 608,
+  "alfred": 52
+ },
+ "propiedades_periodo_puntuado": {
+  "meses": 659,
+  "meses_sin_cuadrante": 0,
+  "frecuencia": {
+   "Goldilocks": 0.1806,
+   "Reflación": 0.1335,
+   "Estanflación": 0.3247,
+   "Deflación/recesión": 0.3612
+  },
+  "cambios": 129,
+  "cambios_año": 2.349,
+  "duracion_media_meses": {
+   "Goldilocks": 4.25,
+   "Reflación": 4.0,
+   "Estanflación": 5.63,
+   "Deflación/recesión": 5.67
+  },
+  "tramos": 130,
+  "por_año": {
+   "1950": {
+    "Goldilocks": 2,
+    "Reflación": 5,
+    "Estanflación": 0,
+    "Deflación/recesión": 5
+   },
+   "1951": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 6,
+    "Deflación/recesión": 6
+   },
+   "1952": {
+    "Goldilocks": 1,
+    "Reflación": 0,
+    "Estanflación": 3,
+    "Deflación/recesión": 8
+   },
+   "1953": {
+    "Goldilocks": 6,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 6
+   },
+   "1954": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 12
+   },
+   "1955": {
+    "Goldilocks": 8,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 4
+   },
+   "1956": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 5,
+    "Deflación/recesión": 7
+   },
+   "1957": {
+    "Goldilocks": 1,
+    "Reflación": 2,
+    "Estanflación": 6,
+    "Deflación/recesión": 3
+   },
+   "1958": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 1,
+    "Deflación/recesión": 11
+   },
+   "1959": {
+    "Goldilocks": 7,
+    "Reflación": 0,
+    "Estanflación": 2,
+    "Deflación/recesión": 3
+   },
+   "1960": {
+    "Goldilocks": 3,
+    "Reflación": 0,
+    "Estanflación": 1,
+    "Deflación/recesión": 8
+   },
+   "1961": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 12
+   },
+   "1962": {
+    "Goldilocks": 6,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 6
+   },
+   "1963": {
+    "Goldilocks": 6,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 6
+   },
+   "1964": {
+    "Goldilocks": 7,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 5
+   },
+   "1965": {
+    "Goldilocks": 8,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 4
+   },
+   "1966": {
+    "Goldilocks": 4,
+    "Reflación": 2,
+    "Estanflación": 6,
+    "Deflación/recesión": 0
+   },
+   "1967": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 7,
+    "Deflación/recesión": 5
+   },
+   "1968": {
+    "Goldilocks": 0,
+    "Reflación": 6,
+    "Estanflación": 6,
+    "Deflación/recesión": 0
+   },
+   "1969": {
+    "Goldilocks": 0,
+    "Reflación": 3,
+    "Estanflación": 7,
+    "Deflación/recesión": 2
+   },
+   "1970": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 10,
+    "Deflación/recesión": 2
+   },
+   "1971": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 3,
+    "Deflación/recesión": 9
+   },
+   "1972": {
+    "Goldilocks": 4,
+    "Reflación": 5,
+    "Estanflación": 1,
+    "Deflación/recesión": 2
+   },
+   "1973": {
+    "Goldilocks": 3,
+    "Reflación": 3,
+    "Estanflación": 6,
+    "Deflación/recesión": 0
+   },
+   "1974": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 12,
+    "Deflación/recesión": 0
+   },
+   "1975": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 1,
+    "Deflación/recesión": 11
+   },
+   "1976": {
+    "Goldilocks": 4,
+    "Reflación": 3,
+    "Estanflación": 5,
+    "Deflación/recesión": 0
+   },
+   "1977": {
+    "Goldilocks": 3,
+    "Reflación": 5,
+    "Estanflación": 4,
+    "Deflación/recesión": 0
+   },
+   "1978": {
+    "Goldilocks": 0,
+    "Reflación": 6,
+    "Estanflación": 5,
+    "Deflación/recesión": 1
+   },
+   "1979": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 12,
+    "Deflación/recesión": 0
+   },
+   "1980": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 7,
+    "Deflación/recesión": 5
+   },
+   "1981": {
+    "Goldilocks": 2,
+    "Reflación": 1,
+    "Estanflación": 7,
+    "Deflación/recesión": 2
+   },
+   "1982": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 4,
+    "Deflación/recesión": 8
+   },
+   "1983": {
+    "Goldilocks": 0,
+    "Reflación": 5,
+    "Estanflación": 2,
+    "Deflación/recesión": 5
+   },
+   "1984": {
+    "Goldilocks": 2,
+    "Reflación": 3,
+    "Estanflación": 4,
+    "Deflación/recesión": 3
+   },
+   "1985": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 6,
+    "Deflación/recesión": 6
+   },
+   "1986": {
+    "Goldilocks": 0,
+    "Reflación": 1,
+    "Estanflación": 8,
+    "Deflación/recesión": 3
+   },
+   "1987": {
+    "Goldilocks": 0,
+    "Reflación": 10,
+    "Estanflación": 2,
+    "Deflación/recesión": 0
+   },
+   "1988": {
+    "Goldilocks": 0,
+    "Reflación": 7,
+    "Estanflación": 5,
+    "Deflación/recesión": 0
+   },
+   "1989": {
+    "Goldilocks": 0,
+    "Reflación": 2,
+    "Estanflación": 8,
+    "Deflación/recesión": 2
+   },
+   "1990": {
+    "Goldilocks": 0,
+    "Reflación": 1,
+    "Estanflación": 10,
+    "Deflación/recesión": 1
+   },
+   "1991": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 2,
+    "Deflación/recesión": 10
+   },
+   "1992": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 12,
+    "Deflación/recesión": 0
+   },
+   "1993": {
+    "Goldilocks": 0,
+    "Reflación": 3,
+    "Estanflación": 9,
+    "Deflación/recesión": 0
+   },
+   "1994": {
+    "Goldilocks": 0,
+    "Reflación": 12,
+    "Estanflación": 0,
+    "Deflación/recesión": 0
+   },
+   "1995": {
+    "Goldilocks": 0,
+    "Reflación": 3,
+    "Estanflación": 9,
+    "Deflación/recesión": 0
+   },
+   "1996": {
+    "Goldilocks": 6,
+    "Reflación": 0,
+    "Estanflación": 4,
+    "Deflación/recesión": 2
+   },
+   "1997": {
+    "Goldilocks": 6,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 6
+   },
+   "1998": {
+    "Goldilocks": 6,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 6
+   },
+   "1999": {
+    "Goldilocks": 8,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 4
+   },
+   "2000": {
+    "Goldilocks": 6,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 6
+   },
+   "2001": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 5,
+    "Deflación/recesión": 7
+   },
+   "2002": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 1,
+    "Deflación/recesión": 11
+   },
+   "2003": {
+    "Goldilocks": 2,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 10
+   },
+   "2004": {
+    "Goldilocks": 8,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 3
+   }
+  }
+ }
+}
