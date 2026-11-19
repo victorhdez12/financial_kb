@@ -43,4 +43,10 @@ solo en su informe. Sin Bash, sin red de Alpaca: los datos de las cuentas los pr
 | automatización (no instalada) | `scripts/supervisor.sh` + `scripts/launchd/com.financialkb.supervisor.plist` (8:00, todos los días) |
 Declarado: «orden ejecutada fuera de mandato» se mide por su efecto en la cuenta (posición corta, opción vendida, efectivo
 negativo); «> 3 días seguidos con error» = últimas líneas seguidas del registro con Claude fallido o salida inválida.
+**Vigía macro** (petición del usuario, 19-nov; misma ejecución y paquete): para B1 y D1 (carteras de regla fija con
+cuenta) el agente escribe qué dicen hoy los modelos macro (régimen, crédito, liquidez, E1, INT-11, diagnósticos: `modelos`
+del paquete, los mismos que recibe M1) para lo que tiene cada una, riesgos que la regla no ve y qué haría un gestor
+macro. **No opera ni cambia nada de esas carteras.** Si marca `aviso_usuario`, notificación + línea en
+`Actualizaciones.md`. Cada día y cartera, una línea en `~/financial_archive/supervisor/vigia_avisos.jsonl` (fuera de
+git) para medir después si los avisos acertaban (evaluación por definir antes de mirar resultados).
 Ensayo (`python -m src.paper.supervisor --simulada`): cuentas ficticias, no crea paradas ni avisa (dice qué haría).

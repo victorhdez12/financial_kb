@@ -35,10 +35,12 @@ VERSION_MANDATO = "supervisor-v1"
 SPEC = "docs/factors/supervisor_carteras_spec.md v1.0"
 CARTERAS = ("B0", "B1", "B1P", "D1", "C1", "M1")
 CON_PARADA = ("C1", "M1")
+CARTERAS_REGLA = ("B1", "D1")    # «Vigía macro»: solo observa (no opera ni cambia nada de ellas)
 CAIDA_LIMITE = -0.35
 DIAS_ERROR = 3
 ESTADOS = {"ok", "aviso", "grave", "sin_datos"}
-CAMPOS = {"version_mandato", "fecha", "carteras", "paradas", "para_el_usuario", "informe_md"}
+CAMPOS = {"version_mandato", "fecha", "carteras", "paradas", "para_el_usuario", "informe_md", "vigia_macro"}
+CAMPOS_VIGIA = {"modelos_hoy", "riesgos_no_vistos", "gestor_macro_haria", "aviso_usuario", "aviso"}
 PAPER = REPO / "research" / "paper"
 REGISTROS = {"B0": PAPER / "decisiones.jsonl", "B1": PAPER / "decisiones.jsonl", "B1P": PAPER / "decisiones_b1prima.jsonl",
              "D1": PAPER / "decisiones_d1.jsonl", "C1": PAPER / "decisiones_c1.jsonl", "M1": PAPER / "decisiones_m1.jsonl"}
@@ -308,6 +310,8 @@ def recoger(hoy: dt.date, *, cuentas: dict | None = None, ensayo: bool = True) -
          "espejo": {"lineas": len(espejo), "ultimas": espejo[-10:]},
          "diarios": {k: diarios(k, hoy) for k in ("C1", "M1")},
          "informes_anteriores": diarios("Supervisor", hoy, n=2, max_chars=3000),
+         "modelos": modelos_macro(),
+         "vigia_carteras": list(CARTERAS_REGLA),
          "logs": logs(hoy), "salud": salud(regs, hoy),
          "limites_duros": {"reglas": {"caida_maxima": CAIDA_LIMITE, "errores_seguidos": DIAS_ERROR,
                                       "fuera_de_mandato": "corto, opción vendida para abrir o efectivo negativo"},
@@ -337,7 +341,62 @@ def leer_salida(texto: str | None) -> dict:
             raise G.SalidaInvalida(f"estado de {k} no válido")
     if not isinstance(d.get("informe_md"), str) or not d["informe_md"].strip():
         raise G.SalidaInvalida("falta 'informe_md'")
+    vg = d.get("vigia_macro")
+    if not isinstance(vg, dict) or set(vg) != set(CARTERAS_REGLA):
+        raise G.SalidaInvalida(f"'vigia_macro' debe tener exactamente {list(CARTERAS_REGLA)}")
+    for k, v in vg.items():
+        if not isinstance(v, dict) or set(v) - CAMPOS_VIGIA or not isinstance(v.get("aviso_usuario"), bool):
+            raise G.SalidaInvalida(f"vigia_macro.{k}: campos {sorted(CAMPOS_VIGIA)} con aviso_usuario booleano")
+        if v["aviso_usuario"] and not (isinstance(v.get("aviso"), str) and v["aviso"].strip()):
+            raise G.SalidaInvalida(f"vigia_macro.{k}: aviso_usuario sin texto en 'aviso'")
     return d
+
+
+# --------------------------------------------------------------------------- vigía macro (B1, D1)
+def ruta_vigia() -> Path:
+    """Registro de avisos del vigía, FUERA de git (para medir después si acertaban)."""
+    return dir_supervisor() / "vigia_avisos.jsonl"
+
+
+def modelos_macro() -> dict:
+    """Salidas de los modelos macro con su fecha (las mismas que recibe M1: src/paper/m1_paquete.modelos)."""
+    try:
+        from src.paper import c1_paquete as CP
+        from src.paper import m1_paquete as MP
+        s, nombre = CP.ultimo_signal()
+        base = {"diagnosticos": CP.diagnosticos(dt.date.today())}
+        m = MP.modelos(s, nombre, base)
+        m.pop("alertas", None)
+        m.pop("xbrl", None)
+        return m
+    except Exception as e:  # noqa: BLE001 — sin modelos, el vigía lo dice; el supervisor sigue
+        return _error(e)
+
+
+def registrar_vigia(d: dict | None, hoy: dt.date, *, registrar: bool, trabajo: Path) -> list[dict]:
+    """Una línea por cartera de regla y día en vigia_avisos.jsonl (ensayo: en la carpeta del ensayo). Si
+    `aviso_usuario`, notificación + línea en Actualizaciones.md (solo al registrar). Nunca toca esas carteras."""
+    if not d:
+        return []
+    filas = []
+    for k in CARTERAS_REGLA:
+        v = (d.get("vigia_macro") or {}).get(k) or {}
+        filas.append({"fecha": hoy.isoformat(), "cartera": k, "aviso_usuario": bool(v.get("aviso_usuario")),
+                      "aviso": v.get("aviso"), "riesgos_no_vistos": v.get("riesgos_no_vistos"),
+                      "gestor_macro_haria": v.get("gestor_macro_haria"), "modelos_hoy": v.get("modelos_hoy"),
+                      "ensayo": not registrar, "mandato": VERSION_MANDATO})
+    ruta = ruta_vigia() if registrar else trabajo / "vigia_avisos.jsonl"
+    ruta.parent.mkdir(parents=True, exist_ok=True)
+    previas = {(r.get("fecha"), r.get("cartera")) for r in _jsonl(ruta)}
+    with open(ruta, "a", encoding="utf-8") as fh:
+        for f in filas:
+            if (f["fecha"], f["cartera"]) not in previas:
+                fh.write(json.dumps(f, ensure_ascii=False, default=str) + "\n")
+    if registrar:
+        for f in filas:
+            if f["aviso_usuario"]:
+                avisar(f"Vigía macro {f['cartera']}: {f['aviso']}"[:200], False)
+    return filas
 
 
 def prompt(p: dict, trabajo: Path) -> str:
@@ -377,6 +436,7 @@ def ciclo(hoy: dt.date | None = None, *, registrar: bool = False, cuentas: dict 
         d = None
         out["salida_no_valida"] = str(e)
     out["informe"] = d
+    out["vigia"] = registrar_vigia(d, hoy, registrar=registrar, trabajo=trabajo)
     ruta = AG.ruta_diario("Supervisor", hoy.isoformat()) if registrar else trabajo / "informe.md"
     cab = {"tipo": "supervisor", "fecha": hoy.isoformat(), "mandato": VERSION_MANDATO, "ensayo": not registrar,
            "cuentas_simuladas": p["cuentas_simuladas"], "modelo": ", ".join(cl.get("modelo") or []) or "—"}
@@ -410,6 +470,9 @@ def main(argv: list[str] | None = None) -> int:
         print(f"  LÍMITE {x['cartera']}: {x['accion']} — {'; '.join(x['motivos'])}")
     for k, v in ((out.get("informe") or {}).get("carteras") or {}).items():
         print(f"  {k}: {v.get('estado')} · {' | '.join(v.get('hallazgos') or [])[:300]}")
+    for f in out.get("vigia") or []:
+        print(f"  VIGÍA {f['cartera']}: {'AVISO: ' + str(f['aviso']) if f['aviso_usuario'] else 'sin aviso'} · "
+              f"{str(f.get('gestor_macro_haria'))[:200]}")
     if not cl.get("ok"):
         print(f"sin informe del agente: {cl.get('error')}")
     print(f"informe: {out['informe_fichero']}")
