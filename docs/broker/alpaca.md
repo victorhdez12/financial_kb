@@ -97,6 +97,16 @@ fichero; cada línea de `espejo.jsonl` lleva la versión.
   deja derivar los pesos, como la regla. `ALPACA_API_KEY_ID_S1` / `ALPACA_API_SECRET_KEY_S1` en `alpaca.env`.
 - Tests: `tests/test_s1_vivo.py` (mismo transporte simulado, sin red ni claves, registros reales intactos).
 
+### 4 ter. C1 «Claude gestor» (perfil `C1`; 2026-11-19)
+- Cuenta paper del 2.º usuario, claves `ALPACA_API_KEY_ID_C1` / `ALPACA_API_SECRET_KEY_C1`. No usa el mapeo de ETFs:
+  opera lo que proponga Claude y valide la guardia (`docs/factors/C1_claude_gestor_spec.md` §3 y §6).
+- Métodos nuevos del cliente, todos de **solo lectura** y en los mismos dos hosts: `contrato_opcion`
+  (`/v2/options/contracts/…`), `historial_cartera` (`/v2/account/portfolio/history`), `instantaneas_opciones`
+  (`/v1beta1/options/snapshots`, feed `indicative`) e `instantaneas_cripto` (`/v1beta3/crypto/us/snapshots`). Las
+  órdenes de opciones y cripto usan el `enviar_orden` de siempre (mismo endpoint paper; opciones con
+  `position_intent` buy_to_open / sell_to_close; cripto `gtc`). `activo("BTC/USD")` consulta `/v2/assets/BTCUSD`.
+- C1 se niega a operar si el perfil declara otra cartera o si la cuenta ya recibió órdenes del espejo.
+
 ## 5. Comandos
 ```bash
 .venv/bin/python -m src.broker.alpaca perfiles                 # qué perfiles hay (sin mostrar claves)

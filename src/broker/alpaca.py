@@ -27,7 +27,7 @@ import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable
-from urllib.parse import urlparse
+from urllib.parse import quote, urlparse
 
 log = logging.getLogger("broker.alpaca")
 
@@ -253,7 +253,7 @@ class Cliente:
         return self._pide("GET", self.base, "/v2/positions")
 
     def activo(self, simbolo: str) -> dict:
-        return self._pide("GET", self.base, f"/v2/assets/{simbolo}")
+        return self._pide("GET", self.base, f"/v2/assets/{quote(simbolo.replace('/', ''), safe='')}")
 
     def enviar_orden(self, orden: dict) -> dict:
         return self._pide("POST", self.base, "/v2/orders", cuerpo=orden)
@@ -267,6 +267,15 @@ class Cliente:
     def orden_por_cliente(self, client_order_id: str) -> dict:
         return self._pide("GET", self.base, "/v2/orders:by_client_order_id", {"client_order_id": client_order_id})
 
+    def contrato_opcion(self, simbolo: str) -> dict:
+        """Contrato de opción (símbolo OCC): tradable, tipo call/put, vencimiento, precio de ejercicio. Solo lectura."""
+        return self._pide("GET", self.base, f"/v2/options/contracts/{quote(simbolo, safe='')}")
+
+    def historial_cartera(self, periodo: str = "1A", marco: str = "1D", desde: dt.date | None = None) -> dict:
+        """Valor diario de la cuenta paper (timestamp, equity, profit_loss). Con `desde`, desde esa fecha. Solo lectura."""
+        params = {"timeframe": marco, **({"start": desde.isoformat()} if desde else {"period": periodo})}
+        return self._pide("GET", self.base, "/v2/account/portfolio/history", params)
+
     # ---- market data (feed IEX)
     def instantaneas(self, simbolos: list[str]) -> dict:
         """Por símbolo: latestTrade, latestQuote, minuteBar, dailyBar, prevDailyBar (feed IEX)."""
@@ -276,6 +285,16 @@ class Cliente:
         """Última barra de 1 minuto por símbolo (feed IEX)."""
         d = self._pide("GET", DATOS, "/v2/stocks/bars/latest", {"symbols": ",".join(simbolos), "feed": FEED})
         return d.get("bars", {}) if isinstance(d, dict) else {}
+
+    def instantaneas_opciones(self, simbolos: list[str]) -> dict:
+        """Por contrato OCC: latestQuote, latestTrade (feed `indicative`, el gratuito: retrasado 15 min). Solo lectura."""
+        d = self._pide("GET", DATOS, "/v1beta1/options/snapshots", {"symbols": ",".join(simbolos), "feed": "indicative"})
+        return d.get("snapshots", {}) if isinstance(d, dict) else {}
+
+    def instantaneas_cripto(self, simbolos: list[str]) -> dict:
+        """Por par (p. ej. BTC/USD): latestQuote, latestTrade, minuteBar, dailyBar. Solo lectura."""
+        d = self._pide("GET", DATOS, "/v1beta3/crypto/us/snapshots", {"symbols": ",".join(simbolos)})
+        return d.get("snapshots", {}) if isinstance(d, dict) else {}
 
     def barras_diarias(self, simbolos: list[str], desde: dt.date, hasta: dt.date) -> dict[str, list[dict]]:
         d = self._pide("GET", DATOS, "/v2/stocks/bars",
