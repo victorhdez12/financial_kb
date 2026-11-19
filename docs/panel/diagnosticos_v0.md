@@ -1,7 +1,7 @@
 ---
 documento: Diagnósticos automáticos («¿por qué ha pasado esto?») — diseño
-version: 0.1 BORRADOR (2026-11-19) — pendiente de aprobación del usuario (§7)
-estado: diseño; nada construido. Los umbrales de §2 se fijan ANTES de mirar qué eventos dispararían (como alertas v1).
+version: 1.0 APROBADA (2026-11-19)
+estado: aprobado tal cual el 19-nov (§7 a-d); en construcción (src/diag/). Los umbrales de §2 se fijan ANTES de mirar qué eventos dispararían (como alertas v1).
 ---
 
 # Diagnósticos: buscar la causa cuando pasa algo fuerte
