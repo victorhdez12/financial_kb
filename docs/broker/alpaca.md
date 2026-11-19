@@ -2,7 +2,7 @@
 documento: Alpaca PAPER (cuenta simulada): datos en tiempo real y espejo de ejecución de B0/B1/B1′
 version: 1.1 (2026-11-19)
 estado: enganchado (§7). Tres cuentas paper: B1 …4JGR (perfil por defecto), B1′ …ZFJX (`_B1P`), B0 …X9F9 (`_B0`).
-  Dry-run hasta el registro de dic-2026 (cierre de nov); órdenes paper desde ene-2027 (cierre de dic). Sin claves no hace nada.
+  Entrada de B0 y B1 el 19-nov-2026 (decisión del cierre de oct, a petición del usuario); desde el registro del cierre de nov (dic-2026) todo se ejecuta (`ALPACA_EJECUTA_DESDE="2026-12"`). Sin claves no hace nada.
 ---
 
 # Alpaca paper: «testearnos con la bolsa en tiempo real»

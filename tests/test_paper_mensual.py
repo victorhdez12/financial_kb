@@ -148,18 +148,18 @@ def _espejo(llamadas: str) -> list[str]:
     return [l.strip() for l in llamadas.splitlines() if "src.broker.espejo" in l]
 
 
-def test_espejo_alpaca_tras_cada_registro_en_dry_run_hasta_2027_01(juguete):
+def test_espejo_alpaca_tras_cada_registro_en_dry_run_antes_de_2026_12(juguete):
     # el python falso sale con 9 para src.broker.espejo (como un fallo): el registro no se entera
     # docs/broker/alpaca.md §7: B1′ tras su registro, B1 y B0 tras el de B1; el cierre de nov (registrado en dic) en dry-run
-    llamadas, _ = _corre(juguete)
+    llamadas, _ = _corre(juguete, hoy="2026-11-03")
     esp = _espejo(llamadas)
     assert len(esp) == 3 and all("--dry-run" in l and "--auto" in l for l in esp)
     assert [l.split("--cartera ")[1].split()[0] for l in esp] == ["B1P", "B1", "B0"]
     assert _git(juguete[0], "status", "--porcelain") == ""
 
 
-def test_espejo_alpaca_ejecuta_desde_2027_01_y_el_entorno_manda(juguete):
-    llamadas, _ = _corre(juguete, hoy="2027-01-04")
+def test_espejo_alpaca_ejecuta_desde_2026_12_y_el_entorno_manda(juguete):
+    llamadas, _ = _corre(juguete, hoy="2026-12-03")
     assert all("--ejecutar" in l for l in _espejo(llamadas)) and len(_espejo(llamadas)) == 3
 
 

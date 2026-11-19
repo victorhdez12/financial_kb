@@ -27,9 +27,10 @@ cd "$REPO" || exit 1
 
 # --- Espejo Alpaca PAPER (docs/broker/alpaca.md §7): NUNCA afecta a los registros ni al código de salida ---
 # Cuentas: B1 (perfil por defecto), B1P y B0. Envía órdenes a las cuentas PAPER solo desde ALPACA_EJECUTA_DESDE (mes en
-# que corre este script; plan 18-nov: el cierre de nov, registrado en dic, va en dry-run; el de dic, en ene, se ejecuta).
-# FIN_ALPACA_EJECUTAR=0/1 en el entorno manda sobre la fecha. Escribe solo en ~/financial_archive/alpaca y en su log.
-ALPACA_EJECUTA_DESDE="2027-01"
+# que corre este script). 19-nov: el usuario pidió empezar ya (entrada de B0/B1 el 19-nov con la decisión del cierre de
+# oct); desde el registro del cierre de nov (dic) todo se ejecuta. FIN_ALPACA_EJECUTAR=0/1 en el entorno manda sobre la
+# fecha. Escribe solo en ~/financial_archive/alpaca y en su log.
+ALPACA_EJECUTA_DESDE="2026-12"
 ALOG="$LOGDIR/$(date +%Y-%m-%d)_alpaca.log"
 if [ -z "${FIN_ALPACA_EJECUTAR:-}" ]; then
   if [[ ! "$MES" < "$ALPACA_EJECUTA_DESDE" ]]; then FIN_ALPACA_EJECUTAR=1; else FIN_ALPACA_EJECUTAR=0; fi
