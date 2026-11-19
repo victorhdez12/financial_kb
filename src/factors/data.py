@@ -174,15 +174,59 @@ def _al_calendario(r: pd.Series, calendario: pd.DatetimeIndex) -> pd.Series:
     return out
 
 
-def d1_dev(con) -> tuple[pd.DataFrame, pd.Series]:
+RUTA_ORO_D = Path("~/financial_archive/raw/gold/fred_GOLDPMGBD228NLBM_archive_20171122.txt").expanduser()
+SHA_ORO_D = "cf04e466ec375d3eb49d011a6bb20e02cb1f289f7b84d6be729146dccab2160a"
+
+
+def oro_diario_dev(ruta: Path = RUTA_ORO_D, sha256: str | None = SHA_ORO_D) -> pd.Series:
+    """Fixing LBMA de la tarde (15:00 Londres) en USD/oz, diario (serie FRED GOLDPMGBD228NLBM, copia de archive.org;
+    procedencia en ~/financial_archive/raw/gold/LEEME_oro_diario.md). El corte se aplica al PARSEAR: las filas con
+    fecha > DEV_END se descartan antes de convertir el valor. '.' (festivo de Londres) = ausente. sha256 comprobado."""
+    import hashlib
+    datos = Path(ruta).read_bytes()
+    if sha256 and hashlib.sha256(datos).hexdigest() != sha256:
+        raise ValueError(f"{Path(ruta).name}: sha256 distinto del registrado")
+    lineas = datos.decode("utf-8").splitlines()
+    i = next(k for k, x in enumerate(lineas) if x.startswith("DATE"))
+    idx, val = [], []
+    for x in lineas[i + 1:]:
+        m = re.match(r"^(\d{4}-\d{2}-\d{2})\s+(\S+)\s*$", x)
+        if not m:
+            continue
+        d = pd.Timestamp(m.group(1))
+        if d > DEV_END:
+            continue                                  # nunca se convierte un dato ≥ 2005
+        if m.group(2) == ".":
+            continue
+        idx.append(d)
+        val.append(float(m.group(2)))
+    s = pd.Series(val, index=pd.DatetimeIndex(idx), name="oro_usd_d")
+    if s.index.has_duplicates or (s <= 0).any():
+        raise ValueError("oro diario: fechas duplicadas o precios no positivos")
+    check(s)
+    return s
+
+
+def oro_al_calendario(precio: pd.Series, calendario: pd.DatetimeIndex) -> pd.Series:
+    """Rentabilidad del oro en el calendario de EE. UU.: precio arrastrado como mucho D1_HUECO_MAX días (festivo de
+    Londres → rentabilidad 0 ese día y el cambio entra el siguiente día con fixing; un día solo de Londres se suma al
+    siguiente día de EE. UU.). Más de D1_HUECO_MAX días sin fixing → NaN (fallo cerrado en la simulación)."""
+    p = precio.reindex(precio.index.union(calendario)).ffill(limit=D1_HUECO_MAX).reindex(calendario)
+    return (p / p.shift(1) - 1).rename("oro")
+
+
+def d1_dev(con, ruta_oro: Path | None = RUTA_ORO_D) -> tuple[pd.DataFrame, pd.Series]:
     """(rentabilidades diarias en fracción de los activos de D1 con dato diario ≤ 2004, efectivo diario), en el
     calendario de Ken French EE. UU. Columnas: 'us' (ffx_us_mkt_rf_d + ffx_us_rf_d), 'xus' (desarrollados sin EE. UU.
-    de Ken French, en USD: ffx_devxus_mkt_rf_d + ffx_devxus_rf_d; desde 1990-07, NaN antes), 'bonos' (d1_bonos_dev).
-    Oro y materias primas: sin serie diaria ≤ 2004 en el archivo (research/factors/d1_series.json)."""
+    de Ken French, en USD: ffx_devxus_mkt_rf_d + ffx_devxus_rf_d; desde 1990-07, NaN antes), 'bonos' (d1_bonos_dev),
+    'oro' (oro_diario_dev; solo si `ruta_oro`). Materias primas: sin índice diario ≤ 2004 (excluidas)."""
     rf = (load_dev(con, "ffx_us_rf_d") / 100).rename("rf")
     us = load_dev(con, "ffx_us_mkt_rf_d") / 100 + rf
     xrf = load_dev(con, "ffx_devxus_rf_d") / 100
     xus = _al_calendario(load_dev(con, "ffx_devxus_mkt_rf_d") / 100 + xrf, rf.index)
-    df = pd.DataFrame({"us": us, "xus": xus, "bonos": d1_bonos_dev(con, rf.index)})
+    cols = {"us": us, "xus": xus, "bonos": d1_bonos_dev(con, rf.index)}
+    if ruta_oro is not None:
+        cols["oro"] = oro_al_calendario(oro_diario_dev(ruta_oro), rf.index)
+    df = pd.DataFrame(cols)
     check(df)
     return df, rf

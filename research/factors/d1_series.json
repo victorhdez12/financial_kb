@@ -1,8 +1,8 @@
 {
  "documento": "D1: series diarias y periodo de puntuación por disponibilidad (spec v1.0 §1, §3)",
  "spec": "docs/factors/D1_tendencia_diaria_spec.md v1.0 (commit 7d04137)",
- "creado": "2026-11-19T07:30:07+00:00",
- "git_head": "7d0413765ea0c4c962704c40793bba6c882ecd69",
+ "creado": "2026-11-19T11:11:52+00:00",
+ "git_head": "a6e25fc568998dc947e2b739bd5e54d98da4826f",
  "corte": "2004-12-31",
  "incluidos": {
   "us": {
@@ -47,6 +47,19 @@
     "huecos_dentro": 0
    }
   },
+  "oro": {
+   "vivo": "GLD",
+   "series": [
+    "raw/gold/fred_GOLDPMGBD228NLBM_archive_20171122.txt"
+   ],
+   "nota": "fixing LBMA de la tarde (15:00 Londres) en USD/oz, serie FRED GOLDPMGBD228NLBM (copia de archive.org, sha256 cf04e466ec37…; LEEME_oro_diario.md); aprobado por el usuario (opción A, sin cambio de diseño). Festivo de Londres ('.') → precio arrastrado ≤ 5 días: rentabilidad 0 ese día y el cambio entra el siguiente con fixing; cierre asíncrono (15:00 Londres frente a 16:00 Nueva York)",
+   "cobertura": {
+    "desde": "1968-04-02",
+    "hasta": "2004-12-31",
+    "dias": 9251,
+    "huecos_dentro": 0
+   }
+  },
   "efectivo": {
    "vivo": "(cuenta)",
    "series": [
@@ -62,19 +75,27 @@
   }
  },
  "excluidos": {
-  "oro": {
-   "vivo": "GLD",
-   "motivo": "NO hay precio DIARIO del oro ≤ 2004 en el archivo: solo mensual (Banco Mundial, datahub) y anual (MeasuringWorth). Fuentes públicas probadas el 19-nov-2026 sin éxito: FRED/ALFRED (las series LBMA GOLDAMGBD228NLBM/GOLDPMGBD228NLBM se retiraron y ALFRED no las conserva), LBMA (prices.lbma.org.uk tras Cloudflare), Stooq (verificación JavaScript), Bundesbank BBEX3 (solo el fixing de Frankfurt en DEM, 1968-06 a 1998-12, sin serie en USD ni tras 1998).",
-   "bloqueante": true
-  },
   "mp": {
    "vivo": "DBC",
    "motivo": "No hay índice diario de materias primas ≤ 2004 en el archivo (GSCI/BCOM no están; AQR y Pink Sheet son mensuales). El futuro de crudo de la EIA (RCLC1d) es una sola materia prima y un precio sin rentabilidad de rollo: no es un índice. Se excluye del desarrollo (spec §1).",
    "bloqueante": false
   }
  },
- "periodo": null,
- "estado": "BLOQUEADO: el periodo de §3 exige «al menos bolsa EE. UU., bonos y oro» y L1 (§4) es 70/15/15 con oro; sin oro diario ≤ 2004 no se puede fijar el periodo ni L1 sin cambiar el diseño. Decide el usuario (opciones en docs/factors/D1_resultado_desarrollo.md). No se ha calculado ninguna rentabilidad de D1.",
+ "periodo": {
+  "desde": "1969-05-13",
+  "hasta": "2004-12-31",
+  "dias": 8999,
+  "activos": [
+   "us",
+   "xus",
+   "bonos",
+   "oro"
+  ],
+  "primer_dia_decision": "1969-05-12",
+  "xus_entra_tras_su_calentamiento": "1991-06-28",
+  "regla": "primer día con 252 rentabilidades de bolsa EE. UU., bonos y oro; el día siguiente se puntúa; fuera de EE. UU. pesa 0 (y no cuenta en N) hasta tener su historia completa"
+ },
+ "estado": "listo",
  "calendario": "días hábiles de Ken French EE. UU. (NYSE)",
  "calentamiento_dias": 252
 }

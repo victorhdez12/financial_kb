@@ -160,9 +160,11 @@ def test_desarrollo_se_niega_sin_sellado_sin_periodo_o_repetido(monkeypatch, tmp
     with pytest.raises(SystemExit, match="SELLADO"):
         D.main([])
     monkeypatch.setattr(D, "git", lambda *a: subprocess.CompletedProcess([], 0, "", ""))
-    with pytest.raises(SystemExit, match="no está listo"):       # el d1_series.json real está BLOQUEADO
-        D.main([])
     s = tmp_path / "d1_series.json"
+    s.write_text(json.dumps({"estado": "BLOQUEADO", "periodo": None}))
+    monkeypatch.setattr(D, "SERIES", s)
+    with pytest.raises(SystemExit, match="no está listo"):
+        D.main([])
     s.write_text(json.dumps({"estado": "listo", "periodo": {"desde": "1975-01-02", "hasta": "2004-12-31",
                                                            "activos": ["us", "bonos", "oro"]}}))
     monkeypatch.setattr(D, "SERIES", s)

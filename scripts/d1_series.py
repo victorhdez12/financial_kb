@@ -28,16 +28,14 @@ SERIES = {
               "nota": f"r_t = y_(t−1)/252 − {F.D1_DURACION:g}·Δy (duración declarada 17); DGS20 cuando "
                       "existe; DGS10 en el hueco del 20 a (1987-01 a 1993-09); un rendimiento se arrastra como mucho "
                       f"{F.D1_HUECO_MAX} días (festivos del mercado de bonos)"},
+    "oro": {"vivo": "GLD", "series": ["raw/gold/fred_GOLDPMGBD228NLBM_archive_20171122.txt"],
+            "nota": "fixing LBMA de la tarde (15:00 Londres) en USD/oz, serie FRED GOLDPMGBD228NLBM (copia de "
+                    f"archive.org, sha256 {F.SHA_ORO_D[:12]}…; LEEME_oro_diario.md); aprobado por el usuario (opción A, "
+                    "sin cambio de diseño). Festivo de Londres ('.') → precio arrastrado ≤ 5 días: rentabilidad 0 ese día "
+                    "y el cambio entra el siguiente con fixing; cierre asíncrono (15:00 Londres frente a 16:00 Nueva York)"},
     "efectivo": {"vivo": "(cuenta)", "series": ["ffx_us_rf_d"], "nota": "RF diario de Ken French"},
 }
 EXCLUIDOS = {
-    "oro": {"vivo": "GLD", "motivo": (
-        "NO hay precio DIARIO del oro ≤ 2004 en el archivo: solo mensual (Banco Mundial, datahub) y anual "
-        "(MeasuringWorth). Fuentes públicas probadas el 19-nov-2026 sin éxito: FRED/ALFRED (las series LBMA "
-        "GOLDAMGBD228NLBM/GOLDPMGBD228NLBM se retiraron y ALFRED no las conserva), LBMA (prices.lbma.org.uk tras "
-        "Cloudflare), Stooq (verificación JavaScript), Bundesbank BBEX3 (solo el fixing de Frankfurt en DEM, "
-        "1968-06 a 1998-12, sin serie en USD ni tras 1998)."),
-        "bloqueante": True},
     "mp": {"vivo": "DBC", "motivo": (
         "No hay índice diario de materias primas ≤ 2004 en el archivo (GSCI/BCOM no están; AQR y Pink Sheet son "
         "mensuales). El futuro de crudo de la EIA (RCLC1d) es una sola materia prima y un precio sin rentabilidad de "
@@ -62,7 +60,16 @@ def main() -> int:
         con.close()
     F.check(df)
     cob = {k: cobertura(df[k]) for k in df.columns} | {"efectivo": cobertura(rf)}
-    nucleo_ok = not any(v["bloqueante"] for v in EXCLUIDOS.values())
+    # periodo SOLO por disponibilidad: primer día de decisión con 252 rentabilidades seguidas de bolsa EE. UU., bonos
+    # y oro (recuento de datos, no valores); se puntúa desde el día siguiente hasta el corte
+    nucleo = ["us", "bonos", "oro"]
+    listo = df[nucleo].notna().rolling(max(M.VENTANAS)).sum().eq(max(M.VENTANAS)).all(axis=1)
+    primero_dec = listo.idxmax()
+    dias = df.index[df.index > primero_dec]
+    huecos = {k: int(df.loc[dias, k].isna().sum()) for k in nucleo}
+    if any(huecos.values()):
+        raise SystemExit(f"huecos dentro del periodo en {huecos}: no se fija el periodo")
+    xus_dec = df["xus"].notna().rolling(max(M.VENTANAS)).sum().eq(max(M.VENTANAS)).idxmax()
     out = {
         "documento": "D1: series diarias y periodo de puntuación por disponibilidad (spec v1.0 §1, §3)",
         "spec": "docs/factors/D1_tendencia_diaria_spec.md v1.0 (commit 7d04137)",
@@ -72,11 +79,13 @@ def main() -> int:
         "corte": str(F.DEV_END.date()),
         "incluidos": {k: {**v, "cobertura": cob[k]} for k, v in SERIES.items()},
         "excluidos": EXCLUIDOS,
-        "periodo": None if not nucleo_ok else "pendiente",
-        "estado": ("BLOQUEADO: el periodo de §3 exige «al menos bolsa EE. UU., bonos y oro» y L1 (§4) es 70/15/15 con "
-                   "oro; sin oro diario ≤ 2004 no se puede fijar el periodo ni L1 sin cambiar el diseño. Decide el "
-                   "usuario (opciones en docs/factors/D1_resultado_desarrollo.md). No se ha calculado ninguna "
-                   "rentabilidad de D1.") if not nucleo_ok else "listo",
+        "periodo": {"desde": str(dias[0].date()), "hasta": str(dias[-1].date()), "dias": int(len(dias)),
+                    "activos": ["us", "xus", "bonos", "oro"],
+                    "primer_dia_decision": str(primero_dec.date()),
+                    "xus_entra_tras_su_calentamiento": str(xus_dec.date()),
+                    "regla": "primer día con 252 rentabilidades de bolsa EE. UU., bonos y oro; el día siguiente se "
+                             "puntúa; fuera de EE. UU. pesa 0 (y no cuenta en N) hasta tener su historia completa"},
+        "estado": "listo",
         "calendario": "días hábiles de Ken French EE. UU. (NYSE)",
         "calentamiento_dias": max(M.VENTANAS),
     }

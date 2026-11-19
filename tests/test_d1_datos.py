@@ -63,7 +63,7 @@ def test_d1_dev_columnas_calendario_y_corte():
     con.execute("delete from obs_latest where series_id like 'ffx_devxus%' and date = '2004-12-28'")
     con.execute("insert into obs_latest values ('ffx_devxus_mkt_rf_d', '2004-12-25', 1.0), "
                 "('ffx_devxus_rf_d', '2004-12-25', 0.0)")
-    df, rf = F.d1_dev(con)
+    df, rf = F.d1_dev(con, ruta_oro=None)
     assert list(df.columns) == ["us", "xus", "bonos"] and df.index.max() == pd.Timestamp("2004-12-31")
     assert df.loc["2004-12-28", "us"] == pytest.approx(0.0101) and rf.iloc[0] == pytest.approx(0.0001)
     assert np.isnan(df.loc["2004-12-27", "xus"])                              # primer día del calendario
@@ -78,3 +78,34 @@ def test_al_calendario_compone():
     assert np.isnan(out.iloc[0])
     assert out.iloc[1] == pytest.approx(0.01)
     assert out.iloc[2] == pytest.approx(1.02 * 1.03 - 1)
+
+
+def _oro(tmp_path, filas):
+    ruta = tmp_path / "oro.txt"
+    ruta.write_bytes(("Title: x\r\nDATE          VALUE\r\n" + "".join(f"{f}\r\n" for f in filas)).encode())
+    return ruta
+
+
+def test_oro_corta_en_2004_sin_convertir_y_salta_festivos(tmp_path):
+    ruta = _oro(tmp_path, ["2004-12-29    440.000", "2004-12-30         .", "2004-12-31    438.000",
+                           "2005-01-03    basura"])                 # si se convirtiera, float() fallaría
+    s = F.oro_diario_dev(ruta, sha256=None)
+    assert list(s) == [440.0, 438.0] and s.index.max() == pd.Timestamp("2004-12-31")
+    with pytest.raises(ValueError):
+        F.oro_diario_dev(ruta)                                        # sha256 distinto del registrado
+
+
+def test_oro_al_calendario_festivos_y_hueco_largo():
+    p = pd.Series([100.0, 110.0, 121.0], index=pd.DatetimeIndex(["2000-01-03", "2000-01-05", "2000-01-06"]))
+    cal = pd.DatetimeIndex(["2000-01-03", "2000-01-04", "2000-01-05", "2000-01-06"])
+    r = F.oro_al_calendario(p, cal)
+    assert np.isnan(r.iloc[0]) and r.iloc[1] == 0 and r.iloc[2] == pytest.approx(0.10) and r.iloc[3] == pytest.approx(0.10)
+    p2 = pd.Series([100.0, 120.0], index=pd.DatetimeIndex(["2000-01-03", "2000-01-20"]))
+    r2 = F.oro_al_calendario(p2, pd.bdate_range("2000-01-03", "2000-01-20"))
+    assert r2.iloc[1:6].eq(0).all() and r2.iloc[6:].isna().all()     # más de 5 días sin fixing → NaN
+
+
+@pytest.mark.skipif(not F.RUTA_ORO_D.exists(), reason="sin el fichero real del oro")
+def test_oro_real_cuadra_sha_y_corte():
+    s = F.oro_diario_dev()
+    assert s.index.min() == pd.Timestamp("1968-04-01") and s.index.max() <= F.DEV_END
