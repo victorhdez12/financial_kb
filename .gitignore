@@ -46,3 +46,8 @@ espejo.jsonl
 # fuera de git para no ensuciar el árbol que exigen los registros en vivo (E1/B1/B1′ el día 3, INT-11 el día 20)
 obsidian/Diagnosticos/*.md
 research/diag/aciertos.jsonl
+
+# Carteras gestionadas por agentes (C1/M1) y supervisor: diarios e informes en Obsidian, fuera de git
+# (docs/factors/M1_cartera_macro_spec.md §7, supervisor_carteras_spec.md §0); botones de parada que crea el supervisor
+obsidian/Carteras/
+research/paper/*_PARADA

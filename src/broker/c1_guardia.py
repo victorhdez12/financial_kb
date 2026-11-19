@@ -58,8 +58,10 @@ def comprobar_cliente(c: A.Cliente) -> None:
 
 
 # --------------------------------------------------------------------------- lectura de la salida
-def leer_salida(texto: str | None) -> dict:
-    """JSON de la salida de Claude. Admite el JSON solo o envuelto en UN bloque ```json …```; nada más."""
+def leer_salida(texto: str | None, *, version: str = VERSION_MANDATO, campos: set[str] | None = None) -> dict:
+    """JSON de la salida de Claude. Admite el JSON solo o envuelto en UN bloque ```json …```; nada más.
+    `version` y `campos`: los del mandato (c1-v1 por defecto; el modo agente c1-v2 y M1 m1-v1 pasan los suyos)."""
+    campos = CAMPOS_SALIDA if campos is None else campos
     if texto is None or not str(texto).strip():
         raise SalidaInvalida("salida vacía")
     t = str(texto).strip()
@@ -72,11 +74,11 @@ def leer_salida(texto: str | None) -> dict:
         raise SalidaInvalida(f"no es JSON válido ({e.msg}, posición {e.pos})") from None
     if not isinstance(d, dict):
         raise SalidaInvalida("el JSON no es un objeto")
-    extra = set(d) - CAMPOS_SALIDA
+    extra = set(d) - campos
     if extra:
         raise SalidaInvalida(f"campos no previstos en el mandato: {sorted(extra)}")
-    if d.get("version_mandato") != VERSION_MANDATO:
-        raise SalidaInvalida(f"version_mandato {d.get('version_mandato')!r} ≠ {VERSION_MANDATO!r}")
+    if d.get("version_mandato") != version:
+        raise SalidaInvalida(f"version_mandato {d.get('version_mandato')!r} ≠ {version!r}")
     if not isinstance(d.get("ordenes"), list):
         raise SalidaInvalida("falta la lista 'ordenes' (puede ser [] si no opera)")
     if not isinstance(d.get("nota_diario"), str) or not d["nota_diario"].strip():
@@ -122,11 +124,11 @@ def _num(x) -> float | None:
     return x if math.isfinite(x) else None
 
 
-def _forma(o) -> tuple[dict | None, str | None]:
+def _forma(o, campos: set[str] | None = None) -> tuple[dict | None, str | None]:
     """Comprueba la forma de una orden (sin mirar la cuenta). Devuelve (orden normalizada, None) o (None, motivo)."""
     if not isinstance(o, dict):
         return None, "la orden no es un objeto"
-    extra = set(o) - CAMPOS_ORDEN
+    extra = set(o) - (CAMPOS_ORDEN if campos is None else campos)
     if extra:
         return None, f"campos no previstos: {sorted(extra)}"
     s = str(o.get("simbolo") or "").strip().upper()
@@ -178,17 +180,26 @@ def _forma(o) -> tuple[dict | None, str | None]:
             "precio_limite": lim, "razon": o["razon"].strip(), "cambiaria_de_opinion": o["cambiaria_de_opinion"].strip()}, None
 
 
-def validar(texto: str | None, estado: EstadoCuenta | None, *, parada: bool | None = None) -> Veredicto:
-    """Veredicto de la guardia para la salida `texto` de Claude. `estado` None = sin datos de la cuenta → no opera."""
-    parada = PARADA.exists() if parada is None else parada
+def validar(texto: str | None, estado: EstadoCuenta | None, *, parada: bool | None = None,
+            version: str = VERSION_MANDATO, campos_salida: set[str] | None = None,
+            campos_orden: set[str] | None = None, leer=None, extra_orden=None,
+            ruta_parada: Path | None = None) -> Veredicto:
+    """Veredicto de la guardia para la salida `texto` de Claude. `estado` None = sin datos de la cuenta → no opera.
+
+    Ampliaciones (modo agente c1-v2 y M1; las reglas de la cuenta son las mismas): `version`, `campos_salida` y
+    `campos_orden` del mandato; `leer(texto) -> dict` sustituye a `leer_salida` (M1 comprueba además su declaración
+    modelo por modelo); `extra_orden(orden) -> motivo | None` rechaza una orden antes de mirar la cuenta (M1: sin cita
+    válida); `ruta_parada`: el botón de parada de esa cartera (por defecto el de C1)."""
+    ruta_parada = PARADA if ruta_parada is None else ruta_parada
+    parada = ruta_parada.exists() if parada is None else parada
     if parada:
-        return no_opera(f"botón de parada: existe research/paper/{PARADA.name}")
+        return no_opera(f"botón de parada: existe research/paper/{ruta_parada.name}")
     try:
-        d = leer_salida(texto)
+        d = leer(texto) if leer is not None else leer_salida(texto, version=version, campos=campos_salida)
     except SalidaInvalida as e:
         return no_opera(f"salida de Claude inválida: {e}", estado.efectivo if estado else None)
     if estado is None:
-        return no_opera("sin estado de la cuenta C1")
+        return no_opera("sin estado de la cuenta")
     efectivo = _num(estado.efectivo)
     if efectivo is None:
         return no_opera("efectivo de la cuenta no numérico")
@@ -198,7 +209,8 @@ def validar(texto: str | None, estado: EstadoCuenta | None, *, parada: bool | No
     v = Veredicto(True, None, efectivo=round(efectivo, 2))
     formadas = []
     for i, o in enumerate(d["ordenes"]):
-        n, motivo = _forma(o)
+        motivo = extra_orden(o) if extra_orden is not None and isinstance(o, dict) else None
+        n, motivo = (None, motivo) if motivo else _forma(o, campos_orden)
         if motivo:
             v.rechazadas.append({"indice": i, "orden": o, "motivo": motivo})
         else:

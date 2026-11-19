@@ -1,0 +1,19 @@
+{
+ "documento": "Lista fija de acciones de la SOMBRA teórica de M1 (regla mecánica del borrador 0.1, docs/factors/M1_cartera_macro_spec.md v1.1 §4; borrador en git be92b9e §2 paso 2): las 2 mayores por capitalización de cada sector de S1 (industrias de Ken French, mapa ETF en config/alpaca_etfs_s1.json)",
+ "version": "m1-acciones-1.0 (2026-11-19)",
+ "revision": "Solo en enero (la siguiente: 2027-01). Cambiar la lista = versión nueva (sube 'version'); la sombra registra la versión que usó.",
+ "fuente_declarada": "Capitalización aproximada a noviembre de 2026 según el conocimiento del Constructor (sin consulta en vivo): lista DECLARADA, no medida; el Validador debe revisarla. Dentro de cada industria se eligen empresas cuyo negocio principal es de esa industria; una empresa no se repite entre industrias.",
+ "acciones": {
+  "BusEq": ["NVDA", "MSFT"],
+  "Durbl": ["AMZN", "TSLA"],
+  "Shops": ["WMT", "COST"],
+  "Money": ["JPM", "BRK.B"],
+  "Enrgy": ["XOM", "CVX"],
+  "Chems": ["LIN", "SHW"],
+  "Manuf": ["GE", "CAT"],
+  "Utils": ["NEE", "SO"],
+  "NoDur": ["PG", "KO"],
+  "Hlth": ["LLY", "JNJ"],
+  "Telcm": ["GOOGL", "META"]
+ }
+}

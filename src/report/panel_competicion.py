@@ -28,11 +28,14 @@ from src.broker import alpaca as A
 REPO = A.REPO
 LOG_C1 = REPO / "research" / "paper" / "decisiones_c1.jsonl"
 LOG_D1 = REPO / "research" / "paper" / "decisiones_d1.jsonl"
+LOG_M1 = REPO / "research" / "paper" / "decisiones_m1.jsonl"
+LOG_M1_SOMBRA = REPO / "research" / "paper" / "decisiones_m1_sombra.jsonl"
 AVISO = ("Meses de datos no distinguen habilidad de suerte: hacen falta años (docs/factors/paper_trading.md §5). "
          "Esta tabla sirve para seguir la ejecución, no para elegir ganador.")
 TEORICOS = [("b0", "B0 · estática 70/15/15"), ("b1", "B1 · ajuste por volatilidad"), ("b1p", "B1′ · HAR diario")]
 CUENTAS = [("B0", "B0 · espejo Alpaca"), ("B1", "B1 · espejo Alpaca"), ("B1P", "B1′ · espejo Alpaca"),
-           ("D1", "D1 · tendencia diaria"), ("C1", "C1 · Claude gestor")]
+           ("D1", "D1 · tendencia diaria"), ("C1", "C1 · Claude gestor"), ("M1", "M1 · Claude gestor macro")]
+SOMBRA = [("M1S", "M1 · sombra teórica (regla 0.1)")]
 SD = '<span class="nd">sin datos</span>'
 
 
@@ -156,20 +159,71 @@ def clientes_por_cartera() -> dict[str, A.Cliente]:
         c = A.cliente(p or None)
         if c is None:
             continue
-        k = E.cartera_de(c.cred) or (c.cred.perfil if c.cred.perfil in ("D1", "C1") else None)
+        k = E.cartera_de(c.cred) or (c.cred.perfil if c.cred.perfil in ("D1", "C1", "M1") else None)
         if k and k not in out:
             out[k] = c
     return out
 
 
+def fila_sombra(reg: list[dict], desde: str | None) -> dict | None:
+    """Fila de la sombra teórica de M1 (research/paper/decisiones_m1_sombra.jsonl): la serie es la valoración que guarda
+    cada línea (valor al último cierre completo); rotación y costes, los acumulados de la última línea."""
+    pts = {}
+    for r in reg:
+        v = r.get("valoracion") or {}
+        if v.get("hasta") and v.get("valor"):
+            pts[v["hasta"]] = float(v["valor"])
+    if len(pts) < 2:
+        return None
+    s = pd.Series(pts).sort_index()
+    s.index = pd.to_datetime(s.index)
+    if desde:
+        s = s[s.index >= pd.Timestamp(desde)]
+    m = metricas_serie(s)
+    if m["n"] < 2:
+        return None
+    ult = (reg[-1].get("valoracion") or {})
+    return {"desde": str(s.index[0].date()), "hasta": str(s.index[-1].date()), "rent": m["rent"], "vol": m["vol"],
+            "sharpe": m["sharpe"], "caida": m["caida"], "rotacion": ult.get("rotacion"), "costes": ult.get("costes"),
+            "operaciones": ult.get("rebalanceos"), "coste_claude_usd": None, "periodos": m["n"]}
+
+
+def uso_modelos(reg_m1: list[dict], serie: pd.Series | None = None) -> list[dict]:
+    """Spec M1 §5 (descriptivo): por modelo, % de días en que M1 le hizo caso (declaración «si» o «parcial»), nº de
+    órdenes que lo citan y rentabilidad media de la cuenta en la sesión siguiente a los días con órdenes que lo citan."""
+    from src.broker import m1_guardia as MG
+    dias = [r for r in reg_m1 if not r.get("ensayo") and (r.get("uso_modelos") or {}).get("declaracion")]
+    sig = None
+    if serie is not None and len(serie) > 1:
+        sig = serie.sort_index().pct_change().shift(-1)
+    out = []
+    for m in MG.MODELOS:
+        caso = [(r.get("uso_modelos") or {}).get("declaracion", {}).get(m) for r in dias]
+        con = [r for r in dias if any(m in (o.get("modelos") or []) for o in (r.get("uso_modelos") or {}).get("citas_ordenes") or [])]
+        n_ord = sum(sum(1 for o in (r.get("uso_modelos") or {}).get("citas_ordenes") or [] if m in (o.get("modelos") or []))
+                    for r in dias)
+        rent = None
+        if sig is not None and con:
+            xs = [sig.get(pd.Timestamp(r["fecha"])) for r in con]
+            xs = [float(x) for x in xs if x is not None and math.isfinite(float(x))]
+            rent = float(np.mean(xs)) if xs else None
+        out.append({"modelo": m, "dias": len(dias),
+                    "pct_caso": (sum(c in ("si", "parcial") for c in caso) / len(dias)) if dias else None,
+                    "pct_no": (sum(c == "no" for c in caso) / len(dias)) if dias else None,
+                    "ordenes": n_ord, "dias_con_ordenes": len(con), "rent_sesion_siguiente": rent})
+    return out
+
+
 def recoger(s: dict | None, *, con_alpaca: bool | None = None, log_c1: Path = LOG_C1, log_d1: Path = LOG_D1,
-            espejo: list[dict] | None = None, series: dict[str, pd.Series] | None = None) -> dict:
-    """{'teoricos': {k: fila|None}, 'cuentas': {k: fila|None}, 'inicio_teorico', 'inicio_cuentas', 'notas'}."""
+            espejo: list[dict] | None = None, series: dict[str, pd.Series] | None = None,
+            log_m1: Path = LOG_M1, log_m1_sombra: Path = LOG_M1_SOMBRA) -> dict:
+    """{'teoricos': {k: fila|None}, 'cuentas': {k: fila|None}, 'inicio_teorico', 'inicio_cuentas', 'notas',
+    'uso_modelos'}."""
     notas = []
     val = ((s or {}).get("paper") or {}).get("valoracion") or {}
     teo = {k: fila_teorica(val.get(k)) for k, _ in TEORICOS}
     con_alpaca = (os.environ.get("FIN_PANEL_SIN_ALPACA") != "1") if con_alpaca is None else con_alpaca
-    reg_c1, reg_d1 = _jsonl(log_c1), _jsonl(log_d1)
+    reg_c1, reg_d1, reg_m1, reg_s = _jsonl(log_c1), _jsonl(log_d1), _jsonl(log_m1), _jsonl(log_m1_sombra)
     if espejo is None:
         try:
             from src.broker import espejo as E
@@ -179,10 +233,13 @@ def recoger(s: dict | None, *, con_alpaca: bool | None = None, log_c1: Path = LO
     ej = {k: [r for r in espejo if r.get("tipo") == "ejecucion" and r.get("cartera") == k] for k in ("B0", "B1", "B1P")}
     inicios = {k: (min(str(r.get("ts"))[:10] for r in v) if v else None) for k, v in ej.items()}
     inicios["C1"] = inicio_registro([r for r in reg_c1 if not r.get("ensayo")])
+    inicios["M1"] = inicio_registro([r for r in reg_m1 if not r.get("ensayo")])
     inicios["D1"] = inicio_registro(reg_d1)
     ej["C1"] = ejecuciones_c1(reg_c1)
+    ej["M1"] = ejecuciones_c1(reg_m1)
     ej["D1"] = [e for r in reg_d1 for e in (r.get("ejecuciones") or []) if isinstance(e, dict)]
-    coste_claude = sum(float((r.get("claude") or {}).get("coste_usd") or 0) for r in reg_c1) if reg_c1 else None
+    coste = {k: (sum(float((r.get("claude") or {}).get("coste_usd") or 0) for r in reg) if reg else None)
+             for k, reg in (("C1", reg_c1), ("M1", reg_m1))}
     if series is None:
         series = {}
         if con_alpaca:
@@ -200,13 +257,14 @@ def recoger(s: dict | None, *, con_alpaca: bool | None = None, log_c1: Path = LO
     con_datos = [inicios[k] for k, _ in CUENTAS if inicios.get(k) and k in series and len(series[k])]
     inicio_c = max(con_datos) if con_datos else None
     cuentas = {k: (fila_cuenta(series.get(k), operaciones(ej.get(k) or [], desde=inicio_c), inicio_c,
-                               coste_claude if k == "C1" else None) if inicios.get(k) else None) for k, _ in CUENTAS}
+                               coste.get(k)) if inicios.get(k) else None) for k, _ in CUENTAS}
+    cuentas["M1S"] = fila_sombra(reg_s, inicio_c)
     desde_t = [f["desde"] for f in teo.values() if f]
     if len(set(desde_t)) > 1:
         notas.append("Teórico: las carteras empiezan en meses distintos (B1′ se registró más tarde); "
                      "la valoración del informe mensual no se puede recortar al inicio común.")
     return {"teoricos": teo, "cuentas": cuentas, "inicio_teorico": max(desde_t) if desde_t else None,
-            "inicio_cuentas": inicio_c, "notas": notas}
+            "inicio_cuentas": inicio_c, "notas": notas, "uso_modelos": uso_modelos(reg_m1, series.get("M1"))}
 
 
 # --------------------------------------------------------------------------- HTML
@@ -226,6 +284,20 @@ def _filas(defs, datos: dict, con_claude: bool) -> list[str]:
     return out
 
 
+def html_uso_modelos(filas: list[dict]) -> str:
+    cab = ["modelo", "días", "le hizo caso", "lo descartó", "órdenes que lo citan", "rent. sesión siguiente*"]
+    th = "".join(f'<th scope="col">{c}</th>' for c in cab)
+    tr = []
+    for f in filas or []:
+        tr.append("<tr>" + "".join(f"<td>{c}</td>" for c in (
+            _e(f["modelo"]), str(f["dias"]), _pct(f["pct_caso"], 0).replace("+", ""), _pct(f["pct_no"], 0).replace("+", ""),
+            str(f["ordenes"]), _pct(f["rent_sesion_siguiente"], 2))) + "</tr>")
+    return ('<h4>M1 · uso de modelos (descriptivo; docs/factors/M1_cartera_macro_spec.md §5)</h4>'
+            f'<div class="tw"><table><thead><tr>{th}</tr></thead><tbody>{"".join(tr)}</tbody></table></div>'
+            '<p class="small">«Le hizo caso» = declaración diaria «si» o «parcial»; * rentabilidad media de la cuenta M1 '
+            'en la sesión siguiente a los días con órdenes que citan ese modelo. Muchos años para concluir nada.</p>')
+
+
 def html_competicion(d: dict) -> str:
     cab = ["cartera", "periodo", "rentabilidad", "volatilidad anual", "Sharpe*", "caída máx.", "rotación", "costes",
            "nº operaciones"]
@@ -237,14 +309,16 @@ def html_competicion(d: dict) -> str:
     cue = ("<h4>Cuentas Alpaca PAPER (diario, USD, ejecución simulada)"
            + (f" · inicio común {_e(d['inicio_cuentas'])}" if d.get("inicio_cuentas") else "") + "</h4>"
            f'<div class="tw"><table><thead><tr>{th(cab + ["coste Claude"])}</tr></thead><tbody>'
-           + "".join(_filas(CUENTAS, d["cuentas"], True)) + "</tbody></table></div>")
+           + "".join(_filas(CUENTAS + SOMBRA, d["cuentas"], True)) + "</tbody></table></div>")
     notas = "".join(f'<p class="small">{_e(n)}</p>' for n in d.get("notas") or [])
     return ('<div class="card" id="competicion"><h3>Competición</h3>'
             f'<p class="note"><strong>Aviso:</strong> {_e(AVISO)}</p>{teo}{cue}'
             '<p class="small">* Sharpe = rentabilidad media anualizada / volatilidad anualizada, sin restar el tipo sin '
             'riesgo. Rotación = valor operado / valor medio. Costes: teórico = costes fijos del backtest; Alpaca = '
-            'deslizamiento frente al precio al enviar (paper: optimista). Los dos bloques no son comparables entre sí '
-            '(moneda, instrumentos y frecuencia distintos).</p>' + notas + "</div>")
+            'deslizamiento frente al precio al enviar (paper: optimista). La sombra de M1 es TEÓRICA (sin cuenta: '
+            'cierres ajustados y 5 pb por lado; nº operaciones = reequilibrios). Los dos bloques no son comparables '
+            'entre sí (moneda, instrumentos y frecuencia distintos).</p>' + html_uso_modelos(d.get("uso_modelos") or [])
+            + notas + "</div>")
 
 
 def sec_competicion(s: dict | None) -> str:
