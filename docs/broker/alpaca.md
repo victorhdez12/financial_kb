@@ -1,8 +1,8 @@
 ---
 documento: Alpaca PAPER (cuenta simulada): datos en tiempo real y espejo de ejecución de B0/B1/B1′
 version: 1.1 (2026-11-19)
-estado: enganchado (§7). Cuentas paper: B1 …4JGR (perfil por defecto), B0 …X9F9 (`_B0`), **M1 …ZFJX (`_M1`)** — la cuenta de B1′ pasó a M1 el
-  19-nov a petición del usuario (B1′ sigue solo en papel); M1 configurada sin margen (×1), sin cortos y opciones nivel 2.
+estado: enganchado (§7). Cuentas paper: B1 …4JGR (perfil por defecto), **D1 …X9F9 (`_D1`; era B0, reasignación declarada en espejo.jsonl)**, **M1 …ZFJX (`_M1`)** — la cuenta de B1′ pasó a M1 el
+  19-nov a petición del usuario (B1′ sigue solo en papel); M1 y D1 configuradas sin margen (×1) y sin cortos (opciones: M1 nivel 2, D1 nivel 1).
   Entrada de B0 y B1 el 19-nov-2026 (decisión del cierre de oct, a petición del usuario); desde el registro del cierre de nov (dic-2026) todo se ejecuta (`ALPACA_EJECUTA_DESDE="2026-12"`). Sin claves no hace nada.
 ---
 

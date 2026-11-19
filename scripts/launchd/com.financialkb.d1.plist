@@ -7,6 +7,8 @@
 <dict>
   <key>Label</key><string>com.financialkb.d1</string>
   <key>WorkingDirectory</key><string>/Users/victorhdez12/Proyectos/financial_kb</string>
+  <key>EnvironmentVariables</key>
+  <dict><key>FIN_ALPACA_EJECUTAR</key><string>1</string></dict>
   <key>ProgramArguments</key>
   <array>
     <string>/bin/bash</string><string>-lc</string>

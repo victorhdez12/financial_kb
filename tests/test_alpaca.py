@@ -412,3 +412,17 @@ def test_panel_engancha_alpaca_en_mi_cartera_y_se_puede_apagar(monkeypatch):
     html = P.construir({})
     cart = html.split('<section id="cartera"')[1].split('<section id="estado"')[0]
     assert "ALPACA-OK" in cart
+
+
+def test_reasignacion_declarada_permite_otra_cartera_solo_despues():
+    from src.broker import espejo as E
+    cred = A.Credenciales(key_id="PKX", secret="s", perfil="D1", cartera="D1", origen="t")
+    viejo = [{"tipo": "orden", "cartera": "B0", "cuenta_huella": "h1"}]
+    assert "ya se usó" in E.puede_ejecutar(cred, "D1", "h1", viejo)
+    reasig = viejo + [{"tipo": "reasignacion", "cuenta_huella": "h1", "de": "B0", "a": "D1"}]
+    assert E.puede_ejecutar(cred, "D1", "h1", reasig) is None
+    # una reasignación a OTRA cartera no sirve
+    otra = viejo + [{"tipo": "reasignacion", "cuenta_huella": "h1", "de": "B0", "a": "C1"}]
+    assert "ya se usó" in E.puede_ejecutar(cred, "D1", "h1", otra)
+    # órdenes de B0 posteriores a la reasignación vuelven a bloquear
+    assert "ya se usó" in E.puede_ejecutar(cred, "D1", "h1", reasig + viejo)
