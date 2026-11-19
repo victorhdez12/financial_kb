@@ -847,3 +847,11 @@ Las entradas más recientes van arriba. Ver también [[Proyecto/Estado del proye
 
 - **Alpaca PAPER:** conexión comprobada (cuenta …4JGR, 100 000 $ simulados). Declarada la cartera B1 en el perfil por defecto (`ALPACA_CARTERA=B1` en `alpaca.env`, fuera de git). Simulación del espejo con la decisión del cierre 31-oct (70 % RV / 15 % RF / 15 % oro): 3 compras limit (URTH, IEI, GLD), nada enviado. Sigue sin instalar el enganche automático (§7 de `docs/broker/alpaca.md`).
 - **Curso → reglas:** nueva carpeta `Curso/` (índice, lecciones, reglas) y plantilla `Templates/Regla`. Prueba con M2-C10 «Costes de cambio»: 4 reglas (R-FOSO-01..04). Son reglas de análisis de empresas (fosos), no macro; R-FOSO-04 (el foso tiene que verse en margen bruto y ROIC) se puede usar como filtro descriptivo en la ficha XBRL, pero no probar con ≤ 2004 (XBRL empieza ≈ 2009).
+
+## 2026-11-19 — S1 «rotación de sectores por régimen»: NO PASA → cerrada; 3.ª cuenta Alpaca = B0
+
+- Prerregistro `docs/factors/S1_rotacion_sectorial_spec.md` v1.0 congelado y subido (7a0b1a3) antes de calcular nada. Corrida única de desarrollo 1950-02 → 2004-12 (12 industrias French, cuadrante PIT del clasificador en vivo, 0 meses distintos de `regime_monthly`).
+- S1 12,17 % vs mercado 11,89 %; activa +0,13 %/año, IR 0,04; placebos p = 0,50 (la mediana de los placebos da lo mismo: la ventaja es el sobrepeso defensivo, no el momento); 1.ª mitad negativa. Criterios a) b) c) ❌, d) ✅. Detalle: `docs/factors/S1_resultado_desarrollo.md`, `research/trial_log.md`.
+- **Decisión del usuario:** S1 se cierra (cualquier v2 = prueba nueva, ya contaminada). Código del espejo S1 fusionado pero inactivo (sin `research/paper/S1_ACTIVO`). Sin Validador completo (fallo claro).
+- **Cuentas Alpaca PAPER:** B1 (…4JGR, lista), B1′ y **B0** (por crear por el usuario; claves `_B1P` y `_B0`).
+- Con V1-V3 y S1, la conclusión se refuerza: la señal macro mensual no sirve para cronometrar ni la bolsa ni los sectores (≤ 2004).
