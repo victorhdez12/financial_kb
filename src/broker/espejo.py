@@ -337,7 +337,13 @@ def puede_ejecutar(cred: A.Credenciales, cartera: str, huella: str, registro: li
                 f"ALPACA_CARTERA{'_' + cred.perfil if cred.perfil else ''}={cartera} en alpaca.env")
     if propia != cartera:
         return f"el perfil '{cred.perfil or 'defecto'}' es de la cartera {propia}, no de {cartera} (una cuenta = una cartera)"
-    otras = {r["cartera"] for r in registro if r.get("cuenta_huella") == huella and r.get("tipo") == "orden"} - {cartera}
+    # Reasignación DECLARADA (fila «reasignacion» en espejo.jsonl, decisión del usuario): solo cuentan las órdenes
+    # posteriores a la última reasignación de esta cuenta a esta cartera.
+    desde = 0
+    for i, r in enumerate(registro):
+        if r.get("tipo") == "reasignacion" and r.get("cuenta_huella") == huella and r.get("a") == cartera:
+            desde = i + 1
+    otras = {r["cartera"] for r in registro[desde:] if r.get("cuenta_huella") == huella and r.get("tipo") == "orden"} - {cartera}
     if otras:
         return f"esta cuenta paper ya se usó para {sorted(otras)}: una cuenta = una cartera"
     return None
