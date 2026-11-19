@@ -99,9 +99,15 @@ def ficha_movimiento(s: pd.Series, medida: str, fecha: pd.Timestamp) -> dict | N
            "unidad": "pb" if medida == "pb" else "%", "k_sigma63": _f(r["k"]),
            "percentil_dia_en_historia": _f(100 * float((m["cambio"] <= r["cambio"]).mean()), 1),
            "historia_desde": str(m.index[0].date()), "retraso_dias": int((fecha - f).days)}
-    if len(niv) > 5:
-        out["cambio_5s"] = _f(100 * (niv.iloc[-1] - niv.iloc[-6])) if medida == "pb" else _f(100 * (niv.iloc[-1] / niv.iloc[-6] - 1))
-    if medida != "pb":
+    for h in (5, 20):   # tendencia reciente (en el ensayo del 18-nov faltaba la de 20 sesiones de tipos y dólar)
+        if len(niv) > h:
+            a, b = niv.iloc[-h - 1], niv.iloc[-1]
+            out[f"cambio_{h}s"] = _f(100 * (b - a)) if medida == "pb" else _f(100 * (a / b - 1)) if medida == "inv_log" \
+                else _f(100 * (b / a - 1))
+    w = niv[niv.index > f - pd.Timedelta(days=365)]
+    out["percentil_nivel_1a"] = _f(100 * float((w <= niv.iloc[-1]).mean()), 0) if medida != "inv_log" \
+        else _f(100 * float((w >= niv.iloc[-1]).mean()), 0)
+    if medida == "log":   # (el dólar se guarda como EUR/USD: su máximo de 52 sem. no significa lo mismo)
         w = niv[niv.index > f - pd.Timedelta(days=365)]
         out["desde_max_52s"] = _f(100 * (niv.iloc[-1] / w.max() - 1))
         out["vol_1a_anual"] = _f(100 * float(np.log(w).diff().std() * np.sqrt(252)), 1)

@@ -122,9 +122,9 @@ def argumentos(paquete_dir: Path, nota: Path) -> list[str]:
     return [claude_bin(), "-p", "--output-format", "json", "--restricted", "--tools", "Read,Write",
             "--permission-mode", "dontAsk", "--strict-mcp-config", "--no-session-persistence",
             "--disable-slash-commands", "--add-dir", str(nota.parent),
-            "--allowedTools", _regla("Read", paquete_dir, True), _regla("Write", nota),
-            "--disallowedTools", "Bash", "WebFetch", "WebSearch", "Edit", "NotebookEdit",
-            _regla("Read", cfg, True), _regla("Write", cfg, True), _regla("Read", REPO / "research" / "paper", True),
+            "--allowedTools", _regla("Read", paquete_dir, True), _regla("Edit", nota),
+            "--disallowedTools", "Bash", "WebFetch", "WebSearch",
+            _regla("Read", cfg, True), _regla("Edit", cfg, True), _regla("Read", REPO / "research" / "paper", True),
             _regla("Read", D.root() / "alpaca", True)] + (
         ["--model", os.environ["FIN_DIAG_MODELO"]] if os.environ.get("FIN_DIAG_MODELO") else [])
 

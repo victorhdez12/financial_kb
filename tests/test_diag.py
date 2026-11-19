@@ -200,6 +200,11 @@ def test_contexto_paquete_sin_red(tmp_path):
     f = X["precios"].index[-1]
     P = C.construir(f, None, X, None, None, tmp_path / "pq", {})
     assert P["evento"]["forzado"] and P["movimientos"][0]["clave"] == "sp500"
+    s = X["precios"]["SPY"]
+    assert P["movimientos"][0]["cambio_20s"] == pytest.approx(100 * (s.iloc[-1] / s.iloc[-21] - 1), abs=0.01)
+    dol = next(m for m in P["movimientos"] if m["clave"] == "dolar")
+    e = X["wh"]["ecb_eurusd_d"]
+    assert dol["cambio_5s"] == pytest.approx(100 * (e.iloc[-6] / e.iloc[-1] - 1), abs=0.01)   # dólar = 1 / EUR-USD
     assert P["amplitud"]["sectores_eeuu"] == 2
     assert {"oro – bolsa", "bolsa – bonos largos"} <= {c["par"] for c in P["correlaciones"]}
     assert "sp500" in P["series_seguimiento"] and "SPY" not in P["series_seguimiento"]
@@ -338,7 +343,7 @@ def test_explicar_con_claude_falso(tmp_path, monkeypatch):
     assert "Bash" in argv[argv.index("--disallowedTools"):]
     assert any("config/**" in a and a.startswith("Read(") for a in argv)
     assert any("research/paper/**" in a for a in argv)
-    assert any(a.startswith("Write(/") and a.endswith("2026-11-18_extremo_oro.md)") for a in argv)
+    assert any(a.startswith("Edit(/") and a.endswith("2026-11-18_extremo_oro.md)") for a in argv)
 
 
 def test_explicar_avisa_formato_y_urls_ajenas(tmp_path, monkeypatch):
@@ -482,3 +487,15 @@ def test_prompt_versionado_restricciones():
     t = E.PROMPT.read_text()
     for k in ("{PAQUETE}", "{NOTA}", "{FECHA}", "SOLO titulares", "## 5. Comprobaciones automáticas", "máximo 4"):
         assert k in t
+
+
+def test_noticias_reintenta_429_de_gdelt():
+    vistas = {}
+
+    def tr(url):
+        vistas[url] = vistas.get(url, 0) + 1
+        if "gdelt" in url:
+            return (429, b"Please limit requests") if vistas[url] == 1 else (200, GDELT_OK)
+        return 404, b""
+    r = N.recoger("2026-11-18", None, [], transporte=tr, espera=0)
+    assert r["gdelt"] and not [k for k in r["errores"] if k.startswith("gdelt")]

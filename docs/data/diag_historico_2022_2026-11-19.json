@@ -1,0 +1,189 @@
+{
+ "desde": "2022-01-01",
+ "hasta": "2026-11-19",
+ "semanas": 256,
+ "eventos_nuevos": 186,
+ "media_semana": 0.73,
+ "actualizaciones": 17,
+ "con_nota_tras_tope": 185,
+ "notas_media_semana": 0.72,
+ "semanas_sin_evento": 117,
+ "semanas_mas_de_3": 1,
+ "max_semana": 4,
+ "por_tipo": {
+  "extremo": {
+   "eventos": 66,
+   "por_semana": 0.26,
+   "solo_este_tipo": 42
+  },
+  "conjunto": {
+   "eventos": 13,
+   "por_semana": 0.05,
+   "solo_este_tipo": 1
+  },
+  "tendencia": {
+   "eventos": 47,
+   "por_semana": 0.18,
+   "solo_este_tipo": 45
+  },
+  "regimen": {
+   "eventos": 20,
+   "por_semana": 0.08,
+   "solo_este_tipo": 18
+  },
+  "macro": {
+   "eventos": 19,
+   "por_semana": 0.07,
+   "solo_este_tipo": 17
+  },
+  "flujos": {
+   "eventos": 52,
+   "por_semana": 0.2,
+   "solo_este_tipo": 38
+  }
+ },
+ "por_anio": {
+  "2022": 41,
+  "2023": 41,
+  "2024": 37,
+  "2025": 33,
+  "2026": 34
+ },
+ "errores_carga": {},
+ "sustitutos": {
+  "sp500": "ETF SPY (cierre ajustado)",
+  "nasdaq": "ETF QQQ",
+  "eurostoxx": "SUSTITUTO: ETF VGK (bolsa europea amplia, en dólares); no hay Euro Stoxx 50 diario en el archivo",
+  "oro": "ETF GLD",
+  "tesoro10": "FRED DGS10 (cambio diario en pb; 1 día de retraso)",
+  "dolar": "SUSTITUTO: dólar frente al euro (inverso del cambio de referencia del BCE); el DXY no está en el archivo",
+  "petroleo": "futuro CL=F, 1.er vencimiento (saltos en cambios de contrato)",
+  "bitcoin": "sin datos diarios en el archivo ni sustituto razonable: se omite"
+ },
+ "ultimos": [
+  {
+   "fecha": "2026-06-05",
+   "nuevo": true,
+   "nota": true,
+   "disparos": [
+    "Nasdaq 100: −4,80 % (−4,2 σ)"
+   ]
+  },
+  {
+   "fecha": "2026-06-09",
+   "nuevo": true,
+   "nota": true,
+   "disparos": [
+    "Oro lleva 3 sesiones por debajo de su media de 200 sesiones (nivel 390,78, media 405,54)"
+   ]
+  },
+  {
+   "fecha": "2026-06-18",
+   "nuevo": true,
+   "nota": true,
+   "disparos": [
+    "Dólar: +1,13 % (+3,1 σ)"
+   ]
+  },
+  {
+   "fecha": "2026-06-25",
+   "nuevo": true,
+   "nota": true,
+   "disparos": [
+    "BAYN.DE: alerta fuerte «volumen» con precio +18,72 % (+8,9 σ)"
+   ]
+  },
+  {
+   "fecha": "2026-07-14",
+   "nuevo": true,
+   "nota": true,
+   "disparos": [
+    "IPC subyacente EE. UU. (2026-06): −0,02 % m/m frente a la tendencia de 6 meses 0,25 % m/m (−2,6 σ de los errores históricos; previsión propia, sin consenso de analistas)"
+   ]
+  },
+  {
+   "fecha": "2026-08-21",
+   "nuevo": true,
+   "nota": true,
+   "disparos": [
+    "Oro lleva 3 sesiones por encima de su media de 200 sesiones (nivel 423,36, media 413,46)"
+   ]
+  },
+  {
+   "fecha": "2026-09-01",
+   "nuevo": true,
+   "nota": true,
+   "disparos": [
+    "Oro lleva 3 sesiones por debajo de su media de 200 sesiones (nivel 396,75, media 414,99)"
+   ]
+  },
+  {
+   "fecha": "2026-09-23",
+   "nuevo": true,
+   "nota": true,
+   "disparos": [
+    "Tesoro EE. UU. 10 a: +15,00 pb (+3,5 σ)"
+   ]
+  },
+  {
+   "fecha": "2026-10-01",
+   "nuevo": true,
+   "nota": true,
+   "disparos": [
+    "cuadrante Estanflación → Deflación/recesión; liquidez neutral → escasa (mes 2026-09)"
+   ]
+  },
+  {
+   "fecha": "2026-10-22",
+   "nuevo": true,
+   "nota": true,
+   "disparos": [
+    "Tesoro EE. UU. 10 a: −17,00 pb (−3,5 σ)"
+   ]
+  },
+  {
+   "fecha": "2026-10-30",
+   "nuevo": true,
+   "nota": true,
+   "disparos": [
+    "Nasdaq 100: −3,47 % (−3,2 σ)"
+   ]
+  },
+  {
+   "fecha": "2026-11-02",
+   "nuevo": true,
+   "nota": true,
+   "disparos": [
+    "cuadrante Deflación/recesión → Goldilocks (mes 2026-10)"
+   ]
+  },
+  {
+   "fecha": "2026-11-04",
+   "nuevo": true,
+   "nota": true,
+   "disparos": [
+    "movimiento conjunto ≥ 2,5 σ en S&P 500 (+2,6 σ), Euro Stoxx 50 (+4,3 σ), Dólar (−2,8 σ), Petróleo WTI (−3,3 σ)",
+    "Euro Stoxx 50: +3,08 % (+4,3 σ)",
+    "Petróleo WTI: −8,29 % (−3,3 σ)"
+   ]
+  },
+  {
+   "fecha": "2026-11-05",
+   "nuevo": true,
+   "nota": true,
+   "disparos": [
+    "movimiento conjunto ≥ 2,5 σ en S&P 500 (−6,9 σ), Nasdaq 100 (−6,0 σ), Euro Stoxx 50 (−2,5 σ) (repetido)",
+    "Nasdaq 100: −6,49 % (−6,0 σ) (repetido)",
+    "S&P 500: −4,41 % (−6,9 σ)"
+   ]
+  },
+  {
+   "fecha": "2026-11-09",
+   "nuevo": false,
+   "nota": false,
+   "disparos": [
+    "Euro Stoxx 50: +3,07 % (+3,6 σ) (repetido)"
+   ]
+  }
+ ]
+}

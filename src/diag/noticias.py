@@ -28,6 +28,7 @@ PLAZO = {"timeout": 20, "total": 45}         # s por lectura y total por petici√
 ESPERA_GDELT = 5.5
 MAX_CONSULTAS_GDELT = 4
 MAX_ARTICULOS = 20
+REINTENTOS_429 = 3
 RSS = {"Fed": "https://www.federalreserve.gov/feeds/press_all.xml",
        "BLS": "https://www.bls.gov/feed/bls_latest.rss",
        "BEA": "https://apps.bea.gov/rss/rss.xml",
@@ -168,6 +169,12 @@ def recoger(fecha, evento: dict | None = None, movs: list[dict] | None = None, t
         res["consultas"].append({"activo": c, "consulta": q, "url": url})
         try:
             st, cuerpo = tr(url)
+            for k in range(REINTENTOS_429):   # GDELT limita a 1 petici√≥n / 5 s por IP y responde 429
+                if st != 429:
+                    break
+                if espera:
+                    time.sleep(espera * (2 + 2 * k))
+                st, cuerpo = tr(url)
             if st != 200:
                 raise RuntimeError(f"HTTP {st}")
             for a in parse_gdelt(cuerpo):
