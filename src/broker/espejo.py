@@ -1,9 +1,14 @@
-"""Espejo de ejecución en Alpaca PAPER de las carteras del paper trading (B0, B1, B1′). SOLO cuenta simulada.
+"""Espejo de ejecución en Alpaca PAPER de las carteras del paper trading (B0, B1, B1′ y S1). SOLO cuenta simulada.
 
 Qué hace: lee la decisión registrada (research/paper/decisiones.jsonl para B0/B1, decisiones_b1prima.jsonl para B1′;
 SOLO LECTURA, nunca los modifica ni los sustituye), traduce los pesos por tramo (rv/rf/oro) a ETFs de EE. UU. con
 `config/alpaca_etfs.json` y calcula las órdenes que llevan la cuenta paper a esos pesos. Es una comprobación de ejecución
 realista (deslizamiento, fracciones, redondeos, costes) frente al paper teórico, que valora con cierres de mes.
+
+S1 (docs/factors/S1_rotacion_sectorial_spec.md §6): pesos por ETF (núcleo `mkt` + industrias French) desde
+research/paper/decisiones_s1.jsonl con su propio mapeo versionado `config/alpaca_etfs_s1.json`. Solo opera cuando la
+decisión dice `opera` (cambió el cuadrante) o la cuenta aún no tiene ninguna posición de S1 (arranque); si no, deja que
+los pesos deriven, como la regla. B0/B1/B1′ no cambian (sus decisiones no llevan `opera`: siempre se rebalancean).
 
 Reglas:
 - `--dry-run` por defecto: calcula, imprime y apunta el plan; no envía nada. `--ejecutar` envía órdenes a la cuenta
@@ -41,7 +46,9 @@ from src.broker import alpaca as A
 REPO = A.REPO
 LOG_B1 = REPO / "research" / "paper" / "decisiones.jsonl"
 LOG_B1P = REPO / "research" / "paper" / "decisiones_b1prima.jsonl"
-CARTERAS = {"B0": (LOG_B1, "b0"), "B1": (LOG_B1, "b1"), "B1P": (LOG_B1P, "b1prima")}
+LOG_S1 = REPO / "research" / "paper" / "decisiones_s1.jsonl"
+CARTERAS = {"B0": (LOG_B1, "b0"), "B1": (LOG_B1, "b1"), "B1P": (LOG_B1P, "b1prima"), "S1": (LOG_S1, "s1")}
+MAPEOS = {"S1": REPO / "config" / "alpaca_etfs_s1.json"}       # el resto: config/alpaca_etfs.json
 COSTE_TEORICO_PB = {"rv": 10.0, "rf": 10.0, "oro": 20.0}   # docs/factors/paper_trading.md §4 (por lado)
 ESTADOS_FINALES = {"filled", "canceled", "expired", "rejected", "done_for_day", "replaced"}
 
@@ -61,11 +68,18 @@ def _jsonl(p: Path) -> list[dict]:
     return [json.loads(x) for x in p.read_text(encoding="utf-8").splitlines() if x.strip()]
 
 
+def mapeo_de(cartera: str) -> dict:
+    """Mapeo tramo → ETF de la cartera (S1 tiene el suyo; B0/B1/B1′ comparten config/alpaca_etfs.json)."""
+    ruta = MAPEOS.get(A.normaliza_perfil(cartera))
+    return A.cargar_mapeo(ruta) if ruta else A.cargar_mapeo()
+
+
 def decision(cartera: str, cierre: str | None = None, *, logs: dict | None = None) -> dict | None:
-    """{'cierre', 'pesos': {rv, rf, oro}, 'registrado'} de la última decisión (o la del cierre pedido)."""
+    """{'cierre', 'pesos': {tramo: peso}, 'registrado'} de la última decisión (o la del cierre pedido); con 'opera' si
+    el registro lo lleva (S1)."""
     cartera = A.normaliza_perfil(cartera)
-    if cartera not in CARTERAS:
-        raise ValueError(f"cartera desconocida {cartera!r}: B0, B1 o B1P (B1′)")
+    if cartera not in (logs or CARTERAS):
+        raise ValueError(f"cartera desconocida {cartera!r}: B0, B1, B1P (B1′) o S1")
     ruta, clave = (logs or CARTERAS)[cartera]
     filas = [d for d in _jsonl(Path(ruta)) if clave in d]
     if cierre:
@@ -73,8 +87,11 @@ def decision(cartera: str, cierre: str | None = None, *, logs: dict | None = Non
     if not filas:
         return None
     d = filas[-1]
-    return {"cierre": d["cierre"], "pesos": {k: float(v) for k, v in d[clave].items()},
-            "registrado": d.get("registrado")}
+    out = {"cierre": d["cierre"], "pesos": {k: float(v) for k, v in d[clave].items()},
+           "registrado": d.get("registrado")}
+    if "opera" in d:
+        out["opera"] = bool(d["opera"])
+    return out
 
 
 # --------------------------------------------------------------------------- cálculo de órdenes (puro)
@@ -202,6 +219,16 @@ def calcular_ordenes(pesos: dict[str, float], mapeo: dict, *, equity: float, efe
     return ordenes, resumen
 
 
+def sin_operar(pesos: dict[str, float], mapeo: dict, equity: float, efectivo: float) -> dict:
+    """Resumen de un mes sin operaciones (S1 sin cambio de cuadrante: los pesos derivan, como en la regla)."""
+    objetivo = pesos_etf(pesos, mapeo)
+    colchon = float(mapeo.get("liquidez", {}).get("colchon", 0.0))
+    return {"tipo_orden": "ninguna", "equity": equity, "efectivo": efectivo, "invertible": round(equity * (1 - colchon), 2),
+            "escala_compras": 1.0, "rotacion": 0.0, "coste_teorico_usd": 0.0, "omitidas": [],
+            "pesos_objetivo_etf": {s: round(w, 6) for s, (_, w) in objetivo.items()},
+            "sin_operar": "sin cambio de cuadrante: se mantienen las posiciones (los pesos derivan)"}
+
+
 def deslizamiento_pb(lado: str, precio: float | None, ref: float | None) -> float | None:
     """Positivo = peor que la referencia (comprar más caro o vender más barato)."""
     if not precio or not ref:
@@ -247,7 +274,7 @@ def _cierre_sesion(c: A.Cliente, simbolos: list[str], cierre: str) -> dict[str, 
 
 def plan(c: A.Cliente, cartera: str, cierre: str | None = None, *, mapeo: dict | None = None,
          logs: dict | None = None) -> dict:
-    mapeo = mapeo or A.cargar_mapeo()
+    mapeo = mapeo or mapeo_de(cartera)
     d = decision(cartera, cierre, logs=logs)
     if d is None:
         raise LookupError(f"sin decisión registrada para {cartera}" + (f" en {cierre}" if cierre else ""))
@@ -263,8 +290,12 @@ def plan(c: A.Cliente, cartera: str, cierre: str | None = None, *, mapeo: dict |
         if not a.get("tradable", False):
             raise ValueError(f"{s} no es negociable en Alpaca")
         frac[s] = bool(a.get("fractionable"))
-    ordenes, res = calcular_ordenes(d["pesos"], mapeo, equity=float(cu["equity"]), efectivo=float(cu["cash"]),
-                                    posiciones=pos, precios=precios, fraccionable=frac, mercado=mercado)
+    propias = set(A.simbolos_mapeo(mapeo).values())
+    if d.get("opera", True) or not any(abs(q) > 0 for s, q in pos.items() if s in propias):
+        ordenes, res = calcular_ordenes(d["pesos"], mapeo, equity=float(cu["equity"]), efectivo=float(cu["cash"]),
+                                        posiciones=pos, precios=precios, fraccionable=frac, mercado=mercado)
+    else:
+        ordenes, res = [], sin_operar(d["pesos"], mapeo, float(cu["equity"]), float(cu["cash"]))
     cierres = _cierre_sesion(c, simbolos, d["cierre"])
     return {"cartera": cartera, "decision": d, "mercado": mercado, "cuenta": A.enmascara_cuenta(cu.get("account_number")),
             "cuenta_huella": huella_cuenta(cu), "mapeo_version": mapeo.get("version"), "precios": precios,
@@ -393,15 +424,17 @@ def _imprime(p: dict) -> None:
         lim = f" limit {o.limit_price}" if o.limit_price else ""
         print(f"  {o.lado:4s} {o.simbolo:5s} {_fmt_qty(o.qty):>12s} @≈{o.precio_ref}{lim} = {o.valor_estimado:.2f} $"
               f"  (peso {o.peso_actual:.1%} → {o.peso_objetivo:.1%})")
-    if not p["ordenes"]:
+    if r.get("sin_operar"):
+        print(f"  sin órdenes: {r['sin_operar']}")
+    elif not p["ordenes"]:
         print("  sin órdenes: la cuenta ya está en los pesos (o las diferencias son menores que el mínimo)")
     for o in r["omitidas"]:
         print(f"  omitida (menor que el mínimo o sin presupuesto): {o}")
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(description="Espejo de ejecución en Alpaca PAPER de B0/B1/B1′ (solo simulado)")
-    ap.add_argument("--cartera", help="B0, B1 o B1P (B1′)")
+    ap = argparse.ArgumentParser(description="Espejo de ejecución en Alpaca PAPER de B0/B1/B1′/S1 (solo simulado)")
+    ap.add_argument("--cartera", help="B0, B1, B1P (B1′) o S1")
     ap.add_argument("--cierre", help="AAAA-MM-DD; por defecto la última decisión registrada")
     ap.add_argument("--perfil", default=None, help="perfil de alpaca.env; por defecto el de la cartera o el general")
     g = ap.add_mutually_exclusive_group()
@@ -470,7 +503,7 @@ def main(argv: list[str] | None = None) -> int:
     apunta(fila_plan)
     try:
         ej = ejecutar(c, p, espera_s=a.espera if a.espera is not None
-                      else A.cargar_mapeo().get("ordenes", {}).get("espera_ejecucion_s", 60))
+                      else mapeo_de(cartera).get("ordenes", {}).get("espera_ejecucion_s", 60))
     except A.AlpacaError as e:
         print(f"ERROR: {cred.enmascarar(str(e))}", file=sys.stderr)
         return 1

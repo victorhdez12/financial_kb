@@ -1,0 +1,753 @@
+{
+ "documento": "S1 corrida de desarrollo (≤ 2004)",
+ "spec": "docs/factors/S1_rotacion_sectorial_spec.md v1.0 (commit 7a0b1a3)",
+ "generado": "2026-11-19T06:27:29+00:00",
+ "git_head": "501a238a3200a4fe7de0cc66125ebcb308e3ff5f",
+ "recorrida": null,
+ "senal": {
+  "csv_sha256": "53877fcef0a9ba90ab2927f2d065979c7cde425ca51f8d85415d8a3024c65d60",
+  "git_head_senal": "d8e665d84250a6003d19f996dc89f3d15c65dde7"
+ },
+ "periodo": {
+  "desde": "1950-02",
+  "hasta": "2004-12",
+  "meses": 659
+ },
+ "s1": {
+  "meses": 659,
+  "rent_anual": 0.121709,
+  "media_arit_anual": 0.12511,
+  "vol": 0.139039,
+  "sharpe": 0.550398,
+  "caida_max": -0.468514,
+  "rotacion_anual": 0.812695,
+  "coste_anual": 0.001625,
+  "operaciones": 130
+ },
+ "l0": {
+  "meses": 659,
+  "rent_anual": 0.118916,
+  "media_arit_anual": 0.123806,
+  "vol": 0.147373,
+  "sharpe": 0.510112,
+  "caida_max": -0.465075,
+  "rotacion_anual": 0.0,
+  "coste_anual": 0.0,
+  "operaciones": 0
+ },
+ "activa": {
+  "activa_arit": 0.001305,
+  "activa_geo": 0.002794,
+  "error_seguimiento": 0.029677,
+  "ir": 0.043963,
+  "activa_bruta_arit": 0.002945
+ },
+ "placebos": {
+  "n": 1000,
+  "bloque_meses": 12,
+  "semilla": 20261119,
+  "rng": "numpy.random.default_rng",
+  "activa_arit": {
+   "p": 0.4995,
+   "mejor_que": 0.501,
+   "n": 1000,
+   "p05": -0.004038,
+   "p50": 0.001292,
+   "p90": 0.005316,
+   "p95": 0.006107
+  },
+  "activa_geo": {
+   "p": 0.506494,
+   "mejor_que": 0.494,
+   "n": 1000,
+   "p05": -0.003096,
+   "p50": 0.002894,
+   "p90": 0.007306,
+   "p95": 0.008313
+  },
+  "cambios_medios": 154.535,
+  "ir_p95": 0.186707
+ },
+ "mitades": [
+  {
+   "desde": "1950-02",
+   "hasta": "1977-07",
+   "activa_arit": -0.001311,
+   "activa_geo": -0.000634,
+   "error_seguimiento": 0.023855,
+   "ir": -0.054942,
+   "s1": {
+    "meses": 330,
+    "rent_anual": 0.104864,
+    "media_arit_anual": 0.108748,
+    "vol": 0.131816,
+    "sharpe": 0.547698,
+    "caida_max": -0.468514
+   },
+   "l0": {
+    "meses": 330,
+    "rent_anual": 0.105498,
+    "media_arit_anual": 0.110058,
+    "vol": 0.137214,
+    "sharpe": 0.535637,
+    "caida_max": -0.465075
+   }
+  },
+  {
+   "desde": "1977-08",
+   "hasta": "2004-12",
+   "activa_arit": 0.003928,
+   "activa_geo": 0.006326,
+   "error_seguimiento": 0.034566,
+   "ir": 0.113635,
+   "s1": {
+    "meses": 329,
+    "rent_anual": 0.138864,
+    "media_arit_anual": 0.141523,
+    "vol": 0.145974,
+    "sharpe": 0.553268,
+    "caida_max": -0.387002
+   },
+   "l0": {
+    "meses": 329,
+    "rent_anual": 0.132537,
+    "media_arit_anual": 0.137595,
+    "vol": 0.157013,
+    "sharpe": 0.488836,
+    "caida_max": -0.449947
+   }
+  }
+ ],
+ "criterios": {
+  "a": false,
+  "b": false,
+  "c": false,
+  "d": true,
+  "pasa": false
+ },
+ "por_cuadrante_vigente": {
+  "Goldilocks": {
+   "meses": 119,
+   "activa_arit": -0.008583
+  },
+  "Reflación": {
+   "meses": 88,
+   "activa_arit": 0.013488
+  },
+  "Estanflación": {
+   "meses": 214,
+   "activa_arit": 0.001849
+  },
+  "Deflación/recesión": {
+   "meses": 238,
+   "activa_arit": 0.001254
+  }
+ },
+ "por_año": {
+  "1950": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 2,
+    "Reflación": 4,
+    "Estanflación": 0,
+    "Deflación/recesión": 5
+   },
+   "s1": 0.243265,
+   "l0": 0.277795,
+   "operaciones": 3
+  },
+  "1951": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 1,
+    "Estanflación": 5,
+    "Deflación/recesión": 6
+   },
+   "s1": 0.201272,
+   "l0": 0.206945,
+   "operaciones": 2
+  },
+  "1952": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 4,
+    "Deflación/recesión": 8
+   },
+   "s1": 0.102887,
+   "l0": 0.134749,
+   "operaciones": 2
+  },
+  "1953": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 7,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 5
+   },
+   "s1": 0.006933,
+   "l0": 0.007186,
+   "operaciones": 2
+  },
+  "1954": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 12
+   },
+   "s1": 0.388866,
+   "l0": 0.503056,
+   "operaciones": 0
+  },
+  "1955": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 8,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 4
+   },
+   "s1": 0.259681,
+   "l0": 0.253556,
+   "operaciones": 2
+  },
+  "1956": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 4,
+    "Deflación/recesión": 8
+   },
+   "s1": 0.07734,
+   "l0": 0.083375,
+   "operaciones": 1
+  },
+  "1957": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 1,
+    "Reflación": 2,
+    "Estanflación": 6,
+    "Deflación/recesión": 3
+   },
+   "s1": -0.01887,
+   "l0": -0.100041,
+   "operaciones": 5
+  },
+  "1958": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 2,
+    "Deflación/recesión": 10
+   },
+   "s1": 0.471293,
+   "l0": 0.44981,
+   "operaciones": 2
+  },
+  "1959": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 7,
+    "Reflación": 0,
+    "Estanflación": 1,
+    "Deflación/recesión": 4
+   },
+   "s1": 0.164608,
+   "l0": 0.127607,
+   "operaciones": 3
+  },
+  "1960": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 3,
+    "Reflación": 0,
+    "Estanflación": 2,
+    "Deflación/recesión": 7
+   },
+   "s1": 0.059545,
+   "l0": 0.01201,
+   "operaciones": 3
+  },
+  "1961": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 12
+   },
+   "s1": 0.287317,
+   "l0": 0.269388,
+   "operaciones": 0
+  },
+  "1962": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 6,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 6
+   },
+   "s1": -0.128743,
+   "l0": -0.10187,
+   "operaciones": 2
+  },
+  "1963": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 5,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 7
+   },
+   "s1": 0.196765,
+   "l0": 0.209587,
+   "operaciones": 1
+  },
+  "1964": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 8,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 4
+   },
+   "s1": 0.151736,
+   "l0": 0.160734,
+   "operaciones": 5
+  },
+  "1965": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 7,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 5
+   },
+   "s1": 0.133019,
+   "l0": 0.144353,
+   "operaciones": 3
+  },
+  "1966": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 5,
+    "Reflación": 2,
+    "Estanflación": 5,
+    "Deflación/recesión": 0
+   },
+   "s1": -0.075802,
+   "l0": -0.088061,
+   "operaciones": 2
+  },
+  "1967": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 7,
+    "Deflación/recesión": 5
+   },
+   "s1": 0.221126,
+   "l0": 0.286957,
+   "operaciones": 2
+  },
+  "1968": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 6,
+    "Estanflación": 6,
+    "Deflación/recesión": 0
+   },
+   "s1": 0.195052,
+   "l0": 0.141351,
+   "operaciones": 2
+  },
+  "1969": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 3,
+    "Estanflación": 8,
+    "Deflación/recesión": 1
+   },
+   "s1": -0.114408,
+   "l0": -0.109542,
+   "operaciones": 3
+  },
+  "1970": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 9,
+    "Deflación/recesión": 3
+   },
+   "s1": 0.060208,
+   "l0": 0.000899,
+   "operaciones": 2
+  },
+  "1971": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 4,
+    "Deflación/recesión": 8
+   },
+   "s1": 0.149211,
+   "l0": 0.161628,
+   "operaciones": 2
+  },
+  "1972": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 3,
+    "Reflación": 5,
+    "Estanflación": 1,
+    "Deflación/recesión": 3
+   },
+   "s1": 0.151665,
+   "l0": 0.169161,
+   "operaciones": 4
+  },
+  "1973": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 4,
+    "Reflación": 3,
+    "Estanflación": 5,
+    "Deflación/recesión": 0
+   },
+   "s1": -0.197133,
+   "l0": -0.19312,
+   "operaciones": 3
+  },
+  "1974": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 12,
+    "Deflación/recesión": 0
+   },
+   "s1": -0.256899,
+   "l0": -0.278049,
+   "operaciones": 0
+  },
+  "1975": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 1,
+    "Deflación/recesión": 11
+   },
+   "s1": 0.346811,
+   "l0": 0.383288,
+   "operaciones": 1
+  },
+  "1976": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 4,
+    "Reflación": 3,
+    "Estanflación": 5,
+    "Deflación/recesión": 0
+   },
+   "s1": 0.224466,
+   "l0": 0.269803,
+   "operaciones": 4
+  },
+  "1977": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 2,
+    "Reflación": 5,
+    "Estanflación": 5,
+    "Deflación/recesión": 0
+   },
+   "s1": -0.046478,
+   "l0": -0.031175,
+   "operaciones": 2
+  },
+  "1978": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 1,
+    "Reflación": 5,
+    "Estanflación": 5,
+    "Deflación/recesión": 1
+   },
+   "s1": 0.07897,
+   "l0": 0.082459,
+   "operaciones": 3
+  },
+  "1979": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 1,
+    "Estanflación": 11,
+    "Deflación/recesión": 0
+   },
+   "s1": 0.259043,
+   "l0": 0.234666,
+   "operaciones": 1
+  },
+  "1980": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 8,
+    "Deflación/recesión": 4
+   },
+   "s1": 0.293667,
+   "l0": 0.332522,
+   "operaciones": 1
+  },
+  "1981": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 2,
+    "Reflación": 1,
+    "Estanflación": 6,
+    "Deflación/recesión": 3
+   },
+   "s1": -0.008751,
+   "l0": -0.032595,
+   "operaciones": 8
+  },
+  "1982": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 5,
+    "Deflación/recesión": 7
+   },
+   "s1": 0.218326,
+   "l0": 0.214554,
+   "operaciones": 3
+  },
+  "1983": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 4,
+    "Estanflación": 2,
+    "Deflación/recesión": 6
+   },
+   "s1": 0.201377,
+   "l0": 0.225508,
+   "operaciones": 2
+  },
+  "1984": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 2,
+    "Reflación": 4,
+    "Estanflación": 4,
+    "Deflación/recesión": 2
+   },
+   "s1": 0.050652,
+   "l0": 0.038505,
+   "operaciones": 4
+  },
+  "1985": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 6,
+    "Deflación/recesión": 6
+   },
+   "s1": 0.357306,
+   "l0": 0.326239,
+   "operaciones": 2
+  },
+  "1986": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 1,
+    "Estanflación": 7,
+    "Deflación/recesión": 4
+   },
+   "s1": 0.192381,
+   "l0": 0.164175,
+   "operaciones": 5
+  },
+  "1987": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 9,
+    "Estanflación": 3,
+    "Deflación/recesión": 0
+   },
+   "s1": 0.017801,
+   "l0": 0.016448,
+   "operaciones": 1
+  },
+  "1988": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 8,
+    "Estanflación": 4,
+    "Deflación/recesión": 0
+   },
+   "s1": 0.193349,
+   "l0": 0.179927,
+   "operaciones": 5
+  },
+  "1989": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 2,
+    "Estanflación": 8,
+    "Deflación/recesión": 2
+   },
+   "s1": 0.320818,
+   "l0": 0.288574,
+   "operaciones": 3
+  },
+  "1990": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 1,
+    "Estanflación": 11,
+    "Deflación/recesión": 0
+   },
+   "s1": -0.015601,
+   "l0": -0.06024,
+   "operaciones": 3
+  },
+  "1991": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 1,
+    "Deflación/recesión": 11
+   },
+   "s1": 0.344843,
+   "l0": 0.348164,
+   "operaciones": 2
+  },
+  "1992": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 12,
+    "Deflación/recesión": 0
+   },
+   "s1": 0.051124,
+   "l0": 0.097792,
+   "operaciones": 0
+  },
+  "1993": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 2,
+    "Estanflación": 10,
+    "Deflación/recesión": 0
+   },
+   "s1": 0.089036,
+   "l0": 0.111602,
+   "operaciones": 1
+  },
+  "1994": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 12,
+    "Estanflación": 0,
+    "Deflación/recesión": 0
+   },
+   "s1": 0.019409,
+   "l0": -0.001482,
+   "operaciones": 0
+  },
+  "1995": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 4,
+    "Estanflación": 8,
+    "Deflación/recesión": 0
+   },
+   "s1": 0.382034,
+   "l0": 0.368518,
+   "operaciones": 1
+  },
+  "1996": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 5,
+    "Reflación": 0,
+    "Estanflación": 5,
+    "Deflación/recesión": 2
+   },
+   "s1": 0.202446,
+   "l0": 0.212068,
+   "operaciones": 2
+  },
+  "1997": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 7,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 5
+   },
+   "s1": 0.348317,
+   "l0": 0.312471,
+   "operaciones": 5
+  },
+  "1998": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 6,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 6
+   },
+   "s1": 0.31536,
+   "l0": 0.242607,
+   "operaciones": 2
+  },
+  "1999": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 7,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 5
+   },
+   "s1": 0.16205,
+   "l0": 0.252424,
+   "operaciones": 5
+  },
+  "2000": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 7,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 5
+   },
+   "s1": -0.033114,
+   "l0": -0.115921,
+   "operaciones": 1
+  },
+  "2001": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 5,
+    "Deflación/recesión": 7
+   },
+   "s1": -0.095381,
+   "l0": -0.112014,
+   "operaciones": 2
+  },
+  "2002": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 0,
+    "Reflación": 0,
+    "Estanflación": 1,
+    "Deflación/recesión": 11
+   },
+   "s1": -0.207547,
+   "l0": -0.211388,
+   "operaciones": 2
+  },
+  "2003": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 1,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 11
+   },
+   "s1": 0.250314,
+   "l0": 0.316929,
+   "operaciones": 1
+  },
+  "2004": {
+   "meses_por_cuadrante": {
+    "Goldilocks": 9,
+    "Reflación": 0,
+    "Estanflación": 0,
+    "Deflación/recesión": 3
+   },
+   "s1": 0.121682,
+   "l0": 0.119315,
+   "operaciones": 2
+  }
+ }
+}

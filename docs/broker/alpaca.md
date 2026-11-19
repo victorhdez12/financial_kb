@@ -82,6 +82,20 @@ Diferencias declaradas: todo en USD; la RF es Tesoro de EE. UU., no Bund (otro t
 el espejo **no** compara rentabilidades con el paper teórico, solo ejecución. Cambiar el mapeo = subir `version` del
 fichero; cada línea de `espejo.jsonl` lleva la versión.
 
+### 4 bis. S1 «rotación de sectores por régimen» (tercera cuenta, perfil `S1`; 2026-11-19)
+- **S1 NO pasó el desarrollo** (`docs/factors/S1_resultado_desarrollo.md`: falla a, b y c). El código queda hecho por si
+  el usuario decide llevarla como **observación**; no hay registro real ni enganche a launchd.
+- Mapeo propio y versionado `config/alpaca_etfs_s1.json` (`s1-1.0`): núcleo `mkt` → VTI e industrias French → XLK, XLY,
+  XRT, XLF, XLE, XLB, XLI, XLU, XLP, XLV, XLC (spec §6, con sus diferencias declaradas). B0/B1/B1′ siguen con
+  `config/alpaca_etfs.json` sin cambios.
+- Decisión mensual: `scripts/paper_decision_s1.py` (`src/paper/s1.py`): cuadrante de la fila `regime_monthly` del
+  cierre (con corte = ese fin de mes), pesos 50 % mercado + 4 × 12,5 %; registro propio `research/paper/decisiones_s1.jsonl`
+  con `opera` (true solo si cambió el cuadrante). Para registrar exige además `research/paper/S1_ACTIVO` (no existe) y
+  cierre ≥ 2026-11-30.
+- El espejo solo opera en S1 si la decisión dice `opera` o la cuenta no tiene aún posiciones de S1 (arranque); si no,
+  deja derivar los pesos, como la regla. `ALPACA_API_KEY_ID_S1` / `ALPACA_API_SECRET_KEY_S1` en `alpaca.env`.
+- Tests: `tests/test_s1_vivo.py` (mismo transporte simulado, sin red ni claves, registros reales intactos).
+
 ## 5. Comandos
 ```bash
 .venv/bin/python -m src.broker.alpaca perfiles                 # qué perfiles hay (sin mostrar claves)
