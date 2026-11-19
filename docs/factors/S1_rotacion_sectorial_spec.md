@@ -1,6 +1,6 @@
 ---
 documento: S1 «rotación de sectores por régimen macro» — prerregistro de desarrollo (≤ 2004) y espejo Alpaca PAPER
-version: 0.1 BORRADOR (2026-11-19) — pendiente de aprobación del usuario; NO congelado
+version: 1.0 CONGELADA (2026-11-19) — aprobada por el usuario; sin cambios de diseño a partir de aquí
 estado: diseño ANTES de calcular ninguna rentabilidad de S1. Ni el autor ni ningún agente ha mirado rentabilidades por
   régimen de las industrias de Ken French para escribir esto.
 alcance: desarrollo ≤ 2004 (corte de `src/factors/data.py`, fallo cerrado). No abre el periodo bloqueado (≥ 2005).
