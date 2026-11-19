@@ -499,3 +499,21 @@ def test_noticias_reintenta_429_de_gdelt():
         return 404, b""
     r = N.recoger("2026-11-18", None, [], transporte=tr, espera=0)
     assert r["gdelt"] and not [k for k in r["errores"] if k.startswith("gdelt")]
+
+
+def test_evento_ya_visto_con_disparo_tardio_repetido_no_abre_nota(tmp_path, monkeypatch):
+    """Validador 19-nov: un evento cuyo único disparador no repetido ya se vio (p. ej. se quedó sin nota por el tope)
+    no abre nota ni gasta cupo porque llegue tarde un disparador en enfriamiento (DGS10 con 1 día de retraso)."""
+    monkeypatch.setenv("FIN_DIAG_CLAUDE_BIN", str(_falso_claude(tmp_path)))
+    f = pd.Timestamp("2026-11-17")
+    ev = {"fecha": f, "tipos": ["extremo"], "tamano": 3.5, "nuevo": True,
+          "disparos": [{"fecha": f, "tipo": "extremo", "clave": "sp500", "tamano": 3.5, "texto": "S&P", "visto": True,
+                        "repetido": False},
+                       {"fecha": f, "tipo": "extremo", "clave": "tesoro10", "tamano": 3.1, "texto": "10 a",
+                        "visto": False, "repetido": True}]}
+    monkeypatch.setattr(D, "detectar", lambda *a, **k: ([ev], {"vistos": ["x"]}))
+    D.guardar_estado({"vistos": ["x"]})
+    r = E.diario("2026-11-18", con=_con_vacia(), X=_X(), flujos=[], con_noticias=False)
+    assert not any("nota" in x for x in r), r
+    assert E.cupo_restante(pd.Timestamp("2026-11-18")) == 3
+    assert E.leer_registro()[-1]["estado"] == "solo_vistos_sin_nota_abierta"

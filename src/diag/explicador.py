@@ -395,8 +395,11 @@ def diario(hoy=None, usar_claude: bool = True, con_noticias: bool = True, transp
                 registrar(_evento_reg(e, e["fecha"], "actualizacion", None, {"nota": str(abierta)}))
                 res.append(f"actualización de {abierta.name}")
                 continue
-            if not e["nuevo"]:
-                registrar(_evento_reg(e, e["fecha"], "repetido_sin_nota_abierta", None))
+            if not e["nuevo"] or solo_vistos:
+                # sin disparador nuevo y no repetido: el evento ya tuvo su oportunidad (nota, tope o fallo) en una
+                # ejecución anterior; un disparo tardío en enfriamiento no abre nota ni gasta cupo
+                registrar(_evento_reg(e, e["fecha"], "repetido_sin_nota_abierta" if not e["nuevo"]
+                                      else "solo_vistos_sin_nota_abierta", None))
                 continue
             pq, P = paquete(e["fecha"], e, X, con, con_noticias, transporte)
             if usar_claude and claude_activo() and cupo > 0:
