@@ -26,7 +26,7 @@ mkdir -p "$LOGDIR"
 cd "$REPO" || exit 1
 
 # --- Espejo Alpaca PAPER (docs/broker/alpaca.md §7): NUNCA afecta a los registros ni al código de salida ---
-# Cuentas: B1 (perfil por defecto), B1P y B0. Envía órdenes a las cuentas PAPER solo desde ALPACA_EJECUTA_DESDE (mes en
+# Cuentas: B1 (perfil por defecto) y B0. (B1′ sigue solo en papel: su cuenta pasó a M1 el 19-nov.) Envía órdenes a las cuentas PAPER solo desde ALPACA_EJECUTA_DESDE (mes en
 # que corre este script). 19-nov: el usuario pidió empezar ya (entrada de B0/B1 el 19-nov con la decisión del cierre de
 # oct); desde el registro del cierre de nov (dic) todo se ejecuta. FIN_ALPACA_EJECUTAR=0/1 en el entorno manda sobre la
 # fecha. Escribe solo en ~/financial_archive/alpaca y en su log.
@@ -36,7 +36,7 @@ if [ -z "${FIN_ALPACA_EJECUTAR:-}" ]; then
   if [[ ! "$MES" < "$ALPACA_EJECUTA_DESDE" ]]; then FIN_ALPACA_EJECUTAR=1; else FIN_ALPACA_EJECUTAR=0; fi
 fi
 export FIN_ALPACA_EJECUTAR
-espejo_alpaca() {   # $1 = cartera (B0 | B1 | B1P)
+espejo_alpaca() {   # $1 = cartera (B0 | B1)
   local modo="--dry-run"; [ "$FIN_ALPACA_EJECUTAR" = 1 ] && modo="--ejecutar"
   { echo "== $(date '+%F %T') espejo $1 $modo"
     .venv/bin/python -m src.broker.espejo --cartera "$1" $modo --auto; } >> "$ALOG" 2>&1 || true
@@ -135,7 +135,6 @@ if [ ! -f "$LOGDIR/.b1p_hecho_$MES" ]; then
   elif .venv/bin/python -m scripts.paper_decision_b1prima --auto --registrar > "$BLOG" 2>&1; then
     touch "$LOGDIR/.b1p_hecho_$MES"
     grep -q "registrada y subida" "$BLOG" && nota "✅ B1′: decisión registrada y subida"
-    espejo_alpaca B1P
   else
     restaura "$B1P_F"
     nota "❌ B1′ no registrada: $(tail -1 "$BLOG" | cut -c1-120) · se reintenta mañana"
