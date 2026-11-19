@@ -12,6 +12,8 @@ existe para estas fuentes (precios y rendimientos de mercado se conocen al cierr
 from __future__ import annotations
 
 import re
+import zipfile
+from pathlib import Path
 
 import pandas as pd
 
@@ -24,6 +26,9 @@ FAMILIAS: dict[str, str] = {
     r"ff_(mkt_rf|smb|hml|mom|rf)_m": "Ken French EE. UU., mensual (1926-07 →)",
     r"ff5_(mkt_rf|smb|hml|rmw|cma|rf)_m": "Ken French 5 factores EE. UU., mensual (1963-07 →)",
     r"ff_ind10_\w+_m": "Ken French 10 industrias EE. UU., mensual",
+    # S1 (docs/factors/S1_rotacion_sectorial_spec.md §1): SOLO las ponderadas por capitalización, mensuales
+    r"ff_ind12_(nodur|durbl|manuf|enrgy|chems|buseq|telcm|utils|shops|hlth|money|other)_vw_m":
+        "Ken French 12 industrias EE. UU., ponderadas por capitalización, mensual (1926-07 →)",
     r"ffx_\w+_[md]": "Ken French internacional y diario EE. UU.",
     r"aqr_\w+_[md]": "AQR (QMJ, BAB, HML Devil, VME, TSMOM; sin redistribución)",
     r"jkp_\w+_[md]": "JKP (CC BY-NC: solo no comercial)",
@@ -84,3 +89,53 @@ def gold_eur_dev(con) -> pd.Series:
     out = (usd * fx.reindex(usd.index)).dropna().rename("gold_eur_m")
     check(out)
     return out
+
+
+# ---------------------------------------------------------------- S1: 12 industrias de Ken French
+INDUSTRIAS12 = ("NoDur", "Durbl", "Manuf", "Enrgy", "Chems", "BusEq", "Telcm", "Utils", "Shops", "Hlth", "Money",
+                "Other")
+ZIP_IND12 = Path("~/financial_archive/raw/ken_french/12_Industry_Portfolios_CSV.zip").expanduser()
+
+
+def industrias12_dev(con) -> pd.DataFrame:
+    """Rentabilidad total mensual (fracción, no %) de las 12 industrias value-weighted, fechas ≤ DEV_END (índice =
+    primer día del mes, como el warehouse). Cada columna entra por `load_dev` (filtro SQL + comprobación)."""
+    cols = {n: load_dev(con, f"ff_ind12_{n.lower()}_vw_m") / 100 for n in INDUSTRIAS12}
+    df = pd.DataFrame(cols)
+    if df.isna().any().any() or (df <= -0.9999).any().any():
+        raise ValueError("industrias12: huecos o códigos de dato ausente (-99.99) en el tramo ≤ 2004")
+    check(df)
+    return df
+
+
+def industrias12_zip_dev(ruta: Path = ZIP_IND12) -> pd.DataFrame:
+    """Lo mismo leído del zip original de Ken French (solo para cuadrar con el warehouse). El corte se aplica al
+    PARSEAR: las filas con fecha AAAAMM > 200412 se descartan antes de convertir ningún valor; después, `check`."""
+    with zipfile.ZipFile(ruta) as z:
+        texto = z.read(z.namelist()[0]).decode("latin-1")
+    lineas = texto.splitlines()
+    i = next(k for k, x in enumerate(lineas) if "Average Value Weighted Returns -- Monthly" in x)
+    cab = [c.strip() for c in lineas[i + 1].split(",")[1:]]
+    if tuple(cab) != INDUSTRIAS12:
+        raise ValueError(f"cabecera inesperada en {ruta.name}: {cab}")
+    filas, tope = [], int(DEV_END.strftime("%Y%m"))
+    for x in lineas[i + 2:]:
+        m = re.match(r"^\s*(\d{6})\s*,", x)
+        if not m:
+            break
+        if int(m.group(1)) > tope:
+            continue                                  # nunca se convierte un dato ≥ 2005
+        partes = [p.strip() for p in x.split(",")]
+        filas.append([pd.Timestamp(f"{m.group(1)}01")] + [float(v) / 100 for v in partes[1:13]])
+    df = pd.DataFrame(filas, columns=["date", *INDUSTRIAS12]).set_index("date")
+    df.index.name = None
+    check(df)
+    return df
+
+
+def mercado_dev(con) -> tuple[pd.Series, pd.Series]:
+    """(mercado total = ff_mkt_rf_m + ff_rf_m, efectivo = ff_rf_m), en fracción, ≤ DEV_END."""
+    rf = load_dev(con, "ff_rf_m") / 100
+    mkt = (load_dev(con, "ff_mkt_rf_m") / 100 + rf).rename("mkt")
+    check(mkt)
+    return mkt, rf.rename("rf")
