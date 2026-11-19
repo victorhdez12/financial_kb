@@ -1,6 +1,6 @@
 ---
 documento: D1 «tendencia y volatilidad diaria multiactivo» — prerregistro de desarrollo (≤ 2004) y vivo en Alpaca PAPER
-version: 0.1 BORRADOR (2026-11-19) — pendiente de aprobación del usuario; NO congelado
+version: 1.0 CONGELADA (2026-11-19) — aprobada por el usuario; sin cambios de diseño a partir de aquí
 estado: diseño ANTES de calcular ninguna rentabilidad de D1. Nadie ha mirado rentabilidades de reglas de tendencia en
   nuestros datos para escribir esto.
 alcance: desarrollo ≤ 2004 (fallo cerrado). No abre el periodo bloqueado (≥ 2005). No toca B0/B1/B1′ ni sus registros.

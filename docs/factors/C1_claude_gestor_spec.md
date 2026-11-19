@@ -1,6 +1,6 @@
 ---
 documento: C1 «Claude gestor» — cartera discrecional diaria gestionada por un agente, en Alpaca PAPER
-version: 0.1 BORRADOR (2026-11-19) — pendiente de aprobación del usuario
+version: 1.0 APROBADA (2026-11-19) — mandato v1; cambiarlo = nueva versión declarada
 estado: diseño; nada construido.
 ---
 
