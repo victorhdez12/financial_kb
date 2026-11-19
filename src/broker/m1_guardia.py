@@ -65,7 +65,7 @@ def _motivo_citas(citas, disponibles: set[str]) -> str | None:
 def lector(disponibles: set[str]):
     """Función `leer(texto) -> dict` para G.validar (lanza G.SalidaInvalida si incumple el mandato m1-v1)."""
     def leer(texto: str | None) -> dict:
-        d = G.leer_salida(texto, version=VERSION_MANDATO, campos=CAMPOS_SALIDA)
+        d = G.leer_salida(texto, version=VERSION_MANDATO, campos=CAMPOS_SALIDA, prosa_previa=True)
         dec = d.get("declaracion_modelos")
         if not isinstance(dec, list):
             raise G.SalidaInvalida("falta 'declaracion_modelos' (una línea por modelo: le hace caso o no y por qué)")

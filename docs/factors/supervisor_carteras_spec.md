@@ -1,7 +1,8 @@
 ---
 documento: Supervisor de carteras — revisión diaria de B0, B1, B1′, D1, C1 y M1 (Alpaca PAPER)
 version: 1.0 APROBADA (2026-11-19) — diario, con poder de parada (decisión del usuario)
-estado: diseño; se construye junto con el modo agente de C1/M1.
+estado: CONSTRUIDO (2026-11-19, rama del Constructor; pendiente del Validador), NO instalado: falta cargar el plist
+  (`scripts/launchd/com.financialkb.supervisor.plist`, 8:00 diario). Piezas en §4.
 ---
 
 # Supervisor de carteras
@@ -32,3 +33,14 @@ B0/B1/B1′/D1 no tienen parada propia hoy: el supervisor solo avisa (cambiarlo 
 ## 3. Seguridad
 Solo lectura (Read/Grep/Glob) del repo, el panel, los registros y `~/financial_archive/` salvo `config/`; escritura
 solo en su informe. Sin Bash, sin red de Alpaca: los datos de las cuentas los prepara Python en un paquete.
+
+## 4. Construcción (2026-11-19)
+| pieza | dónde |
+|---|---|
+| paquete, límites duros, paradas y avisos | `src/paper/supervisor.py`: cuentas con el cliente de `src/broker/alpaca.py` (perfiles B0/B1/B1P/D1/C1/M1), registros de `research/paper/`, espejo, diarios de `obsidian/Carteras/`, logs, salud; límites (§2) en código; parada = el mismo fichero que miran los ciclos (`C1_PARADA`, `M1_PARADA`); aviso = notificación + línea en `Actualizaciones.md` |
+| mandato | `config/supervisor_mandato_v1.md` (+ documento de conocimiento) |
+| agente | `src/paper/agente.py`, rol `supervisor` (lee además `research/paper/`, `logs`, `alpaca`, `c1`, `m1`); salida JSON → Python escribe `obsidian/Carteras/Supervisor/AAAA-MM-DD.md` |
+| automatización (no instalada) | `scripts/supervisor.sh` + `scripts/launchd/com.financialkb.supervisor.plist` (8:00, todos los días) |
+Declarado: «orden ejecutada fuera de mandato» se mide por su efecto en la cuenta (posición corta, opción vendida, efectivo
+negativo); «> 3 días seguidos con error» = últimas líneas seguidas del registro con Claude fallido o salida inválida.
+Ensayo (`python -m src.paper.supervisor --simulada`): cuentas ficticias, no crea paradas ni avisa (dice qué haría).

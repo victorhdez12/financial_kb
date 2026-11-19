@@ -5,7 +5,8 @@ docs/factors/supervisor_carteras_spec.md §3).
 `claude -p` con herramientas SOLO de lectura (Read, Grep, Glob) y acceso a una lista de carpetas ENUMERADA:
 - del repo: `config`, `docs`, `obsidian`, `schema`, `scripts`, `src` y las subcarpetas de `research` salvo `paper`
   (nunca `data/`, que es un enlace a todo ~/financial_archive, ni `.env`, ni `research/paper/`). Su propio registro
-  (`research/paper/decisiones_<x>.jsonl`) se le copia en su carpeta de trabajo;
+  (`research/paper/decisiones_<x>.jsonl`) se le copia en su carpeta de trabajo. El supervisor sí lee research/paper
+  (revisa los registros de todas las carteras) y además `logs`, `alpaca`, `c1`, `m1` y `supervisor` del archivo;
 - de ~/financial_archive (`FIN_DATA_ROOT`): solo las subcarpetas de datos listadas en `ARCHIVO_<ROL>`; NUNCA la raíz,
   así `config/` (claves de Alpaca) queda fuera por construcción;
 - su carpeta de trabajo (paquete del día, su registro, prompt), fuera del repo.

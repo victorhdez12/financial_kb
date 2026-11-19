@@ -82,3 +82,31 @@ def test_panel_engancha_la_competicion_en_mi_cartera_sin_alpaca(monkeypatch):
     cartera = h[h.index('<section id="cartera"'):h.index('<section id="estado"')]
     assert 'id="competicion"' in cartera and "habilidad de suerte" in cartera
     assert "FIN_PANEL_SIN_ALPACA=1" in cartera
+
+
+def test_m1_sombra_y_uso_de_modelos(tmp_path):
+    dias = pd.date_range("2027-01-04", periods=10, freq="B")
+    series = {"M1": pd.Series([100_000 * (1 + 0.01 * (i % 2)) for i in range(10)], index=dias, dtype=float)}
+    m1 = tmp_path / "m1.jsonl"
+    dec = lambda caso_e1: {"cuadrante": "si", "credito": "parcial", "e1": caso_e1}  # noqa: E731
+    m1.write_text("\n".join(json.dumps(x) for x in [
+        {"fecha": str(dias[0].date()), "claude": {"coste_usd": 1.0},
+         "uso_modelos": {"declaracion": dec("no"), "citas_ordenes": [{"modelos": ["cuadrante", "credito"]}]}},
+        {"fecha": str(dias[1].date()), "claude": {"coste_usd": 2.0},
+         "uso_modelos": {"declaracion": dec("si"), "citas_ordenes": []}},
+        {"fecha": "2027-01-01", "ensayo": True, "uso_modelos": {"declaracion": dec("si")}}]) + "\n")
+    sombra = tmp_path / "s.jsonl"
+    sombra.write_text("\n".join(json.dumps({"fecha": str(d.date()), "valoracion": {
+        "hasta": str(d.date()), "valor": 100_000 + 100 * i, "rotacion": 0.5, "costes": 0.0005, "rebalanceos": 1}})
+        for i, d in enumerate(dias)) + "\n")
+    d = PC.recoger({}, con_alpaca=True, log_c1=tmp_path / "no", log_d1=tmp_path / "no2", espejo=[], series=series,
+                   log_m1=m1, log_m1_sombra=sombra)
+    assert d["cuentas"]["M1"]["coste_claude_usd"] == pytest.approx(3.0)
+    s = d["cuentas"]["M1S"]
+    assert s["rent"] == pytest.approx(900 / 100_000) and s["operaciones"] == 1 and s["coste_claude_usd"] is None
+    u = {f["modelo"]: f for f in d["uso_modelos"]}
+    assert u["cuadrante"]["dias"] == 2 and u["cuadrante"]["pct_caso"] == 1.0 and u["e1"]["pct_caso"] == 0.5
+    assert u["cuadrante"]["ordenes"] == 1 and u["xbrl"]["ordenes"] == 0
+    assert u["cuadrante"]["rent_sesion_siguiente"] == pytest.approx(0.01)
+    h = PC.html_competicion(d)
+    assert "M1 · Claude gestor macro" in h and "sombra teórica" in h and "uso de modelos" in h

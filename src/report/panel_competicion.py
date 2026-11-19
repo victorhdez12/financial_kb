@@ -1,8 +1,8 @@
 """Tabla «Competición» del panel (pestaña «Mi cartera»; docs/factors/C1_claude_gestor_spec.md v1.0 §4).
 
-Compara, desde el inicio común de cada bloque, B0, B1 y B1′ (paper teórico y cuentas Alpaca), D1 y C1:
-rentabilidad, volatilidad, Sharpe, caída máxima, rotación, costes y número de operaciones (y, en C1, el coste de
-`claude -p`). Solo lee: el signal semanal (valoración teórica de src/paper/informe.py), los registros
+Compara, desde el inicio común de cada bloque, B0, B1 y B1′ (paper teórico y cuentas Alpaca), D1, C1, M1 y la sombra
+teórica de M1 (docs/factors/M1_cartera_macro_spec.md §4-§5): rentabilidad, volatilidad, Sharpe, caída máxima, rotación,
+costes y número de operaciones (y, en C1 y M1, el coste de `claude -p`); debajo, el «uso de modelos» de M1. Solo lee: el signal semanal (valoración teórica de src/paper/informe.py), los registros
 (research/paper/decisiones_c1.jsonl, decisiones_d1.jsonl si existe, ~/financial_archive/alpaca/espejo.jsonl) y, si
 no está apagado (`FIN_PANEL_SIN_ALPACA=1`, siempre en los tests), el historial diario de valor de cada cuenta paper.
 Lo que no exista aún sale como «sin datos».

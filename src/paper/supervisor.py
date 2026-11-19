@@ -53,7 +53,17 @@ def dir_supervisor() -> Path:
 
 
 def parada(cartera: str) -> Path:
-    return PAPER / f"{cartera}_PARADA"
+    """El MISMO fichero que miran los ciclos (C1: c1_guardia.PARADA; M1: m1_guardia.PARADA)."""
+    from src.broker import c1_guardia as G
+    from src.broker import m1_guardia as MG
+    return {"C1": G.PARADA, "M1": MG.PARADA}.get(cartera) or PAPER / f"{cartera}_PARADA"
+
+
+def _rel(p: Path) -> str:
+    try:
+        return str(Path(p).resolve().relative_to(REPO))
+    except ValueError:
+        return str(p)
 
 
 def _jsonl(p: Path) -> list[dict]:
@@ -146,7 +156,7 @@ def resumen_registro(k: str, filas: list[dict]) -> dict:
     if k in ("B0", "B1"):
         filas = [f for f in filas if not f.get("cartera") or f.get("cartera") in (k, k.lower())] or filas
     ult = filas[-5:]
-    return {"fichero": str(REGISTROS[k].relative_to(REPO)), "lineas": len(filas),
+    return {"fichero": _rel(REGISTROS[k]), "lineas": len(filas),
             "ultima_fecha": next((str(f.get("fecha") or f.get("cierre") or f.get("registrado") or "")[:10]
                                   for f in reversed(filas) if f.get("fecha") or f.get("cierre") or f.get("registrado")), None),
             "ultimas": [{x: f.get(x) for x in ("fecha", "cierre", "opera", "motivo_no_opera", "modelo", "rechazadas",
@@ -171,7 +181,7 @@ def diarios(cartera: str, hoy: dt.date, n: int = 3, max_chars: int = 6000) -> li
     out = []
     for p in sorted(d.glob("*.md"), reverse=True)[:n]:
         t = p.read_text(encoding="utf-8")
-        out.append({"fichero": str(p.relative_to(REPO)), "texto": t[:max_chars], "recortado": len(t) > max_chars})
+        out.append({"fichero": _rel(p), "texto": t[:max_chars], "recortado": len(t) > max_chars})
     return out
 
 
@@ -241,7 +251,7 @@ def aplicar_paradas(limites: list[dict], *, ensayo: bool, fecha: str) -> list[di
         a = {"cartera": k, "motivos": motivos, "parada": k in CON_PARADA}
         if k in CON_PARADA:
             p = parada(k)
-            a["fichero"] = str(p.relative_to(REPO))
+            a["fichero"] = _rel(p)
             if ensayo:
                 a["accion"] = "ENSAYO: se crearía la parada" if not p.exists() else "ENSAYO: la parada ya existe"
             elif p.exists():
@@ -312,7 +322,7 @@ def leer_salida(texto: str | None) -> dict:
     t = str(texto or "").strip()
     import re
     m = re.fullmatch(r"```(?:json)?\s*\n(.*)\n```", t, flags=re.S)
-    t = m.group(1).strip() if m else t
+    t = m.group(1).strip() if m else (G.bloque_final(t) or t)
     try:
         d = json.loads(t)
     except json.JSONDecodeError as e:

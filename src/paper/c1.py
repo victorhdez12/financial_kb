@@ -310,7 +310,7 @@ class Cartera:
 
 
 def leer_agente_c1(texto: str | None) -> dict:
-    d = G.leer_salida(texto, version=VERSION_AGENTE, campos=CAMPOS_AGENTE)
+    d = G.leer_salida(texto, version=VERSION_AGENTE, campos=CAMPOS_AGENTE, prosa_previa=True)
     _comprobar_diario(d)
     return d
 

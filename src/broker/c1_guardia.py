@@ -58,9 +58,18 @@ def comprobar_cliente(c: A.Cliente) -> None:
 
 
 # --------------------------------------------------------------------------- lectura de la salida
-def leer_salida(texto: str | None, *, version: str = VERSION_MANDATO, campos: set[str] | None = None) -> dict:
+def bloque_final(t: str) -> str | None:
+    """Contenido del ÚLTIMO bloque ```json …``` si el texto TERMINA en él (modo agente: el último mensaje de un agente
+    con herramientas suele llevar una frase antes del JSON; ensayos reales del 19-nov). Si no, None."""
+    m = re.search(r"```json[ \t]*\n((?:(?!```).)*)\n```\s*\Z", t, flags=re.S)
+    return m.group(1).strip() if m else None
+
+
+def leer_salida(texto: str | None, *, version: str = VERSION_MANDATO, campos: set[str] | None = None,
+                prosa_previa: bool = False) -> dict:
     """JSON de la salida de Claude. Admite el JSON solo o envuelto en UN bloque ```json …```; nada más.
-    `version` y `campos`: los del mandato (c1-v1 por defecto; el modo agente c1-v2 y M1 m1-v1 pasan los suyos)."""
+    `version` y `campos`: los del mandato (c1-v1 por defecto; el modo agente c1-v2 y M1 m1-v1 pasan los suyos).
+    `prosa_previa` (modo agente): admite además texto ANTES de un único bloque ```json final; nada después."""
     campos = CAMPOS_SALIDA if campos is None else campos
     if texto is None or not str(texto).strip():
         raise SalidaInvalida("salida vacía")
@@ -68,6 +77,8 @@ def leer_salida(texto: str | None, *, version: str = VERSION_MANDATO, campos: se
     m = re.fullmatch(r"```(?:json)?\s*\n(.*)\n```", t, flags=re.S)
     if m:
         t = m.group(1).strip()
+    elif prosa_previa and bloque_final(t) is not None:
+        t = bloque_final(t)
     try:
         d = json.loads(t)
     except json.JSONDecodeError as e:
