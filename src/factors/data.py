@@ -46,6 +46,8 @@ FAMILIAS: dict[str, str] = {
     # INT-16 (docs/int/INT16_prima_plazo_v0.md): descomposición ACM del Tesoro (NY Fed). NO es PIT: el modelo se
     # reestima con toda la muestra publicada (incluida la ≥ 2005); solo como sensibilidad o para calibrar la potencia.
     r"nyfed_acm_(y|tp|rny)\d\d_m": "NY Fed ACM: rendimiento ajustado, prima por plazo y neutral al riesgo, mensual (1961-06 →; no PIT)",
+    # D1 (docs/factors/D1_tendencia_diaria_spec.md §1): rendimientos DIARIOS del Tesoro de FRED a 10 y 20 años
+    r"DGS(10|20)": "Rendimientos del Tesoro de FRED, diario (1962 →; el 20 a tiene un hueco 1987-1993)",
 }
 _RX = [re.compile(f"^(?:{p})$") for p in FAMILIAS]
 
@@ -139,3 +141,48 @@ def mercado_dev(con) -> tuple[pd.Series, pd.Series]:
     mkt = (load_dev(con, "ff_mkt_rf_m") / 100 + rf).rename("mkt")
     check(mkt)
     return mkt, rf.rename("rf")
+
+
+# ---------------------------------------------------------------- D1: diario multiactivo (spec D1 v1.0 §1)
+D1_DURACION = 17.0          # duración declarada de los bonos largos (spec §1)
+D1_HUECO_MAX = 5            # días hábiles que se arrastra un rendimiento (festivos del mercado de bonos), nunca más
+
+
+def d1_bonos_dev(con, calendario: pd.DatetimeIndex, duracion: float = D1_DURACION) -> pd.Series:
+    """Rentabilidad diaria aproximada del Tesoro largo en el `calendario` (días hábiles de la bolsa EE. UU.):
+    r_t = y_{t−1}/252 − D·(y_t − y_{t−1}), con y en fracción. Serie del día: DGS20 si tiene dato (arrastrado como
+    mucho D1_HUECO_MAX días) en t y t − 1; si no, DGS10 (tramo 1987-1993 sin 20 a). Un día sin ninguna → NaN (el
+    llamador decide; nunca se rellena con 0)."""
+    y20 = load_dev(con, "DGS20") / 100
+    y10 = load_dev(con, "DGS10") / 100
+    out = pd.Series(float("nan"), index=calendario, name="bonos")
+    for y in (y10, y20):                                 # el 20 a pisa al 10 a donde existe
+        ya = y.reindex(y.index.union(calendario)).ffill(limit=D1_HUECO_MAX).reindex(calendario)
+        r = ya.shift(1) / 252 - duracion * (ya - ya.shift(1))
+        out = r.where(r.notna(), out)
+    check(out)
+    return out
+
+
+def _al_calendario(r: pd.Series, calendario: pd.DatetimeIndex) -> pd.Series:
+    """Lleva rentabilidades diarias a otro calendario componiéndolas (un día que solo existe en la serie se suma al
+    siguiente día del calendario; nada se pierde). NaN antes del primer dato."""
+    nivel = (1 + r).cumprod()
+    n = nivel.reindex(nivel.index.union(calendario)).ffill().fillna(1.0).reindex(calendario)
+    out = n / n.shift(1) - 1
+    out[calendario < r.index.min()] = float("nan")
+    return out
+
+
+def d1_dev(con) -> tuple[pd.DataFrame, pd.Series]:
+    """(rentabilidades diarias en fracción de los activos de D1 con dato diario ≤ 2004, efectivo diario), en el
+    calendario de Ken French EE. UU. Columnas: 'us' (ffx_us_mkt_rf_d + ffx_us_rf_d), 'xus' (desarrollados sin EE. UU.
+    de Ken French, en USD: ffx_devxus_mkt_rf_d + ffx_devxus_rf_d; desde 1990-07, NaN antes), 'bonos' (d1_bonos_dev).
+    Oro y materias primas: sin serie diaria ≤ 2004 en el archivo (research/factors/d1_series.json)."""
+    rf = (load_dev(con, "ffx_us_rf_d") / 100).rename("rf")
+    us = load_dev(con, "ffx_us_mkt_rf_d") / 100 + rf
+    xrf = load_dev(con, "ffx_devxus_rf_d") / 100
+    xus = _al_calendario(load_dev(con, "ffx_devxus_mkt_rf_d") / 100 + xrf, rf.index)
+    df = pd.DataFrame({"us": us, "xus": xus, "bonos": d1_bonos_dev(con, rf.index)})
+    check(df)
+    return df, rf
