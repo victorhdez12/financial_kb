@@ -1,0 +1,30 @@
+{
+ "documento": "Mapeo de S1 «rotación de sectores por régimen» (núcleo + industrias de Ken French) a ETFs de EE. UU. para el espejo en Alpaca PAPER (docs/factors/S1_rotacion_sectorial_spec.md v1.0 §6)",
+ "version": "s1-1.0 (2026-11-19)",
+ "nota": "Tercera cuenta paper (perfil S1). Los 'tramos' son las claves de los pesos de research/paper/decisiones_s1.jsonl: 'mkt' (núcleo, 50 %) y las industrias French favorecidas (12,5 % cada una). 'Other' no tiene ETF y nunca se favorece. Cambiar este fichero abre una versión nueva del espejo de S1: sube 'version'. S1 NO pasó el desarrollo (docs/factors/S1_resultado_desarrollo.md): solo se usaría como observación si el usuario lo decide.",
+ "tramos": {
+  "mkt": {"etf": "VTI", "diferencia_declarada": "—"},
+  "BusEq": {"etf": "XLK", "diferencia_declarada": "XLK es más estrecho (sin parte de servicios de empresa)"},
+  "Durbl": {"etf": "XLY", "diferencia_declarada": "XLY mezcla duraderos con comercio (AMZN, TSLA)"},
+  "Shops": {"etf": "XRT", "diferencia_declarada": "XRT es equiponderado"},
+  "Money": {"etf": "XLF", "diferencia_declarada": "—"},
+  "Enrgy": {"etf": "XLE", "diferencia_declarada": "—"},
+  "Chems": {"etf": "XLB", "diferencia_declarada": "XLB incluye minería y envases"},
+  "Manuf": {"etf": "XLI", "diferencia_declarada": "—"},
+  "Utils": {"etf": "XLU", "diferencia_declarada": "—"},
+  "NoDur": {"etf": "XLP", "diferencia_declarada": "—"},
+  "Hlth": {"etf": "XLV", "diferencia_declarada": "—"},
+  "Telcm": {"etf": "XLC", "diferencia_declarada": "XLC incluye medios e internet (GOOGL, META)"}
+ },
+ "liquidez": {
+  "colchon": 0.005,
+  "por_que": "Como B0/B1/B1′: S1 siempre está invertida al 100 %; se deja un 0,5 % en efectivo para deslizamiento y redondeos."
+ },
+ "ordenes": {
+  "min_orden_usd": 10.0,
+  "decimales_fraccion": 4,
+  "margen_limit": 0.005,
+  "minutos_antes_cierre_sin_mercado": 15,
+  "espera_ejecucion_s": 60
+ }
+}

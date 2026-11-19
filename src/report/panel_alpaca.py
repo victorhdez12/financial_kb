@@ -46,7 +46,7 @@ def _bloque_perfil(c: A.Cliente, registro: list[dict]) -> str:
         try:
             d = E.decision(cartera)
             if d:
-                objetivo = {s: w for s, (_, w) in E.pesos_etf(d["pesos"], A.cargar_mapeo()).items()}
+                objetivo = {s: w for s, (_, w) in E.pesos_etf(d["pesos"], E.mapeo_de(cartera)).items()}
                 partes.append(f"<p>Decisión espejada: cierre {_e(d['cierre'])}, pesos {_e(d['pesos'])}</p>")
         except (ValueError, OSError):
             pass
