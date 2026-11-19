@@ -142,3 +142,50 @@ def test_criterios():
     assert ok["pasa"]
     no = M.criterios(m(0.6, -0.35), m(0.5, -0.30), m(0.65, -0.25), {"p": 0.11}, [(0.5, 0.6), (0.7, 0.7)])
     assert not any(no[k] for k in "abcd")
+
+
+# ---------------------------------------------------------------- script de desarrollo: fallo cerrado
+def test_desarrollo_se_niega_sin_sellado_sin_periodo_o_repetido(monkeypatch, tmp_path):
+    import json
+    import subprocess
+
+    from scripts import d1_desarrollo as D
+
+    def no_corre(*a):
+        raise AssertionError("no debe calcular nada")
+
+    monkeypatch.setattr(D, "OUT", tmp_path / "d1_desarrollo.json")
+    monkeypatch.setattr(D, "correr", no_corre)
+    monkeypatch.setattr(D, "git", lambda *a: subprocess.CompletedProcess([], 1, "", ""))
+    with pytest.raises(SystemExit, match="SELLADO"):
+        D.main([])
+    monkeypatch.setattr(D, "git", lambda *a: subprocess.CompletedProcess([], 0, "", ""))
+    with pytest.raises(SystemExit, match="no está listo"):       # el d1_series.json real está BLOQUEADO
+        D.main([])
+    s = tmp_path / "d1_series.json"
+    s.write_text(json.dumps({"estado": "listo", "periodo": {"desde": "1975-01-02", "hasta": "2004-12-31",
+                                                           "activos": ["us", "bonos", "oro"]}}))
+    monkeypatch.setattr(D, "SERIES", s)
+    (tmp_path / "d1_desarrollo.json").write_text("{}")
+    with pytest.raises(SystemExit, match="única"):
+        D.main([])
+
+
+def test_desarrollo_corre_entero_con_datos_sinteticos(monkeypatch):
+    from scripts import d1_desarrollo as D
+
+    dias = pd.bdate_range("1980-01-01", periods=900)
+    rng = np.random.default_rng(3)
+    r = pd.DataFrame(rng.normal(0.0003, 0.01, (900, 3)), index=dias, columns=["us", "bonos", "oro"])
+    r.loc[:dias[400], "oro"] = np.nan                              # el oro entra tarde: fuera del universo antes
+    rf = pd.Series(0.0001, index=dias)
+
+    class Con:
+        def close(self):
+            pass
+    monkeypatch.setattr(D.F, "connect", lambda: Con())
+    monkeypatch.setattr(D.F, "d1_dev", lambda con: (r, rf))
+    monkeypatch.setattr(D, "N_PLACEBOS", 3)
+    out = D.correr(dias[700], dias[-1], ["us", "bonos", "oro"])
+    assert set(out["metricas"]) == {"D1", "L1", "L2"} and out["placebo"]["n"] == 3
+    assert set(out["criterios"]) == {"a", "b", "c", "d", "pasa"} and len(out["mitades"]) == 2
