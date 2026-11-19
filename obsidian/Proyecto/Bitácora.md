@@ -853,5 +853,5 @@ Las entradas más recientes van arriba. Ver también [[Proyecto/Estado del proye
 - Prerregistro `docs/factors/S1_rotacion_sectorial_spec.md` v1.0 congelado y subido (7a0b1a3) antes de calcular nada. Corrida única de desarrollo 1950-02 → 2004-12 (12 industrias French, cuadrante PIT del clasificador en vivo, 0 meses distintos de `regime_monthly`).
 - S1 12,17 % vs mercado 11,89 %; activa +0,13 %/año, IR 0,04; placebos p = 0,50 (la mediana de los placebos da lo mismo: la ventaja es el sobrepeso defensivo, no el momento); 1.ª mitad negativa. Criterios a) b) c) ❌, d) ✅. Detalle: `docs/factors/S1_resultado_desarrollo.md`, `research/trial_log.md`.
 - **Decisión del usuario:** S1 se cierra (cualquier v2 = prueba nueva, ya contaminada). Código del espejo S1 fusionado pero inactivo (sin `research/paper/S1_ACTIVO`). Sin Validador completo (fallo claro).
-- **Cuentas Alpaca PAPER:** B1 (…4JGR, lista), B1′ y **B0** (por crear por el usuario; claves `_B1P` y `_B0`).
+- **Cuentas Alpaca PAPER (creadas 19-nov):** B1 …4JGR (perfil por defecto), B1′ …ZFJX (`_B1P`), B0 …X9F9 (`_B0`); 100 000 $ cada una. Dry-run B0 OK; B1′ sin decisión hasta su primer registro (cierre nov).
 - Con V1-V3 y S1, la conclusión se refuerza: la señal macro mensual no sirve para cronometrar ni la bolsa ni los sectores (≤ 2004).
