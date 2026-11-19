@@ -1,51 +1,62 @@
 ---
 documento: D1 «tendencia y volatilidad diaria multiactivo» — resultado del desarrollo (≤ 2004)
-estado: NO CORRIDO (2026-11-19). Sellado ya cumplido (7d04137 en origin/main, comprobado tras el push del usuario).
-  Sigue bloqueado antes de calcular ninguna rentabilidad de D1: no hay precio DIARIO del oro ≤ 2004 en el archivo, y la
-  spec lo necesita para fijar el periodo (§3) y el listón L1 (§4). Decide el usuario.
+estado: CORRIDA ÚNICA HECHA (2026-11-19T11:13:40Z, git e02684c). PASA los cuatro criterios §5 a)-d) → candidata a
+  Alpaca PAPER, con un aviso de sincronía (§0.2) que el Validador debe juzgar antes de activar `D1_ACTIVO`.
 spec: docs/factors/D1_tendencia_diaria_spec.md v1.0 (CONGELADA, commit 7d04137); sin cambios de diseño
 ---
 
 # D1: resultado del desarrollo
 
 ## 0. Resumen
-**No hay resultado.** Se hizo todo lo que no calcula rentabilidades de D1 (series, inventario, motor con tests
-sintéticos, script de la corrida única con fallo cerrado, vivo y espejo) y se paró antes del backtest por dos motivos:
+Sellado comprobado antes de calcular (`git merge-base --is-ancestor 7d04137 origin/main` verdadero). Periodo y activos
+fijados por disponibilidad y commiteados antes (e02684c, `research/factors/d1_series.json`): **1969-05-13 → 2004-12-31,
+8 999 días**; activos bolsa EE. UU., fuera de EE. UU. (entra en 1991-06), bonos largos y oro; materias primas
+excluidas. Resultado completo en `research/factors/d1_desarrollo.json` (1 000 placebos, bloques de 63 días, semilla
+20261119).
 
-1. **Sellado.** `git fetch origin && git merge-base --is-ancestor 7d04137 origin/main` → falso (comprobado dos veces el
-   19-nov); **resuelto** después: el usuario hizo push y la comprobación da verdadero. `scripts/d1_desarrollo.py` la
-   repite siempre antes de calcular. Queda solo el motivo 2.
-2. **Oro diario.** El archivo solo tiene oro mensual (Banco Mundial, datahub) y anual (MeasuringWorth). §1 dice que un
-   activo sin diario ≤ 2005 se excluye, pero §3 define el periodo como «del primer día con datos de al menos bolsa
-   EE. UU., bonos **y oro**» y §4 define L1 = 70/15/15 **con oro**: sin oro no hay periodo ni L1 sin cambiar el diseño.
-   Lectura conservadora: parar y preguntar, no improvisar un listón.
+| | rent./año | vol | Sharpe | caída máx. | rotación/año |
+|---|---|---|---|---|---|
+| **D1** (neto, costes 0,46 %/año) | 9,52 % | 4,28 % | **0,77** | **−6,7 %** | 867 % |
+| L1 70/15/15 anual (sin costes) | 10,55 % | 11,68 % | 0,41 | −30,5 % | 7 % |
+| L2 vol. sin tendencia (neto) | 7,37 % | 6,21 % | 0,23 | −22,9 % | 88 % |
 
-Fuentes públicas probadas para el oro diario (solo descarga de precios; ninguna rentabilidad calculada):
-| fuente | resultado |
-|---|---|
-| FRED / ALFRED (GOLDAMGBD228NLBM, GOLDPMGBD228NLBM) | retiradas de FRED en 2022; ALFRED: «series does not exist» |
-| LBMA (prices.lbma.org.uk/json) | detrás de Cloudflare (página de comprobación) |
-| Stooq (xauusd) | verificación JavaScript (no se intenta saltar) |
-| Bundesbank BBEX3 | solo fixing de Frankfurt en **DEM**, 1968-06-18 → 1998-12-31 (sin USD ni tras 1998) |
+- Placebos: D1 mejor que el **100 %** (p conservador 0,001; mediana placebo 0,06, p90 0,19).
+- Mitades (Sharpe D1 / L1 / L2): 1969-05 → 1987-03 **0,91** / 0,38 / 0,11; 1987-03 → 2004-12 **0,63** / 0,44 / 0,37.
+- Pesos medios: bolsa EE. UU. 17,6 %, fuera 4,7 %, bonos 13,2 %, oro 11,2 %; **efectivo medio 53 %**.
+- Criterios: a) ✅ b) ✅ c) ✅ d) ✅ → **PASA**. Rinde menos al año que L1 (9,5 % frente a 10,6 %) con un tercio de la
+  volatilidad: la ventaja es de Sharpe y caída, no de rentabilidad.
 
-## 1. Opciones para el usuario (ninguna aplicada)
-- **A (recomendada, no cambia el diseño):** que el usuario descargue a mano, con su navegador, el histórico diario del
-  fixing LBMA en USD (p. ej. la descarga CSV/XLSX de la web de LBMA) a `~/financial_archive/raw/gold/`. Se añade un
-  lector en `src/factors/data.py` (familia nueva, corte ≤ 2004), se fija el periodo en `research/factors/d1_series.json`
-  con commit y se corre una sola vez. Periodo esperado: desde el primer día con bolsa, bonos y oro + 252 días.
-- **B:** oro de Frankfurt (Bundesbank, DEM × DEM/USD diario, ambas en la misma fuente) 1968-1998: el periodo terminaría
-  en 1998-12 en vez de 2004-12 (§3) y el fixing de Frankfurt no es el de Londres. Es un cambio de periodo: lo decide el
-  usuario y se anota.
-- **C:** desarrollo sin oro: L1 deja de ser el de §4 → cambio de listón = **v2 (N = 2 al registro)**.
+### 0.1 Lo que no se ha hecho
+Ninguna variante, sensibilidad ni re-corrida. Cualquier cambio de la regla = v2 (N = 2 al registro).
 
-## 2. Lo que sí está fijado (commit 46d617a, antes de cualquier rentabilidad)
+### 0.2 Avisos para el Validador (no cambian el veredicto registrado; pueden pesar en la decisión de activar)
+1. **Sincronía.** La decisión se toma al cierre de Nueva York (16:00), pero el oro se valora con el fixing de las 15:00
+   de Londres (≈ 10:00 NY) y la bolsa fuera de EE. UU. con cierres de Europa/Asia. La rentabilidad que gana la posición
+   (fixing d → d + 1) empieza horas ANTES de la decisión: si hay continuación a muy corto plazo, el backtest la cobra
+   sin poder hacerlo. En vivo (GLD, VEA en Nueva York) no existe ese desfase.
+2. **Precios rancios** del índice de mercado diario de los años 70-80 (autocorrelación positiva de primer orden) pueden
+   inflar las señales de 21 días y el Sharpe de la primera mitad (0,91 frente a 0,63).
+3. Rotación ≈ 8,7 veces al año con la banda de 3 pp: los costes de 5 pb/lado (0,46 %/año) son supuestos; el vivo medirá
+   los reales.
+4. El oro 1968-1975 es el del mercado libre de Londres en el régimen de dos niveles (los particulares de EE. UU. no
+   podían tenerlo hasta 1975).
+
+### 0.3 Historia del bloqueo (resuelto)
+Al principio se paró antes de calcular: 7d04137 no estaba en origin/main y no había oro diario ≤ 2004 en el archivo
+(FRED/ALFRED, LBMA, Stooq y Bundesbank probados sin éxito). El usuario aprobó la **opción A** sin cambio de diseño: el
+fixing LBMA de la tarde en USD (serie FRED GOLDPMGBD228NLBM, copia de archive.org, sha256 cf04e466…, procedencia en
+`~/financial_archive/raw/gold/LEEME_oro_diario.md`). Festivos de Londres («.»): el precio se arrastra como mucho 5 días
+(rentabilidad 0 ese día; el cambio entra el siguiente día con fixing); más de 5 días sin fixing → fallo cerrado (no
+ocurre en el periodo).
+
+## 2. Series (commits 46d617a y e02684c, antes de cualquier rentabilidad)
 `research/factors/d1_series.json` (solo fechas, recuentos y huecos):
 | activo | vivo | desarrollo | cobertura ≤ 2004 |
 |---|---|---|---|
 | bolsa EE. UU. | SPY | Ken French diario, Mkt-RF + RF (`ffx_us_*_d`) | 1926-07-01 → 2004-12-31, sin huecos |
 | bolsa fuera de EE. UU. | VEA | Ken French «Developed ex US» diario en USD (`ffx_devxus_*_d`), compuesto al calendario de EE. UU. | 1990-07-02 → 2004-12-31 |
 | bonos largos | TLT | r = y₍t−1₎/252 − 17·Δy; DGS20, y DGS10 en el hueco del 20 a (1987-01 → 1993-09); arrastre ≤ 5 días | 1962-01-03 → 2004-12-31, sin huecos |
-| oro | GLD | **sin serie diaria** → bloqueante | — |
+| oro | GLD | fixing LBMA 15:00 en USD (FRED GOLDPMGBD228NLBM, archive.org), festivos arrastrados ≤ 5 días | 1968-04-01 → 2004-12-31 |
 | materias primas | DBC | **excluido**: sin índice diario ≤ 2004 (el futuro de crudo de la EIA es una sola materia y sin rollo) | — |
 | efectivo | cuenta | RF diario de Ken French | 1926-07-01 → 2004-12-31 |
 
@@ -68,7 +79,7 @@ Fuentes públicas probadas para el oro diario (solo descarga de precios; ninguna
 10. Bonos: devengo y₍t−1₎/252 por día hábil de la bolsa; el 20 a manda donde existe.
 11. Fuera de EE. UU.: cierres asíncronos (Asia/Europa cierran antes que Nueva York); se compone sin perder días.
 
-## 4. Código listo (sin correr con datos reales)
+## 4. Código
 - `src/factors/d1.py` (motor puro) y `tests/test_d1_motor.py` (sintéticos, incluido un extremo a extremo).
 - `src/factors/data.py`: `d1_dev`, `d1_bonos_dev`, familia `DGS(10|20)`; `tests/test_d1_datos.py`.
 - `scripts/d1_series.py` (inventario) y `scripts/d1_desarrollo.py` (corrida única: sellado → periodo «listo» → nunca
