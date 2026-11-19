@@ -1,7 +1,7 @@
 ---
 documento: D1 «tendencia y volatilidad diaria multiactivo» — resultado del desarrollo (≤ 2004)
-estado: NO CORRIDO (2026-11-19). Bloqueado antes de calcular ninguna rentabilidad de D1: (1) el prerregistro congelado
-  (7d04137) no estaba en origin/main (regla de sellado) y (2) no hay precio DIARIO del oro ≤ 2004 en el archivo, y la
+estado: NO CORRIDO (2026-11-19). Sellado ya cumplido (7d04137 en origin/main, comprobado tras el push del usuario).
+  Sigue bloqueado antes de calcular ninguna rentabilidad de D1: no hay precio DIARIO del oro ≤ 2004 en el archivo, y la
   spec lo necesita para fijar el periodo (§3) y el listón L1 (§4). Decide el usuario.
 spec: docs/factors/D1_tendencia_diaria_spec.md v1.0 (CONGELADA, commit 7d04137); sin cambios de diseño
 ---
@@ -13,7 +13,8 @@ spec: docs/factors/D1_tendencia_diaria_spec.md v1.0 (CONGELADA, commit 7d04137);
 sintéticos, script de la corrida única con fallo cerrado, vivo y espejo) y se paró antes del backtest por dos motivos:
 
 1. **Sellado.** `git fetch origin && git merge-base --is-ancestor 7d04137 origin/main` → falso (comprobado dos veces el
-   19-nov). **Falta que el usuario haga push** de `main`. `scripts/d1_desarrollo.py` repite esta comprobación y se niega.
+   19-nov); **resuelto** después: el usuario hizo push y la comprobación da verdadero. `scripts/d1_desarrollo.py` la
+   repite siempre antes de calcular. Queda solo el motivo 2.
 2. **Oro diario.** El archivo solo tiene oro mensual (Banco Mundial, datahub) y anual (MeasuringWorth). §1 dice que un
    activo sin diario ≤ 2005 se excluye, pero §3 define el periodo como «del primer día con datos de al menos bolsa
    EE. UU., bonos **y oro**» y §4 define L1 = 70/15/15 **con oro**: sin oro no hay periodo ni L1 sin cambiar el diseño.
