@@ -1,6 +1,6 @@
 ---
 documento: M1 «Claude gestor macro» — Claude gestiona una cartera basándose en los modelos macro del proyecto (Alpaca PAPER)
-version: 1.0 APROBADA (2026-11-19) — mandato m1-v1; cambiarlo = nueva versión declarada. Sustituye al borrador 0.1
+version: 1.1 APROBADA (2026-11-19) — mandato m1-v1 + modo agente (§7); cambiarlo = nueva versión declarada. Sustituye al borrador 0.1
   (regla mecánica), que queda como **sombra teórica** (§4).
 estado: diseño; se construye sobre la infraestructura de C1 (paquete, guardia, registro) tras su validación.
 ---
@@ -52,3 +52,17 @@ y se registra en `research/paper/decisiones_m1_sombra.jsonl`. Sirve de listón y
 
 ## 6. Requisitos
 Tercera cuenta paper del 2.º usuario de Alpaca, claves `_M1`.
+
+## 7. Modo agente (decisión del usuario 19-nov, v1.1)
+- M1 no recibe solo el paquete: es un **agente gestor especializado** (`claude -p` con herramientas **solo de lectura**:
+  Read/Grep/Glob) que lee lo mismo que el usuario —panel (`~/financial_archive/panel/index.html`), índice y notas de
+  Obsidian (`obsidian/`), informes y diagnósticos— y explora los datos (`~/financial_archive/` salvo `config/`).
+  **Denegado:** `~/financial_archive/config/**`, `research/paper/**` (salvo leer su propio registro), Bash, red de
+  Alpaca. Escritura solo en su diario.
+- **Especialización:** documento de conocimiento versionado `config/gestor_conocimiento_v1.md` (ciclo, crédito,
+  liquidez, curva, indicadores, ETFs que siguen futuros, qué mide cada modelo del proyecto y sus límites).
+- **Diario** en Obsidian `obsidian/Carteras/M1/AAAA-MM-DD.md` (fuera de git, como los diagnósticos): qué vio, qué
+  decidió y por qué, modelo por modelo. Las órdenes siguen pasando por la guardia de C1; el registro inmutable sigue en
+  `research/paper/decisiones_m1.jsonl`.
+- Coste: lo paga la **suscripción del usuario** (decisión 19-nov). Límite por ejecución: 15 min; si se agota el cupo
+  de la suscripción, ese día no opera y se anota.

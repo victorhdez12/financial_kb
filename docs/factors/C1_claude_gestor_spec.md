@@ -1,6 +1,6 @@
 ---
 documento: C1 «Claude gestor» — cartera discrecional diaria gestionada por un agente, en Alpaca PAPER
-version: 1.0 APROBADA (2026-11-19) — mandato v1; cambiarlo = nueva versión declarada
+version: 1.1 APROBADA (2026-11-19) — mandato v1 + modo agente (§7); cambiarlo = nueva versión declarada
 estado: diseño; nada construido.
 ---
 
@@ -49,3 +49,8 @@ estado: diseño; nada construido.
 ## 5. Requisitos del usuario
 - Segundo usuario de Alpaca (otro correo) con cuentas paper para **D1** y **C1**; claves en `alpaca.env` con
   sufijos `_D1` y `_C1` (el código distingue el usuario por las claves, no hace falta nada más).
+
+## 7. Modo agente (decisión del usuario 19-nov, v1.1)
+Igual que M1 §7 (mismas herramientas de solo lectura, mismo documento de conocimiento, diario en
+`obsidian/Carteras/C1/`), pero **sin la obligación de citar los modelos**: puede usarlos o no. La diferencia M1 vs C1
+mide el efecto de anclarse a los modelos. Coste: suscripción del usuario.
