@@ -1,0 +1,25 @@
+{
+ "documento": "Mapeo de D1 «tendencia y volatilidad diaria multiactivo» a ETFs de EE. UU. para el espejo en Alpaca PAPER (docs/factors/D1_tendencia_diaria_spec.md v1.0 §1 y §6)",
+ "version": "d1-1.0 (2026-11-19)",
+ "nota": "Cuenta paper propia (perfil D1). Los 'tramos' son las claves de los pesos de research/paper/decisiones_d1.jsonl. Los pesos suman ≤ 100 %: el resto se queda en efectivo en la cuenta (no se invierte). Cambiar este fichero abre una versión nueva del espejo de D1: sube 'version'. D1 solo registra si existe research/paper/D1_ACTIVO (lo decide el usuario).",
+ "tramos": {
+  "us": {"etf": "SPY", "diferencia_declarada": "S&P 500 frente al mercado total de Ken French del desarrollo"},
+  "xus": {"etf": "VEA", "diferencia_declarada": "FTSE Developed ex US (incluye Canadá y Corea) frente a Developed ex US de Ken French"},
+  "bonos": {"etf": "TLT", "diferencia_declarada": "Tesoro 20+ años real frente a la aproximación DGS20/DGS10 con duración 17"},
+  "oro": {"etf": "GLD", "diferencia_declarada": "—"},
+  "mp": {"etf": "DBC", "diferencia_declarada": "excluido del desarrollo (sin índice diario ≤ 2004)"}
+ },
+ "permite_efectivo": true,
+ "liquidez": {
+  "colchon": 0.005,
+  "por_que": "Como B0/B1/B1′/S1: 0,5 % para deslizamiento y redondeos; D1 además deja en efectivo lo que no invierte."
+ },
+ "ordenes": {
+  "min_orden_usd": 10.0,
+  "decimales_fraccion": 4,
+  "margen_limit": 0.005,
+  "minutos_antes_cierre_sin_mercado": 15,
+  "espera_ejecucion_s": 60,
+  "banda_no_operar": 0.03
+ }
+}

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- D1 (docs/factors/D1_tendencia_diaria_spec.md §6): decisión diaria tras el cierre de EE. UU., lun-vie 22:30 Madrid.
+     NO INSTALADO. Solo registra si existe research/paper/D1_ACTIVO; el espejo (órdenes) va aparte y en dry-run salvo
+     FIN_ALPACA_EJECUTAR=1. Instalar: cp a ~/Library/LaunchAgents/ y launchctl load (lo decide el usuario). -->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.financialkb.d1</string>
+  <key>WorkingDirectory</key><string>/Users/victorhdez12/Proyectos/financial_kb</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string><string>-lc</string>
+    <string>.venv/bin/python -m scripts.paper_decision_d1 --auto --registrar &amp;&amp; .venv/bin/python -m src.broker.espejo --cartera D1 --auto --ejecutar</string>
+  </array>
+  <key>StartCalendarInterval</key>
+  <array>
+    <dict><key>Weekday</key><integer>1</integer><key>Hour</key><integer>22</integer><key>Minute</key><integer>30</integer></dict>
+    <dict><key>Weekday</key><integer>2</integer><key>Hour</key><integer>22</integer><key>Minute</key><integer>30</integer></dict>
+    <dict><key>Weekday</key><integer>3</integer><key>Hour</key><integer>22</integer><key>Minute</key><integer>30</integer></dict>
+    <dict><key>Weekday</key><integer>4</integer><key>Hour</key><integer>22</integer><key>Minute</key><integer>30</integer></dict>
+    <dict><key>Weekday</key><integer>5</integer><key>Hour</key><integer>22</integer><key>Minute</key><integer>30</integer></dict>
+  </array>
+  <key>StandardOutPath</key><string>/Users/victorhdez12/financial_archive/logs/launchd_d1.out</string>
+  <key>StandardErrorPath</key><string>/Users/victorhdez12/financial_archive/logs/launchd_d1.err</string>
+  <key>Nice</key><integer>10</integer>
+</dict>
+</plist>
