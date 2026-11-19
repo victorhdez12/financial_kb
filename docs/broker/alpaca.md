@@ -1,7 +1,8 @@
 ---
 documento: Alpaca PAPER (cuenta simulada): datos en tiempo real y espejo de ejecución de B0/B1/B1′
-version: 1.0 (2026-11-18)
-estado: código y tests hechos; NO enganchado a launchd (propuesta en §7). Sin claves no hace nada.
+version: 1.1 (2026-11-19)
+estado: enganchado (§7). Tres cuentas paper: B1 …4JGR (perfil por defecto), B1′ …ZFJX (`_B1P`), B0 …X9F9 (`_B0`).
+  Dry-run hasta el registro de dic-2026 (cierre de nov); órdenes paper desde ene-2027 (cierre de dic). Sin claves no hace nada.
 ---
 
 # Alpaca paper: «testearnos con la bolsa en tiempo real»
@@ -134,7 +135,15 @@ retraso de ejecución, que el paper teórico supone cero.
 - Los datos de Alpaca no entran en el warehouse ni en ningún modelo: es una comprobación lateral.
 - Horario: mercado de EE. UU. (15:30-22:00 hora de Madrid); el calendario/festivos vienen de Alpaca (`/v2/clock`).
 
-## 7. Automatización (PROPUESTA, no instalada)
+## 7. Automatización (INSTALADA 2026-11-19)
+Hecho así (difiere de la propuesta de abajo en dos cosas): la fecha de inicio de ejecución está en el script
+(`ALPACA_EJECUTA_DESDE="2027-01"`, mes en que corre `paper_mensual.sh`; `FIN_ALPACA_EJECUTAR=0/1` en el entorno manda),
+y el `--seguimiento` de las 3 cuentas va al final de la diaria (`scripts/actualizar.sh`), no en `paper_mensual.sh`
+(que no hace nada los días 1-2). Log: `~/financial_archive/logs/AAAA-MM-DD_alpaca.log`. Panel: sección al final de
+«Mi cartera» (`FIN_PANEL_SIN_ALPACA=1` la apaga; los tests la apagan siempre). Tests: `tests/test_paper_mensual.py`
+(`test_espejo_alpaca_*`) y `tests/test_alpaca.py::test_panel_engancha_alpaca_en_mi_cartera_y_se_puede_apagar`.
+
+Propuesta original:
 Enganche en `scripts/paper_mensual.sh` **después** de cada registro, en un bloque que no puede afectar a nada:
 salida ignorada (`|| true`), sin `set -e`, sin tocar el código de salida del script, log propio y sin escribir en el
 repo (el espejo escribe solo en `~/financial_archive/alpaca`). Solo dry-run hasta que exista `FIN_ALPACA_EJECUTAR=1`

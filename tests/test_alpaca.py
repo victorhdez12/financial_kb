@@ -401,3 +401,14 @@ def test_seccion_panel(tmp_path, monkeypatch):
         raise ConnectionError("caído")
     h = PA.seccion_alpaca([A.Cliente(cred(perfil="B1"), transporte=roto)], registro=[])
     assert "no responde" in h
+
+
+def test_panel_engancha_alpaca_en_mi_cartera_y_se_puede_apagar(monkeypatch):
+    from src.report import panel as P
+    monkeypatch.setattr(P.PAL, "seccion_alpaca", lambda: "<section id='alpaca'>ALPACA-OK</section>")
+    assert P._alpaca() == ""                         # conftest: FIN_PANEL_SIN_ALPACA=1
+    monkeypatch.delenv("FIN_PANEL_SIN_ALPACA")
+    assert "ALPACA-OK" in P._alpaca()
+    html = P.construir({})
+    cart = html.split('<section id="cartera"')[1].split('<section id="estado"')[0]
+    assert "ALPACA-OK" in cart

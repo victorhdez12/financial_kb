@@ -109,6 +109,13 @@ if [ -n "$ALERTAS" ]; then
   echo "$(date) alertas notificadas: $ALERTAS" >> "$LOG"
   /usr/bin/osascript -e "display notification \"$ALERTAS\" with title \"financial_kb · alertas\"" 2>/dev/null || true
 fi
+# Espejo Alpaca PAPER: apunta ejecuciones pendientes de las 3 cuentas (las limit del registro mensual esperan a la
+# apertura de las 15:30). Nunca afecta a la diaria; sin claves no hace nada (docs/broker/alpaca.md §7).
+for P in "" B1P B0; do
+  { echo "== $(date '+%F %T') seguimiento ${P:-defecto}"
+    "$REPO/.venv/bin/python" -m src.broker.espejo --seguimiento ${P:+--perfil $P}; } \
+    >> "$LOGDIR/$(date +%Y-%m-%d)_alpaca.log" 2>&1 || true
+done
 # Logs de más de 60 días fuera
 find "$LOGDIR" -name '*.log' -mtime +60 -delete 2>/dev/null
 exit $RC

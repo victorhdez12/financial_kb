@@ -23,3 +23,9 @@ def synthetic_label_meta(tmp_path_factory):
     with pytest.MonkeyPatch.context() as mp:
         mp.setattr(R, "out_path", lambda p=R.PARAMS: d / f"regime_us_v{p.version}.parquet")
         yield
+
+
+@pytest.fixture(autouse=True)
+def _panel_sin_alpaca(monkeypatch):
+    """El panel no llama a Alpaca en los tests (sin red ni claves reales). test_alpaca prueba la sección aparte."""
+    monkeypatch.setenv("FIN_PANEL_SIN_ALPACA", "1")

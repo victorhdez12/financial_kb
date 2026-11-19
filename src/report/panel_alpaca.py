@@ -1,6 +1,5 @@
-"""Sección «Alpaca paper» del panel (NO conectada todavía a src/report/panel.py).
+"""Sección «Alpaca paper» del panel, al final de la pestaña «Mi cartera» (src/report/panel.py `_alpaca`).
 
-Para enchufarla: `from src.report.panel_alpaca import seccion_alpaca` y añadir su HTML a la pestaña que se decida.
 Muestra, por cada perfil configurado: estado del mercado, valor de la cuenta PAPER (simulada), posiciones con su peso
 frente al peso objetivo de la cartera que espeja, y el resumen del espejo (deslizamiento real vs coste teórico).
 Nunca muestra claves ni el número de cuenta completo. Sin claves: un aviso breve «Alpaca no configurado». Cualquier fallo

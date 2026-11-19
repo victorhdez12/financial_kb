@@ -25,6 +25,23 @@ export PYTHONUNBUFFERED=1   # el motivo de la nota es la última línea del log:
 mkdir -p "$LOGDIR"
 cd "$REPO" || exit 1
 
+# --- Espejo Alpaca PAPER (docs/broker/alpaca.md §7): NUNCA afecta a los registros ni al código de salida ---
+# Cuentas: B1 (perfil por defecto), B1P y B0. Envía órdenes a las cuentas PAPER solo desde ALPACA_EJECUTA_DESDE (mes en
+# que corre este script; plan 18-nov: el cierre de nov, registrado en dic, va en dry-run; el de dic, en ene, se ejecuta).
+# FIN_ALPACA_EJECUTAR=0/1 en el entorno manda sobre la fecha. Escribe solo en ~/financial_archive/alpaca y en su log.
+ALPACA_EJECUTA_DESDE="2027-01"
+ALOG="$LOGDIR/$(date +%Y-%m-%d)_alpaca.log"
+if [ -z "${FIN_ALPACA_EJECUTAR:-}" ]; then
+  if [[ ! "$MES" < "$ALPACA_EJECUTA_DESDE" ]]; then FIN_ALPACA_EJECUTAR=1; else FIN_ALPACA_EJECUTAR=0; fi
+fi
+export FIN_ALPACA_EJECUTAR
+espejo_alpaca() {   # $1 = cartera (B0 | B1 | B1P)
+  local modo="--dry-run"; [ "$FIN_ALPACA_EJECUTAR" = 1 ] && modo="--ejecutar"
+  { echo "== $(date '+%F %T') espejo $1 $modo"
+    .venv/bin/python -m src.broker.espejo --cartera "$1" $modo --auto; } >> "$ALOG" 2>&1 || true
+}
+# El seguimiento de ejecuciones pendientes lo hace la diaria (scripts/actualizar.sh), no este script.
+
 [ "$((10#$DIA))" -lt 3 ] && exit 0
 
 nota() {   # $1 = línea
@@ -117,6 +134,7 @@ if [ ! -f "$LOGDIR/.b1p_hecho_$MES" ]; then
   elif .venv/bin/python -m scripts.paper_decision_b1prima --auto --registrar > "$BLOG" 2>&1; then
     touch "$LOGDIR/.b1p_hecho_$MES"
     grep -q "registrada y subida" "$BLOG" && nota "✅ B1′: decisión registrada y subida"
+    espejo_alpaca B1P
   else
     restaura "$B1P_F"
     nota "❌ B1′ no registrada: $(tail -1 "$BLOG" | cut -c1-120) · se reintenta mañana"
@@ -146,6 +164,8 @@ RC=$?
 if [ $RC -eq 0 ]; then
   touch "$LOGDIR/.paper_hecho_$MES"
   if grep -q "registrada y subida" "$LOG"; then nota "✅ decisión registrada y subida"; fi
+  espejo_alpaca B1
+  espejo_alpaca B0
 else
   restaura research/paper/decisiones.jsonl
   MOTIVO=$(tail -1 "$LOG" | cut -c1-120)
