@@ -265,3 +265,34 @@ def test_metricas_no_mezclan_un_concepto_de_ingresos_abandonado_con_anios_recien
     assert m["crec_ingresos"] is None and m["margen_operativo"] is None
     assert m["roa"] == 0.15 and m["apalancamiento"] == 0.1
     assert K.VERSION == "a1-candidatas-2"
+
+
+# ------------------------------------------------------------------ mercado al ir a enviar
+class _Reloj:
+    def __init__(self, abierto, cierre="2026-11-20T16:00:00-05:00", ahora="2026-11-20T15:58:00-05:00"):
+        self.abierto, self.cierre, self.ahora, self.posts = abierto, cierre, ahora, []
+
+    def __call__(self, metodo, url, cab, params, cuerpo, plazo):
+        if url.endswith("/v2/orders") and metodo == "GET":
+            return 200, []
+        if url.endswith("/v2/clock"):
+            return 200, {"timestamp": self.ahora, "is_open": self.abierto, "next_close": self.cierre,
+                         "next_open": "2026-11-23T09:30:00-05:00"}
+        if metodo == "POST":
+            self.posts.append(cuerpo)
+            return 200, {"id": "o1", "status": "new"}
+        return 200, {"status": "filled"}
+
+
+@pytest.mark.parametrize("abierto,ahora", [(False, "2026-11-20T16:10:00-05:00"), (True, "2026-11-20T15:58:00-05:00")])
+def test_no_envia_si_el_mercado_cerro_o_va_a_cerrar_mientras_decidia(abierto, ahora):
+    t = _Reloj(abierto, ahora=ahora)
+    c = A.Cliente(A.Credenciales(key_id="K", secret="S", perfil="C1"), transporte=t)
+    n = {"indice": 0, "simbolo": "AAA", "clase": "accion", "lado": "compra", "tipo": "mercado", "cantidad": None,
+         "importe_usd": 100.0, "precio_limite": None}
+    out = C.ejecutar(c, G.Veredicto(True, None, validas=[n]), "2026-11-20", espera_s=0, dormir=lambda s: None)
+    assert t.posts == [] and out["enviadas"] == [] and "no se envía nada" in out["rechazadas_alpaca"][0]["motivo"]
+    t2 = _Reloj(True, ahora="2026-11-20T15:00:00-05:00")
+    c2 = A.Cliente(A.Credenciales(key_id="K", secret="S", perfil="C1"), transporte=t2)
+    out = C.ejecutar(c2, G.Veredicto(True, None, validas=[dict(n)]), "2026-11-20", espera_s=0, dormir=lambda s: None)
+    assert len(t2.posts) == 1 and out["enviadas"]

@@ -58,6 +58,7 @@ SPEC = "docs/factors/C1_claude_gestor_spec.md v1.1"
 PERFIL = "C1"
 PLAZO_S = 600
 ESPERA_EJECUCION_S = 60
+MIN_MINUTOS_AL_CIERRE = 5     # no se envían órdenes con el mercado cerrado o a menos de esto del cierre
 ESTADOS_FINALES = {"filled", "canceled", "expired", "rejected", "done_for_day", "replaced"}
 
 
@@ -238,6 +239,19 @@ def ejecutar(c: A.Cliente, ver: G.Veredicto, fecha: str, *, espera_s: float = ES
     if c.ordenes_abiertas():
         out["rechazadas_alpaca"] = [{"indice": n["indice"], "simbolo": n["simbolo"],
                                      "motivo": "hay órdenes abiertas en la cuenta: no se envía nada"} for n in ver.validas]
+        return out
+    # el mercado se comprueba al empezar, pero el agente tarda hasta 15 min (y los scripts esperan a otros ciclos):
+    # se vuelve a mirar justo antes de enviar; cerrado o a < MIN_MINUTOS_AL_CIERRE del cierre → no se envía nada
+    # (una orden «day» enviada fuera de hora quedaría para la apertura siguiente, con precios que la guardia no vio)
+    try:
+        m = A.estado_mercado(c.reloj())
+        motivo = None if m["abierto"] and (m["minutos_al_cierre"] or 0) >= MIN_MINUTOS_AL_CIERRE else \
+            f"mercado cerrado o a menos de {MIN_MINUTOS_AL_CIERRE} min del cierre al ir a enviar: no se envía nada"
+    except A.AlpacaError as ex:
+        motivo = f"sin reloj de Alpaca al ir a enviar ({c.cred.enmascarar(str(ex))[:120]}): no se envía nada"
+    if motivo:
+        out["rechazadas_alpaca"] = [{"indice": n["indice"], "simbolo": n["simbolo"], "motivo": motivo}
+                                    for n in ver.validas]
         return out
     for n in sorted(ver.validas, key=lambda n: (n["lado"] != "venta", n["indice"])):
         coid = f"{prefijo}-{fecha}-{n['indice']:02d}"
