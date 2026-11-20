@@ -1,4 +1,5 @@
 """Sección «Alpaca paper» del panel, al final de la pestaña «Mi cartera» (src/report/panel.py `_alpaca`).
+Desde el 20-nov-2026: solo los perfiles de las cuentas gestionadas (C1, M1, A1), sin espejo.
 
 Muestra, por cada perfil configurado: estado del mercado, valor de la cuenta PAPER (simulada), posiciones con su peso
 frente al peso objetivo de la cartera que espeja, y el resumen del espejo (deslizamiento real vs coste teórico).
@@ -24,8 +25,14 @@ def _num(x, dec: int = 2) -> str:
         return "—"
 
 
+GESTIONADAS = {"C1": "Claude gestor libre (docs/factors/C1_claude_gestor_spec.md)",
+               "M1": "Claude gestor macro (docs/factors/M1_cartera_macro_spec.md)",
+               "A1": "Claude selección de acciones (docs/factors/A1_seleccion_acciones_spec.md)"}
+
+
 def _bloque_perfil(c: A.Cliente, registro: list[dict]) -> str:
-    cartera = E.cartera_de(c.cred)
+    gestionada = c.cred.perfil in GESTIONADAS
+    cartera = c.cred.perfil if gestionada else E.cartera_de(c.cred)
     partes = [f"<h4>Cuenta paper · perfil {_e(c.cred.perfil or 'defecto')} · cartera "
               f"{_e(cartera or 'sin declarar')}</h4>"]
     try:
@@ -41,7 +48,10 @@ def _bloque_perfil(c: A.Cliente, registro: list[dict]) -> str:
                   f"<b>{_num(equity)} {_e(cu.get('currency', 'USD'))}</b>, efectivo {_num(cu.get('cash'))} · "
                   f"cuenta {_e(A.enmascara_cuenta(cu.get('account_number')))}</p>")
     objetivo: dict[str, float] = {}
-    if cartera:
+    if gestionada:
+        partes.append(f"<p>Gestionada por el agente cada día: {_e(GESTIONADAS[cartera])}. Sus decisiones, en "
+                      f"research/paper/decisiones_{cartera.lower()}.jsonl y obsidian/Carteras/{cartera}/.</p>")
+    elif cartera:
         try:
             d = E.decision(cartera)
             if d:
@@ -64,7 +74,9 @@ def _bloque_perfil(c: A.Cliente, registro: list[dict]) -> str:
     else:
         partes.append("<p>Sin posiciones.</p>")
     r = E.resumen_ejecucion(registro, cartera)
-    if r["ejecuciones"]:
+    if gestionada:
+        pass                                       # sin espejo: las ejecuciones van en el registro del gestor
+    elif r["ejecuciones"]:
         partes.append(f"<p>Espejo vs teórico: {r['ejecuciones']} ejecuciones por {_num(r['valor_usd'])} $ · "
                       f"deslizamiento medio {_e(r['desliz_pb_vs_ref'])} pb frente al precio al enviar y "
                       f"{_e(r['desliz_pb_vs_cierre'])} pb frente al cierre del mes (el precio del paper teórico) · "
@@ -77,11 +89,12 @@ def _bloque_perfil(c: A.Cliente, registro: list[dict]) -> str:
 def seccion_alpaca(clientes: list[A.Cliente] | None = None, registro: list[dict] | None = None) -> str:
     """HTML de la sección. `clientes` y `registro` se inyectan en los tests; por defecto, todos los perfiles."""
     cab = ("<section id='alpaca'><h3>Alpaca paper (cuenta SIMULADA)</h3>"
-           "<p class='nota'>Comprobación de ejecución del paper trading con ETFs de EE. UU. "
-           "(datos IEX, no todo el volumen). Nunca dinero real; no sustituye a los registros B0/B1/B1′.</p>")
+           "<p class='nota'>Las 3 cuentas paper las gestiona el agente desde el 20-nov-2026 (C1 libre, M1 macro, A1 "
+           "selección de acciones); B0/B1/B1′/D1 siguen solo en papel. Datos IEX (no todo el volumen). "
+           "Nunca dinero real.</p>")
     try:
         if clientes is None:
-            clientes = [c for c in (A.cliente(p or None) for p in A.perfiles()) if c is not None]
+            clientes = [c for c in (A.cliente(p) for p in A.perfiles() if p in GESTIONADAS) if c is not None]
             vistos, unicos = set(), []
             for c in clientes:
                 if c.cred.perfil not in vistos:

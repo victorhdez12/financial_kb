@@ -1000,7 +1000,7 @@ PESTANAS.insert(PESTANAS.index(("activos", "Mis activos")) + 1, ("manos", "Manos
 
 
 def _alpaca() -> str:
-    """Cuentas Alpaca PAPER de B1, B1′ y B0 (simuladas; docs/broker/alpaca.md). Sin claves: «no configurado»."""
+    """Cuentas Alpaca PAPER de C1, M1 y A1 (simuladas; docs/broker/alpaca.md §4 quater). Sin claves: «no configurado»."""
     if os.environ.get("FIN_PANEL_SIN_ALPACA") == "1":   # tests y ensayos sin red
         return ""
     return PAL.seccion_alpaca()

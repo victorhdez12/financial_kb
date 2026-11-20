@@ -2,7 +2,8 @@
 documento: M1 «Claude gestor macro» — Claude gestiona una cartera basándose en los modelos macro del proyecto (Alpaca PAPER)
 version: 1.1 APROBADA (2026-11-19) — mandato m1-v1 + modo agente (§7); cambiarlo = nueva versión declarada. Sustituye al borrador 0.1
   (regla mecánica), que queda como **sombra teórica** (§4).
-estado: diseño; se construye sobre la infraestructura de C1 (paquete, guardia, registro) tras su validación.
+estado: CONSTRUIDO (2026-11-19, rama del Constructor; pendiente del Validador), NO activado: faltan claves `_M1`,
+  `research/paper/M1_ACTIVO` y cargar el plist. Piezas en §8.
 ---
 
 # M1: Claude como gestor, obligado a basarse en los modelos macro
@@ -11,8 +12,8 @@ estado: diseño; se construye sobre la infraestructura de C1 (paquete, guardia, 
 - Decisión del usuario (19-nov): «tú eres el manager, pero quiero que lo bases en los modelos para ver si se pueden
   usar». Claude decide **cuánta bolsa y qué contenido** (ETFs, sectores, acciones, ETFs tipo futuros), cada día, pero
   cada decisión debe **apoyarse en las salidas de los modelos** y citarlas.
-- Compite con: **C1** (Claude libre, sin obligación de usar los modelos), **D1** (regla de precio, sin macro), y
-  B0/B1/B1′. La comparación M1 vs C1 dice si **anclarse a los modelos** ayuda a un gestor; M1 vs su sombra (§4) dice
+- Compite con: **C1** (Claude libre, sin obligación de usar los modelos), **A1** (selección de acciones con freno
+  macro, desde el 20-nov), **D1** (regla de precio, sin macro; solo papel desde el 20-nov), y B0/B1/B1′ (papel). La comparación M1 vs C1 dice si **anclarse a los modelos** ayuda a un gestor; M1 vs su sombra (§4) dice
   si el **criterio** añade algo a una aplicación mecánica de los modelos.
 - **Solo hacia delante**; previo escéptico declarado (V1-V3 y S1 no ganaron con historia ≤ 2004).
 
@@ -66,3 +67,30 @@ Tercera cuenta paper del 2.º usuario de Alpaca, claves `_M1`.
   `research/paper/decisiones_m1.jsonl`.
 - Coste: lo paga la **suscripción del usuario** (decisión 19-nov). Límite por ejecución: 15 min; si se agota el cupo
   de la suscripción, ese día no opera y se anota.
+
+## 8. Construcción (2026-11-19)
+| pieza | dónde |
+|---|---|
+| ciclo (el de C1 con la cartera M1) y registro | `src/paper/m1.py` → `research/paper/decisiones_m1.jsonl` (una línea por día, con `uso_modelos`; exige `M1_ACTIVO`, árbol limpio, claves `_M1`, mercado abierto; commit y push) |
+| paquete (§3) | `src/paper/m1_paquete.py`: paquete de C1 + `modelos` (salida y fecha de publicación de cada uno) + `modelos_disponibles` + `sombra` + cierres del universo de la sombra |
+| mandato `m1-v1` (§2) | `config/m1_mandato_v1.md` + `config/gestor_conocimiento_v1.md` (system prompt; sha256 de los dos en el registro) |
+| guardia (§1-§2) | `src/broker/m1_guardia.py` = guardia de C1 + citas: orden sin cita válida (modelo de la lista y con salida hoy, con `dice`) → rechazada; no operar sin `citas_no_operar` válidas, `declaracion_modelos` sin los 9 modelos una vez, o «si» a un modelo sin salida → salida inválida (no opera). Botón `research/paper/M1_PARADA` |
+| sombra (§4) | `src/paper/m1_sombra.py` (regla del borrador 0.1; acciones `config/m1_acciones_v1.json`; sectores del mapa de S1) → `research/paper/decisiones_m1_sombra.jsonl`, en el mismo commit que M1 |
+| agente (§7) | `src/paper/agente.py` (rol M1; ver C1 §8); diario `obsidian/Carteras/M1/AAAA-MM-DD.md`; no puede leer el de C1 |
+| automatización (no instalada) | `scripts/m1_gestor.sh` + `scripts/launchd/com.financialkb.m1.plist` (20:45, lun-vie; espera a que acabe C1) |
+| evaluación (§5) | `src/report/panel_competicion.py`: filas M1 y «M1 · sombra teórica» y tabla «uso de modelos» |
+Declarado (lo que la spec no fijaba):
+- Sombra: entradas del último signal semanal (`regime.quadrant/G_state/I_state`, `credit.light`, `liquidity.state`,
+  INT-11 `paises.USA.abanicos.bolsa.p_neg`) y E1 = `p_A` de EE. UU. del último origen; sin dato → esa entrada no
+  ajusta. La liquidez «holgada» del borrador es la «abundante» del clasificador. Ejecución teórica al cierre del día de
+  la decisión, valorada con sesiones completas (al día siguiente); cierres Alpaca ajustados → archivo → Yahoo.
+- Acciones de la sombra: las 2 mayores por capitalización de cada sector según el conocimiento del Constructor
+  (lista declarada, no medida; revisión en enero).
+- E1 llega a M1 aunque su prerregistro dice que no se muestra en el reporte: lo pide esta spec (aprobada); a decidir
+  por el Validador/usuario si eso contamina E1 (no cambia sus predicciones congeladas).
+
+## 9. Reparto de cuentas (20-nov-2026)
+Sin cambios en M1 (cuenta …ZFJX, mandato m1-v1). Las otras dos cuentas pasan a C1 (…4JGR) y A1 (…X9F9); B0, B1, B1′ y
+D1 quedan solo en papel (tabla «Competición»: D1 como teórico diario). `comprobar_cuenta` acepta reasignaciones
+declaradas (C1 §9). `m1_sombra.bolsa` admite base/suelo/techo como parámetros (los de M1 por defecto, sin cambio de
+resultados); A1 reutiliza los mismos ajustes para su filtro macro.

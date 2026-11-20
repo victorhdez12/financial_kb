@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Supervisor de carteras (docs/factors/supervisor_carteras_spec.md v1.0): 8:00 hora del Mac (Madrid), todos los días.
+     NO instalado. Para activarlo:
+     cp scripts/launchd/com.financialkb.supervisor.plist ~/Library/LaunchAgents/ && launchctl load ~/Library/LaunchAgents/com.financialkb.supervisor.plist
+     Gasta un `claude -p` al día de la suscripción. Nunca opera; puede crear research/paper/C1_PARADA o M1_PARADA. -->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.financialkb.supervisor</string>
+  <key>ProgramArguments</key>
+  <array><string>/bin/bash</string><string>/Users/victorhdez12/Proyectos/financial_kb/scripts/supervisor.sh</string></array>
+  <key>StartCalendarInterval</key>
+  <dict><key>Hour</key><integer>8</integer><key>Minute</key><integer>0</integer></dict>
+  <key>RunAtLoad</key><false/>
+  <key>StandardOutPath</key><string>/Users/victorhdez12/financial_archive/logs/launchd_supervisor.out</string>
+  <key>StandardErrorPath</key><string>/Users/victorhdez12/financial_archive/logs/launchd_supervisor.err</string>
+  <key>Nice</key><integer>10</integer>
+</dict>
+</plist>

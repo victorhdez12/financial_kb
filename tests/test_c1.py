@@ -28,6 +28,10 @@ def aislado(tmp_path, monkeypatch):
     for k in list(os.environ):
         if k.startswith(("ALPACA_", "APCA_")):
             monkeypatch.delenv(k)
+    # estos tests son los del explicador c1-v1 (modo «paquete», validado el 19-nov); el modo agente c1-v2 se prueba
+    # en tests/test_agente.py
+    monkeypatch.setattr(C, "MODO_DEFECTO", "paquete")
+    monkeypatch.setattr(C.AG, "ruta_diario", lambda cartera, fecha, repo=None: tmp_path / "diarios" / cartera / f"{fecha}.md")
     monkeypatch.setenv("FIN_ALPACA_ENV", str(tmp_path / "alpaca.env"))
     monkeypatch.setenv("FIN_ALPACA_DIR", str(tmp_path / "alpaca"))
     monkeypatch.setenv("FIN_C1_DIR", str(tmp_path / "c1"))

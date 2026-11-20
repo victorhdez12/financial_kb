@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <!-- D1 (docs/factors/D1_tendencia_diaria_spec.md §6): decisión diaria tras el cierre de EE. UU., lun-vie 22:30 Madrid.
-     NO INSTALADO. Solo registra si existe research/paper/D1_ACTIVO; el espejo (órdenes) va aparte y en dry-run salvo
-     FIN_ALPACA_EJECUTAR=1. Instalar: cp a ~/Library/LaunchAgents/ y launchctl load (lo decide el usuario). -->
+     Desde el 20-nov-2026 D1 es SOLO PAPEL (decisión del usuario): decide y registra en research/paper/decisiones_d1.jsonl
+     (exige research/paper/D1_ACTIVO), SIN espejo ni órdenes; su cuenta …X9F9 pasó a A1. Reinstalar esta versión:
+     launchctl unload ~/Library/LaunchAgents/com.financialkb.d1.plist && cp scripts/launchd/com.financialkb.d1.plist
+     ~/Library/LaunchAgents/ && launchctl load ~/Library/LaunchAgents/com.financialkb.d1.plist (lo hace el usuario). -->
 <plist version="1.0">
 <dict>
   <key>Label</key><string>com.financialkb.d1</string>
   <key>WorkingDirectory</key><string>/Users/victorhdez12/Proyectos/financial_kb</string>
-  <key>EnvironmentVariables</key>
-  <dict><key>FIN_ALPACA_EJECUTAR</key><string>1</string></dict>
   <key>ProgramArguments</key>
   <array>
     <string>/bin/bash</string><string>-lc</string>
-    <string>.venv/bin/python -m scripts.paper_decision_d1 --auto --registrar &amp;&amp; .venv/bin/python -m src.broker.espejo --cartera D1 --auto --ejecutar</string>
+    <string>.venv/bin/python -m scripts.paper_decision_d1 --auto --registrar</string>
   </array>
   <key>StartCalendarInterval</key>
   <array>

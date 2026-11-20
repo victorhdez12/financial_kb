@@ -340,9 +340,16 @@ def puede_ejecutar(cred: A.Credenciales, cartera: str, huella: str, registro: li
     # Reasignación DECLARADA (fila «reasignacion» en espejo.jsonl, decisión del usuario): solo cuentan las órdenes
     # posteriores a la última reasignación de esta cuenta a esta cartera.
     desde = 0
+    ultima = None
     for i, r in enumerate(registro):
-        if r.get("tipo") == "reasignacion" and r.get("cuenta_huella") == huella and r.get("a") == cartera:
-            desde = i + 1
+        if r.get("tipo") == "reasignacion" and r.get("cuenta_huella") == huella:
+            ultima = r.get("a")
+            if r.get("a") == cartera:
+                desde = i + 1
+    # la última reasignación de esta cuenta manda: si fue a OTRA cartera (p. ej. …X9F9 D1→A1 el 20-nov), el espejo
+    # ya no envía nada a esa cuenta aunque el perfil siga declarando la cartera antigua
+    if ultima is not None and ultima != cartera:
+        return f"esta cuenta paper se reasignó a {ultima} (espejo.jsonl): {cartera} ya no opera en ella"
     otras = {r["cartera"] for r in registro[desde:] if r.get("cuenta_huella") == huella and r.get("tipo") == "orden"} - {cartera}
     if otras:
         return f"esta cuenta paper ya se usó para {sorted(otras)}: una cuenta = una cartera"
