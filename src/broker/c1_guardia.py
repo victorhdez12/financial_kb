@@ -172,6 +172,7 @@ def _forma(o, campos: set[str] | None = None) -> tuple[dict | None, str | None]:
     if imp is not None:
         if o["lado"] != "compra" or o["clase"] == "opcion" or tipo != "mercado":
             return None, "'importe_usd' solo en compras de mercado de acciones o cripto (las ventas van por cantidad)"
+        imp = math.floor(imp * 100 + 1e-6) / 100   # céntimos hacia abajo: el `notional` enviado = el coste estimado
         if imp < IMPORTE_MINIMO:
             return None, f"importe < {IMPORTE_MINIMO} $"
     if o["clase"] == "opcion" and (cant is None or cant != int(cant)):

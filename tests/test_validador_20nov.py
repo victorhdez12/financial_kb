@@ -243,3 +243,12 @@ def test_reasignar_no_tapa_ordenes_del_espejo_posteriores(capsys):
         R.plan(E.leer_registro())
     assert R.main([]) == 1 and "DESPUÉS" in capsys.readouterr().out
     assert "después de su reasignación" in C.comprobar_cuenta(_cli("A1", CTA["A1"]), CTA["A1"], "A1")
+
+
+def test_importe_se_redondea_a_centimos_hacia_abajo_y_el_notional_no_supera_el_efectivo():
+    t = json.dumps({"version_mandato": "c1-v1", "fecha": "x", "nota_diario": "n", "ordenes": [
+        {"simbolo": "AAA", "clase": "accion", "lado": "compra", "importe_usd": 99.995, "razon": "r",
+         "cambiaria_de_opinion": "c"}]})
+    v = G.validar(t, estado(efectivo=99.995), parada=False)
+    n = v.validas[0]
+    assert float(G.cuerpo_alpaca(n, "x")["notional"]) == n["coste_estimado_usd"] == 99.99 <= 99.995
