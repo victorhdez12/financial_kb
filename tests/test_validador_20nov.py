@@ -296,3 +296,14 @@ def test_no_envia_si_el_mercado_cerro_o_va_a_cerrar_mientras_decidia(abierto, ah
     c2 = A.Cliente(A.Credenciales(key_id="K", secret="S", perfil="C1"), transporte=t2)
     out = C.ejecutar(c2, G.Veredicto(True, None, validas=[dict(n)]), "2026-11-20", espera_s=0, dormir=lambda s: None)
     assert len(t2.posts) == 1 and out["enviadas"]
+
+
+def test_aviso_del_supervisor_con_texto_del_agente_no_rompe_el_literal_de_applescript(tmp_path, monkeypatch):
+    from src.paper import supervisor as SV
+    llamadas = []
+    monkeypatch.delenv("FIN_SIN_AVISOS", raising=False)
+    monkeypatch.setattr(SV.subprocess, "run", lambda cmd, **kw: llamadas.append(cmd))
+    SV.avisar('x\\" & (do shell script "id") & "\nfin', False, nota=tmp_path / "no_existe.md")
+    script = llamadas[0][2]
+    cuerpo = script[len('display notification "'):script.index('" with title')]
+    assert '"' not in cuerpo and "\\" not in cuerpo and "\n" not in cuerpo

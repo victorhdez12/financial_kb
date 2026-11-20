@@ -308,7 +308,8 @@ def avisar(texto: str, es_parada: bool, nota: Path | None = None) -> None:
         s = s.replace(marca, marca + linea + "\n", 1) if marca in s else s + "\n" + linea + "\n"
         nota.write_text(s, encoding="utf-8")
     if os.environ.get("FIN_SIN_AVISOS") != "1":
-        t = texto.replace('"', "'")
+        # el texto puede venir del agente (vigía): dentro del literal de AppleScript solo « " » y « \\ » son especiales
+        t = " ".join(texto.replace("\\", "/").replace('"', "'").split())
         subprocess.run(["/usr/bin/osascript", "-e", f'display notification "{t}" with title "financial_kb · Supervisor"'],
                        capture_output=True, check=False)
 
