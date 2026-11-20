@@ -48,7 +48,8 @@ El de C1 (cuenta, precios, régimen, alertas, diagnósticos, panel, diario) más
   + «Mis activos» + posiciones; de `raw/sec_bulk/companyfacts.zip` el último año fiscal (marco `CYAAAA`) de ingresos,
   beneficio y resultado operativo (y el anterior) y el último instante de activos/pasivos/patrimonio; sector por SIC
   (`submissions.zip`, mapa declarado aprox. GICS). Métricas: ROA, margen operativo (mismo año fiscal que los
-  ingresos), crecimiento de ingresos y apalancamiento; **calidad** = media de percentiles (ROA↑, margen↑,
+  ingresos; desde `a1-candidatas-2`, Validador 20-nov: solo cuentan los conceptos anuales del año fiscal más reciente
+  de la empresa, nunca uno abandonado de años anteriores), crecimiento de ingresos y apalancamiento; **calidad** = media de percentiles (ROA↑, margen↑,
   crecimiento↑, apalancamiento↓), ≥ 3 de 4, año fiscal ≥ actual − 2. Detalle de las 60 mejores y fila compacta de todas.
   Caché por versión del zip (`~/financial_archive/a1/candidatas/`);
 - `mis_activos`: XBRL de los últimos trimestres (`sec_fundamentales/hechos.json`), Form 4 de 12 meses (compras en

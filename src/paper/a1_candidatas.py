@@ -6,6 +6,7 @@ con su CIK (`sec/companies/sec_company_tickers.json`), más los valores de «Mis
 Para cada empresa, de `raw/sec_bulk/companyfacts.zip` (XBRL de la SEC; fecha = la del fichero) y su sector de
 `raw/sec_bulk/submissions.zip` (código SIC → sector amplio, mapa `SECTORES_SIC`):
 - ingresos, beneficio neto y resultado operativo del ÚLTIMO año fiscal con marco anual `CYAAAA` (y del anterior);
+  un concepto cuyo último año es anterior al más reciente de la empresa no cuenta (v2);
   activos, pasivos y patrimonio del último marco instantáneo `CYAAAAQnI`;
 - métricas: ROA = beneficio / activos; margen operativo = resultado operativo / ingresos; crecimiento de ingresos =
   ingresos / ingresos del año anterior − 1; apalancamiento = pasivos / activos (o 1 − patrimonio / activos);
@@ -25,7 +26,7 @@ import re
 import zipfile
 from pathlib import Path
 
-VERSION = "a1-candidatas-1"
+VERSION = "a1-candidatas-2"   # -2 (Validador 20-nov): métricas anuales solo del año fiscal más reciente
 RE_ANUAL = re.compile(r"^CY(\d{4})$")
 RE_INSTANTE = re.compile(r"^CY(\d{4})Q(\d)I$")
 CONCEPTOS = {
@@ -157,10 +158,11 @@ def metricas(x: dict) -> dict:
     def anio(k):
         return (x.get(k) or {}).get("anio")
     act = v("activos")
-    ni, op, ing = v("beneficio_neto"), v("resultado_operativo"), v("ingresos")
-    if op is not None and anio("resultado_operativo") != anio("ingresos"):
-        op = None                       # margen solo con el mismo año fiscal en los dos conceptos
-    ant = (x.get("ingresos") or {}).get("anterior")
+    # solo cuentan los conceptos anuales del año fiscal más reciente de la empresa: un concepto abandonado (p. ej.
+    # CPRT dejó `Revenues`/`SalesRevenueNet` en 2018) daría un crecimiento o un margen de hace años (v1 lo mezclaba)
+    ref = max((anio(k) for k in ("ingresos", "beneficio_neto", "resultado_operativo") if anio(k)), default=None)
+    ni, op, ing = (v(k) if anio(k) == ref else None for k in ("beneficio_neto", "resultado_operativo", "ingresos"))
+    ant = (x.get("ingresos") or {}).get("anterior") if ing is not None else None
     pas = v("pasivos")
     pat = v("patrimonio")
     m = {"roa": ni / act if ni is not None and act else None,

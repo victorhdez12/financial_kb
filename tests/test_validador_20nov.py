@@ -252,3 +252,16 @@ def test_importe_se_redondea_a_centimos_hacia_abajo_y_el_notional_no_supera_el_e
     v = G.validar(t, estado(efectivo=99.995), parada=False)
     n = v.validas[0]
     assert float(G.cuerpo_alpaca(n, "x")["notional"]) == n["coste_estimado_usd"] == 99.99 <= 99.995
+
+
+# ------------------------------------------------------------------ calidad XBRL
+def test_metricas_no_mezclan_un_concepto_de_ingresos_abandonado_con_anios_recientes():
+    from src.paper import a1_candidatas as K
+    # como CPRT en el companyfacts real: ingresos solo hasta 2018 (conceptos abandonados), beneficio hasta 2026
+    x = {"ingresos": {"anio": 2018, "valor": 125.0, "anterior": 100.0},
+         "beneficio_neto": {"anio": 2026, "valor": 15.0}, "resultado_operativo": {"anio": 2026, "valor": 20.0},
+         "activos": {"valor": 100.0}, "pasivos": {"valor": 10.0}}
+    m = K.metricas(x)
+    assert m["crec_ingresos"] is None and m["margen_operativo"] is None
+    assert m["roa"] == 0.15 and m["apalancamiento"] == 0.1
+    assert K.VERSION == "a1-candidatas-2"
