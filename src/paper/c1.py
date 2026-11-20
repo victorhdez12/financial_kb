@@ -285,9 +285,21 @@ def comprobar_cuenta(c: A.Cliente, cuenta_raw: dict, perfil: str = PERFIL) -> st
     # Reasignación DECLARADA (fila «reasignacion» en espejo.jsonl con `a` = esta cartera; decisión del usuario, como
     # B0→D1 el 19-nov y B1→C1 / D1→A1 el 20-nov): solo cuentan las órdenes del espejo POSTERIORES a la última.
     desde = 0
+    ultima = None
     for i, r in enumerate(reg):
-        if r.get("tipo") == "reasignacion" and r.get("cuenta_huella") == h and r.get("a") == perfil:
-            desde = i + 1
+        if r.get("tipo") == "reasignacion" and r.get("cuenta_huella") == h:
+            ultima = r.get("a")
+            if r.get("a") == perfil:
+                desde = i + 1
+    # la última reasignación de esta cuenta manda (como en espejo.puede_ejecutar): si fue a OTRA cartera, esta no opera
+    if ultima is not None and ultima != perfil:
+        return f"esta cuenta paper se reasignó a {ultima} (espejo.jsonl): {perfil} no opera en ella"
+    # si a esta cartera se le declaró OTRA cuenta (y nunca esta), las claves del perfil apuntan a la cuenta equivocada
+    # (p. ej. claves de C1 puestas en la cuenta …ZFJX de M1, que no tiene historia en el espejo)
+    suyas = {r.get("cuenta_huella") for r in reg if r.get("tipo") == "reasignacion" and r.get("a") == perfil}
+    if suyas and h not in suyas:
+        return (f"a {perfil} se le declaró otra cuenta en espejo.jsonl ({', '.join(sorted(str(x) for x in suyas))}), "
+                "no esta: claves del perfil equivocadas")
     otras = {r.get("cartera") for r in reg[desde:] if r.get("cuenta_huella") == h and r.get("tipo") == "orden"}
     if otras:
         return (f"esta cuenta paper ya recibió órdenes del espejo de {sorted(otras)}"

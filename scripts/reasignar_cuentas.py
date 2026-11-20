@@ -35,8 +35,15 @@ def plan(registro: list[dict], reasignaciones: list[dict] | None = None) -> list
         if len(huellas) != 1:
             raise LookupError(f"cuenta {x['cuenta']}: {len(huellas)} huellas en espejo.jsonl (hace falta exactamente 1)")
         h = huellas.pop()
-        ult = [r for r in registro if r.get("tipo") == "reasignacion" and r.get("cuenta_huella") == h]
-        if ult and ult[-1].get("a") == x["a"]:
+        idx = [i for i, r in enumerate(registro) if r.get("tipo") == "reasignacion" and r.get("cuenta_huella") == h]
+        if idx and registro[idx[-1]].get("a") == x["a"]:
+            # ya declarada; pero si el espejo de otra cartera envió órdenes DESPUÉS (p. ej. el plist antiguo de D1), la
+            # cuenta ya no está limpia: no se re-declara en silencio (heredar esas posiciones lo decide el usuario)
+            tras = sorted({r.get("cartera") for r in registro[idx[-1] + 1:]
+                           if r.get("tipo") == "orden" and r.get("cuenta_huella") == h and r.get("cartera") != x["a"]})
+            if tras:
+                raise LookupError(f"cuenta {x['cuenta']}: órdenes del espejo de {tras} DESPUÉS de su reasignación a "
+                                  f"{x['a']}; revisa la cuenta y decide (no se re-declara sola)")
             continue
         out.append({"tipo": "reasignacion", "ts": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
                     "cuenta_huella": h, "cuenta": x["cuenta"], "de": x["de"], "a": x["a"], "motivo": x["motivo"]})
