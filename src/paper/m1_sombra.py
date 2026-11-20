@@ -81,9 +81,10 @@ def entradas(signal: dict | None, e1: dict | None) -> dict:
 
 
 # --------------------------------------------------------------------------- regla (pura)
-def bolsa(x: dict) -> tuple[float, list[str]]:
-    """Paso 1: % de bolsa y los ajustes aplicados (texto)."""
-    b, aj = BASE, []
+def bolsa(x: dict, *, base: float = BASE, suelo: float = SUELO, techo: float = TECHO) -> tuple[float, list[str]]:
+    """Paso 1: % de bolsa y los ajustes aplicados (texto). `base`/`suelo`/`techo`: los de M1 por defecto (A1 usa los
+    suyos con los mismos ajustes: src/paper/a1_sombra.py)."""
+    b, aj = base, []
     cr = x.get("credito")
     if cr == "ámbar" or cr == "ambar":
         b -= 0.10
@@ -120,9 +121,9 @@ def bolsa(x: dict) -> tuple[float, list[str]]:
         b -= 0.10
         aj.append("G↓ −10 pp")
     b = round(b, 10)
-    b2 = min(TECHO, max(SUELO, b))
+    b2 = min(techo, max(suelo, b))
     if round(b2, 10) != round(b, 10):
-        aj.append(f"acotado a [{SUELO:.0%}, {TECHO:.0%}]")
+        aj.append(f"acotado a [{suelo:.0%}, {techo:.0%}]")
     return round(b2, 6), aj
 
 

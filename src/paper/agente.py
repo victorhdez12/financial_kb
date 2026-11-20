@@ -1,12 +1,13 @@
-"""Modo agente de solo lectura para los gestores C1 y M1 y para el supervisor de carteras
+"""Modo agente de solo lectura para los gestores C1, M1 y A1 y para el supervisor de carteras
 (docs/factors/C1_claude_gestor_spec.md §7, docs/factors/M1_cartera_macro_spec.md §7,
+docs/factors/A1_seleccion_acciones_spec.md §6,
 docs/factors/supervisor_carteras_spec.md §3).
 
 `claude -p` con herramientas SOLO de lectura (Read, Grep, Glob) y acceso a una lista de carpetas ENUMERADA:
 - del repo: `config`, `docs`, `obsidian`, `schema`, `scripts`, `src` y las subcarpetas de `research` salvo `paper`
   (nunca `data/`, que es un enlace a todo ~/financial_archive, ni `.env`, ni `research/paper/`). Su propio registro
   (`research/paper/decisiones_<x>.jsonl`) se le copia en su carpeta de trabajo. El supervisor sí lee research/paper
-  (revisa los registros de todas las carteras) y además `logs`, `alpaca`, `c1`, `m1` y `supervisor` del archivo;
+  (revisa los registros de todas las carteras) y además `logs`, `alpaca`, `c1`, `m1`, `a1` y `supervisor` del archivo;
 - de ~/financial_archive (`FIN_DATA_ROOT`): solo las subcarpetas de datos listadas en `ARCHIVO_<ROL>`; NUNCA la raíz,
   así `config/` (claves de Alpaca) queda fuera por construcción;
 - su carpeta de trabajo (paquete del día, su registro, prompt), fuera del repo.
@@ -41,12 +42,12 @@ RESEARCH_EXCLUIDOS = {"paper"}
 # subcarpetas de ~/financial_archive que puede leer cada rol (enumeradas: la raíz nunca, config nunca)
 ARCHIVO_GESTOR = ("panel", "macro", "mercados", "intl", "curated", "features", "events", "diag", "labels",
                   "sec_fundamentales", "sec_flujos", "sec_form4", "sec_13f", "sec_recompras", "finra_short")
-ARCHIVO_SUPERVISOR = ARCHIVO_GESTOR + ("alpaca", "c1", "m1", "supervisor", "logs")
+ARCHIVO_SUPERVISOR = ARCHIVO_GESTOR + ("alpaca", "c1", "m1", "a1", "supervisor", "logs")
 PROHIBIDOS_ARCHIVO = {"config", ".venv", "raw", "neo4j"}
 HERRAMIENTAS = ("Read", "Grep", "Glob")
 # nombres conocidos: un ajuste inválido haría que `claude -p` ignorase en silencio el fichero de ajustes entero
 NEGADAS = ("Bash", "Write", "Edit", "NotebookEdit", "WebFetch", "WebSearch", "Agent")
-GESTORES = ("C1", "M1")
+GESTORES = ("C1", "M1", "A1")
 RE_CUPO = re.compile(r"usage limit|limit reached|hit your limit|rate.?limit|quota|out of (extra )?usage|"
                      r"credit balance|cupo", re.I)
 
@@ -82,7 +83,7 @@ def _dentro(p: Path, base: Path) -> bool:
 
 # --------------------------------------------------------------------------- carpetas y permisos
 def directorios(rol: str, *, repo: Path | None = None, archivo: Path | None = None) -> list[Path]:
-    """Carpetas de lectura del rol ('C1', 'M1' o 'supervisor'), ya resueltas. Lanza AislamientoRoto si alguna es la
+    """Carpetas de lectura del rol ('C1', 'M1', 'A1' o 'supervisor'), ya resueltas. Lanza AislamientoRoto si alguna es la
     raíz del archivo, está dentro de config/ o contiene config/ (p. ej. por un enlace simbólico)."""
     repo = (repo or repo_lectura()).resolve()
     archivo = archivo or archivo_raiz()

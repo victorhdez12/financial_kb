@@ -274,16 +274,25 @@ def seguimiento(c: A.Cliente, registro: list[dict]) -> list[dict]:
 
 # --------------------------------------------------------------------------- comprobaciones de la cuenta
 def comprobar_cuenta(c: A.Cliente, cuenta_raw: dict, perfil: str = PERFIL) -> str | None:
-    """None si la cuenta es de la cartera `perfil` (C1 o M1); si no, el motivo (una cuenta = una cartera)."""
+    """None si la cuenta es de la cartera `perfil` (C1, M1 o A1); si no, el motivo (una cuenta = una cartera)."""
     from src.broker import espejo as E   # solo lectura de espejo.jsonl
     if c.cred.perfil != perfil:
         return f"perfil {c.cred.perfil or 'defecto'!r}: {perfil} solo opera con el perfil {perfil}"
     if c.cred.cartera and c.cred.cartera != perfil:
         return f"el perfil {perfil} declara la cartera {c.cred.cartera}: una cuenta = una cartera"
     h = E.huella_cuenta(cuenta_raw)
-    otras = {r.get("cartera") for r in E.leer_registro() if r.get("cuenta_huella") == h and r.get("tipo") == "orden"}
+    reg = E.leer_registro()
+    # Reasignación DECLARADA (fila «reasignacion» en espejo.jsonl con `a` = esta cartera; decisión del usuario, como
+    # B0→D1 el 19-nov y B1→C1 / D1→A1 el 20-nov): solo cuentan las órdenes del espejo POSTERIORES a la última.
+    desde = 0
+    for i, r in enumerate(reg):
+        if r.get("tipo") == "reasignacion" and r.get("cuenta_huella") == h and r.get("a") == perfil:
+            desde = i + 1
+    otras = {r.get("cartera") for r in reg[desde:] if r.get("cuenta_huella") == h and r.get("tipo") == "orden"}
     if otras:
-        return f"esta cuenta paper ya recibió órdenes del espejo de {sorted(otras)}: una cuenta = una cartera"
+        return (f"esta cuenta paper ya recibió órdenes del espejo de {sorted(otras)}"
+                + (" después de su reasignación" if desde else " y no hay reasignación declarada a " + perfil)
+                + ": una cuenta = una cartera")
     return None
 
 
@@ -307,6 +316,9 @@ class Cartera:
     extra_orden: Callable[[dict], Callable | None] | None = None   # paquete → (orden → motivo | None)
     prompt_agente: Callable[[dict, Path], str] | None = None
     anexo: Callable[[dict], dict] | None = None   # propuesta → campos extra de la línea (M1: uso de modelos)
+    # (veredicto, paquete, estado) → veredicto: reglas de cartera tras la guardia de C1 (A1: 10 % por valor, 35 % por
+    # sector, 30 valores, techo de bolsa del filtro macro)
+    post_validar: Callable | None = None
 
 
 def leer_agente_c1(texto: str | None) -> dict:
@@ -448,6 +460,8 @@ def ciclo(c: A.Cliente | None, *, hoy: dt.date | None = None, registro: list[dic
             est = estado_alpaca(c, paquete["cuenta"], ordenes)
         ver = G.validar(cl["texto"], est, parada=False, leer=k.leer, campos_orden=k.campos_orden,
                         extra_orden=k.extra_orden(paquete) if k.extra_orden else None, ruta_parada=ruta_parada)
+        if k.post_validar is not None:
+            ver = k.post_validar(ver, paquete, est)
     linea["opera"] = ver.opera
     linea["motivo_no_opera"] = ver.motivo
     linea["guardia"] = {"validas": [{x: n.get(x) for x in ("indice", "simbolo", "clase", "lado", "tipo", "cantidad",
