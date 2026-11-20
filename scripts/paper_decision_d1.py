@@ -6,7 +6,8 @@ Uso: .venv/bin/python -m scripts.paper_decision_d1 [--cierre AAAA-MM-DD | --auto
 - Con --registrar exige: research/paper/D1_ACTIVO (lo crea el usuario), árbol limpio, cierre = última sesión cerrada
   (fuente alpaca), ≥ PRIMER_CIERRE (sin historia retroactiva), no registrado y posterior al último registrado. Añade la
   línea a research/paper/decisiones_d1.jsonl (propio, inmutable), commitea y sube, como B1′/S1.
-- Nunca envía órdenes: eso es `python -m src.broker.espejo --cartera D1` (dry-run por defecto).
+- Nunca envía órdenes. Desde el 20-nov-2026 D1 es solo papel (sin espejo): usa de Alpaca solo datos (reloj,
+  calendario, barras) del primer perfil disponible de PERFILES_DATOS. D1_ACTIVO sigue siendo la marca para registrar.
 Códigos de salida: 0 hecho (o ya registrado / antes del arranque con --auto), 2 Alpaca sin configurar, 3 ya
 registrado, 4 cierre no válido, 5 árbol sucio, 6 sin research/paper/D1_ACTIVO, 8 sin datos suficientes, 1 otros.
 """
@@ -25,6 +26,21 @@ from src.paper import d1 as D
 
 PRIMER_CIERRE = pd.Timestamp("2026-11-20")     # primera sesión tras la spec congelada (19-nov-2026)
 DIAS_HISTORIA = 420                             # días naturales pedidos (≥ 253 sesiones)
+
+
+# D1 es SOLO PAPEL desde el 20-nov-2026 (su cuenta …X9F9 pasó a A1): de Alpaca solo usa DATOS (reloj, calendario y
+# barras), que dan igual de qué cuenta paper salgan. Nunca envía órdenes (este script no tiene ninguna llamada de órdenes).
+PERFILES_DATOS = ("D1", "A1", "C1", "M1")
+
+
+def cliente_datos():
+    """Primer perfil con claves de PERFILES_DATOS (solo para datos de mercado); None si no hay ninguno."""
+    from src.broker import alpaca as A
+    for p in PERFILES_DATOS:
+        c = A.cliente(p)
+        if c is not None:
+            return c
+    return None
 
 
 def ultima_sesion_cerrada(reloj: dict, calendario: list[dict]) -> pd.Timestamp:
@@ -71,9 +87,9 @@ def main(argv=None, *, cliente=None, precios: pd.DataFrame | None = None) -> int
             c = cliente
             if c is None:
                 from src.broker import alpaca as A
-                c = A.cliente("D1")
+                c = cliente_datos()
                 if c is None:
-                    print("Alpaca sin configurar para el perfil D1: nada que hacer")
+                    print(f"Alpaca sin configurar (ningún perfil de {PERFILES_DATOS}): nada que hacer")
                     return 0 if a.auto else 2
             hoy = dt.date.today()
             esperado = ultima_sesion_cerrada(c.reloj(), c.calendario(hoy - dt.timedelta(days=10), hoy))

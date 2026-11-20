@@ -164,7 +164,8 @@ def test_plist_no_instalado_y_horario():
     pl = Path(P.__file__).parent / "launchd" / "com.financialkb.d1.plist"
     t = pl.read_text()
     assert "paper_decision_d1 --auto --registrar" in t and "<integer>22</integer>" in t and "<integer>30</integer>" in t
-    assert not (Path.home() / "Library" / "LaunchAgents" / "com.financialkb.d1.plist").exists()
+    # 20-nov-2026: D1 solo en papel — el plist ya no lanza el espejo ni pide ejecución (el instalado lo cambia el usuario)
+    assert "src.broker.espejo" not in t and "--ejecutar" not in t and "FIN_ALPACA_EJECUTAR" not in t
 
 
 # --------------------------------------------------------------------------- espejo

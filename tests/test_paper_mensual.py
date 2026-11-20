@@ -148,29 +148,11 @@ def _espejo(llamadas: str) -> list[str]:
     return [l.strip() for l in llamadas.splitlines() if "src.broker.espejo" in l]
 
 
-def test_espejo_alpaca_tras_cada_registro_en_dry_run_antes_de_2026_12(juguete):
-    # el python falso sale con 9 para src.broker.espejo (como un fallo): el registro no se entera
-    # docs/broker/alpaca.md §7: solo B1 tras su registro (B1′ y B0 solo en papel desde el 19-nov)
-    llamadas, _ = _corre(juguete, hoy="2026-11-03")
-    esp = _espejo(llamadas)
-    assert len(esp) == 1 and all("--dry-run" in l and "--auto" in l for l in esp)
-    assert [l.split("--cartera ")[1].split()[0] for l in esp] == ["B1"]
-    assert _git(juguete[0], "status", "--porcelain") == ""
-
-
-def test_espejo_alpaca_ejecuta_desde_2026_12_y_el_entorno_manda(juguete):
-    llamadas, _ = _corre(juguete, hoy="2026-12-03")
-    assert all("--ejecutar" in l for l in _espejo(llamadas)) and len(_espejo(llamadas)) == 1
-
-
-def test_espejo_alpaca_no_ejecuta_si_el_entorno_lo_prohibe(juguete):
-    llamadas, _ = _corre(juguete, hoy="2027-01-04", FIN_ALPACA_EJECUTAR="0")
-    assert _espejo(llamadas) and all("--dry-run" in l for l in _espejo(llamadas))
-
-
-def test_espejo_alpaca_fallido_no_cambia_nada(juguete):
+@pytest.mark.parametrize("hoy, extra", [("2026-11-03", {}), ("2026-12-03", {}), ("2027-01-04", {"FIN_ALPACA_EJECUTAR": "1"})])
+def test_sin_espejo_alpaca_b0_b1_b1prima_solo_en_papel(juguete, hoy, extra):
+    # 20-nov-2026 (decisión del usuario): B1 deja de tener cuenta (…4JGR pasa a C1); el script ya no llama al espejo
     repo, logs, _, _ = juguete
-    llamadas, nota = _corre(juguete)                      # el python falso sale con 9 en el espejo
-    assert _espejo(llamadas)
-    assert (logs / ".paper_hecho_2026-12").exists() and "✅ decisión registrada" in nota
+    llamadas, nota = _corre(juguete, hoy=hoy, **extra)
+    assert _espejo(llamadas) == []
     assert _git(repo, "status", "--porcelain") == ""
+    assert "src.broker.espejo" not in (REPO / "scripts" / "paper_mensual.sh").read_text()

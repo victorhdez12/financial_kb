@@ -1,7 +1,9 @@
 ---
 documento: Alpaca PAPER (cuenta simulada): datos en tiempo real y espejo de ejecución de B0/B1/B1′
-version: 1.1 (2026-11-19)
-estado: enganchado (§7). Cuentas paper: B1 …4JGR (perfil por defecto), **D1 …X9F9 (`_D1`; era B0, reasignación declarada en espejo.jsonl)**, **M1 …ZFJX (`_M1`)** — la cuenta de B1′ pasó a M1 el
+version: 1.2 (2026-11-20)
+estado: **20-nov: sin espejo** (§4 quater). Las 3 cuentas las gestiona el agente: **C1 …4JGR (perfil `_C1`; era B1)**,
+  **A1 …X9F9 (perfil `_A1`; era B0 y luego D1)**, **M1 …ZFJX (`_M1`)**. B0/B1/B1′/D1 solo en papel. Histórico (19-nov):
+  Cuentas paper: B1 …4JGR (perfil por defecto), D1 …X9F9 (`_D1`; era B0, reasignación declarada en espejo.jsonl), M1 …ZFJX (`_M1`) — la cuenta de B1′ pasó a M1 el
   19-nov a petición del usuario (B1′ sigue solo en papel); M1 y D1 configuradas sin margen (×1) y sin cortos (opciones: M1 nivel 2, D1 nivel 1).
   Entrada de B0 y B1 el 19-nov-2026 (decisión del cierre de oct, a petición del usuario); desde el registro del cierre de nov (dic-2026) todo se ejecuta (`ALPACA_EJECUTA_DESDE="2026-12"`). Sin claves no hace nada.
 ---
@@ -107,6 +109,32 @@ fichero; cada línea de `espejo.jsonl` lleva la versión.
   órdenes de opciones y cripto usan el `enviar_orden` de siempre (mismo endpoint paper; opciones con
   `position_intent` buy_to_open / sell_to_close; cripto `gtc`). `activo("BTC/USD")` consulta `/v2/assets/BTCUSD`.
 - C1 se niega a operar si el perfil declara otra cartera o si la cuenta ya recibió órdenes del espejo.
+
+### 4 quater. Reparto del 20-nov-2026: C1, M1 y A1 gestionan las 3 cuentas; el espejo se apaga
+Decisión del usuario: no dos cuentas que hagan lo mismo (B1 y D1 tenían URTH/IEI/GLD 70/15/15). Cada cuenta, un estilo
+gestionado por el agente cada día (`src/paper/c1.py`, `m1.py`, `a1.py`): M1 macro, A1 selección de acciones
+(`docs/factors/A1_seleccion_acciones_spec.md`), C1 libre.
+
+| cuenta | antes | ahora | perfil (claves) | configuración |
+|---|---|---|---|---|
+| …4JGR | B1 (perfil por defecto) | **C1** | `_C1` (renombrar las de defecto) | sin cortos, margen ×1, opciones nivel 2 |
+| …X9F9 | B0 → D1 (19-nov) | **A1** | `_A1` (renombrar las `_D1`) | sin cortos, margen ×1, opciones desactivadas |
+| …ZFJX | B1′ → M1 (19-nov) | M1 | `_M1` | ya configurada (sin cortos, ×1, nivel 2) |
+
+- **B0, B1, B1′ y D1 solo en papel** (listón teórico en «Competición»). `scripts/paper_mensual.sh` ya no llama al
+  espejo; el plist de D1 solo decide y registra (`paper_decision_d1 --auto --registrar`, sin `--ejecutar`); D1 usa de
+  Alpaca solo datos (reloj, calendario, barras) del primer perfil disponible (`D1`, `A1`, `C1`, `M1`). `D1_ACTIVO`
+  sigue siendo la marca de registro en papel: no hace falta otra (no ejecutar basta; el espejo además se niega, abajo).
+- **Reasignación declarada** (mismo mecanismo que el 19-nov): `scripts/reasignar_cuentas.py` (en seco por defecto;
+  `--escribir`) añade a `espejo.jsonl` las filas …4JGR B1→C1 y …X9F9 D1→A1. Efectos: `espejo.puede_ejecutar` se niega a
+  operar en una cuenta cuya ÚLTIMA reasignación es a otra cartera; `c1.comprobar_cuenta` (C1/M1/A1) ignora las
+  órdenes del espejo anteriores a la reasignación a esa cartera. Escribirlas DESPUÉS de reinstalar el plist de D1.
+- **Configuración**: `scripts/configurar_cuentas.py` (`PATCH /v2/account/configurations`, solo paper): en seco y sin
+  red por defecto; `--leer` muestra la actual; `--aplicar` cambia; comprueba antes el número de cuenta del perfil.
+- La diaria (`scripts/actualizar.sh`) ya no hace `--seguimiento` del espejo: deja en el log `_alpaca` una foto de
+  solo lectura de C1, M1 y A1 (`src.broker.alpaca estado --perfil`); cada ciclo de gestor sigue sus órdenes.
+- Panel «Competición»: filas de cuenta C1/M1/A1 y teóricos diarios D1, sombra de M1 y sombra de A1 (sin filas de
+  espejo). `clientes_por_cartera` solo asocia los perfiles `C1`, `M1`, `A1`.
 
 ## 5. Comandos
 ```bash

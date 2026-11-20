@@ -12,8 +12,8 @@ estado: CONSTRUIDO (2026-11-19, rama del Constructor; pendiente del Validador), 
 - Decisión del usuario (19-nov): «tú eres el manager, pero quiero que lo bases en los modelos para ver si se pueden
   usar». Claude decide **cuánta bolsa y qué contenido** (ETFs, sectores, acciones, ETFs tipo futuros), cada día, pero
   cada decisión debe **apoyarse en las salidas de los modelos** y citarlas.
-- Compite con: **C1** (Claude libre, sin obligación de usar los modelos), **D1** (regla de precio, sin macro), y
-  B0/B1/B1′. La comparación M1 vs C1 dice si **anclarse a los modelos** ayuda a un gestor; M1 vs su sombra (§4) dice
+- Compite con: **C1** (Claude libre, sin obligación de usar los modelos), **A1** (selección de acciones con freno
+  macro, desde el 20-nov), **D1** (regla de precio, sin macro; solo papel desde el 20-nov), y B0/B1/B1′ (papel). La comparación M1 vs C1 dice si **anclarse a los modelos** ayuda a un gestor; M1 vs su sombra (§4) dice
   si el **criterio** añade algo a una aplicación mecánica de los modelos.
 - **Solo hacia delante**; previo escéptico declarado (V1-V3 y S1 no ganaron con historia ≤ 2004).
 
@@ -88,3 +88,9 @@ Declarado (lo que la spec no fijaba):
   (lista declarada, no medida; revisión en enero).
 - E1 llega a M1 aunque su prerregistro dice que no se muestra en el reporte: lo pide esta spec (aprobada); a decidir
   por el Validador/usuario si eso contamina E1 (no cambia sus predicciones congeladas).
+
+## 9. Reparto de cuentas (20-nov-2026)
+Sin cambios en M1 (cuenta …ZFJX, mandato m1-v1). Las otras dos cuentas pasan a C1 (…4JGR) y A1 (…X9F9); B0, B1, B1′ y
+D1 quedan solo en papel (tabla «Competición»: D1 como teórico diario). `comprobar_cuenta` acepta reasignaciones
+declaradas (C1 §9). `m1_sombra.bolsa` admite base/suelo/techo como parámetros (los de M1 por defecto, sin cambio de
+resultados); A1 reutiliza los mismos ajustes para su filtro macro.

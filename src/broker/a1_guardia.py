@@ -48,6 +48,9 @@ FUENTES_EMPRESA = {
     "ficha": "ficha de «Mis activos» en el panel",
 }
 COLCHON = {"SGOV", "BIL", "SHV", "SHY", "IEI"}
+# heredadas de la cartera anterior de la cuenta …X9F9 (B0 y luego D1, 70/15/15 URTH/IEI/GLD): fuera del universo, solo
+# se pueden vender; cuentan en el techo de bolsa, pero el supervisor no las trata como concentración de A1
+HEREDADAS = {"URTH", "GLD"}
 MAX_POR_VALOR = 0.10
 MAX_POR_SECTOR = 0.35
 MAX_VALORES = 30
@@ -217,20 +220,20 @@ def limites(ver: G.Veredicto, ctx: Contexto, estado: G.EstadoCuenta | None = Non
         if k not in COLCHON:
             sec = ctx.sectores.get(k)
             if (val.get(k, 0.0) + coste) > MAX_POR_VALOR * V + TOLERANCIA:
-                motivo = (f"{k} pasaría a {(val.get(k, 0.0) + coste) / V:.1%} del valor de la cuenta "
-                          f"(máx. {MAX_POR_VALOR:.0%} por valor)")
+                motivo = (f"{k} pasaría a {100 * ((val.get(k, 0.0) + coste) / V):.1f} % del valor de la cuenta "
+                          f"(máx. {100 * (MAX_POR_VALOR):.0f} % por valor)")
             elif sec is None:
                 motivo = f"{k} sin sector en el paquete: no se puede comprobar el máximo por sector"
             elif sector(sec) + coste > MAX_POR_SECTOR * V + TOLERANCIA:
-                motivo = (f"el sector {sec} pasaría a {(sector(sec) + coste) / V:.1%} (máx. {MAX_POR_SECTOR:.0%} "
+                motivo = (f"el sector {sec} pasaría a {100 * ((sector(sec) + coste) / V):.1f} % (máx. {100 * (MAX_POR_SECTOR):.0f} % "
                           "por sector)")
             elif val.get(k, 0.0) <= 1.0 and n_valores() + 1 > MAX_VALORES:
                 motivo = f"abriría el valor nº {n_valores() + 1} (máx. {MAX_VALORES} valores)"
             elif ctx.techo_bolsa is None:
                 motivo = "sin filtro macro (techo de bolsa) en el paquete: A1 no compra acciones hoy"
             elif bolsa() + coste > ctx.techo_bolsa * V + TOLERANCIA:
-                motivo = (f"la bolsa pasaría a {(bolsa() + coste) / V:.1%} del valor; el filtro macro de hoy la "
-                          f"limita a {ctx.techo_bolsa:.0%}")
+                motivo = (f"la bolsa pasaría a {100 * ((bolsa() + coste) / V):.1f} % del valor; el filtro macro de hoy la "
+                          f"limita a {100 * (ctx.techo_bolsa):.0f} %")
         if motivo:
             ver.rechazadas.append({"indice": n["indice"], "orden": n, "motivo": motivo})
             ver.compras_estimadas_usd = round(ver.compras_estimadas_usd - coste, 2)

@@ -42,6 +42,8 @@ def aislado(tmp_path, monkeypatch):
     monkeypatch.setattr(SUP, "ACTIVOS", {k: paper / v.name for k, v in SUP.ACTIVOS.items()})
     monkeypatch.setattr(G, "PARADA", paper / "C1_PARADA")
     monkeypatch.setattr(MG, "PARADA", paper / "M1_PARADA")
+    from src.broker import a1_guardia as AGd
+    monkeypatch.setattr(AGd, "PARADA", paper / "A1_PARADA")
     nota = tmp_path / "Actualizaciones.md"
     nota.write_text("# Actualizaciones\n<!-- entradas -->\n")
     monkeypatch.setattr(SUP, "NOTA", nota)
@@ -52,13 +54,15 @@ def aislado(tmp_path, monkeypatch):
 
 
 def salida_sup(**kw) -> str:
-    d = {"version_mandato": "supervisor-v1", "fecha": HOY.isoformat(),
+    d = {"version_mandato": "supervisor-v2", "fecha": HOY.isoformat(),
          "carteras": {k: {"estado": "ok", "hallazgos": []} for k in SUP.CARTERAS},
          "paradas": [], "para_el_usuario": ["nada"], "informe_md": "## Informe\nTodo en orden.",
-         "vigia_macro": {"B1": {"modelos_hoy": "crédito verde (2026-11-17)", "riesgos_no_vistos": ["HY OAS +0,63"],
+         "vigia_macro": {"C1": {"modelos_hoy": "crédito verde (2026-11-17)", "riesgos_no_vistos": ["HY OAS +0,63"],
                                 "gestor_macro_haria": "menos bono largo", "aviso_usuario": False, "aviso": None},
-                         "D1": {"modelos_hoy": "x", "riesgos_no_vistos": [], "gestor_macro_haria": "y",
-                                "aviso_usuario": True, "aviso": "DBC en contango con inflación cayendo"}}}
+                         "M1": {"modelos_hoy": "x", "riesgos_no_vistos": [], "gestor_macro_haria": "y",
+                                "aviso_usuario": False, "aviso": None},
+                         "A1": {"modelos_hoy": "x", "riesgos_no_vistos": [], "gestor_macro_haria": "y",
+                                "aviso_usuario": True, "aviso": "18 % en semiconductores con crédito ámbar"}}}
     d.update(kw)
     return json.dumps(d, ensure_ascii=False)
 
@@ -135,7 +139,11 @@ def test_paquete_con_cuentas_simuladas_registros_y_salud(tmp_path):
     assert p["salud"]["B0"]["activo"] and not p["salud"]["M1"]["registro_existe"]
     assert p["salud"]["C1"]["errores_seguidos"] == 5
     sup = {(x["cartera"], x["limite"]) for x in p["limites_duros"]["superados"]}
-    assert ("M1", "caida_maxima") in sup and ("D1", "fuera_de_mandato") in sup and ("C1", "errores_seguidos") in sup
+    assert ("M1", "caida_maxima") in sup and ("C1", "errores_seguidos") in sup
+    assert ("A1", "fuera_de_mandato") in sup and ("A1", "concentracion") in sup        # opción y NVDA 18 %
+    assert not any(k in ("B0", "B1", "B1P", "D1") for k, _ in sup)                      # solo papel: sin cuenta
+    assert not any("URTH" in x["detalle"] for x in p["limites_duros"]["superados"])     # heredada: exenta
+    assert p["cuentas"]["D1"] == {"sin_cuenta": "solo papel desde el 20-nov-2026 (ensayo)"}
     assert all(a["accion"].startswith("ENSAYO") for a in p["limites_duros"]["acciones"])
     assert not MG.PARADA.exists() and not G.PARADA.exists()
     assert "KEY" not in json.dumps(p).upper().replace("KEYS", "")
@@ -202,38 +210,39 @@ def test_plist_supervisor_8_00_diario_y_no_instalado():
     assert p["StartCalendarInterval"] == {"Hour": 8, "Minute": 0} and not p["RunAtLoad"]
     assert not (Path.home() / "Library" / "LaunchAgents" / "com.financialkb.supervisor.plist").exists()
     t = SUP.MANDATO.read_text()
-    assert "version: supervisor-v1" in t and '"version_mandato": "supervisor-v1"' in t and "Nunca operas" in t
-    assert "Vigía macro" in t and "No propones órdenes" in t
+    assert "version: supervisor-v2" in t and '"version_mandato": "supervisor-v2"' in t and "Nunca operas" in t
+    assert "Vigía macro (C1, M1 y A1" in t and "No propones órdenes" in t and "a1_mandato_v1.md" in t
 
 
-# ------------------------------------------------------------------ vigía macro (B1, D1): solo observa
+# ------------------------------------------------------------------ vigía macro (C1, M1, A1): solo observa
 def test_vigia_ensayo_registra_en_la_carpeta_de_trabajo_y_no_avisa(tmp_path, monkeypatch):
     monkeypatch.setenv("FIN_AGENTE_CLAUDE", str(claude_falso(tmp_path, salida_sup())))
     out = SUP.ciclo(HOY, cuentas=SUP.cuentas_simuladas(HOY))
-    assert [f["cartera"] for f in out["vigia"]] == ["B1", "D1"] and out["vigia"][1]["aviso_usuario"]
+    assert [f["cartera"] for f in out["vigia"]] == ["C1", "M1", "A1"] and out["vigia"][2]["aviso_usuario"]
     t = Path(out["informe_fichero"]).parent / "vigia_avisos.jsonl"
-    assert len(t.read_text().splitlines()) == 2 and not SUP.ruta_vigia().exists()
+    assert len(t.read_text().splitlines()) == 3 and not SUP.ruta_vigia().exists()
     assert "Vigía" not in SUP.NOTA.read_text()
     p = json.loads((Path(out["informe_fichero"]).parent / "paquete.json").read_text())
-    assert p["vigia_carteras"] == ["B1", "D1"] and "modelos" in p
+    assert p["vigia_carteras"] == ["C1", "M1", "A1"] and "modelos" in p
 
 
 def test_vigia_registrado_fuera_de_git_avisa_una_vez_por_dia_y_no_toca_las_carteras(tmp_path, monkeypatch):
     monkeypatch.setenv("FIN_AGENTE_CLAUDE", str(claude_falso(tmp_path, salida_sup())))
-    monkeypatch.setattr(SUP, "cuentas_alpaca", lambda: {"B1": cuenta(), "D1": cuenta()})
+    monkeypatch.setattr(SUP, "cuentas_alpaca", lambda: {"C1": cuenta(), "M1": cuenta(), "A1": cuenta()})
     antes = sorted(p.name for p in SUP.PAPER.iterdir())
     SUP.ciclo(HOY, registrar=True)
     SUP.ciclo(HOY, registrar=True)                                   # reintento del mismo día
     filas = [json.loads(x) for x in SUP.ruta_vigia().read_text().splitlines()]
-    assert len(filas) == 2 and {f["cartera"] for f in filas} == {"B1", "D1"}
+    assert len(filas) == 3 and {f["cartera"] for f in filas} == {"C1", "M1", "A1"}
     assert str(SUP.ruta_vigia()).startswith(os.environ["FIN_SUPERVISOR_DIR"])          # fuera del repo
-    assert "Vigía macro D1: DBC en contango" in SUP.NOTA.read_text()
+    assert "Vigía macro A1: 18 % en semiconductores" in SUP.NOTA.read_text()
     assert sorted(p.name for p in SUP.PAPER.iterdir()) == antes                        # ni paradas ni registros
 
 
 def test_vigia_salida_sin_las_dos_carteras_o_aviso_sin_texto_es_invalida():
     d = json.loads(salida_sup())
-    for v in ({"B1": d["vigia_macro"]["B1"]}, {**d["vigia_macro"], "D1": {**d["vigia_macro"]["D1"], "aviso": ""}},
-              {**d["vigia_macro"], "B1": {**d["vigia_macro"]["B1"], "orden": "vender TLT"}}):
+    for v in ({"C1": d["vigia_macro"]["C1"]}, {**d["vigia_macro"], "A1": {**d["vigia_macro"]["A1"], "aviso": ""}},
+              {**d["vigia_macro"], "C1": {**d["vigia_macro"]["C1"], "orden": "vender TLT"}},
+              {**d["vigia_macro"], "B1": d["vigia_macro"]["C1"]}):
         with pytest.raises(G.SalidaInvalida):
             SUP.leer_salida(json.dumps({**d, "vigia_macro": v}))

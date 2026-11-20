@@ -1,6 +1,7 @@
 ---
-documento: Supervisor de carteras — revisión diaria de B0, B1, B1′, D1, C1 y M1 (Alpaca PAPER)
-version: 1.0 APROBADA (2026-11-19) — diario, con poder de parada (decisión del usuario)
+documento: Supervisor de carteras — revisión diaria de B0, B1, B1′, D1 (solo papel), C1, M1 y A1 (Alpaca PAPER)
+version: 1.1 (2026-11-20) — mandato supervisor-v2: A1, reasignación de cuentas y vigía macro sobre C1/M1/A1 (§5).
+  1.0 APROBADA (2026-11-19) — diario, con poder de parada (decisión del usuario)
 estado: CONSTRUIDO (2026-11-19, rama del Constructor; pendiente del Validador), NO instalado: falta cargar el plist
   (`scripts/launchd/com.financialkb.supervisor.plist`, 8:00 diario). Piezas en §4.
 ---
@@ -50,3 +51,15 @@ macro. **No opera ni cambia nada de esas carteras.** Si marca `aviso_usuario`, n
 `Actualizaciones.md`. Cada día y cartera, una línea en `~/financial_archive/supervisor/vigia_avisos.jsonl` (fuera de
 git) para medir después si los avisos acertaban (evaluación por definir antes de mirar resultados).
 Ensayo (`python -m src.paper.supervisor --simulada`): cuentas ficticias, no crea paradas ni avisa (dice qué haría).
+
+## 5. Cambios v1.1 (2026-11-20, decisión del usuario: las 3 cuentas las gestiona el agente)
+- Carteras: B0, B1, B1′ y D1 son **solo papel** (registros teóricos, sin cuenta ni órdenes; en el paquete salen como
+  `sin_cuenta: solo papel`); C1 (…4JGR, antes B1), M1 (…ZFJX) y A1 (…X9F9, antes B0 y D1) tienen cuenta y parada.
+  Si aparece una orden nueva del espejo en alguna cuenta, es grave (el espejo ya no debe operar).
+- **Vigía macro** sobre las tres cuentas gestionadas (C1, M1, A1) en vez de B1/D1: qué dicen hoy los modelos macro
+  para lo que tiene cada una, riesgos que su gestor no ve y qué haría un gestor macro; sigue sin operar ni proponer
+  órdenes; avisos en `vigia_avisos.jsonl` (fuera de git).
+- Límites duros de A1, además de los generales (en código, con parada `A1_PARADA`): opciones o cripto en la cuenta
+  (fuera de mandato), y un valor > 15 % del valor de la cuenta (10 % del mandato + 5 pp de deriva por precio; no
+  cuentan el colchón SGOV/BIL/SHV/SHY/IEI ni los ETFs heredados URTH/GLD).
+- Mandato `config/supervisor_mandato_v2.md` (`supervisor-v2`); el v1 queda en el repo como histórico.

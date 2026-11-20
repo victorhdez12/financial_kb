@@ -1,6 +1,7 @@
 ---
 documento: C1 «Claude gestor» — cartera discrecional diaria gestionada por un agente, en Alpaca PAPER
 version: 1.1 APROBADA (2026-11-19) — mandato v1 + modo agente (§7); cambiarlo = nueva versión declarada
+cuenta: …4JGR (antes B1; reasignación declarada B1→C1 el 20-nov, ver §9). Hereda URTH/IEI/GLD 70/15/15.
 estado: CONSTRUIDO v1.0 (paquete) (2026-11-19, rama del Constructor; Validador ✅ 19-nov), NO activado: faltan claves `_C1`,
   `research/paper/C1_ACTIVO` y cargar el plist. Piezas en §6.
   Modo agente (§7) CONSTRUIDO (2026-11-19, rama del Constructor; pendiente del Validador): mandato `c1-v2`, por
@@ -87,3 +88,16 @@ mide el efecto de anclarse a los modelos. Coste: suscripción del usuario.
 - Prueba de aislamiento real (19-nov, con un señuelo propio, nunca con `config/` real): lecturas directas, por el enlace
   `data/archive`, por un enlace dentro de una carpeta permitida, `.env`, `research/paper` y el diario del otro gestor
   → denegadas; Grep/Glob no los encuentran; Bash y escritura no existen.
+
+## 9. Cuenta …4JGR y reparto de estilos (decisión del usuario, 20-nov-2026)
+- Las 3 cuentas paper las gestiona el agente, cada una con un estilo: M1 macro de arriba abajo, A1 selección de
+  acciones (`docs/factors/A1_seleccion_acciones_spec.md`) y C1 **libre** (usa todo, sin obligación de citar modelos;
+  el mandato c1-v2 no cambia).
+- C1 opera en la cuenta …4JGR, que era la de B1 (B1 sigue solo en papel). Hereda sus posiciones (URTH/IEI/GLD
+  70/15/15): el agente decide el primer día qué hacer con ellas.
+- `comprobar_cuenta` (src/paper/c1.py) acepta ahora una **reasignación declarada** en `espejo.jsonl` (fila
+  `reasignacion` con `a` = la cartera): solo bloquean las órdenes del espejo posteriores a la última reasignación a
+  esa cartera. Lo usan C1, M1 y A1. La fila B1→C1 la escribe `scripts/reasignar_cuentas.py --escribir`.
+- Activación (usuario, tras el Validador): renombrar las claves del perfil por defecto a `_C1` (sin `ALPACA_CARTERA`
+  o con `ALPACA_CARTERA_C1=C1`), `scripts/configurar_cuentas.py --aplicar` (…4JGR: `no_shorting=true`,
+  `max_margin_multiplier=1`, opciones nivel 2), reasignación, `C1_ACTIVO` y plist.

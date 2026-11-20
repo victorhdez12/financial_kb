@@ -401,6 +401,9 @@ def test_seccion_panel(tmp_path, monkeypatch):
         raise ConnectionError("caído")
     h = PA.seccion_alpaca([A.Cliente(cred(perfil="B1"), transporte=roto)], registro=[])
     assert "no responde" in h
+    # cuentas gestionadas por el agente (20-nov): sin objetivo ni resumen de espejo
+    h = PA.seccion_alpaca([A.Cliente(cred(perfil="A1"), transporte=f)], registro=[])
+    assert "Gestionada por el agente" in h and "selección de acciones" in h and "Espejo vs teórico" not in h
 
 
 def test_panel_engancha_alpaca_en_mi_cartera_y_se_puede_apagar(monkeypatch):
@@ -423,6 +426,9 @@ def test_reasignacion_declarada_permite_otra_cartera_solo_despues():
     assert E.puede_ejecutar(cred, "D1", "h1", reasig) is None
     # una reasignación a OTRA cartera no sirve
     otra = viejo + [{"tipo": "reasignacion", "cuenta_huella": "h1", "de": "B0", "a": "C1"}]
-    assert "ya se usó" in E.puede_ejecutar(cred, "D1", "h1", otra)
+    assert "reasignó a C1" in E.puede_ejecutar(cred, "D1", "h1", otra)
+    # 20-nov: …X9F9 pasa de D1 a A1 → el espejo de D1 ya no opera en ella (la última reasignación manda)
+    assert "reasignó a A1" in E.puede_ejecutar(cred, "D1", "h1", reasig + [
+        {"tipo": "reasignacion", "cuenta_huella": "h1", "de": "D1", "a": "A1"}])
     # órdenes de B0 posteriores a la reasignación vuelven a bloquear
     assert "ya se usó" in E.puede_ejecutar(cred, "D1", "h1", reasig + viejo)

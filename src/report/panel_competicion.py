@@ -1,7 +1,9 @@
 """Tabla «Competición» del panel (pestaña «Mi cartera»; docs/factors/C1_claude_gestor_spec.md v1.0 §4).
 
-Compara, desde el inicio común de cada bloque, B0, B1 y B1′ (paper teórico y cuentas Alpaca), D1, C1, M1 y la sombra
-teórica de M1 (docs/factors/M1_cartera_macro_spec.md §4-§5): rentabilidad, volatilidad, Sharpe, caída máxima, rotación,
+Compara, desde el inicio común de cada bloque, B0, B1 y B1′ (paper teórico mensual), las tres cuentas Alpaca que
+gestiona el agente desde el 20-nov-2026 (C1 libre, M1 macro y A1 selección de acciones) y los teóricos diarios: D1
+(solo papel), la sombra de M1 (docs/factors/M1_cartera_macro_spec.md §4-§5) y la de A1
+(docs/factors/A1_seleccion_acciones_spec.md §4): rentabilidad, volatilidad, Sharpe, caída máxima, rotación,
 costes y número de operaciones (y, en C1 y M1, el coste de `claude -p`); debajo, el «uso de modelos» de M1. Solo lee: el signal semanal (valoración teórica de src/paper/informe.py), los registros
 (research/paper/decisiones_c1.jsonl, decisiones_d1.jsonl si existe, ~/financial_archive/alpaca/espejo.jsonl) y, si
 no está apagado (`FIN_PANEL_SIN_ALPACA=1`, siempre en los tests), el historial diario de valor de cada cuenta paper.
@@ -30,12 +32,18 @@ LOG_C1 = REPO / "research" / "paper" / "decisiones_c1.jsonl"
 LOG_D1 = REPO / "research" / "paper" / "decisiones_d1.jsonl"
 LOG_M1 = REPO / "research" / "paper" / "decisiones_m1.jsonl"
 LOG_M1_SOMBRA = REPO / "research" / "paper" / "decisiones_m1_sombra.jsonl"
+LOG_A1 = REPO / "research" / "paper" / "decisiones_a1.jsonl"
+LOG_A1_SOMBRA = REPO / "research" / "paper" / "decisiones_a1_sombra.jsonl"
+MAPEO_D1 = REPO / "config" / "alpaca_etfs_d1.json"
 AVISO = ("Meses de datos no distinguen habilidad de suerte: hacen falta años (docs/factors/paper_trading.md §5). "
          "Esta tabla sirve para seguir la ejecución, no para elegir ganador.")
 TEORICOS = [("b0", "B0 · estática 70/15/15"), ("b1", "B1 · ajuste por volatilidad"), ("b1p", "B1′ · HAR diario")]
-CUENTAS = [("B0", "B0 · espejo Alpaca"), ("B1", "B1 · espejo Alpaca"), ("B1P", "B1′ · espejo Alpaca"),
-           ("D1", "D1 · tendencia diaria"), ("C1", "C1 · Claude gestor"), ("M1", "M1 · Claude gestor macro")]
-SOMBRA = [("M1S", "M1 · sombra teórica (regla 0.1)")]
+# 20-nov-2026: las tres cuentas paper las gestiona el agente; B0/B1/B1′/D1 quedan solo en papel (sin espejo)
+CUENTAS = [("C1", "C1 · Claude gestor libre (…4JGR)"), ("M1", "M1 · Claude gestor macro (…ZFJX)"),
+           ("A1", "A1 · Claude selección de acciones (…X9F9)")]
+GESTORES = ("C1", "M1", "A1")
+SOMBRA = [("D1T", "D1 · tendencia diaria (teórico, solo papel)"), ("M1S", "M1 · sombra teórica (regla 0.1)"),
+          ("A1S", "A1 · sombra teórica (20 de mayor calidad XBRL)")]
 SD = '<span class="nd">sin datos</span>'
 
 
@@ -152,16 +160,15 @@ def serie_historial(h: dict) -> pd.Series:
 
 
 def clientes_por_cartera() -> dict[str, A.Cliente]:
-    """Cuenta paper de cada cartera (B0, B1, B1P por su perfil o ALPACA_CARTERA; D1 y C1 por su perfil)."""
-    from src.broker import espejo as E   # solo lectura
+    """Cuenta paper de cada cartera gestionada (C1, M1, A1), por el nombre de su perfil. Desde el 20-nov-2026 no hay
+    cuentas de B0/B1/B1′/D1 (solo papel): un perfil antiguo (por defecto, D1…) no se asocia a ninguna cartera."""
     out: dict[str, A.Cliente] = {}
     for p in A.perfiles():
-        c = A.cliente(p or None)
-        if c is None:
+        if p not in GESTORES:
             continue
-        k = E.cartera_de(c.cred) or (c.cred.perfil if c.cred.perfil in ("D1", "C1", "M1") else None)
-        if k and k not in out:
-            out[k] = c
+        c = A.cliente(p)
+        if c is not None and c.cred.cartera in (None, p):
+            out[p] = c
     return out
 
 
@@ -186,6 +193,40 @@ def fila_sombra(reg: list[dict], desde: str | None) -> dict | None:
     return {"desde": str(s.index[0].date()), "hasta": str(s.index[-1].date()), "rent": m["rent"], "vol": m["vol"],
             "sharpe": m["sharpe"], "caida": m["caida"], "rotacion": ult.get("rotacion"), "costes": ult.get("costes"),
             "operaciones": ult.get("rebalanceos"), "coste_claude_usd": None, "periodos": m["n"]}
+
+
+def fila_d1_teorica(reg_d1: list[dict], desde: str | None, precios: pd.DataFrame | None = None) -> dict | None:
+    """D1 en PAPEL: valor teórico de los pesos registrados (research/paper/decisiones_d1.jsonl; cada decisión rige
+    desde el cierre de su sesión) con los cierres ajustados del archivo (sin red) y 5 pb por unidad operada
+    (src/paper/m1_sombra.valorar). Sin cierres → sin datos."""
+    from src.paper import m1_sombra as S
+    if not reg_d1:
+        return None
+    etf = {k: v["etf"] for k, v in json.loads(MAPEO_D1.read_text(encoding="utf-8"))["tramos"].items()}
+    lineas = []
+    for r in reg_d1:
+        w = {etf[k]: float(v) for k, v in (r.get("d1") or {}).items() if k in etf and float(v) > 0}
+        w["efectivo"] = max(0.0, 1 - sum(w.values()))
+        lineas.append({"fecha": r["cierre"], "objetivo": {"pesos": w}})
+    if precios is None:
+        try:
+            precios, _ = S.cierres(sorted(etf.values()), dt.date.fromisoformat(lineas[0]["fecha"]) - dt.timedelta(days=5),
+                                   dt.date.today(), None, yahoo=False)
+        except Exception:  # noqa: BLE001
+            return None
+    v = S.valorar(lineas, precios)
+    serie = pd.Series(v.get("serie") or {}, dtype=float)
+    if len(serie) < 2:
+        return None
+    serie.index = pd.to_datetime(serie.index)
+    if desde:
+        serie = serie[serie.index >= pd.Timestamp(desde)]
+    m = metricas_serie(serie)
+    if m["n"] < 2:
+        return None
+    return {"desde": str(serie.index[0].date()), "hasta": str(serie.index[-1].date()), "rent": m["rent"], "vol": m["vol"],
+            "sharpe": m["sharpe"], "caida": m["caida"], "rotacion": v.get("rotacion"), "costes": v.get("costes"),
+            "operaciones": v.get("rebalanceos"), "coste_claude_usd": None, "periodos": m["n"]}
 
 
 def uso_modelos(reg_m1: list[dict], serie: pd.Series | None = None) -> list[dict]:
@@ -216,7 +257,8 @@ def uso_modelos(reg_m1: list[dict], serie: pd.Series | None = None) -> list[dict
 
 def recoger(s: dict | None, *, con_alpaca: bool | None = None, log_c1: Path = LOG_C1, log_d1: Path = LOG_D1,
             espejo: list[dict] | None = None, series: dict[str, pd.Series] | None = None,
-            log_m1: Path = LOG_M1, log_m1_sombra: Path = LOG_M1_SOMBRA) -> dict:
+            log_m1: Path = LOG_M1, log_m1_sombra: Path = LOG_M1_SOMBRA, log_a1: Path = LOG_A1,
+            log_a1_sombra: Path = LOG_A1_SOMBRA, precios_d1: pd.DataFrame | None = None) -> dict:
     """{'teoricos': {k: fila|None}, 'cuentas': {k: fila|None}, 'inicio_teorico', 'inicio_cuentas', 'notas',
     'uso_modelos'}."""
     notas = []
@@ -224,22 +266,13 @@ def recoger(s: dict | None, *, con_alpaca: bool | None = None, log_c1: Path = LO
     teo = {k: fila_teorica(val.get(k)) for k, _ in TEORICOS}
     con_alpaca = (os.environ.get("FIN_PANEL_SIN_ALPACA") != "1") if con_alpaca is None else con_alpaca
     reg_c1, reg_d1, reg_m1, reg_s = _jsonl(log_c1), _jsonl(log_d1), _jsonl(log_m1), _jsonl(log_m1_sombra)
-    if espejo is None:
-        try:
-            from src.broker import espejo as E
-            espejo = E.leer_registro()
-        except Exception:  # noqa: BLE001
-            espejo = []
-    ej = {k: [r for r in espejo if r.get("tipo") == "ejecucion" and r.get("cartera") == k] for k in ("B0", "B1", "B1P")}
-    inicios = {k: (min(str(r.get("ts"))[:10] for r in v) if v else None) for k, v in ej.items()}
-    inicios["C1"] = inicio_registro([r for r in reg_c1 if not r.get("ensayo")])
-    inicios["M1"] = inicio_registro([r for r in reg_m1 if not r.get("ensayo")])
-    inicios["D1"] = inicio_registro(reg_d1)
-    ej["C1"] = ejecuciones_c1(reg_c1)
-    ej["M1"] = ejecuciones_c1(reg_m1)
-    ej["D1"] = [e for r in reg_d1 for e in (r.get("ejecuciones") or []) if isinstance(e, dict)]
+    reg_a1, reg_as = _jsonl(log_a1), _jsonl(log_a1_sombra)
+    # espejo.jsonl ya no alimenta la tabla (sin espejo desde el 20-nov); se mantiene el parámetro por compatibilidad
+    regs = {"C1": reg_c1, "M1": reg_m1, "A1": reg_a1}
+    inicios = {k: inicio_registro([r for r in reg if not r.get("ensayo")]) for k, reg in regs.items()}
+    ej = {k: ejecuciones_c1(reg) for k, reg in regs.items()}
     coste = {k: (sum(float((r.get("claude") or {}).get("coste_usd") or 0) for r in reg) if reg else None)
-             for k, reg in (("C1", reg_c1), ("M1", reg_m1))}
+             for k, reg in regs.items()}
     if series is None:
         series = {}
         if con_alpaca:
@@ -259,6 +292,12 @@ def recoger(s: dict | None, *, con_alpaca: bool | None = None, log_c1: Path = LO
     cuentas = {k: (fila_cuenta(series.get(k), operaciones(ej.get(k) or [], desde=inicio_c), inicio_c,
                                coste.get(k)) if inicios.get(k) else None) for k, _ in CUENTAS}
     cuentas["M1S"] = fila_sombra(reg_s, inicio_c)
+    cuentas["A1S"] = fila_sombra(reg_as, inicio_c)
+    try:
+        cuentas["D1T"] = fila_d1_teorica(reg_d1, inicio_c, precios_d1)
+    except Exception as e:  # noqa: BLE001 — la tabla nunca tumba el panel
+        cuentas["D1T"] = None
+        notas.append(f"D1 teórico: {type(e).__name__}")
     desde_t = [f["desde"] for f in teo.values() if f]
     if len(set(desde_t)) > 1:
         notas.append("Teórico: las carteras empiezan en meses distintos (B1′ se registró más tarde); "
@@ -306,7 +345,7 @@ def html_competicion(d: dict) -> str:
            + (f" · inicio común {_e(d['inicio_teorico'])}" if d.get("inicio_teorico") else "") + "</h4>"
            f'<div class="tw"><table><thead><tr>{th(cab)}</tr></thead><tbody>'
            + "".join(_filas(TEORICOS, d["teoricos"], False)) + "</tbody></table></div>")
-    cue = ("<h4>Cuentas Alpaca PAPER (diario, USD, ejecución simulada)"
+    cue = ("<h4>Cuentas Alpaca PAPER gestionadas por el agente y teóricos diarios (USD)"
            + (f" · inicio común {_e(d['inicio_cuentas'])}" if d.get("inicio_cuentas") else "") + "</h4>"
            f'<div class="tw"><table><thead><tr>{th(cab + ["coste Claude"])}</tr></thead><tbody>'
            + "".join(_filas(CUENTAS + SOMBRA, d["cuentas"], True)) + "</tbody></table></div>")
@@ -315,8 +354,8 @@ def html_competicion(d: dict) -> str:
             f'<p class="note"><strong>Aviso:</strong> {_e(AVISO)}</p>{teo}{cue}'
             '<p class="small">* Sharpe = rentabilidad media anualizada / volatilidad anualizada, sin restar el tipo sin '
             'riesgo. Rotación = valor operado / valor medio. Costes: teórico = costes fijos del backtest; Alpaca = '
-            'deslizamiento frente al precio al enviar (paper: optimista). La sombra de M1 es TEÓRICA (sin cuenta: '
-            'cierres ajustados y 5 pb por lado; nº operaciones = reequilibrios). Los dos bloques no son comparables '
+            'deslizamiento frente al precio al enviar (paper: optimista). D1 (solo papel desde el 20-nov) y las sombras de M1 '
+            'y A1 son TEÓRICAS (sin cuenta: cierres ajustados y 5 pb por lado; nº operaciones = reequilibrios). Los dos bloques no son comparables '
             'entre sí (moneda, instrumentos y frecuencia distintos).</p>' + html_uso_modelos(d.get("uso_modelos") or [])
             + notas + "</div>")
 

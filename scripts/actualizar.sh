@@ -109,11 +109,13 @@ if [ -n "$ALERTAS" ]; then
   echo "$(date) alertas notificadas: $ALERTAS" >> "$LOG"
   /usr/bin/osascript -e "display notification \"$ALERTAS\" with title \"financial_kb · alertas\"" 2>/dev/null || true
 fi
-# Espejo Alpaca PAPER: apunta ejecuciones pendientes de las cuentas B1 y D1 (las limit del registro mensual esperan a la
-# apertura de las 15:30). Nunca afecta a la diaria; sin claves no hace nada (docs/broker/alpaca.md §7).
-for P in "" D1; do   # B1 (defecto) y D1; M1/C1 apuntan sus ejecuciones en su propio ciclo
-  { echo "== $(date '+%F %T') seguimiento ${P:-defecto}"
-    "$REPO/.venv/bin/python" -m src.broker.espejo --seguimiento ${P:+--perfil $P}; } \
+# Cuentas Alpaca PAPER (20-nov-2026): ya no hay espejo de B1/D1 (solo papel); las 3 cuentas las gestiona el agente
+# (C1 …4JGR, M1 …ZFJX, A1 …X9F9), y cada ciclo apunta el estado final de sus órdenes del día anterior
+# (`seguimiento_previo`). Aquí solo se deja en el log una foto de SOLO LECTURA de cada cuenta (valor, posiciones).
+# Nunca afecta a la diaria; sin claves de un perfil no hace nada (docs/broker/alpaca.md §7).
+for P in C1 M1 A1; do
+  { echo "== $(date '+%F %T') estado $P"
+    "$REPO/.venv/bin/python" -m src.broker.alpaca estado --perfil "$P"; } \
     >> "$LOGDIR/$(date +%Y-%m-%d)_alpaca.log" 2>&1 || true
 done
 # Diagnósticos automáticos (docs/panel/diagnosticos_v0.md): disparadores + nota con claude -p (tope 3/semana). Nunca
