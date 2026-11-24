@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<!-- M1 «Claude gestor macro» (docs/factors/M1_cartera_macro_spec.md v1.1): 20:45 hora del Mac (Madrid), lunes a viernes.
+<!-- M1 «Claude gestor macro» (docs/factors/M1_cartera_macro_spec.md v1.1): 16:00 hora del Mac (antes 20:45; cambio del usuario 24-nov) (Madrid), lunes a viernes.
      NO instalado. Para activarlo: claves _M1 en alpaca.env, research/paper/M1_ACTIVO commiteado y
      cp scripts/launchd/com.financialkb.m1.plist ~/Library/LaunchAgents/ && launchctl load ~/Library/LaunchAgents/com.financialkb.m1.plist
      Sin RunAtLoad: al encender el Mac no se lanza (el ciclo tiene sentido con el mercado abierto). -->
@@ -11,11 +11,11 @@
   <array><string>/bin/bash</string><string>/Users/victorhdez12/Proyectos/financial_kb/scripts/m1_gestor.sh</string></array>
   <key>StartCalendarInterval</key>
   <array>
-    <dict><key>Weekday</key><integer>1</integer><key>Hour</key><integer>20</integer><key>Minute</key><integer>45</integer></dict>
-    <dict><key>Weekday</key><integer>2</integer><key>Hour</key><integer>20</integer><key>Minute</key><integer>45</integer></dict>
-    <dict><key>Weekday</key><integer>3</integer><key>Hour</key><integer>20</integer><key>Minute</key><integer>45</integer></dict>
-    <dict><key>Weekday</key><integer>4</integer><key>Hour</key><integer>20</integer><key>Minute</key><integer>45</integer></dict>
-    <dict><key>Weekday</key><integer>5</integer><key>Hour</key><integer>20</integer><key>Minute</key><integer>45</integer></dict>
+    <dict><key>Weekday</key><integer>1</integer><key>Hour</key><integer>16</integer><key>Minute</key><integer>0</integer></dict>
+    <dict><key>Weekday</key><integer>2</integer><key>Hour</key><integer>16</integer><key>Minute</key><integer>0</integer></dict>
+    <dict><key>Weekday</key><integer>3</integer><key>Hour</key><integer>16</integer><key>Minute</key><integer>0</integer></dict>
+    <dict><key>Weekday</key><integer>4</integer><key>Hour</key><integer>16</integer><key>Minute</key><integer>0</integer></dict>
+    <dict><key>Weekday</key><integer>5</integer><key>Hour</key><integer>16</integer><key>Minute</key><integer>0</integer></dict>
   </array>
   <key>RunAtLoad</key><false/>
   <key>StandardOutPath</key><string>/Users/victorhdez12/financial_archive/logs/launchd_m1.out</string>

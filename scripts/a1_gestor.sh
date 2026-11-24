@@ -1,5 +1,5 @@
 #!/bin/bash
-# A1 «selección de acciones» (docs/factors/A1_seleccion_acciones_spec.md v1.0; launchd com.financialkb.a1: 21:00 Madrid, lun-vie).
+# A1 «selección de acciones» (docs/factors/A1_seleccion_acciones_spec.md v1.0; launchd com.financialkb.a1: 16:15 Madrid, lun-vie).
 #
 #   scripts/a1_gestor.sh     ciclo del día (launchd): .venv/bin/python -m src.paper.a1 --auto
 #                            (sin research/paper/A1_ACTIVO no hace nada; con él: paquete + sombra → agente de solo
@@ -49,7 +49,7 @@ if [ "$RAMA" != main ]; then
   nota "❌ el repo no está en main; A1 no opera hoy"
   exit 0
 fi
-# no pisar la diaria ni los ciclos de C1 (20:30) y M1 (20:45): esperan a que acaben (los tres commitean en main)
+# no pisar la diaria ni los ciclos de C1 (15:45) y M1 (16:00): esperan a que acaben (los tres commitean en main)
 for ((i = 0; i < ${FIN_ESPERA_LOCK_MIN:-30} * 2; i++)); do [ -d "$LOGDIR/.actualizar.lock" ] || break; sleep 30; done
 for ((i = 0; i < ${FIN_ESPERA_C1_MIN:-20} * 2; i++)); do pgrep -f "src.paper.(c1|m1) --auto" >/dev/null || break; sleep 30; done
 

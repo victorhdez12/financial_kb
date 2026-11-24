@@ -1,5 +1,5 @@
 #!/bin/bash
-# C1 «Claude gestor» (docs/factors/C1_claude_gestor_spec.md v1.0; launchd com.financialkb.c1: 20:30 Madrid, lun-vie).
+# C1 «Claude gestor» (docs/factors/C1_claude_gestor_spec.md v1.0; launchd com.financialkb.c1: 15:45 Madrid, lun-vie).
 #
 #   scripts/c1_gestor.sh                 ciclo del día (launchd): .venv/bin/python -m src.paper.c1 --auto
 #                                        (sin research/paper/C1_ACTIVO no hace nada; con él: paquete → Claude → guardia →

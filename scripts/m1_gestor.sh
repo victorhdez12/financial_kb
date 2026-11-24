@@ -1,5 +1,5 @@
 #!/bin/bash
-# M1 «Claude gestor macro» (docs/factors/M1_cartera_macro_spec.md v1.1; launchd com.financialkb.m1: 20:45 Madrid, lun-vie).
+# M1 «Claude gestor macro» (docs/factors/M1_cartera_macro_spec.md v1.1; launchd com.financialkb.m1: 16:00 Madrid, lun-vie).
 #
 #   scripts/m1_gestor.sh     ciclo del día (launchd): .venv/bin/python -m src.paper.m1 --auto
 #                            (sin research/paper/M1_ACTIVO no hace nada; con él: paquete + sombra → agente de solo
@@ -49,7 +49,7 @@ if [ "$RAMA" != main ]; then
   nota "❌ el repo no está en main; M1 no opera hoy"
   exit 0
 fi
-# no pisar la diaria ni el ciclo de C1 (20:30): esperan a que acaben
+# no pisar la diaria ni el ciclo de C1 (15:45): esperan a que acaben
 for ((i = 0; i < ${FIN_ESPERA_LOCK_MIN:-30} * 2; i++)); do [ -d "$LOGDIR/.actualizar.lock" ] || break; sleep 30; done
 for ((i = 0; i < ${FIN_ESPERA_C1_MIN:-20} * 2; i++)); do pgrep -f "src.paper.c1 --auto" >/dev/null || break; sleep 30; done
 
