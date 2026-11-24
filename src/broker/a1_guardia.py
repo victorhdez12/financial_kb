@@ -6,8 +6,9 @@ Por orden (antes de mirar la cuenta; `comprobar_orden`):
 - solo `clase` = `accion` (acciones y ETFs de EE. UU.): opciones y cripto se RECHAZAN;
 - cita DOBLE: `citas_macro` (≥ 1 {modelo, dice}, modelo de MACRO con salida hoy) y `citas_empresa` (≥ 1 {fuente, dice},
   fuente de FUENTES_EMPRESA con datos HOY para ESE símbolo en el paquete). Excepciones declaradas: los ETFs de colchón
-  (COLCHON) solo necesitan la cita macro; la VENTA de algo que hoy no tiene ningún dato de empresa en el paquete (p. ej.
-  los ETFs heredados URTH/GLD) también. Sin cita válida → orden rechazada;
+  (COLCHON) solo necesitan la cita macro; la VENTA de un heredado (HEREDADAS: URTH/GLD, aunque tengan ficha en «Mis
+  activos», arreglo 24-nov) o de algo que hoy no tiene ningún dato de empresa en el paquete también. Sin cita válida →
+  orden rechazada;
 - compras: solo acciones del universo con datos de empresa hoy (`universo_compra`) o ETFs de colchón.
 Por cartera (después de la guardia de C1; `limites`): con la cuenta (valor y posiciones) y las órdenes válidas del día
 (las ventas válidas se descuentan a su precio de referencia; las compras se suman a su coste estimado):
@@ -150,8 +151,9 @@ def comprobar_orden(ctx: Contexto):
             return f"{s} fuera del universo de compra de hoy (acciones con datos de empresa en el paquete o colchón)"
         if colchon:
             return None
-        if o.get("lado") == "venta" and not ctx.empresa.get(s):
-            return None     # venta de algo sin datos de empresa hoy (ETF heredado): basta la cita macro
+        if o.get("lado") == "venta" and (s in HEREDADAS or not ctx.empresa.get(s)):
+            return None     # venta de un heredado (URTH/GLD, aunque tenga ficha en «Mis activos») o de algo sin datos
+            #                 de empresa hoy: basta la cita macro
         return motivo_citas_empresa(o.get("citas_empresa"), s, ctx)
     return comprobar
 

@@ -29,6 +29,14 @@ from src.paper import m1_paquete as MP
 from src.paper import m1_sombra as S
 from tests.agente_falso import archivo_y_repo, claude_falso
 
+
+@pytest.fixture(autouse=True)
+def _registros_temporales(tmp_path, monkeypatch):
+    """Desde la activación en vivo (24-nov) existen los registros reales del día: los tests usan registros temporales
+    para no leer «ya registrado hoy» (rc 3) ni tocar los reales."""
+    for mod, nombre in ((M, "LOG"), (P, "LOG"), (SA, "LOG")):
+        monkeypatch.setattr(mod, nombre, tmp_path / f"_reg_{mod.__name__.rsplit('.', 1)[-1]}.jsonl")
+
 REPO = M.REPO
 REALES = [REPO / "research" / "paper" / x for x in ("decisiones_a1.jsonl", "decisiones_a1_sombra.jsonl", "A1_PARADA",
                                                      "A1_ACTIVO")]
@@ -269,6 +277,22 @@ def test_venta_de_heredadas_sin_datos_de_empresa_basta_la_macro_y_sin_cortos():
     assert "citas_macro" in mot[1] and "citas_empresa" in mot[2] and "sin cortos" in mot[3]
 
 
+def test_venta_de_heredada_con_ficha_en_mis_activos_basta_la_macro():
+    # 24-nov: GLD tiene datos de empresa en el paquete (ficha/alertas de «Mis activos») y la guardia exigía
+    # citas_empresa para venderlo; un heredado se vende solo con la cita macro, pero sigue sin poder comprarse
+    c = ctx(posiciones={"URTH": 70_000.0, "GLD": 15_000.0}, precios_pos={"URTH": 200.0, "GLD": 250.0})
+    c.empresa["GLD"] = {"ficha", "alertas"}
+    c.empresa["URTH"] = {"ficha"}
+    ords = [orden("GLD", ce=None, lado="venta", importe_usd=None, cantidad=5),
+            orden("URTH", ce=None, lado="venta", importe_usd=None, cantidad=10),
+            orden("GLD", ce=None, cm=None, lado="venta", importe_usd=None, cantidad=5),   # sin macro: rechazada
+            orden("GLD", ce=None)]                                                         # compra: rechazada
+    v = AGd.validar(salida(ords), estado(posiciones={"URTH": 350.0, "GLD": 60.0}), c, parada=False)
+    assert [n["indice"] for n in v.validas] == [0, 1]
+    mot = {r["indice"]: r["motivo"] for r in v.rechazadas}
+    assert "citas_macro" in mot[2] and "fuera del universo" in mot[3]
+
+
 def test_limites_10_por_valor_35_por_sector_y_techo_de_bolsa():
     # 10 %: AAA ya tiene 6 000 $; comprar 5 000 la deja en 11 %
     v = AGd.validar(salida([orden("AAA")]), estado(), ctx(posiciones={"AAA": 6_000.0}), parada=False)
@@ -487,13 +511,12 @@ def test_d1_solo_papel_usa_cualquier_perfil_para_datos(monkeypatch):
 
 
 # ------------------------------------------------------------------ automatización (no instalada)
-def test_plist_a1_lun_vie_2100_y_no_instalado():
+def test_plist_a1_lun_vie_1615():
     import plistlib
     p = plistlib.loads((REPO / "scripts" / "launchd" / "com.financialkb.a1.plist").read_bytes())
     assert p["Label"] == "com.financialkb.a1" and p["ProgramArguments"][-1].endswith("scripts/a1_gestor.sh")
     assert sorted(d["Weekday"] for d in p["StartCalendarInterval"]) == [1, 2, 3, 4, 5]
-    assert all((d["Hour"], d["Minute"]) == (21, 0) for d in p["StartCalendarInterval"]) and not p["RunAtLoad"]
-    assert not (Path.home() / "Library" / "LaunchAgents" / "com.financialkb.a1.plist").exists()
+    assert all((d["Hour"], d["Minute"]) == (16, 15) for d in p["StartCalendarInterval"]) and not p["RunAtLoad"]
 
 
 def test_script_a1_sin_activo_no_hace_nada(tmp_path):

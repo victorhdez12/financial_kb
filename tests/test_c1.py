@@ -18,6 +18,13 @@ from src.broker import c1_guardia as G
 from src.paper import c1 as C
 from src.paper import c1_paquete as P
 
+@pytest.fixture(autouse=True)
+def _registros_temporales(tmp_path, monkeypatch):
+    """Desde la activación en vivo (24-nov) existe el registro real del día: los tests usan uno temporal."""
+    for mod in (C, P):
+        monkeypatch.setattr(mod, "LOG", tmp_path / "_reg_c1.jsonl")
+
+
 REPO = C.REPO
 REG_REAL = REPO / "research" / "paper" / "decisiones_c1.jsonl"
 OPC = "SPY261218C00600000"
@@ -410,12 +417,12 @@ def test_script_ciclo_sin_activo_no_hace_nada(tmp_path):
     assert "no activado" in next((tmp_path / "logs").glob("*_c1.log")).read_text()
 
 
-def test_plist_c1_lun_vie_2030_y_no_instalado():
+def test_plist_c1_lun_vie_1545():
     import plistlib
     p = plistlib.loads((REPO / "scripts" / "launchd" / "com.financialkb.c1.plist").read_bytes())
     assert p["Label"] == "com.financialkb.c1" and p["ProgramArguments"][-1].endswith("scripts/c1_gestor.sh")
     assert sorted(d["Weekday"] for d in p["StartCalendarInterval"]) == [1, 2, 3, 4, 5]
-    assert all((d["Hour"], d["Minute"]) == (20, 30) for d in p["StartCalendarInterval"]) and not p["RunAtLoad"]
+    assert all((d["Hour"], d["Minute"]) == (15, 45) for d in p["StartCalendarInterval"]) and not p["RunAtLoad"]
 
 
 def test_mandato_versionado_coincide_con_la_guardia():

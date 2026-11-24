@@ -22,6 +22,14 @@ from src.paper import m1_paquete as P
 from src.paper import m1_sombra as S
 from tests.agente_falso import archivo_y_repo, claude_falso
 
+
+@pytest.fixture(autouse=True)
+def _registros_temporales(tmp_path, monkeypatch):
+    """Desde la activación en vivo (24-nov) existen los registros reales del día: los tests usan registros temporales
+    para no leer «ya registrado hoy» (rc 3) ni tocar los reales."""
+    for mod, nombre in ((M, "LOG"), (P, "LOG"), (S, "LOG")):
+        monkeypatch.setattr(mod, nombre, tmp_path / f"_reg_{mod.__name__.rsplit('.', 1)[-1]}.jsonl")
+
 REPO = M.REPO
 REALES = [REPO / "research" / "paper" / x for x in ("decisiones_m1.jsonl", "decisiones_m1_sombra.jsonl", "M1_PARADA")]
 SIGNAL = {"asof": "2026-11-17", "regime": {"quadrant": "Goldilocks", "G_state": "up", "I_state": "down"},
@@ -354,13 +362,12 @@ def test_main_m1_registra_decision_y_sombra_y_commitea_las_dos(tmp_path, monkeyp
 
 
 # ------------------------------------------------------------------ automatización (no instalada)
-def test_plist_m1_lun_vie_2045_y_no_instalado():
+def test_plist_m1_lun_vie_1600():
     import plistlib
     p = plistlib.loads((REPO / "scripts" / "launchd" / "com.financialkb.m1.plist").read_bytes())
     assert p["Label"] == "com.financialkb.m1" and p["ProgramArguments"][-1].endswith("scripts/m1_gestor.sh")
     assert sorted(d["Weekday"] for d in p["StartCalendarInterval"]) == [1, 2, 3, 4, 5]
-    assert all((d["Hour"], d["Minute"]) == (20, 45) for d in p["StartCalendarInterval"]) and not p["RunAtLoad"]
-    assert not (Path.home() / "Library" / "LaunchAgents" / "com.financialkb.m1.plist").exists()
+    assert all((d["Hour"], d["Minute"]) == (16, 0) for d in p["StartCalendarInterval"]) and not p["RunAtLoad"]
 
 
 def test_script_m1_sin_activo_no_hace_nada(tmp_path):

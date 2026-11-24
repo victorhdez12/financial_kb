@@ -203,12 +203,11 @@ def test_agente_que_falla_deja_informe_minimo(tmp_path, monkeypatch):
     assert SUP.main(["--registrar", "--simulada"]) == 1
 
 
-def test_plist_supervisor_8_00_diario_y_no_instalado():
+def test_plist_supervisor_8_00_diario():
     import plistlib
     p = plistlib.loads((REPO / "scripts" / "launchd" / "com.financialkb.supervisor.plist").read_bytes())
     assert p["Label"] == "com.financialkb.supervisor" and p["ProgramArguments"][-1].endswith("scripts/supervisor.sh")
     assert p["StartCalendarInterval"] == {"Hour": 8, "Minute": 0} and not p["RunAtLoad"]
-    assert not (Path.home() / "Library" / "LaunchAgents" / "com.financialkb.supervisor.plist").exists()
     t = SUP.MANDATO.read_text()
     assert "version: supervisor-v2" in t and '"version_mandato": "supervisor-v2"' in t and "Nunca operas" in t
     assert "Vigía macro (C1, M1 y A1" in t and "No propones órdenes" in t and "a1_mandato_v1.md" in t
