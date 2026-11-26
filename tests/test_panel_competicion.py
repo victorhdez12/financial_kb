@@ -134,3 +134,54 @@ def test_m1_sombra_y_uso_de_modelos(tmp_path):
     assert u["cuadrante"]["rent_sesion_siguiente"] == pytest.approx(0.01)
     h = PC.html_competicion(d)
     assert "M1 · Claude gestor macro" in h and "sombra teórica" in h and "uso de modelos" in h
+
+
+# ------------------------------------------------------------------ listón «sin tocar» (26-nov-2026)
+def test_serie_historial_usa_la_fecha_de_nueva_york():
+    # Alpaca sella la sesión a las 20:00 NY = 01:00 UTC del día siguiente (24-nov 20:00 NY → 1795568400)
+    s = PC.serie_historial({"timestamp": [1795482000, 1795568400], "equity": [98559.57, 97988.13]})
+    assert [str(x.date()) for x in s.index] == ["2026-11-23", "2026-11-24"]
+
+
+def _reg_con_cartera(tmp_path, nombre, posiciones, efectivo, fecha="2027-01-05"):
+    p = tmp_path / nombre
+    p.write_text("\n".join(json.dumps(x) for x in [
+        {"fecha": "2027-01-01", "ensayo": True, "paquete": {"efectivo": 1, "posiciones": []}},
+        {"fecha": fecha, "claude": {"coste_usd": 0.5},
+         "paquete": {"efectivo": efectivo, "posiciones": posiciones}, "ejecuciones": []}]) + "\n")
+    return p
+
+
+def test_sin_tocar_valora_la_cartera_inicial_y_la_diferencia(tmp_path):
+    dias = pd.date_range("2027-01-04", periods=5, freq="B")            # 4..8 ene
+    precios = pd.DataFrame({"URTH": [100, 100, 110, 121, 130], "GLD": [50, 50, 50, 55, 60]}, index=dias, dtype=float)
+    pos = [{"simbolo": "URTH", "clase": "accion", "cantidad": 10}, {"simbolo": "GLD", "clase": "accion", "cantidad": 20}]
+    c1 = _reg_con_cartera(tmp_path, "c1.jsonl", pos, 1000.0)
+    m1 = _reg_con_cartera(tmp_path, "m1.jsonl", [], 5000.0)
+    # la cuenta C1 existe del 5 al 7 (los cierres llevan un día más: se corta al final de la cuenta)
+    series = {"C1": pd.Series([3000.0, 3100.0, 3300.0], index=dias[1:4]),
+              "M1": pd.Series([5000.0, 5050.0, 5100.0], index=dias[1:4])}
+    d = PC.recoger(None, con_alpaca=True, log_c1=c1, log_m1=m1, log_a1=tmp_path / "no", log_d1=tmp_path / "no2",
+                   log_m1_sombra=tmp_path / "no3", log_a1_sombra=tmp_path / "no4", espejo=[], series=series,
+                   precios_sin_tocar=precios)
+    h = d["sin_tocar"]["C1"]
+    # 5-ene: 1000 + 10·100 + 20·50 = 3000; 7-ene: 1000 + 1210 + 1100 = 3310
+    assert (h["desde"], h["hasta"]) == ("2027-01-05", "2027-01-07") and h["rent"] == pytest.approx(3310 / 3000 - 1)
+    ap = {x["cartera"]: x for x in d["aporta"]}
+    assert ap["C1"]["diferencia"] == pytest.approx((3300 / 3000 - 1) - (3310 / 3000 - 1))
+    assert d["sin_tocar"]["M1"]["solo_efectivo"] and ap["M1"]["diferencia"] == pytest.approx(0.02)
+    assert ap["A1"]["cuenta"] is None and ap["A1"]["coste_claude_usd"] is None
+    html = PC.html_competicion(d)
+    assert "¿Aporta el gestor?" in html and "todo en efectivo" in html and "GLD 20, URTH 10 + 1.000 $ efectivo" in html
+
+
+def test_sin_tocar_no_valora_opciones_ni_cripto_y_sin_cierres_sin_datos(tmp_path):
+    pos = [{"simbolo": "BTC/USD", "clase": "cripto", "cantidad": 1}]
+    ini = PC.cartera_inicial([{"fecha": "2027-01-05", "paquete": {"efectivo": 0, "posiciones": pos}}])
+    assert ini["otras"] == ["BTC/USD"] and PC.fila_sin_tocar(ini, None, pd.DataFrame()) is None
+    ini = PC.cartera_inicial([{"fecha": "2027-01-05", "paquete": {"efectivo": 0, "posiciones": [
+        {"simbolo": "URTH", "clase": "accion", "cantidad": 1}]}}])
+    assert PC.fila_sin_tocar(ini, None, None) is None
+    assert PC.cartera_inicial([{"fecha": "2027-01-05"}]) is None            # registro sin paquete
+    h = PC.html_aporta({"aporta": PC.aporta({}, {}, {"C1": 0.4}), "iniciales": {}})
+    assert "0,40 $" in h and h.count("sin datos") >= 3

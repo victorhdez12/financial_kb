@@ -21,6 +21,7 @@ import json
 import math
 import os
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 import numpy as np
 import pandas as pd
@@ -155,7 +156,10 @@ def fila_cuenta(serie: pd.Series | None, ops: dict, desde: str | None, coste_cla
 # --------------------------------------------------------------------------- datos (lectura)
 def serie_historial(h: dict) -> pd.Series:
     ts, eq = h.get("timestamp") or [], h.get("equity") or []
-    idx = pd.to_datetime([dt.datetime.fromtimestamp(int(t), dt.timezone.utc).date() for t in ts])
+    # Alpaca sella cada sesión a las 20:00 de Nueva York (= 01:00 UTC del día SIGUIENTE): la fecha es la de NY. Con
+    # la fecha UTC (hasta el 26-nov-2026) cada valor quedaba un día desplazado (el «24-nov» era el cierre del 23-nov).
+    ny = ZoneInfo("America/New_York")
+    idx = pd.to_datetime([dt.datetime.fromtimestamp(int(t), dt.timezone.utc).astimezone(ny).date() for t in ts])
     return pd.Series([float(x) if x is not None else np.nan for x in eq], index=idx).dropna()
 
 
@@ -229,6 +233,72 @@ def fila_d1_teorica(reg_d1: list[dict], desde: str | None, precios: pd.DataFrame
             "operaciones": v.get("rebalanceos"), "coste_claude_usd": None, "periodos": m["n"]}
 
 
+def cartera_inicial(reg: list[dict]) -> dict | None:
+    """Cartera con la que empezó el gestor: efectivo y cantidades del paquete de su PRIMERA decisión en vivo (antes
+    de sus órdenes de ese día). Solo acciones/ETF; si había opciones o cripto se marca (no se valoran)."""
+    vivo = [r for r in reg if not r.get("ensayo")]
+    if not vivo:
+        return None
+    p = vivo[0].get("paquete")
+    if not p or "efectivo" not in p:
+        return None
+    qty, otras = {}, []
+    for x in p.get("posiciones") or []:
+        if (x.get("clase") or "accion") == "accion":
+            qty[str(x["simbolo"])] = qty.get(str(x["simbolo"]), 0.0) + float(x.get("cantidad") or 0)
+        else:
+            otras.append(str(x.get("simbolo")))
+    return {"fecha": vivo[0]["fecha"], "efectivo": float(p.get("efectivo") or 0), "qty": qty, "otras": otras}
+
+
+def serie_sin_tocar(ini: dict, precios: pd.DataFrame) -> pd.Series:
+    """Valor diario de la cartera inicial mantenida sin operar (efectivo + Σ cantidad × cierre ajustado), desde el
+    cierre del primer día. Un símbolo sin cierre ese día → ese día no se valora."""
+    s = pd.Series(ini["efectivo"], index=precios.index[precios.index >= pd.Timestamp(ini["fecha"])], dtype=float)
+    for sim, q in ini["qty"].items():
+        if sim not in precios.columns:
+            return pd.Series(dtype=float)
+        s = s + q * precios[sim].reindex(s.index)
+    return s.dropna()
+
+
+def fila_sin_tocar(ini: dict | None, desde: str | None, precios: pd.DataFrame | None,
+                   hasta: str | None = None) -> dict | None:
+    if not ini or ini["otras"]:
+        return None
+    if not ini["qty"]:   # todo en efectivo: «no hacer nada» = 0 % (sin interés del efectivo, como la cuenta paper)
+        d = desde or ini["fecha"]
+        return {"desde": d, "hasta": None, "rent": 0.0, "vol": 0.0, "sharpe": None, "caida": 0.0, "rotacion": 0.0,
+                "costes": 0.0, "operaciones": 0, "coste_claude_usd": None, "periodos": None, "solo_efectivo": True}
+    if precios is None or precios.empty:
+        return None
+    s = serie_sin_tocar(ini, precios)
+    if desde:
+        s = s[s.index >= pd.Timestamp(desde)]
+    if hasta:   # mismo final que la serie de la cuenta (los cierres pueden llevar un día más)
+        s = s[s.index <= pd.Timestamp(hasta)]
+    m = metricas_serie(s)
+    if m["n"] < 2:
+        return None
+    return {"desde": str(s.index[0].date()), "hasta": str(s.index[-1].date()), "rent": m["rent"], "vol": m["vol"],
+            "sharpe": m["sharpe"], "caida": m["caida"], "rotacion": 0.0, "costes": 0.0, "operaciones": 0,
+            "coste_claude_usd": None, "periodos": m["n"]}
+
+
+def aporta(cuentas: dict, sin_tocar: dict, coste: dict | None = None) -> list[dict]:
+    """Por gestor: rentabilidad de la cuenta frente a su cartera inicial sin tocar, en el MISMO periodo."""
+    out = []
+    for k, _ in CUENTAS:
+        c, h = cuentas.get(k), sin_tocar.get(k)
+        if not c or not h:
+            out.append({"cartera": k, "desde": None, "hasta": None, "cuenta": None, "sin_tocar": None,
+                        "diferencia": None, "coste_claude_usd": (coste or {}).get(k)})
+            continue
+        out.append({"cartera": k, "desde": c["desde"], "hasta": c["hasta"], "cuenta": c["rent"], "sin_tocar": h["rent"],
+                    "diferencia": c["rent"] - h["rent"], "coste_claude_usd": c.get("coste_claude_usd")})
+    return out
+
+
 def uso_modelos(reg_m1: list[dict], serie: pd.Series | None = None) -> list[dict]:
     """Spec M1 §5 (descriptivo): por modelo, % de días en que M1 le hizo caso (declaración «si» o «parcial»), nº de
     órdenes que lo citan y rentabilidad media de la cuenta en la sesión siguiente a los días con órdenes que lo citan."""
@@ -258,7 +328,8 @@ def uso_modelos(reg_m1: list[dict], serie: pd.Series | None = None) -> list[dict
 def recoger(s: dict | None, *, con_alpaca: bool | None = None, log_c1: Path = LOG_C1, log_d1: Path = LOG_D1,
             espejo: list[dict] | None = None, series: dict[str, pd.Series] | None = None,
             log_m1: Path = LOG_M1, log_m1_sombra: Path = LOG_M1_SOMBRA, log_a1: Path = LOG_A1,
-            log_a1_sombra: Path = LOG_A1_SOMBRA, precios_d1: pd.DataFrame | None = None) -> dict:
+            log_a1_sombra: Path = LOG_A1_SOMBRA, precios_d1: pd.DataFrame | None = None,
+            precios_sin_tocar: pd.DataFrame | None = None) -> dict:
     """{'teoricos': {k: fila|None}, 'cuentas': {k: fila|None}, 'inicio_teorico', 'inicio_cuentas', 'notas',
     'uso_modelos'}."""
     notas = []
@@ -298,12 +369,29 @@ def recoger(s: dict | None, *, con_alpaca: bool | None = None, log_c1: Path = LO
     except Exception as e:  # noqa: BLE001 — la tabla nunca tumba el panel
         cuentas["D1T"] = None
         notas.append(f"D1 teórico: {type(e).__name__}")
+    # Listón «sin tocar»: la cartera con la que empezó cada gestor, mantenida sin operar (mismo periodo que su cuenta)
+    iniciales = {k: cartera_inicial(reg) for k, reg in regs.items()}
+    sims = sorted({s_ for i in iniciales.values() if i for s_ in i["qty"]})
+    if precios_sin_tocar is None and sims and con_alpaca and inicio_c:
+        try:
+            from src.paper import m1_sombra as S
+            cli = next(iter(clientes_por_cartera().values()), None)
+            precios_sin_tocar, _ = S.cierres(sims, dt.date.fromisoformat(inicio_c) - dt.timedelta(days=5),
+                                             dt.date.today(), cli, yahoo=False)
+        except Exception as e:  # noqa: BLE001 — la tabla nunca tumba el panel
+            notas.append(f"Sin tocar: cierres no disponibles ({type(e).__name__})")
+    sin_tocar = {}
+    for k, _ in CUENTAS:
+        c = cuentas.get(k)
+        sin_tocar[k] = fila_sin_tocar(iniciales.get(k), (c or {}).get("desde") or inicio_c, precios_sin_tocar,
+                                      (c or {}).get("hasta"))
     desde_t = [f["desde"] for f in teo.values() if f]
     if len(set(desde_t)) > 1:
         notas.append("Teórico: las carteras empiezan en meses distintos (B1′ se registró más tarde); "
                      "la valoración del informe mensual no se puede recortar al inicio común.")
     return {"teoricos": teo, "cuentas": cuentas, "inicio_teorico": max(desde_t) if desde_t else None,
-            "inicio_cuentas": inicio_c, "notas": notas, "uso_modelos": uso_modelos(reg_m1, series.get("M1"))}
+            "inicio_cuentas": inicio_c, "notas": notas, "uso_modelos": uso_modelos(reg_m1, series.get("M1")),
+            "sin_tocar": sin_tocar, "iniciales": iniciales, "aporta": aporta(cuentas, sin_tocar, coste)}
 
 
 # --------------------------------------------------------------------------- HTML
@@ -337,6 +425,31 @@ def html_uso_modelos(filas: list[dict]) -> str:
             'en la sesión siguiente a los días con órdenes que citan ese modelo. Muchos años para concluir nada.</p>')
 
 
+def html_aporta(d: dict) -> str:
+    """¿Aporta el gestor? Su cuenta frente a la cartera con la que empezó, sin operar, en el mismo periodo."""
+    nombres = dict(CUENTAS)
+    ini = d.get("iniciales") or {}
+    tr = []
+    for f in d.get("aporta") or []:
+        i = ini.get(f["cartera"]) or {}
+        empezo = ("todo en efectivo" if i and not i.get("qty") else
+                  ", ".join(f"{s_} {q:g}".replace(".", ",") for s_, q in sorted((i.get("qty") or {}).items())) + (
+                      f" + {i['efectivo']:,.0f} $ efectivo".replace(",", ".") if i.get("efectivo") else "") if i else SD)
+        periodo = f"{_e(f['desde'])} → {_e(f['hasta'])}" if f.get("desde") else SD
+        coste = SD if f.get("coste_claude_usd") is None else f"{f['coste_claude_usd']:.2f} $".replace(".", ",")
+        tr.append("<tr>" + "".join(f"<td>{c}</td>" for c in (
+            _e(nombres.get(f["cartera"], f["cartera"])), _e(empezo) if i else SD, periodo, _pct(f["cuenta"], 2),
+            _pct(f["sin_tocar"], 2), _pct(f["diferencia"], 2), coste)) + "</tr>")
+    cab = ["gestor", "empezó con", "periodo", "cuenta", "sin tocar", "diferencia", "coste Claude acumulado"]
+    th = "".join(f'<th scope="col">{c}</th>' for c in cab)
+    return ('<h4>¿Aporta el gestor? Su cuenta frente a la cartera con la que empezó, sin operar</h4>'
+            f'<div class="tw"><table><thead><tr>{th}</tr></thead><tbody>{"".join(tr)}</tbody></table></div>'
+            '<p class="small">«Sin tocar» = efectivo y cantidades del paquete de su primera decisión en vivo, valorados '
+            'con cierres ajustados desde el mismo primer cierre que la cuenta (las operaciones del primer día antes de '
+            'ese cierre no se separan). Diferencia = cuenta − sin tocar, en puntos. El efectivo no rinde (como en la '
+            'cuenta paper). Con días o semanas de datos la diferencia es ruido: sirve para seguir, no para juzgar.</p>')
+
+
 def html_competicion(d: dict) -> str:
     cab = ["cartera", "periodo", "rentabilidad", "volatilidad anual", "Sharpe*", "caída máx.", "rotación", "costes",
            "nº operaciones"]
@@ -351,7 +464,7 @@ def html_competicion(d: dict) -> str:
            + "".join(_filas(CUENTAS + SOMBRA, d["cuentas"], True)) + "</tbody></table></div>")
     notas = "".join(f'<p class="small">{_e(n)}</p>' for n in d.get("notas") or [])
     return ('<div class="card" id="competicion"><h3>Competición</h3>'
-            f'<p class="note"><strong>Aviso:</strong> {_e(AVISO)}</p>{teo}{cue}'
+            f'<p class="note"><strong>Aviso:</strong> {_e(AVISO)}</p>{html_aporta(d)}{teo}{cue}'
             '<p class="small">* Sharpe = rentabilidad media anualizada / volatilidad anualizada, sin restar el tipo sin '
             'riesgo. Rotación = valor operado / valor medio. Costes: teórico = costes fijos del backtest; Alpaca = '
             'deslizamiento frente al precio al enviar (paper: optimista). D1 (solo papel desde el 20-nov) y las sombras de M1 '
