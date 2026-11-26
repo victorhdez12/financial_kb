@@ -198,6 +198,24 @@ def _apunta_diario(fecha: str, fila: dict, base: Path | None = None) -> None:
         fh.write(json.dumps(fila, ensure_ascii=False, default=str) + "\n")
 
 
+def _enviadas_hoy(fecha: str, base: Path | None = None) -> list[dict]:
+    """Órdenes ya ENVIADAS (con orden_id) el día `fecha` según el diario de órdenes fuera de git."""
+    p = (base / "ordenes" / f"{fecha}.jsonl") if base is not None else _diario_ordenes(fecha)
+    out = []
+    try:
+        lineas = p.read_text(encoding="utf-8").splitlines()
+    except FileNotFoundError:
+        return out
+    for x in lineas:
+        try:
+            f = json.loads(x)
+        except ValueError:
+            continue
+        if isinstance(f, dict) and f.get("orden_id"):
+            out.append({k: f.get(k) for k in ("indice", "simbolo", "lado", "client_order_id", "orden_id", "estado")})
+    return out
+
+
 def fila_ejecucion(enviada: dict, r: dict) -> dict:
     q = float(r.get("filled_qty") or 0)
     pm = float(r["filled_avg_price"]) if r.get("filled_avg_price") else None
@@ -235,6 +253,17 @@ def ejecutar(c: A.Cliente, ver: G.Veredicto, fecha: str, *, espera_s: float = ES
     G.comprobar_cliente(c)
     out = {"enviadas": [], "rechazadas_alpaca": [], "ejecuciones": []}
     if not ver.opera or not ver.validas:
+        return out
+    # Un envío por día y cartera: si el diario de órdenes (fuera de git) ya tiene órdenes ENVIADAS hoy, un ciclo
+    # anterior las mandó y murió antes de dejar la línea en git (fallo de commit, cuelgue, Mac apagado; `restaura`
+    # deshace la línea sin commitear). La recuperación horaria (scripts/recupera_gestores.sh) relanzaría el ciclo y,
+    # sin esto, reenviaría órdenes ya ejecutadas (el client_order_id solo choca si coincide el índice).
+    previas = _enviadas_hoy(fecha, base)
+    if previas:
+        out["rechazadas_alpaca"] = [{"indice": n["indice"], "simbolo": n["simbolo"],
+                                     "motivo": f"ya se enviaron {len(previas)} órdenes hoy en un ciclo anterior "
+                                               "(diario de órdenes): no se envía nada"} for n in ver.validas]
+        out["enviadas_previas"] = previas
         return out
     if c.ordenes_abiertas():
         out["rechazadas_alpaca"] = [{"indice": n["indice"], "simbolo": n["simbolo"],
