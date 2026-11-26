@@ -69,7 +69,12 @@ def clase_alpaca(asset_class: str | None) -> str:
 def cuenta_alpaca(c: A.Cliente) -> dict:
     cu = c.cuenta()
     pos = c.posiciones()
-    out = {"simulada": False, "perfil": c.cred.perfil, "numero": A.enmascara_cuenta(cu.get("account_number")),
+    # «simulada: false» a secas lo leían C1/M1/A1 como contradicción con el mandato («cartera SIMULADA») y gastaban
+    # el ciclo en comprobarlo en el código (24-nov): el aviso lo aclara en el propio paquete.
+    out = {"simulada": False,
+           "aviso": ("CUENTA PAPER REAL de Alpaca (paper-api, dinero ficticio): tus órdenes se envían a esta cuenta. "
+                     "«simulada: false» solo significa que no es el ensayo sin claves; no contradice el mandato."),
+           "perfil": c.cred.perfil, "numero": A.enmascara_cuenta(cu.get("account_number")),
            "efectivo": float(cu.get("cash") or 0), "valor": float(cu.get("equity") or 0),
            "poder_de_compra_ignorado": cu.get("buying_power"), "estado": cu.get("status"),
            "posiciones": [{"simbolo": p.get("symbol"), "clase": clase_alpaca(p.get("asset_class")),
