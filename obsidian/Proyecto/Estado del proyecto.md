@@ -36,7 +36,7 @@ fase_real: Fase 3 (modelos); fase de datos cerrada el 14-oct
 
 **Agentes de la fase:** Constructor · Investigador de relaciones · **Validador independiente** · **Reportero** (ver [[Proyecto/Agentes]]). Informe: [[Reports/Fase 3/Informe de resultados]].
 
-**▶ Retomar (26-nov):** ciclos C1/M1/A1 ya se recuperan solos si el Mac estaba apagado/dormido o sin red (arranque horario → `scripts/recupera_gestores.sh`; ver Bitácora 26-nov). 25-nov perdido en las 3 carteras. Pendientes: plist D1 (usuario), descarga SEC, «simulada: false». Hitos: 30-nov B1′, 1-dic Verificación, 3-dic E1/E1b/B1/B1′.
+**▶ Retomar (26-nov):** ciclos C1/M1/A1 ya se recuperan solos si el Mac estaba apagado/dormido o sin red (arranque horario → `scripts/recupera_gestores.sh`; ver Bitácora 26-nov). 25-nov perdido en las 3 carteras. Pendientes: plist D1 (usuario); hechos hoy descarga SEC y aviso «simulada». Hitos: 30-nov B1′, 1-dic Verificación, 3-dic E1/E1b/B1/B1′.
 
 **(anterior)** **▶ Retomar (24-nov):** **C1, M1 y A1 ACTIVOS** en las 3 cuentas Alpaca PAPER (C1 …4JGR, M1 …ZFJX, A1 …X9F9), lun-vie a las 15:45 / 16:00 / 16:15 Madrid (Mac encendido); supervisor 8:10. Primer día: C1 no opera, M1 compra VTI/IEF/SHY (40 % efectivo), A1 vende media URTH; arreglo GLD de la guardia de A1 (`ae110cb`). Pendiente usuario: reinstalar el plist D1 del repo (el cargado es el antiguo; neutralizado sin claves `_D1`). Pendiente: descarga SEC (curl con reanudación), aclarar «simulada: false» en los mandatos. Detalle: Bitácora 24-nov.
 
