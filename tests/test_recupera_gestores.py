@@ -87,3 +87,74 @@ def test_gestor_real_con_cerrojo_no_lanza_un_segundo_ciclo(tmp_path):
         assert r.returncode == 0
         assert "ya hay un ciclo" in next(logs.glob(f"*_{g}.log")).read_text()
         assert (logs / f".gestor_{g}.lock").is_dir()                         # el cerrojo ajeno no se borra
+
+
+# ------------------------------------------------------------------ Validador 26-nov
+class _Alpaca:
+    """Transporte FALSO: mercado abierto, sin órdenes abiertas, cada POST se apunta y se ejecuta."""
+    def __init__(self):
+        self.posts = []
+
+    def __call__(self, metodo, url, cab, params, cuerpo, plazo):
+        if url.endswith("/v2/orders") and metodo == "GET":
+            return 200, []
+        if url.endswith("/v2/clock"):
+            return 200, {"timestamp": "2026-11-25T11:00:00-05:00", "is_open": True,
+                         "next_close": "2026-11-25T16:00:00-05:00", "next_open": "2026-11-27T09:30:00-05:00"}
+        if metodo == "POST":
+            self.posts.append(cuerpo)
+            return 200, {"id": f"o{len(self.posts)}", "status": "new"}
+        return 200, {"status": "filled", "filled_qty": "1", "filled_avg_price": "100"}
+
+
+def test_un_ciclo_relanzado_no_reenvia_ordenes_ya_enviadas_hoy(tmp_path, monkeypatch):
+    """Ciclo 1 envía y muere antes de dejar la línea en git (o `restaura` la deshace); la recuperación relanza el
+    ciclo el mismo día: NO debe volver a enviar (aunque el agente decida otra cosa, con otros índices)."""
+    from src.broker import alpaca as A
+    from src.broker import c1_guardia as G
+    from src.paper import c1 as C
+    monkeypatch.setattr(A, "_transporte_requests", lambda *a, **k: (_ for _ in ()).throw(AssertionError("red real")))
+    base = tmp_path / "c1"
+    t = _Alpaca()
+    c = A.Cliente(A.Credenciales(key_id="K", secret="S", perfil="C1"), transporte=t)
+    n = {"indice": 1, "simbolo": "AAA", "clase": "accion", "lado": "compra", "tipo": "mercado", "cantidad": None,
+         "importe_usd": 100.0, "precio_limite": None}
+    out = C.ejecutar(c, G.Veredicto(True, None, validas=[n]), HOY, espera_s=0, dormir=lambda s: None, base=base)
+    assert len(t.posts) == 1 and out["enviadas"]
+    otra = {**n, "indice": 2, "simbolo": "BBB"}
+    out = C.ejecutar(c, G.Veredicto(True, None, validas=[otra]), HOY, espera_s=0, dormir=lambda s: None, base=base)
+    assert len(t.posts) == 1 and out["enviadas"] == []
+    assert "ya se enviaron 1 órdenes hoy" in out["rechazadas_alpaca"][0]["motivo"]
+    assert out["enviadas_previas"][0]["simbolo"] == "AAA"
+    out = C.ejecutar(c, G.Veredicto(True, None, validas=[otra]), "2026-11-27", espera_s=0, dormir=lambda s: None,
+                     base=base)
+    assert len(t.posts) == 2                                                # otro día sí envía
+
+
+def test_rechazos_de_alpaca_previos_no_bloquean_el_envio(tmp_path):
+    from src.paper import c1 as C
+    base = tmp_path / "c1"
+    (base / "ordenes").mkdir(parents=True)
+    (base / "ordenes" / f"{HOY}.jsonl").write_text('{"indice": 1, "simbolo": "AAA", "motivo": "422"}\nbasura\n')
+    assert C._enviadas_hoy(HOY, base) == []
+
+
+def test_mercado_cerrado_solo_por_el_aviso_de_main_y_sin_linea_de_hoy(tmp_path):
+    """El resumen/diario del agente (impreso en el log) puede decir «mercado cerrado» (p. ej. «mañana mercado
+    cerrado por Acción de Gracias»): eso no es el aviso de main() y no debe parar la recuperación de M1/A1."""
+    repo, logs = repo_falso(tmp_path)
+    for g in ("c1", "m1", "a1"):
+        (repo / "scripts" / f"{g}_gestor.sh").write_text(
+            f'echo "{g} ${{FIN_RECUPERADA:-}}" >> "{tmp_path}/lanzados.txt"\n'
+            f'echo "resumen: mañana mercado cerrado (abre el viernes) por Acción de Gracias" '
+            f'> "{logs}/$(date +%H%M%S)_${{RANDOM}}_{g}.log"\n'
+            f'echo \'{{"fecha": "{HOY}"}}\' >> research/paper/decisiones_{g}.jsonl\n')
+    assert corre(tmp_path, repo, logs, "1800") == ["c1 1", "m1 1", "a1 1"]
+    assert not (logs / ".mercado_cerrado").exists()
+
+
+def test_fecha_de_hoy_anidada_en_una_linea_de_ayer_no_cuenta(tmp_path):
+    repo, logs = repo_falso(tmp_path, activos=("C1",))
+    (repo / "research" / "paper" / "decisiones_c1.jsonl").write_text(
+        '{"fecha": "2026-11-24", "propuesta": {"fecha": "%s"}}\n' % HOY)
+    assert corre(tmp_path, repo, logs, "1800") == ["c1 1"]
