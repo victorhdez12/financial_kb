@@ -2,7 +2,8 @@
 # Actualización automática de financial_kb (la lanza launchd; ver docs/automatizacion.md).
 #   scripts/actualizar.sh diario    -> make daily   (fuentes diarias + warehouse + régimen)
 #   scripts/actualizar.sh semanal   -> make semanal (todas las fuentes + warehouse + régimen + auditoría + reporte)
-#   scripts/actualizar.sh pendiente -> al encender el Mac (launchd RunAtLoad): lanza la que falte hoy.
+#   scripts/actualizar.sh pendiente -> al encender el Mac (launchd RunAtLoad) y cada hora: lanza la que falte hoy,
+#     y después los ciclos C1/M1/A1 perdidos hoy (scripts/recupera_gestores.sh).
 #     launchd no recupera las citas perdidas con el Mac APAGADO (solo en reposo). Este modo mira las marcas
 #     ~/financial_archive/logs/.hecho_diario y .hecho_semanal: si la semanal tiene más de 7 días -> semanal;
 #     si no, si hoy es lun-sáb, ya son las 7:30 y la diaria de hoy no está hecha -> diaria; si no, nada.
@@ -30,7 +31,9 @@ if [ "$MODO" = pendiente ]; then
   AHORA=$(date +%H%M); DOW=$(date +%u)   # 1 = lunes … 7 = domingo
   if [ "$DIAS_S" -gt 7 ] || { [ "$DOW" = 7 ] && [ "$AHORA" -ge 0700 ] && [ "$ULT_S" != "$HOY" ]; }; then MODO=semanal
   elif [ "$DOW" != 7 ] && [ "$AHORA" -ge 0730 ] && [ "$ULT_D" != "$HOY" ] && [ "$ULT_S" != "$HOY" ]; then MODO=diario
-  else exit 0; fi
+  else   # nada que actualizar: solo los ciclos C1/M1/A1 perdidos hoy (scripts/recupera_gestores.sh)
+    bash "$REPO/scripts/recupera_gestores.sh" >> "$LOGDIR/$(date +%Y-%m-%d)_recupera.log" 2>&1; exit 0
+  fi
   LOG="$LOGDIR/${STAMP}_${MODO}.log"
   RECUPERADA=" (recuperada al encender)"
 fi
@@ -122,6 +125,12 @@ done
 # afecta a la diaria ni a su código de salida (|| true; el exit de abajo es $RC de make). FIN_DIAG=0 lo apaga.
 if [ "${FIN_DIAG:-1}" != 0 ]; then
   bash "$REPO/scripts/diagnostico.sh" >> "$LOGDIR/$(date +%Y-%m-%d)_diag.log" 2>&1 || true
+fi
+# Modo pendiente: tras la actualización recuperada, también los ciclos C1/M1/A1 perdidos hoy. Antes se suelta el
+# cerrojo de la actualización (los gestores lo esperan hasta 30 min).
+if [ -n "${RECUPERADA:-}" ]; then
+  rmdir "$LOCK" 2>/dev/null; trap - EXIT
+  bash "$REPO/scripts/recupera_gestores.sh" >> "$LOGDIR/$(date +%Y-%m-%d)_recupera.log" 2>&1 || true
 fi
 # Logs de más de 60 días fuera
 find "$LOGDIR" -name '*.log' -mtime +60 -delete 2>/dev/null

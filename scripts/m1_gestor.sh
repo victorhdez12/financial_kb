@@ -21,7 +21,7 @@ cd "$REPO" || exit 1
 
 nota() {   # $1 = línea (mismo formato que scripts/c1_gestor.sh)
   [ -f "$NOTA" ] || return 0
-  /usr/bin/python3 - "$NOTA" "- **$(date '+%Y-%m-%d %H:%M')** · M1 · $1 · log \`$(basename "$LOG")\`" <<'PY'
+  /usr/bin/python3 - "$NOTA" "- **$(date '+%Y-%m-%d %H:%M')** · M1${FIN_RECUPERADA:+ (recuperado)} · $1 · log \`$(basename "$LOG")\`" <<'PY'
 import sys
 p, linea = sys.argv[1], sys.argv[2]
 s = open(p, encoding="utf-8").read()
@@ -49,11 +49,21 @@ if [ "$RAMA" != main ]; then
   nota "❌ el repo no está en main; M1 no opera hoy"
   exit 0
 fi
+# Un solo ciclo M1 a la vez: launchd y la recuperación (scripts/recupera_gestores.sh, desde el arranque horario)
+# podrían coincidir y enviar órdenes dobles. Cerrojo huérfano (Mac apagado a mitad) de más de 90 min: se quita.
+GLOCK="$LOGDIR/.gestor_m1.lock"
+if [ -d "$GLOCK" ] && [ -n "$(find "$GLOCK" -maxdepth 0 -mmin +90 2>/dev/null)" ]; then rmdir "$GLOCK" 2>/dev/null; fi
+if ! mkdir "$GLOCK" 2>/dev/null; then echo "$(date) ya hay un ciclo M1 en marcha; salgo" >> "$LOG"; exit 0; fi
+trap 'rmdir "$GLOCK" 2>/dev/null' EXIT
+# Esperar a tener red (hasta 10 min): el 25-nov M1 arrancó al despertar el Mac sin DNS y no registró.
+if [ "${FIN_SIN_ESPERA_RED:-0}" != 1 ]; then
+  for _ in $(seq 1 60); do curl -sS -o /dev/null --max-time 5 https://paper-api.alpaca.markets/ 2>/dev/null && break; sleep 10; done
+fi
 # no pisar la diaria ni el ciclo de C1 (15:45): esperan a que acaben
 for ((i = 0; i < ${FIN_ESPERA_LOCK_MIN:-30} * 2; i++)); do [ -d "$LOGDIR/.actualizar.lock" ] || break; sleep 30; done
 for ((i = 0; i < ${FIN_ESPERA_C1_MIN:-20} * 2; i++)); do pgrep -f "src.paper.c1 --auto" >/dev/null || break; sleep 30; done
 
-.venv/bin/python -m src.paper.m1 --auto >> "$LOG" 2>&1
+/usr/bin/caffeinate -i .venv/bin/python -m src.paper.m1 --auto >> "$LOG" 2>&1   # sin reposo a mitad del ciclo
 RC=$?
 if [ $RC -eq 0 ]; then
   grep -q "registrada y subida" "$LOG" && nota "✅ M1: decisión del día y sombra registradas y subidas"

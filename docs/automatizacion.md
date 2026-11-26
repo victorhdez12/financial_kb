@@ -30,6 +30,18 @@ Por eso hay una tercera tarea, `com.financialkb.arranque` (`RunAtLoad` + cada ho
 - si es lunes-sábado después de las 7:30 y la diaria de hoy no está hecha → diaria; si no, no hace nada.
 En `Actualizaciones.md` estas salen como "(recuperada al encender)". Un lock evita que coincida con las tareas normales.
 
+### Ciclos C1/M1/A1 perdidos (26-nov)
+El 25-nov C1 y A1 no corrieron (Mac apagado o dormido) y M1 falló al despertar sin DNS. Ahora:
+- cada `scripts/{c1,m1,a1}_gestor.sh` espera hasta 10 min a tener red (`paper-api.alpaca.markets`), corre con
+  `caffeinate -i` (sin reposo a mitad del ciclo) y tiene su cerrojo `~/financial_archive/logs/.gestor_<g>.lock`
+  (huérfano a los 90 min), para que launchd y la recuperación nunca lancen dos ciclos a la vez;
+- `actualizar.sh pendiente` (al encender y cada hora) llama después a `scripts/recupera_gestores.sh`: lun-vie,
+  entre la hora del gestor (15:45 / 16:00 / 16:15) y las 22:30, si existe `<P>_ACTIVO` y no hay línea de hoy en
+  `decisiones_<g>.jsonl`, lanza el gestor. Es seguro repetirlo: `--auto` no hace nada si ya hay decisión de hoy o el
+  mercado está cerrado. Si el mercado sale cerrado (festivo, cierre anticipado), apunta `.mercado_cerrado` y no
+  reintenta ese día. Log en `<fecha>_recupera.log`; en `Actualizaciones.md` sale «C1 (recuperado)».
+- Un fallo (p. ej. de red) se reintenta solo en el siguiente tick horario del arranque.
+
 ## Comandos
 ```
 scripts/actualizar.sh diario      # a mano, igual que la tarea
