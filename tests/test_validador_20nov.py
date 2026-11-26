@@ -23,6 +23,9 @@ def aislado(tmp_path, monkeypatch):
             monkeypatch.delenv(k)
     monkeypatch.setenv("FIN_ALPACA_ENV", str(tmp_path / "alpaca.env"))
     monkeypatch.setenv("FIN_ALPACA_DIR", str(tmp_path / "alpaca"))
+    # diario de órdenes de C.ejecutar fuera del real (~/financial_archive/c1/ordenes/): antes del 26-nov se escribía allí
+    for g in ("C1", "M1", "A1"):
+        monkeypatch.setenv(f"FIN_{g}_DIR", str(tmp_path / g.lower()))
     monkeypatch.setattr(A, "_transporte_requests", lambda *a, **k: (_ for _ in ()).throw(AssertionError("red real")))
     monkeypatch.setattr(AGd, "PARADA", tmp_path / "A1_PARADA")
     monkeypatch.setattr(G, "PARADA", tmp_path / "C1_PARADA")
